@@ -40,6 +40,7 @@ module.exports = {
       '@config/*': ['config/*'],
       '@assets/*': ['assets/*'],
       '@components/*': ['components/*'],
+      '@components_new/*': ['components_new/*'],
       '@commerce': ['framework/commerce'],
       '@commerce/*': ['framework/commerce/*'],
       // Update paths to point to the selected provider

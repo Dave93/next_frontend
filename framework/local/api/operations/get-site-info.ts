@@ -36,6 +36,40 @@ export default function getSiteInfoOperation({}: OperationContext<any>) {
         },
       ],
       brands: [],
+      topMenu: [
+        {
+          id: '1',
+          href: '/menu',
+          label: {
+            ru: 'Меню',
+            uz: 'Menyu',
+          },
+        },
+        {
+          id: '2',
+          href: '/sale',
+          label: {
+            ru: 'Акции',
+            uz: 'Aksiyalar',
+          },
+        },
+        {
+          id: '3',
+          href: '/deliver',
+          label: {
+            ru: 'Доставка',
+            uz: 'Yetkazish',
+          },
+        },
+        {
+          id: '4',
+          href: '/contacts',
+          label: {
+            ru: 'Контакты',
+            uz: 'Kontaktlar',
+          },
+        },
+      ],
     })
   }
 

@@ -1,4 +1,4 @@
-import '@assets/main.css'
+import 'tailwindcss/tailwind.css'
 import '@assets/chrome-bug.css'
 import 'keen-slider/keen-slider.min.css'
 

@@ -1,4 +1,4 @@
-.root {
+/* .root {
   @apply grid grid-cols-1 gap-0;
 
   @screen lg {
@@ -151,4 +151,4 @@
       @apply bg-pink;
     }
   }
-}
+} */
