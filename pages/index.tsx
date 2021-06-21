@@ -1,9 +1,15 @@
 import commerce from '@lib/api/commerce'
 import { Layout } from '@components/common'
+import { Product } from '@commerce/types/product'
 import { ProductCard } from '@components/product'
 import { Grid, Marquee, Hero } from '@components/ui'
+import '@egjs/react-flicking/dist/flicking.css'
 // import HomeAllProductsGrid from '@components/common/HomeAllProductsGrid'
 import type { GetStaticPropsContext, InferGetStaticPropsType } from 'next'
+import MainSlider from '@components_new/main/MainSlider'
+import React, { useMemo } from 'react'
+import ProductListSectionTitle from '@components_new/product/ProductListSectionTitle'
+import ProductItemNew from '@components_new/product/ProductItemNew'
 
 export async function getStaticProps({
   preview,
@@ -22,7 +28,8 @@ export async function getStaticProps({
   const siteInfoPromise = commerce.getSiteInfo({ config, preview })
   const { products } = await productsPromise
   const { pages } = await pagesPromise
-  const { categories, brands, topMenu } = await siteInfoPromise
+  const { categories, brands, topMenu, footerInfoMenu, socials } =
+    await siteInfoPromise
 
   return {
     props: {
@@ -31,6 +38,8 @@ export async function getStaticProps({
       brands,
       pages,
       topMenu,
+      footerInfoMenu,
+      socials,
     },
     revalidate: 60,
   }
@@ -39,9 +48,41 @@ export async function getStaticProps({
 export default function Home({
   products,
 }: InferGetStaticPropsType<typeof getStaticProps>) {
+  const readyProducts = useMemo(() => {
+    const categories = {}
+    products.map((prod: Product) => {
+      if (!categories[prod.categoryId]) {
+        categories[prod.categoryId] = {
+          id: prod.categoryId,
+          name: prod.categoryName,
+          items: [],
+        }
+      }
+      categories[prod.categoryId].items.push(prod)
+      return prod
+    })
+    return Object.values(categories)
+  }, [products])
+
   return (
     <>
-      <h2>Davr</h2>
+      <MainSlider />
+      <div className="container mx-auto">
+        <div className="grid lg:grid-cols-4 grid-cols-1 md:grid-cols-2 gap-4 mt-10">
+          <div className="col-span-3">
+            {readyProducts.map((sec, index) => (
+              <div key={sec.id} className={index > 0 ? 'mt-[60px]' : ''}>
+                <ProductListSectionTitle title={sec.name} />
+                <div className="grid grid-cols-1 lg:grid-cols-3 md:grid-cols-2 gap-10">
+                  {sec.items.map((prod) => (
+                    <ProductItemNew product={prod} key={prod.name} />
+                  ))}
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
     </>
   )
 }

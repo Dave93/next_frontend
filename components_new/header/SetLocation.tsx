@@ -17,7 +17,9 @@ const SetLocation: FC = () => {
           setOpen(true)
         }}
       >
-        <Image src="/assets/location.png" width="48" height="48" />
+        <div className="flex items-center mr-3">
+          <Image src="/assets/location.png" width="14" height="16" />
+        </div>
         {tr('chooseLocation')}
       </button>
       <Transition.Root show={open} as={Fragment}>

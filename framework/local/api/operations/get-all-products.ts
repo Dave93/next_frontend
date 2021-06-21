@@ -2,7 +2,7 @@ import { Product } from '@commerce/types/product'
 import { GetAllProductsOperation } from '@commerce/types/product'
 import type { OperationContext } from '@commerce/api/operations'
 import type { LocalConfig, Provider } from '../index'
-import data from '../../data.json'
+import data from '../../chopar_data.json'
 
 export default function getAllProductsOperation({
   commerce,

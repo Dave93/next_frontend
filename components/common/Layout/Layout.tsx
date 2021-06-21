@@ -16,8 +16,17 @@ import PaymentMethodView from '@components/checkout/PaymentMethodView'
 import CheckoutSidebarView from '@components/checkout/CheckoutSidebarView'
 
 import LoginView from '@components/auth/LoginView'
-import s from './Layout.module.css'
+import styles from './Layout.module.css'
 import Header from '@components_new/Header'
+import Image from 'next/image'
+import Link from 'next/link'
+import {
+  faFacebook,
+  faInstagram,
+  faTelegram,
+} from '@fortawesome/free-brands-svg-icons'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { SocialIcons } from '@commerce/types/socialIcons'
 
 const Loading = () => (
   <div className="w-80 h-80 flex items-center text-center justify-center p-3">
@@ -47,8 +56,10 @@ const FeatureBar = dynamic(
 interface Props {
   pageProps: {
     pages?: Page[]
-    categories: Category[]
+    categories: LinkItem[]
     topMenu: LinkItem[]
+    footerInfoMenu: LinkItem[]
+    socials: SocialIcons[]
   }
 }
 
@@ -93,26 +104,117 @@ const SidebarUI: FC = () => {
   ) : null
 }
 
+const socIcons = {
+  fb: faFacebook,
+  inst: faInstagram,
+  tg: faTelegram,
+}
+
 const Layout: FC<Props> = ({
   children,
-  pageProps: { categories = [], topMenu = [], ...pageProps },
+  pageProps: {
+    categories = [],
+    topMenu = [],
+    footerInfoMenu = [],
+    socials = [],
+    ...pageProps
+  },
 }) => {
   const { acceptedCookies, onAcceptCookies } = useAcceptCookies()
   const { locale = 'ru' } = useRouter()
-  console.log(categories)
-  const navBarlinks = categories.slice(0, 2).map((c) => ({
-    label: c.name,
-    href: `/search/${c.slug}`,
-  }))
+  console.log(footerInfoMenu)
 
   return (
     <CommerceProvider locale={locale}>
       <div className="font-sans">
         <div className="flex flex-col h-screen">
           <Header menu={topMenu} />
+          <main className="flex-grow">{children}</main>
+          <footer className="text-white">
+            <Image src="/assets/footer_weave.png" width={1920} height={40} />
+            <div className="bg-secondary w-full pt-5 pb-2">
+              <div className="container mx-auto my-6">
+                <div className="border-b flex justify-between mb-5 pb-10">
+                  <div className="w-1/5">
+                    <div>
+                      <Image
+                        src="/assets/footer_logo.png"
+                        width={188}
+                        height={68}
+                      />
+                    </div>
+                    <span className="block mt-7 text-xl">
+                      Пицца, которая объединяет
+                    </span>
+                  </div>
+                  <div className="flex-grow">
+                    <div className="flex justify-center">
+                      <div className="mr-24">
+                        <span className="block font-bold mb-3 text-[16px]">
+                          Меню
+                        </span>
+                        <ul className="ml-3">
+                          {categories.map((item) => (
+                            <li
+                              key={item.href}
+                              className={styles.footerMenuListItem}
+                            >
+                              <Link href={item.href} prefetch={false}>
+                                <a>{item.label[locale]}</a>
+                              </Link>
+                            </li>
+                          ))}
+                        </ul>
+                      </div>
+                      <div>
+                        <span className="block font-bold mb-3 text-[16px]">
+                          Информация
+                        </span>
+                        <ul className="ml-3">
+                          {footerInfoMenu.map((item) => (
+                            <li
+                              key={item.href}
+                              className={styles.footerMenuListItem}
+                            >
+                              <Link href={item.href} prefetch={false}>
+                                <a>{item.label[locale]}</a>
+                              </Link>
+                            </li>
+                          ))}
+                        </ul>
+                      </div>
+                    </div>
+                  </div>
+                  <div className="text-right text-sm leading-7">
+                    <div>Телефон доставки</div>
+                    <div className="text-[30px] font-bold">71 205 11 11</div>
+                    <div>
+                      График работы <br /> с 10-00 до 23-00 Ежедневно
+                    </div>
+                    <div className="mt-4">
+                      <span>Подписывайтесь на нас:</span>
+                      <ul className="flex justify-end text-4xl">
+                        {socials.map((soc) => (
+                          <li key={soc.code} className="mx-1">
+                            <a
+                              target="_blank"
+                              className="no-underline text-white"
+                            >
+                              <FontAwesomeIcon icon={socIcons[soc.code]} />
+                            </a>
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
+                  </div>
+                </div>
+                <div>{new Date().getFullYear()} Все права защищены</div>
+              </div>
+            </div>
+          </footer>
         </div>
       </div>
-      <div className={cn(s.root)}>
+      <div className={cn(styles.root)}>
         {/* <Navbar links={navBarlinks} />
         <main className="fit">{children}</main>
         <Footer pages={pageProps.pages} />

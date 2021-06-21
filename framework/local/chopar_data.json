@@ -1,0 +1,902 @@
+{
+  "products": [
+    {
+      "categoryName": "Пицца",
+      "categoryId": "1",
+      "id": "1",
+      "name": "Шоколадная",
+      "image": "/pizza_img.png",
+      "description": "Фирменный томатный соус, сыр Моцарелла, микс мясных деликатесов (говядина, баранина)(Halal), лук красный, маслины, базилик",
+      "sizeDesc": "25 см, 2 персоны, 6 кусков",
+      "size": {
+        "label": "Маленькая",
+        "id": "sm",
+        "price": {
+          "value": 86000,
+          "currencyCode": "UZS"
+        }
+      },
+      "options": [
+        {
+          "id": "option-size",
+          "label": "Size",
+          "values": [
+            {
+              "label": "Маленькая",
+              "id": "sm",
+              "active": true,
+              "price": {
+                "value": 86000,
+                "currencyCode": "UZS"
+              }
+            },
+            {
+              "label": "Средняя",
+              "id": "md",
+              "active": false,
+              "price": {
+                "value": 96000,
+                "currencyCode": "UZS"
+              }
+            },
+            {
+              "label": "Большая",
+              "id": "lg",
+              "active": false,
+              "price": {
+                "value": 110000,
+                "currencyCode": "UZS"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "categoryName": "Пицца",
+      "categoryId": "1",
+      "id": "2",
+      "name": "Ханская",
+      "image": "/pizza_img.png",
+      "description": "Фирменный томатный соус, сыр Моцарелла, микс мясных деликатесов (говядина, баранина)(Halal), лук красный, маслины, базилик",
+      "sizeDesc": "25 см, 2 персоны, 6 кусков",
+      "size": {
+        "label": "Маленькая",
+        "id": "sm",
+        "price": {
+          "value": 86000,
+          "currencyCode": "UZS"
+        }
+      },
+      "options": [
+        {
+          "id": "option-size",
+          "label": "Size",
+          "values": [
+            {
+              "label": "Маленькая",
+              "id": "sm",
+              "active": true,
+              "price": {
+                "value": 86000,
+                "currencyCode": "UZS"
+              }
+            },
+            {
+              "label": "Средняя",
+              "id": "md",
+              "active": false,
+              "price": {
+                "value": 96000,
+                "currencyCode": "UZS"
+              }
+            },
+            {
+              "label": "Большая",
+              "id": "lg",
+              "active": false,
+              "price": {
+                "value": 110000,
+                "currencyCode": "UZS"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "categoryName": "Пицца",
+      "categoryId": "1",
+      "id": "3",
+      "name": "Сырная",
+      "image": "/pizza_img.png",
+      "description": "Фирменный томатный соус, сыр Моцарелла, микс мясных деликатесов (говядина, баранина)(Halal), лук красный, маслины, базилик",
+      "sizeDesc": "25 см, 2 персоны, 6 кусков",
+      "size": {
+        "label": "Маленькая",
+        "id": "sm",
+        "price": {
+          "value": 86000,
+          "currencyCode": "UZS"
+        }
+      },
+      "options": [
+        {
+          "id": "option-size",
+          "label": "Size",
+          "values": [
+            {
+              "label": "Маленькая",
+              "id": "sm",
+              "active": true,
+              "price": {
+                "value": 86000,
+                "currencyCode": "UZS"
+              }
+            },
+            {
+              "label": "Средняя",
+              "id": "md",
+              "active": false,
+              "price": {
+                "value": 96000,
+                "currencyCode": "UZS"
+              }
+            },
+            {
+              "label": "Большая",
+              "id": "lg",
+              "active": false,
+              "price": {
+                "value": 110000,
+                "currencyCode": "UZS"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "categoryName": "Пицца",
+      "categoryId": "1",
+      "id": "4",
+      "name": "Ростбиф",
+      "image": "/pizza_img.png",
+      "description": "Фирменный томатный соус, сыр Моцарелла, микс мясных деликатесов (говядина, баранина)(Halal), лук красный, маслины, базилик",
+      "sizeDesc": "25 см, 2 персоны, 6 кусков",
+      "size": {
+        "label": "Маленькая",
+        "id": "sm",
+        "price": {
+          "value": 86000,
+          "currencyCode": "UZS"
+        }
+      },
+      "options": [
+        {
+          "id": "option-size",
+          "label": "Size",
+          "values": [
+            {
+              "label": "Маленькая",
+              "id": "sm",
+              "active": true,
+              "price": {
+                "value": 86000,
+                "currencyCode": "UZS"
+              }
+            },
+            {
+              "label": "Средняя",
+              "id": "md",
+              "active": false,
+              "price": {
+                "value": 96000,
+                "currencyCode": "UZS"
+              }
+            },
+            {
+              "label": "Большая",
+              "id": "lg",
+              "active": false,
+              "price": {
+                "value": 110000,
+                "currencyCode": "UZS"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "categoryName": "Пицца",
+      "categoryId": "1",
+      "id": "5",
+      "name": "Пепперони",
+      "image": "/pizza_img.png",
+      "description": "Фирменный томатный соус, сыр Моцарелла, микс мясных деликатесов (говядина, баранина)(Halal), лук красный, маслины, базилик",
+      "sizeDesc": "25 см, 2 персоны, 6 кусков",
+      "size": {
+        "label": "Маленькая",
+        "id": "sm",
+        "price": {
+          "value": 86000,
+          "currencyCode": "UZS"
+        }
+      },
+      "options": [
+        {
+          "id": "option-size",
+          "label": "Size",
+          "values": [
+            {
+              "label": "Маленькая",
+              "id": "sm",
+              "active": true,
+              "price": {
+                "value": 86000,
+                "currencyCode": "UZS"
+              }
+            },
+            {
+              "label": "Средняя",
+              "id": "md",
+              "active": false,
+              "price": {
+                "value": 96000,
+                "currencyCode": "UZS"
+              }
+            },
+            {
+              "label": "Большая",
+              "id": "lg",
+              "active": false,
+              "price": {
+                "value": 110000,
+                "currencyCode": "UZS"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "categoryName": "Пицца",
+      "categoryId": "1",
+      "id": "6",
+      "name": "Мясная",
+      "image": "/pizza_img.png",
+      "description": "Фирменный томатный соус, сыр Моцарелла, микс мясных деликатесов (говядина, баранина)(Halal), лук красный, маслины, базилик",
+      "sizeDesc": "25 см, 2 персоны, 6 кусков",
+      "size": {
+        "label": "Маленькая",
+        "id": "sm",
+        "price": {
+          "value": 86000,
+          "currencyCode": "UZS"
+        }
+      },
+      "options": [
+        {
+          "id": "option-size",
+          "label": "Size",
+          "values": [
+            {
+              "label": "Маленькая",
+              "id": "sm",
+              "active": true,
+              "price": {
+                "value": 86000,
+                "currencyCode": "UZS"
+              }
+            },
+            {
+              "label": "Средняя",
+              "id": "md",
+              "active": false,
+              "price": {
+                "value": 96000,
+                "currencyCode": "UZS"
+              }
+            },
+            {
+              "label": "Большая",
+              "id": "lg",
+              "active": false,
+              "price": {
+                "value": 110000,
+                "currencyCode": "UZS"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "categoryName": "Пицца",
+      "categoryId": "1",
+      "id": "7",
+      "name": "Маргарита",
+      "image": "/pizza_img.png",
+      "description": "Фирменный томатный соус, сыр Моцарелла, микс мясных деликатесов (говядина, баранина)(Halal), лук красный, маслины, базилик",
+      "sizeDesc": "25 см, 2 персоны, 6 кусков",
+      "size": {
+        "label": "Маленькая",
+        "id": "sm",
+        "price": {
+          "value": 86000,
+          "currencyCode": "UZS"
+        }
+      },
+      "options": [
+        {
+          "id": "option-size",
+          "label": "Size",
+          "values": [
+            {
+              "label": "Маленькая",
+              "id": "sm",
+              "active": true,
+              "price": {
+                "value": 86000,
+                "currencyCode": "UZS"
+              }
+            },
+            {
+              "label": "Средняя",
+              "id": "md",
+              "active": false,
+              "price": {
+                "value": 96000,
+                "currencyCode": "UZS"
+              }
+            },
+            {
+              "label": "Большая",
+              "id": "lg",
+              "active": false,
+              "price": {
+                "value": 110000,
+                "currencyCode": "UZS"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "categoryName": "Пицца",
+      "categoryId": "1",
+      "id": "8",
+      "name": "Лаззат",
+      "image": "/pizza_img.png",
+      "description": "Фирменный томатный соус, сыр Моцарелла, микс мясных деликатесов (говядина, баранина)(Halal), лук красный, маслины, базилик",
+      "sizeDesc": "25 см, 2 персоны, 6 кусков",
+      "size": {
+        "label": "Маленькая",
+        "id": "sm",
+        "price": {
+          "value": 86000,
+          "currencyCode": "UZS"
+        }
+      },
+      "options": [
+        {
+          "id": "option-size",
+          "label": "Size",
+          "values": [
+            {
+              "label": "Маленькая",
+              "id": "sm",
+              "active": true,
+              "price": {
+                "value": 86000,
+                "currencyCode": "UZS"
+              }
+            },
+            {
+              "label": "Средняя",
+              "id": "md",
+              "active": false,
+              "price": {
+                "value": 96000,
+                "currencyCode": "UZS"
+              }
+            },
+            {
+              "label": "Большая",
+              "id": "lg",
+              "active": false,
+              "price": {
+                "value": 110000,
+                "currencyCode": "UZS"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "categoryName": "Пицца",
+      "categoryId": "1",
+      "id": "9",
+      "name": "Куриная",
+      "image": "/pizza_img.png",
+      "description": "Фирменный томатный соус, сыр Моцарелла, микс мясных деликатесов (говядина, баранина)(Halal), лук красный, маслины, базилик",
+      "sizeDesc": "25 см, 2 персоны, 6 кусков",
+      "size": {
+        "label": "Маленькая",
+        "id": "sm",
+        "price": {
+          "value": 86000,
+          "currencyCode": "UZS"
+        }
+      },
+      "options": [
+        {
+          "id": "option-size",
+          "label": "Size",
+          "values": [
+            {
+              "label": "Маленькая",
+              "id": "sm",
+              "active": true,
+              "price": {
+                "value": 86000,
+                "currencyCode": "UZS"
+              }
+            },
+            {
+              "label": "Средняя",
+              "id": "md",
+              "active": false,
+              "price": {
+                "value": 96000,
+                "currencyCode": "UZS"
+              }
+            },
+            {
+              "label": "Большая",
+              "id": "lg",
+              "active": false,
+              "price": {
+                "value": 110000,
+                "currencyCode": "UZS"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "categoryName": "Пицца",
+      "categoryId": "1",
+      "id": "10",
+      "name": "Комбо",
+      "image": "/pizza_img.png",
+      "description": "Фирменный томатный соус, сыр Моцарелла, микс мясных деликатесов (говядина, баранина)(Halal), лук красный, маслины, базилик",
+      "sizeDesc": "25 см, 2 персоны, 6 кусков",
+      "size": {
+        "label": "Маленькая",
+        "id": "sm",
+        "price": {
+          "value": 86000,
+          "currencyCode": "UZS"
+        }
+      },
+      "options": [
+        {
+          "id": "option-size",
+          "label": "Size",
+          "values": [
+            {
+              "label": "Маленькая",
+              "id": "sm",
+              "active": true,
+              "price": {
+                "value": 86000,
+                "currencyCode": "UZS"
+              }
+            },
+            {
+              "label": "Средняя",
+              "id": "md",
+              "active": false,
+              "price": {
+                "value": 96000,
+                "currencyCode": "UZS"
+              }
+            },
+            {
+              "label": "Большая",
+              "id": "lg",
+              "active": false,
+              "price": {
+                "value": 110000,
+                "currencyCode": "UZS"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "categoryName": "Пицца",
+      "categoryId": "1",
+      "id": "11",
+      "name": "Жульен",
+      "image": "/pizza_img.png",
+      "description": "Фирменный томатный соус, сыр Моцарелла, микс мясных деликатесов (говядина, баранина)(Halal), лук красный, маслины, базилик",
+      "sizeDesc": "25 см, 2 персоны, 6 кусков",
+      "size": {
+        "label": "Маленькая",
+        "id": "sm",
+        "price": {
+          "value": 86000,
+          "currencyCode": "UZS"
+        }
+      },
+      "options": [
+        {
+          "id": "option-size",
+          "label": "Size",
+          "values": [
+            {
+              "label": "Маленькая",
+              "id": "sm",
+              "active": true,
+              "price": {
+                "value": 86000,
+                "currencyCode": "UZS"
+              }
+            },
+            {
+              "label": "Средняя",
+              "id": "md",
+              "active": false,
+              "price": {
+                "value": 96000,
+                "currencyCode": "UZS"
+              }
+            },
+            {
+              "label": "Большая",
+              "id": "lg",
+              "active": false,
+              "price": {
+                "value": 110000,
+                "currencyCode": "UZS"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "categoryName": "Пицца",
+      "categoryId": "1",
+      "id": "12",
+      "name": "Двойная пепперони",
+      "image": "/pizza_img.png",
+      "description": "Фирменный томатный соус, сыр Моцарелла, микс мясных деликатесов (говядина, баранина)(Halal), лук красный, маслины, базилик",
+      "sizeDesc": "25 см, 2 персоны, 6 кусков",
+      "size": {
+        "label": "Маленькая",
+        "id": "sm",
+        "price": {
+          "value": 86000,
+          "currencyCode": "UZS"
+        }
+      },
+      "options": [
+        {
+          "id": "option-size",
+          "label": "Size",
+          "values": [
+            {
+              "label": "Маленькая",
+              "id": "sm",
+              "active": true,
+              "price": {
+                "value": 86000,
+                "currencyCode": "UZS"
+              }
+            },
+            {
+              "label": "Средняя",
+              "id": "md",
+              "active": false,
+              "price": {
+                "value": 96000,
+                "currencyCode": "UZS"
+              }
+            },
+            {
+              "label": "Большая",
+              "id": "lg",
+              "active": false,
+              "price": {
+                "value": 110000,
+                "currencyCode": "UZS"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "categoryName": "Пицца",
+      "categoryId": "1",
+      "id": "13",
+      "name": "Грибная",
+      "image": "/pizza_img.png",
+      "description": "Фирменный томатный соус, сыр Моцарелла, микс мясных деликатесов (говядина, баранина)(Halal), лук красный, маслины, базилик",
+      "sizeDesc": "25 см, 2 персоны, 6 кусков",
+      "size": {
+        "label": "Маленькая",
+        "id": "sm",
+        "price": {
+          "value": 86000,
+          "currencyCode": "UZS"
+        }
+      },
+      "options": [
+        {
+          "id": "option-size",
+          "label": "Size",
+          "values": [
+            {
+              "label": "Маленькая",
+              "id": "sm",
+              "active": true,
+              "price": {
+                "value": 86000,
+                "currencyCode": "UZS"
+              }
+            },
+            {
+              "label": "Средняя",
+              "id": "md",
+              "active": false,
+              "price": {
+                "value": 96000,
+                "currencyCode": "UZS"
+              }
+            },
+            {
+              "label": "Большая",
+              "id": "lg",
+              "active": false,
+              "price": {
+                "value": 110000,
+                "currencyCode": "UZS"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "categoryName": "Пицца",
+      "categoryId": "1",
+      "id": "14",
+      "name": "Гавайская",
+      "image": "/pizza_img.png",
+      "description": "Фирменный томатный соус, сыр Моцарелла, микс мясных деликатесов (говядина, баранина)(Halal), лук красный, маслины, базилик",
+      "sizeDesc": "25 см, 2 персоны, 6 кусков",
+      "size": {
+        "label": "Маленькая",
+        "id": "sm",
+        "price": {
+          "value": 86000,
+          "currencyCode": "UZS"
+        }
+      },
+      "options": [
+        {
+          "id": "option-size",
+          "label": "Size",
+          "values": [
+            {
+              "label": "Маленькая",
+              "id": "sm",
+              "active": true,
+              "price": {
+                "value": 86000,
+                "currencyCode": "UZS"
+              }
+            },
+            {
+              "label": "Средняя",
+              "id": "md",
+              "active": false,
+              "price": {
+                "value": 96000,
+                "currencyCode": "UZS"
+              }
+            },
+            {
+              "label": "Большая",
+              "id": "lg",
+              "active": false,
+              "price": {
+                "value": 110000,
+                "currencyCode": "UZS"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "categoryName": "Пицца",
+      "categoryId": "1",
+      "id": "15",
+      "name": "Барбекю",
+      "image": "/pizza_img.png",
+      "description": "Фирменный томатный соус, сыр Моцарелла, микс мясных деликатесов (говядина, баранина)(Halal), лук красный, маслины, базилик",
+      "sizeDesc": "25 см, 2 персоны, 6 кусков",
+      "size": {
+        "label": "Маленькая",
+        "id": "sm",
+        "price": {
+          "value": 86000,
+          "currencyCode": "UZS"
+        }
+      },
+      "options": [
+        {
+          "id": "option-size",
+          "label": "Size",
+          "values": [
+            {
+              "label": "Маленькая",
+              "id": "sm",
+              "active": true,
+              "price": {
+                "value": 86000,
+                "currencyCode": "UZS"
+              }
+            },
+            {
+              "label": "Средняя",
+              "id": "md",
+              "active": false,
+              "price": {
+                "value": 96000,
+                "currencyCode": "UZS"
+              }
+            },
+            {
+              "label": "Большая",
+              "id": "lg",
+              "active": false,
+              "price": {
+                "value": 110000,
+                "currencyCode": "UZS"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "categoryName": "Пицца",
+      "categoryId": "1",
+      "id": "16",
+      "name": "Байрам",
+      "image": "/pizza_img.png",
+      "description": "Фирменный томатный соус, сыр Моцарелла, микс мясных деликатесов (говядина, баранина)(Halal), лук красный, маслины, базилик",
+      "sizeDesc": "25 см, 2 персоны, 6 кусков",
+      "size": {
+        "label": "Маленькая",
+        "id": "sm",
+        "price": {
+          "value": 86000,
+          "currencyCode": "UZS"
+        }
+      },
+      "options": [
+        {
+          "id": "option-size",
+          "label": "Size",
+          "values": [
+            {
+              "label": "Маленькая",
+              "id": "sm",
+              "active": true,
+              "price": {
+                "value": 86000,
+                "currencyCode": "UZS"
+              }
+            },
+            {
+              "label": "Средняя",
+              "id": "md",
+              "active": false,
+              "price": {
+                "value": 96000,
+                "currencyCode": "UZS"
+              }
+            },
+            {
+              "label": "Большая",
+              "id": "lg",
+              "active": false,
+              "price": {
+                "value": 110000,
+                "currencyCode": "UZS"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "categoryName": "Сеты",
+      "categoryId": "2",
+      "id": "17",
+      "name": "Снэк сет",
+      "description": "Куриные крылья со специями и ароматом копчения, большая порция",
+      "price": {
+        "value": 86000,
+        "currencyCode": "UZS"
+      }
+    },
+    {
+      "categoryName": "Сеты",
+      "categoryId": "2",
+      "id": "18",
+      "name": "Чопар сет",
+      "description": "Фирменный томатный соус, сыр Моцарелла, микс мясных деликатесов (говядина, баранина)(Halal), лук красный, маслины, базилик",
+      "price": {
+        "value": 86000,
+        "currencyCode": "UZS"
+      }
+    },
+    {
+      "categoryName": "Закуски",
+      "categoryId": "3",
+      "id": "19",
+      "name": "Картофель по деревенски",
+      "description": "Хлебцы с начинкой из сыра и зеленью, Классическое сочетание ингредиентов порадует отменным вкусом.",
+      "price": {
+        "value": 86000,
+        "currencyCode": "UZS"
+      }
+    },
+    {
+      "categoryName": "Закуски",
+      "categoryId": "3",
+      "id": "20",
+      "name": "Крылышки в соусе",
+      "description": "Аппетитные крылышки в фирсенном соусе “Chopar”. Просто объедение!",
+      "price": {
+        "value": 86000,
+        "currencyCode": "UZS"
+      }
+    },
+    {
+      "categoryName": "Закуски",
+      "categoryId": "3",
+      "id": "21",
+      "name": "Куриные палочки",
+      "description": "Нежные и сочные куриные палочки в хрустящей панировке, по классическому рецепту",
+      "price": {
+        "value": 86000,
+        "currencyCode": "UZS"
+      }
+    },
+    {
+      "categoryName": "Закуски",
+      "categoryId": "3",
+      "id": "22",
+      "name": "Сырные тосты",
+      "description": "Хлебцы с начинкой из сыра и зеленью, Классическое сочетание ингредиентов порадует отменным вкусом.",
+      "price": {
+        "value": 86000,
+        "currencyCode": "UZS"
+      }
+    }
+  ]
+}

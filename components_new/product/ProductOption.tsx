@@ -1,28 +1,47 @@
-import React from 'react'
+import React, { FC, memo } from 'react'
 import PropTypes from 'prop-types'
 import TextProductOption from './TextProductOption'
-import SwatchProductOption from 'react-storefront/option/SwatchProductOption'
-import withDefaultHandler from 'react-storefront/utils/withDefaultHandler'
 import get from 'lodash/get'
 
-/**
- * A button or swatch that displays a representation of a product option within a
- * [`ProductOptionSelector`](/apiReference/option/ProductOptionSelector].
- */
-export default function ProductOption(props) {
-  let {
-    value,
-    selected,
-    selectedOption,
-    onSelectedOptionChange,
-    onClick,
-    variant,
-    showLabel,
-    wrapperProps,
-    optionProps,
-    selectedClassName,
-    ...others
-  } = props
+
+function withDefaultHandler(handler, defaultHandler) {
+  return (e, ...args) => {
+    if (handler) {
+      handler(e, ...args)
+    }
+
+    if (!e.defaultPrevented) {
+      defaultHandler(e, ...args)
+    }
+  }
+}
+
+type ProductOptionProp = {
+  value: Object,
+  selected?: boolean,
+  selectedOption?: Object,
+  onSelectedOptionChange?: Function,
+  onClick?: Function,
+  variant?: string,
+  showLabel?: boolean,
+  wrapperProps?: Function,
+  optionProps?: Function,
+  selectedClassName?: string
+}
+
+const ProductOption: FC<ProductOptionProp> = ({
+  value,
+  selected,
+  selectedOption,
+  onSelectedOptionChange,
+  onClick,
+  variant,
+  showLabel = true,
+  wrapperProps,
+  optionProps,
+  selectedClassName = 'rsf-po-selected',
+  ...others as props
+}) => {
 
   if (selectedOption) {
     selected = get(value, 'id') == get(selectedOption, 'id')
@@ -34,7 +53,7 @@ export default function ProductOption(props) {
     }
   })
 
-  const Variant = variant === 'text' ? TextProductOption : SwatchProductOption
+  const Variant = TextProductOption
   const propArgs = { selected, ...props }
 
   return (

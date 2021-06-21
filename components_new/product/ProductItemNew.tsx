@@ -1,28 +1,53 @@
-import React, { memo, useState, useContext } from 'react'
+import React, { memo, useState, useContext, FC } from 'react'
 import Image from 'next/image'
-import ProductOptionSelector from 'react-storefront/option/ProductOptionSelector'
-import ProductOption from './ProductOption'
+import ProductOptionSelector from './ProductOptionSelector'
 import currency from 'currency.js'
-import SessionContext from 'react-storefront/session/SessionContext'
+import { Product } from '@commerce/types/product'
+// import SessionContext from 'react-storefront/session/SessionContext'
 
-function ProductItemNew({ product, sizeSelector }) {
+type ProductItem = {
+  product: Product
+}
+
+const ProductItemNew: FC<ProductItem> = ({ product }) => {
   // console.log('product', product)
   const [store, updateStore] = useState(product)
-  const { actions } = useContext(SessionContext)
+  // const { actions } = useContext(SessionContext)
   const [addToCartInProgress, setAddToCartInProgress] = useState(false)
 
-  const handleSubmit = async event => {
+  const updateOptionSelection = (optionId: string, valueId: string) => {
+    console.log([optionId, valueId])
+    const prod = store
+    prod.options = prod.options.map((option) => {
+      if (option.id == optionId) {
+        option.values = option.values.map((v) => {
+          if (v.id == valueId) {
+            v.active = true
+          } else {
+            v.active = false
+          }
+          return v
+        })
+      }
+      return option
+    })
+    // console.log(prod)
+    updateStore(prod)
+  }
+
+  console.log(store)
+
+  const handleSubmit = async (event) => {
     event.preventDefault() // prevent the page location from changing
     setAddToCartInProgress(true) // disable the add to cart button until the request is finished
 
     try {
       // send the data to the server
-      await actions.addToCart({
-        product: store,
-        quantity: 1,
-        size: store.size.id,
-      })
-
+      // await actions.addToCart({
+      //   product: store,
+      //   quantity: 1,
+      //   size: store.size.id,
+      // })
       // open the confirmation dialog
       // setConfirmationOpen(true)
     } finally {
@@ -33,7 +58,7 @@ function ProductItemNew({ product, sizeSelector }) {
 
   return (
     <div>
-      <div>
+      <div className="text-center">
         {store.image ? (
           <Image src={store.image} width={250} height={250} alt={store.name} />
         ) : (
@@ -48,21 +73,20 @@ function ProductItemNew({ product, sizeSelector }) {
       </div>
       <div className="font-black mt-4 text-xl">{store.name}</div>
       {store.sizeDesc && (
-        <div className="font-bold mt-2 text-gray-700 text-xs">{store.sizeDesc}</div>
+        <div className="font-bold mt-2 text-gray-700 text-xs">
+          {store.sizeDesc}
+        </div>
       )}
-      <div className="mt-1 text-xs">{store.desc}</div>
-      {sizeSelector && (
-        <ProductOptionSelector
-          options={store.sizes}
-          value={store.size}
-          onChange={value => updateStore({ ...store, size: value })}
-          optionProps={{
-            size: 'small',
-            showLabel: true,
-          }}
-          OptionComponent={ProductOption}
-        />
-      )}
+      <div className="mt-1 text-xs">{store.description}</div>
+      {store.options &&
+        store.options.length > 0 &&
+        store.options.map((option) => (
+          <ProductOptionSelector
+            key={option.id}
+            option={option}
+            onChange={updateOptionSelection}
+          />
+        ))}
       <div className="mt-10 flex justify-between items-center">
         <button
           className="bg-yellow focus:outline-none font-bold outline-none px-6 py-2 rounded-full text-white uppercase inline-flex items-center"
@@ -103,23 +127,8 @@ function ProductItemNew({ product, sizeSelector }) {
           }).format()}
         </span>
       </div>
-      <style global jsx>{`
-        [data-id='ProductOptionSelector'] {
-          display: flex;
-          border: 1px solid #e5e5e5;
-          box-sizing: border-box;
-          border-radius: 17.5px;
-          justify-content: space-between;
-          margin-top: 20px;
-          flex-wrap: nowrap !important;
-        }
-      `}</style>
     </div>
   )
-}
-
-ProductItemNew.defaultProps = {
-  sizeSelector: false,
 }
 
 export default memo(ProductItemNew)

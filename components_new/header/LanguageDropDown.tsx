@@ -19,6 +19,13 @@ const LanguageDropDown: FC = () => {
   const { locale, pathname } = router
   const localeComponent = locales[locale]()
 
+  const changeLang = (e: any, loc: string) => {
+    e.preventDefault()
+    return router.push(pathname, pathname, {
+      locale: loc,
+    })
+  }
+
   return (
     <Menu as="div" className="relative inline-block text-left">
       {({ open }) => (
@@ -46,12 +53,14 @@ const LanguageDropDown: FC = () => {
             >
               {Object.keys(locales).map((langKey) => (
                 <Menu.Item key={langKey}>
-                  <Link href={pathname} locale={langKey} scroll={false}>
-                    <a className="px-4 py-2 text-sm text-secondary hover:bg-secondary hover:text-white flex items-center no-underline">
-                      {locales[langKey]()}{' '}
-                      <span className="ml-1.5">{localeLabel[langKey]}</span>
-                    </a>
-                  </Link>
+                  <a
+                    className="px-4 py-2 text-sm text-secondary hover:bg-secondary hover:text-white flex items-center no-underline"
+                    href={`/${locale}${pathname}`}
+                    onClick={(e) => changeLang(e, langKey)}
+                  >
+                    {locales[langKey]()}{' '}
+                    <span className="ml-1.5">{localeLabel[langKey]}</span>
+                  </a>
                 </Menu.Item>
               ))}
             </Menu.Items>

@@ -5,7 +5,7 @@ export type ProductImage = {
 
 export type ProductPrice = {
   value: number
-  currencyCode?: 'USD' | 'EUR' | 'ARS' | string
+  currencyCode?: 'USD' | 'EUR' | 'ARS' | 'UZS' | string
   retailPrice?: number
   salePrice?: number
   listPrice?: number
@@ -21,7 +21,10 @@ export type ProductOption = {
 }
 
 export type ProductOptionValues = {
+  id: string
   label: string
+  price: ProductPrice
+  active: boolean
   hexColors?: string[]
 }
 
@@ -34,14 +37,18 @@ export type ProductVariant = {
 export type Product = {
   id: string
   name: string
+  sizeDesc?: string
+  categoryName: string
+  categoryId: string
   description: string
   descriptionHtml?: string
-  sku?: string
-  slug?: string
-  path?: string
-  images: ProductImage[]
-  variants: ProductVariant[]
-  price: ProductPrice
+  // sku?: string
+  // slug?: string
+  // path?: string
+  image: string
+  // images: ProductImage[]
+  variants?: ProductVariant[]
+  price?: ProductPrice
   options: ProductOption[]
 }
 
@@ -77,12 +84,11 @@ export type ProductsSchema<T extends ProductTypes = ProductTypes> = {
   }
 }
 
-export type GetAllProductPathsOperation<
-  T extends ProductTypes = ProductTypes
-> = {
-  data: { products: Pick<T['product'], 'path'>[] }
-  variables: { first?: number }
-}
+export type GetAllProductPathsOperation<T extends ProductTypes = ProductTypes> =
+  {
+    data: { products: Pick<T['product'], 'path'>[] }
+    variables: { first?: number }
+  }
 
 export type GetAllProductsOperation<T extends ProductTypes = ProductTypes> = {
   data: { products: T['product'][] }

@@ -1,4 +1,11 @@
-.root {
-  @apply h-full bg-primary mx-auto transition-colors duration-150;
-  max-width: 2460px;
+.footerMenuListItem {
+  list-style-image: url('/footer_list_type.svg');
+  padding-top: 0.25rem;
+  padding-bottom: 0.25rem;
+}
+
+.footerMenuListItem a {
+  font-size: 14px;
+  color: white;
+  text-decoration: none;
 }
