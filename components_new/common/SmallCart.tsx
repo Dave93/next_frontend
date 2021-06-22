@@ -26,7 +26,7 @@ const SmallCart: FC = () => {
         </div>
         {isEmpty && (
           <div className="flex flex-col items-center mt-2 text-center text-gray-400 text-sm">
-            <Image src="/cart_empty.png" width={120} height={120} />
+            <Image src="/cart_empty.png" width={130} height={119} />
             <div>
               Корзина пуста <br />
               Выберите пиццу
