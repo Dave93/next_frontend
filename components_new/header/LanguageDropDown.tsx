@@ -17,7 +17,9 @@ const localeLabel = {
 const LanguageDropDown: FC = () => {
   const router = useRouter()
   const { locale, pathname } = router
-  const localeComponent = locales[locale]()
+  const keyTyped = locale as keyof typeof locales
+  const keyTypedLabel = locale as keyof typeof locales
+  const localeComponent = locales[keyTyped]({})
 
   const changeLang = (e: any, loc: string) => {
     e.preventDefault()
@@ -33,7 +35,7 @@ const LanguageDropDown: FC = () => {
           <div>
             <Menu.Button className="bg-white focus:outline-none font-medium inline-flex justify-center outline-none px-4 py-2 text-secondary text-sm w-full">
               {localeComponent}{' '}
-              <span className="ml-1.5">{localeLabel[locale]}</span>
+              <span className="ml-1.5">{localeLabel[keyTypedLabel]}</span>
             </Menu.Button>
           </div>
 
@@ -51,18 +53,24 @@ const LanguageDropDown: FC = () => {
               static
               className="absolute overflow-hidden bg-white divide-gray-100 divide-y focus:outline-none mt-2 origin-top-right right-0 ring-1 ring-black ring-opacity-5 rounded-2xl shadow-lg top-0 z-20"
             >
-              {Object.keys(locales).map((langKey) => (
-                <Menu.Item key={langKey}>
-                  <a
-                    className="px-4 py-2 text-sm text-secondary hover:bg-secondary hover:text-white flex items-center no-underline"
-                    href={`/${locale}${pathname}`}
-                    onClick={(e) => changeLang(e, langKey)}
-                  >
-                    {locales[langKey]()}{' '}
-                    <span className="ml-1.5">{localeLabel[langKey]}</span>
-                  </a>
-                </Menu.Item>
-              ))}
+              {Object.keys(locales).map((langKey) => {
+                const keyTypedLabel = langKey as keyof typeof localeLabel
+                const keyTyped = langKey as keyof typeof locales
+                return (
+                  <Menu.Item key={langKey}>
+                    <a
+                      className="px-4 py-2 text-sm text-secondary hover:bg-secondary hover:text-white flex items-center no-underline"
+                      href={`/${locale}${pathname}`}
+                      onClick={(e) => changeLang(e, langKey)}
+                    >
+                      {locales[keyTyped]({})}{' '}
+                      <span className="ml-1.5">
+                        {localeLabel[keyTypedLabel]}
+                      </span>
+                    </a>
+                  </Menu.Item>
+                )
+              })}
             </Menu.Items>
           </Transition>
         </>

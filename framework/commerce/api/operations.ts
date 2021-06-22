@@ -4,7 +4,7 @@ import type { GetAllPagesOperation, GetPageOperation } from '../types/page'
 import type { GetSiteInfoOperation } from '../types/site'
 import type { GetCustomerWishlistOperation } from '../types/wishlist'
 import type {
-  GetAllProductPathsOperation,
+  // GetAllProductPathsOperation,
   GetAllProductsOperation,
   GetProductOperation,
 } from '../types/product'
@@ -20,7 +20,7 @@ export const OPERATIONS = [
   'getPage',
   'getSiteInfo',
   'getCustomerWishlist',
-  'getAllProductPaths',
+  // 'getAllProductPaths',
   'getAllProducts',
   'getProduct',
 ] as const
@@ -109,19 +109,19 @@ export type Operations<P extends APIProvider> = {
     ): Promise<T['data']>
   }
 
-  getAllProductPaths: {
-    <T extends GetAllProductPathsOperation>(opts: {
-      variables?: T['variables']
-      config?: P['config']
-    }): Promise<T['data']>
+  // getAllProductPaths: {
+  //   <T extends GetAllProductPathsOperation>(opts: {
+  //     variables?: T['variables']
+  //     config?: P['config']
+  //   }): Promise<T['data']>
 
-    <T extends GetAllProductPathsOperation>(
-      opts: {
-        variables?: T['variables']
-        config?: P['config']
-      } & OperationOptions
-    ): Promise<T['data']>
-  }
+  //   <T extends GetAllProductPathsOperation>(
+  //     opts: {
+  //       variables?: T['variables']
+  //       config?: P['config']
+  //     } & OperationOptions
+  //   ): Promise<T['data']>
+  // }
 
   getAllProducts: {
     <T extends GetAllProductsOperation>(opts: {

@@ -9,7 +9,14 @@ import React, {
 } from 'react'
 import { Menu, Transition, Disclosure } from '@headlessui/react'
 import { ChevronDownIcon, ChevronRightIcon } from '@heroicons/react/solid'
-import { YMaps, Map, Placemark } from 'react-yandex-maps'
+import {
+  YMaps,
+  Map,
+  Placemark,
+  MapState,
+  MapStateBase,
+  MapStateCenter,
+} from 'react-yandex-maps'
 import { useForm } from 'react-hook-form'
 
 const LocationTabs: FC = () => {
@@ -223,7 +230,7 @@ const LocationTabs: FC = () => {
     },
   ])
 
-  const activeLabel = cities.find((item) => item.active).label
+  const activeLabel = cities.find((item) => item.active)?.label
   const activeCity = cities.find((item) => item.active)
   const activePoint = pickupPoints.find((item) => item.active)
 
@@ -253,14 +260,18 @@ const LocationTabs: FC = () => {
     )
   }
 
-  const mapState = useMemo(
-    () => ({
-      center: activeCity.mapCenter,
-      zoom: activeCity.mapZoom,
+  const mapState = useMemo<MapState>(() => {
+    const baseState: MapStateBase = {
       controls: ['zoomControl', 'fullscreenControl', 'geolocationControl'],
-    }),
-    [activeCity.mapCenter, activeCity.mapZoom]
-  )
+    }
+    const mapStateCenter: MapStateCenter = {
+      center: activeCity?.mapCenter || [],
+      zoom: activeCity?.mapZoom || 10,
+    }
+
+    const res: MapState = Object.assign({}, baseState, mapStateCenter)
+    return res
+  }, [activeCity?.mapCenter, activeCity?.mapZoom])
 
   const { register, handleSubmit } = useForm()
   const onSubmit = (data: Object) => console.log(JSON.stringify(data))

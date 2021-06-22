@@ -4,7 +4,6 @@ import { Heart } from '@components/icons'
 import { Layout } from '@components/common'
 import { Text, Container } from '@components/ui'
 import { useCustomer } from '@framework/customer'
-import { WishlistCard } from '@components/wishlist'
 import useWishlist from '@framework/wishlist/use-wishlist'
 
 export async function getStaticProps({
@@ -56,11 +55,7 @@ export default function Wishlist() {
               </p>
             </div>
           ) : (
-            data &&
-            // @ts-ignore Shopify - Fix this types
-            data.items?.map((item) => (
-              <WishlistCard key={item.id} product={item.product! as any} />
-            ))
+            <div>sdd</div>
           )}
         </div>
       </div>

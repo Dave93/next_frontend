@@ -1,8 +1,12 @@
-import React, { memo, useState, useContext, FC } from 'react'
+import React, { memo, useState, useContext, FC, useMemo } from 'react'
 import Image from 'next/image'
 import ProductOptionSelector from './ProductOptionSelector'
 import currency from 'currency.js'
-import { Product } from '@commerce/types/product'
+import {
+  Product,
+  ProductOptionValues,
+  ProductPrice,
+} from '@commerce/types/product'
 // import SessionContext from 'react-storefront/session/SessionContext'
 
 type ProductItem = {
@@ -16,7 +20,6 @@ const ProductItemNew: FC<ProductItem> = ({ product }) => {
   const [addToCartInProgress, setAddToCartInProgress] = useState(false)
 
   const updateOptionSelection = (optionId: string, valueId: string) => {
-    console.log([optionId, valueId])
     const prod = store
     prod.options = prod.options.map((option) => {
       if (option.id == optionId) {
@@ -32,12 +35,10 @@ const ProductItemNew: FC<ProductItem> = ({ product }) => {
       return option
     })
     // console.log(prod)
-    updateStore(prod)
+    updateStore({ ...prod })
   }
 
-  console.log(store)
-
-  const handleSubmit = async (event) => {
+  const handleSubmit = async (event: React.MouseEvent<HTMLElement>) => {
     event.preventDefault() // prevent the page location from changing
     setAddToCartInProgress(true) // disable the add to cart button until the request is finished
 
@@ -56,8 +57,21 @@ const ProductItemNew: FC<ProductItem> = ({ product }) => {
     }
   }
 
+  const totalPrice = useMemo(() => {
+    let price: number = store.price?.value || 0
+    if (store.options && store.options.length > 0) {
+      store.options.map((option) => {
+        const activeValue: ProductOptionValues = option.values.find(
+          (item) => item.active == true
+        ) as ProductOptionValues
+        price += activeValue.price.value
+      })
+    }
+    return price
+  }, [store.price, store.options])
+
   return (
-    <div>
+    <div className="flex flex-col">
       <div className="text-center">
         {store.image ? (
           <Image src={store.image} width={250} height={250} alt={store.name} />
@@ -77,7 +91,7 @@ const ProductItemNew: FC<ProductItem> = ({ product }) => {
           {store.sizeDesc}
         </div>
       )}
-      <div className="mt-1 text-xs">{store.description}</div>
+      <div className="mt-1 text-xs flex-grow">{store.description}</div>
       {store.options &&
         store.options.length > 0 &&
         store.options.map((option) => (
@@ -118,7 +132,7 @@ const ProductItemNew: FC<ProductItem> = ({ product }) => {
           В корзину
         </button>
         <span className="text-xl">
-          {currency(store.size ? store.size.price : store.price, {
+          {currency(totalPrice, {
             pattern: '# !',
             separator: ' ',
             decimal: ',',

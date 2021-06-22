@@ -1,4 +1,4 @@
-type LinkLabel = {
+export type LinkLabel = {
   ru: string
   uz: string
 }

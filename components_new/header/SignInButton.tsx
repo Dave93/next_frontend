@@ -25,7 +25,7 @@ const SignInButton: FC = () => {
   const { register, handleSubmit, reset, watch, formState } = useForm({
     mode: 'onChange',
   })
-  const onSubmit = async (data) => {
+  const onSubmit = async (data: React.SyntheticEvent) => {
     // const dada = await fetch('https://api.hq.fungeek.net/sanctum/csrf-cookie', {
     //   credentials: 'same-origin',
     // })
@@ -80,7 +80,7 @@ const SignInButton: FC = () => {
   const authName = watch('name')
   const authPhone = watch('phone')
 
-  const showPrivacy = (e) => {
+  const showPrivacy = (e: React.MouseEvent<HTMLElement>) => {
     e.preventDefault()
     setIsOpen(false)
     setIsShowPrivacy(true)
@@ -159,7 +159,7 @@ const SignInButton: FC = () => {
                             <button
                               className="absolute focus:outline-none inset-y-0 outline-none right-4 text-gray-400"
                               onClick={() => {
-                                reset('name')
+                                reset({ name: '' })
                               }}
                             >
                               <XIcon className="cursor-pointer h-5 text-gray-400 w-5" />
@@ -184,7 +184,7 @@ const SignInButton: FC = () => {
                             <button
                               className="absolute focus:outline-none inset-y-0 outline-none right-4 text-gray-400"
                               onClick={() => {
-                                reset('phone')
+                                reset({ phone: '' })
                               }}
                             >
                               <XIcon className="cursor-pointer h-5 text-gray-400 w-5" />

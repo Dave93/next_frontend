@@ -1,8 +1,14 @@
 import { Fragment, useState, FC, memo } from 'react'
 import { Menu, Transition } from '@headlessui/react'
 
+interface City {
+  id: string
+  label: string
+  active: boolean
+}
+
 const ChooseCityDropDown: FC = () => {
-  const [cities, setCities] = useState([
+  const [cities, setCities] = useState<City[]>([
     {
       id: 'tash',
       label: 'Ташкент',
@@ -20,7 +26,7 @@ const ChooseCityDropDown: FC = () => {
     },
   ])
 
-  const activeLabel = cities.find((item) => item.active).label
+  const activeLabel = cities.find((item) => item.active)?.label
 
   const setActive = (id: string) => {
     setCities(

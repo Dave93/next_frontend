@@ -1,8 +1,6 @@
 import commerce from '@lib/api/commerce'
 import { Layout } from '@components/common'
 import { Product } from '@commerce/types/product'
-import { ProductCard } from '@components/product'
-import { Grid, Marquee, Hero } from '@components/ui'
 import '@egjs/react-flicking/dist/flicking.css'
 // import HomeAllProductsGrid from '@components/common/HomeAllProductsGrid'
 import type { GetStaticPropsContext, InferGetStaticPropsType } from 'next'
@@ -10,6 +8,7 @@ import MainSlider from '@components_new/main/MainSlider'
 import React, { useMemo } from 'react'
 import ProductListSectionTitle from '@components_new/product/ProductListSectionTitle'
 import ProductItemNew from '@components_new/product/ProductItemNew'
+import SmallCart from '@components_new/common/SmallCart'
 
 export async function getStaticProps({
   preview,
@@ -45,11 +44,21 @@ export async function getStaticProps({
   }
 }
 
+interface Category {
+  id: string
+  name: string
+  items: Product[]
+}
+
+interface CategoriesType {
+  [key: string]: Category
+}
+
 export default function Home({
   products,
 }: InferGetStaticPropsType<typeof getStaticProps>) {
   const readyProducts = useMemo(() => {
-    const categories = {}
+    const categories: CategoriesType = {}
     products.map((prod: Product) => {
       if (!categories[prod.categoryId]) {
         categories[prod.categoryId] = {
@@ -68,10 +77,10 @@ export default function Home({
     <>
       <MainSlider />
       <div className="container mx-auto">
-        <div className="grid lg:grid-cols-4 grid-cols-1 md:grid-cols-2 gap-4 mt-10">
-          <div className="col-span-3">
-            {readyProducts.map((sec, index) => (
-              <div key={sec.id} className={index > 0 ? 'mt-[60px]' : ''}>
+        <div className="grid lg:grid-cols-4 grid-cols-1 md:grid-cols-2 gap-10 mt-10">
+          <div className="col-span-3 space-y-16">
+            {readyProducts.map((sec) => (
+              <div key={sec.id}>
                 <ProductListSectionTitle title={sec.name} />
                 <div className="grid grid-cols-1 lg:grid-cols-3 md:grid-cols-2 gap-10">
                   {sec.items.map((prod) => (
@@ -80,6 +89,9 @@ export default function Home({
                 </div>
               </div>
             ))}
+          </div>
+          <div className="mt-20 sticky top-10 max-h-screen">
+            <SmallCart />
           </div>
         </div>
       </div>

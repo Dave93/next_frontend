@@ -5,7 +5,6 @@ import { useState } from 'react'
 import { useRouter } from 'next/router'
 
 import { Layout } from '@components/common'
-import { ProductCard } from '@components/product'
 import type { Product } from '@commerce/types/product'
 import { Container, Grid, Skeleton } from '@components/ui'
 
@@ -23,7 +22,7 @@ const SORT = Object.entries({
 
 import {
   filterQuery,
-  getCategoryPath,
+  // getCategoryPath,
   getDesignerPath,
   useSearchMeta,
 } from '@lib/search'
@@ -119,7 +118,7 @@ export default function Search({ categories, brands }: SearchPropsType) {
                         }
                       )}
                     >
-                      <Link
+                      {/* <Link
                         href={{ pathname: getCategoryPath('', brand), query }}
                       >
                         <a
@@ -130,11 +129,11 @@ export default function Search({ categories, brands }: SearchPropsType) {
                         >
                           All Categories
                         </a>
-                      </Link>
+                      </Link> */}
                     </li>
                     {categories.map((cat: any) => (
                       <li
-                        key={cat.path}
+                        key={cat.id}
                         className={cn(
                           'block text-sm leading-5 text-accent-4 hover:bg-accent-1 lg:hover:bg-transparent hover:text-accent-8 focus:outline-none focus:bg-accent-1 focus:text-accent-8',
                           {
@@ -142,7 +141,7 @@ export default function Search({ categories, brands }: SearchPropsType) {
                           }
                         )}
                       >
-                        <Link
+                        {/* <Link
                           href={{
                             pathname: getCategoryPath(cat.path, brand),
                             query,
@@ -156,7 +155,7 @@ export default function Search({ categories, brands }: SearchPropsType) {
                           >
                             {cat.name}
                           </a>
-                        </Link>
+                        </Link> */}
                       </li>
                     ))}
                   </ul>
@@ -313,20 +312,7 @@ export default function Search({ categories, brands }: SearchPropsType) {
             </div>
           )}
           {data ? (
-            <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
-              {data.products.map((product: Product) => (
-                <ProductCard
-                  variant="simple"
-                  key={product.path}
-                  className="animated fadeIn"
-                  product={product}
-                  imgProps={{
-                    width: 480,
-                    height: 480,
-                  }}
-                />
-              ))}
-            </div>
+            <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3"></div>
           ) : (
             <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
               {rangeMap(12, (i) => (

@@ -5,17 +5,17 @@ import Image from 'next/image'
 
 const MainSlider: FC = () => {
   const plugins = [
-    new Fade(),
+    new Fade('', 0.4),
     new AutoPlay({ duration: 2000, direction: 'NEXT', stopOnHover: false }),
   ]
-  const sliderRef = createRef()
+  const sliderRef = createRef<Flicking>()
 
   const slideNext = () => {
-    sliderRef.current.next()
+    sliderRef.current?.next()
   }
 
   const slidePrev = () => {
-    sliderRef.current.prev()
+    sliderRef.current?.prev()
   }
   return (
     <div className="relative">
