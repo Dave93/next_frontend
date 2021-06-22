@@ -5,11 +5,11 @@ module.exports = {
       script: './server.js',
       watch: false,
       env: {
-        port: 3000,
+        PORT: 3000,
         NODE_ENV: 'development',
       },
       env_production: {
-        port: 5656,
+        PORT: 5656,
         NODE_ENV: 'production',
       },
     },
