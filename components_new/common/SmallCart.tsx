@@ -20,7 +20,7 @@ const SmallCart: FC = () => {
               </span>
             )} */}
           </div>
-          <div>
+          <div className="flex items-center">
             <Image src="/small_cart_icon.png" width={34} height={34} />
           </div>
         </div>
