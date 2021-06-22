@@ -1,17 +1,17 @@
 const colors = require('tailwindcss/colors')
 const defaultTheme = require('tailwindcss/defaultTheme')
 module.exports = {
-  // mode: 'jit',
+  mode: 'jit',
   future: {
     purgeLayersByDefault: true,
     applyComplexClasses: true,
   },
   purge: {
     content: [
-      // './public/**/*.html',
-      // './components/**/*.{js,ts,jsx,tsx}',
-      // './components_new/**/*.{js,ts,jsx,tsx}',
-      // './pages/**/*.{js,ts,jsx,tsx}',
+      './public/**/*.html',
+      './components/**/*.{js,ts,jsx,tsx}',
+      './components_new/**/*.{js,ts,jsx,tsx}',
+      './pages/**/*.{js,ts,jsx,tsx}',
     ],
     options: {
       safelist: {
