@@ -1,18 +1,42 @@
-import React, { Fragment, useState, memo, useRef, FC } from 'react'
+import React, { Fragment, useState, memo, useRef, FC, useMemo } from 'react'
 import { Dialog, Transition } from '@headlessui/react'
 import useTranslation from 'next-translate/useTranslation'
 import { XIcon } from '@heroicons/react/outline'
 import { useForm } from 'react-hook-form'
+import OtpInput from 'react-otp-input'
 import axios from 'axios'
 import Cookies from 'js-cookie'
 
+import styles from './SignInButton.module.css'
+
 axios.defaults.withCredentials = true
+
+interface Errors {
+  [key: string]: string
+}
+
+interface AnyObject {
+  [key: string]: any
+}
+
+const errors: Errors = {
+  name_field_is_required:
+    'Мы Вас не нашли в нашей системе. Просьба указать своё имя.',
+}
+
+let otpTimerRef: NodeJS.Timeout
 
 const SignInButton: FC = () => {
   const { t: tr } = useTranslation('common')
 
   let [isOpen, setIsOpen] = useState(false)
   let [isShowPrivacy, setIsShowPrivacy] = useState(false)
+  const [otpCode, setOtpCode] = useState('')
+  const [submitError, setSubmitError] = useState('')
+  const [isShowPasswordForm, setIsShowPasswordForm] = useState(false)
+  const [otpShowCode, setOtpShowCode] = useState(0)
+
+  const otpTime = useRef(0)
 
   const openModal = () => {
     setIsOpen(true)
@@ -25,20 +49,41 @@ const SignInButton: FC = () => {
   const { register, handleSubmit, reset, watch, formState } = useForm({
     mode: 'onChange',
   })
-  const onSubmit = async (data: React.SyntheticEvent) => {
-    // const dada = await fetch('https://api.hq.fungeek.net/sanctum/csrf-cookie', {
-    //   credentials: 'same-origin',
-    // })
-    // console.log(document.cookie)
-    // console.log(dada)
 
-    // axios.get('https://api.hq.fungeek.net/sanctum/csrf-cookie').then(response => {
-    //   console.log(Cookies.get('XSRF-TOKEN'))
-    //   // Login...
-    //   axios.post('https://api.hq.fungeek.net/api/send_otp', data).then(data => {
-    //     console.log(data)
-    //   })
-    // })
+  const startTimeout = () => {
+    otpTimerRef = setInterval(() => {
+      if (otpTime.current > 0) {
+        otpTime.current = otpTime.current - 1
+        setOtpShowCode(otpTime.current)
+      } else {
+        clearInterval(otpTimerRef)
+      }
+    }, 1000)
+  }
+
+  const otpTimerText = useMemo(() => {
+    let text = 'Получить новый код через '
+    const minutes: number = parseInt((otpShowCode / 60).toString(), 0)
+    const seconds: number = otpShowCode % 60
+    if (minutes > 0) {
+      text += minutes + ' мин. '
+    }
+
+    if (seconds > 0) {
+      text += seconds + ' сек.'
+    }
+    return text
+  }, [otpShowCode])
+
+  const {
+    register: passwordFormRegister,
+    handleSubmit: handlePasswordSubmit,
+    formState: passwordFormState,
+  } = useForm({
+    mode: 'onChange',
+  })
+  const onSubmit = async (data: Object) => {
+    setSubmitError('')
     const csrfReq = await axios('https://api.hq.fungeek.net/api/keldi', {
       method: 'GET',
       headers: {
@@ -64,19 +109,47 @@ const SignInButton: FC = () => {
         withCredentials: true,
       }
     )
-    console.log(ress)
-    // const rawResponse = await fetch('https://api.hq.fungeek.net/api/send_otp', {
-    //   method: 'POST',
-    //   headers: {
-    //     Accept: 'application/json',
-    //     'Content-Type': 'application/json',
-    //   },
-    //   credentials: 'include',
-    //   body: JSON.stringify(data),
-    // })
-    // const content = await rawResponse.json()
-    // console.log(content)
+
+    let {
+      data: { error: otpError, data: result, success },
+    }: {
+      data: {
+        error: string
+        data: AnyObject
+        success: AnyObject
+      }
+    } = ress
+
+    if (otpError) {
+      setSubmitError(errors[otpError])
+    } else if (success) {
+      Cookies.set('opt_token', success.user_token)
+      otpTime.current = result?.time_to_answer
+      setOtpShowCode(otpTime.current)
+      startTimeout()
+      setIsShowPasswordForm(true)
+    }
   }
+
+  const submitPasswordForm = async (data: React.SyntheticEvent) => {
+    const otpToken = Cookies.get('opt_token')
+    let ress = await axios.post(
+      'https://api.hq.fungeek.net/api/auth_otp',
+      {
+        phone: authPhone,
+        code: otpCode,
+      },
+      {
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${otpToken}`,
+        },
+        withCredentials: true,
+      }
+    )
+    console.log(ress)
+  }
+
   const authName = watch('name')
   const authPhone = watch('phone')
 
@@ -93,6 +166,18 @@ const SignInButton: FC = () => {
 
   let authButtonRef = useRef(null)
   let privacyButtonRef = useRef(null)
+
+  const handleOtpChange = (otp: string) => {
+    setOtpCode(otp)
+  }
+
+  const getNewCode = (e: React.SyntheticEvent<EventTarget>) => {
+    e.preventDefault()
+    onSubmit({
+      name: authName,
+      phone: authPhone,
+    })
+  }
 
   return (
     <>
@@ -140,104 +225,181 @@ const SignInButton: FC = () => {
             >
               <div className="align-middle inline-block overflow-hidden w-full">
                 <div className="inline-flex my-8 items-start">
-                  <div className="align-middle bg-white inline-block overflow-hidden px-40 py-10 rounded-2xl shadow-xl text-center transform transition-all w-full">
+                  <div className="align-middle bg-white inline-block overflow-hidden px-40 py-10 rounded-2xl shadow-xl text-center transform transition-all max-w-2xl">
                     <Dialog.Title as="h3" className="leading-6 text-3xl">
                       Авторизация
                     </Dialog.Title>
-                    <form onSubmit={handleSubmit(onSubmit)}>
-                      <div className="mt-10">
-                        <label className="text-sm text-gray-400 mb-2 block">
-                          Ваше имя
-                        </label>
-                        <div className="relative">
-                          <input
-                            type="text"
-                            {...register('name')}
-                            className="border border-yellow focus:outline-none outline-none px-6 py-3 rounded-full text-sm w-full"
-                          />
-                          {authName && (
-                            <button
-                              className="absolute focus:outline-none inset-y-0 outline-none right-4 text-gray-400"
-                              onClick={() => {
-                                reset({ name: '' })
-                              }}
-                            >
-                              <XIcon className="cursor-pointer h-5 text-gray-400 w-5" />
-                            </button>
-                          )}
-                        </div>
+                    {submitError && (
+                      <div className="bg-red-200 p-5 font-bold text-red-600 my-6">
+                        {submitError}
                       </div>
-                      <div className="mt-10">
-                        <label className="text-sm text-gray-400 mb-2 block">
-                          Номер телефона
-                        </label>
-                        <div className="relative">
-                          <input
-                            type="text"
-                            {...register('phone', {
-                              required: true,
-                              pattern: /^\+998\d\d\d\d\d\d\d\d\d$/i,
-                            })}
-                            className="border border-yellow focus:outline-none outline-none px-6 py-3 rounded-full text-sm w-full"
-                          />
-                          {authPhone && (
-                            <button
-                              className="absolute focus:outline-none inset-y-0 outline-none right-4 text-gray-400"
-                              onClick={() => {
-                                reset({ phone: '' })
-                              }}
-                            >
-                              <XIcon className="cursor-pointer h-5 text-gray-400 w-5" />
-                            </button>
-                          )}
-                        </div>
-                      </div>
-                      <div className="mt-10">
-                        <button
-                          className={`py-3 px-20 text-white font-bold text-xl text-center rounded-full w-full outline-none focus:outline-none ${
-                            formState.isValid ? 'bg-yellow' : 'bg-gray-400'
-                          }`}
-                          disabled={!formState.isValid}
-                          ref={authButtonRef}
+                    )}
+                    {isShowPasswordForm ? (
+                      <div>
+                        <form
+                          onSubmit={handlePasswordSubmit(submitPasswordForm)}
                         >
-                          {formState.isSubmitting ? (
-                            <svg
-                              className="animate-spin h-5 mx-auto text-center text-white w-5"
-                              xmlns="http://www.w3.org/2000/svg"
-                              fill="none"
-                              viewBox="0 0 24 24"
+                          <div className="mt-10">
+                            <label className="text-sm text-gray-400 mb-2 block">
+                              Код из смс
+                            </label>
+                            <OtpInput
+                              value={otpCode}
+                              onChange={handleOtpChange}
+                              inputStyle={`${styles.digitField} border border-yellow w-16 rounded-3xl h-12 outline-none focus:outline-none text-center`}
+                              isInputNum={true}
+                              containerStyle="grid grid-cols-4 gap-1.5"
+                              numInputs={4}
+                            />
+                            {otpShowCode > 0 ? (
+                              <div className="text-xs text-yellow mt-3">
+                                {otpTimerText}
+                              </div>
+                            ) : (
+                              <button
+                                className="text-xs text-yellow mt-3 outline-none focus:outline-none border-b border-yellow pb-0.5"
+                                onClick={(e) => getNewCode(e)}
+                              >
+                                Получить код заново
+                              </button>
+                            )}
+                          </div>
+                          <div className="mt-10">
+                            <button
+                              className={`py-3 px-20 text-white font-bold text-xl text-center rounded-full w-full outline-none focus:outline-none ${
+                                otpCode.length >= 4
+                                  ? 'bg-yellow'
+                                  : 'bg-gray-400'
+                              }`}
+                              disabled={otpCode.length < 4}
+                              ref={authButtonRef}
                             >
-                              <circle
-                                className="opacity-25"
-                                cx="12"
-                                cy="12"
-                                r="10"
-                                stroke="currentColor"
-                                strokeWidth="4"
-                              ></circle>
-                              <path
-                                className="opacity-75"
-                                fill="currentColor"
-                                d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
-                              ></path>
-                            </svg>
-                          ) : (
-                            'Получить код'
-                          )}
-                        </button>
+                              {passwordFormState.isSubmitting ? (
+                                <svg
+                                  className="animate-spin h-5 mx-auto text-center text-white w-5"
+                                  xmlns="http://www.w3.org/2000/svg"
+                                  fill="none"
+                                  viewBox="0 0 24 24"
+                                >
+                                  <circle
+                                    className="opacity-25"
+                                    cx="12"
+                                    cy="12"
+                                    r="10"
+                                    stroke="currentColor"
+                                    strokeWidth="4"
+                                  ></circle>
+                                  <path
+                                    className="opacity-75"
+                                    fill="currentColor"
+                                    d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+                                  ></path>
+                                </svg>
+                              ) : (
+                                'Войти'
+                              )}
+                            </button>
+                          </div>
+                        </form>
                       </div>
-                    </form>
-                    <div className="mt-5 text-gray-400 text-sm">
-                      Нажимая получить код я принимаю условия{' '}
-                      <a
-                        href="/privacy"
-                        onClick={showPrivacy}
-                        className="text-yellow block"
-                        target="_blank"
-                      >
-                        пользовательского соглашения
-                      </a>
-                    </div>
+                    ) : (
+                      <>
+                        <form onSubmit={handleSubmit(onSubmit)}>
+                          <div className="mt-10">
+                            <label className="text-sm text-gray-400 mb-2 block">
+                              Ваше имя
+                            </label>
+                            <div className="relative">
+                              <input
+                                type="text"
+                                {...register('name')}
+                                className="border border-yellow focus:outline-none outline-none px-6 py-3 rounded-full text-sm w-full"
+                              />
+                              {authName && (
+                                <button
+                                  className="absolute focus:outline-none inset-y-0 outline-none right-4 text-gray-400"
+                                  onClick={() => {
+                                    reset({ name: '' })
+                                  }}
+                                >
+                                  <XIcon className="cursor-pointer h-5 text-gray-400 w-5" />
+                                </button>
+                              )}
+                            </div>
+                          </div>
+                          <div className="mt-10">
+                            <label className="text-sm text-gray-400 mb-2 block">
+                              Номер телефона
+                            </label>
+                            <div className="relative">
+                              <input
+                                type="text"
+                                {...register('phone', {
+                                  required: true,
+                                  pattern: /^\+998\d\d\d\d\d\d\d\d\d$/i,
+                                })}
+                                className="border border-yellow focus:outline-none outline-none px-6 py-3 rounded-full text-sm w-full"
+                              />
+                              {authPhone && (
+                                <button
+                                  className="absolute focus:outline-none inset-y-0 outline-none right-4 text-gray-400"
+                                  onClick={() => {
+                                    reset({ phone: '' })
+                                  }}
+                                >
+                                  <XIcon className="cursor-pointer h-5 text-gray-400 w-5" />
+                                </button>
+                              )}
+                            </div>
+                          </div>
+                          <div className="mt-10">
+                            <button
+                              className={`py-3 px-20 text-white font-bold text-xl text-center rounded-full w-full outline-none focus:outline-none ${
+                                formState.isValid ? 'bg-yellow' : 'bg-gray-400'
+                              }`}
+                              disabled={!formState.isValid}
+                              ref={authButtonRef}
+                            >
+                              {formState.isSubmitting ? (
+                                <svg
+                                  className="animate-spin h-5 mx-auto text-center text-white w-5"
+                                  xmlns="http://www.w3.org/2000/svg"
+                                  fill="none"
+                                  viewBox="0 0 24 24"
+                                >
+                                  <circle
+                                    className="opacity-25"
+                                    cx="12"
+                                    cy="12"
+                                    r="10"
+                                    stroke="currentColor"
+                                    strokeWidth="4"
+                                  ></circle>
+                                  <path
+                                    className="opacity-75"
+                                    fill="currentColor"
+                                    d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+                                  ></path>
+                                </svg>
+                              ) : (
+                                'Получить код'
+                              )}
+                            </button>
+                          </div>
+                        </form>
+                        <div className="mt-5 text-gray-400 text-sm">
+                          Нажимая получить код я принимаю условия{' '}
+                          <a
+                            href="/privacy"
+                            onClick={showPrivacy}
+                            className="text-yellow block"
+                            target="_blank"
+                          >
+                            пользовательского соглашения
+                          </a>
+                        </div>
+                      </>
+                    )}
                   </div>
                   <button
                     className="text-white outline-none focus:outline-none transform"
