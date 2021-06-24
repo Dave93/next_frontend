@@ -1,6 +1,19 @@
 import React, { FC, useCallback, useMemo } from 'react'
 import { ThemeProvider } from 'next-themes'
 
+interface AnyObject {
+  [key: string]: any
+}
+
+export interface UserData {
+  user_identity: number[]
+  user_contact: string
+  user_token: string
+  try: number
+  status: number
+  user: AnyObject
+}
+
 export interface State {
   displaySidebar: boolean
   displayDropdown: boolean
@@ -8,6 +21,7 @@ export interface State {
   sidebarView: string
   modalView: string
   userAvatar: string
+  user?: UserData | null
 }
 
 const initialState = {
@@ -17,6 +31,7 @@ const initialState = {
   modalView: 'LOGIN_VIEW',
   sidebarView: 'CART_VIEW',
   userAvatar: '',
+  user: null,
 }
 
 type Action =
@@ -49,6 +64,10 @@ type Action =
   | {
       type: 'SET_USER_AVATAR'
       value: string
+    }
+  | {
+      type: 'SET_USER_DATA'
+      value: UserData
     }
 
 type MODAL_VIEWS =
@@ -121,6 +140,12 @@ function uiReducer(state: State, action: Action) {
         userAvatar: action.value,
       }
     }
+    case 'SET_USER_DATA': {
+      return {
+        ...state,
+        user: action.value,
+      }
+    }
   }
 }
 
@@ -180,6 +205,11 @@ export const UIProvider: FC = (props) => {
     [dispatch]
   )
 
+  const setUserData = useCallback(
+    (value: UserData) => dispatch({ type: 'SET_USER_DATA', value }),
+    [dispatch]
+  )
+
   const value = useMemo(
     () => ({
       ...state,
@@ -194,6 +224,7 @@ export const UIProvider: FC = (props) => {
       setModalView,
       setSidebarView,
       setUserAvatar,
+      setUserData,
     }),
     [state]
   )

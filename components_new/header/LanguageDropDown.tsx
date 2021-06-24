@@ -2,7 +2,6 @@ import { Fragment, FC, memo } from 'react'
 import { Menu, Transition } from '@headlessui/react'
 import { Ru, Uz } from 'react-flags-select'
 import { useRouter } from 'next/router'
-import Link from 'next/link'
 
 const locales = {
   ru: Ru,

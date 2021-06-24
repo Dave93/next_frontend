@@ -48,14 +48,20 @@ const Layout: FC<Props> = ({
     ...pageProps
   },
 }) => {
-  const { locale = 'ru' } = useRouter()
+  const { locale = 'ru', pathname } = useRouter()
 
   return (
     <CommerceProvider locale={locale}>
       <div className="font-sans">
         <div className="flex flex-col h-screen">
           <Header menu={topMenu} />
-          <main className="flex-grow">{children}</main>
+          <main className="flex-grow">
+            {pathname == '/' ? (
+              children
+            ) : (
+              <div className="container mx-auto">{children}</div>
+            )}
+          </main>
           <footer className="text-white flex flex-col mt-14">
             <Image src="/assets/footer_weave.png" width={1920} height={40} />
             <div className="bg-secondary w-full pt-5 pb-2">
