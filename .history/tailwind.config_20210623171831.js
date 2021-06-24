@@ -1,17 +1,17 @@
 const colors = require('tailwindcss/colors')
 const defaultTheme = require('tailwindcss/defaultTheme')
 module.exports = {
-  // mode: 'jit',
+  mode: 'jit',
   future: {
     purgeLayersByDefault: true,
     applyComplexClasses: true,
   },
   purge: {
     content: [
-      // './public/**/*.html',
-      // './components/**/*.{js,ts,jsx,tsx}',
-      // './components_new/**/*.{js,ts,jsx,tsx}',
-      // './pages/**/*.{js,ts,jsx,tsx}',
+      './public/**/*.html',
+      './components/**/*.{js,ts,jsx,tsx}',
+      './components_new/**/*.{js,ts,jsx,tsx}',
+      './pages/**/*.{js,ts,jsx,tsx}',
     ],
     options: {
       safelist: {
@@ -35,7 +35,6 @@ module.exports = {
       gray: colors.trueGray,
       indigo: colors.indigo,
       red: colors.rose,
-      green: colors.green,
       yellow: {
         light: '#F9B004',
         DEFAULT: '#FAAF04',

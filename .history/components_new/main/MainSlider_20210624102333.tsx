@@ -58,7 +58,7 @@ const MainSlider: FC = () => {
         </div>
       </Flicking>
       <div
-        className="absolute cursor-pointer left-72 lg:left-28 top-36 z-10"
+        className="absolute cursor-pointer left-72 2xl:left-28 top-36 z-10"
         onClick={() => slidePrev()}
       >
         <Image src="/assets/slider_arrow_left.png" width={46} height={46} />
