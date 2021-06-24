@@ -7,22 +7,22 @@ export type profileMenuItem = {
 const menuItems: profileMenuItem[] = [
   {
     href: '/profile',
-    icon: '/bonuses.png',
+    icon: 'bonuses.png',
     langCode: 'profile_bonuses',
   },
   {
     href: '/profile/orders',
-    icon: '/order.png',
+    icon: 'order.png',
     langCode: 'profile_orders',
   },
   {
     href: '/profile/account',
-    icon: '/personal.png',
+    icon: 'personal.png',
     langCode: 'profile_account',
   },
   {
     href: '/profile/logout',
-    icon: '/logout.png',
+    icon: 'logout.png',
     langCode: 'profile_logout',
   },
 ]
