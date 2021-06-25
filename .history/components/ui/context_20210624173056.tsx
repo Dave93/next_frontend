@@ -1,4 +1,5 @@
 import React, { FC, useCallback, useMemo } from 'react'
+import { ThemeProvider } from 'next-themes'
 
 interface AnyObject {
   [key: string]: any
@@ -241,6 +242,6 @@ export const useUI = () => {
 
 export const ManagedUIContext: FC = ({ children }) => (
   <UIProvider>
-    {children}
+    <ThemeProvider>{}</ThemeProvider>
   </UIProvider>
 )

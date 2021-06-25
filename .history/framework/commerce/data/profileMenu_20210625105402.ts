@@ -15,19 +15,19 @@ const menuItems: profileMenuItem[] = [
   {
     href: '/profile/orders',
     icon: '/order.png',
-    activeIcon: '/activeOrder.png',
+    activeIcon: '',
     langCode: 'profile_orders',
   },
   {
     href: '/profile/account',
     icon: '/personal.png',
-    activeIcon: '/activePersonal.png',
+    activeIcon: '',
     langCode: 'profile_account',
   },
   {
     href: '/profile/logout',
     icon: '/logout.png',
-    activeIcon: '/logout.png',
+    activeIcon: '',
     langCode: 'profile_logout',
   },
 ]

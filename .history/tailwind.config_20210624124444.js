@@ -19,7 +19,7 @@ module.exports = {
       },
     },
   },
-  darkMode: 'media', // or 'media' or 'class'
+  darkMode: 'class', // or 'media' or 'class'
   theme: {
     screens: {
       sm: '480px',
@@ -35,7 +35,6 @@ module.exports = {
       gray: colors.trueGray,
       indigo: colors.indigo,
       red: colors.rose,
-      green: colors.green,
       yellow: {
         light: '#F9B004',
         DEFAULT: '#FAAF04',

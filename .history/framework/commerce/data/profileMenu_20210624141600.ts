@@ -2,32 +2,27 @@ export type profileMenuItem = {
   href: string
   icon: string
   langCode: string
-  activeIcon: string
 }
 
 const menuItems: profileMenuItem[] = [
   {
     href: '/profile',
-    activeIcon: '/activeBonuses.png',
-    icon: '/bonuses.png',
+    icon: '',
     langCode: 'profile_bonuses',
   },
   {
     href: '/profile/orders',
-    icon: '/order.png',
-    activeIcon: '/activeOrder.png',
+    icon: '',
     langCode: 'profile_orders',
   },
   {
     href: '/profile/account',
-    icon: '/personal.png',
-    activeIcon: '/activePersonal.png',
+    icon: '',
     langCode: 'profile_account',
   },
   {
     href: '/profile/logout',
-    icon: '/logout.png',
-    activeIcon: '/logout.png',
+    icon: '',
     langCode: 'profile_logout',
   },
 ]

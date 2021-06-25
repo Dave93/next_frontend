@@ -1,4 +1,5 @@
 import React, { FC, useCallback, useMemo } from 'react'
+import { ThemeProvider } from 'next-themes'
 
 interface AnyObject {
   [key: string]: any

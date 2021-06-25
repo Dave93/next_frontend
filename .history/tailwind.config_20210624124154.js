@@ -35,7 +35,6 @@ module.exports = {
       gray: colors.trueGray,
       indigo: colors.indigo,
       red: colors.rose,
-      green: colors.green,
       yellow: {
         light: '#F9B004',
         DEFAULT: '#FAAF04',
