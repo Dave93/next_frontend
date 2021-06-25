@@ -3,7 +3,6 @@ import React from "react";
 import { Layout } from '@components/common'
 import { GetStaticPropsContext } from "next";
 import commerce from "@lib/api/commerce";
-import Orders from '@components_new/profile/Orders';
 
 
 export async function getStaticProps({
@@ -26,7 +25,6 @@ export default function  OrdersPage() {
     return (
       <div>
         <UserData />
-        <Orders />
       </div>
     )
 }

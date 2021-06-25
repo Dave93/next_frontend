@@ -4,7 +4,7 @@ import commerce from '@lib/api/commerce'
 import { Layout } from '@components/common'
 import { Container, Text } from '@components/ui'
 import React from 'react'
-import UserData from '@components_new/profile/UserData'
+import UserName from '@components_new/profile/UserName'
 import Bonuses from '@components_new/profile/Bonuses'
 
 export async function getStaticProps({
@@ -28,7 +28,7 @@ export default function Profile() {
   return (
     <Container>
       <Text variant="pageHeading">My Profile</Text>
-      <UserData />
+      <UserName />
       <Bonuses />
       {data && (
         <div className="grid lg:grid-cols-12">

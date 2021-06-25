@@ -5,7 +5,7 @@ import { useUI } from '@components/ui/context'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
 
-const UserName: FC = () => {
+const UserData: FC = () => {
   const { t: tr } = useTranslation('common')
   const router = useRouter()
   const { locale, pathname } = router
@@ -20,7 +20,7 @@ const UserName: FC = () => {
   return (
     <div className="border-b justify-between md:flex pb-5">
       <div>
-        <div className="text-3xl mb-1">Привет, Зафар!</div>
+        <div className="text-3xl mb-1">Привет, {user?.name}!</div>
         <div className="text-xs w-80 text-gray-400">
           Это ваш личный кабинет. Здесь вы можете управлять своими заказами,
           редактировать личные данные и следить за избранными товарами
@@ -29,7 +29,7 @@ const UserName: FC = () => {
       <div className="flex items-end">
         {items.map((item, id) => (
           <div className="flex items-center ml-10" key={id}>
-            <img src={item.icon} />
+            <img src={`${pathname == item.href ? item.activeIcon : item.icon}`} />
             <Link href={item.href} locale={locale} prefetch={false}>
               <a
                 className={`${
@@ -46,4 +46,4 @@ const UserName: FC = () => {
   )
 }
 
-export default memo(UserName)
+export default UserData

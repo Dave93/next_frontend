@@ -27,7 +27,7 @@ const menuItems: profileMenuItem[] = [
   {
     href: '/profile/logout',
     icon: '/logout.png',
-    activeIcon: '/logout.png',
+    activeIcon: '',
     langCode: 'profile_logout',
   },
 ]

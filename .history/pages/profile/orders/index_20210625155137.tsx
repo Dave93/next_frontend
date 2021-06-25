@@ -3,7 +3,7 @@ import React from "react";
 import { Layout } from '@components/common'
 import { GetStaticPropsContext } from "next";
 import commerce from "@lib/api/commerce";
-import Orders from '@components_new/profile/Orders';
+import Orders from 'pages/orders';
 
 
 export async function getStaticProps({
