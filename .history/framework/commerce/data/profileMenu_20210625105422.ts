@@ -21,13 +21,13 @@ const menuItems: profileMenuItem[] = [
   {
     href: '/profile/account',
     icon: '/personal.png',
-    activeIcon: '/activePersonal.png',
+    activeIcon: '',
     langCode: 'profile_account',
   },
   {
     href: '/profile/logout',
     icon: '/logout.png',
-    activeIcon: '/logout.png',
+    activeIcon: '',
     langCode: 'profile_logout',
   },
 ]
