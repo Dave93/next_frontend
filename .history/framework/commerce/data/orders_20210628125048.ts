@@ -34,7 +34,7 @@ const orderItems: Orders[] = [
         img: '/pizza_img.png',
         name: 'Байрам',
         type: 'Средняя 32 см, Традиционное тесто',
-        price: '88 000 сум',
+        price: '108 000 сум',
       },
     ],
   },

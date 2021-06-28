@@ -15,7 +15,5 @@
   "order_price": "Сумма:",
   "order_address": "Адрес:",
   "order_time": "Время заказа:",
-  "order": "Заказ",
-  "order_detail": "Детали заказа",
-  "order_repeat": "Повторить заказ"
+  "order": "Заказ"
 }

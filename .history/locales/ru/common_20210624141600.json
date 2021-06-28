@@ -1,0 +1,12 @@
+{
+  "signIn": "Войти",
+  "headerMenuMenu": "Меню",
+  "headerMenuSale": "Акции",
+  "headerMenuDelivery": "Доставка",
+  "headerMenuContacts": "Контакты",
+  "chooseLocation": "Укажите свой адрес",
+  "profile_bonuses": "Бонусы",
+  "profile_orders": "Мои заказы",
+  "profile_account": "Личные данные",
+  "profile_logout": "Выйти"
+}
