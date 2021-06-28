@@ -1,5 +1,16 @@
 import React, { FC, useCallback, useMemo } from 'react'
 
+let userData: any = null
+
+if (typeof window !== 'undefined') {
+  userData = localStorage.getItem('mijoz')
+  try {
+    userData = Buffer.from(userData, 'base64')
+    userData = userData.toString('ascii')
+    userData = JSON.parse(userData)
+  } catch (e) {}
+}
+
 interface AnyObject {
   [key: string]: any
 }
@@ -30,7 +41,7 @@ const initialState = {
   modalView: 'LOGIN_VIEW',
   sidebarView: 'CART_VIEW',
   userAvatar: '',
-  user: null,
+  user: userData,
 }
 
 type Action =
@@ -140,6 +151,11 @@ function uiReducer(state: State, action: Action) {
       }
     }
     case 'SET_USER_DATA': {
+      try {
+        let userNewData = JSON.stringify(action.value)
+        userNewData = Buffer.from(userNewData).toString('base64')
+        localStorage.setItem('mijoz', userNewData)
+      } catch (e) {}
       return {
         ...state,
         user: action.value,
@@ -240,7 +256,5 @@ export const useUI = () => {
 }
 
 export const ManagedUIContext: FC = ({ children }) => (
-  <UIProvider>
-    {children}
-  </UIProvider>
+  <UIProvider>{children}</UIProvider>
 )

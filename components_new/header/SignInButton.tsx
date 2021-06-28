@@ -169,6 +169,7 @@ const SignInButton: FC = () => {
     } else {
       clearInterval(otpTimerRef)
       setUserData(result)
+      setIsShowPasswordForm(false)
     }
   }
 

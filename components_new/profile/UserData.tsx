@@ -10,13 +10,22 @@ const UserData: FC = () => {
   const router = useRouter()
   const { locale, pathname } = router
 
-  const { user } = useUI()
+  const { user, setUserData } = useUI()
   let items = menuItems.map((item) => {
     return {
       ...item,
       name: tr(item.langCode),
     }
   })
+
+  const logout = (e: React.SyntheticEvent<EventTarget>) => {
+    e.preventDefault()
+    e.stopPropagation()
+    localStorage.removeItem('mijoz')
+    setUserData(null)
+    router.push('/')
+  }
+
   return (
     <div className="border-b justify-between md:flex pb-5">
       <div>
@@ -29,16 +38,27 @@ const UserData: FC = () => {
       <div className="flex items-end">
         {items.map((item, id) => (
           <div className="flex items-center ml-10" key={id}>
-            <img src={`${pathname == item.href ? item.activeIcon : item.icon}`} />
-            <Link href={item.href} locale={locale} prefetch={false}>
-              <a
-                className={`${
-                  pathname == item.href ? 'text-yellow' : 'text-gray-400'
-                } ml-1 text-sm`}
+            <img
+              src={`${pathname == item.href ? item.activeIcon : item.icon}`}
+            />
+            {item.href == '/profile/logout' ? (
+              <span
+                className="block ml-1 text-sm cursor-pointer text-gray-400"
+                onClick={logout}
               >
                 {item.name}
-              </a>
-            </Link>
+              </span>
+            ) : (
+              <Link href={item.href} locale={locale} prefetch={false}>
+                <a
+                  className={`${
+                    pathname == item.href ? 'text-yellow' : 'text-gray-400'
+                  } ml-1 text-sm`}
+                >
+                  {item.name}
+                </a>
+              </Link>
+            )}
           </div>
         ))}
       </div>

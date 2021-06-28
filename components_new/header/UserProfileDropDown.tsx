@@ -1,31 +1,29 @@
-import { Fragment, FC, memo } from 'react'
+import { Fragment, FC, memo, ReactEventHandler } from 'react'
 import { Menu, Transition } from '@headlessui/react'
-import { Ru, Uz } from 'react-flags-select'
-import { useRouter } from 'next/router'
+import menuItems from '@commerce/data/profileMenu'
+import useTranslation from 'next-translate/useTranslation'
+import { useUI } from '@components/ui/context'
 import Link from 'next/link'
-
-const locales = {
-  ru: Ru,
-  uz: Uz,
-}
-
-const localeLabel = {
-  ru: 'Ru',
-  uz: 'Uz',
-}
+import { useRouter } from 'next/router'
 
 const UserProfileDropDown: FC = () => {
+  const { t: tr } = useTranslation('common')
   const router = useRouter()
   const { locale, pathname } = router
-  const keyTyped = locale as keyof typeof locales
-  const keyTypedLabel = locale as keyof typeof locales
-  const localeComponent = locales[keyTyped]({})
 
-  const changeLang = (e: any, loc: string) => {
+  const { user, setUserData } = useUI()
+  let items = menuItems.map((item) => {
+    return {
+      ...item,
+      name: tr(item.langCode),
+    }
+  })
+
+  const logout = (e: React.SyntheticEvent<EventTarget>) => {
     e.preventDefault()
-    return router.push(pathname, pathname, {
-      locale: loc,
-    })
+    e.stopPropagation()
+    localStorage.removeItem('mijoz')
+    setUserData(null)
   }
 
   return (
@@ -33,9 +31,8 @@ const UserProfileDropDown: FC = () => {
       {({ open }) => (
         <>
           <div>
-            <Menu.Button className="bg-white focus:outline-none font-medium inline-flex justify-center outline-none px-4 py-2 text-secondary text-sm w-full">
-              {localeComponent}{' '}
-              <span className="ml-1.5">{localeLabel[keyTypedLabel]}</span>
+            <Menu.Button className="bg-gray-200 px-8 py-1 rounded-full text-secondary outline-none focus:outline-none">
+              {user.user.name}
             </Menu.Button>
           </div>
 
@@ -51,26 +48,26 @@ const UserProfileDropDown: FC = () => {
           >
             <Menu.Items
               static
-              className="absolute overflow-hidden bg-white divide-gray-100 divide-y focus:outline-none mt-2 origin-top-right right-0 ring-1 ring-black ring-opacity-5 rounded-2xl shadow-lg top-0 z-20"
+              className="absolute bg-white divide-gray-100 divide-y focus:outline-none mt-2 origin-top-right right-0 ring-1 ring-black ring-opacity-5 overflow-hidden rounded-2xl shadow-lg z-20"
             >
-              {Object.keys(locales).map((langKey) => {
-                const keyTypedLabel = langKey as keyof typeof localeLabel
-                const keyTyped = langKey as keyof typeof locales
-                return (
-                  <Menu.Item key={langKey}>
-                    <a
-                      className="px-4 py-2 text-sm text-secondary hover:bg-secondary hover:text-white flex items-center no-underline"
-                      href={`/${locale}${pathname}`}
-                      onClick={(e) => changeLang(e, langKey)}
+              {items.map((item) => (
+                <Menu.Item key={item.href}>
+                  {item.href == '/profile/logout' ? (
+                    <span
+                      className="block px-4 py-2 text-sm cursor-pointer text-secondary hover:text-white hover:bg-secondary"
+                      onClick={logout}
                     >
-                      {locales[keyTyped]({})}{' '}
-                      <span className="ml-1.5">
-                        {localeLabel[keyTypedLabel]}
-                      </span>
-                    </a>
-                  </Menu.Item>
-                )
-              })}
+                      {item.name}
+                    </span>
+                  ) : (
+                    <Link href={item.href} locale={locale} prefetch={false}>
+                      <a className="block px-4 py-2 text-sm cursor-pointer text-secondary hover:text-white hover:bg-secondary">
+                        {item.name}
+                      </a>
+                    </Link>
+                  )}
+                </Menu.Item>
+              ))}
             </Menu.Items>
           </Transition>
         </>
