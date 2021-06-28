@@ -9,6 +9,7 @@ import { ChevronDownIcon } from '@heroicons/react/solid'
 const Orders: FC = () => {
   const { t: tr } = useTranslation('common')
   const router = useRouter()
+  const { locale, pathname } = router
   const { user } = useUI()
   let items = OrdersItems.map((item) => {
     return {
@@ -19,7 +20,7 @@ const Orders: FC = () => {
 
   return (
     <div>
-      <div className="text-2xl mt-8 mb-5">{tr('order_myOrders')}</div>
+      <div className="text-2xl mt-8 mb-5">Мои заказы</div>
       {items.map((item) => (
         <div className="border  p-10 rounded-2xl text-xl mt-5">
           <Disclosure>
@@ -27,11 +28,9 @@ const Orders: FC = () => {
               <>
                 <div className="flex  text-base justify-between border-b pb-8">
                   {open ? (
-                    <div className="font-bold text-xl">
-                      {tr('order')} № {item.id}
-                    </div>
+                    <div className="font-bold text-xl">Заказ № {item.id}</div>
                   ) : (
-                    <div> № {item.id}</div>
+                    <div>№ {item.id}</div>
                   )}
 
                   {!open && (
@@ -69,32 +68,32 @@ const Orders: FC = () => {
                 {open && (
                   <>
                     <div className="flex items-center justify-between border-b pt-7 pb-7">
-                      <div>{tr('order_price')}</div>
+                      <div>Сумма:</div>
                       <div className="font-bold">{item.totalPrice}</div>
                     </div>
                     <div className="flex items-center justify-between border-b pt-7 pb-7">
-                      <div>{tr('order_address')}</div>
+                      <div>Адрес:</div>
                       <div>{item.address}</div>
                     </div>
                     <div className="flex items-center justify-between border-b pt-7 pb-7">
-                      <div>{tr('order_time')}</div>
+                      <div>Время заказа:</div>
                       <div> {item.date}</div>
                     </div>
                   </>
                 )}
 
                 <div className="flex justify-between mt-8">
-                  <Disclosure.Button className="border flex focus:outline-none items-center justify-between px-3 py-3 w-64 text-lg h-10 rounded-3xl bg-gray-100 text-gray-400">
-                    <div className="ml-auto">{tr('order_detail')}</div>
+                  <Disclosure.Button className="border flex focus:outline-none items-center justify-end px-3 py-3 w-64 text-lg h-10 rounded-3xl bg-gray-100 text-gray-400">
+                    <span className="mr-12">Детали заказа</span>
                     <ChevronDownIcon
                       className={`${
                         open ? 'transform rotate-180' : ''
-                      } w-6 h-6 text-purple-500 ml-auto`}
+                      } w-6 h-6 text-purple-500`}
                     />
                   </Disclosure.Button>
                   <Disclosure>
-                    <Disclosure.Button className="border flex focus:outline-none items-center justify-center px-3 py-3 w-64 text-lg h-10 rounded-3xl bg-yellow text-white">
-                      <div>{tr('order_repeat')}</div>
+                    <Disclosure.Button className="border flex focus:outline-none items-center justify-end px-3 py-3 w-64 text-lg h-10 rounded-3xl bg-yellow text-white">
+                      <span className="mr-12">Повторить заказ</span>
                     </Disclosure.Button>
                   </Disclosure>
                 </div>
