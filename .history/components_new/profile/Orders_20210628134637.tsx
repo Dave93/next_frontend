@@ -28,10 +28,10 @@ const Orders: FC = () => {
                 <div className="flex  text-base justify-between border-b pb-8">
                   {open ? (
                     <div className="font-bold text-xl">
-                      {tr('order')} № {item.id}
+                      {tr('order_order')} № {item.id}
                     </div>
                   ) : (
-                    <div> № {item.id}</div>
+                    <div>№ {item.id}</div>
                   )}
 
                   {!open && (
@@ -69,23 +69,23 @@ const Orders: FC = () => {
                 {open && (
                   <>
                     <div className="flex items-center justify-between border-b pt-7 pb-7">
-                      <div>{tr('order_price')}</div>
+                      <div>{tr('order_price')}:</div>
                       <div className="font-bold">{item.totalPrice}</div>
                     </div>
                     <div className="flex items-center justify-between border-b pt-7 pb-7">
-                      <div>{tr('order_address')}</div>
+                      <div>{tr('order_address')}:</div>
                       <div>{item.address}</div>
                     </div>
                     <div className="flex items-center justify-between border-b pt-7 pb-7">
-                      <div>{tr('order_time')}</div>
+                      <div>{tr('order_time')}:</div>
                       <div> {item.date}</div>
                     </div>
                   </>
                 )}
 
                 <div className="flex justify-between mt-8">
-                  <Disclosure.Button className="border flex focus:outline-none items-center justify-center px-3 py-3 w-64 text-lg h-10 rounded-3xl bg-gray-100 text-gray-400">
-                    <div>{tr('order_detail')}</div>
+                  <Disclosure.Button className="border flex focus:outline-none items-center justify-end px-3 py-3 w-64 text-lg h-10 rounded-3xl bg-gray-100 text-gray-400">
+                    <span className="mr-12">Детали заказа</span>
                     <ChevronDownIcon
                       className={`${
                         open ? 'transform rotate-180' : ''
@@ -93,8 +93,8 @@ const Orders: FC = () => {
                     />
                   </Disclosure.Button>
                   <Disclosure>
-                    <Disclosure.Button className="border flex focus:outline-none items-center justify-center px-3 py-3 w-64 text-lg h-10 rounded-3xl bg-yellow text-white">
-                      <div>{tr('order_repeat')}</div>
+                    <Disclosure.Button className="border flex focus:outline-none items-center justify-end px-3 py-3 w-64 text-lg h-10 rounded-3xl bg-yellow text-white">
+                      <span className="mr-12">Повторить заказ</span>
                     </Disclosure.Button>
                   </Disclosure>
                 </div>

@@ -9,13 +9,10 @@
   "profile_orders": "Мои заказы",
   "profile_account": "Личные данные",
   "profile_logout": "Выйти",
-  "order_myOrders": "Мои заказы",
   "order_delivered": "Доставлено",
   "order_cancelled": "Отменён",
-  "order_price": "Сумма:",
-  "order_address": "Адрес:",
-  "order_time": "Время заказа:",
-  "order": "Заказ",
-  "order_detail": "Детали заказа",
-  "order_repeat": "Повторить заказ"
+  "order_price": "",
+  "order_address": "",
+  "order_time": "",
+  "order": ""
 }

@@ -85,7 +85,7 @@ const Orders: FC = () => {
 
                 <div className="flex justify-between mt-8">
                   <Disclosure.Button className="border flex focus:outline-none items-center justify-center px-3 py-3 w-64 text-lg h-10 rounded-3xl bg-gray-100 text-gray-400">
-                    <div>{tr('order_detail')}</div>
+                    <div className="mr-12">{tr('order_detail')}</div>
                     <ChevronDownIcon
                       className={`${
                         open ? 'transform rotate-180' : ''
@@ -94,7 +94,7 @@ const Orders: FC = () => {
                   </Disclosure.Button>
                   <Disclosure>
                     <Disclosure.Button className="border flex focus:outline-none items-center justify-center px-3 py-3 w-64 text-lg h-10 rounded-3xl bg-yellow text-white">
-                      <div>{tr('order_repeat')}</div>
+                      <div className="mr-12">{tr('order_repeat')}</div>
                     </Disclosure.Button>
                   </Disclosure>
                 </div>

@@ -9,13 +9,11 @@
   "profile_orders": "Mening buyurtmalarim",
   "profile_account": "Shaxsiy ma'lumotlar",
   "profile_logout": "Chiqish",
-  "order_myOrders": "Mening buyurtmalarim",
+  "order_myOrders": "Mening buyurtmam",
   "order_delivered": "Yetkazib berildi",
   "order_cancelled": "Bekor qilindi",
-  "order_price": "Narx:",
-  "order_address": "Manzil:",
-  "order_time": "Buyurtma vaqti:",
-  "order": "Buyurtma",
-  "order_detail": "Buyurtma tafsilotlari",
-  "order_repeat": "Buyurtma takrorlash"
+  "order_price": "Narx",
+  "order_address": "Manzil",
+  "order_time": "Buyurtma vaqti",
+  "order": "Buyurtma"
 }
