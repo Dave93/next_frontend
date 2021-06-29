@@ -204,7 +204,7 @@ const SignInButton: FC = () => {
   }
 
   const resetField = (fieldName: string) => {
-    const newFields:any = {
+    const newFields = {
       ...getValues(),
     }
     newFields[fieldName] = null
