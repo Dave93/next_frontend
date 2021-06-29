@@ -51,9 +51,10 @@ const SignInButton: FC = () => {
     setIsOpen(false)
   }
 
-  const { register, handleSubmit, reset, watch, formState } = useForm({
-    mode: 'onChange',
-  })
+  const { register, handleSubmit, reset, watch, formState, getValues } =
+    useForm({
+      mode: 'onChange',
+    })
 
   const startTimeout = () => {
     otpTimerRef = setInterval(() => {
@@ -200,6 +201,14 @@ const SignInButton: FC = () => {
       name: authName,
       phone: authPhone,
     })
+  }
+
+  const resetField = (fieldName: string) => {
+    const newFields = {
+      ...getValues(),
+    }
+    newFields[fieldName] = null
+    reset(newFields)
   }
 
   return (
@@ -358,7 +367,7 @@ const SignInButton: FC = () => {
                                     <button
                                       className="absolute focus:outline-none inset-y-0 outline-none right-4 text-gray-400"
                                       onClick={() => {
-                                        reset({ name: '' })
+                                        resetField('name')
                                       }}
                                     >
                                       <XIcon className="cursor-pointer h-5 text-gray-400 w-5" />
@@ -383,7 +392,7 @@ const SignInButton: FC = () => {
                                     <button
                                       className="absolute focus:outline-none inset-y-0 outline-none right-4 text-gray-400"
                                       onClick={() => {
-                                        reset({ phone: '' })
+                                        resetField('phone')
                                       }}
                                     >
                                       <XIcon className="cursor-pointer h-5 text-gray-400 w-5" />
