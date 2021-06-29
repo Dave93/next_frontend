@@ -1,6 +1,6 @@
 {
   "title": "Chopar",
-  "titleTemplate": "%s - Pizza",
+  "titleTemplate": "%s - ACME Storefront",
   "description": "Next.js Commerce - https://www.nextjs.org/commerce",
   "openGraph": {
     "title": "ACME Storefront | Powered by Next.js Commerce",

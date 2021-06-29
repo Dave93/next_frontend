@@ -1,11 +1,8 @@
 import { FC } from 'react'
 import { XIcon } from '@heroicons/react/outline'
 import { useForm } from 'react-hook-form'
-import useTranslation from 'next-translate/useTranslation'
 
 const PersonalData: FC = () => {
-  const { t: tr } = useTranslation('common')
-
   type FormData = {
     name: string
     phone: string
@@ -26,7 +23,7 @@ const PersonalData: FC = () => {
   const authEmail = watch('email')
 
   const resetField = (fieldName: string) => {
-    const newFields:any = {
+    const newFields = {
       ...getValues(),
     }
     newFields[fieldName] = null
@@ -35,7 +32,7 @@ const PersonalData: FC = () => {
 
   return (
     <div className="w-full max-w-xs">
-      <div className="text-2xl mt-8 mb-5">{ tr('personal_data')}</div>
+      <div className="text-2xl mt-8 mb-5">Личные данные</div>
       <form onSubmit={handleSubmit(onSubmit)}>
         <div className="mt-10">
           <label className="text-sm text-gray-400 mb-2 block">Имя</label>
@@ -89,7 +86,7 @@ const PersonalData: FC = () => {
             {authEmail && (
               <button
                 className="absolute focus:outline-none inset-y-0 outline-none right-4 text-gray-400"
-                onClick={() => resetField('email')}
+                onClick={() => reset({ email: '' })}
               >
                 <XIcon className="cursor-pointer h-5 text-gray-400 w-5" />
               </button>
