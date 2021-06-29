@@ -2,9 +2,10 @@ import type { GetStaticPropsContext } from 'next'
 import useCustomer from '@framework/customer/use-customer'
 import commerce from '@lib/api/commerce'
 import { Layout } from '@components/common'
+import { Container, Text } from '@components/ui'
 import React from 'react'
 import UserData from '@components_new/profile/UserData'
-import PersonalData from '@components_new/profile/PersonalData'
+import Bonuses from '@components_new/profile/Bonuses'
 
 export async function getStaticProps({
   preview,
@@ -25,10 +26,7 @@ export async function getStaticProps({
 export default function Profile() {
   const { data } = useCustomer()
   return (
-    <>
       <UserData />
-      <PersonalData />
-    </>
   )
 }
 

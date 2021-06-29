@@ -6,6 +6,7 @@ import React from 'react'
 import UserData from '@components_new/profile/UserData'
 import PersonalData from '@components_new/profile/PersonalData'
 
+
 export async function getStaticProps({
   preview,
   locale,
@@ -26,9 +27,9 @@ export default function Profile() {
   const { data } = useCustomer()
   return (
     <>
-      <UserData />
+    <UserData />
       <PersonalData />
-    </>
+      </>
   )
 }
 
