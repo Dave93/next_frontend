@@ -2,11 +2,9 @@ import { FC } from 'react'
 import { XIcon } from '@heroicons/react/outline'
 import { useForm } from 'react-hook-form'
 import useTranslation from 'next-translate/useTranslation'
-import { useUI } from '@components/ui/context'
 
 const PersonalData: FC = () => {
   const { t: tr } = useTranslation('common')
-  const { user, setUserData } = useUI()
 
   type FormData = {
     name: string
@@ -20,8 +18,8 @@ const PersonalData: FC = () => {
     useForm<FormData>({
       mode: 'onChange',
       defaultValues: {
-        name: user?.user?.name,
-        phone: user?.user?.phone,
+        name: 'Shahzod',
+        phone: '935300998',
         email: '',
         birthDay: '',
         birthMonth: '',
@@ -69,7 +67,7 @@ const PersonalData: FC = () => {
         </div>
         <div className="mt-10">
           <label className="text-sm text-gray-400 mb-2 block">
-            {tr('personal_phone')}
+            Номер телефона
           </label>
           <div className="relative">
             <input
@@ -91,9 +89,7 @@ const PersonalData: FC = () => {
           </div>
         </div>
         <div className="mt-10">
-          <label className="text-sm text-gray-400 mb-2 block">
-            {tr('personal_email')}
-          </label>
+          <label className="text-sm text-gray-400 mb-2 block">Эл. почта</label>
           <div className="relative">
             <input
               type="email"
@@ -112,7 +108,7 @@ const PersonalData: FC = () => {
         </div>
         <div className="mt-10">
           <label className="text-sm text-gray-400 mb-2 block">
-            {tr('personal_birth')}
+            День рождения
           </label>
           <div className="flex justify-between">
             <input
@@ -140,7 +136,7 @@ const PersonalData: FC = () => {
         </div>
         <div className="mt-10">
           <button className="text-white font-bold text-xl rounded-full bg-yellow w-full h-10">
-            {tr('personal_save_button')}
+            Сохранить
           </button>
         </div>
       </form>
