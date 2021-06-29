@@ -29,7 +29,7 @@ const UserData: FC = () => {
   return (
     <div className="border-b justify-between md:flex pb-5">
       <div>
-        <div className="text-3xl mb-1">{tr('profile_hello')}, {user?.user?.name}!</div>
+        <div className="text-3xl mb-1">{tr('hello')}, {user?.user?.name}!</div>
         <div className="text-xs w-80 text-gray-400">
           {tr('profile_desc')}
         </div>
