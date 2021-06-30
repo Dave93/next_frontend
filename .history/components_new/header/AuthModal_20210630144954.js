@@ -2,6 +2,7 @@ import { Dialog, Transition } from '@headlessui/react'
 import { Fragment, useState, memo, useRef } from 'react'
 import { XIcon } from '@heroicons/react/outline'
 import { useForm } from 'react-hook-form'
+import InputMask from 'react-input-mask'
 
 const AuthModal = ({ authOpen, onClose }) => {
   let [isOpen, setIsOpen] = useState(authOpen)

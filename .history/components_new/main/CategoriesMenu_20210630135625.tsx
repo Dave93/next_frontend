@@ -21,6 +21,8 @@ const CategoriesMenu: FC<{ categories: LinkItem[] }> = ({
     }
   }, [])
 
+  console.log(categories)
+
   return (
     <div
       className={`${
@@ -31,15 +33,15 @@ const CategoriesMenu: FC<{ categories: LinkItem[] }> = ({
     >
       <div className="container flex items-center m-auto">
         {fixed && (
-          <Link to="header" spy={true} smooth={true}>
-            <span className="flex mr-16 cursor-pointer">
+          <Link href="/" prefetch={false}>
+            <a className="flex mr-16">
               <Image
                 src="/assets/categories_logo.png"
                 width="44"
                 height="44"
                 unoptimized={true}
               />
-            </span>
+            </a>
           </Link>
         )}
         <div
@@ -61,7 +63,7 @@ const CategoriesMenu: FC<{ categories: LinkItem[] }> = ({
                   spy={true}
                   smooth={true}
                   activeClass="text-yellow"
-                  offset={-100}
+                  offset={200}
                 >
                   <span>{item.label[keyTyped]}</span>
                 </Link>

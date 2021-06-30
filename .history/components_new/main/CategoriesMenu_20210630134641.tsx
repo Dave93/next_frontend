@@ -2,7 +2,7 @@ import { FC, memo, useEffect, useState } from 'react'
 import { useRouter } from 'next/router'
 import { LinkItem } from '@commerce/types/headerMenu'
 import Image from 'next/image'
-import { Link } from 'react-scroll'
+import Link from 'next/link'
 
 const CategoriesMenu: FC<{ categories: LinkItem[] }> = ({
   categories = [],
@@ -19,7 +19,9 @@ const CategoriesMenu: FC<{ categories: LinkItem[] }> = ({
     if (typeof window !== 'undefined') {
       window.addEventListener('scroll', categoriesFixing)
     }
-  }, [])
+  }, [fixed])
+
+  console.log(categories)
 
   return (
     <div
@@ -31,15 +33,15 @@ const CategoriesMenu: FC<{ categories: LinkItem[] }> = ({
     >
       <div className="container flex items-center m-auto">
         {fixed && (
-          <Link to="header" spy={true} smooth={true}>
-            <span className="flex mr-16 cursor-pointer">
+          <Link href="/" prefetch={false}>
+            <a className="flex mr-16">
               <Image
                 src="/assets/categories_logo.png"
                 width="44"
                 height="44"
                 unoptimized={true}
               />
-            </span>
+            </a>
           </Link>
         )}
         <div
@@ -53,17 +55,11 @@ const CategoriesMenu: FC<{ categories: LinkItem[] }> = ({
             const keyTyped = locale as keyof typeof item.label
             return (
               <div
-                className="font-bold text-base text-center text-secondary cursor-pointer uppercase w-28"
+                className="font-bold text-base text-center text-secondary uppercase w-28"
                 key={item.id}
               >
-                <Link
-                  to={`productSection_${item.id}`}
-                  spy={true}
-                  smooth={true}
-                  activeClass="text-yellow"
-                  offset={-100}
-                >
-                  <span>{item.label[keyTyped]}</span>
+                <Link href={item.href} prefetch={false}>
+                  <a>{item.label[keyTyped]}</a>
                 </Link>
               </div>
             )

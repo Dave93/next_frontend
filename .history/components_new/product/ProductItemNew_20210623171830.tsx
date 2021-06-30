@@ -71,7 +71,7 @@ const ProductItemNew: FC<ProductItem> = ({ product }) => {
   }, [store.price, store.options])
 
   return (
-    <div className="md:flex md:flex-col">
+    <div className="flex flex-col">
       <div className="text-center">
         {store.image ? (
           <Image src={store.image} width={250} height={250} alt={store.name} />

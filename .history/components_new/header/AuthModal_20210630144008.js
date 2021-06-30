@@ -2,6 +2,7 @@ import { Dialog, Transition } from '@headlessui/react'
 import { Fragment, useState, memo, useRef } from 'react'
 import { XIcon } from '@heroicons/react/outline'
 import { useForm } from 'react-hook-form'
+import InputMask from 'react-input-mask'
 
 const AuthModal = ({ authOpen, onClose }) => {
   let [isOpen, setIsOpen] = useState(authOpen)
@@ -112,6 +113,12 @@ const AuthModal = ({ authOpen, onClose }) => {
                             })}
                             className="border border-yellow focus:outline-none outline-none px-6 py-3 rounded-full text-sm w-full"
                           />
+                          <InputMask
+                            mask="99/99/9999"
+                            onChange={props.onChange}
+                            value={props.value}
+                          />
+                          ;
                           {authPhone && (
                             <button
                               className="absolute focus:outline-none inset-y-0 outline-none right-4 text-gray-400"
