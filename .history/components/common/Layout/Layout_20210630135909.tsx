@@ -53,7 +53,7 @@ const Layout: FC<Props> = ({
   return (
     <CommerceProvider locale={locale}>
       <div className="font-sans">
-        <div className="md:flex md:flex-col h-screen">
+        <div className="flex flex-col h-screen">
           <Header menu={topMenu} />
           <main className="flex-grow">
             {pathname == '/' ? (

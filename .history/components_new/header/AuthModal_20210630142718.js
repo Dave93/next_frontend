@@ -109,6 +109,7 @@ const AuthModal = ({ authOpen, onClose }) => {
                             {...register('phone', {
                               required: true,
                               pattern: /^\+998\d\d\d\d\d\d\d\d\d$/i,
+                              valueAsNumber: true,
                             })}
                             className="border border-yellow focus:outline-none outline-none px-6 py-3 rounded-full text-sm w-full"
                           />

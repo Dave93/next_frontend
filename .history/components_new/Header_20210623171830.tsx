@@ -16,7 +16,7 @@ const Header: FC<{
 
   return (
     <>
-      <header className="py-[15px] items-center flex bg-white mb-3" id="header">
+      <header className="py-[15px] items-center flex bg-white mb-3">
         <div className="container mx-auto">
           <div className="flex justify-between items-center">
             <div>
