@@ -18,7 +18,7 @@ const MainSlider: FC = () => {
     sliderRef.current?.prev()
   }
   return (
-    <div className="relative px-4 rounded-2xl">
+    <div className="relative">
       <Flicking
         align="center"
         circular={true}
@@ -58,13 +58,13 @@ const MainSlider: FC = () => {
         </div>
       </Flicking>
       <div
-        className="hidden md:block md:absolute cursor-pointer left-72 lg:left-28 top-36 z-10"
+        className="md:absolute cursor-pointer left-72 lg:left-28 top-36 z-10"
         onClick={() => slidePrev()}
       >
         <Image src="/assets/slider_arrow_left.png" width={46} height={46} />
       </div>
       <div
-        className="hidden md:block md:absolute cursor-pointer right-72 lg:right-28 top-36 z-10"
+        className="md:absolute cursor-pointer right-72 lg:right-28 top-36 z-10"
         onClick={() => slideNext()}
       >
         <Image src="/assets/slider_arrow_right.png" width={46} height={46} />
