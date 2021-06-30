@@ -9,13 +9,11 @@ const HeaderMenu: FC<HeaderMenuItems> = ({ menuItems }) => {
     <ul className="flex justify-between">
       {menuItems.length &&
         menuItems.map((item) => {
-          const keyTyped = locale as keyof typeof item.label
+          const keyTyped = `name_${locale}` as keyof typeof item
           return (
             <li className="px-4" key={item.id}>
               <Link href={item.href} prefetch={false}>
-                <a className="no-underline text-secondary">
-                  {item.label[keyTyped]}
-                </a>
+                <a className="no-underline text-secondary">{item[keyTyped]}</a>
               </Link>
             </li>
           )
