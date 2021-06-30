@@ -12,7 +12,7 @@ const CategoriesMenu: FC<{ categories: LinkItem[] }> = ({
   const [fixed, changeState] = useState(false)
 
   const categoriesFixing = () => {
-    window.pageYOffset > 600 ? changeState(true) : changeState(false)
+    window.pageYOffset > 428 ? changeState(true) : changeState(false)
   }
 
   useEffect(() => {
@@ -29,21 +29,9 @@ const CategoriesMenu: FC<{ categories: LinkItem[] }> = ({
         fixed
           ? 'fixed left-0 m-auto right-0 top-0 z-30 bg-white w-full shadow-lg'
           : ''
-      } transition-all duration-300 ease-in-out`}
+      }`}
     >
-      <div className="container flex items-center m-auto">
-        {fixed && (
-          <Link href="/" prefetch={false}>
-            <a className="flex mr-16">
-              <Image
-                src="/assets/categories_logo.png"
-                width="44"
-                height="44"
-                unoptimized={true}
-              />
-            </a>
-          </Link>
-        )}
+      <div className="container m-auto">
         <div
           className={`${
             fixed
@@ -51,6 +39,18 @@ const CategoriesMenu: FC<{ categories: LinkItem[] }> = ({
               : 'bg-white flex h-14 items-center justify-between px-36 rounded-xl shadow-lg w-full'
           } `}
         >
+          {fixed && (
+            <Link href="/" prefetch={false}>
+              <a className="flex">
+                <Image
+                  src="/assets/categories_logo.png"
+                  width="44"
+                  height="44"
+                  unoptimized={true}
+                />
+              </a>
+            </Link>
+          )}
           {categories.map((item: LinkItem) => {
             const keyTyped = locale as keyof typeof item.label
             return (

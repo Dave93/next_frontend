@@ -12,7 +12,7 @@ const CategoriesMenu: FC<{ categories: LinkItem[] }> = ({
   const [fixed, changeState] = useState(false)
 
   const categoriesFixing = () => {
-    window.pageYOffset > 600 ? changeState(true) : changeState(false)
+    window.pageYOffset > 450 ? changeState(true) : changeState(false)
   }
 
   useEffect(() => {
@@ -29,7 +29,7 @@ const CategoriesMenu: FC<{ categories: LinkItem[] }> = ({
         fixed
           ? 'fixed left-0 m-auto right-0 top-0 z-30 bg-white w-full shadow-lg'
           : ''
-      } transition-all duration-300 ease-in-out`}
+      } transition-all duration-200 ease-in-out`}
     >
       <div className="container flex items-center m-auto">
         {fixed && (
