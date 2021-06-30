@@ -9,7 +9,6 @@ import React, { useMemo } from 'react'
 import ProductListSectionTitle from '@components_new/product/ProductListSectionTitle'
 import ProductItemNew from '@components_new/product/ProductItemNew'
 import SmallCart from '@components_new/common/SmallCart'
-import CategoriesMenu from '@components_new/main/CategoriesMenu'
 
 export async function getStaticProps({
   preview,
@@ -93,7 +92,7 @@ export default function Home({
               </div>
             ))}
           </div>
-          <div className="mt-20 sticky top-16 max-h-screen">
+          <div className="mt-20 sticky top-10 max-h-screen">
             <SmallCart />
           </div>
         </div>

@@ -93,7 +93,7 @@ export default function Home({
               </div>
             ))}
           </div>
-          <div className="mt-20 sticky top-16 max-h-screen">
+          <div className="mt-20 sticky top-10 max-h-screen">
             <SmallCart />
           </div>
         </div>

@@ -18,7 +18,7 @@ const MainSlider: FC = () => {
     sliderRef.current?.prev()
   }
   return (
-    <div className="relative px-4 rounded-2xl">
+    <div className="relative">
       <Flicking
         align="center"
         circular={true}

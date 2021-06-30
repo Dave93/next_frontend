@@ -9,7 +9,6 @@ import React, { useMemo } from 'react'
 import ProductListSectionTitle from '@components_new/product/ProductListSectionTitle'
 import ProductItemNew from '@components_new/product/ProductItemNew'
 import SmallCart from '@components_new/common/SmallCart'
-import CategoriesMenu from '@components_new/main/CategoriesMenu'
 
 export async function getStaticProps({
   preview,
@@ -57,7 +56,6 @@ interface CategoriesType {
 
 export default function Home({
   products,
-  categories,
 }: InferGetStaticPropsType<typeof getStaticProps>) {
   const readyProducts = useMemo(() => {
     const categories: CategoriesType = {}
@@ -78,7 +76,6 @@ export default function Home({
   return (
     <>
       <MainSlider />
-      <CategoriesMenu categories={ categories}/>
       <div className="container mx-auto">
         <div className="grid lg:grid-cols-4 grid-cols-1 md:grid-cols-2 gap-10 mt-10">
           <div className="col-span-3 space-y-16">
@@ -93,7 +90,7 @@ export default function Home({
               </div>
             ))}
           </div>
-          <div className="mt-20 sticky top-16 max-h-screen">
+          <div className="mt-20 sticky top-10 max-h-screen">
             <SmallCart />
           </div>
         </div>
