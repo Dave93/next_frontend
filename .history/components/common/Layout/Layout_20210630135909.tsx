@@ -3,11 +3,7 @@ import React, { FC } from 'react'
 import { useRouter } from 'next/router'
 import { CommerceProvider } from '@framework'
 import type { Page } from '@commerce/types/page'
-import type {
-  APILinkItem,
-  LinkItem,
-  LinkLabel,
-} from '@commerce/types/headerMenu'
+import type { LinkItem, LinkLabel } from '@commerce/types/headerMenu'
 import { useAcceptCookies } from '@lib/hooks/useAcceptCookies'
 import styles from './Layout.module.css'
 import Header from '@components_new/Header'
@@ -26,8 +22,8 @@ interface Props {
   pageProps: {
     pages?: Page[]
     categories: LinkItem[]
-    topMenu: APILinkItem[]
-    footerInfoMenu: APILinkItem[]
+    topMenu: LinkItem[]
+    footerInfoMenu: LinkItem[]
     socials: SocialIcons[]
   }
 }
@@ -57,7 +53,7 @@ const Layout: FC<Props> = ({
   return (
     <CommerceProvider locale={locale}>
       <div className="font-sans">
-        <div className="md:flex md:flex-col h-screen">
+        <div className="flex flex-col h-screen">
           <Header menu={topMenu} />
           <main className="flex-grow">
             {pathname == '/' ? (
@@ -111,15 +107,14 @@ const Layout: FC<Props> = ({
                         </span>
                         <ul className="ml-3">
                           {footerInfoMenu.map((item) => {
-                            const keyTyped =
-                              `name_${locale}` as keyof typeof item
+                            const keyTyped = locale as keyof typeof item.label
                             return (
                               <li
                                 key={item.href}
                                 className={styles.footerMenuListItem}
                               >
                                 <Link href={item.href} prefetch={false}>
-                                  <a>{item[keyTyped]}</a>
+                                  <a>{item.label[keyTyped]}</a>
                                 </Link>
                               </li>
                             )

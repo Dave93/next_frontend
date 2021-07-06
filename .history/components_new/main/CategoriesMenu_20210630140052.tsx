@@ -21,6 +21,8 @@ const CategoriesMenu: FC<{ categories: LinkItem[] }> = ({
     }
   }, [])
 
+  console.log(categories)
+
   return (
     <div
       className={`${
@@ -31,7 +33,11 @@ const CategoriesMenu: FC<{ categories: LinkItem[] }> = ({
     >
       <div className="container flex items-center m-auto">
         {fixed && (
-          <Link to="header" spy={true} smooth={true}>
+          <Link
+            to="header"
+            spy={true}
+            smooth={true}
+          >
             <span className="flex mr-16 cursor-pointer">
               <Image
                 src="/assets/categories_logo.png"

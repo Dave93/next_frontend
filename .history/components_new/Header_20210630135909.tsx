@@ -7,10 +7,10 @@ import HeaderMenu from '@components_new/header/HeaderMenu'
 import SignInButton from './header/SignInButton'
 import LanguageDropDown from './header/LanguageDropDown'
 import Image from 'next/image'
-import type { APILinkItem, LinkItem } from '@commerce/types/headerMenu'
+import type { LinkItem } from '@commerce/types/headerMenu'
 
 const Header: FC<{
-  menu: Array<APILinkItem>
+  menu: Array<LinkItem>
 }> = ({ menu = [] }) => {
   const [menuOpen, setMenuOpen] = useState(false)
 

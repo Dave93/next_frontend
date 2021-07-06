@@ -1,4 +1,4 @@
-import { fetcher } from './fetcher'
+import fetcher from './fetcher'
 import { handler as useCart } from './cart/use-cart'
 import { handler as useAddItem } from './cart/use-add-item'
 import { handler as useUpdateItem } from './cart/use-update-item'
@@ -13,7 +13,7 @@ export type Provider = typeof localProvider
 export const localProvider = {
   locale: 'en-us',
   cartCookie: 'session',
-  fetcher: fetcher,
+  fetcher,
   cart: { useCart, useAddItem, useUpdateItem, useRemoveItem },
   customer: { useCustomer },
   products: { useSearch },

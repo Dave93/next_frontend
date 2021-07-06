@@ -10,5 +10,15 @@ export type LinkItem = {
 }
 
 export type HeaderMenuItems = {
-  menuItems: LinkItem[]
+  menuItems: APILinkItem[]
+}
+
+export type APILinkItem = {
+  id: number
+  name_ru: string
+  name_uz: string
+  href: string
+  sort: number
+  type_id: number
+  type: any
 }

@@ -83,7 +83,7 @@ export default function Home({
         <div className="grid lg:grid-cols-4 grid-cols-1 md:grid-cols-2 gap-10 mt-10">
           <div className="col-span-3 space-y-16">
             {readyProducts.map((sec) => (
-              <div key={sec.id} id={`productSection_${sec.id}`}>
+              <div key={sec.id} id={sec.id}>
                 <ProductListSectionTitle title={sec.name} />
                 <div className="grid grid-cols-1 lg:grid-cols-3 md:grid-cols-2 gap-10">
                   {sec.items.map((prod) => (
