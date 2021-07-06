@@ -11,7 +11,7 @@ import {
 const MainSlider: FC = () => {
   const plugins = [
     new Fade('', 0.4),
-    // new AutoPlay({ duration: 2000, direction: 'NEXT', stopOnHover: false }),
+    new AutoPlay({ duration: 2000, direction: 'NEXT', stopOnHover: false }),
     new Pagination({ type: 'bullet' }),
   ]
   const sliderRef = createRef<Flicking>()
@@ -28,10 +28,6 @@ const MainSlider: FC = () => {
     wait: 400
   })
   console.log(onlyWidth)
-  console.log({
-    width: 1160,
-    height: onlyWidth < 414 ? 176 : 320,
-  })
   return (
     <div className="relative px-4 rounded-2xl">
       <Flicking
@@ -41,7 +37,7 @@ const MainSlider: FC = () => {
         plugins={plugins}
         ref={sliderRef}
       >
-        <div className="panel max-w-full mr-6">
+        <div className="panel mr-6">
           <div className="rounded-[15px] overflow-hidden">
             <Image
               src="/banner/banner.png"
@@ -51,7 +47,7 @@ const MainSlider: FC = () => {
             />
           </div>
         </div>
-        <div className="panel max-w-full mr-6">
+        <div className="panel mr-6">
           <div className="rounded-[15px] overflow-hidden">
             <Image
               src="/banner/banner.png"
@@ -61,7 +57,7 @@ const MainSlider: FC = () => {
             />
           </div>
         </div>
-        <div className="panel max-w-full mr-6">
+        <div className="panel mr-6">
           <div className="rounded-[15px] overflow-hidden">
             <Image
               src="/banner/banner.png"
@@ -71,7 +67,7 @@ const MainSlider: FC = () => {
             />
           </div>
         </div>
-        <div className="panel max-w-full mr-6">
+        <div className="panel mr-6">
           <div className="rounded-[15px] overflow-hidden">
             <Image
               src="/banner/banner.png"
@@ -81,7 +77,7 @@ const MainSlider: FC = () => {
             />
           </div>
         </div>
-        <div className="panel max-w-full mr-6">
+        <div className="panel mr-6">
           <div className="rounded-[15px] overflow-hidden">
             <Image
               src="/banner/banner.png"
@@ -91,7 +87,7 @@ const MainSlider: FC = () => {
             />
           </div>
         </div>
-        <div className="panel max-w-full mr-6">
+        <div className="panel mr-6">
           <div className="rounded-[15px] overflow-hidden">
             <Image
               src="/banner/banner.png"
@@ -101,9 +97,6 @@ const MainSlider: FC = () => {
             />
           </div>
         </div>
-        <ViewportSlot>
-          <div className="md:hidden flicking-pagination justify-center flex"></div>
-        </ViewportSlot>
       </Flicking>
       <div
         className="hidden md:block md:absolute cursor-pointer left-72 lg:left-28 top-36 z-10"

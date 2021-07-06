@@ -34,6 +34,7 @@ const MainSlider: FC = () => {
   })
   return (
     <div className="relative px-4 rounded-2xl">
+      {onlyWidth < 414 && <span>SMALL</span>}
       <Flicking
         align="center"
         circular={true}

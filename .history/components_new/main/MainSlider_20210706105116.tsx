@@ -11,7 +11,7 @@ import {
 const MainSlider: FC = () => {
   const plugins = [
     new Fade('', 0.4),
-    // new AutoPlay({ duration: 2000, direction: 'NEXT', stopOnHover: false }),
+    new AutoPlay({ duration: 2000, direction: 'NEXT', stopOnHover: false }),
     new Pagination({ type: 'bullet' }),
   ]
   const sliderRef = createRef<Flicking>()
@@ -23,15 +23,8 @@ const MainSlider: FC = () => {
   const slidePrev = () => {
     sliderRef.current?.prev()
   }
-  const onlyWidth = useWindowWidth({
-    initialWidth: 1920,
-    wait: 400
-  })
-  console.log(onlyWidth)
-  console.log({
-    width: 1160,
-    height: onlyWidth < 414 ? 176 : 320,
-  })
+  const [width, height] = useWindowSize()
+  console.log(width <= 414 ? 176 : 320)
   return (
     <div className="relative px-4 rounded-2xl">
       <Flicking
@@ -41,64 +34,38 @@ const MainSlider: FC = () => {
         plugins={plugins}
         ref={sliderRef}
       >
-        <div className="panel max-w-full mr-6">
+        <div className="panel mr-6">
           <div className="rounded-[15px] overflow-hidden">
             <Image
               src="/banner/banner.png"
               width={1160}
-              height={onlyWidth < 414 ? 176 : 320}
-              layout="intrinsic"
+              height={typeof width}
             />
           </div>
         </div>
-        <div className="panel max-w-full mr-6">
+        <div className="panel mr-6">
           <div className="rounded-[15px] overflow-hidden">
-            <Image
-              src="/banner/banner.png"
-              width={1160}
-              height={onlyWidth < 414 ? 176 : 320}
-              layout="intrinsic"
-            />
+            <Image src="/banner/banner.png" width={1160} height={320} />
           </div>
         </div>
-        <div className="panel max-w-full mr-6">
+        <div className="panel mr-6">
           <div className="rounded-[15px] overflow-hidden">
-            <Image
-              src="/banner/banner.png"
-              width={1160}
-              height={onlyWidth < 414 ? 176 : 320}
-              layout="intrinsic"
-            />
+            <Image src="/banner/banner.png" width={1160} height={320} />
           </div>
         </div>
-        <div className="panel max-w-full mr-6">
+        <div className="panel mr-6">
           <div className="rounded-[15px] overflow-hidden">
-            <Image
-              src="/banner/banner.png"
-              width={1160}
-              height={onlyWidth < 414 ? 176 : 320}
-              layout="intrinsic"
-            />
+            <Image src="/banner/banner.png" width={1160} height={320} />
           </div>
         </div>
-        <div className="panel max-w-full mr-6">
+        <div className="panel mr-6">
           <div className="rounded-[15px] overflow-hidden">
-            <Image
-              src="/banner/banner.png"
-              width={1160}
-              height={onlyWidth < 414 ? 176 : 320}
-              layout="intrinsic"
-            />
+            <Image src="/banner/banner.png" width={1160} height={320} />
           </div>
         </div>
-        <div className="panel max-w-full mr-6">
+        <div className="panel mr-6">
           <div className="rounded-[15px] overflow-hidden">
-            <Image
-              src="/banner/banner.png"
-              width={1160}
-              height={onlyWidth < 414 ? 176 : 320}
-              layout="intrinsic"
-            />
+            <Image src="/banner/banner.png" width={1160} height={320} />
           </div>
         </div>
         <ViewportSlot>

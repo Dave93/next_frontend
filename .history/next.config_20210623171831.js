@@ -14,6 +14,9 @@ const isVendure = provider === 'vendure'
 
 module.exports = nextTranslate(
   withCommerceConfig({
+    future: {
+      webpack5: true,
+    },
     commerce,
     rewrites() {
       return [

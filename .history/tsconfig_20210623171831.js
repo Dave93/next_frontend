@@ -34,7 +34,6 @@ module.exports = {
     resolveJsonModule: true,
     isolatedModules: true,
     jsx: 'preserve',
-    incremental: true,
     paths: {
       '@lib/*': ['lib/*'],
       '@utils/*': ['utils/*'],

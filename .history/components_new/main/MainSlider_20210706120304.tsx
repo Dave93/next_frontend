@@ -34,6 +34,7 @@ const MainSlider: FC = () => {
   })
   return (
     <div className="relative px-4 rounded-2xl">
+      {onlyWidth < 414 && <span>SMALL</span>}
       <Flicking
         align="center"
         circular={true}
@@ -41,7 +42,7 @@ const MainSlider: FC = () => {
         plugins={plugins}
         ref={sliderRef}
       >
-        <div className="panel max-w-full mr-6">
+        <div className="panel mr-6">
           <div className="rounded-[15px] overflow-hidden">
             <Image
               src="/banner/banner.png"
@@ -51,7 +52,7 @@ const MainSlider: FC = () => {
             />
           </div>
         </div>
-        <div className="panel max-w-full mr-6">
+        <div className="panel mr-6">
           <div className="rounded-[15px] overflow-hidden">
             <Image
               src="/banner/banner.png"
@@ -61,7 +62,7 @@ const MainSlider: FC = () => {
             />
           </div>
         </div>
-        <div className="panel max-w-full mr-6">
+        <div className="panel mr-6">
           <div className="rounded-[15px] overflow-hidden">
             <Image
               src="/banner/banner.png"
@@ -71,7 +72,7 @@ const MainSlider: FC = () => {
             />
           </div>
         </div>
-        <div className="panel max-w-full mr-6">
+        <div className="panel mr-6">
           <div className="rounded-[15px] overflow-hidden">
             <Image
               src="/banner/banner.png"
@@ -81,7 +82,7 @@ const MainSlider: FC = () => {
             />
           </div>
         </div>
-        <div className="panel max-w-full mr-6">
+        <div className="panel mr-6">
           <div className="rounded-[15px] overflow-hidden">
             <Image
               src="/banner/banner.png"
@@ -91,7 +92,7 @@ const MainSlider: FC = () => {
             />
           </div>
         </div>
-        <div className="panel max-w-full mr-6">
+        <div className="panel mr-6">
           <div className="rounded-[15px] overflow-hidden">
             <Image
               src="/banner/banner.png"
