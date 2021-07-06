@@ -5,9 +5,7 @@ import '@egjs/react-flicking/dist/flicking.css'
 // import HomeAllProductsGrid from '@components/common/HomeAllProductsGrid'
 import type {
   GetServerSidePropsContext,
-  GetStaticPropsContext,
   InferGetServerSidePropsType,
-  InferGetStaticPropsType,
 } from 'next'
 import MainSlider from '@components_new/main/MainSlider'
 import React, { useMemo } from 'react'
