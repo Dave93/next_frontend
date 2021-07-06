@@ -3,7 +3,11 @@ import { Layout } from '@components/common'
 import { Product } from '@commerce/types/product'
 import '@egjs/react-flicking/dist/flicking.css'
 // import HomeAllProductsGrid from '@components/common/HomeAllProductsGrid'
-import type { GetStaticPropsContext, InferGetStaticPropsType } from 'next'
+import type {
+  GetServerSidePropsContext,
+  GetStaticPropsContext,
+  InferGetStaticPropsType,
+} from 'next'
 import MainSlider from '@components_new/main/MainSlider'
 import React, { useMemo } from 'react'
 import ProductListSectionTitle from '@components_new/product/ProductListSectionTitle'
@@ -43,6 +47,26 @@ export async function getStaticProps({
       socials,
     },
     revalidate: 60,
+  }
+}
+
+export async function getServerSideProps({
+  preview,
+  locale,
+  locales,
+}: GetServerSidePropsContext) {
+  const config = { locale, locales }
+  const siteInfoPromise = commerce.getSiteInfo({ config, preview })
+  const { categories, brands, topMenu, footerInfoMenu, socials } =
+    await siteInfoPromise
+  return {
+    props: {
+      categories,
+      brands,
+      topMenu,
+      footerInfoMenu,
+      socials,
+    },
   }
 }
 
