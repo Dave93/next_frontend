@@ -6,6 +6,7 @@ import '@egjs/react-flicking/dist/flicking.css'
 import type {
   GetServerSidePropsContext,
   GetStaticPropsContext,
+  InferGetServerSidePropsType,
   InferGetStaticPropsType,
 } from 'next'
 import MainSlider from '@components_new/main/MainSlider'
@@ -16,11 +17,45 @@ import SmallCart from '@components_new/common/SmallCart'
 import CategoriesMenu from '@components_new/main/CategoriesMenu'
 import SetLocation from '@components_new/header/SetLocation'
 
-export async function getStaticProps({
+// export async function getStaticProps({
+//   preview,
+//   locale,
+//   locales,
+// }: GetStaticPropsContext) {
+//   const config = { locale, locales }
+//   const productsPromise = commerce.getAllProducts({
+//     variables: { first: 6 },
+//     config,
+//     preview,
+//     // Saleor provider only
+//     ...({ featured: true } as any),
+//   })
+//   const pagesPromise = commerce.getAllPages({ config, preview })
+//   const siteInfoPromise = commerce.getSiteInfo({ config, preview })
+//   const { products } = await productsPromise
+//   const { pages } = await pagesPromise
+//   const { categories, brands, topMenu, footerInfoMenu, socials } =
+//     await siteInfoPromise
+
+//   return {
+//     props: {
+//       products,
+//       categories,
+//       brands,
+//       pages,
+//       topMenu,
+//       footerInfoMenu,
+//       socials,
+//     },
+//     revalidate: 60,
+//   }
+// }
+
+export async function getServerSideProps({
   preview,
   locale,
   locales,
-}: GetStaticPropsContext) {
+}: GetServerSidePropsContext) {
   const config = { locale, locales }
   const productsPromise = commerce.getAllProducts({
     variables: { first: 6 },
@@ -50,26 +85,6 @@ export async function getStaticProps({
   }
 }
 
-export async function getServerSideProps({
-  preview,
-  locale,
-  locales,
-}: GetServerSidePropsContext) {
-  const config = { locale, locales }
-  const siteInfoPromise = commerce.getSiteInfo({ config, preview })
-  const { categories, brands, topMenu, footerInfoMenu, socials } =
-    await siteInfoPromise
-  return {
-    props: {
-      categories,
-      brands,
-      topMenu,
-      footerInfoMenu,
-      socials,
-    },
-  }
-}
-
 interface Category {
   id: string
   name: string
@@ -83,7 +98,7 @@ interface CategoriesType {
 export default function Home({
   products,
   categories,
-}: InferGetStaticPropsType<typeof getStaticProps>) {
+}: InferGetServerSidePropsType<typeof getServerSideProps>) {
   const readyProducts = useMemo(() => {
     const categories: CategoriesType = {}
     products.map((prod: Product) => {
