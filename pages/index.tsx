@@ -81,7 +81,6 @@ export async function getServerSideProps({
       footerInfoMenu,
       socials,
     },
-    revalidate: 60,
   }
 }
 
