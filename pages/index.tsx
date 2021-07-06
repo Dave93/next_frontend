@@ -3,13 +3,18 @@ import { Layout } from '@components/common'
 import { Product } from '@commerce/types/product'
 import '@egjs/react-flicking/dist/flicking.css'
 // import HomeAllProductsGrid from '@components/common/HomeAllProductsGrid'
-import type { GetStaticPropsContext, InferGetStaticPropsType } from 'next'
+import type {
+  GetServerSidePropsContext,
+  GetStaticPropsContext,
+  InferGetStaticPropsType,
+} from 'next'
 import MainSlider from '@components_new/main/MainSlider'
 import React, { useMemo } from 'react'
 import ProductListSectionTitle from '@components_new/product/ProductListSectionTitle'
 import ProductItemNew from '@components_new/product/ProductItemNew'
 import SmallCart from '@components_new/common/SmallCart'
 import CategoriesMenu from '@components_new/main/CategoriesMenu'
+import SetLocation from '@components_new/header/SetLocation'
 
 export async function getStaticProps({
   preview,
@@ -45,6 +50,26 @@ export async function getStaticProps({
   }
 }
 
+export async function getServerSideProps({
+  preview,
+  locale,
+  locales,
+}: GetServerSidePropsContext) {
+  const config = { locale, locales }
+  const siteInfoPromise = commerce.getSiteInfo({ config, preview })
+  const { categories, brands, topMenu, footerInfoMenu, socials } =
+    await siteInfoPromise
+  return {
+    props: {
+      categories,
+      brands,
+      topMenu,
+      footerInfoMenu,
+      socials,
+    },
+  }
+}
+
 interface Category {
   id: string
   name: string
@@ -74,10 +99,14 @@ export default function Home({
     })
     return Object.values(categories)
   }, [products])
+  console.log(readyProducts)
 
   return (
     <>
       <MainSlider />
+      <div className="lg:hidden mx-8 my-5">
+        <SetLocation />
+      </div>
       <CategoriesMenu categories={categories} />
       <div className="container mx-auto">
         <div className="grid lg:grid-cols-4 grid-cols-1 md:grid-cols-2 gap-10 mt-10">
@@ -93,7 +122,7 @@ export default function Home({
               </div>
             ))}
           </div>
-          <div className="mt-20 sticky top-16 max-h-screen">
+          <div className="mt-20 sticky top-16 max-h-screen hidden md:block">
             <SmallCart />
           </div>
         </div>
