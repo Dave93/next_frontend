@@ -70,8 +70,8 @@ const Header: FC<{
           </div>
         </div>
         {mobMenuOpen && (
-          <div className="w-screen h-screen fixed bg-secondary z-40 top-0 overflow-y-hidden">
-            <div className="flex justify-between items-center mt-10 border-b pb-2 mx-4 border-blue-700">
+          <div className="w-screen h-screen fixed bg-secondary z-40 top-0 overflow-y-hidden p-4">
+            <div className="flex justify-between items-center mt-10 border-b pb-2 border-blue-500">
               <div className="w-32 md:w-48 md:ml-0">
                 <Link href="/" prefetch={false}>
                   <a className="flex">
@@ -90,12 +90,14 @@ const Header: FC<{
                 />
               </div>
             </div>
-            <div className="border-blue-700 border-b py-5 mb-7">
+            <div className="border-blue-500 border-b py-5 mb-7">
               <MobChooseCityDropDown />
             </div>
-            <SignInButton />
-            <MobHeaderMenu menuItems={menu} />
-            <div className="ml-12 text-white">
+            <div className="border-b border-blue-500 py-8">
+              <SignInButton />
+              <MobHeaderMenu menuItems={menu} />
+            </div>
+            <div className="ml-9 text-white pt-8">
               <div className="text-xs mb-1">Телефон доставки</div>
               <div className="text-2xl mb-5">71 205 11 11</div>
               <a className="flex mb-5" href="#">

@@ -6,12 +6,12 @@ import type { HeaderMenuItems } from '@commerce/types/headerMenu'
 const HeaderMenu: FC<HeaderMenuItems> = ({ menuItems }) => {
   const { locale } = useRouter()
   return (
-    <ul className="space-y-4 border-b mb-7 pb-7">
+    <ul className="space-y-4 ml-9">
       {menuItems.length &&
         menuItems.map((item) => {
           const keyTyped = `name_${locale}` as keyof typeof item
           return (
-            <li className="ml-12" key={item.id}>
+            <li key={item.id}>
               <Link href={item.href} prefetch={false}>
                 <a className="no-underline text-white">{item[keyTyped]}</a>
               </Link>
