@@ -25,13 +25,13 @@ const MainSlider: FC = () => {
   }
   const onlyWidth = useWindowWidth({
     initialWidth: 1920,
-    wait: 400
+    wait: 400,
   })
-  console.log(onlyWidth)
-  console.log({
-    width: 1160,
-    height: onlyWidth < 414 ? 176 : 320,
-  })
+  // console.log(onlyWidth)
+  // console.log({
+  //   width: 1160,
+  //   height: onlyWidth < 414 ? 176 : 320,
+  // })
   return (
     <div className="relative px-4 rounded-2xl">
       <Flicking

@@ -5,7 +5,7 @@ import Image from 'next/image'
 
 const SmallCart: FC = () => {
   const { data, isLoading, isEmpty } = useCart()
-  console.log(isEmpty)
+  // console.log(isEmpty)
   const { register, handleSubmit } = useForm()
   const onSubmit = (data: Object) => console.log(JSON.stringify(data))
   return (

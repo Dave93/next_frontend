@@ -125,7 +125,7 @@ export default function Home({
             {readyProducts.map((sec) => (
               <div key={sec.id} id={`productSection_${sec.id}`}>
                 <ProductListSectionTitle title={sec.name} />
-                <div className="grid grid-cols-1 lg:grid-cols-3 md:grid-cols-2 gap-10 divide-y px-4 md:px-0">
+                <div className="grid grid-cols-1 lg:grid-cols-3 md:grid-cols-2 md:gap-10 divide-y md:divide-y-0 px-4 md:px-0">
                   {sec.items.map((prod) => (
                     <ProductItemNew product={prod} key={prod.name} />
                   ))}
