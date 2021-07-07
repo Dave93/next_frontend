@@ -14,7 +14,6 @@ import ProductItemNew from '@components_new/product/ProductItemNew'
 import SmallCart from '@components_new/common/SmallCart'
 import CategoriesMenu from '@components_new/main/CategoriesMenu'
 import SetLocation from '@components_new/header/SetLocation'
-import MobSetLocation from '@components_new/header/MobSetLocation'
 
 // export async function getStaticProps({
 //   preview,
@@ -117,7 +116,7 @@ export default function Home({
     <>
       <MainSlider />
       <div className="lg:hidden mx-8 my-5">
-        <MobSetLocation />
+        {/* <SetLocation /> */}
       </div>
       <CategoriesMenu categories={categories} />
       <div className="container mx-auto">
