@@ -111,7 +111,6 @@ export default function Home({
     })
     return Object.values(categories)
   }, [products])
-  console.log(readyProducts)
 
   return (
     <>
