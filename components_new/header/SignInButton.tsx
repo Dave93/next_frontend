@@ -204,7 +204,7 @@ const SignInButton: FC = () => {
   }
 
   const resetField = (fieldName: string) => {
-    const newFields:any = {
+    const newFields: any = {
       ...getValues(),
     }
     newFields[fieldName] = null
@@ -221,7 +221,7 @@ const SignInButton: FC = () => {
       {!user && (
         <>
           <button
-            className="md:bg-gray-200 bg-yellow px-8 py-1 rounded-full text-secondary outline-none focus:outline-none my-5 md:my-0 ml-4 md:ml-0 font-bold md:font-normal"
+            className="md:bg-gray-200 bg-yellow px-8 py-1 rounded-full text-secondary outline-none focus:outline-none mb-5 md:mb-0 ml-1 md:ml-0 font-bold md:font-normal"
             onClick={openModal}
           >
             {tr('signIn')}
