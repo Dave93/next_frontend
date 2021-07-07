@@ -10,7 +10,6 @@ import Image from 'next/image'
 import type { APILinkItem, LinkItem } from '@commerce/types/headerMenu'
 import MobHeaderMenu from './header/MobHeaderMenu'
 import MobChooseCityDropDown from './header/MobChooseCityDropDown'
-import MobLanguageDropDown from './header/MobLanguageDropDown'
 
 const Header: FC<{
   menu: Array<APILinkItem>
@@ -70,9 +69,9 @@ const Header: FC<{
           </div>
         </div>
         {mobMenuOpen && (
-          <div className="w-screen h-screen fixed bg-secondary z-40 top-0 overflow-y-hidden">
-            <div className="flex justify-between items-center mt-10 border-b pb-2 mx-4 border-blue-700">
-              <div className="w-32 md:w-48 md:ml-0">
+          <div className="w-screen h-screen fixed bg-secondary z-40 top-0 overflow-y-hidden border-b pb-2">
+            <div className="flex justify-between items-center mt-10">
+              <div className="w-32 md:w-48 ml-4 md:ml-0">
                 <Link href="/" prefetch={false}>
                   <a className="flex">
                     <Image
@@ -85,24 +84,17 @@ const Header: FC<{
               </div>
               <div>
                 <XIcon
-                  className="cursor-pointer h-5 w-5 text-white"
+                  className="cursor-pointer h-5 w-5 text-white mr-4"
                   onClick={() => setMobMenuOpen(false)}
                 />
               </div>
             </div>
-            <div className="border-blue-700 border-b py-5 mb-7">
+            <div className="">
               <MobChooseCityDropDown />
             </div>
-            <SignInButton />
             <MobHeaderMenu menuItems={menu} />
-            <div className="ml-12 text-white">
-              <div className="text-xs mb-1">Телефон доставки</div>
-              <div className="text-2xl mb-5">71 205 11 11</div>
-              <a className="flex mb-5" href="#">
-                <Image src="/assets/appstore.png" width="151" height="49" />
-              </a>
-              <MobLanguageDropDown />
-            </div>
+            <SignInButton />
+            <LanguageDropDown />
           </div>
         )}
       </header>

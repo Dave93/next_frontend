@@ -96,9 +96,9 @@ const Header: FC<{
             <SignInButton />
             <MobHeaderMenu menuItems={menu} />
             <div className="ml-12 text-white">
-              <div className="text-xs mb-1">Телефон доставки</div>
+              <div className="text-xs">Телефон доставки</div>
               <div className="text-2xl mb-5">71 205 11 11</div>
-              <a className="flex mb-5" href="#">
+              <a className="mb-5">
                 <Image src="/assets/appstore.png" width="151" height="49" />
               </a>
               <MobLanguageDropDown />

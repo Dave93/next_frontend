@@ -52,7 +52,7 @@ const MainSlider: FC = () => {
           </div>
         </div>
         <div className="panel max-w-full mr-6">
-          <div className="rounded-[15px] overflow-hidden flex mb-[10px]">
+          <div className="rounded-[15px] overflow-hidden flex"> 
             <Image
               src="/banner/banner.png"
               width={1160}
@@ -62,7 +62,7 @@ const MainSlider: FC = () => {
           </div>
         </div>
         <div className="panel max-w-full mr-6">
-          <div className="rounded-[15px] overflow-hidden flex mb-[10px]">
+          <div className="rounded-[15px] overflow-hidden flex">
             <Image
               src="/banner/banner.png"
               width={1160}
@@ -72,7 +72,7 @@ const MainSlider: FC = () => {
           </div>
         </div>
         <div className="panel max-w-full mr-6">
-          <div className="rounded-[15px] overflow-hidden flex mb-[10px]">
+          <div className="rounded-[15px] overflow-hidden flex">
             <Image
               src="/banner/banner.png"
               width={1160}
@@ -82,7 +82,7 @@ const MainSlider: FC = () => {
           </div>
         </div>
         <div className="panel max-w-full mr-6">
-          <div className="rounded-[15px] overflow-hidden flex mb-[10px]">
+          <div className="rounded-[15px] overflow-hidden flex">
             <Image
               src="/banner/banner.png"
               width={1160}
@@ -92,7 +92,7 @@ const MainSlider: FC = () => {
           </div>
         </div>
         <div className="panel max-w-full mr-6">
-          <div className="rounded-[15px] overflow-hidden flex mb-[10px]">
+          <div className="rounded-[15px] overflow-hidden flex">
             <Image
               src="/banner/banner.png"
               width={1160}

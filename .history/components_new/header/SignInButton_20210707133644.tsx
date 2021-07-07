@@ -221,7 +221,7 @@ const SignInButton: FC = () => {
       {!user && (
         <>
           <button
-            className="md:bg-gray-200 bg-yellow px-8 py-1 rounded-full text-secondary outline-none focus:outline-none my-5 md:my-0 ml-4 md:ml-0 font-bold md:font-normal"
+            className="md:bg-gray-200 bg-yellow px-8 py-1 rounded-full text-secondary outline-none focus:outline-none"
             onClick={openModal}
           >
             {tr('signIn')}
@@ -229,7 +229,7 @@ const SignInButton: FC = () => {
           <Transition appear show={isOpen} as={Fragment}>
             <Dialog
               as="div"
-              className="fixed inset-0 z-50 overflow-y-auto"
+              className="fixed inset-0 z-10 overflow-y-auto"
               onClose={closeModal}
               initialFocus={authButtonRef}
             >

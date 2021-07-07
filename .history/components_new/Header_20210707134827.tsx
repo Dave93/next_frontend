@@ -10,7 +10,6 @@ import Image from 'next/image'
 import type { APILinkItem, LinkItem } from '@commerce/types/headerMenu'
 import MobHeaderMenu from './header/MobHeaderMenu'
 import MobChooseCityDropDown from './header/MobChooseCityDropDown'
-import MobLanguageDropDown from './header/MobLanguageDropDown'
 
 const Header: FC<{
   menu: Array<APILinkItem>
@@ -90,18 +89,18 @@ const Header: FC<{
                 />
               </div>
             </div>
-            <div className="border-blue-700 border-b py-5 mb-7">
+            <div className="border-blue-700 border-b">
               <MobChooseCityDropDown />
             </div>
             <SignInButton />
             <MobHeaderMenu menuItems={menu} />
             <div className="ml-12 text-white">
-              <div className="text-xs mb-1">Телефон доставки</div>
-              <div className="text-2xl mb-5">71 205 11 11</div>
-              <a className="flex mb-5" href="#">
+              <div className="text-xs">Телефон доставки</div>
+              <div className="">71 205 11 11</div>
+              <a className="flex">
                 <Image src="/assets/appstore.png" width="151" height="49" />
               </a>
-              <MobLanguageDropDown />
+              <LanguageDropDown />
             </div>
           </div>
         )}

@@ -9,8 +9,6 @@ import LanguageDropDown from './header/LanguageDropDown'
 import Image from 'next/image'
 import type { APILinkItem, LinkItem } from '@commerce/types/headerMenu'
 import MobHeaderMenu from './header/MobHeaderMenu'
-import MobChooseCityDropDown from './header/MobChooseCityDropDown'
-import MobLanguageDropDown from './header/MobLanguageDropDown'
 
 const Header: FC<{
   menu: Array<APILinkItem>
@@ -20,10 +18,7 @@ const Header: FC<{
 
   return (
     <>
-      <header
-        className="py-[15px] items-center md:flex bg-white mb-3"
-        id="header"
-      >
+      <header className="py-[15px] items-center flex bg-white mb-3" id="header">
         <div className="container mx-auto">
           <div className="flex justify-between items-center">
             <div className="w-32 md:w-48 ml-4 md:ml-0">
@@ -69,42 +64,20 @@ const Header: FC<{
             )}
           </div>
         </div>
+        <div className="max-w-full max-h-full absolute">
+
         {mobMenuOpen && (
-          <div className="w-screen h-screen fixed bg-secondary z-40 top-0 overflow-y-hidden">
-            <div className="flex justify-between items-center mt-10 border-b pb-2 mx-4 border-blue-700">
-              <div className="w-32 md:w-48 md:ml-0">
-                <Link href="/" prefetch={false}>
-                  <a className="flex">
-                    <Image
-                      src="/assets/footer_logo.png"
-                      width="188"
-                      height="68"
-                    />
-                  </a>
-                </Link>
-              </div>
-              <div>
-                <XIcon
-                  className="cursor-pointer h-5 w-5 text-white"
-                  onClick={() => setMobMenuOpen(false)}
-                />
-              </div>
-            </div>
-            <div className="border-blue-700 border-b py-5 mb-7">
-              <MobChooseCityDropDown />
-            </div>
-            <SignInButton />
+          <div className="">
+            <XIcon
+              className="cursor-pointer h-5 text-secondary w-5"
+              onClick={() => setMobMenuOpen(false)}
+            />
             <MobHeaderMenu menuItems={menu} />
-            <div className="ml-12 text-white">
-              <div className="text-xs mb-1">Телефон доставки</div>
-              <div className="text-2xl mb-5">71 205 11 11</div>
-              <a className="flex mb-5" href="#">
-                <Image src="/assets/appstore.png" width="151" height="49" />
-              </a>
-              <MobLanguageDropDown />
-            </div>
+            <SignInButton />
+            <LanguageDropDown />
           </div>
         )}
+        </div>
       </header>
     </>
   )
