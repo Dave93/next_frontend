@@ -564,7 +564,7 @@ const LocationTabs: FC = () => {
               } font-bold px-12 py-3 rounded-full text-[18px] text-white outline-none focus:outline-none`}
               disabled={!activePoint}
               onClick={() => {
-                console.log('davr')
+                // console.log('davr')
               }}
             >
               Подтвердить

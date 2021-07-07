@@ -73,8 +73,8 @@ const ProductItemNew: FC<ProductItem> = ({ product }) => {
   }, [store.price, store.options])
 
   return (
-    <div className="flex items-center justify-around md:flex md:flex-col">
-      <div className="w-1/2 md:w-auto">
+    <div className="gap-4 grid grid-cols-2 py-4 md:py-0 items-center justify-around md:flex md:flex-col">
+      <div>
         <div className="text-center">
           {store.image ? (
             <Image
@@ -94,7 +94,7 @@ const ProductItemNew: FC<ProductItem> = ({ product }) => {
           )}
         </div>
       </div>
-      <div className="w-1/2 md:w-auto">
+      <div>
         <div className="font-black mt-4 text-xl">{store.name}</div>
         {store.sizeDesc && (
           <div className="font-bold mt-2 text-gray-700 text-xs">
