@@ -6,8 +6,6 @@ import React, {
   useState,
   useMemo,
   FC,
-  Dispatch,
-  SetStateAction,
 } from 'react'
 import { Menu, Transition, Disclosure } from '@headlessui/react'
 import { ChevronDownIcon, ChevronRightIcon } from '@heroicons/react/solid'
@@ -23,11 +21,7 @@ import { useForm } from 'react-hook-form'
 import Image from 'next/image'
 import useTranslation from 'next-translate/useTranslation'
 
-interface MobLocationTabProps {
-  setOpen: Dispatch<SetStateAction<boolean>>
-}
-
-const MobLocationTabs: FC<MobLocationTabProps> = ({ setOpen }) => {
+const LocationTabs: FC = () => {
   const [tabIndex, setTabIndex] = useState(1)
   const [pickupIndex, setPickupIndex] = useState(1)
   const [cities, setCities] = useState([
@@ -288,9 +282,7 @@ const MobLocationTabs: FC<MobLocationTabProps> = ({ setOpen }) => {
   return (
     <>
       <div className="flex items-center pt-12 mb-8">
-        <span onClick={() => { console.log('calling'); setOpen(false) }} className="flex">
-          <Image src="/assets/back.png" width="24" height="24" />
-        </span>
+        <Image src="/assets/back.png" width="24" height="24" />
         <div className="text-lg flex-grow text-center">Адрес</div>
       </div>
       <div className="bg-gray-100 flex rounded-full w-full h-11 items-center">
@@ -382,7 +374,7 @@ const MobLocationTabs: FC<MobLocationTabProps> = ({ setOpen }) => {
                     type="text"
                     {...register('address')}
                     placeholder="Адрес"
-                    className="bg-gray-100 px-8 py-2 rounded-full w-full outline-none focus:outline-none "
+                    className="bg-gray-100 px-8 py-3 rounded-full w-full outline-none focus:outline-none h-10"
                   />
                 </div>
                 <div className="flex justify-between">
@@ -390,13 +382,13 @@ const MobLocationTabs: FC<MobLocationTabProps> = ({ setOpen }) => {
                     type="text"
                     {...register('flat')}
                     placeholder="Квартира"
-                    className="bg-gray-100 px-8 py-2 rounded-full w-40  outline-none focus:outline-none"
+                    className="bg-gray-100 px-8 py-3 rounded-full w-40 h-10 outline-none focus:outline-none"
                   />
                   <input
                     type="text"
                     {...register('house')}
                     placeholder="Дом"
-                    className="bg-gray-100 px-8 py-2 rounded-full w-40 "
+                    className="bg-gray-100 px-8 py-3 rounded-full w-40 h-10"
                   />
                 </div>
               </div>
@@ -431,7 +423,7 @@ const MobLocationTabs: FC<MobLocationTabProps> = ({ setOpen }) => {
                                 type="text"
                                 {...register('entrance')}
                                 placeholder="Подъезд"
-                                className="bg-gray-100 px-8 py-2 rounded-full w-40  outline-none focus:outline-none"
+                                className="bg-gray-100 px-8 py-3 rounded-full w-40 h-10  outline-none focus:outline-none"
                               />
                             </div>
                             <div className="mx-5">
@@ -439,7 +431,7 @@ const MobLocationTabs: FC<MobLocationTabProps> = ({ setOpen }) => {
                                 type="text"
                                 {...register('door_code')}
                                 placeholder="Домофон"
-                                className="bg-gray-100 px-8 py-2 rounded-full w-40 outline-none focus:outline-none"
+                                className="bg-gray-100 px-8 py-3 rounded-full w-40 h-10  outline-none focus:outline-none"
                               />
                             </div>
                           </div>
@@ -452,7 +444,7 @@ const MobLocationTabs: FC<MobLocationTabProps> = ({ setOpen }) => {
               <div className="flex mt-12">
                 <button
                   type="submit"
-                  className="bg-yellow font-bold px-12 py-2 rounded-full text-[18px] text-white outline-none focus:outline-none w-full"
+                  className="bg-yellow font-bold px-12 py-3 rounded-full text-[18px] text-white outline-none focus:outline-none w-full h-12"
                 >
                   Подтвердить
                 </button>
@@ -495,7 +487,7 @@ const MobLocationTabs: FC<MobLocationTabProps> = ({ setOpen }) => {
               type="text"
               {...register('address')}
               placeholder="Адрес"
-              className="bg-gray-100 px-8 rounded-full w-full outline-none focus:outline-none py-2"
+              className="bg-gray-100 px-8 rounded-full w-full outline-none focus:outline-none h-10"
             />
           </div>
           <div className="mt-5">
@@ -554,7 +546,7 @@ const MobLocationTabs: FC<MobLocationTabProps> = ({ setOpen }) => {
               </>
             )}
             {pickupIndex == 2 && (
-              <div className="space-y-3">
+              <div className="">
                 {pickupPoints.map((point) => (
                   <div
                     key={point.id}
@@ -594,7 +586,7 @@ const MobLocationTabs: FC<MobLocationTabProps> = ({ setOpen }) => {
               type="submit"
               className={`${
                 activePoint ? 'bg-yellow' : 'bg-gray-200'
-              } font-bold px-12 rounded-full text-[18px] text-white outline-none focus:outline-none w-full py-2`}
+              } font-bold px-12 rounded-full text-[18px] text-white outline-none focus:outline-none w-full h-10`}
               disabled={!activePoint}
               onClick={() => {
                 // console.log('davr')
@@ -609,4 +601,4 @@ const MobLocationTabs: FC<MobLocationTabProps> = ({ setOpen }) => {
   )
 }
 
-export default memo(MobLocationTabs)
+export default memo(LocationTabs)

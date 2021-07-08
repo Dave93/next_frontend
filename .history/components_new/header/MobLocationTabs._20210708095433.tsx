@@ -6,8 +6,6 @@ import React, {
   useState,
   useMemo,
   FC,
-  Dispatch,
-  SetStateAction,
 } from 'react'
 import { Menu, Transition, Disclosure } from '@headlessui/react'
 import { ChevronDownIcon, ChevronRightIcon } from '@heroicons/react/solid'
@@ -23,11 +21,7 @@ import { useForm } from 'react-hook-form'
 import Image from 'next/image'
 import useTranslation from 'next-translate/useTranslation'
 
-interface MobLocationTabProps {
-  setOpen: Dispatch<SetStateAction<boolean>>
-}
-
-const MobLocationTabs: FC<MobLocationTabProps> = ({ setOpen }) => {
+const LocationTabs: FC = () => {
   const [tabIndex, setTabIndex] = useState(1)
   const [pickupIndex, setPickupIndex] = useState(1)
   const [cities, setCities] = useState([
@@ -240,6 +234,7 @@ const MobLocationTabs: FC<MobLocationTabProps> = ({ setOpen }) => {
 
   const activeLabel = cities.find((item) => item.active)?.label
   const activeCity = cities.find((item) => item.active)
+  const activePoint = pickupPoints.find((item) => item.active)
 
   const setActive = (id: string) => {
     setCities(
@@ -266,7 +261,6 @@ const MobLocationTabs: FC<MobLocationTabProps> = ({ setOpen }) => {
       })
     )
   }
-  const activePoint = pickupPoints.find((item) => item.active)
 
   const mapState = useMemo<MapState>(() => {
     const baseState: MapStateBase = {
@@ -283,16 +277,14 @@ const MobLocationTabs: FC<MobLocationTabProps> = ({ setOpen }) => {
 
   const { register, handleSubmit } = useForm()
   const onSubmit = (data: Object) => console.log(JSON.stringify(data))
-  const { t: tr } = useTranslation('common')
+  const { t: tr } = useTranslation('common');
 
   return (
     <>
-      <div className="flex items-center pt-12 mb-8">
-        <span onClick={() => { console.log('calling'); setOpen(false) }} className="flex">
-          <Image src="/assets/back.png" width="24" height="24" />
-        </span>
-        <div className="text-lg flex-grow text-center">Адрес</div>
+      <div className="flex items-center pt-12">
+        <Image src="/assets/back.png" width="24" height="24" />
       </div>
+        <div className="text-lg ml-16">Адрес</div>
       <div className="bg-gray-100 flex rounded-full w-full h-11 items-center">
         <button
           className={`${
@@ -312,7 +304,7 @@ const MobLocationTabs: FC<MobLocationTabProps> = ({ setOpen }) => {
         </button>
       </div>
       {tabIndex == 1 && (
-        <div className="mt-5">
+        <div className="mt-8">
           <div className="flex justify-between">
             <div className="text-gray-400 font-bold text-[18px]">
               Укажите свой адрес
@@ -373,30 +365,32 @@ const MobLocationTabs: FC<MobLocationTabProps> = ({ setOpen }) => {
               </div>
             </YMaps>
           </div>
-          <div className="mt-3">
+          <div className="mt-4">
             <form onSubmit={handleSubmit(onSubmit)}>
-              <div className="font-bold text-[18px]">Адрес</div>
-              <div className="mt-3 space-y-6">
-                <div className="w-full">
+              <div className="font-bold text-[18px] text-gray-400">Адрес:</div>
+              <div className="flex justify-between mt-3">
+                <div className="w-7/12">
                   <input
                     type="text"
                     {...register('address')}
                     placeholder="Адрес"
-                    className="bg-gray-100 px-8 py-2 rounded-full w-full outline-none focus:outline-none "
+                    className="bg-gray-100 px-8 py-3 rounded-full w-full outline-none focus:outline-none"
                   />
                 </div>
-                <div className="flex justify-between">
+                <div className="mx-5 w-3/12">
                   <input
                     type="text"
                     {...register('flat')}
                     placeholder="Квартира"
-                    className="bg-gray-100 px-8 py-2 rounded-full w-40  outline-none focus:outline-none"
+                    className="bg-gray-100 px-8 py-3 rounded-full w-full outline-none focus:outline-none"
                   />
+                </div>
+                <div className="w-2/12">
                   <input
                     type="text"
                     {...register('house')}
                     placeholder="Дом"
-                    className="bg-gray-100 px-8 py-2 rounded-full w-40 "
+                    className="bg-gray-100 px-8 py-3 rounded-full w-full"
                   />
                 </div>
               </div>
@@ -404,7 +398,7 @@ const MobLocationTabs: FC<MobLocationTabProps> = ({ setOpen }) => {
                 <Disclosure defaultOpen={true}>
                   {({ open }) => (
                     <>
-                      <Disclosure.Button className="flex text-yellow outline-none focus:outline-none">
+                      <Disclosure.Button className="flex text-yellow w-1/4 outline-none focus:outline-none">
                         <span>Указать домофон и подъезд</span>
                         {/*
                           Use the `open` render prop to rotate the icon when the panel is open
@@ -425,21 +419,21 @@ const MobLocationTabs: FC<MobLocationTabProps> = ({ setOpen }) => {
                         leaveTo="transform scale-95 opacity-0"
                       >
                         <Disclosure.Panel>
-                          <div className="flex mt-3 justify-between">
+                          <div className="flex mt-3">
                             <div>
                               <input
                                 type="text"
                                 {...register('entrance')}
                                 placeholder="Подъезд"
-                                className="bg-gray-100 px-8 py-2 rounded-full w-40  outline-none focus:outline-none"
+                                className="bg-gray-100 px-8 py-3 rounded-full w-full outline-none focus:outline-none"
                               />
                             </div>
                             <div className="mx-5">
                               <input
                                 type="text"
                                 {...register('door_code')}
-                                placeholder="Домофон"
-                                className="bg-gray-100 px-8 py-2 rounded-full w-40 outline-none focus:outline-none"
+                                placeholder="Код от домофона"
+                                className="bg-gray-100 px-8 py-3 rounded-full w-full outline-none focus:outline-none"
                               />
                             </div>
                           </div>
@@ -449,10 +443,10 @@ const MobLocationTabs: FC<MobLocationTabProps> = ({ setOpen }) => {
                   )}
                 </Disclosure>
               </div>
-              <div className="flex mt-12">
+              <div className="flex justify-end mt-3">
                 <button
                   type="submit"
-                  className="bg-yellow font-bold px-12 py-2 rounded-full text-[18px] text-white outline-none focus:outline-none w-full"
+                  className="bg-yellow font-bold px-12 py-3 rounded-full text-[18px] text-white outline-none focus:outline-none"
                 >
                   Подтвердить
                 </button>
@@ -462,99 +456,79 @@ const MobLocationTabs: FC<MobLocationTabProps> = ({ setOpen }) => {
         </div>
       )}
       {tabIndex == 2 && (
-        <div className="mt-5">
-          <div>
+        <div className="mt-8">
+          <div className="flex">
             <div className="font-bold text-[18px] text-gray-400">
-              Поиск ближайшего ресторана:
+              Выберите пиццерии:
             </div>
-            <div className="flex mt-3">
-              <div
-                className={`${
-                  pickupIndex == 1 ? ' text-yellow' : 'text-gray-400'
-                } cursor-pointer font-bold text-[18px] mr-5`}
-                onClick={() => {
-                  setPickupIndex(1)
-                }}
-              >
-                На карте
-              </div>
-              <div
-                className={`${
-                  pickupIndex == 2 ? ' text-yellow' : 'text-gray-400'
-                } cursor-pointer font-bold text-[18px]`}
-                onClick={() => {
-                  setPickupIndex(2)
-                }}
-              >
-                Списком
-              </div>
+            <div
+              className={`${
+                pickupIndex == 1 ? ' text-yellow' : 'text-gray-400'
+              } cursor-pointer font-bold text-[18px] mx-5`}
+              onClick={() => {
+                setPickupIndex(1)
+              }}
+            >
+              На карте
             </div>
-          </div>
-          <div className="w-full mt-5">
-            <input
-              type="text"
-              {...register('address')}
-              placeholder="Адрес"
-              className="bg-gray-100 px-8 rounded-full w-full outline-none focus:outline-none py-2"
-            />
+            <div
+              className={`${
+                pickupIndex == 2 ? ' text-yellow' : 'text-gray-400'
+              } cursor-pointer font-bold text-[18px]`}
+              onClick={() => {
+                setPickupIndex(2)
+              }}
+            >
+              Списком
+            </div>
           </div>
           <div className="mt-5">
             {pickupIndex == 1 && (
-              <>
-                <YMaps>
-                  <div>
-                    <Map
-                      defaultState={{
-                        center: [40.351706, 69.090118],
-                        zoom: 7.2,
-                        controls: [
-                          'zoomControl',
-                          'fullscreenControl',
-                          'geolocationControl',
-                        ],
-                      }}
-                      width="100%"
-                      height="270px"
-                      modules={[
-                        'control.ZoomControl',
-                        'control.FullscreenControl',
-                        'control.GeolocationControl',
-                      ]}
-                    >
-                      {pickupPoints.map((point) => (
-                        <div>
-                          <Placemark
-                            modules={['geoObject.addon.balloon']}
-                            defaultGeometry={point.mapCenter}
-                            key={point.id}
-                            onClick={() => setActivePoint(point.id)}
-                            options={{
-                              iconColor:
-                                activePoint && activePoint.id == point.id
-                                  ? '#FAAF04'
-                                  : '#1E98FF',
-                              iconLayout: 'default#image',
-                              iconImageHref: '/assets/locationLogo.png',
-                              iconImageSize: [40, 40],
-                            }}
-                          />
-                        </div>
-                      ))}
-                    </Map>
-                  </div>
-                </YMaps>
-                {activePoint && (
-                  <div className="w-72">
-                    <div className="font-bold text-base">
-                      {activePoint.label}
-                    </div>
-                    <div>{activePoint.desc}</div>
-                  </div>
-                )}
-              </>
+              <YMaps>
+                <div>
+                  <Map
+                    defaultState={{
+                      center: [40.351706, 69.090118],
+                      zoom: 7.2,
+                      controls: [
+                        'zoomControl',
+                        'fullscreenControl',
+                        'geolocationControl',
+                      ],
+                    }}
+                    width="100%"
+                    height="530px"
+                    modules={[
+                      'control.ZoomControl',
+                      'control.FullscreenControl',
+                      'control.GeolocationControl',
+                    ]}
+                  >
+                    {pickupPoints.map((point) => (
+                      <Placemark
+                        modules={['geoObject.addon.balloon']}
+                        defaultGeometry={point.mapCenter}
+                        key={point.id}
+                        onClick={() => setActivePoint(point.id)}
+                        options={{
+                          iconColor:
+                            activePoint && activePoint.id == point.id
+                              ? '#FAAF04'
+                              : '#1E98FF',
+                        }}
+                        properties={{
+                          balloonContentBody: `<b>${point.label}</b> <br />
+                          ${point.desc}
+                          `,
+                        }}
+                      />
+                    ))}
+                  </Map>
+                </div>
+              </YMaps>
             )}
             {pickupIndex == 2 && (
-              <div className="space-y-3">
+              <div className="gap-5 grid grid-cols-2">
                 {pickupPoints.map((point) => (
                   <div
                     key={point.id}
@@ -589,12 +563,12 @@ const MobLocationTabs: FC<MobLocationTabProps> = ({ setOpen }) => {
               </div>
             )}
           </div>
-          <div className="flex mt-12">
+          <div className="flex mt-10 justify-end">
             <button
               type="submit"
               className={`${
                 activePoint ? 'bg-yellow' : 'bg-gray-200'
-              } font-bold px-12 rounded-full text-[18px] text-white outline-none focus:outline-none w-full py-2`}
+              } font-bold px-12 py-3 rounded-full text-[18px] text-white outline-none focus:outline-none`}
               disabled={!activePoint}
               onClick={() => {
                 // console.log('davr')
@@ -609,4 +583,4 @@ const MobLocationTabs: FC<MobLocationTabProps> = ({ setOpen }) => {
   )
 }
 
-export default memo(MobLocationTabs)
+export default memo(LocationTabs)

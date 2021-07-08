@@ -495,7 +495,7 @@ const MobLocationTabs: FC<MobLocationTabProps> = ({ setOpen }) => {
               type="text"
               {...register('address')}
               placeholder="Адрес"
-              className="bg-gray-100 px-8 rounded-full w-full outline-none focus:outline-none py-2"
+              className="bg-gray-100 px-8 rounded-full w-full outline-none focus:outline-none"
             />
           </div>
           <div className="mt-5">

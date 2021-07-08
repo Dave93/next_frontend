@@ -452,7 +452,7 @@ const MobLocationTabs: FC<MobLocationTabProps> = ({ setOpen }) => {
               <div className="flex mt-12">
                 <button
                   type="submit"
-                  className="bg-yellow font-bold px-12 py-2 rounded-full text-[18px] text-white outline-none focus:outline-none w-full"
+                  className="bg-yellow font-bold px-12 py-3 rounded-full text-[18px] text-white outline-none focus:outline-none w-full h-12"
                 >
                   Подтвердить
                 </button>
@@ -495,7 +495,7 @@ const MobLocationTabs: FC<MobLocationTabProps> = ({ setOpen }) => {
               type="text"
               {...register('address')}
               placeholder="Адрес"
-              className="bg-gray-100 px-8 rounded-full w-full outline-none focus:outline-none py-2"
+              className="bg-gray-100 px-8 rounded-full w-full outline-none focus:outline-none"
             />
           </div>
           <div className="mt-5">
@@ -594,7 +594,7 @@ const MobLocationTabs: FC<MobLocationTabProps> = ({ setOpen }) => {
               type="submit"
               className={`${
                 activePoint ? 'bg-yellow' : 'bg-gray-200'
-              } font-bold px-12 rounded-full text-[18px] text-white outline-none focus:outline-none w-full py-2`}
+              } font-bold px-12 rounded-full text-[18px] text-white outline-none focus:outline-none w-full h-10`}
               disabled={!activePoint}
               onClick={() => {
                 // console.log('davr')

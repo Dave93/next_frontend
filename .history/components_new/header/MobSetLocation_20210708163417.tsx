@@ -1,6 +1,7 @@
 import React, { Fragment, useRef, useState, memo, FC } from 'react'
 import useTranslation from 'next-translate/useTranslation'
 import { Dialog, Transition } from '@headlessui/react'
+import LocationTabs from './LocationTabs'
 import Image from 'next/image'
 import MobLocationTabs from './MobLocationTabs.'
 
@@ -61,7 +62,7 @@ const SetLocation: FC = () => {
               leaveTo="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
             >
               <div className="inline-block align-bottom bg-white p-4 text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle container sm:w-full">
-                <MobLocationTabs setOpen={setOpen} />
+                <MobLocationTabs />
               </div>
             </Transition.Child>
           </div>
