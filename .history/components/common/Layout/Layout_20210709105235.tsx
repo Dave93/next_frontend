@@ -66,17 +66,12 @@ const Layout: FC<Props> = ({
               <div className="container mx-auto">{children}</div>
             )}
           </main>
-          <footer className="text-white md:flex flex-col md:mt-14 flex">
-            <div className="hidden md:flex">
-              <Image src="/assets/uzor.svg" width={1920} height={40} />
-            </div>
-            <div className="md:hidden flex">
-              <Image src="/assets/uzor.png" width={450} height={30} />
-            </div>
+          <footer className="text-white md:flex flex-col mt-14">
+            <Image src="/assets/footer_weave.png" width={1920} height={40} />
             <div className="bg-secondary w-full pt-5 pb-2 px-4 md:px-0">
-              <div className="container mx-auto md:my-6">
-                <div className="md:border-b md:flex justify-between mb-1 md:pb-10">
-                  <div className="md:w-1/5">
+              <div className="container mx-auto my-6">
+                <div className="border-b flex justify-between mb-5 pb-10">
+                  <div className="w-1/5">
                     <div className="hidden md:flex">
                       <Image
                         src="/assets/footer_logo.png"
@@ -84,16 +79,16 @@ const Layout: FC<Props> = ({
                         height={68}
                       />
                     </div>
-                    <div className="md:hidden border-b border-blue md:border-0 pb-5">
+                    <div className="md:hidden">
                       <div>Телефон доставки</div>
                       <div className="text-[30px] font-bold">71 205 11 11</div>
                     </div>
-                    <span className="md:block mt-7 text-xl hidden">
+                    <span className="block mt-7 text-xl">
                       Пицца, которая объединяет
                     </span>
                   </div>
-                  <div className="flex-grow border-b border-blue md:border-0 mt-5 md:mt-0 pb-5 md:pb-0">
-                    <div className="md:flex justify-center">
+                  <div className="flex-grow">
+                    <div className="flex justify-center">
                       <div className="mr-24 hidden md:block">
                         <span className="block font-bold mb-3 text-[16px]">
                           Меню
@@ -137,17 +132,17 @@ const Layout: FC<Props> = ({
                       </div>
                     </div>
                   </div>
-                  <div className="md:text-right text-sm leading-7 mt-5 md:mt-0">
+                  <div className="text-right text-sm leading-7">
                     <div className="hidden md:block">
                       <div>Телефон доставки</div>
                       <div className="text-[30px] font-bold">71 205 11 11</div>
                     </div>
-                    <div className=" border-b border-blue md:border-0 pb-5 md:pb-0">
+                    <div>
                       График работы <br /> с 10-00 до 23-00 Ежедневно
                     </div>
-                    <div className="mt-4  border-b border-blue md:border-0 pb-5 md:pb-0">
+                    <div className="mt-4">
                       <span>Подписывайтесь на нас:</span>
-                      <ul className="flex md:justify-end text-4xl">
+                      <ul className="flex justify-end text-4xl">
                         {socials.map((soc) => {
                           return (
                             <li key={soc.code} className="mx-1">
@@ -164,9 +159,7 @@ const Layout: FC<Props> = ({
                     </div>
                   </div>
                 </div>
-                <div className="mb-7 md:mb-0">
-                  {new Date().getFullYear()} Все права защищены
-                </div>
+                <div>{new Date().getFullYear()} Все права защищены</div>
               </div>
             </div>
           </footer>
