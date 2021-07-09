@@ -70,8 +70,8 @@ const Header: FC<{
           </div>
         </div>
         {mobMenuOpen && (
-          <div className="w-screen h-screen fixed bg-secondary z-40 top-0 overflow-y-auto p-4 pt-12">
-            <div className="flex justify-between items-center border-b pb-2 border-blue">
+          <div className="w-screen h-screen fixed bg-secondary z-40 top-0 p-4">
+            <div className="flex justify-between items-center mt-10 border-b pb-2 border-blue">
               <div className="w-32 md:w-48 md:ml-0">
                 <Link href="/" prefetch={false}>
                   <a className="flex">

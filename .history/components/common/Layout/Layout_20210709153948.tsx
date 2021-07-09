@@ -68,7 +68,7 @@ const Layout: FC<Props> = ({
           </main>
           <footer className="text-white md:flex flex-col md:mt-14 flex">
             <div className="hidden md:flex">
-              <Image src="/assets/uzor.svg" width={1920} height={40} />
+              <Image src="/assets/footer_weave.png" width={1920} height={40} />
             </div>
             <div className="md:hidden flex">
               <Image src="/assets/uzor.png" width={450} height={30} />
