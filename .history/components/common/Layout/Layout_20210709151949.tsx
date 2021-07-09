@@ -66,13 +66,8 @@ const Layout: FC<Props> = ({
               <div className="container mx-auto">{children}</div>
             )}
           </main>
-          <footer className="text-white md:flex flex-col md:mt-14 flex">
-            <div className="hidden md:flex">
-              <Image src="/assets/uzor.svg" width={1920} height={40} />
-            </div>
-            <div className="md:hidden flex">
-              <Image src="/assets/uzor.png" width={450} height={30} />
-            </div>
+          <footer className="text-white md:flex flex-col md:mt-14">
+            <Image src="/assets/footer_weave.png" width={400} height={40} />
             <div className="bg-secondary w-full pt-5 pb-2 px-4 md:px-0">
               <div className="container mx-auto md:my-6">
                 <div className="md:border-b md:flex justify-between mb-1 md:pb-10">
@@ -164,9 +159,7 @@ const Layout: FC<Props> = ({
                     </div>
                   </div>
                 </div>
-                <div className="mb-7 md:mb-0">
-                  {new Date().getFullYear()} Все права защищены
-                </div>
+                <div className="mb-7 md:mb-0">{new Date().getFullYear()} Все права защищены</div>
               </div>
             </div>
           </footer>
