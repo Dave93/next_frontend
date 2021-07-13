@@ -59,18 +59,14 @@ const Layout: FC<Props> = ({
       <div className="font-sans">
         <div className="md:flex md:flex-col h-screen">
           <Header menu={topMenu} />
-          <main
-            className={`${
-              pathname == '/order' ? 'bg-gray-200' : ''
-            } flex-grow md:pb-14`}
-          >
+          <main className={`${pathname == '/order' ? 'bg-gray-400': ''} flex-grow`}>
             {pathname == '/' ? (
               children
             ) : (
               <div className="container mx-auto">{children}</div>
             )}
           </main>
-          <footer className="text-white md:flex flex-col flex">
+          <footer className="text-white md:flex flex-col md:mt-14 flex">
             <div className="hidden md:flex">
               <Image src="/assets/uzor.svg" width={1920} height={40} />
             </div>

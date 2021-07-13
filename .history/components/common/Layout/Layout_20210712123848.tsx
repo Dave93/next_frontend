@@ -59,11 +59,7 @@ const Layout: FC<Props> = ({
       <div className="font-sans">
         <div className="md:flex md:flex-col h-screen">
           <Header menu={topMenu} />
-          <main
-            className={`${
-              pathname == '/order' ? 'bg-gray-200' : ''
-            } flex-grow md:pb-14`}
-          >
+          <main className={`${pathname == '/order' ? 'bg-gray-400': ''} flex-grow`}>
             {pathname == '/' ? (
               children
             ) : (

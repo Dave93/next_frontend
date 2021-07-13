@@ -57,13 +57,9 @@ const Layout: FC<Props> = ({
   return (
     <CommerceProvider locale={locale}>
       <div className="font-sans">
-        <div className="md:flex md:flex-col h-screen">
+        <div className="md:flex md:flex-col h-screen md:pb-14">
           <Header menu={topMenu} />
-          <main
-            className={`${
-              pathname == '/order' ? 'bg-gray-200' : ''
-            } flex-grow md:pb-14`}
-          >
+          <main className={`${pathname == '/order' ? 'bg-gray-400': ''} flex-grow`}>
             {pathname == '/' ? (
               children
             ) : (
