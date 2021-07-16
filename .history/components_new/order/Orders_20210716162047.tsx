@@ -815,46 +815,46 @@ const Orders: FC = () => {
         </div>
         <div className={openTab === 2 ? 'block' : 'hidden'} id="link2">
           <div className="flex w-[460px] justify-between pt-8 items-center">
-            <label className="flex justify-around items-center w-24 h-24 p-3 rounded-2xl border-gray-200 border cursor-pointer">
+            <div className="w-24 h-24 p-3 rounded-2xl border-gray-200 border cursor-pointer">
               <img src="/assets/uzcard.png" />
               <input
                 type="radio"
                 defaultValue="uzcard"
                 checked={payType === 'uzcard'}
                 onChange={onValueChange}
-                className="hidden"
+                className=""
               />
-            </label>
-            <label className="flex justify-around items-center w-24 h-24 p-3 rounded-2xl border-gray-200 border cursor-pointer">
+            </div>
+            <div className="w-24 h-24 p-3 rounded-2xl border-gray-200 border cursor-pointer">
               <img src="/assets/visa.png" />
               <input
                 type="radio"
                 defaultValue="visa"
                 onChange={onValueChange}
                 checked={payType === 'visa'}
-                className="hidden"
+                className=""
               />
-            </label>
-            <label className="flex justify-around items-center w-24 h-24 p-3 rounded-2xl border-gray-200 border cursor-pointer">
+            </div>
+            <div className="w-24 h-24 p-3 rounded-2xl border-gray-200 border cursor-pointer">
               <img src="/assets/humo.png" />
               <input
                 type="radio"
                 defaultValue="humo"
                 onChange={onValueChange}
                 checked={payType === 'humo'}
-                className="hidden"
+                className=""
               />
-            </label>
-            <label className="flex justify-around items-center w-24 h-24 p-3 rounded-2xl border-gray-200 border cursor-pointer">
+            </div>
+            <div className="w-24 h-24 p-3 rounded-2xl border-gray-200 border cursor-pointer">
               <img src="/assets/mastercard.png" />
               <input
                 type="radio"
                 defaultValue="mastercard"
                 onChange={onValueChange}
                 checked={payType === 'mastercard'}
-                className="hidden"
+                className=""
               />
-            </label>
+            </div>
           </div>
         </div>
         <div className={openTab === 3 ? 'block' : 'hidden'} id="link3">

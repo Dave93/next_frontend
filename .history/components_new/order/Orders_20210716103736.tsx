@@ -2,7 +2,7 @@ import { XIcon } from '@heroicons/react/outline'
 import { useForm } from 'react-hook-form'
 import useTranslation from 'next-translate/useTranslation'
 import { useUI } from '@components/ui/context'
-import React, { Fragment, useState, useMemo, FC, memo } from 'react'
+import React, { Fragment, useState, useMemo, FC } from 'react'
 import { Menu, Transition, Disclosure } from '@headlessui/react'
 import { ChevronDownIcon, ChevronRightIcon } from '@heroicons/react/solid'
 import {
@@ -308,12 +308,134 @@ const Orders: FC = () => {
   // time of delivery
   const [deliveryActive, setDeliveryActive] = useState(1)
   // pay
-  const [openTab, setOpenTab] = useState(1)
-  const [payType, setPayType] = useState('')
+  import React from 'react'
 
-  const onValueChange = (e: any) => {
-    console.log(payType)
-    setPayType(e.target.value)
+  const Tabs = ({ color }) => {
+    const [openTab, setOpenTab] = React.useState(1)
+    return (
+      <>
+        <div className="flex flex-wrap">
+          <div className="w-full">
+            <ul
+              className="flex mb-0 list-none flex-wrap pt-3 pb-4 flex-row"
+              role="tablist"
+            >
+              <li className="-mb-px mr-2 last:mr-0 flex-auto text-center">
+                <a
+                  className={
+                    'text-xs font-bold uppercase px-5 py-3 shadow-lg rounded block leading-normal ' +
+                    (openTab === 1
+                      ? 'text-white bg-' + color + '-600'
+                      : 'text-' + color + '-600 bg-white')
+                  }
+                  onClick={(e) => {
+                    e.preventDefault()
+                    setOpenTab(1)
+                  }}
+                  data-toggle="tab"
+                  href="#link1"
+                  role="tablist"
+                >
+                  Profile
+                </a>
+              </li>
+              <li className="-mb-px mr-2 last:mr-0 flex-auto text-center">
+                <a
+                  className={
+                    'text-xs font-bold uppercase px-5 py-3 shadow-lg rounded block leading-normal ' +
+                    (openTab === 2
+                      ? 'text-white bg-' + color + '-600'
+                      : 'text-' + color + '-600 bg-white')
+                  }
+                  onClick={(e) => {
+                    e.preventDefault()
+                    setOpenTab(2)
+                  }}
+                  data-toggle="tab"
+                  href="#link2"
+                  role="tablist"
+                >
+                  Settings
+                </a>
+              </li>
+              <li className="-mb-px mr-2 last:mr-0 flex-auto text-center">
+                <a
+                  className={
+                    'text-xs font-bold uppercase px-5 py-3 shadow-lg rounded block leading-normal ' +
+                    (openTab === 3
+                      ? 'text-white bg-' + color + '-600'
+                      : 'text-' + color + '-600 bg-white')
+                  }
+                  onClick={(e) => {
+                    e.preventDefault()
+                    setOpenTab(3)
+                  }}
+                  data-toggle="tab"
+                  href="#link3"
+                  role="tablist"
+                >
+                  Options
+                </a>
+              </li>
+            </ul>
+            <div className="relative flex flex-col min-w-0 break-words bg-white w-full mb-6 shadow-lg rounded">
+              <div className="px-4 py-5 flex-auto">
+                <div className="tab-content tab-space">
+                  <div
+                    className={openTab === 1 ? 'block' : 'hidden'}
+                    id="link1"
+                  >
+                    <p>
+                      Collaboratively administrate empowered markets via
+                      plug-and-play networks. Dynamically procrastinate B2C
+                      users after installed base benefits.
+                      <br />
+                      <br /> Dramatically visualize customer directed
+                      convergence without revolutionary ROI.
+                    </p>
+                  </div>
+                  <div
+                    className={openTab === 2 ? 'block' : 'hidden'}
+                    id="link2"
+                  >
+                    <p>
+                      Completely synergize resource taxing relationships via
+                      premier niche markets. Professionally cultivate one-to-one
+                      customer service with robust ideas.
+                      <br />
+                      <br />
+                      Dynamically innovate resource-leveling customer service
+                      for state of the art customer service.
+                    </p>
+                  </div>
+                  <div
+                    className={openTab === 3 ? 'block' : 'hidden'}
+                    id="link3"
+                  >
+                    <p>
+                      Efficiently unleash cross-media information without
+                      cross-media value. Quickly maximize timely deliverables
+                      for real-time schemas.
+                      <br />
+                      <br /> Dramatically maintain clicks-and-mortar solutions
+                      without functional solutions.
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </>
+    )
+  }
+
+  export default function TabsRender() {
+    return (
+      <>
+        return <Tabs color="pink" />;
+      </>
+    )
   }
   return (
     <>
@@ -738,137 +860,44 @@ const Orders: FC = () => {
         <div>
           <button
             className={`${
-              openTab !== 1
+              payActive !== 1
                 ? 'text-gray-400 bg-gray-200'
                 : 'bg-yellow text-white'
             } flex-1 font-bold  rounded-full outline-none focus:outline-none  h-11 md:w-44`}
-            onClick={() => setOpenTab(1)}
+            onClick={() => setPayActive(1)}
           >
             Наличными
           </button>
           <button
             className={`${
-              openTab !== 2
+              payActive !== 2
                 ? 'text-gray-400 bg-gray-200'
                 : 'bg-yellow text-white'
             } flex-1 font-bold  rounded-full outline-none focus:outline-none  h-11 md:w-44 ml-5`}
-            onClick={() => setOpenTab(2)}
+            onClick={() => setPayActive(2)}
           >
             Картой
           </button>
           <button
             className={`${
-              openTab !== 3
+              payActive !== 3
                 ? 'text-gray-400 bg-gray-200'
                 : 'bg-yellow text-white'
             } flex-1 font-bold  rounded-full outline-none focus:outline-none  h-11 md:w-44 ml-5`}
-            onClick={() => setOpenTab(3)}
+            onClick={() => setPayActive(3)}
           >
             Онлайн
           </button>
         </div>
-        <div className={openTab === 1 ? 'block' : 'hidden'} id="link1">
-          <input
-            type="text"
-            {...register('change')}
-            className="borde focus:outline-none outline-none px-6 py-3 rounded-full text-sm w-80 bg-gray-200 text-gray-400 mt-8"
-            value="Сдача с"
-          />
-          <Disclosure defaultOpen={true}>
-            {({ open }) => (
-              <>
-                <Disclosure.Button className="flex text-yellow outline-none focus:outline-none mt-8">
-                  <span>Комментарий к заказу </span>
-                  {/*
-                          Use the `open` render prop to rotate the icon when the panel is open
-                        */}
-                  <ChevronRightIcon
-                    className={`w-6 transform ${
-                      open ? 'rotate-90' : '-rotate-90'
-                    }`}
-                  />
-                </Disclosure.Button>
-                <Transition
-                  show={open}
-                  enter="transition duration-300 ease-out"
-                  enterFrom="transform scale-95 opacity-0"
-                  enterTo="transform scale-100 opacity-100"
-                  leave="transition duration-300 ease-out"
-                  leaveFrom="transform scale-100 opacity-100"
-                  leaveTo="transform scale-95 opacity-0"
-                >
-                  <Disclosure.Panel>
-                    <div className="flex mt-3 w-96 h-28">
-                      <div>
-                        <textarea
-                          {...register('pay_comment')}
-                          className="w-96 h-28 bg-gray-200 rounded-2xl p-3 outline-none focus:outline-none resize-none"
-                          placeholder="Ваш коментарии увидет только куръер"
-                        ></textarea>
-                      </div>
-                    </div>
-                  </Disclosure.Panel>
-                </Transition>
-              </>
-            )}
-          </Disclosure>
-        </div>
-        <div className={openTab === 2 ? 'block' : 'hidden'} id="link2">
-          <div className="flex w-[460px] justify-between pt-8 items-center">
-            <label className="flex justify-around items-center w-24 h-24 p-3 rounded-2xl border-gray-200 border cursor-pointer">
-              <img src="/assets/uzcard.png" />
-              <input
-                type="radio"
-                defaultValue="uzcard"
-                checked={payType === 'uzcard'}
-                onChange={onValueChange}
-                className="hidden"
-              />
-            </label>
-            <label className="flex justify-around items-center w-24 h-24 p-3 rounded-2xl border-gray-200 border cursor-pointer">
-              <img src="/assets/visa.png" />
-              <input
-                type="radio"
-                defaultValue="visa"
-                onChange={onValueChange}
-                checked={payType === 'visa'}
-                className="hidden"
-              />
-            </label>
-            <label className="flex justify-around items-center w-24 h-24 p-3 rounded-2xl border-gray-200 border cursor-pointer">
-              <img src="/assets/humo.png" />
-              <input
-                type="radio"
-                defaultValue="humo"
-                onChange={onValueChange}
-                checked={payType === 'humo'}
-                className="hidden"
-              />
-            </label>
-            <label className="flex justify-around items-center w-24 h-24 p-3 rounded-2xl border-gray-200 border cursor-pointer">
-              <img src="/assets/mastercard.png" />
-              <input
-                type="radio"
-                defaultValue="mastercard"
-                onChange={onValueChange}
-                checked={payType === 'mastercard'}
-                className="hidden"
-              />
-            </label>
-          </div>
-        </div>
-        <div className={openTab === 3 ? 'block' : 'hidden'} id="link3">
-          <p>
-            Efficiently unleash cross-media information without cross-media
-            value. Quickly maximize timely deliverables for real-time schemas.
-            <br />
-            <br /> Dramatically maintain clicks-and-mortar solutions without
-            functional solutions.
-          </p>
-        </div>
+        <input
+          type="text"
+          {...register('change')}
+          className="borde focus:outline-none outline-none px-6 py-3 rounded-full text-sm w-80 bg-gray-200 text-gray-400 mt-8"
+          value="Сдача с"
+        />
       </div>
     </>
   )
 }
 
-export default memo(Orders)
+export default Orders

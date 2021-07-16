@@ -815,7 +815,7 @@ const Orders: FC = () => {
         </div>
         <div className={openTab === 2 ? 'block' : 'hidden'} id="link2">
           <div className="flex w-[460px] justify-between pt-8 items-center">
-            <label className="flex justify-around items-center w-24 h-24 p-3 rounded-2xl border-gray-200 border cursor-pointer">
+            <label className="flex items-center w-24 h-24 p-3 rounded-2xl border-gray-200 border cursor-pointer">
               <img src="/assets/uzcard.png" />
               <input
                 type="radio"
@@ -825,7 +825,7 @@ const Orders: FC = () => {
                 className="hidden"
               />
             </label>
-            <label className="flex justify-around items-center w-24 h-24 p-3 rounded-2xl border-gray-200 border cursor-pointer">
+            <label className="flex items-center w-24 h-24 p-3 rounded-2xl border-gray-200 border cursor-pointer">
               <img src="/assets/visa.png" />
               <input
                 type="radio"
@@ -835,7 +835,7 @@ const Orders: FC = () => {
                 className="hidden"
               />
             </label>
-            <label className="flex justify-around items-center w-24 h-24 p-3 rounded-2xl border-gray-200 border cursor-pointer">
+            <label className="flex items-center w-24 h-24 p-3 rounded-2xl border-gray-200 border cursor-pointer">
               <img src="/assets/humo.png" />
               <input
                 type="radio"
@@ -845,7 +845,7 @@ const Orders: FC = () => {
                 className="hidden"
               />
             </label>
-            <label className="flex justify-around items-center w-24 h-24 p-3 rounded-2xl border-gray-200 border cursor-pointer">
+            <label className="flex items-center w-24 h-24 p-3 rounded-2xl border-gray-200 border cursor-pointer">
               <img src="/assets/mastercard.png" />
               <input
                 type="radio"

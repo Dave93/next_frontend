@@ -2,7 +2,7 @@ import { XIcon } from '@heroicons/react/outline'
 import { useForm } from 'react-hook-form'
 import useTranslation from 'next-translate/useTranslation'
 import { useUI } from '@components/ui/context'
-import React, { Fragment, useState, useMemo, FC, memo } from 'react'
+import React, { Fragment, useState, useMemo, FC } from 'react'
 import { Menu, Transition, Disclosure } from '@headlessui/react'
 import { ChevronDownIcon, ChevronRightIcon } from '@heroicons/react/solid'
 import {
@@ -308,13 +308,7 @@ const Orders: FC = () => {
   // time of delivery
   const [deliveryActive, setDeliveryActive] = useState(1)
   // pay
-  const [openTab, setOpenTab] = useState(1)
-  const [payType, setPayType] = useState('')
-
-  const onValueChange = (e: any) => {
-    console.log(payType)
-    setPayType(e.target.value)
-  }
+  const [openTab, setOpenTab] = React.useState(1)
   return (
     <>
       {/* Contacts */}
@@ -777,8 +771,8 @@ const Orders: FC = () => {
           <Disclosure defaultOpen={true}>
             {({ open }) => (
               <>
-                <Disclosure.Button className="flex text-yellow outline-none focus:outline-none mt-8">
-                  <span>Комментарий к заказу </span>
+                <Disclosure.Button className="flex text-yellow outline-none focus:outline-none">
+                  <span>Указать домофон и подъезд</span>
                   {/*
                           Use the `open` render prop to rotate the icon when the panel is open
                         */}
@@ -798,13 +792,14 @@ const Orders: FC = () => {
                   leaveTo="transform scale-95 opacity-0"
                 >
                   <Disclosure.Panel>
-                    <div className="flex mt-3 w-96 h-28">
+                    <div className="flex mt-3">
                       <div>
-                        <textarea
+                        <input
+                          type="textarea"
                           {...register('pay_comment')}
-                          className="w-96 h-28 bg-gray-200 rounded-2xl p-3 outline-none focus:outline-none resize-none"
-                          placeholder="Ваш коментарии увидет только куръер"
-                        ></textarea>
+                          placeholder="Подъезд"
+                          className="bg-gray-100 px-8 py-2 rounded-full w-60  outline-none focus:outline-none"
+                        />
                       </div>
                     </div>
                   </Disclosure.Panel>
@@ -814,48 +809,15 @@ const Orders: FC = () => {
           </Disclosure>
         </div>
         <div className={openTab === 2 ? 'block' : 'hidden'} id="link2">
-          <div className="flex w-[460px] justify-between pt-8 items-center">
-            <label className="flex justify-around items-center w-24 h-24 p-3 rounded-2xl border-gray-200 border cursor-pointer">
-              <img src="/assets/uzcard.png" />
-              <input
-                type="radio"
-                defaultValue="uzcard"
-                checked={payType === 'uzcard'}
-                onChange={onValueChange}
-                className="hidden"
-              />
-            </label>
-            <label className="flex justify-around items-center w-24 h-24 p-3 rounded-2xl border-gray-200 border cursor-pointer">
-              <img src="/assets/visa.png" />
-              <input
-                type="radio"
-                defaultValue="visa"
-                onChange={onValueChange}
-                checked={payType === 'visa'}
-                className="hidden"
-              />
-            </label>
-            <label className="flex justify-around items-center w-24 h-24 p-3 rounded-2xl border-gray-200 border cursor-pointer">
-              <img src="/assets/humo.png" />
-              <input
-                type="radio"
-                defaultValue="humo"
-                onChange={onValueChange}
-                checked={payType === 'humo'}
-                className="hidden"
-              />
-            </label>
-            <label className="flex justify-around items-center w-24 h-24 p-3 rounded-2xl border-gray-200 border cursor-pointer">
-              <img src="/assets/mastercard.png" />
-              <input
-                type="radio"
-                defaultValue="mastercard"
-                onChange={onValueChange}
-                checked={payType === 'mastercard'}
-                className="hidden"
-              />
-            </label>
-          </div>
+          <p>
+            Completely synergize resource taxing relationships via premier niche
+            markets. Professionally cultivate one-to-one customer service with
+            robust ideas.
+            <br />
+            <br />
+            Dynamically innovate resource-leveling customer service for state of
+            the art customer service.
+          </p>
         </div>
         <div className={openTab === 3 ? 'block' : 'hidden'} id="link3">
           <p>
@@ -871,4 +833,4 @@ const Orders: FC = () => {
   )
 }
 
-export default memo(Orders)
+export default Orders
