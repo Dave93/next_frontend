@@ -15,6 +15,9 @@ const isVendure = provider === 'vendure'
 module.exports = nextTranslate(
   withCommerceConfig({
     commerce,
+    publicRuntimeConfig: {
+      apiUrl: process.env.API_URL,
+    },
     rewrites() {
       return [
         (isBC || isShopify || isSwell || isVendure) && {

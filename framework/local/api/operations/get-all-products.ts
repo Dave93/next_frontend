@@ -3,6 +3,7 @@ import { GetAllProductsOperation } from '@commerce/types/product'
 import type { OperationContext } from '@commerce/api/operations'
 import type { LocalConfig, Provider } from '../index'
 import data from '../../chopar_data.json'
+import getProducts from '../utils/fetch-products'
 
 export default function getAllProductsOperation({
   commerce,
@@ -16,9 +17,12 @@ export default function getAllProductsOperation({
     variables?: T['variables']
     config?: Partial<LocalConfig>
     preview?: boolean
-  } = {}): Promise<{ products: Product[] | any[] }> {
+  } = {}): Promise<{ products: any[] | any[] }> {
+    const cfg = commerce.getConfig(config)
+
+    const result = await getProducts(cfg)
     return {
-      products: data.products,
+      products: result,
     }
   }
   return getAllProducts
