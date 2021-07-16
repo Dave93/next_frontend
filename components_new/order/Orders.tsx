@@ -26,8 +26,15 @@ const Orders: FC = () => {
 
   type FormData = {
     name: string
+    address: string
     phone: string
     email: string
+    flat: string
+    house: string
+    entrance: string
+    door_code: string
+    change: string
+    pay_comment: string
   }
   const { register, handleSubmit, reset, watch, formState, getValues } =
     useForm<FormData>({
@@ -36,6 +43,13 @@ const Orders: FC = () => {
         name: user?.user?.name,
         phone: user?.user?.phone,
         email: '',
+        address: '',
+        flat: '',
+        house: '',
+        entrance: '',
+        door_code: '',
+        change: '',
+        pay_comment: '',
       },
     })
 
