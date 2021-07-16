@@ -61,7 +61,7 @@ const Layout: FC<Props> = ({
           <Header menu={topMenu} />
           <main
             className={`${
-              pathname == '/order' ? 'bg-gray-200' : ''
+              pathname == '/order' ? 'bg-gray-400' : ''
             } flex-grow md:pb-14`}
           >
             {pathname == '/' ? (
