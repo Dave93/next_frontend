@@ -39,6 +39,7 @@
     "cross-env": "^7.0.3",
     "currency.js": "^2.0.4",
     "dot-object": "^2.1.4",
+    "dotenv": "^10.0.0",
     "email-validator": "^2.0.4",
     "express": "^4.17.1",
     "fastify": "^3.18.0",

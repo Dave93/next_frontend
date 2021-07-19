@@ -4,6 +4,7 @@ const {
   getProviderName,
 } = require('./framework/commerce/config')
 const nextTranslate = require('next-translate')
+// require('dotenv').config()
 
 const provider = commerce.provider || getProviderName()
 const isBC = provider === 'bigcommerce'

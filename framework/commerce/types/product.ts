@@ -46,10 +46,12 @@ export type Product = {
   // slug?: string
   // path?: string
   image: string
+  attribute_data: any
   // images: ProductImage[]
-  variants?: ProductVariant[]
-  price?: ProductPrice
-  options: ProductOption[]
+  variants?: any[]
+  modifiers?: any[]
+  price: string
+  options?: ProductOption[]
 }
 
 export type SearchProductsBody = {
