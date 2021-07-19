@@ -1330,13 +1330,14 @@ const Orders: FC = () => {
           </Dialog>
         </Transition>
         <div className="flex justify-between mt-8">
-          <button className="text-xl text-gray-400 bg-gray-200 flex h-12 items-center justify-between px-12 rounded-full w-80">
-            <img src="/left.png" /> Вернуться в корзину
-          </button>
-          <button className="text-xl text-white bg-yellow flex h-12 items-center justify-evenly rounded-full w-80">
-            Оплатить
+          <div className="rounded-full py-3 text-center w-80 bg-gray-200">
+            <img src="/left.png" />
+            <button>Вернуться в корзину</button>
+          </div>
+          <div className="rounded-full py-3 text-center w-80 bg-yellow">
             <img src="/right.png" />
-          </button>
+            <button>Оплатить</button>
+          </div>
         </div>
       </div>
     </>

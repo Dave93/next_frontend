@@ -2,8 +2,8 @@ import { XIcon } from '@heroicons/react/outline'
 import { useForm } from 'react-hook-form'
 import useTranslation from 'next-translate/useTranslation'
 import { useUI } from '@components/ui/context'
-import React, { Fragment, useState, useMemo, FC, memo, useRef } from 'react'
-import { Menu, Transition, Disclosure, Dialog } from '@headlessui/react'
+import React, { Fragment, useState, useMemo, FC, memo } from 'react'
+import { Menu, Transition, Disclosure } from '@headlessui/react'
 import { ChevronDownIcon, ChevronRightIcon } from '@heroicons/react/solid'
 import {
   YMaps,
@@ -348,16 +348,25 @@ const Orders: FC = () => {
     newsSetChecked(e.target.checked)
   }
 
+  let [isOpen, setIsOpen] = useState(false)
   let [isShowPrivacy, setIsShowPrivacy] = useState(false)
+  const openModal = () => {
+    setIsOpen(true)
+  }
+
+  const closeModal = () => {
+    setIsOpen(false)
+  }
   const showPrivacy = (e: React.MouseEvent<HTMLElement>) => {
     e.preventDefault()
+    setIsOpen(false)
     setIsShowPrivacy(true)
   }
 
   const closePrivacy = () => {
     setIsShowPrivacy(false)
+    setIsOpen(true)
   }
-  let privacyButtonRef = useRef(null)
 
   return (
     <>
@@ -1084,7 +1093,7 @@ const Orders: FC = () => {
               type="checkbox"
               defaultValue="sms"
               className={` ${
-                sms ? 'text-yellow' : 'bg-gray-200'
+                sms ? 'text-yellow' : 'bg-gray-300'
               } form-checkbox h-5 w-5  rounded-md  mr-2`}
               onChange={smsValueChange}
             />
@@ -1095,23 +1104,22 @@ const Orders: FC = () => {
               type="checkbox"
               defaultValue="newsletter"
               className={` ${
-                newsletter ? 'text-yellow' : 'bg-gray-200'
+                newsletter ? 'text-yellow' : 'bg-gray-300'
               } form-checkbox h-5 w-5  rounded-md mr-2`}
               onChange={newsletterValueChange}
             />
             <div>E-mail рассылка</div>
           </label>
         </div>
-        <div className="mt-5 text-gray-400 text-sm flex border-b pb-8">
-          Нажимая "Оплатить", Вы даёте Согласие на обработку Ваших персональных
-          данных и принимаете
+        <div className="mt-5 text-gray-400 text-sm">
+          Нажимая получить код я принимаю условия
           <a
             href="/privacy"
             onClick={showPrivacy}
-            className="text-yellow block mx-1"
+            className="text-yellow block"
             target="_blank"
           >
-            Пользовательское соглашение
+            пользовательского соглашения
           </a>
         </div>
         <Transition appear show={isShowPrivacy} as={Fragment}>
@@ -1329,15 +1337,6 @@ const Orders: FC = () => {
             </div>
           </Dialog>
         </Transition>
-        <div className="flex justify-between mt-8">
-          <button className="text-xl text-gray-400 bg-gray-200 flex h-12 items-center justify-between px-12 rounded-full w-80">
-            <img src="/left.png" /> Вернуться в корзину
-          </button>
-          <button className="text-xl text-white bg-yellow flex h-12 items-center justify-evenly rounded-full w-80">
-            Оплатить
-            <img src="/right.png" />
-          </button>
-        </div>
       </div>
     </>
   )
