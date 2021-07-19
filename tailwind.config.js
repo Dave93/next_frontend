@@ -1,7 +1,7 @@
 const colors = require('tailwindcss/colors')
 const defaultTheme = require('tailwindcss/defaultTheme')
 module.exports = {
-  // mode: 'jit',
+  mode: 'jit',
   future: {
     purgeLayersByDefault: true,
     applyComplexClasses: true,
