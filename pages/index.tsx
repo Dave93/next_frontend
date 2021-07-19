@@ -114,7 +114,7 @@ export default function Home({
       <div className="lg:hidden mx-8 my-5">
         <MobSetLocation />
       </div>
-      <CategoriesMenu categories={categories} />
+      <CategoriesMenu categories={categories} channelName={channelName} />
       <div className="container mx-auto">
         <div className="grid lg:grid-cols-4 grid-cols-1 md:grid-cols-2 gap-10 mt-10">
           <div className="col-span-3 space-y-16">

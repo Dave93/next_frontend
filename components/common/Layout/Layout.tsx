@@ -13,6 +13,7 @@ import styles from './Layout.module.css'
 import Header from '@components_new/Header'
 import Image from 'next/image'
 import Link from 'next/link'
+import { Link as LinkScroll } from 'react-scroll'
 import {
   faFacebook,
   faInstagram,
@@ -25,7 +26,7 @@ import { SocialIcons } from '@commerce/types/socialIcons'
 interface Props {
   pageProps: {
     pages?: Page[]
-    categories: LinkItem[]
+    categories: any[]
     topMenu: APILinkItem[]
     footerInfoMenu: APILinkItem[]
     socials: SocialIcons[]
@@ -104,15 +105,24 @@ const Layout: FC<Props> = ({
                         </span>
                         <ul className="ml-3">
                           {categories.map((item) => {
-                            const keyTyped = locale as keyof typeof item.label
                             return (
                               <li
-                                key={item.href}
+                                key={item.id}
                                 className={styles.footerMenuListItem}
                               >
-                                <Link href={item.href} prefetch={false}>
-                                  <a>{item.label[keyTyped]}</a>
-                                </Link>
+                                <LinkScroll
+                                  to={`productSection_${item.id}`}
+                                  spy={true}
+                                  smooth={true}
+                                  offset={-100}
+                                  className="w-full cursor-pointer block"
+                                >
+                                  {
+                                    item?.attribute_data?.name['chopar'][
+                                      locale || 'ru'
+                                    ] // TODO: fix static value chopar
+                                  }
+                                </LinkScroll>
                               </li>
                             )
                           })}
