@@ -78,6 +78,36 @@ export default function Home({
     getChannel()
   }, [])
 
+  const readyProducts = useMemo(() => {
+    return products.map((prod: any) => {
+      if (prod.variants && prod.variants.length) {
+        prod.variants = prod.variants.map((v: any, index: number) => {
+          if (index === 0) {
+            v.active = true
+          } else {
+            v.active = false
+          }
+
+          return v
+        })
+      } else if (prod.items && prod.items.length) {
+        prod.items = prod.items.map((item: any) => {
+          item.variants = item.variants.map((v: any, index: number) => {
+            if (index === 0) {
+              v.active = true
+            } else {
+              v.active = false
+            }
+
+            return v
+          })
+          return item
+        })
+      }
+      return prod
+    })
+  }, [products])
+
   return (
     <>
       <MainSlider />
@@ -88,14 +118,18 @@ export default function Home({
       <div className="container mx-auto">
         <div className="grid lg:grid-cols-4 grid-cols-1 md:grid-cols-2 gap-10 mt-10">
           <div className="col-span-3 space-y-16">
-            {products.map((sec: any) => (
+            {readyProducts.map((sec: any) => (
               <div key={sec.id} id={`productSection_${sec.id}`}>
                 <ProductListSectionTitle
                   title={sec?.attribute_data?.name[channelName][locale || 'ru']}
                 />
                 <div className="grid grid-cols-1 lg:grid-cols-3 md:grid-cols-2 md:gap-10 divide-y md:divide-y-0 px-4 md:px-0">
                   {sec.items.map((prod: any) => (
-                    <ProductItemNew product={prod} key={prod.id} />
+                    <ProductItemNew
+                      product={prod}
+                      key={prod.id}
+                      channelName={channelName}
+                    />
                   ))}
                 </div>
               </div>
