@@ -4,6 +4,7 @@ import { LinkItem, APILinkItem } from '@commerce/types/headerMenu'
 import { SocialIcons } from '@commerce/types/socialIcons'
 import { LocalConfig } from '../index'
 import getMenus from '../utils/fetch-menus'
+import getCategories from '../utils/fetch-categories'
 
 export type GetSiteInfoResult<
   T extends { categories: any[]; brands: any[] } = {
@@ -30,57 +31,10 @@ export default function getSiteInfoOperation({
   } = {}): Promise<GetSiteInfoResult> {
     const cfg = commerce.getConfig(config)
     const { footer_info: footerInfoMenu, header: topMenu } = await getMenus(cfg)
+
+    const categories = await getCategories(cfg)
     return Promise.resolve({
-      categories: [
-        {
-          id: '1',
-          label: {
-            ru: 'Пицца',
-            uz: 'Picca',
-          },
-          href: '/s/1',
-        },
-        {
-          id: '2',
-          label: {
-            ru: 'Сеты',
-            uz: 'Setlar',
-          },
-          href: '/s/2',
-        },
-        {
-          id: '3',
-          label: {
-            ru: 'Закуски',
-            uz: 'Zakuski',
-          },
-          href: '/s/3',
-        },
-        {
-          id: '4',
-          label: {
-            ru: 'Соусы',
-            uz: 'Souslar',
-          },
-          href: '/s/4',
-        },
-        {
-          id: '5',
-          label: {
-            ru: 'Салаты',
-            uz: 'Salatlar',
-          },
-          href: '/s/5',
-        },
-        {
-          id: '6',
-          label: {
-            ru: 'Напитки',
-            uz: 'Ichimliklar',
-          },
-          href: '/s/6',
-        },
-      ],
+      categories: categories,
       brands: [],
       topMenu,
       footerInfoMenu,
