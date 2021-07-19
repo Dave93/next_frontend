@@ -1084,7 +1084,7 @@ const Orders: FC = () => {
               type="checkbox"
               defaultValue="sms"
               className={` ${
-                sms ? 'text-yellow' : 'bg-gray-200'
+                sms ? 'text-yellow' : 'bg-gray-300'
               } form-checkbox h-5 w-5  rounded-md  mr-2`}
               onChange={smsValueChange}
             />
@@ -1095,7 +1095,7 @@ const Orders: FC = () => {
               type="checkbox"
               defaultValue="newsletter"
               className={` ${
-                newsletter ? 'text-yellow' : 'bg-gray-200'
+                newsletter ? 'text-yellow' : 'bg-gray-300'
               } form-checkbox h-5 w-5  rounded-md mr-2`}
               onChange={newsletterValueChange}
             />
@@ -1330,13 +1330,12 @@ const Orders: FC = () => {
           </Dialog>
         </Transition>
         <div className="flex justify-between mt-8">
-          <button className="text-xl text-gray-400 bg-gray-200 flex h-12 items-center justify-between px-12 rounded-full w-80">
-            <img src="/left.png" /> Вернуться в корзину
-          </button>
-          <button className="text-xl text-white bg-yellow flex h-12 items-center justify-evenly rounded-full w-80">
-            Оплатить
-            <img src="/right.png" />
-          </button>
+          <div className="rounded-full p-5 bg-gray-400">
+            <button>Вернуться в корзину</button>
+          </div>
+          <div className="rounded-full p-5 bg-yellow">
+            <button>Оплатить</button>
+          </div>
         </div>
       </div>
     </>
