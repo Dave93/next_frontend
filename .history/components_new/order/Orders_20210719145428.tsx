@@ -358,7 +358,7 @@ const Orders: FC = () => {
     setIsShowPrivacy(false)
   }
   let privacyButtonRef = useRef(null)
-
+  
   return (
     <>
       {/* Contacts */}
@@ -1084,7 +1084,7 @@ const Orders: FC = () => {
               type="checkbox"
               defaultValue="sms"
               className={` ${
-                sms ? 'text-yellow' : 'bg-gray-200'
+                sms ? 'text-yellow' : 'bg-gray-300'
               } form-checkbox h-5 w-5  rounded-md  mr-2`}
               onChange={smsValueChange}
             />
@@ -1095,24 +1095,26 @@ const Orders: FC = () => {
               type="checkbox"
               defaultValue="newsletter"
               className={` ${
-                newsletter ? 'text-yellow' : 'bg-gray-200'
+                newsletter ? 'text-yellow' : 'bg-gray-300'
               } form-checkbox h-5 w-5  rounded-md mr-2`}
               onChange={newsletterValueChange}
             />
             <div>E-mail рассылка</div>
           </label>
         </div>
-        <div className="mt-5 text-gray-400 text-sm flex border-b pb-8">
-          Нажимая "Оплатить", Вы даёте Согласие на обработку Ваших персональных
-          данных и принимаете
-          <a
-            href="/privacy"
-            onClick={showPrivacy}
-            className="text-yellow block mx-1"
-            target="_blank"
-          >
-            Пользовательское соглашение
-          </a>
+        <div className="mt-5 text-gray-400 text-sm flex">
+          <div>
+            Нажимая "Оплатить", Вы даёте Согласие на обработку Ваших
+            персональных данных и принимаете
+            <a
+              href="/privacy"
+              onClick={showPrivacy}
+              className="text-yellow block"
+              target="_blank"
+            >
+              Пользовательское соглашение
+            </a>
+          </div>
         </div>
         <Transition appear show={isShowPrivacy} as={Fragment}>
           <Dialog
@@ -1329,15 +1331,6 @@ const Orders: FC = () => {
             </div>
           </Dialog>
         </Transition>
-        <div className="flex justify-between mt-8">
-          <button className="text-xl text-gray-400 bg-gray-200 flex h-12 items-center justify-between px-12 rounded-full w-80">
-            <img src="/left.png" /> Вернуться в корзину
-          </button>
-          <button className="text-xl text-white bg-yellow flex h-12 items-center justify-evenly rounded-full w-80">
-            Оплатить
-            <img src="/right.png" />
-          </button>
-        </div>
       </div>
     </>
   )
