@@ -28,6 +28,7 @@ const ProductItemNew: FC<ProductItem> = ({ product, channelName }) => {
   const [activeModifier, setActiveModifier] = useState(null)
   const router = useRouter()
   const { locale } = router
+  console.log(locale)
 
   const updateOptionSelection = (valueId: string) => {
     const prod = store

@@ -402,7 +402,7 @@ const SignInButton: FC = () => {
                               </div>
                               <div className="mt-10">
                                 <button
-                                  className={`py-3 md:px-20 text-white font-bold text-xl text-center rounded-full w-full outline-none focus:outline-none ${
+                                  className={`py-3 px-20 text-white font-bold text-xl text-center rounded-full w-full outline-none focus:outline-none ${
                                     formState.isValid
                                       ? 'bg-yellow'
                                       : 'bg-gray-400'
@@ -452,7 +452,7 @@ const SignInButton: FC = () => {
                         )}
                       </div>
                       <button
-                        className="text-white outline-none focus:outline-none transform hidden md:block"
+                        className="text-white outline-none focus:outline-none transform"
                         onClick={closeModal}
                       >
                         <XIcon className="text-white cursor-pointer w-10 h-10" />
