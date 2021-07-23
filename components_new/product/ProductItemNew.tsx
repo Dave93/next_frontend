@@ -22,6 +22,7 @@ const ProductItemNew: FC<ProductItem> = ({ product, channelName }) => {
   // console.log('product', product)
   const [store, updateStore] = useState(product)
   // const { actions } = useContext(SessionContext)
+
   const [addToCartInProgress, setAddToCartInProgress] = useState(false)
   const [isChoosingModifier, setIsChoosingModifier] = useState(false)
   const [activeModifier, setActiveModifier] = useState(null)
@@ -42,6 +43,59 @@ const ProductItemNew: FC<ProductItem> = ({ product, channelName }) => {
     }
 
     // console.log(prod)
+    updateStore({ ...prod })
+  }
+
+  const addModifier = (modId: number) => {
+    const prod = { ...store }
+    if (prod.variants && prod.variants.length) {
+      prod.variants = prod.variants.map((v) => {
+        if (v.active) {
+          v.modifiers = v.modifiers.map((mod: any) => {
+            if (mod.id == modId) {
+              mod.active = !mod.active
+            }
+            return mod
+          })
+          const activeMods = v.modifiers.filter((mod: any) => mod.active)
+          if (!activeMods.length) {
+            v.modifiers = v.modifiers.map((mod: any) => {
+              if (mod.price == 0) {
+                mod.active = true
+              }
+              return mod
+            })
+          }
+        } else {
+          v.modifiers = v.modifiers.map((mod: any) => {
+            if (mod.price == 0) {
+              mod.active = true
+            } else {
+              mod.active = false
+            }
+            return mod
+          })
+        }
+        return v
+      })
+    } else {
+      prod.modifiers = prod?.modifiers?.map((mod: any) => {
+        if (mod.id == modId) {
+          mod.active = !mod.active
+        }
+        return mod
+      })
+      const activeMods = prod?.modifiers?.filter((mod: any) => mod.active)
+      if (!activeMods?.length) {
+        prod.modifiers = prod?.modifiers?.map((mod: any) => {
+          if (mod.price == 0) {
+            mod.active = true
+          }
+          return mod
+        })
+      }
+    }
+
     updateStore({ ...prod })
   }
 
@@ -108,11 +162,9 @@ const ProductItemNew: FC<ProductItem> = ({ product, channelName }) => {
                 <div
                   key={mod.id}
                   className={`border ${
-                    activeModifier == mod.id
-                      ? 'border-yellow'
-                      : 'border-gray-300'
+                    mod.active ? 'border-yellow' : 'border-gray-300'
                   } flex flex-col justify-between overflow-hidden rounded-[15px] cursor-pointer`}
-                  onClick={() => setActiveModifier(mod.id)}
+                  onClick={() => addModifier(mod.id)}
                 >
                   <div className="flex-grow pt-2 px-2">
                     {mod.image ? (
@@ -137,7 +189,7 @@ const ProductItemNew: FC<ProductItem> = ({ product, channelName }) => {
                   </div>
                   <div
                     className={`${
-                      activeModifier == mod.id ? 'bg-yellow' : 'bg-gray-300'
+                      mod.active ? 'bg-yellow' : 'bg-gray-300'
                     } font-bold px-4 py-2 text-center text-white text-xs`}
                   >
                     {currency(mod.price, {
