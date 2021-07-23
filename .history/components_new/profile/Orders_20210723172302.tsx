@@ -29,14 +29,10 @@ const Orders: FC = () => {
                 <div className="flex  text-base justify-between border-b pb-8">
                   {open ? (
                     <div className="font-bold text-xl">
-                      <Link href="/order">
-                        <a>
-                          {tr('order')} № {item.id}
-                        </a>
-                      </Link>
+                      {tr('order')} № {item.id}
                     </div>
                   ) : (
-                    <div> № {item.id}</div>
+                    <Link href="/order"> № {item.id}</Link>
                   )}
 
                   {!open && (

@@ -1,11 +1,10 @@
-import React, { FC, memo } from 'react'
+import { FC, memo } from 'react'
 import OrdersItems from '@commerce/data/orders'
 import useTranslation from 'next-translate/useTranslation'
 import { useUI } from '@components/ui/context'
 import { useRouter } from 'next/router'
 import { Disclosure } from '@headlessui/react'
 import { ChevronDownIcon } from '@heroicons/react/solid'
-import Link from 'next/link'
 
 const Orders: FC = () => {
   const { t: tr } = useTranslation('common')
@@ -30,9 +29,7 @@ const Orders: FC = () => {
                   {open ? (
                     <div className="font-bold text-xl">
                       <Link href="/order">
-                        <a>
-                          {tr('order')} № {item.id}
-                        </a>
+                      {tr('order')} № {item.id}
                       </Link>
                     </div>
                   ) : (

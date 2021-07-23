@@ -294,7 +294,7 @@ const ProductItemNew: FC<ProductItem> = ({ product, channelName }) => {
                 {tr('main_to_basket')}
               </button>
               <span className="md:text-xl bg-yellow md:bg-white w-28 md:w-auto rounded-full px-2 py-2 text-sm text-center md:px-0 md:py-0 text-white md:text-black">
-                от {currency(totalPrice, {
+                on {currency(totalPrice, {
                   pattern: '# !',
                   separator: ' ',
                   decimal: '.',

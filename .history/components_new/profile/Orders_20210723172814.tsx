@@ -30,9 +30,7 @@ const Orders: FC = () => {
                   {open ? (
                     <div className="font-bold text-xl">
                       <Link href="/order">
-                        <a>
-                          {tr('order')} № {item.id}
-                        </a>
+                      <a></a>{tr('order')} № {item.id}</a>
                       </Link>
                     </div>
                   ) : (

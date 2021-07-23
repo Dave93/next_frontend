@@ -27,6 +27,7 @@ const ProductItemNew: FC<ProductItem> = ({ product, channelName }) => {
   const [isChoosingModifier, setIsChoosingModifier] = useState(false)
   const [activeModifier, setActiveModifier] = useState(null)
   const router = useRouter()
+  console.log(router)
   const { locale } = router
 
   const updateOptionSelection = (valueId: string) => {

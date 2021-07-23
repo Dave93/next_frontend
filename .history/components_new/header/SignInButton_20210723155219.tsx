@@ -263,8 +263,8 @@ const SignInButton: FC = () => {
                   leaveTo="opacity-0 scale-95"
                 >
                   <div className="align-middle inline-block overflow-hidden w-full">
-                    <div className="md:inline-flex my-8 items-start">
-                      <div className="align-middle bg-white inline-block overflow-hidden md:px-40 px-6 py-10 rounded-2xl shadow-xl text-center transform transition-all max-w-2xl">
+                    <div className="inline-flex my-8 items-start">
+                      <div className="align-middle bg-white inline-block overflow-hidden md:px-40 py-10 rounded-2xl shadow-xl text-center transform transition-all max-w-2xl">
                         <Dialog.Title as="h3" className="leading-6 text-3xl">
                           Авторизация
                         </Dialog.Title>
@@ -402,7 +402,7 @@ const SignInButton: FC = () => {
                               </div>
                               <div className="mt-10">
                                 <button
-                                  className={`py-3 md:px-20 text-white font-bold text-xl text-center rounded-full w-full outline-none focus:outline-none ${
+                                  className={`py-3 px-20 text-white font-bold text-xl text-center rounded-full w-full outline-none focus:outline-none ${
                                     formState.isValid
                                       ? 'bg-yellow'
                                       : 'bg-gray-400'
@@ -452,7 +452,7 @@ const SignInButton: FC = () => {
                         )}
                       </div>
                       <button
-                        className="text-white outline-none focus:outline-none transform hidden md:block"
+                        className="text-white outline-none focus:outline-none transform"
                         onClick={closeModal}
                       >
                         <XIcon className="text-white cursor-pointer w-10 h-10" />
