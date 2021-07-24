@@ -1,13 +1,12 @@
-import React, { FC, memo } from 'react'
-import OrdersItems from '@commerce/data/orders'
 import useTranslation from 'next-translate/useTranslation'
 import { useUI } from '@components/ui/context'
-import { useRouter } from 'next/router'
+import React, { memo, FC } from 'react'
 import { Disclosure } from '@headlessui/react'
 import { ChevronDownIcon } from '@heroicons/react/solid'
-import Link from 'next/link'
+import { useRouter } from 'next/router'
+import OrdersItems from '@commerce/data/orders'
 
-const Orders: FC = () => {
+const OrderAccept: FC = () => {
   const { t: tr } = useTranslation('common')
   const router = useRouter()
   const { user } = useUI()
@@ -29,7 +28,7 @@ const Orders: FC = () => {
                 <div className="flex  text-base justify-between border-b pb-8">
                   {open ? (
                     <div className="font-bold text-xl">
-                      <Link href={`${"/order/" + item.id}`}>
+                      <Link href={`${'/order/' + item.id}`}>
                         <a>
                           {tr('order')} № {item.id}
                         </a>
@@ -112,4 +111,4 @@ const Orders: FC = () => {
   )
 }
 
-export default memo(Orders)
+export default memo(OrderAccept)

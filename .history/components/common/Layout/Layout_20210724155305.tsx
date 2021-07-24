@@ -30,7 +30,6 @@ interface Props {
     topMenu: APILinkItem[]
     footerInfoMenu: APILinkItem[]
     socials: SocialIcons[]
-    cleanBackground?: boolean
   }
 }
 
@@ -51,7 +50,6 @@ const Layout: FC<Props> = ({
     topMenu = [],
     footerInfoMenu = [],
     socials = [],
-    cleanBackground = false,
     ...pageProps
   },
 }) => {
@@ -64,7 +62,7 @@ const Layout: FC<Props> = ({
           <Header menu={topMenu} />
           <main
             className={`${
-              cleanBackground == true ? 'bg-gray-200' : ''
+              pathname == '/order/' ? 'bg-gray-200' : ''
             } flex-grow md:pb-14`}
           >
             {pathname == '/' ? (

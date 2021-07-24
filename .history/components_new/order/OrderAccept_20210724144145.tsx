@@ -1,13 +1,26 @@
-import React, { FC, memo } from 'react'
-import OrdersItems from '@commerce/data/orders'
+import { XIcon } from '@heroicons/react/outline'
+import { useForm } from 'react-hook-form'
 import useTranslation from 'next-translate/useTranslation'
 import { useUI } from '@components/ui/context'
-import { useRouter } from 'next/router'
-import { Disclosure } from '@headlessui/react'
-import { ChevronDownIcon } from '@heroicons/react/solid'
-import Link from 'next/link'
+import React, { Fragment, useState, useMemo, FC, memo, useRef } from 'react'
+import { Menu, Transition, Disclosure, Dialog } from '@headlessui/react'
+import { ChevronDownIcon, ChevronRightIcon } from '@heroicons/react/solid'
+import {
+  YMaps,
+  Map,
+  Placemark,
+  MapState,
+  MapStateBase,
+  MapStateCenter,
+} from 'react-yandex-maps'
+import Image from 'next/image'
 
-const Orders: FC = () => {
+// interface LocationTabProps {
+//   setOpen: Dispatch<SetStateAction<boolean>>
+// }
+
+const OrderAccept: FC = () => {
+    
   const { t: tr } = useTranslation('common')
   const router = useRouter()
   const { user } = useUI()
@@ -29,7 +42,7 @@ const Orders: FC = () => {
                 <div className="flex  text-base justify-between border-b pb-8">
                   {open ? (
                     <div className="font-bold text-xl">
-                      <Link href={`${"/order/" + item.id}`}>
+                      <Link href={`${'/order/' + item.id}`}>
                         <a>
                           {tr('order')} № {item.id}
                         </a>
@@ -112,4 +125,4 @@ const Orders: FC = () => {
   )
 }
 
-export default memo(Orders)
+export default memo(OrderAccept)
