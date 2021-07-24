@@ -263,7 +263,7 @@ const ProductItemNew: FC<ProductItem> = ({ product, channelName }) => {
                 </div>
               )}
             </div>
-            <div className="md:mt-10 mt-2 flex justify-between items-center">
+            <div className="md:mt-10 mt-2 flex justify-between items-center text-sm">
               <button
                 className="bg-yellow focus:outline-none font-bold outline-none px-6 py-2 rounded-full text-white uppercase md:inline-flex items-center hidden"
                 onClick={handleSubmit}
@@ -294,7 +294,8 @@ const ProductItemNew: FC<ProductItem> = ({ product, channelName }) => {
                 {tr('main_to_basket')}
               </button>
               <span className="md:text-xl bg-yellow md:bg-white w-28 md:w-auto rounded-full px-2 py-2 text-sm text-center md:px-0 md:py-0 text-white md:text-black">
-                от {currency(totalPrice, {
+                <span className="md:hidden">от</span>{' '}
+                {currency(totalPrice, {
                   pattern: '# !',
                   separator: ' ',
                   decimal: '.',
