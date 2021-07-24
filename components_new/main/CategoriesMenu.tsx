@@ -33,7 +33,7 @@ const CategoriesMenu: FC<{ categories: any[]; channelName: string }> = ({
       <div className="container flex items-center m-auto overflow-x-scroll sm:overflow-x-hidden md:overflow-x-visible">
         {fixed && (
           <Link to="header" spy={true} smooth={true}>
-            <span className="flex mr-16 cursor-pointer">
+            <span className="md:flex mr-16 cursor-pointer hidden">
               <Image
                 src="/assets/categories_logo.png"
                 width="44"
