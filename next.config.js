@@ -40,6 +40,9 @@ module.exports = nextTranslate(
           },
       ].filter(Boolean)
     },
+    images: {
+      domains: ['store.hq.fungeek.net', 'api.hq.fungeek.net'],
+    },
   })
 )
 
