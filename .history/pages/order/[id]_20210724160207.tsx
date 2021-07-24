@@ -32,7 +32,6 @@ export async function getServerSideProps({
       topMenu,
       footerInfoMenu,
       socials,
-      cleanBackground: true
     },
   }
 }

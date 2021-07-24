@@ -30,8 +30,8 @@ interface Props {
     topMenu: APILinkItem[]
     footerInfoMenu: APILinkItem[]
     socials: SocialIcons[]
-    cleanBackground?: boolean
-  }
+  },
+  cleanBackground?: boolean
 }
 
 interface SocIconsProps {
@@ -51,9 +51,9 @@ const Layout: FC<Props> = ({
     topMenu = [],
     footerInfoMenu = [],
     socials = [],
-    cleanBackground = false,
     ...pageProps
   },
+  cleanBackground,
 }) => {
   const { locale = 'ru', pathname } = useRouter()
 
@@ -64,7 +64,7 @@ const Layout: FC<Props> = ({
           <Header menu={topMenu} />
           <main
             className={`${
-              cleanBackground == true ? 'bg-gray-200' : ''
+              pathname == '/order' ? 'bg-gray-200' : ''
             } flex-grow md:pb-14`}
           >
             {pathname == '/' ? (
