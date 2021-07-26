@@ -243,7 +243,16 @@ const ProductItemNew: FC<ProductItem> = ({ product, channelName }) => {
                 {store.sizeDesc}
               </div>
             )}
-            <div className="mt-1 text-xs flex-grow">{store.description}</div>
+            <div
+              className="mt-1 text-xs flex-grow"
+              dangerouslySetInnerHTML={{
+                __html: store?.attribute_data?.description
+                  ? store?.attribute_data?.description[channelName][
+                      locale || 'ru'
+                    ]
+                  : '',
+              }}
+            ></div>
             <div className="hidden md:block">
               {store.variants && store.variants.length > 0 && (
                 <div className={styles.productSelectorOption}>
@@ -256,7 +265,7 @@ const ProductItemNew: FC<ProductItem> = ({ product, channelName }) => {
                       key={v.id}
                     >
                       <button className="outline-none focus:outline-none text-xs py-2">
-                        {v?.custom_name}
+                        {locale == 'ru' ? v?.custom_name : v?.custom_name_uz}
                       </button>
                     </div>
                   ))}
