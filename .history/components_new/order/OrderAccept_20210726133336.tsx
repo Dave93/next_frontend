@@ -40,50 +40,28 @@ const OrderAccept: FC = () => {
         <div className=" flex justify-between">
           <div>
             <div className="text-base text-gray-500 mb-2">Заказ принят!</div>
-            <div className="text-3xl mb-7 font-bold">№ {orderId}</div>
+            <div className="text-3xl mb-7 font-bold">№ 433</div>
           </div>
           <div>
-            <div className="text-base text-gray-500 mb-2 text-right">
-              Время заказа
-            </div>
-            <div className="text-base font-bold">{currentOrder?.date}</div>
+            <div className="text-base text-gray-500 mb-2">Время заказа</div>
+            <div className="text-base text-bold">{currentOrder?.date}</div>
           </div>
         </div>
-        <div className="flex items-center justify-between mb-10 ">
-          <div className="h-24 relative flex flex-col items-center top-5 w-12">
+        <div className="flex items-center justify-between mb-10">
+          <div className="w-12 h-12 border rounded-full">
             <img src="/assets/status.png" />
-            <div className="bottom-0 leading-4 mt-2 text-base text-center text-yellow">
+            <div className="text-base text-yellow leading-4 mt-2">
               Заявка принята
             </div>
           </div>
-          <div className="border border-yellow rounded-full w-48"></div>
-          <div className="h-24 relative flex flex-col items-center top-5 w-12">
-            <img src="/assets/status.png" />
-            <div className="bottom-0 leading-4 mt-2 text-base text-center text-yellow">
-              Обработка заказа
-            </div>
-          </div>
-          <div className="border rounded-full w-48"></div>
-          <div className="flex flex-col h-24 items-center relative top-5 w-12">
-            <div className="border-2 h-12 rounded-full w-12"></div>
-            <div className="bottom-0 leading-4 mt-2 text-base text-center text-gray-400">
-              Заказ готовится
-            </div>
-          </div>
-          <div className="border rounded-full w-48"></div>
-          <div className="flex flex-col h-24 items-center relative top-5 w-12">
-            <div className="border-2 h-12 rounded-full w-12"></div>
-            <div className="bottom-0 leading-4 mt-2 text-base text-center text-gray-400">
-              Курьер выехал
-            </div>
-          </div>
-          <div className="border rounded-full w-48"></div>
-          <div className="flex flex-col h-24 items-center relative top-5 w-12">
-            <div className="border-2 h-12 rounded-full w-12"></div>
-            <div className="bottom-0 leading-4 mt-2 text-base text-center text-gray-400">
-              Доставлено
-            </div>
-          </div>
+          <div className="w-48 border-b"></div>
+          <div className="w-12 h-12 border rounded-full"></div>
+          <div className="w-48 border-b"></div>
+          <div className="w-12 h-12 border rounded-full"></div>
+          <div className="w-48 border-b"></div>
+          <div className="w-12 h-12 border rounded-full"></div>
+          <div className="w-48 border-b"></div>
+          <div className="w-12 h-12 border rounded-full"></div>
         </div>
       </div>
       <div className="p-10 rounded-2xl text-xl mt-5 bg-white">
