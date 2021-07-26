@@ -40,49 +40,51 @@ const OrderAccept: FC = () => {
         <div className=" flex justify-between">
           <div>
             <div className="text-base text-gray-500 mb-2">Заказ принят!</div>
-            <div className="text-3xl mb-7 font-bold">№ {orderId}</div>
+            <div className="text-3xl mb-7 font-bold">№ 433</div>
           </div>
           <div>
-            <div className="text-base text-gray-500 mb-2 text-right">
-              Время заказа
-            </div>
+            <div className="text-base text-gray-500 mb-2 text-right">Время заказа</div>
             <div className="text-base font-bold">{currentOrder?.date}</div>
           </div>
         </div>
         <div className="flex items-center justify-between mb-10 ">
           <div className="h-24 relative flex flex-col items-center top-5 w-12">
-            <img src="/assets/status.png" />
-            <div className="bottom-0 leading-4 mt-2 text-base text-center text-yellow">
+            <div className="absolute bottom-0 leading-4 mt-2 text-base text-center text-yellow">
               Заявка принята
             </div>
+            <div className="">
+              <img src="/assets/status.png" />
+            </div>
           </div>
-          <div className="border border-yellow rounded-full w-48"></div>
+          <div className="border-2 border-yellow rounded-full w-48"></div>
           <div className="h-24 relative flex flex-col items-center top-5 w-12">
-            <img src="/assets/status.png" />
-            <div className="bottom-0 leading-4 mt-2 text-base text-center text-yellow">
+            <div className="absolute bottom-0 leading-4 mt-2 text-base text-center text-yellow">
               Обработка заказа
             </div>
+            <div className="">
+              <img src="/assets/status.png" />
+            </div>
           </div>
-          <div className="border rounded-full w-48"></div>
+          <div className="border-2 rounded-full w-48"></div>
           <div className="flex flex-col h-24 items-center relative top-5 w-12">
-            <div className="border-2 h-12 rounded-full w-12"></div>
-            <div className="bottom-0 leading-4 mt-2 text-base text-center text-gray-400">
+            <div className="absolute bottom-0 leading-4 mt-2 text-base text-center text-gray-400">
               Заказ готовится
             </div>
-          </div>
-          <div className="border rounded-full w-48"></div>
-          <div className="flex flex-col h-24 items-center relative top-5 w-12">
             <div className="border-2 h-12 rounded-full w-12"></div>
-            <div className="bottom-0 leading-4 mt-2 text-base text-center text-gray-400">
+          </div>
+          <div className="border-2 rounded-full w-48"></div>
+          <div className="flex flex-col h-24 items-center relative top-5 w-12">
+            <div className="absolute bottom-0 leading-4 mt-2 text-base text-center text-gray-400">
               Курьер выехал
             </div>
-          </div>
-          <div className="border rounded-full w-48"></div>
-          <div className="flex flex-col h-24 items-center relative top-5 w-12">
             <div className="border-2 h-12 rounded-full w-12"></div>
-            <div className="bottom-0 leading-4 mt-2 text-base text-center text-gray-400">
+          </div>
+          <div className="border-2 rounded-full w-48"></div>
+          <div className="flex flex-col h-24 items-center relative top-5 w-12">
+            <div className="absolute bottom-0 leading-4 mt-2 text-base text-center text-gray-400">
               Доставлено
             </div>
+            <div className="border-2 h-12 rounded-full w-12"></div>
           </div>
         </div>
       </div>

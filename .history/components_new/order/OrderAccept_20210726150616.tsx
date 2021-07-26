@@ -40,7 +40,7 @@ const OrderAccept: FC = () => {
         <div className=" flex justify-between">
           <div>
             <div className="text-base text-gray-500 mb-2">Заказ принят!</div>
-            <div className="text-3xl mb-7 font-bold">№ {orderId}</div>
+            <div className="text-3xl mb-7 font-bold">№ 433</div>
           </div>
           <div>
             <div className="text-base text-gray-500 mb-2 text-right">
