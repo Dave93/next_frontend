@@ -265,7 +265,7 @@ const ProductItemNew: FC<ProductItem> = ({ product, channelName }) => {
                       key={v.id}
                     >
                       <button className="outline-none focus:outline-none text-xs py-2">
-                        {v?.custom_name}
+                        {locale == 'ru' ? v?.custom_name : v?.custom_name_uz}
                       </button>
                     </div>
                   ))}
