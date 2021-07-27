@@ -6,6 +6,8 @@ import React, {
   useState,
   useMemo,
   FC,
+  createRef,
+  useCallback,
 } from 'react'
 import { Menu, Transition, Disclosure } from '@headlessui/react'
 import { ChevronDownIcon, ChevronRightIcon } from '@heroicons/react/solid'
@@ -18,6 +20,14 @@ import {
   MapStateCenter,
 } from 'react-yandex-maps'
 import { useForm } from 'react-hook-form'
+import Autosuggest from 'react-autosuggest'
+import useSWR from 'swr'
+import getConfig from 'next/config'
+import axios from 'axios'
+
+const { publicRuntimeConfig } = getConfig()
+
+const fetcher = (url: string) => fetch(url).then((res) => res.json())
 
 const LocationTabs: FC = () => {
   const [tabIndex, setTabIndex] = useState(1)
@@ -230,9 +240,23 @@ const LocationTabs: FC = () => {
     },
   ])
 
+  const [geoSuggestions, setGeoSuggestions] = useState([])
+  const [suggestionVal, setSuggestionVal] = useState('')
+
   const activeLabel = cities.find((item) => item.active)?.label
   const activeCity = cities.find((item) => item.active)
   const activePoint = pickupPoints.find((item) => item.active)
+
+  let { data: configData, error } = useSWR(
+    `${publicRuntimeConfig.apiUrl}/api/configs/public`,
+    fetcher
+  )
+
+  try {
+    configData = Buffer.from(configData.data, 'base64')
+    configData = configData.toString('ascii')
+    configData = JSON.parse(configData)
+  } catch (e) {}
 
   const setActive = (id: string) => {
     setCities(
@@ -259,6 +283,42 @@ const LocationTabs: FC = () => {
       })
     )
   }
+
+  const onSuggestionsClearRequested = () => {
+    setGeoSuggestions([])
+  }
+
+  const onSuggestionsFetchRequested = async ({ value }: { value: any }) => {
+    console.log('onSuggestionsFetchRequested', value)
+    const inputValue = value.trim().toLowerCase()
+    const inputLength = inputValue.length
+
+    if (!configData) {
+      return []
+    }
+
+    if (!configData.yandexGeoKey) {
+      return []
+    }
+
+    const { data: getCodeData } = await axios.get(
+      `https://geocode-maps.yandex.ru/1.x/?apikey=${
+        configData.yandexGeoKey
+      }&geocode=${encodeURI(value)}`
+    )
+
+    console.log('getCodeData', getCodeData)
+
+    // return inputLength === 0
+    //   ? []
+    //   : languages.filter(
+    //       (lang) => lang.name.toLowerCase().slice(0, inputLength) === inputValue
+    //     )
+  }
+
+  const getSuggestionValue = (suggestion: any) => suggestion.name
+
+  const renderSuggestion = (suggestion: any) => <div>{suggestion.name}</div>
 
   const mapState = useMemo<MapState>(() => {
     const baseState: MapStateBase = {
@@ -360,6 +420,22 @@ const LocationTabs: FC = () => {
           </div>
           <div className="mt-4">
             <form onSubmit={handleSubmit(onSubmit)}>
+              <Autosuggest
+                suggestions={geoSuggestions}
+                onSuggestionsFetchRequested={onSuggestionsFetchRequested}
+                onSuggestionsClearRequested={onSuggestionsClearRequested}
+                getSuggestionValue={getSuggestionValue}
+                renderSuggestion={renderSuggestion}
+                inputProps={{
+                  value: suggestionVal,
+                  placeholder: 'Suggestions',
+                  onChange: (event: any, { newValue }: { newValue: any }) => {
+                    // console.log(arguments)
+                    console.log([event, newValue])
+                    setSuggestionVal(newValue)
+                  },
+                }}
+              />
               <div className="font-bold text-[18px] text-gray-400">Адрес:</div>
               <div className="flex justify-between mt-3">
                 <div className="w-7/12">
