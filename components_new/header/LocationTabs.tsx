@@ -301,10 +301,14 @@ const LocationTabs: FC = () => {
       return []
     }
 
+    // const { data: getCodeData } = await axios.get(
+    //   `https://geocode-maps.yandex.ru/1.x/?apikey=${
+    //     configData.yandexGeoKey
+    //   }&geocode=${encodeURI(value)}`
+    // )
+
     const { data: getCodeData } = await axios.get(
-      `https://geocode-maps.yandex.ru/1.x/?apikey=${
-        configData.yandexGeoKey
-      }&geocode=${encodeURI(value)}`
+      `/api/geocode?text=${encodeURI(value)}`
     )
 
     console.log('getCodeData', getCodeData)
