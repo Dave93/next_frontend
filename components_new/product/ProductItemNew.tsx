@@ -10,12 +10,19 @@ import {
 import { useRouter } from 'next/router'
 import useTranslation from 'next-translate/useTranslation'
 import styles from './ProductOptionSelector.module.css'
+import axios from 'axios'
+import Cookies from 'js-cookie'
+import getConfig from 'next/config'
 // import SessionContext from 'react-storefront/session/SessionContext'
 
 type ProductItem = {
   product: Product
   channelName: string
 }
+
+const { publicRuntimeConfig } = getConfig()
+let webAddress = publicRuntimeConfig.apiUrl
+axios.defaults.withCredentials = true
 
 const ProductItemNew: FC<ProductItem> = ({ product, channelName }) => {
   const { t: tr } = useTranslation('common')
@@ -98,6 +105,57 @@ const ProductItemNew: FC<ProductItem> = ({ product, channelName }) => {
 
     updateStore({ ...prod })
   }
+
+  const setCredentials = async () => {
+    let csrf = Cookies.get('X-XSRF-TOKEN')
+    if (!csrf) {
+      const csrfReq = await axios('https://api.hq.fungeek.net/api/keldi', {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+          crossDomain: true,
+        },
+        withCredentials: true,
+      })
+      let { data: res } = csrfReq
+      csrf = Buffer.from(res.result, 'base64').toString('ascii')
+
+      Cookies.set('X-XSRF-TOKEN', csrf)
+    }
+    axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest'
+    axios.defaults.headers.common['X-CSRF-TOKEN'] = csrf
+    axios.defaults.headers.common['XCSRF-TOKEN'] = csrf
+  }
+
+  const addToBasket = async () => {
+    await setCredentials()
+    let selectedProdId = 0
+    if (store.variants && store.variants.length) {
+      let selectedVariant = store.variants.find((v: any) => v.active == true)
+      selectedProdId = selectedVariant.id
+    } else {
+      selectedProdId = +store.id
+    }
+    console.log(modifiers)
+    await axios.post(`${webAddress}/api/baskets`, {
+      variants: [
+        {
+          id: selectedProdId,
+          quantity: 1,
+          modifiers:
+            modifiers &&
+            modifiers
+              .filter((m: any) => m.active)
+              .map((m: any) => ({ id: m.id })),
+        },
+      ],
+    })
+    if (modifiers && modifiers.length) {
+      setIsChoosingModifier(false)
+    }
+  }
+
+  const discardModifier = async () => {}
 
   const modifiers = useMemo(() => {
     let modifier = null
@@ -204,10 +262,16 @@ const ProductItemNew: FC<ProductItem> = ({ product, channelName }) => {
               ))}
           </div>
           <div className="gap-3 grid grid-cols-2 w-full">
-            <button className="bg-yellow focus:outline-none font-bold outline-none px-6 py-2 rounded-full text-center text-white uppercase">
+            <button
+              className="bg-yellow focus:outline-none font-bold outline-none px-6 py-2 rounded-full text-center text-white uppercase"
+              onClick={addToBasket}
+            >
               Да
             </button>
-            <button className="bg-gray-200 focus:outline-none font-bold outline-none px-6 py-2 rounded-full text-center text-white uppercase">
+            <button
+              className="bg-gray-200 focus:outline-none font-bold outline-none px-6 py-2 rounded-full text-center text-white uppercase"
+              onClick={discardModifier}
+            >
               Нет
             </button>
           </div>
