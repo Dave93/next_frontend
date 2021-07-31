@@ -12,11 +12,17 @@ import MainSlider from '@components_new/main/MainSlider'
 import React, { useEffect, useMemo, useState } from 'react'
 import ProductListSectionTitle from '@components_new/product/ProductListSectionTitle'
 import ProductItemNew from '@components_new/product/ProductItemNew'
-import SmallCart from '@components_new/common/SmallCart'
 import CategoriesMenu from '@components_new/main/CategoriesMenu'
 import SetLocation from '@components_new/header/SetLocation'
 import MobSetLocation from '@components_new/header/MobSetLocation'
 import defaultChannel from '@lib/defaultChannel'
+import { useCart } from '@framework/cart'
+import dynamic from 'next/dynamic'
+
+const CartWithNoSSR = dynamic(
+  () => import('@components_new/common/SmallCart'),
+  { ssr: false }
+)
 
 export async function getServerSideProps({
   preview,
@@ -160,7 +166,7 @@ export default function Home({
             ))}
           </div>
           <div className="mt-20 sticky top-16 max-h-screen hidden md:block">
-            <SmallCart />
+            <CartWithNoSSR />
           </div>
         </div>
       </div>

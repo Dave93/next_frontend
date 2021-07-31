@@ -9,7 +9,7 @@ import {
 
 export const localConfig: CommerceConfig = {
   locale: 'en-us',
-  cartCookie: 'session',
+  cartCookie: 'basketId',
 }
 
 export function CommerceProvider({

@@ -4,7 +4,19 @@ import { useForm } from 'react-hook-form'
 import Image from 'next/image'
 
 const SmallCart: FC = () => {
-  const { data, isLoading, isEmpty } = useCart()
+  let cartId = null
+  if (typeof window !== undefined) {
+    cartId = localStorage.getItem('basketId')
+  }
+
+  console.log('cartId', cartId)
+
+  const { data, isLoading, isEmpty } = useCart({
+    cartId,
+  })
+
+  console.log('isEmpty', isEmpty)
+  console.log('data', data)
   // console.log(isEmpty)
   const { register, handleSubmit } = useForm()
   const onSubmit = (data: Object) => console.log(JSON.stringify(data))

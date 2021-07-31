@@ -28,6 +28,8 @@ const ProductItemNew: FC<ProductItem> = ({ product, channelName }) => {
   const { t: tr } = useTranslation('common')
   // console.log('product', product)
   const [store, updateStore] = useState(product)
+
+  // console.log(data)
   // const { actions } = useContext(SessionContext)
 
   const [addToCartInProgress, setAddToCartInProgress] = useState(false)
@@ -137,19 +139,48 @@ const ProductItemNew: FC<ProductItem> = ({ product, channelName }) => {
       selectedProdId = +store.id
     }
     console.log(modifiers)
-    await axios.post(`${webAddress}/api/baskets`, {
-      variants: [
+
+    const basketId = localStorage.getItem('basketId')
+
+    if (basketId) {
+      const { data: basketData } = await axios.post(
+        `${webAddress}/api/baskets-lines`,
         {
-          id: selectedProdId,
-          quantity: 1,
-          modifiers:
-            modifiers &&
-            modifiers
-              .filter((m: any) => m.active)
-              .map((m: any) => ({ id: m.id })),
-        },
-      ],
-    })
+          basket_id: basketId,
+          variants: [
+            {
+              id: selectedProdId,
+              quantity: 1,
+              modifiers:
+                modifiers &&
+                modifiers
+                  .filter((m: any) => m.active)
+                  .map((m: any) => ({ id: m.id })),
+            },
+          ],
+        }
+      )
+    } else {
+      const { data: basketData } = await axios.post(
+        `${webAddress}/api/baskets`,
+        {
+          variants: [
+            {
+              id: selectedProdId,
+              quantity: 1,
+              modifiers:
+                modifiers &&
+                modifiers
+                  .filter((m: any) => m.active)
+                  .map((m: any) => ({ id: m.id })),
+            },
+          ],
+        }
+      )
+
+      localStorage.setItem('basketId', basketData.data.id)
+    }
+
     if (modifiers && modifiers.length) {
       setIsChoosingModifier(false)
     }
