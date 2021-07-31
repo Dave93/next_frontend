@@ -34,10 +34,16 @@ const fetcher: Fetcher = async ({
   query,
 }) => {
   const { locale, apiUrl, ...vars } = variables ?? {}
+  if (!url || typeof url == undefined) {
+    url = API_URL
+  }
   return handleFetchResponse(
     await fetch(url + apiUrl, {
       method,
-      body: JSON.stringify({ query, variables: vars }),
+      body:
+        query || (vars && Object.values(vars).length)
+          ? JSON.stringify({ query, variables: vars })
+          : null,
       headers: {
         'Content-Type': 'application/json',
         ...(locale && {

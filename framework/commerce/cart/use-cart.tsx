@@ -23,7 +23,7 @@ const useCart: UseCart = (input) => {
   const { cartCookie } = useCommerce()
   const fetcherFn = hook.fetcher ?? fetcher
   const wrapper: typeof fetcher = (context) => {
-    context.input.cartId = Cookies.get(cartCookie)
+    context.input.cartId = localStorage.getItem(cartCookie) || undefined
     return fetcherFn(context)
   }
   return useSWRHook({ ...hook, fetcher: wrapper })(input)
