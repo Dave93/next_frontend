@@ -13,6 +13,7 @@ import styles from './ProductOptionSelector.module.css'
 import axios from 'axios'
 import Cookies from 'js-cookie'
 import getConfig from 'next/config'
+import { useCart } from '@framework/cart'
 // import SessionContext from 'react-storefront/session/SessionContext'
 
 type ProductItem = {
@@ -26,11 +27,9 @@ axios.defaults.withCredentials = true
 
 const ProductItemNew: FC<ProductItem> = ({ product, channelName }) => {
   const { t: tr } = useTranslation('common')
-  // console.log('product', product)
   const [store, updateStore] = useState(product)
-
-  // console.log(data)
-  // const { actions } = useContext(SessionContext)
+  const [isLoadingBasket, setIsLoadingBasket] = useState(false)
+  const { mutate } = useCart()
 
   const [addToCartInProgress, setAddToCartInProgress] = useState(false)
   const [isChoosingModifier, setIsChoosingModifier] = useState(false)
@@ -111,7 +110,7 @@ const ProductItemNew: FC<ProductItem> = ({ product, channelName }) => {
   const setCredentials = async () => {
     let csrf = Cookies.get('X-XSRF-TOKEN')
     if (!csrf) {
-      const csrfReq = await axios('https://api.hq.fungeek.net/api/keldi', {
+      const csrfReq = await axios(`${webAddress}/api/keldi`, {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',
@@ -130,6 +129,7 @@ const ProductItemNew: FC<ProductItem> = ({ product, channelName }) => {
   }
 
   const addToBasket = async () => {
+    setIsLoadingBasket(true)
     await setCredentials()
     let selectedProdId = 0
     if (store.variants && store.variants.length) {
@@ -138,9 +138,8 @@ const ProductItemNew: FC<ProductItem> = ({ product, channelName }) => {
     } else {
       selectedProdId = +store.id
     }
-    console.log(modifiers)
 
-    const basketId = localStorage.getItem('basketId')
+    let basketId = localStorage.getItem('basketId')
 
     if (basketId) {
       const { data: basketData } = await axios.post(
@@ -177,10 +176,27 @@ const ProductItemNew: FC<ProductItem> = ({ product, channelName }) => {
           ],
         }
       )
-
       localStorage.setItem('basketId', basketData.data.id)
     }
 
+    basketId = localStorage.getItem('basketId')
+
+    let { data: basket } = await axios.get(
+      `${webAddress}/api/v1/baskets/${basketId}`
+    )
+    const basketResult = {
+      id: basket.data.id,
+      createdAt: '',
+      currency: { code: basket.data.currency },
+      taxesIncluded: basket.data.tax_total,
+      lineItems: basket.data.lines.data,
+      lineItemsSubtotalPrice: basket.data.sub_total,
+      subtotalPrice: basket.data.sub_total,
+      totalPrice: basket.data.total,
+    }
+
+    await mutate(basketResult, false)
+    setIsLoadingBasket(false)
     if (modifiers && modifiers.length) {
       setIsChoosingModifier(false)
     }
@@ -241,7 +257,31 @@ const ProductItemNew: FC<ProductItem> = ({ product, channelName }) => {
   return (
     <>
       {isChoosingModifier ? (
-        <div className="gap-4 grid grid-cols-2 items-center justify-between md:flex md:flex-col px-6 py-4 rounded-[15px] shadow-lg">
+        <div className="gap-4 grid grid-cols-2 items-center justify-between relative md:flex md:flex-col px-6 py-4 rounded-[15px] shadow-lg">
+          {isLoadingBasket && (
+            <div className="h-full w-full absolute flex items-center justify-around bg-gray-300 top-0 bg-opacity-60">
+              <svg
+                className="animate-spin text-yellow h-14"
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+              >
+                <circle
+                  className="opacity-25"
+                  cx="12"
+                  cy="12"
+                  r="10"
+                  stroke="currentColor"
+                  stroke-width="4"
+                ></circle>
+                <path
+                  className="opacity-75"
+                  fill="currentColor"
+                  d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+                ></path>
+              </svg>
+            </div>
+          )}
           <div className="border-b border-yellow pb-3 text-center text-xl w-full">
             Добавить
           </div>
