@@ -312,6 +312,8 @@ const LocationTabs: FC = () => {
     )
 
     console.log('getCodeData', getCodeData)
+    setGeoSuggestions(getCodeData.featureMember)
+    return getCodeData.featureMember
 
     // return inputLength === 0
     //   ? []
@@ -320,9 +322,11 @@ const LocationTabs: FC = () => {
     //     )
   }
 
-  const getSuggestionValue = (suggestion: any) => suggestion.name
+  const getSuggestionValue = (suggestion: any) => suggestion.GeoObject.name
 
-  const renderSuggestion = (suggestion: any) => <div>{suggestion.name}</div>
+  const renderSuggestion = (suggestion: any) => (
+    <div>{suggestion.GeoObject.name}</div>
+  )
 
   const mapState = useMemo<MapState>(() => {
     const baseState: MapStateBase = {

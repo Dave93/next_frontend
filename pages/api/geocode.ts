@@ -22,8 +22,10 @@ export default async function handler(req: any, res: any) {
   const { data: getCodeData } = await axios.get(
     `https://geocode-maps.yandex.ru/1.x/?apikey=${
       configData.yandexGeoKey
-    }&geocode=${encodeURI(text)}`
+    }&geocode=${encodeURI(text)}&format=json`
   )
 
-  res.status(200).json([])
+  console.log(getCodeData)
+
+  res.status(200).json(getCodeData.response.GeoObjectCollection)
 }
