@@ -288,7 +288,13 @@ const LocationTabs: FC = () => {
     setGeoSuggestions([])
   }
 
-  const onSuggestionsFetchRequested = async ({ value }: { value: any }) => {
+  const onSuggestionsFetchRequested = async ({
+    value,
+    reason,
+  }: {
+    value: any
+    reason: string
+  }) => {
     console.log('onSuggestionsFetchRequested', value)
     const inputValue = value.trim().toLowerCase()
     const inputLength = inputValue.length
@@ -306,7 +312,7 @@ const LocationTabs: FC = () => {
     //     configData.yandexGeoKey
     //   }&geocode=${encodeURI(value)}`
     // )
-
+    // if (reason == 'input-changed') {
     const { data: getCodeData } = await axios.get(
       `/api/geocode?text=${encodeURI(value)}`
     )
@@ -314,6 +320,9 @@ const LocationTabs: FC = () => {
     console.log('getCodeData', getCodeData)
     setGeoSuggestions(getCodeData.featureMember)
     return getCodeData.featureMember
+    // } else {
+    //   return geoSuggestions
+    // }
 
     // return inputLength === 0
     //   ? []
@@ -437,8 +446,11 @@ const LocationTabs: FC = () => {
                 inputProps={{
                   value: suggestionVal,
                   placeholder: 'Suggestions',
-                  onChange: (event: any, { newValue }: { newValue: any }) => {
-                    // console.log(arguments)
+                  onChange: (
+                    event: any,
+                    { newValue, ...options }: { newValue: any }
+                  ) => {
+                    console.log('options', options)
                     console.log([event, newValue])
                     setSuggestionVal(newValue)
                   },
