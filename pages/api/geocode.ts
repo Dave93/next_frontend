@@ -25,7 +25,24 @@ export default async function handler(req: any, res: any) {
     }&geocode=${encodeURI(text)}&format=json`
   )
 
-  console.log(getCodeData)
+  console.log(JSON.stringify(getCodeData))
 
-  res.status(200).json(getCodeData.response.GeoObjectCollection)
+  let result = []
+
+  getCodeData.response.GeoObjectCollection.featureMember.map((item: any) => {
+    result.push({
+      title: item.GeoObject.name,
+      description: item.GeoObject.description,
+      adressItems:
+        item.GeoObject.metaDataProperty.GeocoderMetaData.Address.Components,
+      formatted:
+        item.GeoObject.metaDataProperty.GeocoderMetaData.Address.formatted,
+      coordinates: {
+        long: item.GeoObject.Point.pos.split(' ')[0],
+        lat: item.GeoObject.Point.pos.split(' ')[1],
+      },
+    })
+  })
+
+  res.status(200).json(result)
 }
