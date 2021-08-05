@@ -27,7 +27,7 @@ export default async function handler(req: any, res: any) {
 
   console.log(JSON.stringify(getCodeData))
 
-  let result = []
+  let result = [] as any[]
 
   getCodeData.response.GeoObjectCollection.featureMember.map((item: any) => {
     result.push({
