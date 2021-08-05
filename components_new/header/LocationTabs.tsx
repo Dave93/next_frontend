@@ -10,7 +10,11 @@ import React, {
   useCallback,
 } from 'react'
 import { Menu, Transition, Disclosure } from '@headlessui/react'
-import { ChevronDownIcon, ChevronRightIcon } from '@heroicons/react/solid'
+import {
+  ChevronDownIcon,
+  ChevronRightIcon,
+  CheckIcon,
+} from '@heroicons/react/solid'
 import {
   YMaps,
   Map,
@@ -18,12 +22,15 @@ import {
   MapState,
   MapStateBase,
   MapStateCenter,
+  PlacemarkGeometry,
 } from 'react-yandex-maps'
 import { useForm } from 'react-hook-form'
 import Autosuggest from 'react-autosuggest'
 import useSWR from 'swr'
 import getConfig from 'next/config'
 import axios from 'axios'
+import Downshift from 'downshift'
+import debounce from 'lodash.debounce'
 
 const { publicRuntimeConfig } = getConfig()
 
@@ -247,9 +254,37 @@ const LocationTabs: FC = () => {
   const activeCity = cities.find((item) => item.active)
   const activePoint = pickupPoints.find((item) => item.active)
 
+  const [selectedCoordinates, setSelectedCoordinates] = useState([] as any)
+
+  const [mapCenter, setMapCenter] = useState(activeCity?.mapCenter as number[])
+  const [mapZoom, setMapZoom] = useState(activeCity?.mapZoom as number)
+
   let { data: configData, error } = useSWR(
     `${publicRuntimeConfig.apiUrl}/api/configs/public`,
     fetcher
+  )
+
+  const addressInputChangeHandler = async (event: any) => {
+    console.log(event.target.value)
+    console.log(configData)
+    if (!configData) {
+      return []
+    }
+
+    if (!configData.yandexGeoKey) {
+      return []
+    }
+    const { data: getCodeData } = await axios.get(
+      `/api/geocode?text=${encodeURI(event.target.value)}`
+    )
+
+    console.log('getCodeData', getCodeData)
+    setGeoSuggestions(getCodeData)
+  }
+
+  const debouncedAddressInputChangeHandler = useCallback(
+    debounce(addressInputChangeHandler, 300),
+    []
   )
 
   try {
@@ -269,6 +304,15 @@ const LocationTabs: FC = () => {
         return item
       })
     )
+
+    const activeCity = cities.find((item) => item.id == id)
+    if (activeCity) setMapCenter(activeCity.mapCenter)
+  }
+
+  const setSelectedAddress = (selection: any) => {
+    setMapCenter([selection.coordinates.lat, selection.coordinates.long])
+    setSelectedCoordinates([selection])
+    setMapZoom(17)
   }
 
   const setActivePoint = (id: string) => {
@@ -284,58 +328,32 @@ const LocationTabs: FC = () => {
     )
   }
 
-  const onSuggestionsClearRequested = () => {
-    setGeoSuggestions([])
+  const clickOnMap = (event: any) => {
+    const coords = event.get('coords')
+    setMapCenter(coords)
+    setSelectedCoordinates([
+      {
+        coordinates: {
+          lat: coords[0],
+          long: coords[1],
+        },
+      },
+    ])
+    setMapZoom(17)
   }
-
-  const onSuggestionsFetchRequested = async ({ value }: { value: any }) => {
-    console.log('onSuggestionsFetchRequested', value)
-    const inputValue = value.trim().toLowerCase()
-    const inputLength = inputValue.length
-
-    if (!configData) {
-      return []
-    }
-
-    if (!configData.yandexGeoKey) {
-      return []
-    }
-
-    // const { data: getCodeData } = await axios.get(
-    //   `https://geocode-maps.yandex.ru/1.x/?apikey=${
-    //     configData.yandexGeoKey
-    //   }&geocode=${encodeURI(value)}`
-    // )
-
-    const { data: getCodeData } = await axios.get(
-      `/api/geocode?text=${encodeURI(value)}`
-    )
-
-    console.log('getCodeData', getCodeData)
-
-    // return inputLength === 0
-    //   ? []
-    //   : languages.filter(
-    //       (lang) => lang.name.toLowerCase().slice(0, inputLength) === inputValue
-    //     )
-  }
-
-  const getSuggestionValue = (suggestion: any) => suggestion.name
-
-  const renderSuggestion = (suggestion: any) => <div>{suggestion.name}</div>
 
   const mapState = useMemo<MapState>(() => {
     const baseState: MapStateBase = {
       controls: ['zoomControl', 'fullscreenControl', 'geolocationControl'],
     }
     const mapStateCenter: MapStateCenter = {
-      center: activeCity?.mapCenter || [],
-      zoom: activeCity?.mapZoom || 10,
+      center: mapCenter || [],
+      zoom: mapZoom || 10,
     }
 
     const res: MapState = Object.assign({}, baseState, mapStateCenter)
     return res
-  }, [activeCity?.mapCenter, activeCity?.mapZoom])
+  }, [mapCenter, mapZoom])
 
   const { register, handleSubmit } = useForm()
   const onSubmit = (data: Object) => console.log(JSON.stringify(data))
@@ -413,43 +431,99 @@ const LocationTabs: FC = () => {
                   state={mapState}
                   width="100%"
                   height="530px"
+                  onClick={clickOnMap}
                   modules={[
                     'control.ZoomControl',
                     'control.FullscreenControl',
                     'control.GeolocationControl',
                   ]}
-                />
+                >
+                  {selectedCoordinates.map((item: any, index: number) => (
+                    <Placemark
+                      modules={['geoObject.addon.balloon']}
+                      geomerty={[
+                        item?.coordinates?.lat,
+                        item?.coordinates?.long,
+                      ]}
+                      key={index}
+                    />
+                  ))}
+                </Map>
               </div>
             </YMaps>
           </div>
           <div className="mt-4">
             <form onSubmit={handleSubmit(onSubmit)}>
-              <Autosuggest
-                suggestions={geoSuggestions}
-                onSuggestionsFetchRequested={onSuggestionsFetchRequested}
-                onSuggestionsClearRequested={onSuggestionsClearRequested}
-                getSuggestionValue={getSuggestionValue}
-                renderSuggestion={renderSuggestion}
-                inputProps={{
-                  value: suggestionVal,
-                  placeholder: 'Suggestions',
-                  onChange: (event: any, { newValue }: { newValue: any }) => {
-                    // console.log(arguments)
-                    console.log([event, newValue])
-                    setSuggestionVal(newValue)
-                  },
-                }}
-              />
               <div className="font-bold text-[18px] text-gray-400">Адрес:</div>
               <div className="flex justify-between mt-3">
-                <div className="w-7/12">
-                  <input
-                    type="text"
-                    {...register('address')}
-                    placeholder="Адрес"
-                    className="bg-gray-100 px-8 py-3 rounded-full w-full outline-none focus:outline-none"
-                  />
-                </div>
+                <Downshift
+                  onChange={(selection) => setSelectedAddress(selection)}
+                  itemToString={(item) => (item ? item.formatted : '')}
+                >
+                  {({
+                    getInputProps,
+                    getItemProps,
+                    getLabelProps,
+                    getMenuProps,
+                    isOpen,
+                    inputValue,
+                    highlightedIndex,
+                    selectedItem,
+                    getRootProps,
+                  }) => (
+                    <>
+                      <div
+                        className="relative w-7/12"
+                        {...getRootProps(undefined, { suppressRefError: true })}
+                      >
+                        <input
+                          type="text"
+                          {...register('address')}
+                          {...getInputProps({
+                            onChange: debouncedAddressInputChangeHandler,
+                          })}
+                          placeholder="Адрес"
+                          className="bg-gray-100 px-8 py-3 rounded-full w-full outline-none focus:outline-none"
+                        />
+                        <ul
+                          {...getMenuProps()}
+                          className="absolute w-full z-[1000] rounded-[15px] shadow-lg"
+                        >
+                          {isOpen
+                            ? geoSuggestions.map((item: any, index: number) => (
+                                <li
+                                  {...getItemProps({
+                                    key: index,
+                                    index,
+                                    item,
+                                    className: `py-2 px-4 flex items-center ${
+                                      highlightedIndex == index
+                                        ? 'bg-gray-100'
+                                        : 'bg-white'
+                                    }`,
+                                  })}
+                                >
+                                  <CheckIcon
+                                    className={`w-5 text-yellow font-bold mr-2 ${
+                                      highlightedIndex == index
+                                        ? ''
+                                        : 'invisible'
+                                    }`}
+                                  />
+                                  <div>
+                                    <div>{item.title}</div>
+                                    <div className="text-sm">
+                                      {item.description}
+                                    </div>
+                                  </div>
+                                </li>
+                              ))
+                            : null}
+                        </ul>
+                      </div>
+                    </>
+                  )}
+                </Downshift>
                 <div className="mx-5 w-3/12">
                   <input
                     type="text"
@@ -467,6 +541,7 @@ const LocationTabs: FC = () => {
                   />
                 </div>
               </div>
+
               <div className="mt-5">
                 <Disclosure defaultOpen={true}>
                   {({ open }) => (
