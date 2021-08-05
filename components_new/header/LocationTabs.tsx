@@ -267,7 +267,7 @@ const LocationTabs: FC = () => {
       let { data } = await axios.get(
         `${publicRuntimeConfig.apiUrl}/api/configs/public`
       )
-      configData = data
+      configData = data.data
       sessionStorage.setItem('configData', data.data)
     } else {
       configData = sessionStorage.getItem('configData')
