@@ -11,6 +11,13 @@ if (typeof window !== 'undefined') {
     userData = userData.toString('ascii')
     userData = JSON.parse(userData)
   } catch (e) {}
+
+  locationData = sessionStorage.getItem('yetkazish')
+  try {
+    locationData = Buffer.from(locationData, 'base64')
+    locationData = locationData.toString('ascii')
+    locationData = JSON.parse(locationData)
+  } catch (e) {}
 }
 
 interface AnyObject {
@@ -26,6 +33,17 @@ export interface UserData {
   user: AnyObject
 }
 
+export interface LocationData {
+  address: string
+  flat: string
+  house: string
+  entrance: string
+  door_code: string
+  deliveryType: 'pickup' | 'deliver'
+  location?: number[]
+  terminalId?: number
+}
+
 export interface State {
   displaySidebar: boolean
   displayDropdown: boolean
@@ -34,6 +52,7 @@ export interface State {
   modalView: string
   userAvatar: string
   user?: UserData | null
+  locationData: LocationData | null
 }
 
 const initialState = {
@@ -44,6 +63,7 @@ const initialState = {
   sidebarView: 'CART_VIEW',
   userAvatar: '',
   user: userData,
+  locationData,
 }
 
 type Action =
@@ -80,6 +100,10 @@ type Action =
   | {
       type: 'SET_USER_DATA'
       value: UserData
+    }
+  | {
+      type: 'SET_LOCATION_DATA'
+      value: LocationData
     }
 
 type MODAL_VIEWS =
@@ -163,6 +187,17 @@ function uiReducer(state: State, action: Action) {
         user: action.value,
       }
     }
+    case 'SET_LOCATION_DATA': {
+      try {
+        let locationNewData = JSON.stringify(action.value)
+        locationNewData = Buffer.from(locationNewData).toString('base64')
+        sessionStorage.setItem('yetkazish', locationNewData)
+      } catch (e) {}
+      return {
+        ...state,
+        locationData: action.value,
+      }
+    }
   }
 }
 
@@ -227,6 +262,11 @@ export const UIProvider: FC = (props) => {
     [dispatch]
   )
 
+  const setLocationData = useCallback(
+    (value: LocationData) => dispatch({ type: 'SET_LOCATION_DATA', value }),
+    [dispatch]
+  )
+
   const value = useMemo(
     () => ({
       ...state,
@@ -242,6 +282,7 @@ export const UIProvider: FC = (props) => {
       setSidebarView,
       setUserAvatar,
       setUserData,
+      setLocationData,
     }),
     [state]
   )
