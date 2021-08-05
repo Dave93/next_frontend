@@ -5,16 +5,12 @@ export default async function handler(req: any, res: any) {
     query: { text },
   } = req
 
-  console.log(text)
-
   if (!text) {
     return res.status(200).json([])
   }
   let { data: configData } = await axios.get(
     `${process.env.API_URL}/api/configs/public`
   )
-
-  console.log(configData)
 
   try {
     configData = Buffer.from(configData.data, 'base64')

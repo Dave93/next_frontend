@@ -3,11 +3,12 @@ import useTranslation from 'next-translate/useTranslation'
 import { Dialog, Transition } from '@headlessui/react'
 import LocationTabs from './LocationTabs'
 import Image from 'next/image'
+import { useUI } from '@components/ui/context'
 
 const SetLocation: FC = () => {
   const { t: tr } = useTranslation('common')
   const [open, setOpen] = useState(false)
-
+  const { locationData } = useUI()
   const cancelButtonRef = useRef(null)
   return (
     <>
@@ -20,7 +21,9 @@ const SetLocation: FC = () => {
         <div className="flex items-center mr-3">
           <Image src="/assets/location.png" width="14" height="16" />
         </div>
-        {tr('chooseLocation')}
+        {locationData && locationData.address
+          ? locationData.address
+          : tr('chooseLocation')}
       </button>
       <Transition.Root show={open} as={Fragment}>
         <Dialog
@@ -61,7 +64,7 @@ const SetLocation: FC = () => {
               leaveTo="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
             >
               <div className="inline-block align-bottom bg-white p-10 rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle container sm:w-full">
-                <LocationTabs />
+                <LocationTabs setOpen={setOpen} />
               </div>
             </Transition.Child>
           </div>

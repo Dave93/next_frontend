@@ -8,6 +8,7 @@ import React, {
   FC,
   createRef,
   useCallback,
+  SetStateAction,
 } from 'react'
 import { Menu, Transition, Disclosure } from '@headlessui/react'
 import {
@@ -31,13 +32,19 @@ import getConfig from 'next/config'
 import axios from 'axios'
 import Downshift from 'downshift'
 import debounce from 'lodash.debounce'
+import { useUI } from '@components/ui/context'
 
 const { publicRuntimeConfig } = getConfig()
 
-const fetcher = (url: string) => fetch(url).then((res) => res.json())
+interface Props {
+  setOpen?: any
+}
 
-const LocationTabs: FC = () => {
-  const [tabIndex, setTabIndex] = useState(1)
+const LocationTabs: FC<Props> = ({ setOpen }) => {
+  const { locationData, setLocationData } = useUI()
+  const [tabIndex, setTabIndex] = useState(
+    locationData?.deliveryType || 'deliver'
+  )
   const [pickupIndex, setPickupIndex] = useState(1)
   const [cities, setCities] = useState([
     {
@@ -248,18 +255,38 @@ const LocationTabs: FC = () => {
   ])
 
   const [geoSuggestions, setGeoSuggestions] = useState([])
-  const [suggestionVal, setSuggestionVal] = useState('')
 
   const activeLabel = cities.find((item) => item.active)?.label
   const activeCity = cities.find((item) => item.active)
   const activePoint = pickupPoints.find((item) => item.active)
 
-  const [selectedCoordinates, setSelectedCoordinates] = useState([] as any)
+  const [selectedCoordinates, setSelectedCoordinates] = useState(
+    locationData && locationData.location
+      ? [
+          {
+            coordinates: {
+              lat: locationData.location[0],
+              long: locationData.location[1],
+            },
+            key: `${locationData.location[0]}${locationData.location[1]}`,
+          },
+        ]
+      : ([] as any)
+  )
 
-  const [mapCenter, setMapCenter] = useState(activeCity?.mapCenter as number[])
-  const [mapZoom, setMapZoom] = useState(activeCity?.mapZoom as number)
+  const [mapCenter, setMapCenter] = useState(
+    (locationData?.location || activeCity?.mapCenter) as number[]
+  )
+  const [mapZoom, setMapZoom] = useState(
+    ((locationData?.location ? 17 : 10) || activeCity?.mapZoom) as number
+  )
 
   const [configData, setConfigData] = useState({} as any)
+
+  const changeTabIndex = (index: string) => {
+    setLocationData({ ...locationData, deliveryType: index })
+    setTabIndex(index)
+  }
 
   const fetchConfig = async () => {
     let configData
@@ -331,6 +358,10 @@ const LocationTabs: FC = () => {
       },
     ])
     setMapZoom(17)
+    setLocationData({
+      ...locationData,
+      location: [selection.coordinates.lat, selection.coordinates.long],
+    })
   }
 
   const setActivePoint = (id: string) => {
@@ -359,6 +390,7 @@ const LocationTabs: FC = () => {
       },
     ])
     setMapZoom(17)
+    setLocationData({ ...locationData, location: coords })
   }
 
   const mapState = useMemo<MapState>(() => {
@@ -374,30 +406,48 @@ const LocationTabs: FC = () => {
     return res
   }, [mapCenter, mapZoom])
 
-  const { register, handleSubmit } = useForm()
-  const onSubmit = (data: Object) => console.log(JSON.stringify(data))
+  const { register, handleSubmit, getValues } = useForm({
+    defaultValues: {
+      address: locationData?.address || '',
+      flat: locationData?.flat || '',
+      house: locationData?.house || '',
+      entrance: locationData?.entrance || '',
+      door_code: locationData?.door_code || '',
+    },
+  })
+  const onSubmit = (data: Object) => {
+    saveDeliveryData(data)
+  }
+
+  const saveDeliveryData = (data: Object = {}) => {
+    if (!data) {
+      data = getValues()
+    }
+    setLocationData({ ...locationData, ...data })
+    setOpen(false)
+  }
 
   return (
     <>
       <div className="bg-gray-100 flex rounded-full w-full">
         <button
           className={`${
-            tabIndex == 1 ? 'bg-yellow text-white' : ' text-gray-400'
+            tabIndex == 'deliver' ? 'bg-yellow text-white' : ' text-gray-400'
           } flex-1 font-bold py-3 text-[18px] rounded-full outline-none focus:outline-none`}
-          onClick={() => setTabIndex(1)}
+          onClick={() => changeTabIndex('deliver')}
         >
           Доставка
         </button>
         <button
           className={`${
-            tabIndex == 2 ? 'bg-yellow text-white' : ' text-gray-400'
+            tabIndex == 'pickup' ? 'bg-yellow text-white' : ' text-gray-400'
           } flex-1 font-bold py-3 text-[18px] rounded-full outline-none focus:outline-none`}
-          onClick={() => setTabIndex(2)}
+          onClick={() => changeTabIndex('pickup')}
         >
           Самовывоз
         </button>
       </div>
-      {tabIndex == 1 && (
+      {tabIndex == 'deliver' && (
         <div className="mt-8">
           <div className="flex justify-between">
             <div className="text-gray-400 font-bold text-[18px]">
@@ -469,6 +519,10 @@ const LocationTabs: FC = () => {
                         item?.coordinates?.long,
                       ]}
                       key={item.key}
+                      defaultOptions={{
+                        iconLayout: 'default#image',
+                        iconImageHref: '/map_placemark.png',
+                      }}
                     />
                   ))}
                 </Map>
@@ -618,6 +672,7 @@ const LocationTabs: FC = () => {
                 <button
                   type="submit"
                   className="bg-yellow font-bold px-12 py-3 rounded-full text-[18px] text-white outline-none focus:outline-none"
+                  onClick={() => saveDeliveryData()}
                 >
                   Подтвердить
                 </button>
@@ -626,7 +681,7 @@ const LocationTabs: FC = () => {
           </div>
         </div>
       )}
-      {tabIndex == 2 && (
+      {tabIndex == 'pickup' && (
         <div className="mt-8">
           <div className="flex">
             <div className="font-bold text-[18px] text-gray-400">
@@ -692,6 +747,10 @@ const LocationTabs: FC = () => {
                           ${point.desc}
                           `,
                         }}
+                        defaultOptions={{
+                          iconLayout: 'default#image',
+                          iconImageHref: '/map_placemark.png',
+                        }}
                       />
                     ))}
                   </Map>
@@ -755,3 +814,6 @@ const LocationTabs: FC = () => {
 }
 
 export default memo(LocationTabs)
+function Dispatch<T>() {
+  throw new Error('Function not implemented.')
+}
