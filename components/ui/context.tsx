@@ -2,6 +2,8 @@ import React, { FC, useCallback, useMemo } from 'react'
 
 let userData: any = null
 
+let locationData: any = null
+
 if (typeof window !== 'undefined') {
   userData = localStorage.getItem('mijoz')
   try {
