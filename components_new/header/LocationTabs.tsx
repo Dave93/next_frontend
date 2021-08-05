@@ -259,14 +259,34 @@ const LocationTabs: FC = () => {
   const [mapCenter, setMapCenter] = useState(activeCity?.mapCenter as number[])
   const [mapZoom, setMapZoom] = useState(activeCity?.mapZoom as number)
 
-  let { data: configData, error } = useSWR(
-    `${publicRuntimeConfig.apiUrl}/api/configs/public`,
-    fetcher
-  )
+  const [configData, setConfigData] = useState({} as any)
+
+  const fetchConfig = async () => {
+    let configData
+    if (!sessionStorage.getItem('configData')) {
+      let { data } = await axios.get(
+        `${publicRuntimeConfig.apiUrl}/api/configs/public`
+      )
+      configData = data
+      sessionStorage.setItem('configData', data.data)
+    } else {
+      configData = sessionStorage.getItem('configData')
+    }
+
+    try {
+      configData = Buffer.from(configData, 'base64')
+      configData = configData.toString('ascii')
+      configData = JSON.parse(configData)
+      setConfigData(configData)
+    } catch (e) {}
+  }
+
+  useEffect(() => {
+    fetchConfig()
+    return
+  }, [])
 
   const addressInputChangeHandler = async (event: any) => {
-    console.log(event.target.value)
-    console.log(configData)
     if (!configData) {
       return []
     }
@@ -278,20 +298,13 @@ const LocationTabs: FC = () => {
       `/api/geocode?text=${encodeURI(event.target.value)}`
     )
 
-    console.log('getCodeData', getCodeData)
     setGeoSuggestions(getCodeData)
   }
 
   const debouncedAddressInputChangeHandler = useCallback(
     debounce(addressInputChangeHandler, 300),
-    []
+    [configData]
   )
-
-  try {
-    configData = Buffer.from(configData.data, 'base64')
-    configData = configData.toString('ascii')
-    configData = JSON.parse(configData)
-  } catch (e) {}
 
   const setActive = (id: string) => {
     setCities(
