@@ -324,7 +324,12 @@ const LocationTabs: FC = () => {
 
   const setSelectedAddress = (selection: any) => {
     setMapCenter([selection.coordinates.lat, selection.coordinates.long])
-    setSelectedCoordinates([selection])
+    setSelectedCoordinates([
+      {
+        ...selection,
+        key: `${selection.coordinates.lat}${selection.coordinates.long}`,
+      },
+    ])
     setMapZoom(17)
   }
 
@@ -346,6 +351,7 @@ const LocationTabs: FC = () => {
     setMapCenter(coords)
     setSelectedCoordinates([
       {
+        key: `${coords[0]}${coords[1]}`,
         coordinates: {
           lat: coords[0],
           long: coords[1],
@@ -454,11 +460,15 @@ const LocationTabs: FC = () => {
                   {selectedCoordinates.map((item: any, index: number) => (
                     <Placemark
                       modules={['geoObject.addon.balloon']}
+                      defaultGeometry={[
+                        item?.coordinates?.lat,
+                        item?.coordinates?.long,
+                      ]}
                       geomerty={[
                         item?.coordinates?.lat,
                         item?.coordinates?.long,
                       ]}
-                      key={index}
+                      key={item.key}
                     />
                   ))}
                 </Map>

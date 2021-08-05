@@ -7,6 +7,9 @@ export default async function handler(req: any, res: any) {
 
   console.log(text)
 
+  if (!text) {
+    return res.status(200).json([])
+  }
   let { data: configData } = await axios.get(
     `${process.env.API_URL}/api/configs/public`
   )
