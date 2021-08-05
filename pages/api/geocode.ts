@@ -25,8 +25,6 @@ export default async function handler(req: any, res: any) {
     }&geocode=${encodeURI(text)}&format=json`
   )
 
-  console.log(JSON.stringify(getCodeData))
-
   let result = [] as any[]
 
   getCodeData.response.GeoObjectCollection.featureMember.map((item: any) => {
