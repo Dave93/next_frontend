@@ -14,32 +14,41 @@ import {
   MapStateCenter,
 } from 'react-yandex-maps'
 import Image from 'next/image'
+import { useCart } from '@framework/cart'
+import currency from 'currency.js'
 
 // interface LocationTabProps {
 //   setOpen: Dispatch<SetStateAction<boolean>>
 // }
 
+type FormData = {
+  name: string
+  address: string
+  phone: string
+  email: string
+  flat: string
+  house: string
+  entrance: string
+  door_code: string
+  change: string
+  pay_comment: string
+  card_number: string
+  card_month: string
+  holder_name: string
+  cvv_code: string
+}
 const Orders: FC = () => {
   //Contacts
   const { t: tr } = useTranslation('common')
   const { user, setUserData } = useUI()
-
-  type FormData = {
-    name: string
-    address: string
-    phone: string
-    email: string
-    flat: string
-    house: string
-    entrance: string
-    door_code: string
-    change: string
-    pay_comment: string
-    card_number: string
-    card_month: string
-    holder_name: string
-    cvv_code: string
+  let cartId: string | null = null
+  if (typeof window !== undefined) {
+    cartId = localStorage.getItem('basketId')
   }
+
+  const { data, isLoading, isEmpty, mutate } = useCart({
+    cartId,
+  })
   const { register, handleSubmit, reset, watch, formState, getValues } =
     useForm<FormData>({
       mode: 'onChange',
@@ -1042,39 +1051,56 @@ const Orders: FC = () => {
       {/* order list */}
       <div className="w-full bg-white mb-5 rounded-2xl p-10">
         <div className="text-lg mb-5 font-bold">{tr('order_order_list')}</div>
-        <div className="flex justify-between items-center border-b pb-2">
-          <div>
-            <div className="font-bold text-xl mb-2">Пепперони</div>
-            <div className="text-xs text-gray-400">
-              Средняя 32 см, Традиционное тесто
+        {!isEmpty &&
+          data &&
+          data?.lineItems.map((lineItem: any) => (
+            <div
+              className="flex justify-between items-center border-b py-2"
+              key={lineItem.id}
+            >
+              <Image
+                src={
+                  lineItem?.variant?.data?.product?.data?.assets?.data.length
+                    ? lineItem?.variant?.data?.product?.data?.assets?.data[0]
+                        .url
+                    : '/no_photo.svg'
+                }
+                width={40}
+                height={40}
+                className="rounded-full"
+              />
+              <div className="flex-grow mx-2">
+                <div className="font-bold text-xl mb-2">
+                  {lineItem?.variant?.data?.product?.data?.name}
+                </div>
+              </div>
+              <div className="text-xl">
+                {currency(lineItem.unit_price * lineItem.quantity, {
+                  pattern: '# !',
+                  separator: ' ',
+                  decimal: '.',
+                  symbol: 'сўм',
+                  precision: 0,
+                }).format()}
+              </div>
+            </div>
+          ))}
+        {!isEmpty && (
+          <div className="flex justify-between items-center mt-8">
+            <div>
+              <div className="font-bold text-xl mb-2">Сумма заказа:</div>
+            </div>
+            <div className="text-2xl font-bold">
+              {currency(data.totalPrice, {
+                pattern: '# !',
+                separator: ' ',
+                decimal: '.',
+                symbol: 'сўм',
+                precision: 0,
+              }).format()}
             </div>
           </div>
-          <div className="text-xl">36 000 сўм</div>
-        </div>
-        <div className="flex justify-between items-center border-b pb-2">
-          <div>
-            <div className="font-bold text-xl mb-2">Пепперони</div>
-            <div className="text-xs text-gray-400">
-              Средняя 32 см, Традиционное тесто
-            </div>
-          </div>
-          <div className="text-xl">36 000 сўм</div>
-        </div>
-        <div className="flex justify-between items-center border-b pb-2">
-          <div>
-            <div className="font-bold text-xl mb-2">Пепперони</div>
-            <div className="text-xs text-gray-400">
-              Средняя 32 см, Традиционное тесто
-            </div>
-          </div>
-          <div className="text-xl">36 000 сўм</div>
-        </div>
-        <div className="flex justify-between items-center mt-8">
-          <div>
-            <div className="font-bold text-xl mb-2">Сумма заказа:</div>
-          </div>
-          <div className="text-2xl font-bold">108 000 сум</div>
-        </div>
+        )}
       </div>
       <div className="w-full bg-white mb-5 rounded-2xl p-10">
         <div className="flex">

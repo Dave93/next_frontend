@@ -7,6 +7,7 @@ import currency from 'currency.js'
 import axios from 'axios'
 import Cookies from 'js-cookie'
 import getConfig from 'next/config'
+import { useRouter } from 'next/router'
 
 const { publicRuntimeConfig } = getConfig()
 let webAddress = publicRuntimeConfig.apiUrl
@@ -26,6 +27,8 @@ const SmallCart: FC = () => {
 
   const { register, handleSubmit } = useForm()
   const onSubmit = (data: Object) => console.log(JSON.stringify(data))
+
+  const router = useRouter()
 
   const setCredentials = async () => {
     let csrf = Cookies.get('X-XSRF-TOKEN')
@@ -125,6 +128,11 @@ const SmallCart: FC = () => {
     await mutate(basketResult, false)
 
     setIsCartLoading(false)
+  }
+
+  const goToCheckout = (e: any) => {
+    e.preventDefault()
+    router.push('/order/')
   }
 
   return (
@@ -254,7 +262,10 @@ const SmallCart: FC = () => {
         )}
         {!isEmpty && (
           <div className="mt-8">
-            <button className="cursor-pointer outline-none focus:outline-none bg-yellow py-3 rounded-full w-full text-white font-bold">
+            <button
+              onClick={goToCheckout}
+              className="cursor-pointer outline-none focus:outline-none bg-yellow py-3 rounded-full w-full text-white font-bold"
+            >
               Оформить
             </button>
           </div>
