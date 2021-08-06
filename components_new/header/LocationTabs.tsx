@@ -33,6 +33,7 @@ import axios from 'axios'
 import Downshift from 'downshift'
 import debounce from 'lodash.debounce'
 import { useUI } from '@components/ui/context'
+import { toast } from 'react-toastify'
 
 const { publicRuntimeConfig } = getConfig()
 
@@ -255,6 +256,7 @@ const LocationTabs: FC<Props> = ({ setOpen }) => {
   ])
 
   const [geoSuggestions, setGeoSuggestions] = useState([])
+  const [isSearchingTerminals, setIsSearchingTerminals] = useState(false)
 
   const activeLabel = cities.find((item) => item.active)?.label
   const activeCity = cities.find((item) => item.active)
@@ -419,10 +421,26 @@ const LocationTabs: FC<Props> = ({ setOpen }) => {
     saveDeliveryData(data)
   }
 
-  const saveDeliveryData = (data: Object = {}) => {
+  const saveDeliveryData = async (
+    data: Object = {},
+    event: React.MouseEvent
+  ) => {
+    event.preventDefault()
+    event.stopPropagation()
+    setIsSearchingTerminals(true)
     if (!data) {
       data = getValues()
     }
+
+    if (!locationData || !locationData.location) {
+      toast.warn('Не указан адрес или точка доставки', {
+        position: toast.POSITION.BOTTOM_RIGHT,
+        hideProgressBar: true,
+      })
+      setIsSearchingTerminals(false)
+      return
+    }
+
     setLocationData({ ...locationData, ...data })
     setOpen(false)
   }
@@ -672,9 +690,35 @@ const LocationTabs: FC<Props> = ({ setOpen }) => {
                 <button
                   type="submit"
                   className="bg-yellow font-bold px-12 py-3 rounded-full text-[18px] text-white outline-none focus:outline-none"
-                  onClick={() => saveDeliveryData()}
+                  disabled={isSearchingTerminals}
+                  onClick={(event: React.MouseEvent) =>
+                    saveDeliveryData(null, event)
+                  }
                 >
-                  Подтвердить
+                  {isSearchingTerminals ? (
+                    <svg
+                      className="animate-spin h-5 mx-auto text-center text-white w-5"
+                      xmlns="http://www.w3.org/2000/svg"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                    >
+                      <circle
+                        className="opacity-25"
+                        cx="12"
+                        cy="12"
+                        r="10"
+                        stroke="currentColor"
+                        strokeWidth="4"
+                      ></circle>
+                      <path
+                        className="opacity-75"
+                        fill="currentColor"
+                        d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+                      ></path>
+                    </svg>
+                  ) : (
+                    'Подтвердить'
+                  )}
                 </button>
               </div>
             </form>
