@@ -19,12 +19,6 @@ const menuItems: profileMenuItem[] = [
     langCode: 'profile_orders',
   },
   {
-    href: '/profile/address',
-    icon: '/address.png',
-    activeIcon: '/activeAddress.png',
-    langCode: 'profile_address',
-  },
-  {
     href: '/profile/account',
     icon: '/personal.png',
     activeIcon: '/activePersonal.png',
@@ -35,6 +29,12 @@ const menuItems: profileMenuItem[] = [
     icon: '/logout.png',
     activeIcon: '/logout.png',
     langCode: 'profile_logout',
+  },
+  {
+    href: '/profile/address',
+    icon: '/logout.png',
+    activeIcon: '/logout.png',
+    langCode: 'profile_address',
   },
 ]
 
