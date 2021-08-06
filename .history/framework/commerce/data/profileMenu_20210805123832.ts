@@ -18,10 +18,11 @@ const menuItems: profileMenuItem[] = [
     activeIcon: '/activeOrder.png',
     langCode: 'profile_orders',
   },
+
   {
     href: '/profile/address',
-    icon: '/address.png',
-    activeIcon: '/activeAddress.png',
+    icon: '/logout.png',
+    activeIcon: '/logout.png',
     langCode: 'profile_address',
   },
   {
