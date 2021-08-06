@@ -70,197 +70,13 @@ const LocationTabs: FC<Props> = ({ setOpen }) => {
       mapZoom: 13.06,
     },
   ])
-  const [pickupPoints, setPickupPoint] = useState([
-    {
-      id: '8fbb73fa-5b54-e46e-016f-39e9c456cf69',
-      label: 'Эко парк',
-      active: false,
-      mapCenter: [41.311801, 69.2937486],
-      desc: `Ц-1 Экопарк
-📱 712051111
-Режим работы:
-10:00 – 22:00
-М. Улугбекский р. Ц-1 Узбекистон овози 49
-Ориентир: Экопарк, школа №64
-🚗 доставка
-🅿️ парковка`,
-      mapZoom: 11.76,
-    },
-    {
-      id: 'b49bc4a2-b9ac-6869-0172-959449754927',
-      label: 'Ойбек',
-      active: false,
-      mapCenter: [41.295713, 69.277302],
-      desc: `Ойбек
-📱 712051111
-Режим работы:
-10:00 – 03:00
-Мирабадский р. Ойбек 49
-🚗 доставка
-🅿️ парковка`,
-      mapZoom: 12.73,
-    },
-    {
-      id: '8fbb73fa-5b54-e46e-016f-39f4c194a71b',
-      label: 'Parus',
-      active: false,
-      mapCenter: [41.2919486, 69.2111247],
-      desc: `ТРЦ Parus
-📱 712051111
-Режим работы:
-10:00 – 22:00
-Чиланзарский р-н, Катартал 60, дом 2
-Ориентир: ТРЦ Parus 4-этаж
-Имеются:
-🚗 доставка
-🏰 детская площадка
-🅿️ парковка`,
-      mapZoom: 13.06,
-    },
-    {
-      id: 'd40b7507-18e0-de80-0176-1021c8785833',
-      label: 'Samarqand Darvoza',
-      active: false,
-      mapCenter: [41.316332, 69.231129],
-      desc: `ТРЦ Samarqand Darvoza
-📱 712051111
-Режим работы:
-10:00 – 22:00
-Шайхантаурский р. Коратош 5А
-🚗 доставка
-🏰 детская площадка
-🅿️ парковка`,
-      mapZoom: 13.06,
-    },
-    {
-      id: '796859c4-0dbb-e58b-0174-5e024e94adf8',
-      label: 'Сергели',
-      active: false,
-      mapCenter: [41.222536, 69.2249],
-      desc: `Сергели
-📱 712051111
-Режим работы:
-10:00 – 22:00
-Сергелийский р. Янги Сергели 11
-🚗 доставка
-🏰 детская площадка
-🅿️ парковка`,
-      mapZoom: 13.06,
-    },
-    {
-      id: '8fbb73fa-5b54-e46e-016f-3c2c544b153e',
-      label: 'Буюк ипак йули',
-      active: false,
-      mapCenter: [41.3272276, 69.3393392],
-      desc: `Буюк ипак йули
-📱 712051111
-Режим работы:
-10:00 – 22:00
-М. Улугбекский р. Буюк ипак йули 154
-🚗 доставка
-🏰 детская площадка
-🅿️ парковка`,
-      mapZoom: 13.06,
-    },
-    {
-      id: '8fbb73fa-5b54-e46e-016f-39c03efeb44d',
-      label: 'O’zbegim',
-      active: false,
-      mapCenter: [40.7863073, 72.346673],
-      desc: `Андижан ТРЦ O’zbegim
-📱 979996060
-Режим работы:
-10:00 – 22:00
-г. Андижан, проспект Чулпон 10
-Ориентир:
-ТРЦ O’zbegim
-🚗 доставка
-🏰 детская площадка
-🅿️ парковка`,
-      mapZoom: 13.06,
-    },
-    {
-      id: '26639a16-7813-3e88-0178-74cefbe829bd',
-      label: 'Compas',
-      active: false,
-      mapCenter: [41.2389984, 69.3286705],
-      desc: ` ТРЦ Compass
-📱 712051111
-Режим работы:
-10:00 – 22:00
-Бектемирский р. Пересечение улицы Фаргона йули и ТКАД
-Ориентир: Мост Куйлюк
-🚗 доставка
-🏰 детская площадка
-🅿️ парковка`,
-      mapZoom: 13.06,
-    },
-    {
-      id: '0ee0d30c-0662-e682-0174-90531d2bc636',
-      label: 'Nukus Asia.uz',
-      active: false,
-      mapCenter: [41.350566, 69.217489],
-      desc: `ТРЦ Nukus Asia.uz
-📱 712051111
-Режим работы:
-10:00 – 22:00
-Алмазарский р. Шифокорлар 8
-Ориентир: Asia.uz Nukus
-🚗 доставка
-🏰 детская площадка
-🅿️парковка`,
-      mapZoom: 13.06,
-    },
-    {
-      id: '8fbb73fa-5b54-e46e-016f-39c9927685e2',
-      label: 'Миллий тикланиш',
-      active: false,
-      mapCenter: [40.764064, 72.355316],
-      desc: `Миллий тикланиш
-📱 979996060
-Режим работы:
-10:00 – 03:00
-г. Андижан, Миллий тикланиш 26
-🚗 доставка
-🅿️ парковка`,
-      mapZoom: 13.06,
-    },
-    {
-      id: '0d562a04-0abe-72bc-0171-1ccd85df7a57',
-      label: 'Самарканд',
-      active: false,
-      mapCenter: [39.644253, 66.9537613],
-      desc: `Самарканд
-📱 977143315
-Режим работы:
-10:00 – 03:00
-г. Самарканд, ул. О. Махмудова
-🚗 доставка
-🅿️ парковка`,
-      mapZoom: 13.06,
-    },
-    {
-      id: '0e1f7fcc-1db0-a410-0173-236144e3b4e4',
-      label: 'Коканд',
-      active: false,
-      mapCenter: [40.537005, 70.93409],
-      desc: `г. Коканд
-📱 907034040
-Режим работы:
-10:00 – 03:00
-г. Коканд, Истиклол 10
-🚗 доставка
-🅿️ парковка`,
-      mapZoom: 13.06,
-    },
-  ])
+  const [pickupPoints, setPickupPoint] = useState([] as any[])
 
   const [geoSuggestions, setGeoSuggestions] = useState([])
   const [isSearchingTerminals, setIsSearchingTerminals] = useState(false)
 
   const activeLabel = cities.find((item) => item.active)?.label
   const activeCity = cities.find((item) => item.active)
-  const activePoint = pickupPoints.find((item) => item.active)
 
   const [selectedCoordinates, setSelectedCoordinates] = useState(
     locationData && locationData.location
@@ -283,11 +99,43 @@ const LocationTabs: FC<Props> = ({ setOpen }) => {
     ((locationData?.location ? 17 : 10) || activeCity?.mapZoom) as number
   )
 
+  const [activePoint, setActivePoint] = useState(
+    (locationData ? locationData.terminal_id : null) as number | null
+  )
+
   const [configData, setConfigData] = useState({} as any)
 
-  const changeTabIndex = (index: string) => {
+  const { register, handleSubmit, getValues, setValue } = useForm({
+    defaultValues: {
+      address: locationData?.address || '',
+      flat: locationData?.flat || '',
+      house: locationData?.house || '',
+      entrance: locationData?.entrance || '',
+      door_code: locationData?.door_code || '',
+    },
+  })
+
+  const changeTabIndex = async (index: string) => {
     setLocationData({ ...locationData, deliveryType: index })
+
+    if (index == 'pickup') {
+      await loadPickupItems()
+    }
+
     setTabIndex(index)
+  }
+
+  const loadPickupItems = async () => {
+    const { data } = await axios.get(
+      `${publicRuntimeConfig.apiUrl}/api/terminals/pickup`
+    )
+    let res: any[] = []
+    data.data.map((item: any) => {
+      if (item.latitude) {
+        res.push(item)
+      }
+    })
+    setPickupPoint(res)
   }
 
   const fetchConfig = async () => {
@@ -312,8 +160,11 @@ const LocationTabs: FC<Props> = ({ setOpen }) => {
 
   useEffect(() => {
     fetchConfig()
+    if (locationData && locationData.deliveryType == 'pickup') {
+      loadPickupItems()
+    }
     return
-  }, [])
+  }, [locationData])
 
   const addressInputChangeHandler = async (event: any) => {
     if (!configData) {
@@ -364,19 +215,7 @@ const LocationTabs: FC<Props> = ({ setOpen }) => {
       ...locationData,
       location: [selection.coordinates.lat, selection.coordinates.long],
     })
-  }
-
-  const setActivePoint = (id: string) => {
-    setPickupPoint(
-      pickupPoints.map((item) => {
-        if (item.id == id) {
-          item.active = true
-        } else {
-          item.active = false
-        }
-        return item
-      })
-    )
+    setValue('address', selection.formatted)
   }
 
   const clickOnMap = (event: any) => {
@@ -408,27 +247,26 @@ const LocationTabs: FC<Props> = ({ setOpen }) => {
     return res
   }, [mapCenter, mapZoom])
 
-  const { register, handleSubmit, getValues } = useForm({
-    defaultValues: {
-      address: locationData?.address || '',
-      flat: locationData?.flat || '',
-      house: locationData?.house || '',
-      entrance: locationData?.entrance || '',
-      door_code: locationData?.door_code || '',
-    },
-  })
   const onSubmit = (data: Object) => {
-    saveDeliveryData(data)
+    saveDeliveryData(data, null)
+  }
+
+  const choosePickupPoint = (pointId: number) => {
+    setActivePoint(pointId)
+    setLocationData({
+      ...locationData,
+      terminal_id: pointId,
+    })
   }
 
   const saveDeliveryData = async (
     data: Object = {},
-    event: React.MouseEvent
+    event: React.MouseEvent | null
   ) => {
-    event.preventDefault()
-    event.stopPropagation()
+    event?.preventDefault()
+    event?.stopPropagation()
     setIsSearchingTerminals(true)
-    if (!data) {
+    if (!Object.keys(data).length) {
       data = getValues()
     }
 
@@ -441,7 +279,43 @@ const LocationTabs: FC<Props> = ({ setOpen }) => {
       return
     }
 
-    setLocationData({ ...locationData, ...data })
+    const { data: terminalsData } = await axios.get(
+      `${publicRuntimeConfig.apiUrl}/api/terminals/find_nearest?lat=${locationData.location[0]}&lon=${locationData.location[1]}`
+    )
+
+    if (terminalsData.data && !terminalsData.data.length) {
+      toast.warn('Ресторан не найден', {
+        position: toast.POSITION.BOTTOM_RIGHT,
+        hideProgressBar: true,
+      })
+      setIsSearchingTerminals(false)
+      return
+    }
+
+    setIsSearchingTerminals(false)
+    if (terminalsData.data) {
+      setLocationData({
+        ...locationData,
+        ...data,
+        location: [
+          terminalsData.data[0].latitude,
+          terminalsData.data[0].longitude,
+        ],
+        terminal_id: terminalsData.data[0].id,
+      })
+      setOpen(false)
+    }
+  }
+
+  const submitPickup = () => {
+    if (!activePoint) {
+      toast.warn('Не выбран пункт самовывоза', {
+        position: toast.POSITION.BOTTOM_RIGHT,
+        hideProgressBar: true,
+      })
+      return
+    }
+
     setOpen(false)
   }
 
@@ -692,7 +566,7 @@ const LocationTabs: FC<Props> = ({ setOpen }) => {
                   className="bg-yellow font-bold px-12 py-3 rounded-full text-[18px] text-white outline-none focus:outline-none"
                   disabled={isSearchingTerminals}
                   onClick={(event: React.MouseEvent) =>
-                    saveDeliveryData(null, event)
+                    saveDeliveryData(undefined, event)
                   }
                 >
                   {isSearchingTerminals ? (
@@ -777,17 +651,17 @@ const LocationTabs: FC<Props> = ({ setOpen }) => {
                     {pickupPoints.map((point) => (
                       <Placemark
                         modules={['geoObject.addon.balloon']}
-                        defaultGeometry={point.mapCenter}
+                        defaultGeometry={[point.latitude, point.longitude]}
                         key={point.id}
-                        onClick={() => setActivePoint(point.id)}
+                        onClick={() => choosePickupPoint(point.id)}
                         options={{
                           iconColor:
-                            activePoint && activePoint.id == point.id
+                            activePoint && activePoint == point.id
                               ? '#FAAF04'
                               : '#1E98FF',
                         }}
                         properties={{
-                          balloonContentBody: `<b>${point.label}</b> <br />
+                          balloonContentBody: `<b>${point.name}</b> <br />
                           ${point.desc}
                           `,
                         }}
@@ -807,29 +681,29 @@ const LocationTabs: FC<Props> = ({ setOpen }) => {
                   <div
                     key={point.id}
                     className={`border flex items-start p-3 rounded-[15px] cursor-pointer ${
-                      activePoint && activePoint.id == point.id
+                      activePoint && activePoint == point.id
                         ? 'border-yellow'
                         : 'border-gray-400'
                     }`}
-                    onClick={() => setActivePoint(point.id)}
+                    onClick={() => choosePickupPoint(point.id)}
                   >
                     <div
                       className={`border mr-4 mt-1 rounded-full ${
-                        activePoint && activePoint.id == point.id
+                        activePoint && activePoint == point.id
                           ? 'border-yellow'
                           : 'border-gray-400'
                       }`}
                     >
                       <div
                         className={`h-3 m-1 rounded-full w-3 ${
-                          activePoint && activePoint.id == point.id
+                          activePoint && activePoint == point.id
                             ? 'bg-yellow'
                             : 'bg-gray-400'
                         }`}
                       ></div>
                     </div>
                     <div>
-                      <div className="font-bold">{point.label}</div>
+                      <div className="font-bold">{point.name}</div>
                       <div className="text-gray-400 text-sm">{point.desc}</div>
                     </div>
                   </div>
@@ -844,9 +718,7 @@ const LocationTabs: FC<Props> = ({ setOpen }) => {
                 activePoint ? 'bg-yellow' : 'bg-gray-200'
               } font-bold px-12 py-3 rounded-full text-[18px] text-white outline-none focus:outline-none`}
               disabled={!activePoint}
-              onClick={() => {
-                // console.log('davr')
-              }}
+              onClick={submitPickup}
             >
               Подтвердить
             </button>
