@@ -10,6 +10,7 @@ const SetLocation: FC = () => {
   const [open, setOpen] = useState(false)
   const { locationData } = useUI()
   const cancelButtonRef = useRef(null)
+
   return (
     <>
       <button
@@ -63,7 +64,7 @@ const SetLocation: FC = () => {
               leaveFrom="opacity-100 translate-y-0 sm:scale-100"
               leaveTo="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
             >
-              <div className="inline-block align-bottom bg-white p-10 rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle container sm:w-full">
+              <div className="inline-block align-bottom bg-white p-10 rounded-lg text-left shadow-xl transform transition-all sm:my-8 sm:align-middle container sm:w-full">
                 <LocationTabs setOpen={setOpen} />
               </div>
             </Transition.Child>

@@ -1,7 +1,7 @@
 import { Layout } from '@components/common'
-import Orders from '@components_new/order/Orders'
 import commerce from '@lib/api/commerce'
 import { GetServerSidePropsContext } from 'next'
+import dynamic from 'next/dynamic'
 
 export async function getServerSideProps({
   preview,
@@ -37,10 +37,14 @@ export async function getServerSideProps({
   }
 }
 
+const OrderWithNoSSR = dynamic(() => import('@components_new/order/Orders'), {
+  ssr: false,
+})
+
 export default function Order() {
   return (
     <div>
-      <Orders  />
+      <OrderWithNoSSR />
     </div>
   )
 }

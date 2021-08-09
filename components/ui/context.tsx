@@ -3,21 +3,22 @@ import React, { FC, useCallback, useMemo } from 'react'
 let userData: any = null
 
 let locationData: any = null
-
 if (typeof window !== 'undefined') {
   userData = localStorage.getItem('mijoz')
   try {
     userData = Buffer.from(userData, 'base64')
-    userData = userData.toString('ascii')
+    userData = userData.toString()
     userData = JSON.parse(userData)
   } catch (e) {}
 
   locationData = sessionStorage.getItem('yetkazish')
   try {
     locationData = Buffer.from(locationData, 'base64')
-    locationData = locationData.toString('ascii')
+    locationData = locationData.toString()
     locationData = JSON.parse(locationData)
-  } catch (e) {}
+  } catch (e) {
+    console.log(e)
+  }
 }
 
 interface AnyObject {

@@ -215,7 +215,7 @@ const LocationTabs: FC<Props> = ({ setOpen }) => {
       ...locationData,
       location: [selection.coordinates.lat, selection.coordinates.long],
     })
-    setValue('address', selection.formatted)
+    setValue('address', selection.title)
   }
 
   const clickOnMap = (event: any) => {
@@ -428,6 +428,7 @@ const LocationTabs: FC<Props> = ({ setOpen }) => {
                 <Downshift
                   onChange={(selection) => setSelectedAddress(selection)}
                   itemToString={(item) => (item ? item.formatted : '')}
+                  initialInputValue={locationData?.address || ''}
                 >
                   {({
                     getInputProps,
