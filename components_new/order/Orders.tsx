@@ -1,10 +1,23 @@
 import { XIcon } from '@heroicons/react/outline'
-import { useForm } from 'react-hook-form'
+import { useForm, Controller } from 'react-hook-form'
 import useTranslation from 'next-translate/useTranslation'
 import { useUI } from '@components/ui/context'
-import React, { Fragment, useState, useMemo, FC, memo, useRef } from 'react'
+import React, {
+  Fragment,
+  useState,
+  useMemo,
+  FC,
+  memo,
+  useRef,
+  useEffect,
+  useCallback,
+} from 'react'
 import { Menu, Transition, Disclosure, Dialog } from '@headlessui/react'
-import { ChevronDownIcon, ChevronRightIcon } from '@heroicons/react/solid'
+import {
+  CheckIcon,
+  ChevronDownIcon,
+  ChevronRightIcon,
+} from '@heroicons/react/solid'
 import {
   YMaps,
   Map,
@@ -16,6 +29,14 @@ import {
 import Image from 'next/image'
 import { useCart } from '@framework/cart'
 import currency from 'currency.js'
+import getConfig from 'next/config'
+import axios from 'axios'
+import { debounce } from 'lodash'
+import Downshift from 'downshift'
+import Select from '@components_new/utils/Select'
+import { toast } from 'react-toastify'
+
+const { publicRuntimeConfig } = getConfig()
 
 // interface LocationTabProps {
 //   setOpen: Dispatch<SetStateAction<boolean>>
@@ -36,39 +57,87 @@ type FormData = {
   card_month: string
   holder_name: string
   cvv_code: string
+  deliveryDay: string
+  deliveryTime: string
 }
+interface SelectItem {
+  value: string
+  label: string
+}
+
+const dayOptions = [
+  {
+    value: 'today',
+    label: 'Сегодня',
+  },
+  {
+    value: 'tomorrow',
+    label: 'Завтра',
+  },
+]
+
+const deliveryTimeOptions = [] as SelectItem[]
+
+const zeroPad = (num: number, places: number) =>
+  String(num).padStart(places, '0')
+
+Array.from(Array(24).keys()).map((item: number) => {
+  let val = `${zeroPad(item, 2)}:${zeroPad(0, 2)}`
+  deliveryTimeOptions.push({
+    value: val,
+    label: val,
+  })
+  val = `${zeroPad(item, 2)}:${zeroPad(30, 2)}`
+  deliveryTimeOptions.push({
+    value: val,
+    label: val,
+  })
+
+  return item
+})
+
 const Orders: FC = () => {
   //Contacts
   const { t: tr } = useTranslation('common')
-  const { user, setUserData } = useUI()
+  const { user, setUserData, locationData, setLocationData } = useUI()
   let cartId: string | null = null
-  if (typeof window !== undefined) {
+  if (typeof window !== 'undefined') {
     cartId = localStorage.getItem('basketId')
   }
 
   const { data, isLoading, isEmpty, mutate } = useCart({
     cartId,
   })
-  const { register, handleSubmit, reset, watch, formState, getValues } =
-    useForm<FormData>({
-      mode: 'onChange',
-      defaultValues: {
-        name: user?.user?.name,
-        phone: user?.user?.phone,
-        email: '',
-        address: '',
-        flat: '',
-        house: '',
-        entrance: '',
-        door_code: '',
-        change: '',
-        pay_comment: '',
-        card_number: '',
-        card_month: '',
-        holder_name: '',
-        cvv_code: '',
-      },
-    })
+  const {
+    register,
+    handleSubmit,
+    reset,
+    watch,
+    formState,
+    setValue,
+    getValues,
+    control,
+  } = useForm<FormData>({
+    mode: 'onChange',
+    defaultValues: {
+      name: user?.user?.name,
+      phone: user?.user?.phone,
+      email: '',
+      address: locationData?.address || '',
+      flat: locationData?.flat || '',
+      house: locationData?.house || '',
+      entrance: locationData?.entrance || '',
+      door_code: locationData?.door_code || '',
+      change: '',
+      pay_comment: '',
+      card_number: '',
+      card_month: '',
+      holder_name: '',
+      cvv_code: '',
+      deliveryDay: '',
+      deliveryTime: '',
+    },
+  })
 
   const onSubmit = (data: any) => console.log(JSON.stringify(data))
 
@@ -84,7 +153,10 @@ const Orders: FC = () => {
     reset(newFields)
   }
   //Orders
-  const [tabIndex, setTabIndex] = useState(1)
+
+  const [tabIndex, setTabIndex] = useState(
+    locationData?.deliveryType || 'deliver'
+  )
   const [pickupIndex, setPickupIndex] = useState(1)
   const [cities, setCities] = useState([
     {
@@ -109,193 +181,84 @@ const Orders: FC = () => {
       mapZoom: 13.06,
     },
   ])
-  const [pickupPoints, setPickupPoint] = useState([
-    {
-      id: '8fbb73fa-5b54-e46e-016f-39e9c456cf69',
-      label: 'Эко парк',
-      active: false,
-      mapCenter: [41.311801, 69.2937486],
-      desc: `Ц-1 Экопарк
-📱 712051111
-Режим работы:
-10:00 – 22:00
-М. Улугбекский р. Ц-1 Узбекистон овози 49
-Ориентир: Экопарк, школа №64
-🚗 доставка
-🅿️ парковка`,
-      mapZoom: 11.76,
-    },
-    {
-      id: 'b49bc4a2-b9ac-6869-0172-959449754927',
-      label: 'Ойбек',
-      active: false,
-      mapCenter: [41.295713, 69.277302],
-      desc: `Ойбек
-📱 712051111
-Режим работы:
-10:00 – 03:00
-Мирабадский р. Ойбек 49
-🚗 доставка
-🅿️ парковка`,
-      mapZoom: 12.73,
-    },
-    {
-      id: '8fbb73fa-5b54-e46e-016f-39f4c194a71b',
-      label: 'Parus',
-      active: false,
-      mapCenter: [41.2919486, 69.2111247],
-      desc: `ТРЦ Parus
-📱 712051111
-Режим работы:
-10:00 – 22:00
-Чиланзарский р-н, Катартал 60, дом 2
-Ориентир: ТРЦ Parus 4-этаж
-Имеются:
-🚗 доставка
-🏰 детская площадка
-🅿️ парковка`,
-      mapZoom: 13.06,
-    },
-    {
-      id: 'd40b7507-18e0-de80-0176-1021c8785833',
-      label: 'Samarqand Darvoza',
-      active: false,
-      mapCenter: [41.316332, 69.231129],
-      desc: `ТРЦ Samarqand Darvoza
-📱 712051111
-Режим работы:
-10:00 – 22:00
-Шайхантаурский р. Коратош 5А
-🚗 доставка
-🏰 детская площадка
-🅿️ парковка`,
-      mapZoom: 13.06,
-    },
-    {
-      id: '796859c4-0dbb-e58b-0174-5e024e94adf8',
-      label: 'Сергели',
-      active: false,
-      mapCenter: [41.222536, 69.2249],
-      desc: `Сергели
-📱 712051111
-Режим работы:
-10:00 – 22:00
-Сергелийский р. Янги Сергели 11
-🚗 доставка
-🏰 детская площадка
-🅿️ парковка`,
-      mapZoom: 13.06,
-    },
-    {
-      id: '8fbb73fa-5b54-e46e-016f-3c2c544b153e',
-      label: 'Буюк ипак йули',
-      active: false,
-      mapCenter: [41.3272276, 69.3393392],
-      desc: `Буюк ипак йули
-📱 712051111
-Режим работы:
-10:00 – 22:00
-М. Улугбекский р. Буюк ипак йули 154
-🚗 доставка
-🏰 детская площадка
-🅿️ парковка`,
-      mapZoom: 13.06,
-    },
-    {
-      id: '8fbb73fa-5b54-e46e-016f-39c03efeb44d',
-      label: 'O’zbegim',
-      active: false,
-      mapCenter: [40.7863073, 72.346673],
-      desc: `Андижан ТРЦ O’zbegim
-📱 979996060
-Режим работы:
-10:00 – 22:00
-г. Андижан, проспект Чулпон 10
-Ориентир:
-ТРЦ O’zbegim
-🚗 доставка
-🏰 детская площадка
-🅿️ парковка`,
-      mapZoom: 13.06,
-    },
-    {
-      id: '26639a16-7813-3e88-0178-74cefbe829bd',
-      label: 'Compas',
-      active: false,
-      mapCenter: [41.2389984, 69.3286705],
-      desc: ` ТРЦ Compass
-📱 712051111
-Режим работы:
-10:00 – 22:00
-Бектемирский р. Пересечение улицы Фаргона йули и ТКАД
-Ориентир: Мост Куйлюк
-🚗 доставка
-🏰 детская площадка
-🅿️ парковка`,
-      mapZoom: 13.06,
-    },
-    {
-      id: '0ee0d30c-0662-e682-0174-90531d2bc636',
-      label: 'Nukus Asia.uz',
-      active: false,
-      mapCenter: [41.350566, 69.217489],
-      desc: `ТРЦ Nukus Asia.uz
-📱 712051111
-Режим работы:
-10:00 – 22:00
-Алмазарский р. Шифокорлар 8
-Ориентир: Asia.uz Nukus
-🚗 доставка
-🏰 детская площадка
-🅿️парковка`,
-      mapZoom: 13.06,
-    },
-    {
-      id: '8fbb73fa-5b54-e46e-016f-39c9927685e2',
-      label: 'Миллий тикланиш',
-      active: false,
-      mapCenter: [40.764064, 72.355316],
-      desc: `Миллий тикланиш
-📱 979996060
-Режим работы:
-10:00 – 03:00
-г. Андижан, Миллий тикланиш 26
-🚗 доставка
-🅿️ парковка`,
-      mapZoom: 13.06,
-    },
-    {
-      id: '0d562a04-0abe-72bc-0171-1ccd85df7a57',
-      label: 'Самарканд',
-      active: false,
-      mapCenter: [39.644253, 66.9537613],
-      desc: `Самарканд
-📱 977143315
-Режим работы:
-10:00 – 03:00
-г. Самарканд, ул. О. Махмудова
-🚗 доставка
-🅿️ парковка`,
-      mapZoom: 13.06,
-    },
-    {
-      id: '0e1f7fcc-1db0-a410-0173-236144e3b4e4',
-      label: 'Коканд',
-      active: false,
-      mapCenter: [40.537005, 70.93409],
-      desc: `г. Коканд
-📱 907034040
-Режим работы:
-10:00 – 03:00
-г. Коканд, Истиклол 10
-🚗 доставка
-🅿️ парковка`,
-      mapZoom: 13.06,
-    },
-  ])
+  const [pickupPoints, setPickupPoint] = useState([] as any[])
+  const [activePoint, setActivePoint] = useState(
+    (locationData ? locationData.terminal_id : null) as number | null
+  )
+
+  const [geoSuggestions, setGeoSuggestions] = useState([])
+  const [selectedCoordinates, setSelectedCoordinates] = useState(
+    locationData && locationData.location
+      ? [
+          {
+            coordinates: {
+              lat: locationData.location[0],
+              long: locationData.location[1],
+            },
+            key: `${locationData.location[0]}${locationData.location[1]}`,
+          },
+        ]
+      : ([] as any)
+  )
 
   const activeLabel = cities.find((item) => item.active)?.label
   const activeCity = cities.find((item) => item.active)
+
+  const [mapCenter, setMapCenter] = useState(
+    (locationData?.location || activeCity?.mapCenter) as number[]
+  )
+  const [mapZoom, setMapZoom] = useState(
+    ((locationData?.location ? 17 : 10) || activeCity?.mapZoom) as number
+  )
+
+  const [configData, setConfigData] = useState({} as any)
+  const fetchConfig = async () => {
+    let configData
+    if (!sessionStorage.getItem('configData')) {
+      let { data } = await axios.get(
+        `${publicRuntimeConfig.apiUrl}/api/configs/public`
+      )
+      configData = data.data
+      sessionStorage.setItem('configData', data.data)
+    } else {
+      configData = sessionStorage.getItem('configData')
+    }
+
+    try {
+      configData = Buffer.from(configData, 'base64')
+      configData = configData.toString('ascii')
+      configData = JSON.parse(configData)
+      setConfigData(configData)
+    } catch (e) {}
+  }
+
+  useEffect(() => {
+    fetchConfig()
+    if (locationData && locationData.deliveryType == 'pickup') {
+      loadPickupItems()
+    }
+    return
+  }, [locationData])
+
+  const addressInputChangeHandler = async (event: any) => {
+    if (!configData) {
+      return []
+    }
+
+    if (!configData.yandexGeoKey) {
+      return []
+    }
+    const { data: getCodeData } = await axios.get(
+      `/api/geocode?text=${encodeURI(event.target.value)}`
+    )
+
+    setGeoSuggestions(getCodeData)
+  }
+
+  const debouncedAddressInputChangeHandler = useCallback(
+    debounce(addressInputChangeHandler, 300),
+    [configData]
+  )
 
   const setActive = (id: string) => {
     setCities(
@@ -310,32 +273,52 @@ const Orders: FC = () => {
     )
   }
 
-  const setActivePoint = (id: string) => {
-    setPickupPoint(
-      pickupPoints.map((item) => {
-        if (item.id == id) {
-          item.active = true
-        } else {
-          item.active = false
-        }
-        return item
-      })
-    )
+  const setSelectedAddress = (selection: any) => {
+    setMapCenter([selection.coordinates.lat, selection.coordinates.long])
+    setSelectedCoordinates([
+      {
+        ...selection,
+        key: `${selection.coordinates.lat}${selection.coordinates.long}`,
+      },
+    ])
+    setMapZoom(17)
+    setLocationData({
+      ...locationData,
+      location: [selection.coordinates.lat, selection.coordinates.long],
+    })
+    setValue('address', selection.title)
+    searchTerminal()
   }
-  const activePoint = pickupPoints.find((item) => item.active)
+
+  const clickOnMap = (event: any) => {
+    const coords = event.get('coords')
+    setMapCenter(coords)
+    setSelectedCoordinates([
+      {
+        key: `${coords[0]}${coords[1]}`,
+        coordinates: {
+          lat: coords[0],
+          long: coords[1],
+        },
+      },
+    ])
+    setMapZoom(17)
+    setLocationData({ ...locationData, location: coords })
+    searchTerminal()
+  }
 
   const mapState = useMemo<MapState>(() => {
     const baseState: MapStateBase = {
       controls: ['zoomControl', 'fullscreenControl', 'geolocationControl'],
     }
     const mapStateCenter: MapStateCenter = {
-      center: activeCity?.mapCenter || [],
-      zoom: activeCity?.mapZoom || 10,
+      center: mapCenter || [],
+      zoom: mapZoom || 10,
     }
 
     const res: MapState = Object.assign({}, baseState, mapStateCenter)
     return res
-  }, [activeCity?.mapCenter, activeCity?.mapZoom])
+  }, [mapCenter, mapZoom])
   // time of delivery
   const [deliveryActive, setDeliveryActive] = useState(1)
   // pay
@@ -367,6 +350,74 @@ const Orders: FC = () => {
     setIsShowPrivacy(false)
   }
   let privacyButtonRef = useRef(null)
+
+  const changeTabIndex = async (index: string) => {
+    setLocationData({ ...locationData, deliveryType: index })
+
+    if (index == 'pickup') {
+      await loadPickupItems()
+    }
+
+    setTabIndex(index)
+  }
+
+  const loadPickupItems = async () => {
+    const { data } = await axios.get(
+      `${publicRuntimeConfig.apiUrl}/api/terminals/pickup`
+    )
+    let res: any[] = []
+    data.data.map((item: any) => {
+      if (item.latitude) {
+        res.push(item)
+      }
+    })
+    setPickupPoint(res)
+  }
+
+  const choosePickupPoint = (pointId: number) => {
+    setActivePoint(pointId)
+    setLocationData({
+      ...locationData,
+      terminal_id: pointId,
+    })
+  }
+
+  const searchTerminal = async () => {
+    if (!locationData || !locationData.location) {
+      toast.warn('Не указан адрес или точка доставки', {
+        position: toast.POSITION.BOTTOM_RIGHT,
+        hideProgressBar: true,
+      })
+      setLocationData({
+        ...locationData,
+        terminal_id: undefined,
+      })
+      return
+    }
+
+    const { data: terminalsData } = await axios.get(
+      `${publicRuntimeConfig.apiUrl}/api/terminals/find_nearest?lat=${locationData.location[0]}&lon=${locationData.location[1]}`
+    )
+
+    if (terminalsData.data && !terminalsData.data.length) {
+      toast.warn('Ресторан не найден', {
+        position: toast.POSITION.BOTTOM_RIGHT,
+        hideProgressBar: true,
+      })
+      setLocationData({
+        ...locationData,
+        terminal_id: undefined,
+      })
+      return
+    }
+
+    if (terminalsData.data) {
+      setLocationData({
+        ...locationData,
+        terminal_id: terminalsData.data[0].id,
+      })
+    }
+  }
 
   return (
     <>
@@ -449,23 +500,25 @@ const Orders: FC = () => {
           <div className="bg-gray-100 flex  w-full rounded-full">
             <button
               className={`${
-                tabIndex == 1 ? 'bg-yellow text-white' : ' text-gray-400'
-              } flex-1 font-bold  text-[16px] rounded-full outline-none focus:outline-none  h-11`}
-              onClick={() => setTabIndex(1)}
+                tabIndex == 'deliver'
+                  ? 'bg-yellow text-white'
+                  : ' text-gray-400'
+              } flex-1 font-bold py-3 text-[18px] rounded-full outline-none focus:outline-none`}
+              onClick={() => changeTabIndex('deliver')}
             >
               Доставка
             </button>
             <button
               className={`${
-                tabIndex == 2 ? 'bg-yellow text-white' : ' text-gray-400'
-              } flex-1 font-bold  text-[16px] rounded-full outline-none focus:outline-none  h-11`}
-              onClick={() => setTabIndex(2)}
+                tabIndex == 'pickup' ? 'bg-yellow text-white' : ' text-gray-400'
+              } flex-1 font-bold py-3 text-[18px] rounded-full outline-none focus:outline-none`}
+              onClick={() => changeTabIndex('pickup')}
             >
               Самовывоз
             </button>
           </div>
         </div>
-        {tabIndex == 1 && (
+        {tabIndex == 'deliver' && (
           <div className="bg-white p-10 rounded-2xl">
             <div className="flex justify-between">
               <div className="text-gray-400 font-bold text-lg">
@@ -517,13 +570,33 @@ const Orders: FC = () => {
                   <Map
                     state={mapState}
                     width="100%"
-                    height="520px"
+                    height="530px"
+                    onClick={clickOnMap}
                     modules={[
                       'control.ZoomControl',
                       'control.FullscreenControl',
                       'control.GeolocationControl',
                     ]}
-                  />
+                  >
+                    {selectedCoordinates.map((item: any, index: number) => (
+                      <Placemark
+                        modules={['geoObject.addon.balloon']}
+                        defaultGeometry={[
+                          item?.coordinates?.lat,
+                          item?.coordinates?.long,
+                        ]}
+                        geomerty={[
+                          item?.coordinates?.lat,
+                          item?.coordinates?.long,
+                        ]}
+                        key={item.key}
+                        defaultOptions={{
+                          iconLayout: 'default#image',
+                          iconImageHref: '/map_placemark.png',
+                        }}
+                      />
+                    ))}
+                  </Map>
                 </div>
               </YMaps>
             </div>
@@ -532,24 +605,95 @@ const Orders: FC = () => {
                 <div className="font-bold text-lg">Адрес</div>
                 <div className="mt-3 space-y-6">
                   <div className="flex justify-between w-full">
-                    <input
-                      type="text"
-                      {...register('address')}
-                      placeholder="Адрес"
-                      className="bg-gray-100 px-8 py-2 rounded-full w-[560px] outline-none focus:outline-none "
-                    />
-                    <input
-                      type="text"
-                      {...register('flat')}
-                      placeholder="Квартира"
-                      className="bg-gray-100 px-8 py-2 rounded-full w-64  outline-none focus:outline-none"
-                    />
-                    <input
-                      type="text"
-                      {...register('house')}
-                      placeholder="Дом"
-                      className="bg-gray-100 px-8 py-2 rounded-full w-56 "
-                    />
+                    <Downshift
+                      onChange={(selection) => setSelectedAddress(selection)}
+                      itemToString={(item) => (item ? item.formatted : '')}
+                      initialInputValue={locationData?.address || ''}
+                    >
+                      {({
+                        getInputProps,
+                        getItemProps,
+                        getLabelProps,
+                        getMenuProps,
+                        isOpen,
+                        inputValue,
+                        highlightedIndex,
+                        selectedItem,
+                        getRootProps,
+                      }) => (
+                        <>
+                          <div
+                            className="relative w-7/12"
+                            {...getRootProps(undefined, {
+                              suppressRefError: true,
+                            })}
+                          >
+                            <input
+                              type="text"
+                              {...register('address')}
+                              {...getInputProps({
+                                onChange: debouncedAddressInputChangeHandler,
+                              })}
+                              placeholder="Адрес"
+                              className="bg-gray-100 px-8 py-3 rounded-full w-full outline-none focus:outline-none"
+                            />
+                            <ul
+                              {...getMenuProps()}
+                              className="absolute w-full z-[1000] rounded-[15px] shadow-lg"
+                            >
+                              {isOpen
+                                ? geoSuggestions.map(
+                                    (item: any, index: number) => (
+                                      <li
+                                        {...getItemProps({
+                                          key: index,
+                                          index,
+                                          item,
+                                          className: `py-2 px-4 flex items-center ${
+                                            highlightedIndex == index
+                                              ? 'bg-gray-100'
+                                              : 'bg-white'
+                                          }`,
+                                        })}
+                                      >
+                                        <CheckIcon
+                                          className={`w-5 text-yellow font-bold mr-2 ${
+                                            highlightedIndex == index
+                                              ? ''
+                                              : 'invisible'
+                                          }`}
+                                        />
+                                        <div>
+                                          <div>{item.title}</div>
+                                          <div className="text-sm">
+                                            {item.description}
+                                          </div>
+                                        </div>
+                                      </li>
+                                    )
+                                  )
+                                : null}
+                            </ul>
+                          </div>
+                        </>
+                      )}
+                    </Downshift>
+                    <div className="mx-5 w-3/12">
+                      <input
+                        type="text"
+                        {...register('flat')}
+                        placeholder="Квартира"
+                        className="bg-gray-100 px-8 py-3 rounded-full w-full outline-none focus:outline-none"
+                      />
+                    </div>
+                    <div className="w-2/12">
+                      <input
+                        type="text"
+                        {...register('house')}
+                        placeholder="Дом"
+                        className="bg-gray-100 px-8 py-3 rounded-full w-full"
+                      />
+                    </div>
                   </div>
                 </div>
                 <div className="mt-5">
@@ -605,7 +749,7 @@ const Orders: FC = () => {
             </div>
           </div>
         )}
-        {tabIndex == 2 && (
+        {tabIndex == 'pickup' && (
           <div className="bg-white p-10 rounded-2xl">
             <div>
               <div className="font-bold text-[18px] text-gray-400">
@@ -666,66 +810,62 @@ const Orders: FC = () => {
                         ]}
                       >
                         {pickupPoints.map((point) => (
-                          <div>
-                            <Placemark
-                              modules={['geoObject.addon.balloon']}
-                              defaultGeometry={point.mapCenter}
-                              key={point.id}
-                              onClick={() => setActivePoint(point.id)}
-                              options={{
-                                iconColor:
-                                  activePoint && activePoint.id == point.id
-                                    ? '#FAAF04'
-                                    : '#1E98FF',
-                                iconLayout: 'default#image',
-                                iconImageHref: '/assets/locationLogo.png',
-                                iconImageSize: [40, 40],
-                              }}
-                            />
-                          </div>
+                          <Placemark
+                            modules={['geoObject.addon.balloon']}
+                            defaultGeometry={[point.latitude, point.longitude]}
+                            key={point.id}
+                            onClick={() => choosePickupPoint(point.id)}
+                            options={{
+                              iconColor:
+                                activePoint && activePoint == point.id
+                                  ? '#FAAF04'
+                                  : '#1E98FF',
+                            }}
+                            properties={{
+                              balloonContentBody: `<b>${point.name}</b> <br />
+                          ${point.desc}
+                          `,
+                            }}
+                            defaultOptions={{
+                              iconLayout: 'default#image',
+                              iconImageHref: '/map_placemark.png',
+                            }}
+                          />
                         ))}
                       </Map>
                     </div>
                   </YMaps>
-                  {activePoint && (
-                    <div className="w-72">
-                      <div className="font-bold text-base">
-                        {activePoint.label}
-                      </div>
-                      <div>{activePoint.desc}</div>
-                    </div>
-                  )}
                 </>
               )}
               {pickupIndex == 2 && (
-                <div className="space-y-3">
+                <div className="gap-5 grid grid-cols-2">
                   {pickupPoints.map((point) => (
                     <div
                       key={point.id}
                       className={`border flex items-start p-3 rounded-[15px] cursor-pointer ${
-                        activePoint && activePoint.id == point.id
+                        activePoint && activePoint == point.id
                           ? 'border-yellow'
                           : 'border-gray-400'
                       }`}
-                      onClick={() => setActivePoint(point.id)}
+                      onClick={() => choosePickupPoint(point.id)}
                     >
                       <div
                         className={`border mr-4 mt-1 rounded-full ${
-                          activePoint && activePoint.id == point.id
+                          activePoint && activePoint == point.id
                             ? 'border-yellow'
                             : 'border-gray-400'
                         }`}
                       >
                         <div
                           className={`h-3 m-1 rounded-full w-3 ${
-                            activePoint && activePoint.id == point.id
+                            activePoint && activePoint == point.id
                               ? 'bg-yellow'
                               : 'bg-gray-400'
                           }`}
                         ></div>
                       </div>
                       <div>
-                        <div className="font-bold">{point.label}</div>
+                        <div className="font-bold">{point.name}</div>
                         <div className="text-gray-400 text-sm">
                           {point.desc}
                         </div>
@@ -746,9 +886,9 @@ const Orders: FC = () => {
         <div>
           <button
             className={`${
-              deliveryActive !== 1
-                ? 'text-gray-400 bg-gray-100'
-                : 'bg-yellow text-white'
+              deliveryActive == 1
+                ? 'bg-yellow text-white'
+                : 'text-gray-400 bg-gray-100'
             } flex-1 font-bold  rounded-full outline-none focus:outline-none  h-11 md:w-44`}
             onClick={() => setDeliveryActive(1)}
           >
@@ -756,31 +896,42 @@ const Orders: FC = () => {
           </button>
           <button
             className={`${
-              deliveryActive !== 2
-                ? 'text-gray-400 bg-gray-100'
-                : 'bg-yellow text-white'
+              deliveryActive == 2
+                ? 'bg-yellow text-white'
+                : 'text-gray-400 bg-gray-100'
             } flex-1 font-bold  rounded-full outline-none focus:outline-none  h-11 md:w-44 ml-5`}
             onClick={() => setDeliveryActive(2)}
           >
             Позже
           </button>
         </div>
-        <div className="mt-8">
-          <Menu>
-            <Menu.Button className="flex-1 font-bold  rounded-full outline-none focus:outline-none  h-11 md:w-44 bg-gray-100">
-              Сегодня
-            </Menu.Button>
-            <Menu.Items>
-              <Menu.Item>{({ active }) => <button>Сегодня</button>}</Menu.Item>
-            </Menu.Items>
-            <Menu.Button className="flex-1 font-bold  rounded-full outline-none focus:outline-none  h-11 md:w-44 bg-gray-100  ml-5">
-              Время
-            </Menu.Button>
-            <Menu.Items>
-              <Menu.Item>{({ active }) => <button>Сегодня</button>}</Menu.Item>
-            </Menu.Items>
-          </Menu>
-        </div>
+        {deliveryActive == 2 && (
+          <div className="mt-8 flex">
+            <Controller
+              render={({ field: { onChange } }) => (
+                <Select
+                  items={dayOptions}
+                  placeholder="Сегодня"
+                  onChange={(e: any) => onChange(e)}
+                />
+              )}
+              name="deliveryDay"
+              control={control}
+            />
+            <Controller
+              render={({ field: { onChange } }) => (
+                <Select
+                  items={deliveryTimeOptions}
+                  placeholder="Время"
+                  onChange={(e: any) => onChange(e)}
+                  className="ml-5"
+                />
+              )}
+              name="deliveryTime"
+              control={control}
+            />
+          </div>
+        )}
       </div>
       {/* pay */}
       <div className="w-full bg-white mb-5 rounded-2xl p-10">
@@ -796,7 +947,7 @@ const Orders: FC = () => {
           >
             Наличными
           </button>
-          <button
+          {/* <button
             className={`${
               openTab !== 2
                 ? 'text-gray-400 bg-gray-100'
@@ -805,7 +956,7 @@ const Orders: FC = () => {
             onClick={() => setOpenTab(2)}
           >
             Картой
-          </button>
+          </button> */}
           <button
             className={`${
               openTab !== 3
@@ -1359,7 +1510,12 @@ const Orders: FC = () => {
           <button className="text-xl text-gray-400 bg-gray-200 flex h-12 items-center justify-between px-12 rounded-full w-80">
             <img src="/left.png" /> Вернуться в корзину
           </button>
-          <button className="text-xl text-white bg-yellow flex h-12 items-center justify-evenly rounded-full w-80">
+          <button
+            className={`text-xl text-white bg-yellow flex h-12 items-center justify-evenly rounded-full w-80 ${
+              !locationData?.terminal_id ? 'opacity-25 cursor-not-allowed' : ''
+            }`}
+            disabled={!locationData?.terminal_id}
+          >
             Оплатить
             <img src="/right.png" />
           </button>
