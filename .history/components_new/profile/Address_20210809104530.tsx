@@ -22,16 +22,20 @@ const Address: FC = () => {
     door_code: string
     addressType: string
   }
-  const { register } = useForm<FormData>({
-    defaultValues: {
-      street: '',
-      house: '',
-      flat: '',
-      floor: '',
-      door_code: '',
-      addressType: '',
-    },
-  })
+  const { register, handleSubmit, reset, watch, formState, getValues } =
+    useForm<FormData>({
+      mode: 'onChange',
+      defaultValues: {
+        street: '',
+        house: '',
+        flat: '',
+        floor: '',
+        door_code: '',
+        addressType: '',
+      },
+    })
+
+  const onSubmit = (data: any) => console.log(JSON.stringify(data))
 
   return (
     <>
@@ -54,9 +58,7 @@ const Address: FC = () => {
           <div className="mb-5">
             <div className="border items-center justify-between p-10 rounded-2xl text-xl">
               <div className="flex justify-between">
-                <div className="text-gray-400 text-xl">
-                  {tr('profile_address_add_address')}
-                </div>
+                <div className="text-gray-400 text-xl">Добавить адрес</div>
                 {open ? (
                   <Disclosure.Button className="text-gray-400 text-sm rounded-full bg-gray-100 align-items-center text-center w-28 py-1">
                     {tr('profile_address_cancel')}
@@ -73,9 +75,7 @@ const Address: FC = () => {
                     <div className="mt-7">
                       <div className="flex justify-between">
                         <div className="w-80">
-                          <label className="text-sm text-gray-400">
-                            {tr('street')}
-                          </label>
+                          <label className="text-sm text-gray-400">Улица</label>
                           <input
                             type="text"
                             {...register('street')}
@@ -83,9 +83,7 @@ const Address: FC = () => {
                           />
                         </div>
                         <div className="w-80">
-                          <label className="text-sm text-gray-400">
-                            {tr('profile_address_home')}
-                          </label>
+                          <label className="text-sm text-gray-400">Дом</label>
                           <input
                             type="text"
                             {...register('house')}
@@ -94,7 +92,7 @@ const Address: FC = () => {
                         </div>
                         <div className="w-80">
                           <label className="text-sm text-gray-400">
-                            {tr('flat')}
+                            Квартира
                           </label>
                           <input
                             type="text"
@@ -105,9 +103,7 @@ const Address: FC = () => {
                       </div>
                       <div className="flex justify-between mt-7">
                         <div className="w-80">
-                          <label className="text-sm text-gray-400">
-                            {tr('floor')}
-                          </label>
+                          <label className="text-sm text-gray-400">Этаж</label>
                           <input
                             type="text"
                             {...register('floor')}
@@ -116,7 +112,7 @@ const Address: FC = () => {
                         </div>
                         <div className="w-80">
                           <label className="text-sm text-gray-400">
-                            {tr('code_on_doors')}
+                            Код на двери
                           </label>
                           <input
                             type="text"
@@ -126,18 +122,18 @@ const Address: FC = () => {
                         </div>
                         <div className="w-80">
                           <label className="text-sm text-gray-400">
-                            {tr('address_name')}
+                            Название адреса
                           </label>
                           <input
                             type="text"
                             {...register('addressType')}
                             className="bg-gray-100 px-8 py-2 rounded-full outline-none focus:outline-none w-full mt-2"
                           />
-                          <button className="bg-yellow rounded-full w-80 py-2 mt-10 text-white">
-                            {tr('save')}
-                          </button>
                         </div>
                       </div>
+                      <button className="bg-yellow float-right">
+                        {tr('save')}
+                      </button>
                     </div>
                   </div>
                 </Disclosure.Panel>
