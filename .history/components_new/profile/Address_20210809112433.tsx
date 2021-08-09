@@ -22,16 +22,20 @@ const Address: FC = () => {
     door_code: string
     addressType: string
   }
-  const { register } = useForm<FormData>({
-    defaultValues: {
-      street: '',
-      house: '',
-      flat: '',
-      floor: '',
-      door_code: '',
-      addressType: '',
-    },
-  })
+  const { register} =
+    useForm<FormData>({
+      mode: 'onChange',
+      defaultValues: {
+        street: '',
+        house: '',
+        flat: '',
+        floor: '',
+        door_code: '',
+        addressType: '',
+      },
+    })
+
+  const onSubmit = (data: any) => console.log(JSON.stringify(data))
 
   return (
     <>
@@ -73,9 +77,7 @@ const Address: FC = () => {
                     <div className="mt-7">
                       <div className="flex justify-between">
                         <div className="w-80">
-                          <label className="text-sm text-gray-400">
-                            {tr('street')}
-                          </label>
+                          <label className="text-sm text-gray-400">{ tr("street")}</label>
                           <input
                             type="text"
                             {...register('street')}
@@ -94,7 +96,7 @@ const Address: FC = () => {
                         </div>
                         <div className="w-80">
                           <label className="text-sm text-gray-400">
-                            {tr('flat')}
+                            { tr("flat")}
                           </label>
                           <input
                             type="text"
@@ -105,9 +107,7 @@ const Address: FC = () => {
                       </div>
                       <div className="flex justify-between mt-7">
                         <div className="w-80">
-                          <label className="text-sm text-gray-400">
-                            {tr('floor')}
-                          </label>
+                          <label className="text-sm text-gray-400">{ tr("floor")}</label>
                           <input
                             type="text"
                             {...register('floor')}
@@ -116,7 +116,7 @@ const Address: FC = () => {
                         </div>
                         <div className="w-80">
                           <label className="text-sm text-gray-400">
-                            {tr('code_on_doors')}
+                            { tr("code_on_doors")}
                           </label>
                           <input
                             type="text"
@@ -126,7 +126,7 @@ const Address: FC = () => {
                         </div>
                         <div className="w-80">
                           <label className="text-sm text-gray-400">
-                            {tr('address_name')}
+                            { tr("address_name")}
                           </label>
                           <input
                             type="text"
