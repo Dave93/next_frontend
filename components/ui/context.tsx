@@ -43,6 +43,7 @@ export interface LocationData {
   deliveryType: 'pickup' | 'deliver'
   location?: number[]
   terminalId?: number
+  terminalData?: AnyObject
 }
 
 export interface State {

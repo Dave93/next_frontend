@@ -96,6 +96,8 @@ Array.from(Array(24).keys()).map((item: number) => {
   return item
 })
 
+const paymentTypes = ['payme', 'click', 'oson']
+
 const Orders: FC = () => {
   //Contacts
   const { t: tr } = useTranslation('common')
@@ -287,7 +289,14 @@ const Orders: FC = () => {
       location: [selection.coordinates.lat, selection.coordinates.long],
     })
     setValue('address', selection.title)
-    searchTerminal()
+    console.log({
+      ...locationData,
+      location: [selection.coordinates.lat, selection.coordinates.long],
+    })
+    searchTerminal({
+      ...locationData,
+      location: [selection.coordinates.lat, selection.coordinates.long],
+    })
   }
 
   const clickOnMap = (event: any) => {
@@ -304,7 +313,7 @@ const Orders: FC = () => {
     ])
     setMapZoom(17)
     setLocationData({ ...locationData, location: coords })
-    searchTerminal()
+    searchTerminal({ ...locationData, location: coords })
   }
 
   const mapState = useMemo<MapState>(() => {
@@ -382,7 +391,8 @@ const Orders: FC = () => {
     })
   }
 
-  const searchTerminal = async () => {
+  const searchTerminal = async (locationData: any = {}) => {
+    console.log(locationData)
     if (!locationData || !locationData.location) {
       toast.warn('Не указан адрес или точка доставки', {
         position: toast.POSITION.BOTTOM_RIGHT,
@@ -415,6 +425,7 @@ const Orders: FC = () => {
       setLocationData({
         ...locationData,
         terminal_id: terminalsData.data[0].id,
+        terminalData: terminalsData.data[0],
       })
     }
   }
@@ -934,7 +945,14 @@ const Orders: FC = () => {
         )}
       </div>
       {/* pay */}
-      <div className="w-full bg-white mb-5 rounded-2xl p-10">
+      <div className="w-full bg-white mb-5 rounded-2xl p-10 relative">
+        {!locationData?.terminal_id && (
+          <div className="absolute w-full h-full -ml-10 -mt-10 bg-opacity-60 bg-gray-100 z-20 items-center flex justify-around">
+            <div className="text-yellow font-bold text-2xl">
+              Не указан адрес или ближе к адресу ресторан не найден
+            </div>
+          </div>
+        )}
         <div className="text-lg mb-5 font-bold">{tr('order_pay')}</div>
         <div>
           <button
@@ -1127,37 +1145,30 @@ const Orders: FC = () => {
           </Disclosure>
         </div>
         <div className={openTab === 3 ? 'block' : 'hidden'} id="link3">
-          <div className="flex w-[340px] justify-between pt-8 items-center">
-            <label className="flex justify-around items-center w-24 h-24 p-3 rounded-2xl border-gray-200 border cursor-pointer">
-              <img src="/assets/payme.png" />
-              <input
-                type="radio"
-                defaultValue="payme"
-                checked={payType === 'payme'}
-                onChange={onValueChange}
-                className="hidden"
-              />
-            </label>
-            <label className="flex justify-around items-center w-24 h-24 p-3 rounded-2xl border-gray-200 border cursor-pointer">
-              <img src="/assets/click.png" />
-              <input
-                type="radio"
-                defaultValue="click"
-                onChange={onValueChange}
-                checked={payType === 'click'}
-                className="hidden"
-              />
-            </label>
-            <label className="flex justify-around items-center w-24 h-24 p-3 rounded-2xl border-gray-200 border cursor-pointer">
-              <img src="/assets/oson.png" />
-              <input
-                type="radio"
-                defaultValue="oson"
-                onChange={onValueChange}
-                checked={payType === 'oson'}
-                className="hidden"
-              />
-            </label>
+          <div className="justify-between pt-8 items-center grid grid-cols-4 w-6/12">
+            {locationData?.terminal_id &&
+              paymentTypes
+                .filter(
+                  (payment: string) =>
+                    !!locationData?.terminalData[`${payment}_active`]
+                )
+                .map((payment: string) => (
+                  <label
+                    className={`flex justify-around items-center w-24 h-24 p-3 rounded-2xl ${
+                      payType == payment ? 'border-yellow' : 'border-gray-200'
+                    } border cursor-pointer`}
+                    key={payment}
+                  >
+                    <img src={`/assets/${payment}.png`} />
+                    <input
+                      type="radio"
+                      defaultValue={payment}
+                      checked={payType === payment}
+                      onChange={onValueChange}
+                      className="hidden"
+                    />
+                  </label>
+                ))}
           </div>
           <Disclosure defaultOpen={true}>
             {({ open }) => (
