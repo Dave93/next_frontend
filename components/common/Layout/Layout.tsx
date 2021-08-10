@@ -74,7 +74,7 @@ const Layout: FC<Props> = ({
             )}
           </main>
           <footer className="text-white md:flex flex-col flex">
-            <div className="hidden md:flex">
+            <div className="hidden md:flex justify-center">
               <Image src="/assets/uzor.svg" width={1920} height={40} />
             </div>
             <div className="md:hidden flex">
