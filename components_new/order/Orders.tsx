@@ -409,8 +409,11 @@ const Orders: FC = () => {
       `${publicRuntimeConfig.apiUrl}/api/terminals/find_nearest?lat=${locationData.location[0]}&lon=${locationData.location[1]}`
     )
 
-    if (terminalsData.data && !terminalsData.data.length) {
-      toast.warn('Ресторан не найден', {
+    if (terminalsData.data && !terminalsData.data.items.length) {
+      toast.warn(
+        terminalsData.data.message
+          ? terminalsData.data.message
+          : 'Ресторан не найден',, {
         position: toast.POSITION.BOTTOM_RIGHT,
         hideProgressBar: true,
       })
@@ -424,8 +427,8 @@ const Orders: FC = () => {
     if (terminalsData.data) {
       setLocationData({
         ...locationData,
-        terminal_id: terminalsData.data[0].id,
-        terminalData: terminalsData.data[0],
+        terminal_id: terminalsData.data.items[0].id,
+        terminalData: terminalsData.data.items[0],
       })
     }
   }
