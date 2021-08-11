@@ -303,8 +303,8 @@ const LocationTabs: FC<Props> = ({ setOpen }) => {
         ...locationData,
         ...data,
         location: [
-          terminalsData.data[0].latitude,
-          terminalsData.data[0].longitude,
+          terminalsData.data.items[0].latitude,
+          terminalsData.data.items[0].longitude,
         ],
         terminal_id: terminalsData.data.items[0].id,
         terminalData: terminalsData.data.items[0],

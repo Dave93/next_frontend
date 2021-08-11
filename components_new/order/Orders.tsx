@@ -35,8 +35,11 @@ import { debounce } from 'lodash'
 import Downshift from 'downshift'
 import Select from '@components_new/utils/Select'
 import { toast } from 'react-toastify'
+import Cookies from 'js-cookie'
 
 const { publicRuntimeConfig } = getConfig()
+let webAddress = publicRuntimeConfig.apiUrl
+axios.defaults.withCredentials = true
 
 // interface LocationTabProps {
 //   setOpen: Dispatch<SetStateAction<boolean>>
@@ -59,6 +62,7 @@ type FormData = {
   cvv_code: string
   deliveryDay: string
   deliveryTime: string
+  payType: string
 }
 interface SelectItem {
   value: string
@@ -119,6 +123,7 @@ const Orders: FC = () => {
     setValue,
     getValues,
     control,
+    formState: { errors },
   } = useForm<FormData>({
     mode: 'onChange',
     defaultValues: {
@@ -138,10 +143,32 @@ const Orders: FC = () => {
       cvv_code: '',
       deliveryDay: '',
       deliveryTime: '',
+      payType: '',
     },
   })
 
   const onSubmit = (data: any) => console.log(JSON.stringify(data))
+
+  const setCredentials = async () => {
+    let csrf = Cookies.get('X-XSRF-TOKEN')
+    if (!csrf) {
+      const csrfReq = await axios(`${webAddress}/api/keldi`, {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+          crossDomain: true,
+        },
+        withCredentials: true,
+      })
+      let { data: res } = csrfReq
+      csrf = Buffer.from(res.result, 'base64').toString('ascii')
+
+      Cookies.set('X-XSRF-TOKEN', csrf)
+    }
+    axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest'
+    axios.defaults.headers.common['X-CSRF-TOKEN'] = csrf
+    axios.defaults.headers.common['XCSRF-TOKEN'] = csrf
+  }
 
   const authName = watch('name')
   const authPhone = watch('phone')
@@ -289,10 +316,6 @@ const Orders: FC = () => {
       location: [selection.coordinates.lat, selection.coordinates.long],
     })
     setValue('address', selection.title)
-    console.log({
-      ...locationData,
-      location: [selection.coordinates.lat, selection.coordinates.long],
-    })
     searchTerminal({
       ...locationData,
       location: [selection.coordinates.lat, selection.coordinates.long],
@@ -438,6 +461,32 @@ const Orders: FC = () => {
 
   const saveOrder = async () => {
     setIsSavingOrder(true)
+    await setCredentials()
+    await axios.post(`${webAddress}/api/orders`, {
+      formData: getValues(),
+      basket_id: cartId,
+    })
+    console.log(getValues())
+    setIsSavingOrder(false)
+    // if (Object.keys(errors).length) {
+    //   console.log(errors)
+    // }
+  }
+
+  // console.log(errors)
+
+  if (errors.payType) {
+    toast.error('Не выбрана платёжная система', {
+      position: toast.POSITION.BOTTOM_RIGHT,
+      hideProgressBar: true,
+    })
+  }
+
+  if (errors.deliveryDay || errors.deliveryTime) {
+    toast.error('Не указано время доставки', {
+      position: toast.POSITION.BOTTOM_RIGHT,
+      hideProgressBar: true,
+    })
   }
 
   return (
@@ -456,7 +505,7 @@ const Orders: FC = () => {
               <div className="relative">
                 <input
                   type="text"
-                  {...register('name')}
+                  {...register('name', { required: true })}
                   className="focus:outline-none outline-none px-6 py-3 rounded-full text-sm w-full bg-gray-100 text-gray-400"
                 />
                 {authName && (
@@ -468,6 +517,11 @@ const Orders: FC = () => {
                   </button>
                 )}
               </div>
+              {errors.name && (
+                <div className="text-sm text-center text-red-600">
+                  Данное поле обязательно для заполнения
+                </div>
+              )}
             </div>
             <div className="mt-8">
               <label className="text-sm text-gray-400 mb-2 block">
@@ -491,6 +545,12 @@ const Orders: FC = () => {
                   </button>
                 )}
               </div>
+
+              {errors.phone && (
+                <div className="text-sm text-center text-red-600">
+                  Данное поле обязательно для заполнения
+                </div>
+              )}
             </div>
             <div className="mt-8">
               <label className="text-sm text-gray-400 mb-2 block">
@@ -651,7 +711,7 @@ const Orders: FC = () => {
                           >
                             <input
                               type="text"
-                              {...register('address')}
+                              {...register('address', { required: true })}
                               {...getInputProps({
                                 onChange: debouncedAddressInputChangeHandler,
                               })}
@@ -936,6 +996,10 @@ const Orders: FC = () => {
                   onChange={(e: any) => onChange(e)}
                 />
               )}
+              rules={{
+                required: true,
+              }}
+              key="deliveryDay"
               name="deliveryDay"
               control={control}
             />
@@ -948,6 +1012,10 @@ const Orders: FC = () => {
                   className="ml-5"
                 />
               )}
+              rules={{
+                required: true,
+              }}
+              key="deliveryTime"
               name="deliveryTime"
               control={control}
             />
@@ -998,10 +1066,10 @@ const Orders: FC = () => {
         </div>
         <div className={openTab === 1 ? 'block' : 'hidden'} id="link1">
           <input
-            type="text"
-            {...register('change')}
+            type="number"
+            {...register('change', { required: openTab === 1 })}
             className="borde focus:outline-none outline-none px-6 py-3 rounded-full text-sm w-80 bg-gray-100 text-gray-400 mt-8"
-            value="Сдача с"
+            placeholder="Сдача с"
           />
           <Disclosure defaultOpen={true}>
             {({ open }) => (
@@ -1172,6 +1240,7 @@ const Orders: FC = () => {
                     <img src={`/assets/${payment}.png`} />
                     <input
                       type="radio"
+                      {...register('payType', { required: openTab === 3 })}
                       defaultValue={payment}
                       checked={payType === payment}
                       onChange={onValueChange}
@@ -1536,7 +1605,7 @@ const Orders: FC = () => {
               !locationData?.terminal_id ? 'opacity-25 cursor-not-allowed' : ''
             }`}
             disabled={!locationData?.terminal_id || isSavingOrder}
-            onClick={saveOrder}
+            onClick={handleSubmit(saveOrder)}
           >
             {isSavingOrder ? (
               <svg
@@ -1560,10 +1629,10 @@ const Orders: FC = () => {
                 ></path>
               </svg>
             ) : (
-              'Оплатить'
+              <>
+                Оплатить <img src="/right.png" />
+              </>
             )}
-
-            <img src="/right.png" />
           </button>
         </div>
       </div>
