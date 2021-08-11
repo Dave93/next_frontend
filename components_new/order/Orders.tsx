@@ -414,10 +414,12 @@ const Orders: FC = () => {
       toast.warn(
         terminalsData.data.message
           ? terminalsData.data.message
-          : 'Ресторан не найден',, {
-        position: toast.POSITION.BOTTOM_RIGHT,
-        hideProgressBar: true,
-      })
+          : 'Ресторан не найден',
+        {
+          position: toast.POSITION.BOTTOM_RIGHT,
+          hideProgressBar: true,
+        }
+      )
       setLocationData({
         ...locationData,
         terminal_id: undefined,
