@@ -350,6 +350,8 @@ const Orders: FC = () => {
   }
 
   let [isShowPrivacy, setIsShowPrivacy] = useState(false)
+  const [isSavingOrder, setIsSavingOrder] = useState(false)
+
   const showPrivacy = (e: React.MouseEvent<HTMLElement>) => {
     e.preventDefault()
     setIsShowPrivacy(true)
@@ -392,7 +394,6 @@ const Orders: FC = () => {
   }
 
   const searchTerminal = async (locationData: any = {}) => {
-    console.log(locationData)
     if (!locationData || !locationData.location) {
       toast.warn('Не указан адрес или точка доставки', {
         position: toast.POSITION.BOTTOM_RIGHT,
@@ -431,6 +432,10 @@ const Orders: FC = () => {
         terminalData: terminalsData.data.items[0],
       })
     }
+  }
+
+  const saveOrder = async () => {
+    setIsSavingOrder(true)
   }
 
   return (
@@ -1528,9 +1533,34 @@ const Orders: FC = () => {
             className={`text-xl text-white bg-yellow flex h-12 items-center justify-evenly rounded-full w-80 ${
               !locationData?.terminal_id ? 'opacity-25 cursor-not-allowed' : ''
             }`}
-            disabled={!locationData?.terminal_id}
+            disabled={!locationData?.terminal_id || isSavingOrder}
+            onClick={saveOrder}
           >
-            Оплатить
+            {isSavingOrder ? (
+              <svg
+                className="animate-spin h-5 mx-auto text-center text-white w-5"
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+              >
+                <circle
+                  className="opacity-25"
+                  cx="12"
+                  cy="12"
+                  r="10"
+                  stroke="currentColor"
+                  strokeWidth="4"
+                ></circle>
+                <path
+                  className="opacity-75"
+                  fill="currentColor"
+                  d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+                ></path>
+              </svg>
+            ) : (
+              'Оплатить'
+            )}
+
             <img src="/right.png" />
           </button>
         </div>
