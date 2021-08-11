@@ -283,11 +283,16 @@ const LocationTabs: FC<Props> = ({ setOpen }) => {
       `${publicRuntimeConfig.apiUrl}/api/terminals/find_nearest?lat=${locationData.location[0]}&lon=${locationData.location[1]}`
     )
 
-    if (terminalsData.data && !terminalsData.data.length) {
-      toast.warn('Ресторан не найден', {
-        position: toast.POSITION.BOTTOM_RIGHT,
-        hideProgressBar: true,
-      })
+    if (terminalsData.data && !terminalsData.data.items.length) {
+      toast.warn(
+        terminalsData.data.message
+          ? terminalsData.data.message
+          : 'Ресторан не найден',
+        {
+          position: toast.POSITION.BOTTOM_RIGHT,
+          hideProgressBar: true,
+        }
+      )
       setIsSearchingTerminals(false)
       return
     }
@@ -301,8 +306,8 @@ const LocationTabs: FC<Props> = ({ setOpen }) => {
           terminalsData.data[0].latitude,
           terminalsData.data[0].longitude,
         ],
-        terminal_id: terminalsData.data[0].id,
-        terminalData: terminalsData.data[0],
+        terminal_id: terminalsData.data.items[0].id,
+        terminalData: terminalsData.data.items[0],
       })
       setOpen(false)
     }
