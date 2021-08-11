@@ -100,7 +100,7 @@ const Delivery: FC = () => {
         <div className="grid grid-cols-3 mt-10">
           <div className="flex">
             <div>
-              <img src="/cashPayment.jpg" alt="" width="60px" height="60px" />
+              <img src="/cashPayment.jpg" alt="" />
             </div>
             <div className="ml-4 w-56">
               <div className="text-xl ">Оплата наличными</div>
@@ -114,7 +114,7 @@ const Delivery: FC = () => {
           </div>
           <div className="flex">
             <div>
-              <img src="/cardPayment.jpg" alt="" width="60px" height="60px" />
+              <img src="/cardPayment.jpg" alt="" />
             </div>
             <div className="ml-4  w-56">
               <div className="text-xl">Оплата картой</div>
