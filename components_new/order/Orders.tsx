@@ -36,6 +36,7 @@ import Downshift from 'downshift'
 import Select from '@components_new/utils/Select'
 import { toast } from 'react-toastify'
 import Cookies from 'js-cookie'
+import { useRouter } from 'next/router'
 
 const { publicRuntimeConfig } = getConfig()
 let webAddress = publicRuntimeConfig.apiUrl
@@ -110,6 +111,8 @@ const Orders: FC = () => {
   if (typeof window !== 'undefined') {
     cartId = localStorage.getItem('basketId')
   }
+
+  const router = useRouter()
 
   const { data, isLoading, isEmpty, mutate } = useCart({
     cartId,
@@ -462,12 +465,22 @@ const Orders: FC = () => {
   const saveOrder = async () => {
     setIsSavingOrder(true)
     await setCredentials()
-    await axios.post(`${webAddress}/api/orders`, {
-      formData: { ...locationData, ...getValues() },
-      basket_id: cartId,
-    })
-    console.log(getValues())
-    setIsSavingOrder(false)
+    try {
+      const { data } = await axios.post(`${webAddress}/api/orders`, {
+        formData: { ...locationData, ...getValues() },
+        basket_id: cartId,
+      })
+
+      setIsSavingOrder(false)
+      localStorage.removeItem('basketId')
+      router.push(`/order/success/?id=${data.data.id}`)
+    } catch (e) {
+      toast.error(e.response.data.error.message, {
+        position: toast.POSITION.BOTTOM_RIGHT,
+        hideProgressBar: true,
+      })
+      setIsSavingOrder(false)
+    }
     // if (Object.keys(errors).length) {
     //   console.log(errors)
     // }
