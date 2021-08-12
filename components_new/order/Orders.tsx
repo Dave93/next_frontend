@@ -463,7 +463,7 @@ const Orders: FC = () => {
     setIsSavingOrder(true)
     await setCredentials()
     await axios.post(`${webAddress}/api/orders`, {
-      formData: getValues(),
+      formData: { ...locationData, ...getValues() },
       basket_id: cartId,
     })
     console.log(getValues())
