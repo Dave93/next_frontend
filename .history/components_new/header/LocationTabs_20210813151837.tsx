@@ -603,7 +603,7 @@ const LocationTabs: FC<Props> = ({ setOpen }) => {
                       ></path>
                     </svg>
                   ) : (
-                      tr("confirm")
+                    'Подтвердить'
                   )}
                 </button>
               </div>

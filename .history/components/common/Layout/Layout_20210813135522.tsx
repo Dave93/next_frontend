@@ -35,7 +35,6 @@ interface Props {
     footerInfoMenu: APILinkItem[]
     socials: SocialIcons[]
     cleanBackground?: boolean
-    cities: City[]
   }
 }
 
@@ -56,7 +55,6 @@ const Layout: FC<Props> = ({
     topMenu = [],
     footerInfoMenu = [],
     socials = [],
-    cities = [],
     cleanBackground = false,
     ...pageProps
   },
@@ -91,11 +89,6 @@ const Layout: FC<Props> = ({
     return
   }, [])
 
-  const { setCitiesData } = useUI()
-
-  useEffect(() => {
-    setCitiesData(cities)
-  }, [])
   return (
     <CommerceProvider locale={locale}>
       <div className="font-sans">
@@ -227,7 +220,7 @@ const Layout: FC<Props> = ({
                   </div>
                 </div>
                 <div className="mb-7 md:mb-0">
-                  {new Date().getFullYear()} {tr('all_rights_reserved')}
+                  {new Date().getFullYear()} Все права защищены
                 </div>
               </div>
             </div>

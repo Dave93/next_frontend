@@ -603,7 +603,7 @@ const LocationTabs: FC<Props> = ({ setOpen }) => {
                       ></path>
                     </svg>
                   ) : (
-                      tr("confirm")
+                    'Подтвердить'
                   )}
                 </button>
               </div>
@@ -732,7 +732,7 @@ const LocationTabs: FC<Props> = ({ setOpen }) => {
               disabled={!activePoint}
               onClick={submitPickup}
             >
-              {tr('confirm')}
+              Подтвердить
             </button>
           </div>
         </div>

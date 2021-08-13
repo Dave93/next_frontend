@@ -70,6 +70,17 @@ interface SelectItem {
   label: string
 }
 
+const dayOptions = [
+  {
+    value: 'today',
+    label: 'Сегодня',
+  },
+  {
+    value: 'tomorrow',
+    label: 'Завтра',
+  },
+]
+
 const deliveryTimeOptions = [] as SelectItem[]
 
 const zeroPad = (num: number, places: number) =>
@@ -174,16 +185,7 @@ const Orders: FC = () => {
     reset(newFields)
   }
   //Orders
-  const dayOptions = [
-    {
-      value: 'today',
-      label: tr('today'),
-    },
-    {
-      value: 'tomorrow',
-      label: tr('tomorrow'),
-    },
-  ]
+
   const [tabIndex, setTabIndex] = useState(
     locationData?.deliveryType || 'deliver'
   )
@@ -694,7 +696,7 @@ const Orders: FC = () => {
             </div>
             <div className="mt-3">
               <form onSubmit={handleSubmit(onSubmit)}>
-                <div className="font-bold text-lg">{tr('address')}</div>
+                <div className="font-bold text-lg">Адрес</div>
                 <div className="mt-3 space-y-6">
                   <div className="flex justify-between w-full">
                     <Downshift
@@ -856,7 +858,7 @@ const Orders: FC = () => {
                     setPickupIndex(1)
                   }}
                 >
-                  {tr('on_the_map')}
+                  На карте
                 </div>
                 <div
                   className={`${
@@ -866,7 +868,7 @@ const Orders: FC = () => {
                     setPickupIndex(2)
                   }}
                 >
-                  {tr('list')}
+                  Списком
                 </div>
               </div>
             </div>
@@ -874,7 +876,7 @@ const Orders: FC = () => {
               <input
                 type="text"
                 {...register('address')}
-                placeholder={tr('address')}
+                placeholder="Адрес"
                 className="bg-gray-100 px-8 rounded-full w-full outline-none focus:outline-none py-2"
               />
             </div>
@@ -984,7 +986,7 @@ const Orders: FC = () => {
             } flex-1 font-bold  rounded-full outline-none focus:outline-none  h-11 md:w-44`}
             onClick={() => setDeliveryActive(1)}
           >
-            {tr('hurry_up')}
+            Побыстрее
           </button>
           <button
             className={`${
@@ -994,7 +996,7 @@ const Orders: FC = () => {
             } flex-1 font-bold  rounded-full outline-none focus:outline-none  h-11 md:w-44 ml-5`}
             onClick={() => setDeliveryActive(2)}
           >
-            {tr('later')}
+            Позже
           </button>
         </div>
         {deliveryActive == 2 && (
@@ -1003,7 +1005,7 @@ const Orders: FC = () => {
               render={({ field: { onChange } }) => (
                 <Select
                   items={dayOptions}
-                  placeholder={tr('today')}
+                  placeholder="Сегодня"
                   onChange={(e: any) => onChange(e)}
                 />
               )}
@@ -1018,7 +1020,7 @@ const Orders: FC = () => {
               render={({ field: { onChange } }) => (
                 <Select
                   items={deliveryTimeOptions}
-                  placeholder={tr('time')}
+                  placeholder="Время"
                   onChange={(e: any) => onChange(e)}
                   className="ml-5"
                 />
@@ -1038,7 +1040,7 @@ const Orders: FC = () => {
         {!locationData?.terminal_id && (
           <div className="absolute w-full h-full -ml-10 -mt-10 bg-opacity-60 bg-gray-100 z-20 items-center flex justify-around">
             <div className="text-yellow font-bold text-2xl">
-              {tr('no_address_no_restaurant')}
+              Не указан адрес или ближе к адресу ресторан не найден
             </div>
           </div>
         )}
@@ -1052,7 +1054,7 @@ const Orders: FC = () => {
             } flex-1 font-bold  rounded-full outline-none focus:outline-none  h-11 md:w-44`}
             onClick={() => setOpenTab(1)}
           >
-            {tr('in_cash')}
+            Наличными
           </button>
           {/* <button
             className={`${
@@ -1072,7 +1074,7 @@ const Orders: FC = () => {
             } flex-1 font-bold  rounded-full outline-none focus:outline-none  h-11 md:w-44 ml-5`}
             onClick={() => setOpenTab(3)}
           >
-            {tr('online')}
+            Онлайн
           </button>
         </div>
         <div className={openTab === 1 ? 'block' : 'hidden'} id="link1">
@@ -1080,13 +1082,13 @@ const Orders: FC = () => {
             type="number"
             {...register('change', { required: openTab === 1 })}
             className="borde focus:outline-none outline-none px-6 py-3 rounded-full text-sm w-80 bg-gray-100 text-gray-400 mt-8"
-            placeholder={tr('change')}
+            placeholder="Сдача с"
           />
           <Disclosure defaultOpen={true}>
             {({ open }) => (
               <>
                 <Disclosure.Button className="flex text-yellow outline-none focus:outline-none mt-8">
-                  <span>{tr('comment_on_the_order')}</span>
+                  <span>Комментарий к заказу </span>
                   {/*
                           Use the `open` render prop to rotate the icon when the panel is open
                         */}
@@ -1111,9 +1113,7 @@ const Orders: FC = () => {
                         <textarea
                           {...register('pay_comment')}
                           className="w-96 h-28 bg-gray-100 rounded-2xl p-3 outline-none focus:outline-none resize-none"
-                          placeholder={tr(
-                            'only_the_courier_will_see_your_comment'
-                          )}
+                          placeholder="Ваш коментарии увидет только куръер"
                         ></textarea>
                       </div>
                     </div>
@@ -1185,7 +1185,7 @@ const Orders: FC = () => {
               <input
                 type="text"
                 {...register('holder_name')}
-                placeholder={tr('holder_name')}
+                placeholder="Имя держателя"
                 className="bg-gray-100 px-8 py-2 rounded-full w-80  outline-none focus:outline-none"
               />
               <input
@@ -1200,7 +1200,7 @@ const Orders: FC = () => {
             {({ open }) => (
               <>
                 <Disclosure.Button className="flex text-yellow outline-none focus:outline-none mt-8">
-                  <span>{tr('comment_on_the_order')}</span>
+                  <span>Комментарий к заказу </span>
                   {/*
                           Use the `open` render prop to rotate the icon when the panel is open
                         */}
@@ -1225,9 +1225,7 @@ const Orders: FC = () => {
                         <textarea
                           {...register('pay_comment')}
                           className="w-96 h-28 bg-gray-100 rounded-2xl p-3 outline-none focus:outline-none resize-none"
-                          placeholder={tr(
-                            'only_the_courier_will_see_your_comment'
-                          )}
+                          placeholder="Ваш коментарии увидет только куръер"
                         ></textarea>
                       </div>
                     </div>
@@ -1268,7 +1266,7 @@ const Orders: FC = () => {
             {({ open }) => (
               <>
                 <Disclosure.Button className="flex text-yellow outline-none focus:outline-none mt-8">
-                  <span>{tr('comment_on_the_order')} </span>
+                  <span>Комментарий к заказу </span>
                   {/*
                           Use the `open` render prop to rotate the icon when the panel is open
                         */}
@@ -1293,9 +1291,7 @@ const Orders: FC = () => {
                         <textarea
                           {...register('pay_comment')}
                           className="w-96 h-28 bg-gray-100 rounded-2xl p-3 outline-none focus:outline-none resize-none"
-                          placeholder={tr(
-                            'only_the_courier_will_see_your_comment'
-                          )}
+                          placeholder="Ваш коментарии увидет только куръер"
                         ></textarea>
                       </div>
                     </div>
@@ -1346,9 +1342,7 @@ const Orders: FC = () => {
         {!isEmpty && (
           <div className="flex justify-between items-center mt-8">
             <div>
-              <div className="font-bold text-xl mb-2">
-                {tr('basket_order_price')}
-              </div>
+              <div className="font-bold text-xl mb-2">Сумма заказа:</div>
             </div>
             <div className="text-2xl font-bold">
               {currency(data.totalPrice, {
@@ -1364,7 +1358,7 @@ const Orders: FC = () => {
       </div>
       <div className="w-full bg-white mb-5 rounded-2xl p-10">
         <div className="flex">
-          <div className="mr-8 text-gray-400">{tr('agree_to_send')}</div>
+          <div className="mr-8 text-gray-400">Согласен на отправку</div>
           <label className="mr-8 cursor-pointer text-gray-400 items-center flex">
             <input
               type="checkbox"
@@ -1385,18 +1379,19 @@ const Orders: FC = () => {
               } form-checkbox h-5 w-5  rounded-md mr-2`}
               onChange={newsletterValueChange}
             />
-            <div>E-mail {tr('mailing')}</div>
+            <div>E-mail рассылка</div>
           </label>
         </div>
         <div className="mt-5 text-gray-400 text-sm flex border-b pb-8">
-          {tr('processing_of_your_personal_data')}
+          Нажимая "Оплатить", Вы даёте Согласие на обработку Ваших персональных
+          данных и принимаете
           <a
             href="/privacy"
             onClick={showPrivacy}
             className="text-yellow block mx-1"
             target="_blank"
           >
-            {tr('terms_of_use')}
+            Пользовательское соглашение
           </a>
         </div>
         <Transition appear show={isShowPrivacy} as={Fragment}>
@@ -1616,7 +1611,7 @@ const Orders: FC = () => {
         </Transition>
         <div className="flex justify-between mt-8">
           <button className="text-xl text-gray-400 bg-gray-200 flex h-12 items-center justify-between px-12 rounded-full w-80">
-            <img src="/left.png" /> {tr('back_to_basket')}
+            <img src="/left.png" /> Вернуться в корзину
           </button>
           <button
             className={`text-xl text-white bg-yellow flex h-12 items-center justify-evenly rounded-full w-80 ${
@@ -1648,7 +1643,7 @@ const Orders: FC = () => {
               </svg>
             ) : (
               <>
-                {tr('pay')} <img src="/right.png" />
+                Оплатить <img src="/right.png" />
               </>
             )}
           </button>

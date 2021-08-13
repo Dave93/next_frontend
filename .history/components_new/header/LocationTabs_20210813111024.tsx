@@ -34,7 +34,6 @@ import Downshift from 'downshift'
 import debounce from 'lodash.debounce'
 import { useUI } from '@components/ui/context'
 import { toast } from 'react-toastify'
-import useTranslation from 'next-translate/useTranslation'
 
 const { publicRuntimeConfig } = getConfig()
 
@@ -326,8 +325,6 @@ const LocationTabs: FC<Props> = ({ setOpen }) => {
     setOpen(false)
   }
 
-  const { t:tr } = useTranslation('common')
-
   return (
     <>
       <div className="bg-gray-100 flex rounded-full w-full">
@@ -337,7 +334,7 @@ const LocationTabs: FC<Props> = ({ setOpen }) => {
           } flex-1 font-bold py-3 text-[18px] rounded-full outline-none focus:outline-none`}
           onClick={() => changeTabIndex('deliver')}
         >
-          {tr('delivery')}
+          Доставка
         </button>
         <button
           className={`${
@@ -345,14 +342,14 @@ const LocationTabs: FC<Props> = ({ setOpen }) => {
           } flex-1 font-bold py-3 text-[18px] rounded-full outline-none focus:outline-none`}
           onClick={() => changeTabIndex('pickup')}
         >
-          {tr('pickup')}
+          Самовывоз
         </button>
       </div>
       {tabIndex == 'deliver' && (
         <div className="mt-8">
           <div className="flex justify-between">
             <div className="text-gray-400 font-bold text-[18px]">
-              {tr('chooseLocation')}
+              Укажите свой адрес
             </div>
             <div>
               <Menu as="div" className="relative inline-block text-left">
@@ -432,9 +429,7 @@ const LocationTabs: FC<Props> = ({ setOpen }) => {
           </div>
           <div className="mt-4">
             <form onSubmit={handleSubmit(onSubmit)}>
-              <div className="font-bold text-[18px] text-gray-400">
-                {tr('order_address')}
-              </div>
+              <div className="font-bold text-[18px] text-gray-400">Адрес:</div>
               <div className="flex justify-between mt-3">
                 <Downshift
                   onChange={(selection) => setSelectedAddress(selection)}
@@ -463,7 +458,7 @@ const LocationTabs: FC<Props> = ({ setOpen }) => {
                           {...getInputProps({
                             onChange: debouncedAddressInputChangeHandler,
                           })}
-                          placeholder={tr('address')}
+                          placeholder="Адрес"
                           className="bg-gray-100 px-8 py-3 rounded-full w-full outline-none focus:outline-none"
                         />
                         <ul
@@ -509,7 +504,7 @@ const LocationTabs: FC<Props> = ({ setOpen }) => {
                   <input
                     type="text"
                     {...register('flat')}
-                    placeholder={tr('flat')}
+                    placeholder="Квартира"
                     className="bg-gray-100 px-8 py-3 rounded-full w-full outline-none focus:outline-none"
                   />
                 </div>
@@ -517,7 +512,7 @@ const LocationTabs: FC<Props> = ({ setOpen }) => {
                   <input
                     type="text"
                     {...register('house')}
-                    placeholder={tr('house')}
+                    placeholder="Дом"
                     className="bg-gray-100 px-8 py-3 rounded-full w-full"
                   />
                 </div>
@@ -528,7 +523,7 @@ const LocationTabs: FC<Props> = ({ setOpen }) => {
                   {({ open }) => (
                     <>
                       <Disclosure.Button className="flex text-yellow w-1/4 outline-none focus:outline-none">
-                        <span>{tr('indicate_intercom_and_entrance')}</span>
+                        <span>Указать домофон и подъезд</span>
                         {/*
                           Use the `open` render prop to rotate the icon when the panel is open
                         */}
@@ -553,7 +548,7 @@ const LocationTabs: FC<Props> = ({ setOpen }) => {
                               <input
                                 type="text"
                                 {...register('entrance')}
-                                placeholder={tr('entrance')}
+                                placeholder="Подъезд"
                                 className="bg-gray-100 px-8 py-3 rounded-full w-full outline-none focus:outline-none"
                               />
                             </div>
@@ -561,7 +556,7 @@ const LocationTabs: FC<Props> = ({ setOpen }) => {
                               <input
                                 type="text"
                                 {...register('door_code')}
-                                placeholder={tr('door_code')}
+                                placeholder="Код от домофона"
                                 className="bg-gray-100 px-8 py-3 rounded-full w-full outline-none focus:outline-none"
                               />
                             </div>
@@ -603,7 +598,7 @@ const LocationTabs: FC<Props> = ({ setOpen }) => {
                       ></path>
                     </svg>
                   ) : (
-                      tr("confirm")
+                    'Подтвердить'
                   )}
                 </button>
               </div>
@@ -615,7 +610,7 @@ const LocationTabs: FC<Props> = ({ setOpen }) => {
         <div className="mt-8">
           <div className="flex">
             <div className="font-bold text-[18px] text-gray-400">
-              {tr('select_pizzeries')}
+              Выберите пиццерии:
             </div>
             <div
               className={`${
@@ -625,7 +620,7 @@ const LocationTabs: FC<Props> = ({ setOpen }) => {
                 setPickupIndex(1)
               }}
             >
-              {tr('on_the_map')}
+              На карте
             </div>
             <div
               className={`${
@@ -635,7 +630,7 @@ const LocationTabs: FC<Props> = ({ setOpen }) => {
                 setPickupIndex(2)
               }}
             >
-              {tr('list')}
+              Списком
             </div>
           </div>
           <div className="mt-5">
@@ -732,7 +727,7 @@ const LocationTabs: FC<Props> = ({ setOpen }) => {
               disabled={!activePoint}
               onClick={submitPickup}
             >
-              {tr('confirm')}
+              Подтвердить
             </button>
           </div>
         </div>
