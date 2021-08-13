@@ -10,7 +10,7 @@ export async function getServerSideProps({
 }: GetServerSidePropsContext) {
   const config = { locale, locales }
   const siteInfoPromise = commerce.getSiteInfo({ config, preview })
-  const { categories, brands, topMenu, footerInfoMenu, socials } =
+  const { categories, brands, topMenu, footerInfoMenu, socials, cities } =
     await siteInfoPromise
 
   return {
@@ -21,6 +21,7 @@ export async function getServerSideProps({
       footerInfoMenu,
       socials,
       cleanBackground: true,
+      cities,
     },
   }
 }

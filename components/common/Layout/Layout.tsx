@@ -35,6 +35,7 @@ interface Props {
     footerInfoMenu: APILinkItem[]
     socials: SocialIcons[]
     cleanBackground?: boolean
+    cities: City[]
   }
 }
 
@@ -55,6 +56,7 @@ const Layout: FC<Props> = ({
     topMenu = [],
     footerInfoMenu = [],
     socials = [],
+    cities = [],
     cleanBackground = false,
     ...pageProps
   },
@@ -89,6 +91,11 @@ const Layout: FC<Props> = ({
     return
   }, [])
 
+  const { setCitiesData } = useUI()
+
+  useEffect(() => {
+    setCitiesData(cities)
+  }, [])
   return (
     <CommerceProvider locale={locale}>
       <div className="font-sans">
