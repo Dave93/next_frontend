@@ -1,5 +1,5 @@
 import cn from 'classnames'
-import React, { FC } from 'react'
+import React, { FC, useEffect } from 'react'
 import { useRouter } from 'next/router'
 import { CommerceProvider } from '@framework'
 import type { Page } from '@commerce/types/page'
@@ -22,6 +22,8 @@ import {
 } from '@fortawesome/free-brands-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { SocialIcons } from '@commerce/types/socialIcons'
+import { City } from '@commerce/types/cities'
+import { useUI } from '@components/ui'
 
 interface Props {
   pageProps: {
@@ -31,6 +33,7 @@ interface Props {
     footerInfoMenu: APILinkItem[]
     socials: SocialIcons[]
     cleanBackground?: boolean
+    cities: City[]
   }
 }
 
@@ -51,12 +54,18 @@ const Layout: FC<Props> = ({
     topMenu = [],
     footerInfoMenu = [],
     socials = [],
+    cities = [],
     cleanBackground = false,
     ...pageProps
   },
 }) => {
   const { locale = 'ru', pathname } = useRouter()
 
+  const { setCitiesData } = useUI()
+
+  useEffect(() => {
+    setCitiesData(cities)
+  }, [])
   return (
     <CommerceProvider locale={locale}>
       <div className="font-sans">

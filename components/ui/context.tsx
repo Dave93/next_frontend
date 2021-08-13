@@ -1,3 +1,4 @@
+import { City } from '@commerce/types/cities'
 import React, { FC, useCallback, useMemo } from 'react'
 
 let userData: any = null
@@ -16,9 +17,7 @@ if (typeof window !== 'undefined') {
     locationData = Buffer.from(locationData, 'base64')
     locationData = locationData.toString()
     locationData = JSON.parse(locationData)
-  } catch (e) {
-    console.log(e)
-  }
+  } catch (e) {}
 }
 
 interface AnyObject {
@@ -55,6 +54,8 @@ export interface State {
   userAvatar: string
   user?: UserData | null
   locationData: LocationData | null
+  cities: City[] | null
+  activeCity: City | null
 }
 
 const initialState = {
@@ -66,6 +67,8 @@ const initialState = {
   userAvatar: '',
   user: userData,
   locationData,
+  cities: null,
+  activeCity: null,
 }
 
 type Action =
@@ -106,6 +109,14 @@ type Action =
   | {
       type: 'SET_LOCATION_DATA'
       value: LocationData
+    }
+  | {
+      type: 'SET_CITIES_DATA'
+      value: City[]
+    }
+  | {
+      type: 'SET_ACTIVE_CITY'
+      value: City
     }
 
 type MODAL_VIEWS =
@@ -200,6 +211,18 @@ function uiReducer(state: State, action: Action) {
         locationData: action.value,
       }
     }
+    case 'SET_CITIES_DATA': {
+      return {
+        ...state,
+        cities: action.value,
+      }
+    }
+    case 'SET_ACTIVE_CITY': {
+      return {
+        ...state,
+        activeCity: action.value,
+      }
+    }
   }
 }
 
@@ -269,6 +292,16 @@ export const UIProvider: FC = (props) => {
     [dispatch]
   )
 
+  const setCitiesData = useCallback(
+    (value: City[]) => dispatch({ type: 'SET_CITIES_DATA', value }),
+    [dispatch]
+  )
+
+  const setActiveCity = useCallback(
+    (value: City) => dispatch({ type: 'SET_ACTIVE_CITY', value }),
+    [dispatch]
+  )
+
   const value = useMemo(
     () => ({
       ...state,
@@ -285,6 +318,8 @@ export const UIProvider: FC = (props) => {
       setUserAvatar,
       setUserData,
       setLocationData,
+      setCitiesData,
+      setActiveCity,
     }),
     [state]
   )
