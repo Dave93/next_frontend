@@ -1,45 +1,18 @@
-import { Fragment, useState, FC, memo } from 'react'
+import { Fragment, useState, FC, memo, useMemo } from 'react'
 import { Menu, Transition } from '@headlessui/react'
-
-interface City {
-  id: string
-  label: string
-  active: boolean
-}
+import { useUI } from '@components/ui'
+import { City } from '@commerce/types/cities'
 
 const ChooseCityDropDown: FC = () => {
-  const [cities, setCities] = useState<City[]>([
-    {
-      id: 'tash',
-      label: 'Ташкент',
-      active: true,
-    },
-    {
-      id: 'ferg',
-      label: 'Фергана',
-      active: false,
-    },
-    {
-      id: 'sam',
-      label: 'Самарканд',
-      active: false,
-    },
-  ])
+  const { cities, activeCity, setActiveCity } = useUI()
 
-  const activeLabel = cities.find((item) => item.active)?.label
-
-  const setActive = (id: string) => {
-    setCities(
-      cities.map((item) => {
-        if (item.id == id) {
-          item.active = true
-        } else {
-          item.active = false
-        }
-        return item
-      })
-    )
-  }
+  const chosenCity = useMemo(() => {
+    if (activeCity) {
+      return activeCity
+    }
+    if (cities) return cities[0]
+    return null
+  }, [cities, activeCity])
 
   return (
     <Menu as="div" className="relative inline-block text-left">
@@ -47,7 +20,7 @@ const ChooseCityDropDown: FC = () => {
         <>
           <div>
             <Menu.Button className="bg-white focus:outline-none font-medium inline-flex justify-center outline-none px-4 py-2 text-secondary text-sm w-full">
-              {activeLabel}
+              {chosenCity?.name}
             </Menu.Button>
           </div>
 
@@ -72,15 +45,17 @@ const ChooseCityDropDown: FC = () => {
                   </span>
                 )}
               </Menu.Item>
-              {cities.map((item) => (
+              {cities?.map((item: City) => (
                 <Menu.Item key={item.id}>
                   <span
-                    onClick={() => setActive(item.id)}
+                    onClick={() => setActiveCity(item)}
                     className={`block px-4 py-2 text-sm cursor-pointer ${
-                      item.active ? 'bg-secondary text-white' : 'text-secondary'
+                      chosenCity.id == item.id
+                        ? 'bg-secondary text-white'
+                        : 'text-secondary'
                     }`}
                   >
-                    {item.label}
+                    {item.name}
                   </span>
                 </Menu.Item>
               ))}
