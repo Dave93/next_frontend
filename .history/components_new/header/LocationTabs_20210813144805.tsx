@@ -463,7 +463,7 @@ const LocationTabs: FC<Props> = ({ setOpen }) => {
                           {...getInputProps({
                             onChange: debouncedAddressInputChangeHandler,
                           })}
-                          placeholder={tr('address')}
+                          placeholder={tr('order_address')}
                           className="bg-gray-100 px-8 py-3 rounded-full w-full outline-none focus:outline-none"
                         />
                         <ul
@@ -528,7 +528,9 @@ const LocationTabs: FC<Props> = ({ setOpen }) => {
                   {({ open }) => (
                     <>
                       <Disclosure.Button className="flex text-yellow w-1/4 outline-none focus:outline-none">
-                        <span>{tr('indicate_intercom_and_entrance')}</span>
+                        <span>
+                          {tr('indicate_intercom_and_entrance')}
+                        </span>
                         {/*
                           Use the `open` render prop to rotate the icon when the panel is open
                         */}
@@ -553,7 +555,7 @@ const LocationTabs: FC<Props> = ({ setOpen }) => {
                               <input
                                 type="text"
                                 {...register('entrance')}
-                                placeholder={tr('entrance')}
+                                placeholder={ tr("entrace")}
                                 className="bg-gray-100 px-8 py-3 rounded-full w-full outline-none focus:outline-none"
                               />
                             </div>
@@ -561,7 +563,7 @@ const LocationTabs: FC<Props> = ({ setOpen }) => {
                               <input
                                 type="text"
                                 {...register('door_code')}
-                                placeholder={tr('door_code')}
+                                placeholder="Код от домофона"
                                 className="bg-gray-100 px-8 py-3 rounded-full w-full outline-none focus:outline-none"
                               />
                             </div>
@@ -603,7 +605,7 @@ const LocationTabs: FC<Props> = ({ setOpen }) => {
                       ></path>
                     </svg>
                   ) : (
-                      tr("confirm")
+                    'Подтвердить'
                   )}
                 </button>
               </div>
@@ -615,7 +617,7 @@ const LocationTabs: FC<Props> = ({ setOpen }) => {
         <div className="mt-8">
           <div className="flex">
             <div className="font-bold text-[18px] text-gray-400">
-              {tr('select_pizzeries')}
+              Выберите пиццерии:
             </div>
             <div
               className={`${
@@ -625,7 +627,7 @@ const LocationTabs: FC<Props> = ({ setOpen }) => {
                 setPickupIndex(1)
               }}
             >
-              {tr('on_the_map')}
+              На карте
             </div>
             <div
               className={`${
@@ -635,7 +637,7 @@ const LocationTabs: FC<Props> = ({ setOpen }) => {
                 setPickupIndex(2)
               }}
             >
-              {tr('list')}
+              Списком
             </div>
           </div>
           <div className="mt-5">
@@ -732,7 +734,7 @@ const LocationTabs: FC<Props> = ({ setOpen }) => {
               disabled={!activePoint}
               onClick={submitPickup}
             >
-              {tr('confirm')}
+              Подтвердить
             </button>
           </div>
         </div>

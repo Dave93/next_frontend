@@ -1111,9 +1111,7 @@ const Orders: FC = () => {
                         <textarea
                           {...register('pay_comment')}
                           className="w-96 h-28 bg-gray-100 rounded-2xl p-3 outline-none focus:outline-none resize-none"
-                          placeholder={tr(
-                            'only_the_courier_will_see_your_comment'
-                          )}
+                          placeholder="Ваш коментарии увидет только куръер"
                         ></textarea>
                       </div>
                     </div>
@@ -1225,9 +1223,7 @@ const Orders: FC = () => {
                         <textarea
                           {...register('pay_comment')}
                           className="w-96 h-28 bg-gray-100 rounded-2xl p-3 outline-none focus:outline-none resize-none"
-                          placeholder={tr(
-                            'only_the_courier_will_see_your_comment'
-                          )}
+                          placeholder="Ваш коментарии увидет только куръер"
                         ></textarea>
                       </div>
                     </div>
@@ -1293,9 +1289,7 @@ const Orders: FC = () => {
                         <textarea
                           {...register('pay_comment')}
                           className="w-96 h-28 bg-gray-100 rounded-2xl p-3 outline-none focus:outline-none resize-none"
-                          placeholder={tr(
-                            'only_the_courier_will_see_your_comment'
-                          )}
+                          placeholder="Ваш коментарии увидет только куръер"
                         ></textarea>
                       </div>
                     </div>

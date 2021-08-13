@@ -1111,9 +1111,7 @@ const Orders: FC = () => {
                         <textarea
                           {...register('pay_comment')}
                           className="w-96 h-28 bg-gray-100 rounded-2xl p-3 outline-none focus:outline-none resize-none"
-                          placeholder={tr(
-                            'only_the_courier_will_see_your_comment'
-                          )}
+                          placeholder="Ваш коментарии увидет только куръер"
                         ></textarea>
                       </div>
                     </div>
@@ -1225,9 +1223,7 @@ const Orders: FC = () => {
                         <textarea
                           {...register('pay_comment')}
                           className="w-96 h-28 bg-gray-100 rounded-2xl p-3 outline-none focus:outline-none resize-none"
-                          placeholder={tr(
-                            'only_the_courier_will_see_your_comment'
-                          )}
+                          placeholder="Ваш коментарии увидет только куръер"
                         ></textarea>
                       </div>
                     </div>
@@ -1293,9 +1289,7 @@ const Orders: FC = () => {
                         <textarea
                           {...register('pay_comment')}
                           className="w-96 h-28 bg-gray-100 rounded-2xl p-3 outline-none focus:outline-none resize-none"
-                          placeholder={tr(
-                            'only_the_courier_will_see_your_comment'
-                          )}
+                          placeholder="Ваш коментарии увидет только куръер"
                         ></textarea>
                       </div>
                     </div>
@@ -1385,18 +1379,19 @@ const Orders: FC = () => {
               } form-checkbox h-5 w-5  rounded-md mr-2`}
               onChange={newsletterValueChange}
             />
-            <div>E-mail {tr('mailing')}</div>
+            <div>E-mail рассылка</div>
           </label>
         </div>
         <div className="mt-5 text-gray-400 text-sm flex border-b pb-8">
-          {tr('processing_of_your_personal_data')}
+          Нажимая "Оплатить", Вы даёте Согласие на обработку Ваших персональных
+          данных и принимаете
           <a
             href="/privacy"
             onClick={showPrivacy}
             className="text-yellow block mx-1"
             target="_blank"
           >
-            {tr('terms_of_use')}
+            Пользовательское соглашение
           </a>
         </div>
         <Transition appear show={isShowPrivacy} as={Fragment}>
@@ -1616,7 +1611,7 @@ const Orders: FC = () => {
         </Transition>
         <div className="flex justify-between mt-8">
           <button className="text-xl text-gray-400 bg-gray-200 flex h-12 items-center justify-between px-12 rounded-full w-80">
-            <img src="/left.png" /> {tr('back_to_basket')}
+            <img src="/left.png" /> Вернуться в корзину
           </button>
           <button
             className={`text-xl text-white bg-yellow flex h-12 items-center justify-evenly rounded-full w-80 ${
@@ -1648,7 +1643,7 @@ const Orders: FC = () => {
               </svg>
             ) : (
               <>
-                {tr('pay')} <img src="/right.png" />
+                Оплатить <img src="/right.png" />
               </>
             )}
           </button>

@@ -35,7 +35,6 @@ interface Props {
     footerInfoMenu: APILinkItem[]
     socials: SocialIcons[]
     cleanBackground?: boolean
-    cities: City[]
   }
 }
 
@@ -56,7 +55,6 @@ const Layout: FC<Props> = ({
     topMenu = [],
     footerInfoMenu = [],
     socials = [],
-    cities = [],
     cleanBackground = false,
     ...pageProps
   },
@@ -65,7 +63,7 @@ const Layout: FC<Props> = ({
   const { t: tr } = useTranslation('common')
 
   const [configData, setConfigData] = useState({} as any)
-
+  
   const fetchConfig = async () => {
     let configData
     if (!sessionStorage.getItem('configData')) {
@@ -91,11 +89,7 @@ const Layout: FC<Props> = ({
     return
   }, [])
 
-  const { setCitiesData } = useUI()
 
-  useEffect(() => {
-    setCitiesData(cities)
-  }, [])
   return (
     <CommerceProvider locale={locale}>
       <div className="font-sans">
@@ -133,18 +127,18 @@ const Layout: FC<Props> = ({
                     <div className="md:hidden border-b border-blue md:border-0 pb-5">
                       <div>{tr('delivery_phone')}</div>
                       <div className="text-[30px] font-bold">
-                        {configData.contactPhone}
+                        {configData.contact_phone}
                       </div>
                     </div>
                     <span className="md:block mt-7 text-xl hidden">
-                      {tr('footer_pizza_unites')}
+                      Пицца, которая объединяет
                     </span>
                   </div>
                   <div className="flex-grow border-b border-blue md:border-0 mt-5 md:mt-0 pb-5 md:pb-0">
                     <div className="md:flex justify-center">
                       <div className="mr-24 hidden md:block">
                         <span className="block font-bold mb-3 text-[16px]">
-                          {tr('menu')}
+                          Меню
                         </span>
                         <ul className="ml-3">
                           {categories.map((item) => {
@@ -173,7 +167,7 @@ const Layout: FC<Props> = ({
                       </div>
                       <div>
                         <span className="block font-bold mb-3 text-[16px]">
-                          {tr('information')}
+                          Информация
                         </span>
                         <ul className="ml-3">
                           {footerInfoMenu.map((item) => {
@@ -198,17 +192,14 @@ const Layout: FC<Props> = ({
                     <div className="hidden md:block">
                       <div>{tr('delivery_phone')}</div>
                       <div className="text-[30px] font-bold">
-                        {configData.contactPhone}
+                        {configData.contact_phone}
                       </div>
                     </div>
                     <div className=" border-b border-blue md:border-0 pb-5 md:pb-0">
-                      {tr('work_time')} <br />{' '}
-                      {locale == 'uz'
-                        ? configData.workTimeUz
-                        : configData.workTimeRu}
+                      График работы <br /> с 10-00 до 23-00 Ежедневно
                     </div>
                     <div className="mt-4  border-b border-blue md:border-0 pb-5 md:pb-0">
-                      <span>{tr('follow_us')}</span>
+                      <span>Подписывайтесь на нас:</span>
                       <ul className="flex md:justify-end text-4xl">
                         {socials.map((soc) => {
                           return (
@@ -227,7 +218,7 @@ const Layout: FC<Props> = ({
                   </div>
                 </div>
                 <div className="mb-7 md:mb-0">
-                  {new Date().getFullYear()} {tr('all_rights_reserved')}
+                  {new Date().getFullYear()} Все права защищены
                 </div>
               </div>
             </div>
