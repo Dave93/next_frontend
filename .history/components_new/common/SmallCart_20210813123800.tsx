@@ -276,7 +276,7 @@ const SmallCart: FC = () => {
         <form onSubmit={handleSubmit(onSubmit)} className="relative">
           <input
             type="text"
-            placeholder={tr('promocode')}
+            placeholder={ tr("promocode")}
             {...register('discount_code')}
             className="bg-gray-100 focus:outline-none outline-none px-5 py-2 rounded-full text-xs w-full"
           />

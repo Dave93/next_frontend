@@ -220,7 +220,7 @@ const Layout: FC<Props> = ({
                   </div>
                 </div>
                 <div className="mb-7 md:mb-0">
-                  {new Date().getFullYear()} {tr('all_rights_reserved')}
+                  {new Date().getFullYear()} Все права защищены
                 </div>
               </div>
             </div>

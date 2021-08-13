@@ -180,7 +180,10 @@ const SmallCart: FC = () => {
         {isEmpty && (
           <div className="flex flex-col items-center mt-2 text-center text-gray-400 text-sm">
             <Image src="/cart_empty.png" width={130} height={119} />
-            <div className="w-6/12">{tr('basket_empty')}</div>
+            <div className="w-6/12">
+              Корзина пуста <br />
+              Выберите пиццу
+            </div>
           </div>
         )}
         {!isEmpty && (
@@ -247,9 +250,7 @@ const SmallCart: FC = () => {
         )}
         {!isEmpty && (
           <div className="flex items-center justify-between">
-            <div className="text-sm text-gray-500">
-              {tr('basket_order_price')}
-            </div>
+            <div className="text-sm text-gray-500">Сумма заказа:</div>
             <div className="text-[18px] font-bold">
               {currency(data.totalPrice, {
                 pattern: '# !',
@@ -267,7 +268,7 @@ const SmallCart: FC = () => {
               onClick={goToCheckout}
               className="cursor-pointer outline-none focus:outline-none bg-yellow py-3 rounded-full w-full text-white font-bold"
             >
-              {tr('checkout')}
+              Оформить
             </button>
           </div>
         )}
@@ -276,7 +277,7 @@ const SmallCart: FC = () => {
         <form onSubmit={handleSubmit(onSubmit)} className="relative">
           <input
             type="text"
-            placeholder={tr('promocode')}
+            placeholder="Промокод"
             {...register('discount_code')}
             className="bg-gray-100 focus:outline-none outline-none px-5 py-2 rounded-full text-xs w-full"
           />

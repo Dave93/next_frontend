@@ -63,7 +63,7 @@ const Layout: FC<Props> = ({
   const { t: tr } = useTranslation('common')
 
   const [configData, setConfigData] = useState({} as any)
-
+  
   const fetchConfig = async () => {
     let configData
     if (!sessionStorage.getItem('configData')) {
@@ -88,6 +88,7 @@ const Layout: FC<Props> = ({
     fetchConfig()
     return
   }, [])
+
 
   return (
     <CommerceProvider locale={locale}>
@@ -195,13 +196,10 @@ const Layout: FC<Props> = ({
                       </div>
                     </div>
                     <div className=" border-b border-blue md:border-0 pb-5 md:pb-0">
-                      {tr('work_time')} <br />{' '}
-                      {locale == 'uz'
-                        ? configData.workTimeUz
-                        : configData.workTimeRu}
+                      {tr('work_time')} <br /> { locale == 'uz' ?  configData.workTimeUz : configData.workTimeUz}
                     </div>
                     <div className="mt-4  border-b border-blue md:border-0 pb-5 md:pb-0">
-                      <span>{tr('follow_us')}</span>
+                      <span>Подписывайтесь на нас:</span>
                       <ul className="flex md:justify-end text-4xl">
                         {socials.map((soc) => {
                           return (
@@ -220,7 +218,7 @@ const Layout: FC<Props> = ({
                   </div>
                 </div>
                 <div className="mb-7 md:mb-0">
-                  {new Date().getFullYear()} {tr('all_rights_reserved')}
+                  {new Date().getFullYear()} Все права защищены
                 </div>
               </div>
             </div>
