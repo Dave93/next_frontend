@@ -28,7 +28,7 @@ export async function getServerSideProps({
   const siteInfoPromise = commerce.getSiteInfo({ config, preview })
   const { products } = await productsPromise
   const { pages } = await pagesPromise
-  const { categories, brands, topMenu, footerInfoMenu, socials } =
+  const { categories, brands, topMenu, footerInfoMenu, socials, cities } =
     await siteInfoPromise
   let orderData
   if (id) {
@@ -47,6 +47,7 @@ export async function getServerSideProps({
       footerInfoMenu,
       socials,
       orderData,
+      cities,
     },
   }
 }
