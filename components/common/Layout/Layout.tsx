@@ -1,5 +1,5 @@
 import cn from 'classnames'
-import React, { FC, useEffect } from 'react'
+import React, { FC, useEffect, useState } from 'react'
 import { useRouter } from 'next/router'
 import { CommerceProvider } from '@framework'
 import type { Page } from '@commerce/types/page'
@@ -14,6 +14,7 @@ import Header from '@components_new/Header'
 import Image from 'next/image'
 import Link from 'next/link'
 import { Link as LinkScroll } from 'react-scroll'
+import { useUI } from '@components/ui'
 import {
   faFacebook,
   faInstagram,
@@ -22,8 +23,11 @@ import {
 } from '@fortawesome/free-brands-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { SocialIcons } from '@commerce/types/socialIcons'
+import useTranslation from 'next-translate/useTranslation'
+import getConfig from 'next/config'
+import axios from 'axios'
 import { City } from '@commerce/types/cities'
-import { useUI } from '@components/ui'
+const { publicRuntimeConfig } = getConfig()
 
 interface Props {
   pageProps: {
@@ -60,11 +64,42 @@ const Layout: FC<Props> = ({
   },
 }) => {
   const { locale = 'ru', pathname } = useRouter()
+  const { t: tr } = useTranslation('common')
 
-  const { setCitiesData } = useUI()
+  const [configData, setConfigData] = useState({} as any)
+
+  const fetchConfig = async () => {
+    let configData
+    if (!sessionStorage.getItem('configData')) {
+      let { data } = await axios.get(
+        `${publicRuntimeConfig.apiUrl}/api/configs/public`
+      )
+      configData = data.data
+      sessionStorage.setItem('configData', data.data)
+    } else {
+      configData = sessionStorage.getItem('configData')
+    }
+
+    try {
+      configData = Buffer.from(configData, 'base64')
+      configData = configData.toString()
+      configData = JSON.parse(configData)
+      setConfigData(configData)
+    } catch (e) {}
+  }
+
+  useEffect(() => {
+    fetchConfig()
+    return
+  }, [])
+
+  const { setCitiesData, activeCity, setActiveCity } = useUI()
 
   useEffect(() => {
     setCitiesData(cities)
+    if (!activeCity) {
+      setActiveCity(cities[0])
+    }
   }, [])
   return (
     <CommerceProvider locale={locale}>
@@ -101,18 +136,20 @@ const Layout: FC<Props> = ({
                       />
                     </div>
                     <div className="md:hidden border-b border-blue md:border-0 pb-5">
-                      <div>Телефон доставки</div>
-                      <div className="text-[30px] font-bold">71 205 11 11</div>
+                      <div>{tr('delivery_phone')}</div>
+                      <div className="text-[30px] font-bold">
+                        {configData.contactPhone}
+                      </div>
                     </div>
                     <span className="md:block mt-7 text-xl hidden">
-                      Пицца, которая объединяет
+                      {tr('footer_pizza_unites')}
                     </span>
                   </div>
                   <div className="flex-grow border-b border-blue md:border-0 mt-5 md:mt-0 pb-5 md:pb-0">
                     <div className="md:flex justify-center">
                       <div className="mr-24 hidden md:block">
                         <span className="block font-bold mb-3 text-[16px]">
-                          Меню
+                          {tr('menu')}
                         </span>
                         <ul className="ml-3">
                           {categories.map((item) => {
@@ -141,7 +178,7 @@ const Layout: FC<Props> = ({
                       </div>
                       <div>
                         <span className="block font-bold mb-3 text-[16px]">
-                          Информация
+                          {tr('information')}
                         </span>
                         <ul className="ml-3">
                           {footerInfoMenu.map((item) => {
@@ -164,14 +201,19 @@ const Layout: FC<Props> = ({
                   </div>
                   <div className="md:text-right text-sm leading-7 mt-5 md:mt-0">
                     <div className="hidden md:block">
-                      <div>Телефон доставки</div>
-                      <div className="text-[30px] font-bold">71 205 11 11</div>
+                      <div>{tr('delivery_phone')}</div>
+                      <div className="text-[30px] font-bold">
+                        {configData.contactPhone}
+                      </div>
                     </div>
                     <div className=" border-b border-blue md:border-0 pb-5 md:pb-0">
-                      График работы <br /> с 10-00 до 23-00 Ежедневно
+                      {tr('work_time')} <br />{' '}
+                      {locale == 'uz'
+                        ? configData.workTimeUz
+                        : configData.workTimeRu}
                     </div>
                     <div className="mt-4  border-b border-blue md:border-0 pb-5 md:pb-0">
-                      <span>Подписывайтесь на нас:</span>
+                      <span>{tr('follow_us')}</span>
                       <ul className="flex md:justify-end text-4xl">
                         {socials.map((soc) => {
                           return (
@@ -190,7 +232,7 @@ const Layout: FC<Props> = ({
                   </div>
                 </div>
                 <div className="mb-7 md:mb-0">
-                  {new Date().getFullYear()} Все права защищены
+                  {new Date().getFullYear()} {tr('all_rights_reserved')}
                 </div>
               </div>
             </div>

@@ -70,17 +70,6 @@ interface SelectItem {
   label: string
 }
 
-const dayOptions = [
-  {
-    value: 'today',
-    label: 'Сегодня',
-  },
-  {
-    value: 'tomorrow',
-    label: 'Завтра',
-  },
-]
-
 const deliveryTimeOptions = [] as SelectItem[]
 
 const zeroPad = (num: number, places: number) =>
@@ -185,7 +174,16 @@ const Orders: FC = () => {
     reset(newFields)
   }
   //Orders
-
+  const dayOptions = [
+    {
+      value: 'today',
+      label: tr('today'),
+    },
+    {
+      value: 'tomorrow',
+      label: tr('tomorrow'),
+    },
+  ]
   const [tabIndex, setTabIndex] = useState(
     locationData?.deliveryType || 'deliver'
   )
@@ -421,7 +419,7 @@ const Orders: FC = () => {
 
   const searchTerminal = async (locationData: any = {}) => {
     if (!locationData || !locationData.location) {
-      toast.warn('Не указан адрес или точка доставки', {
+      toast.warn(tr('no_address_specified'), {
         position: toast.POSITION.BOTTOM_RIGHT,
         hideProgressBar: true,
       })
@@ -440,7 +438,7 @@ const Orders: FC = () => {
       toast.warn(
         terminalsData.data.message
           ? terminalsData.data.message
-          : 'Ресторан не найден',
+          : tr('restaurant_not_found'),
         {
           position: toast.POSITION.BOTTOM_RIGHT,
           hideProgressBar: true,
@@ -489,14 +487,14 @@ const Orders: FC = () => {
   // console.log(errors)
 
   if (errors.payType) {
-    toast.error('Не выбрана платёжная система', {
+    toast.error(tr('payment_system_not_selected'), {
       position: toast.POSITION.BOTTOM_RIGHT,
       hideProgressBar: true,
     })
   }
 
   if (errors.deliveryDay || errors.deliveryTime) {
-    toast.error('Не указано время доставки', {
+    toast.error(tr('delivery_time_not_specified'), {
       position: toast.POSITION.BOTTOM_RIGHT,
       hideProgressBar: true,
     })
@@ -532,7 +530,7 @@ const Orders: FC = () => {
               </div>
               {errors.name && (
                 <div className="text-sm text-center text-red-600">
-                  Данное поле обязательно для заполнения
+                  {tr('required')}
                 </div>
               )}
             </div>
@@ -561,7 +559,7 @@ const Orders: FC = () => {
 
               {errors.phone && (
                 <div className="text-sm text-center text-red-600">
-                  Данное поле обязательно для заполнения
+                  {tr('required')}
                 </div>
               )}
             </div>
@@ -600,7 +598,7 @@ const Orders: FC = () => {
               } flex-1 font-bold py-3 text-[18px] rounded-full outline-none focus:outline-none`}
               onClick={() => changeTabIndex('deliver')}
             >
-              Доставка
+              {tr('delivery')}
             </button>
             <button
               className={`${
@@ -608,7 +606,7 @@ const Orders: FC = () => {
               } flex-1 font-bold py-3 text-[18px] rounded-full outline-none focus:outline-none`}
               onClick={() => changeTabIndex('pickup')}
             >
-              Самовывоз
+              {tr('pickup')}
             </button>
           </div>
         </div>
@@ -616,7 +614,7 @@ const Orders: FC = () => {
           <div className="bg-white p-10 rounded-2xl">
             <div className="flex justify-between">
               <div className="text-gray-400 font-bold text-lg">
-                Укажите свой адрес
+                {tr('chooseLocation')}
               </div>
               <div>
                 <Menu as="div" className="relative inline-block text-left">
@@ -696,7 +694,7 @@ const Orders: FC = () => {
             </div>
             <div className="mt-3">
               <form onSubmit={handleSubmit(onSubmit)}>
-                <div className="font-bold text-lg">Адрес</div>
+                <div className="font-bold text-lg">{tr('address')}</div>
                 <div className="mt-3 space-y-6">
                   <div className="flex justify-between w-full">
                     <Downshift
@@ -728,7 +726,7 @@ const Orders: FC = () => {
                               {...getInputProps({
                                 onChange: debouncedAddressInputChangeHandler,
                               })}
-                              placeholder="Адрес"
+                              placeholder={tr('address')}
                               className="bg-gray-100 px-8 py-3 rounded-full w-full outline-none focus:outline-none"
                             />
                             <ul
@@ -776,7 +774,7 @@ const Orders: FC = () => {
                       <input
                         type="text"
                         {...register('flat')}
-                        placeholder="Квартира"
+                        placeholder={tr('flat')}
                         className="bg-gray-100 px-8 py-3 rounded-full w-full outline-none focus:outline-none"
                       />
                     </div>
@@ -784,7 +782,7 @@ const Orders: FC = () => {
                       <input
                         type="text"
                         {...register('house')}
-                        placeholder="Дом"
+                        placeholder={tr('house')}
                         className="bg-gray-100 px-8 py-3 rounded-full w-full"
                       />
                     </div>
@@ -795,7 +793,7 @@ const Orders: FC = () => {
                     {({ open }) => (
                       <>
                         <Disclosure.Button className="flex text-yellow outline-none focus:outline-none">
-                          <span>Указать домофон и подъезд</span>
+                          <span>{tr('indicate_intercom_and_entrance')}</span>
                           {/*
                           Use the `open` render prop to rotate the icon when the panel is open
                         */}
@@ -820,7 +818,7 @@ const Orders: FC = () => {
                                 <input
                                   type="text"
                                   {...register('entrance')}
-                                  placeholder="Подъезд"
+                                  placeholder={tr('entrance')}
                                   className="bg-gray-100 px-8 py-2 rounded-full w-60  outline-none focus:outline-none"
                                 />
                               </div>
@@ -828,7 +826,7 @@ const Orders: FC = () => {
                                 <input
                                   type="text"
                                   {...register('door_code')}
-                                  placeholder="Домофон"
+                                  placeholder={tr('door_code')}
                                   className="bg-gray-100 px-8 py-2 rounded-full w-60 outline-none focus:outline-none"
                                 />
                               </div>
@@ -847,7 +845,7 @@ const Orders: FC = () => {
           <div className="bg-white p-10 rounded-2xl">
             <div>
               <div className="font-bold text-[18px] text-gray-400">
-                Поиск ближайшего ресторана:
+                {tr('search_for_the_nearest_restaurant')}
               </div>
               <div className="flex mt-3">
                 <div
@@ -858,7 +856,7 @@ const Orders: FC = () => {
                     setPickupIndex(1)
                   }}
                 >
-                  На карте
+                  {tr('on_the_map')}
                 </div>
                 <div
                   className={`${
@@ -868,7 +866,7 @@ const Orders: FC = () => {
                     setPickupIndex(2)
                   }}
                 >
-                  Списком
+                  {tr('list')}
                 </div>
               </div>
             </div>
@@ -876,7 +874,7 @@ const Orders: FC = () => {
               <input
                 type="text"
                 {...register('address')}
-                placeholder="Адрес"
+                placeholder={tr('address')}
                 className="bg-gray-100 px-8 rounded-full w-full outline-none focus:outline-none py-2"
               />
             </div>
@@ -986,7 +984,7 @@ const Orders: FC = () => {
             } flex-1 font-bold  rounded-full outline-none focus:outline-none  h-11 md:w-44`}
             onClick={() => setDeliveryActive(1)}
           >
-            Побыстрее
+            {tr('hurry_up')}
           </button>
           <button
             className={`${
@@ -996,7 +994,7 @@ const Orders: FC = () => {
             } flex-1 font-bold  rounded-full outline-none focus:outline-none  h-11 md:w-44 ml-5`}
             onClick={() => setDeliveryActive(2)}
           >
-            Позже
+            {tr('later')}
           </button>
         </div>
         {deliveryActive == 2 && (
@@ -1005,7 +1003,7 @@ const Orders: FC = () => {
               render={({ field: { onChange } }) => (
                 <Select
                   items={dayOptions}
-                  placeholder="Сегодня"
+                  placeholder={tr('today')}
                   onChange={(e: any) => onChange(e)}
                 />
               )}
@@ -1020,7 +1018,7 @@ const Orders: FC = () => {
               render={({ field: { onChange } }) => (
                 <Select
                   items={deliveryTimeOptions}
-                  placeholder="Время"
+                  placeholder={tr('time')}
                   onChange={(e: any) => onChange(e)}
                   className="ml-5"
                 />
@@ -1040,7 +1038,7 @@ const Orders: FC = () => {
         {!locationData?.terminal_id && (
           <div className="absolute w-full h-full -ml-10 -mt-10 bg-opacity-60 bg-gray-100 z-20 items-center flex justify-around">
             <div className="text-yellow font-bold text-2xl">
-              Не указан адрес или ближе к адресу ресторан не найден
+              {tr('no_address_no_restaurant')}
             </div>
           </div>
         )}
@@ -1054,7 +1052,7 @@ const Orders: FC = () => {
             } flex-1 font-bold  rounded-full outline-none focus:outline-none  h-11 md:w-44`}
             onClick={() => setOpenTab(1)}
           >
-            Наличными
+            {tr('in_cash')}
           </button>
           {/* <button
             className={`${
@@ -1074,7 +1072,7 @@ const Orders: FC = () => {
             } flex-1 font-bold  rounded-full outline-none focus:outline-none  h-11 md:w-44 ml-5`}
             onClick={() => setOpenTab(3)}
           >
-            Онлайн
+            {tr('online')}
           </button>
         </div>
         <div className={openTab === 1 ? 'block' : 'hidden'} id="link1">
@@ -1082,13 +1080,13 @@ const Orders: FC = () => {
             type="number"
             {...register('change', { required: openTab === 1 })}
             className="borde focus:outline-none outline-none px-6 py-3 rounded-full text-sm w-80 bg-gray-100 text-gray-400 mt-8"
-            placeholder="Сдача с"
+            placeholder={tr('change')}
           />
           <Disclosure defaultOpen={true}>
             {({ open }) => (
               <>
                 <Disclosure.Button className="flex text-yellow outline-none focus:outline-none mt-8">
-                  <span>Комментарий к заказу </span>
+                  <span>{tr('comment_on_the_order')}</span>
                   {/*
                           Use the `open` render prop to rotate the icon when the panel is open
                         */}
@@ -1113,7 +1111,9 @@ const Orders: FC = () => {
                         <textarea
                           {...register('pay_comment')}
                           className="w-96 h-28 bg-gray-100 rounded-2xl p-3 outline-none focus:outline-none resize-none"
-                          placeholder="Ваш коментарии увидет только куръер"
+                          placeholder={tr(
+                            'only_the_courier_will_see_your_comment'
+                          )}
                         ></textarea>
                       </div>
                     </div>
@@ -1185,7 +1185,7 @@ const Orders: FC = () => {
               <input
                 type="text"
                 {...register('holder_name')}
-                placeholder="Имя держателя"
+                placeholder={tr('holder_name')}
                 className="bg-gray-100 px-8 py-2 rounded-full w-80  outline-none focus:outline-none"
               />
               <input
@@ -1200,7 +1200,7 @@ const Orders: FC = () => {
             {({ open }) => (
               <>
                 <Disclosure.Button className="flex text-yellow outline-none focus:outline-none mt-8">
-                  <span>Комментарий к заказу </span>
+                  <span>{tr('comment_on_the_order')}</span>
                   {/*
                           Use the `open` render prop to rotate the icon when the panel is open
                         */}
@@ -1225,7 +1225,9 @@ const Orders: FC = () => {
                         <textarea
                           {...register('pay_comment')}
                           className="w-96 h-28 bg-gray-100 rounded-2xl p-3 outline-none focus:outline-none resize-none"
-                          placeholder="Ваш коментарии увидет только куръер"
+                          placeholder={tr(
+                            'only_the_courier_will_see_your_comment'
+                          )}
                         ></textarea>
                       </div>
                     </div>
@@ -1266,7 +1268,7 @@ const Orders: FC = () => {
             {({ open }) => (
               <>
                 <Disclosure.Button className="flex text-yellow outline-none focus:outline-none mt-8">
-                  <span>Комментарий к заказу </span>
+                  <span>{tr('comment_on_the_order')} </span>
                   {/*
                           Use the `open` render prop to rotate the icon when the panel is open
                         */}
@@ -1291,7 +1293,9 @@ const Orders: FC = () => {
                         <textarea
                           {...register('pay_comment')}
                           className="w-96 h-28 bg-gray-100 rounded-2xl p-3 outline-none focus:outline-none resize-none"
-                          placeholder="Ваш коментарии увидет только куръер"
+                          placeholder={tr(
+                            'only_the_courier_will_see_your_comment'
+                          )}
                         ></textarea>
                       </div>
                     </div>
@@ -1342,7 +1346,9 @@ const Orders: FC = () => {
         {!isEmpty && (
           <div className="flex justify-between items-center mt-8">
             <div>
-              <div className="font-bold text-xl mb-2">Сумма заказа:</div>
+              <div className="font-bold text-xl mb-2">
+                {tr('basket_order_price')}
+              </div>
             </div>
             <div className="text-2xl font-bold">
               {currency(data.totalPrice, {
@@ -1358,7 +1364,7 @@ const Orders: FC = () => {
       </div>
       <div className="w-full bg-white mb-5 rounded-2xl p-10">
         <div className="flex">
-          <div className="mr-8 text-gray-400">Согласен на отправку</div>
+          <div className="mr-8 text-gray-400">{tr('agree_to_send')}</div>
           <label className="mr-8 cursor-pointer text-gray-400 items-center flex">
             <input
               type="checkbox"
@@ -1379,19 +1385,18 @@ const Orders: FC = () => {
               } form-checkbox h-5 w-5  rounded-md mr-2`}
               onChange={newsletterValueChange}
             />
-            <div>E-mail рассылка</div>
+            <div>E-mail {tr('mailing')}</div>
           </label>
         </div>
         <div className="mt-5 text-gray-400 text-sm flex border-b pb-8">
-          Нажимая "Оплатить", Вы даёте Согласие на обработку Ваших персональных
-          данных и принимаете
+          {tr('processing_of_your_personal_data')}
           <a
             href="/privacy"
             onClick={showPrivacy}
             className="text-yellow block mx-1"
             target="_blank"
           >
-            Пользовательское соглашение
+            {tr('terms_of_use')}
           </a>
         </div>
         <Transition appear show={isShowPrivacy} as={Fragment}>
@@ -1611,7 +1616,7 @@ const Orders: FC = () => {
         </Transition>
         <div className="flex justify-between mt-8">
           <button className="text-xl text-gray-400 bg-gray-200 flex h-12 items-center justify-between px-12 rounded-full w-80">
-            <img src="/left.png" /> Вернуться в корзину
+            <img src="/left.png" /> {tr('back_to_basket')}
           </button>
           <button
             className={`text-xl text-white bg-yellow flex h-12 items-center justify-evenly rounded-full w-80 ${
@@ -1643,7 +1648,7 @@ const Orders: FC = () => {
               </svg>
             ) : (
               <>
-                Оплатить <img src="/right.png" />
+                {tr('pay')} <img src="/right.png" />
               </>
             )}
           </button>

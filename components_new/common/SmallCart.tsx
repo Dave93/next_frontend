@@ -8,12 +8,14 @@ import axios from 'axios'
 import Cookies from 'js-cookie'
 import getConfig from 'next/config'
 import { useRouter } from 'next/router'
+import useTranslation from 'next-translate/useTranslation'
 
 const { publicRuntimeConfig } = getConfig()
 let webAddress = publicRuntimeConfig.apiUrl
 axios.defaults.withCredentials = true
 
 const SmallCart: FC = () => {
+  const { t: tr } = useTranslation('common')
   let cartId: string | null = null
   if (typeof window !== undefined) {
     cartId = localStorage.getItem('basketId')
@@ -164,7 +166,7 @@ const SmallCart: FC = () => {
         )}
         <div className="border-b-2 border-yellow flex items-center justify-between pb-4">
           <div>
-            <span className="font-bold mr-1 text-xl">Корзина</span>
+            <span className="font-bold mr-1 text-xl">{tr('basket')}</span>
             {data?.lineItems.length > 0 && (
               <span className="font-bold text-[18px] text-yellow">
                 ({data.lineItems.length})
@@ -178,10 +180,7 @@ const SmallCart: FC = () => {
         {isEmpty && (
           <div className="flex flex-col items-center mt-2 text-center text-gray-400 text-sm">
             <Image src="/cart_empty.png" width={130} height={119} />
-            <div>
-              Корзина пуста <br />
-              Выберите пиццу
-            </div>
+            <div className="w-6/12">{tr('basket_empty')}</div>
           </div>
         )}
         {!isEmpty && (
@@ -248,7 +247,9 @@ const SmallCart: FC = () => {
         )}
         {!isEmpty && (
           <div className="flex items-center justify-between">
-            <div className="text-sm text-gray-500">Сумма заказа:</div>
+            <div className="text-sm text-gray-500">
+              {tr('basket_order_price')}
+            </div>
             <div className="text-[18px] font-bold">
               {currency(data.totalPrice, {
                 pattern: '# !',
@@ -266,7 +267,7 @@ const SmallCart: FC = () => {
               onClick={goToCheckout}
               className="cursor-pointer outline-none focus:outline-none bg-yellow py-3 rounded-full w-full text-white font-bold"
             >
-              Оформить
+              {tr('checkout')}
             </button>
           </div>
         )}
@@ -275,7 +276,7 @@ const SmallCart: FC = () => {
         <form onSubmit={handleSubmit(onSubmit)} className="relative">
           <input
             type="text"
-            placeholder="Промокод"
+            placeholder={tr('promocode')}
             {...register('discount_code')}
             className="bg-gray-100 focus:outline-none outline-none px-5 py-2 rounded-full text-xs w-full"
           />
