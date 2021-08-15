@@ -14,6 +14,7 @@ import Header from '@components_new/Header'
 import Image from 'next/image'
 import Link from 'next/link'
 import { Link as LinkScroll } from 'react-scroll'
+import { useUI } from '@components/ui'
 import {
   faFacebook,
   faInstagram,
@@ -25,6 +26,7 @@ import { SocialIcons } from '@commerce/types/socialIcons'
 import useTranslation from 'next-translate/useTranslation'
 import getConfig from 'next/config'
 import axios from 'axios'
+import { City } from '@commerce/types/cities'
 const { publicRuntimeConfig } = getConfig()
 
 interface Props {
@@ -91,10 +93,13 @@ const Layout: FC<Props> = ({
     return
   }, [])
 
-  const { setCitiesData } = useUI()
+  const { setCitiesData, activeCity, setActiveCity } = useUI()
 
   useEffect(() => {
     setCitiesData(cities)
+    if (!activeCity) {
+      setActiveCity(cities[0])
+    }
   }, [])
   return (
     <CommerceProvider locale={locale}>
