@@ -1,7 +1,6 @@
 import { Layout } from '@components/common'
 import commerce from '@lib/api/commerce'
 import { GetServerSidePropsContext } from 'next'
-import NewsList from '@components_new/news/NewsList'
 import cookies from 'next-cookies'
 import axios from 'axios'
 import menuItems from '@commerce/data/newsMenu'
