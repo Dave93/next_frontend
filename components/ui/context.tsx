@@ -1,9 +1,22 @@
 import { City } from '@commerce/types/cities'
 import React, { FC, useCallback, useMemo } from 'react'
+import Cookies from 'js-cookie'
 
 let userData: any = null
 
 let locationData: any = null
+
+let activeCity: City | null = null
+
+let activeCityData: any = Cookies.get('activeCity')
+try {
+  activeCityData = Buffer.from(activeCityData, 'base64')
+  activeCityData = activeCityData.toString()
+  activeCityData = JSON.parse(activeCityData)
+} catch (e) {}
+
+activeCity = activeCityData
+
 if (typeof window !== 'undefined') {
   userData = localStorage.getItem('mijoz')
   try {
@@ -68,7 +81,7 @@ const initialState = {
   user: userData,
   locationData,
   cities: null,
-  activeCity: null,
+  activeCity: activeCity,
 }
 
 type Action =
@@ -218,6 +231,11 @@ function uiReducer(state: State, action: Action) {
       }
     }
     case 'SET_ACTIVE_CITY': {
+      try {
+        let locationNewData = JSON.stringify(action.value)
+        locationNewData = Buffer.from(locationNewData).toString('base64')
+        Cookies.set('activeCity', locationNewData)
+      } catch (e) {}
       return {
         ...state,
         activeCity: action.value,

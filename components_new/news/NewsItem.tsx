@@ -1,22 +1,54 @@
 import useTranslation from 'next-translate/useTranslation'
 import { memo, FC } from 'react'
 import Image from 'next/image'
-import NewsItemData from '@commerce/data/news'
 import { ClockIcon, CalendarIcon } from '@heroicons/react/solid'
 import Link from 'next/link'
+import { useRouter } from 'next/router'
 
-const NewsItem: FC = () => {
-  const { t: tr } = useTranslation('common')
+type AnyObject = {
+  [key: string]: any
+}
+
+type NewListProps = {
+  newsItems: AnyObject[]
+}
+
+const NewsItem: FC<NewListProps> = ({ newsItems }) => {
+  const router = useRouter()
+  const { locale } = router
   return (
     <>
-      {NewsItemData.map((news, key) => (
+      {newsItems.map((item, key) => (
         <div
           className="bg-white rounded-3xl flex flex-col overflow-hidden"
-          key={key}
+          key={item.id}
         >
           <div className="relative">
-            <Image src={news.picture} width="400" height="400" />
-            <div className="absolute bottom-5 flex justify-between px-4 text-white w-full">
+            {item.asset && item.asset.length ? (
+              <Link href={`${'/news/' + item.id}`} prefetch={false}>
+                <a>
+                  <Image
+                    src={item.asset[0].link}
+                    width="400"
+                    height="400"
+                    alt={locale == 'ru' ? item.name : item.name_uz}
+                  />
+                </a>
+              </Link>
+            ) : (
+              <Link href={`${'/news/' + item.id}`} prefetch={false}>
+                <a>
+                  <Image
+                    src="/no_photo.svg"
+                    width="400"
+                    height="400"
+                    alt={locale == 'ru' ? item.name : item.name_uz}
+                  />
+                </a>
+              </Link>
+            )}
+
+            {/* <div className="absolute bottom-5 flex justify-between px-4 text-white w-full">
               <div className="flex items-center">
                 <ClockIcon className="h-5 w-5 mr-2" />
                 <div>22:00-03:00</div>
@@ -25,12 +57,18 @@ const NewsItem: FC = () => {
                 <CalendarIcon className="h-5 w-5 mr-2" />
                 <div>01.07-31.07</div>
               </div>
-            </div>
+            </div> */}
           </div>
           <div className="flex flex-col justify-between p-5 flex-grow">
-            <div className="text-lg mb-3">{news.name}</div>
-            <Link href={`${'/news/' + news.id}`}>
-              <a className="text-xs text-gray-400">{news.desc}</a>
+            <div className="text-lg mb-3">
+              <Link href={`${'/news/' + item.id}`} prefetch={false}>
+                {locale == 'ru' ? item.name : item.name_uz}
+              </Link>
+            </div>
+            <Link href={`${'/news/' + item.id}`} prefetch={false}>
+              <a className="text-xs text-gray-400 hover:underline">
+                Подробное описание
+              </a>
             </Link>
           </div>
         </div>
