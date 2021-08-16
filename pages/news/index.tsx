@@ -37,13 +37,10 @@ export async function getServerSideProps({
   if (!activeCity) {
     activeCity = cities[0]
   }
-  console.log(activeCity)
 
   const { data } = await axios.get(
     `${process.env.API_URL}/api/news/public?city_id=${activeCity.id}`
   )
-
-  console.log(data)
 
   return {
     props: {
