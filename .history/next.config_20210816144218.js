@@ -4,6 +4,7 @@ const {
   getProviderName,
 } = require('./framework/commerce/config')
 const nextTranslate = require('next-translate')
+// require('dotenv').config()
 
 const provider = commerce.provider || getProviderName()
 const isBC = provider === 'bigcommerce'
@@ -11,13 +12,14 @@ const isShopify = provider === 'shopify'
 const isSaleor = provider === 'saleor'
 const isSwell = provider === 'swell'
 const isVendure = provider === 'vendure'
+const withPWA = require('next-pwa')
 
 module.exports = nextTranslate(
   withCommerceConfig({
-    future: {
-      webpack5: true,
-    },
     commerce,
+    publicRuntimeConfig: {
+      apiUrl: process.env.API_URL,
+    },
     rewrites() {
       return [
         (isBC || isShopify || isSwell || isVendure) && {
@@ -38,6 +40,12 @@ module.exports = nextTranslate(
             destination: `${process.env.NEXT_PUBLIC_VENDURE_SHOP_API_URL}/:path*`,
           },
       ].filter(Boolean)
+    },
+    images: {
+      domains: ['store.hq.fungeek.net', 'api.hq.fungeek.net'],
+    },
+    pwa: {
+      dest: 'public',
     },
   })
 )

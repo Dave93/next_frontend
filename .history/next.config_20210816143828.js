@@ -4,6 +4,7 @@ const {
   getProviderName,
 } = require('./framework/commerce/config')
 const nextTranslate = require('next-translate')
+// require('dotenv').config()
 
 const provider = commerce.provider || getProviderName()
 const isBC = provider === 'bigcommerce'
@@ -11,10 +12,14 @@ const isShopify = provider === 'shopify'
 const isSaleor = provider === 'saleor'
 const isSwell = provider === 'swell'
 const isVendure = provider === 'vendure'
+const withPWA = require('next-pwa')
 
 module.exports = nextTranslate(
   withCommerceConfig({
     commerce,
+    publicRuntimeConfig: {
+      apiUrl: process.env.API_URL,
+    },
     rewrites() {
       return [
         (isBC || isShopify || isSwell || isVendure) && {
@@ -36,8 +41,17 @@ module.exports = nextTranslate(
           },
       ].filter(Boolean)
     },
+    images: {
+      domains: ['store.hq.fungeek.net', 'api.hq.fungeek.net'],
+    },
   })
 )
+
+module.exports = withPWA({
+  pwa: {
+    dest: 'public',
+  },
+})
 
 // Don't delete this console log, useful to see the commerce config in Vercel deployments
 console.log('next.config.js', JSON.stringify(module.exports, null, 2))

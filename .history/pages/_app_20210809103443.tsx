@@ -9,13 +9,6 @@ import type { AppProps } from 'next/app'
 import { Head } from '@components/common'
 import { ManagedUIContext } from '@components/ui/context'
 import { ToastContainer } from 'react-toastify'
-import { pwaTrackingListeners } from './scripts/pwaEventlisteners'
-
-const isBrowser = typeof window !== 'undefined'
-
-if (isBrowser) {
-  pwaTrackingListeners()
-}
 
 const Noop: FC = ({ children }) => <>{children}</>
 

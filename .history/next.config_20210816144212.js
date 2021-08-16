@@ -14,7 +14,7 @@ const isSwell = provider === 'swell'
 const isVendure = provider === 'vendure'
 const withPWA = require('next-pwa')
 
-module.exports = withPWA(nextTranslate(
+module.exports = nextTranslate(
   withCommerceConfig({
     commerce,
     publicRuntimeConfig: {
@@ -48,8 +48,13 @@ module.exports = withPWA(nextTranslate(
       dest: 'public',
     },
   })
-))
+)
 
+module.exports = withPWA({
+  pwa: {
+    dest: 'public',
+  },
+})
 
 // Don't delete this console log, useful to see the commerce config in Vercel deployments
 console.log('next.config.js', JSON.stringify(module.exports, null, 2))
