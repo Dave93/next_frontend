@@ -1,7 +1,6 @@
 import { Layout } from '@components/common'
 import commerce from '@lib/api/commerce'
 import { GetServerSidePropsContext } from 'next'
-import NewsList from '@components_new/news/NewsList'
 
 export async function getServerSideProps({
   preview,
@@ -29,7 +28,7 @@ export async function getServerSideProps({
 export default function Sale() {
   return (
     <>
-      <NewsList />
+      <h1>Sale</h1>
     </>
   )
 }
