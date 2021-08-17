@@ -130,7 +130,7 @@ const SignInButton: FC = () => {
       setSubmitError(errors[otpError])
     } else if (success) {
       success = Buffer.from(success, 'base64')
-      success = success.toString('ascii')
+      success = success.toString()
       success = JSON.parse(success)
       Cookies.set('opt_token', success.user_token)
       otpTime.current = result?.time_to_answer
@@ -162,7 +162,7 @@ const SignInButton: FC = () => {
       data: { result },
     }: { data: { result: any } } = ress
     result = Buffer.from(result, 'base64')
-    result = result.toString('ascii')
+    result = result.toString()
     result = JSON.parse(result)
 
     if (result === false) {

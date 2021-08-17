@@ -91,6 +91,18 @@ Array.from(Array(24).keys()).map((item: number) => {
 
 const paymentTypes = ['payme', 'click', 'oson']
 
+interface Errors {
+  [key: string]: string
+}
+
+const errors: Errors = {
+  name_field_is_required:
+    'Мы Вас не нашли в нашей системе. Просьба указать своё имя.',
+  opt_code_is_incorrect: 'Введённый код неверный или срок кода истёк',
+}
+
+let otpTimerRef: NodeJS.Timeout
+
 const Orders: FC = () => {
   //Contacts
   const { t: tr } = useTranslation('common')
@@ -224,6 +236,7 @@ const Orders: FC = () => {
   )
   const [isPhoneConfirmOpen, setIsPhoneConfirmOpen] = useState(false)
   const [otpCode, setOtpCode] = useState('')
+  const [otpShowCode, setOtpShowCode] = useState(0)
 
   const [geoSuggestions, setGeoSuggestions] = useState([])
   const [selectedCoordinates, setSelectedCoordinates] = useState(
@@ -241,6 +254,7 @@ const Orders: FC = () => {
   )
 
   let authButtonRef = useRef(null)
+  const otpTime = useRef(0)
   const activeLabel = cities.find((item) => item.active)?.label
   const activeCity = cities.find((item) => item.active)
 
@@ -474,6 +488,17 @@ const Orders: FC = () => {
     setOtpCode(otp)
   }
 
+  const startTimeout = () => {
+    otpTimerRef = setInterval(() => {
+      if (otpTime.current > 0) {
+        otpTime.current = otpTime.current - 1
+        setOtpShowCode(otpTime.current)
+      } else {
+        clearInterval(otpTimerRef)
+      }
+    }, 1000)
+  }
+
   const prepareOrder = async () => {
     setIsSavingOrder(true)
     await setCredentials()
@@ -488,6 +513,13 @@ const Orders: FC = () => {
           hideProgressBar: true,
         })
       } else {
+        let success: any = Buffer.from(data.success, 'base64')
+        success = success.toString()
+        success = JSON.parse(success)
+        Cookies.set('opt_token', success.user_token)
+        otpTime.current = data?.time_to_answer
+        setOtpShowCode(otpTime.current)
+        startTimeout()
         setIsPhoneConfirmOpen(true)
       }
       setIsSavingOrder(false)
@@ -503,16 +535,29 @@ const Orders: FC = () => {
   const saveOrder = async () => {
     setIsSavingOrder(true)
     await setCredentials()
+    const otpToken = Cookies.get('opt_token')
     try {
-      const { data } = await axios.post(`${webAddress}/api/orders`, {
-        formData: { ...locationData, ...getValues() },
-        opt: otpCode,
-        basket_id: cartId,
-      })
+      const { data } = await axios.post(
+        `${webAddress}/api/orders`,
+        {
+          formData: { ...locationData, ...getValues() },
+          code: otpCode,
+          basket_id: cartId,
+        },
+        {
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${otpToken}`,
+          },
+          withCredentials: true,
+        }
+      )
 
       setIsSavingOrder(false)
+      clearInterval(otpTimerRef)
+      setUserData(data.user)
       localStorage.removeItem('basketId')
-      router.push(`/order/success/?id=${data.data.id}`)
+      router.push(`/order/${data.order.id}`)
     } catch (e) {
       toast.error(e.response.data.error.message, {
         position: toast.POSITION.BOTTOM_RIGHT,
@@ -525,7 +570,24 @@ const Orders: FC = () => {
     // }
   }
 
-  // console.log(errors)
+  const otpTimerText = useMemo(() => {
+    let text = 'Получить новый код через '
+    const minutes: number = parseInt((otpShowCode / 60).toString(), 0)
+    const seconds: number = otpShowCode % 60
+    if (minutes > 0) {
+      text += minutes + ' мин. '
+    }
+
+    if (seconds > 0) {
+      text += seconds + ' сек.'
+    }
+    return text
+  }, [otpShowCode])
+
+  const getNewCode = (e: React.SyntheticEvent<EventTarget>) => {
+    e.preventDefault()
+    prepareOrder()
+  }
 
   if (errors.payType) {
     toast.error(tr('payment_system_not_selected'), {
@@ -1752,6 +1814,18 @@ const Orders: FC = () => {
                             containerStyle="grid grid-cols-4 gap-1.5 justify-center"
                             numInputs={4}
                           />
+                          {otpShowCode > 0 ? (
+                            <div className="text-xs text-yellow mt-3">
+                              {otpTimerText}
+                            </div>
+                          ) : (
+                            <button
+                              className="text-xs text-yellow mt-3 outline-none focus:outline-none border-b border-yellow pb-0.5"
+                              onClick={(e) => getNewCode(e)}
+                            >
+                              Получить код заново
+                            </button>
+                          )}
                         </div>
                         <div className="mt-10">
                           <button
@@ -1783,7 +1857,7 @@ const Orders: FC = () => {
                                 ></path>
                               </svg>
                             ) : (
-                              'Войти'
+                              'Подтвердить'
                             )}
                           </button>
                         </div>
