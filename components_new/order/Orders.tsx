@@ -37,14 +37,12 @@ import Select from '@components_new/utils/Select'
 import { toast } from 'react-toastify'
 import Cookies from 'js-cookie'
 import { useRouter } from 'next/router'
+import OtpInput from 'react-otp-input'
+import styles from './Orders.module.css'
 
 const { publicRuntimeConfig } = getConfig()
 let webAddress = publicRuntimeConfig.apiUrl
 axios.defaults.withCredentials = true
-
-// interface LocationTabProps {
-//   setOpen: Dispatch<SetStateAction<boolean>>
-// }
 
 type FormData = {
   name: string
@@ -65,6 +63,7 @@ type FormData = {
   deliveryTime: string
   payType: string
 }
+
 interface SelectItem {
   value: string
   label: string
@@ -137,6 +136,14 @@ const Orders: FC = () => {
       deliveryTime: '',
       payType: '',
     },
+  })
+
+  const {
+    register: passwordFormRegister,
+    handleSubmit: handlePasswordSubmit,
+    formState: passwordFormState,
+  } = useForm({
+    mode: 'onChange',
   })
 
   const onSubmit = (data: any) => console.log(JSON.stringify(data))
@@ -215,6 +222,8 @@ const Orders: FC = () => {
   const [activePoint, setActivePoint] = useState(
     (locationData ? locationData.terminal_id : null) as number | null
   )
+  const [isPhoneConfirmOpen, setIsPhoneConfirmOpen] = useState(false)
+  const [otpCode, setOtpCode] = useState('')
 
   const [geoSuggestions, setGeoSuggestions] = useState([])
   const [selectedCoordinates, setSelectedCoordinates] = useState(
@@ -231,6 +240,7 @@ const Orders: FC = () => {
       : ([] as any)
   )
 
+  let authButtonRef = useRef(null)
   const activeLabel = cities.find((item) => item.active)?.label
   const activeCity = cities.find((item) => item.active)
 
@@ -458,6 +468,10 @@ const Orders: FC = () => {
         terminalData: terminalsData.data.items[0],
       })
     }
+  }
+
+  const handleOtpChange = (otp: string) => {
+    setOtpCode(otp)
   }
 
   const saveOrder = async () => {
@@ -1654,6 +1668,107 @@ const Orders: FC = () => {
           </button>
         </div>
       </div>
+      <Transition appear show={isPhoneConfirmOpen} as={Fragment}>
+        <Dialog
+          as="div"
+          className="fixed inset-0 z-50 overflow-y-auto"
+          onClose={() => {}}
+          initialFocus={authButtonRef}
+        >
+          <div className="min-h-screen px-4 text-center">
+            <Transition.Child
+              as={Fragment}
+              enter="ease-out duration-300"
+              enterFrom="opacity-0"
+              enterTo="opacity-100"
+              leave="ease-in duration-200"
+              leaveFrom="opacity-100"
+              leaveTo="opacity-0"
+            >
+              <Dialog.Overlay className="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity" />
+            </Transition.Child>
+
+            {/* This element is to trick the browser into centering the modal contents. */}
+            <span
+              className="inline-block h-screen align-middle"
+              aria-hidden="true"
+            >
+              &#8203;
+            </span>
+            <Transition.Child
+              as={Fragment}
+              enter="ease-out duration-300"
+              enterFrom="opacity-0 scale-95"
+              enterTo="opacity-100 scale-100"
+              leave="ease-in duration-200"
+              leaveFrom="opacity-100 scale-100"
+              leaveTo="opacity-0 scale-95"
+            >
+              <div className="align-middle inline-block overflow-hidden w-full">
+                <div className="md:inline-flex my-8 items-start">
+                  <div className="align-middle bg-white inline-block overflow-hidden md:px-40 px-6 py-10 rounded-2xl shadow-xl text-center transform transition-all max-w-2xl">
+                    <Dialog.Title as="h3" className="leading-6 text-3xl">
+                      Подтверждение заказа
+                    </Dialog.Title>
+                    <Dialog.Description>Укажите код из смс</Dialog.Description>
+                    <div>
+                      <form onSubmit={handlePasswordSubmit(saveOrder)}>
+                        <div className="mt-10">
+                          <label className="text-sm text-gray-400 mb-2 block">
+                            Код из смс
+                          </label>
+                          <OtpInput
+                            value={otpCode}
+                            onChange={handleOtpChange}
+                            inputStyle={`${styles.digitField} border border-yellow w-16 rounded-3xl h-12 outline-none focus:outline-none text-center`}
+                            isInputNum={true}
+                            containerStyle="grid grid-cols-4 gap-1.5 justify-center"
+                            numInputs={4}
+                          />
+                        </div>
+                        <div className="mt-10">
+                          <button
+                            className={`py-3 px-20 text-white font-bold text-xl text-center rounded-full w-full outline-none focus:outline-none ${
+                              otpCode.length >= 4 ? 'bg-yellow' : 'bg-gray-400'
+                            }`}
+                            disabled={otpCode.length < 4}
+                            ref={authButtonRef}
+                          >
+                            {passwordFormState.isSubmitting ? (
+                              <svg
+                                className="animate-spin h-5 mx-auto text-center text-white w-5"
+                                xmlns="http://www.w3.org/2000/svg"
+                                fill="none"
+                                viewBox="0 0 24 24"
+                              >
+                                <circle
+                                  className="opacity-25"
+                                  cx="12"
+                                  cy="12"
+                                  r="10"
+                                  stroke="currentColor"
+                                  strokeWidth="4"
+                                ></circle>
+                                <path
+                                  className="opacity-75"
+                                  fill="currentColor"
+                                  d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+                                ></path>
+                              </svg>
+                            ) : (
+                              'Войти'
+                            )}
+                          </button>
+                        </div>
+                      </form>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </Transition.Child>
+          </div>
+        </Dialog>
+      </Transition>
     </>
   )
 }
