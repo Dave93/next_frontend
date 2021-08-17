@@ -474,12 +474,39 @@ const Orders: FC = () => {
     setOtpCode(otp)
   }
 
+  const prepareOrder = async () => {
+    setIsSavingOrder(true)
+    await setCredentials()
+    try {
+      const { data } = await axios.post(`${webAddress}/api/orders/prepare`, {
+        formData: { ...locationData, ...getValues() },
+        basket_id: cartId,
+      })
+      if (!data.success) {
+        toast.error(data.message, {
+          position: toast.POSITION.BOTTOM_RIGHT,
+          hideProgressBar: true,
+        })
+      } else {
+        setIsPhoneConfirmOpen(true)
+      }
+      setIsSavingOrder(false)
+    } catch (e) {
+      toast.error(e.response.data.error.message, {
+        position: toast.POSITION.BOTTOM_RIGHT,
+        hideProgressBar: true,
+      })
+      setIsSavingOrder(false)
+    }
+  }
+
   const saveOrder = async () => {
     setIsSavingOrder(true)
     await setCredentials()
     try {
       const { data } = await axios.post(`${webAddress}/api/orders`, {
         formData: { ...locationData, ...getValues() },
+        opt: otpCode,
         basket_id: cartId,
       })
 
@@ -1637,7 +1664,7 @@ const Orders: FC = () => {
               !locationData?.terminal_id ? 'opacity-25 cursor-not-allowed' : ''
             }`}
             disabled={!locationData?.terminal_id || isSavingOrder}
-            onClick={handleSubmit(saveOrder)}
+            onClick={handleSubmit(prepareOrder)}
           >
             {isSavingOrder ? (
               <svg
