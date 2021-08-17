@@ -8,7 +8,11 @@ import cookies from 'next-cookies'
 import axios from 'axios'
 import { useRouter } from 'next/router'
 import useTranslation from 'next-translate/useTranslation'
-import { ClockIcon, CalendarIcon } from '@heroicons/react/solid'
+import { ClockIcon, CalendarIcon } from '@heroicons/react/solid'import { ParsedUrlQuery } from 'querystring'
+
+interface IParams extends ParsedUrlQuery {
+    id: string
+}
 
 import menuItems from '@commerce/data/newsMenu'
 
@@ -23,7 +27,7 @@ export async function getServerSideProps({
   const siteInfoPromise = commerce.getSiteInfo({ config, preview })
   const { categories, brands, topMenu, footerInfoMenu, socials, cities } =
     await siteInfoPromise
-  const { id } = params
+  const { id } = params as IParams
   const c = cookies(context)
 
   let activeCity = null
