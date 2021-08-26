@@ -18,7 +18,6 @@ import MobSetLocation from '@components_new/header/MobSetLocation'
 import defaultChannel from '@lib/defaultChannel'
 import { useCart } from '@framework/cart'
 import dynamic from 'next/dynamic'
-import CreateYourPizza from '@components_new/product/CreateYourPizza'
 
 const CartWithNoSSR = dynamic(
   () => import('@components_new/common/SmallCart'),
@@ -147,15 +146,15 @@ export default function Home({
       <div className="lg:hidden mx-8 my-5">
         <MobSetLocation />
       </div>
+
+      <div className="gap-4 grid grid-cols-2 items-center justify-between relative md:flex md:flex-col px-6 py-4 rounded-[15px] shadow-lg">
+        <div>asd</div>
+        <div></div>
+        <div></div>
+        <div></div>
+      </div>
       <CategoriesMenu categories={categories} channelName={channelName} />
       <div className="container mx-auto">
-        <div className="grid lg:grid-cols-4 grid-cols-1 md:grid-cols-2 gap-10 mt-10">
-          <div className="col-span-3 space-y-16">
-            <div className="grid grid-cols-1 lg:grid-cols-3 md:grid-cols-2 md:gap-10 divide-y md:divide-y-0 px-4 md:px-0">
-              <CreateYourPizza />
-            </div>
-          </div>
-        </div>
         <div className="grid lg:grid-cols-4 grid-cols-1 md:grid-cols-2 gap-10 mt-10">
           <div className="col-span-3 space-y-16">
             {readyProducts.map((sec: any) => (

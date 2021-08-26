@@ -283,7 +283,7 @@ const ProductItemNew: FC<ProductItem> = ({ product, channelName }) => {
             </div>
           )}
           <div className="border-b border-yellow pb-3 text-center text-xl w-full">
-            {tr('add')}
+            {tr("add")}
           </div>
           <div className="flex-grow gap-3 grid grid-cols-2">
             {modifiers &&
@@ -337,13 +337,13 @@ const ProductItemNew: FC<ProductItem> = ({ product, channelName }) => {
               className="bg-yellow focus:outline-none font-bold outline-none px-6 py-2 rounded-full text-center text-white uppercase"
               onClick={addToBasket}
             >
-              {tr('yes')}
+              Да
             </button>
             <button
               className="bg-gray-200 focus:outline-none font-bold outline-none px-6 py-2 rounded-full text-center text-white uppercase"
               onClick={discardModifier}
             >
-              {tr('no')}
+              Нет
             </button>
           </div>
         </div>
