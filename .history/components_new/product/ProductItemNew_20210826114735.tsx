@@ -348,6 +348,13 @@ const ProductItemNew: FC<ProductItem> = ({ product, channelName }) => {
           </div>
         </div>
       ) : (
+          
+      <div className="gap-4 grid grid-cols-2 items-center justify-between relative md:flex md:flex-col px-6 py-4 rounded-[15px] shadow-lg">
+        <div>asd</div>
+        <div></div>
+        <div></div>
+        <div></div>
+      </div>
         <div className="gap-4 grid grid-cols-2 py-4 md:py-0 items-center justify-between md:flex md:flex-col">
           <div>
             <div className="text-center">
