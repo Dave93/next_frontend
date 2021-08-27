@@ -71,10 +71,10 @@ const CreateYourPizza: FC = () => {
             >
               <div className="inline-block align-bottom bg-white p-10 rounded-3xl text-left shadow-xl transform transition-all sm:my-8 sm:align-middle container sm:w-full">
                 <button
-                  className="absolute focus:outline-none outline-none -right-10 top-2"
+                  className="absolute focus:outline-none outline-none -right-1 text-gray-400"
                   onClick={() => setIsOpen(false)}
                 >
-                  <XIcon className="cursor-pointer h-7 text-white w-7" />
+                  <XIcon className="cursor-pointer h-5 text-gray-400 w-5" />
                 </button>
                 <div className="grid grid-cols-12 gap-2 container">
                   <div className="grid grid-cols-2 gap-2 text-center col-span-3">
