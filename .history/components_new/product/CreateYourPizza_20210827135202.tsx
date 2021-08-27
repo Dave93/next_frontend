@@ -69,13 +69,8 @@ const CreateYourPizza: FC = () => {
               leaveFrom="opacity-100 translate-y-0 sm:scale-100"
               leaveTo="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
             >
+              <XIcon />
               <div className="inline-block align-bottom bg-white p-10 rounded-3xl text-left shadow-xl transform transition-all sm:my-8 sm:align-middle container sm:w-full">
-                <button
-                  className="absolute focus:outline-none outline-none -right-10 top-2"
-                  onClick={() => setIsOpen(false)}
-                >
-                  <XIcon className="cursor-pointer h-7 text-white w-7" />
-                </button>
                 <div className="grid grid-cols-12 gap-2 container">
                   <div className="grid grid-cols-2 gap-2 text-center col-span-3">
                     <div className="rounded-3xl bg-white p-2 shadow-xl">

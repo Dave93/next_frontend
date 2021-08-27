@@ -1,7 +1,6 @@
 import React, { memo, FC, useState, Fragment, useRef } from 'react'
 import Image from 'next/image'
 import { Dialog, Transition } from '@headlessui/react'
-import { XIcon } from '@heroicons/react/outline'
 
 const CreateYourPizza: FC = () => {
   let [isOpen, setIsOpen] = useState(false)
@@ -69,54 +68,49 @@ const CreateYourPizza: FC = () => {
               leaveFrom="opacity-100 translate-y-0 sm:scale-100"
               leaveTo="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
             >
-              <div className="inline-block align-bottom bg-white p-10 rounded-3xl text-left shadow-xl transform transition-all sm:my-8 sm:align-middle container sm:w-full">
-                <button
-                  className="absolute focus:outline-none outline-none -right-10 top-2"
-                  onClick={() => setIsOpen(false)}
-                >
-                  <XIcon className="cursor-pointer h-7 text-white w-7" />
-                </button>
+              <div className="inline-block align-bottom bg-white p-10 rounded-lg text-left shadow-xl transform transition-all sm:my-8 sm:align-middle container sm:w-full">
+                <button ref={completeButtonRef}>Complete order</button>
                 <div className="grid grid-cols-12 gap-2 container">
                   <div className="grid grid-cols-2 gap-2 text-center col-span-3">
-                    <div className="rounded-3xl bg-white p-2 shadow-xl">
+                    <div className="rounded-3xl bg-white p-2 h-[174px] shadow-xl">
                       <Image src="/pizza_img.png" width="110" height="110" />
                       <div>СЫРНАЯ</div>
                       <div className="text-gray-400">86000 сум</div>
                     </div>
-                    <div className="rounded-3xl bg-white p-2 shadow-xl">
+                    <div className="rounded-3xl bg-white p-2 h-[174px] shadow-xl">
                       <Image src="/pizza_img.png" width="110" height="110" />
                       <div>СЫРНАЯ</div>
                       <div className="text-gray-400">86000 сум</div>
                     </div>
-                    <div className="rounded-3xl bg-white p-2 shadow-xl">
+                    <div className="rounded-3xl bg-white p-2 h-[174px] shadow-xl">
                       <Image src="/pizza_img.png" width="110" height="110" />
                       <div>СЫРНАЯ</div>
                       <div className="text-gray-400">86000 сум</div>
                     </div>
-                    <div className="rounded-3xl bg-white p-2 shadow-xl">
+                    <div className="rounded-3xl bg-white p-2 h-[174px] shadow-xl">
                       <Image src="/pizza_img.png" width="110" height="110" />
                       <div>СЫРНАЯ</div>
                       <div className="text-gray-400">86000 сум</div>
                     </div>
-                    <div className="rounded-3xl bg-white p-2 shadow-xl">
+                    <div className="rounded-3xl bg-white p-2 h-[174px] shadow-xl">
                       <Image src="/pizza_img.png" width="110" height="110" />
                       <div>СЫРНАЯ</div>
                       <div className="text-gray-400">86000 сум</div>
                     </div>
-                    <div className="rounded-3xl bg-white p-2 shadow-xl">
+                    <div className="rounded-3xl bg-white p-2 h-[174px] shadow-xl">
                       <Image src="/pizza_img.png" width="110" height="110" />
                       <div>СЫРНАЯ</div>
                       <div className="text-gray-400">86000 сум</div>
                     </div>
-                    <div className="rounded-3xl bg-white p-2 shadow-xl">
+                    <div className="rounded-3xl bg-white p-2 h-[174px] shadow-xl">
                       <Image src="/pizza_img.png" width="110" height="110" />
                       <div>СЫРНАЯ</div>
                       <div className="text-gray-400">86000 сум</div>
                     </div>
                   </div>
                   <div className="bg-white rounded-3xl p-5 text-center col-span-6 shadow-xl">
-                    <div className="text-2xl">Пицца 50/50</div>
-                    <div className="text-gray-400 mb-5">
+                    <div className="text-2xl">Пицца Половинки 50/50</div>
+                    <div className="text-gray-200 mb-5">
                       Соедини 2 любимых вкуса
                     </div>
                     <Image
@@ -158,10 +152,7 @@ const CreateYourPizza: FC = () => {
                         </div>
                       </div>
                     </div>
-                    <button
-                      className="bg-yellow w-full rounded-3xl px-10 py-2 text-white mt-7"
-                      ref={completeButtonRef}
-                    >
+                    <button className="bg-yellow w-full rounded-3xl px-10 py-2 text-white mt-7">
                       В корзину 120 000 сум
                     </button>
                   </div>
@@ -191,17 +182,17 @@ const CreateYourPizza: FC = () => {
                       <div>СЫРНАЯ</div>
                       <div className="text-gray-400">86000 сум</div>
                     </div>
-                    <div className="rounded-3xl bg-white p-2 shadow-xl">
+                    <div className="rounded-3xl bg-white p-2 h-[174px] shadow-xl">
                       <Image src="/pizza_img.png" width="110" height="110" />
                       <div>СЫРНАЯ</div>
                       <div className="text-gray-400">86000 сум</div>
                     </div>
-                    <div className="rounded-3xl bg-white p-2 shadow-xl">
+                    <div className="rounded-3xl bg-white p-2 h-[174px] shadow-xl">
                       <Image src="/pizza_img.png" width="110" height="110" />
                       <div>СЫРНАЯ</div>
                       <div className="text-gray-400">86000 сум</div>
                     </div>
-                    <div className="rounded-3xl bg-white p-2 shadow-xl">
+                    <div className="rounded-3xl bg-white p-2 h-[174px] shadow-xl">
                       <Image src="/pizza_img.png" width="110" height="110" />
                       <div>СЫРНАЯ</div>
                       <div className="text-gray-400">86000 сум</div>
