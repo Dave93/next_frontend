@@ -39,7 +39,7 @@ export default function getSiteInfoOperation({
 
     const categories = await getCategories(cfg)
     return Promise.resolve({
-      categories: categories,
+      categories: categories.filter((cat: any) => !cat.half_mode),
       brands: [],
       topMenu,
       footerInfoMenu,
