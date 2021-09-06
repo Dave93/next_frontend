@@ -54,14 +54,15 @@ type FormData = {
   entrance: string
   door_code: string
   change: string
-  pay_comment: string
+  notes: string
   card_number: string
   card_month: string
   holder_name: string
   cvv_code: string
-  deliveryDay: string
-  deliveryTime: string
+  delivery_day: string
+  delivery_time: string
   payType: string
+  delivery_schedule: string
 }
 
 interface SelectItem {
@@ -139,14 +140,15 @@ const Orders: FC = () => {
       entrance: locationData?.entrance || '',
       door_code: locationData?.door_code || '',
       change: '',
-      pay_comment: '',
+      notes: '',
       card_number: '',
       card_month: '',
       holder_name: '',
       cvv_code: '',
-      deliveryDay: '',
-      deliveryTime: '',
+      delivery_day: '',
+      delivery_time: '',
       payType: '',
+      delivery_schedule: 'now',
     },
   })
 
@@ -340,7 +342,7 @@ const Orders: FC = () => {
       ...locationData,
       location: [selection.coordinates.lat, selection.coordinates.long],
     })
-    setValue('address', selection.title)
+    setValue('address', selection.formatted)
     console.log(selection)
     selection.addressItems.map((address: any) => {
       if (address.kind == 'house') {
@@ -356,7 +358,7 @@ const Orders: FC = () => {
   const clickOnMap = (event: any) => {
     const coords = event.get('coords')
     setMapCenter(coords)
-    console.log(window.ymaps)
+    // console.log(window.ymaps)
     setSelectedCoordinates([
       {
         key: `${coords[0]}${coords[1]}`,
@@ -384,7 +386,7 @@ const Orders: FC = () => {
     return res
   }, [mapCenter, mapZoom])
   // time of delivery
-  const [deliveryActive, setDeliveryActive] = useState(1)
+  const [deliveryActive, setDeliveryActive] = useState('now' as string)
   // pay
   const [openTab, setOpenTab] = useState(1)
   const [payType, setPayType] = useState('')
@@ -410,6 +412,11 @@ const Orders: FC = () => {
   const showPrivacy = (e: React.MouseEvent<HTMLElement>) => {
     e.preventDefault()
     setIsShowPrivacy(true)
+  }
+
+  const setDeliverySchedule = (val: string) => {
+    setValue('delivery_schedule', val)
+    setDeliveryActive(val)
   }
 
   const closePrivacy = () => {
@@ -603,7 +610,7 @@ const Orders: FC = () => {
     })
   }
 
-  if (errors.deliveryDay || errors.deliveryTime) {
+  if (errors.delivery_day || errors.delivery_time) {
     toast.error(tr('delivery_time_not_specified'), {
       position: toast.POSITION.BOTTOM_RIGHT,
       hideProgressBar: true,
@@ -1088,26 +1095,26 @@ const Orders: FC = () => {
         <div>
           <button
             className={`${
-              deliveryActive == 1
+              deliveryActive == 'now'
                 ? 'bg-yellow text-white'
                 : 'text-gray-400 bg-gray-100'
             } flex-1 font-bold  rounded-full outline-none focus:outline-none  h-11 md:w-44`}
-            onClick={() => setDeliveryActive(1)}
+            onClick={() => setDeliverySchedule('now')}
           >
             {tr('hurry_up')}
           </button>
           <button
             className={`${
-              deliveryActive == 2
+              deliveryActive == 'later'
                 ? 'bg-yellow text-white'
                 : 'text-gray-400 bg-gray-100'
             } flex-1 font-bold  rounded-full outline-none focus:outline-none  h-11 md:w-44 ml-5`}
-            onClick={() => setDeliveryActive(2)}
+            onClick={() => setDeliverySchedule('later')}
           >
             {tr('later')}
           </button>
         </div>
-        {deliveryActive == 2 && (
+        {deliveryActive == 'later' && (
           <div className="mt-8 flex">
             <Controller
               render={({ field: { onChange } }) => (
@@ -1120,8 +1127,8 @@ const Orders: FC = () => {
               rules={{
                 required: true,
               }}
-              key="deliveryDay"
-              name="deliveryDay"
+              key="delivery_day"
+              name="delivery_day"
               control={control}
             />
             <Controller
@@ -1136,8 +1143,8 @@ const Orders: FC = () => {
               rules={{
                 required: true,
               }}
-              key="deliveryTime"
-              name="deliveryTime"
+              key="delivery_time"
+              name="delivery_time"
               control={control}
             />
           </div>
@@ -1219,7 +1226,7 @@ const Orders: FC = () => {
                     <div className="flex mt-3 w-96 h-28">
                       <div>
                         <textarea
-                          {...register('pay_comment')}
+                          {...register('notes')}
                           className="w-96 h-28 bg-gray-100 rounded-2xl p-3 outline-none focus:outline-none resize-none"
                           placeholder={tr(
                             'only_the_courier_will_see_your_comment'
@@ -1333,7 +1340,7 @@ const Orders: FC = () => {
                     <div className="flex mt-3 w-96 h-28">
                       <div>
                         <textarea
-                          {...register('pay_comment')}
+                          {...register('notes')}
                           className="w-96 h-28 bg-gray-100 rounded-2xl p-3 outline-none focus:outline-none resize-none"
                           placeholder={tr(
                             'only_the_courier_will_see_your_comment'
@@ -1401,7 +1408,7 @@ const Orders: FC = () => {
                     <div className="flex mt-3 w-96 h-28">
                       <div>
                         <textarea
-                          {...register('pay_comment')}
+                          {...register('notes')}
                           className="w-96 h-28 bg-gray-100 rounded-2xl p-3 outline-none focus:outline-none resize-none"
                           placeholder={tr(
                             'only_the_courier_will_see_your_comment'

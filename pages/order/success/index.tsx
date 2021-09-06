@@ -8,6 +8,7 @@ import Link from 'next/link'
 
 const { publicRuntimeConfig } = getConfig()
 let webAddress = publicRuntimeConfig.apiUrl
+axios.defaults.withCredentials = true
 
 export async function getServerSideProps({
   preview,

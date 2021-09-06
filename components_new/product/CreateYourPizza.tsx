@@ -37,8 +37,8 @@ const CreateYourPizza: FC<CreatePizzaProps> = ({ sec, channelName }) => {
   }
 
   const changeCustomName = (name: string) => {
-    setLeftSelectedProduct(null)
-    setRightSelectedProduct(null)
+    // setLeftSelectedProduct(null)
+    // setRightSelectedProduct(null)
     setActiveCustomName(name)
   }
 
@@ -84,7 +84,7 @@ const CreateYourPizza: FC<CreatePizzaProps> = ({ sec, channelName }) => {
       res += +rightSelectedProduct.price
     }
     return res
-  }, [leftSelectedProduct, rightSelectedProduct])
+  }, [leftSelectedProduct, rightSelectedProduct, activeCustomName])
 
   useEffect(() => {
     setActiveCustomName(customNames[0])
