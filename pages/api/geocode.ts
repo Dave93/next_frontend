@@ -30,7 +30,7 @@ export default async function handler(req: any, res: any) {
     result.push({
       title: item.GeoObject.name,
       description: item.GeoObject.description,
-      adressItems:
+      addressItems:
         item.GeoObject.metaDataProperty.GeocoderMetaData.Address.Components,
       formatted:
         item.GeoObject.metaDataProperty.GeocoderMetaData.Address.formatted,

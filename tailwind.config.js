@@ -52,6 +52,9 @@ module.exports = {
         serif: ['Ubuntu', ...defaultTheme.fontFamily.serif],
         mono: [...defaultTheme.fontFamily.mono],
       },
+      gradientColorStops: (theme) => ({
+        ...theme('colors'),
+      }),
     },
   },
   variants: {

@@ -7,22 +7,16 @@ import { useRouter } from 'next/router'
 import OrdersItems from '@commerce/data/orders'
 import Link from 'next/link'
 import { useForm } from 'react-hook-form'
+import currency from 'currency.js'
 
-const OrderAccept: FC = () => {
+type OrderDetailProps = {
+  order: any
+}
+
+const OrderAccept: FC<OrderDetailProps> = ({ order }) => {
   const { t: tr } = useTranslation('common')
   const router = useRouter()
   const orderId = router.query.id
-
-  const { user } = useUI()
-  let items = OrdersItems.map((item) => {
-    return {
-      ...item,
-      name: tr(item.statusCode),
-    }
-  })
-
-  const currentOrder = items.find((item: any) => item.id == orderId)
-  console.log(currentOrder)
   type FormData = {
     review: string
   }
@@ -40,13 +34,13 @@ const OrderAccept: FC = () => {
         <div className=" flex justify-between">
           <div>
             <div className="text-base text-gray-500 mb-2">Заказ принят!</div>
-            <div className="text-3xl mb-7 font-bold">№ {orderId}</div>
+            <div className="text-3xl mb-7 font-bold">№ {order.id}</div>
           </div>
           <div>
             <div className="text-base text-gray-500 mb-2 text-right">
               Время заказа
             </div>
-            <div className="text-base font-bold">{currentOrder?.date}</div>
+            <div className="text-base font-bold">{order?.created_at}</div>
           </div>
         </div>
         <div className="flex items-center justify-between mb-10 ">
@@ -88,13 +82,20 @@ const OrderAccept: FC = () => {
       </div>
       <div className="p-10 rounded-2xl text-xl mt-5 bg-white">
         <div className="text-lg mb-7 font-bold">Адрес доставки</div>
-        <div>{currentOrder?.address}</div>
+        <div>{order?.billing_address}</div>
       </div>
       <div className="p-10 rounded-2xl text-xl mt-5 bg-white">
         <div className="text-lg mb-10 font-bold">
-          {currentOrder?.items.length} товара на {currentOrder?.totalPrice}
+          {order?.basket?.lines.length} товар(а) на{' '}
+          {currency(order?.order_total / 100, {
+            pattern: '# !',
+            separator: ' ',
+            decimal: '.',
+            symbol: 'сўм',
+            precision: 0,
+          }).format()}
         </div>
-        {currentOrder?.items.map((pizza, key) => (
+        {/*currentOrder?.items.map((pizza, key) => (
           <div
             className="flex items-center justify-between border-b mt-4 pb-4"
             key={currentOrder.id}
@@ -108,7 +109,7 @@ const OrderAccept: FC = () => {
             </div>
             <div>{pizza.price}</div>
           </div>
-        ))}
+        ))*/}
       </div>
       <div className="p-10 rounded-2xl text-xl mt-5 bg-white">
         <div className="text-lg mb-7 font-bold">Ждем ваш отзыв</div>

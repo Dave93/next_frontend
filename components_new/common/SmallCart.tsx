@@ -91,20 +91,25 @@ const SmallCart: FC = () => {
         quantity: 1,
       }
     )
-    const basketResult = {
-      id: basket.data.id,
-      createdAt: '',
-      currency: { code: basket.data.currency },
-      taxesIncluded: basket.data.tax_total,
-      lineItems: basket.data.lines.data,
-      lineItemsSubtotalPrice: basket.data.sub_total,
-      subtotalPrice: basket.data.sub_total,
-      totalPrice: basket.data.total,
+
+    if (cartId) {
+      let { data: basket } = await axios.get(
+        `${webAddress}/api/v1/baskets/${cartId}`
+      )
+      const basketResult = {
+        id: basket.data.id,
+        createdAt: '',
+        currency: { code: basket.data.currency },
+        taxesIncluded: basket.data.tax_total,
+        lineItems: basket.data.lines.data,
+        lineItemsSubtotalPrice: basket.data.sub_total,
+        subtotalPrice: basket.data.sub_total,
+        totalPrice: basket.data.total,
+      }
+
+      await mutate(basketResult, false)
+      setIsCartLoading(false)
     }
-
-    await mutate(basketResult, false)
-
-    setIsCartLoading(false)
   }
 
   const increaseQuantity = async (lineId: string) => {
@@ -116,20 +121,25 @@ const SmallCart: FC = () => {
         quantity: 1,
       }
     )
-    const basketResult = {
-      id: basket.data.id,
-      createdAt: '',
-      currency: { code: basket.data.currency },
-      taxesIncluded: basket.data.tax_total,
-      lineItems: basket.data.lines.data,
-      lineItemsSubtotalPrice: basket.data.sub_total,
-      subtotalPrice: basket.data.sub_total,
-      totalPrice: basket.data.total,
+
+    if (cartId) {
+      let { data: basket } = await axios.get(
+        `${webAddress}/api/v1/baskets/${cartId}`
+      )
+      const basketResult = {
+        id: basket.data.id,
+        createdAt: '',
+        currency: { code: basket.data.currency },
+        taxesIncluded: basket.data.tax_total,
+        lineItems: basket.data.lines.data,
+        lineItemsSubtotalPrice: basket.data.sub_total,
+        subtotalPrice: basket.data.sub_total,
+        totalPrice: basket.data.total,
+      }
+
+      await mutate(basketResult, false)
+      setIsCartLoading(false)
     }
-
-    await mutate(basketResult, false)
-
-    setIsCartLoading(false)
   }
 
   const goToCheckout = (e: any) => {
