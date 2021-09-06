@@ -202,7 +202,30 @@ const ProductItemNew: FC<ProductItem> = ({ product, channelName }) => {
     }
   }
 
-  const discardModifier = async () => {}
+  const discardModifier = async () => {
+    let prod = { ...store }
+    if (prod.variants && prod.variants.length) {
+      console.log(prod.variants)
+      prod.variants = prod.variants.map((vars: any) => {
+        if (vars.active == true) {
+          vars.modifiers = vars.modifiers.map((mod: any) => {
+            if (mod.price == 0) {
+              mod.active = true
+            } else {
+              mod.active = false
+            }
+
+            return mod
+          })
+        }
+
+        return vars
+      })
+    }
+
+    updateStore({ ...prod })
+    addToBasket()
+  }
 
   const modifiers = useMemo(() => {
     let modifier = null
@@ -238,6 +261,8 @@ const ProductItemNew: FC<ProductItem> = ({ product, channelName }) => {
     // setAddToCartInProgress(true) // disable the add to cart button until the request is finished
     if (modifiers && modifiers.length) {
       setIsChoosingModifier(true)
+    } else {
+      addToBasket()
     }
     try {
       // send the data to the server
@@ -409,13 +434,13 @@ const ProductItemNew: FC<ProductItem> = ({ product, channelName }) => {
             </div>
             <div className="md:mt-10 mt-2 flex justify-between items-center text-sm">
               <button
-                className="bg-yellow focus:outline-none font-bold outline-none px-6 py-2 rounded-full text-white uppercase md:inline-flex items-center hidden"
+                className="bg-yellow focus:outline-none md:w-32 md:justify-around font-bold outline-none px-6 py-2 rounded-full text-white uppercase md:inline-flex items-center hidden"
                 onClick={handleSubmit}
-                disabled={addToCartInProgress}
+                disabled={isLoadingBasket}
               >
-                {addToCartInProgress && (
+                {isLoadingBasket ? (
                   <svg
-                    className="animate-spin -ml-1 mr-3 h-5 w-5 text-white"
+                    className="animate-spin h-5 w-5 text-white flex-grow text-center"
                     xmlns="http://www.w3.org/2000/svg"
                     fill="none"
                     viewBox="0 0 24 24"
@@ -434,8 +459,9 @@ const ProductItemNew: FC<ProductItem> = ({ product, channelName }) => {
                       d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
                     ></path>
                   </svg>
+                ) : (
+                  tr('main_to_basket')
                 )}
-                {tr('main_to_basket')}
               </button>
               <span className="md:text-xl bg-yellow md:bg-white w-28 md:w-auto rounded-full px-2 py-2 text-sm text-center md:px-0 md:py-0 text-white md:text-black">
                 <span className="md:hidden">от</span>{' '}

@@ -341,6 +341,12 @@ const Orders: FC = () => {
       location: [selection.coordinates.lat, selection.coordinates.long],
     })
     setValue('address', selection.title)
+    console.log(selection)
+    selection.addressItems.map((address: any) => {
+      if (address.kind == 'house') {
+        setValue('house', address.name)
+      }
+    })
     searchTerminal({
       ...locationData,
       location: [selection.coordinates.lat, selection.coordinates.long],
@@ -350,6 +356,7 @@ const Orders: FC = () => {
   const clickOnMap = (event: any) => {
     const coords = event.get('coords')
     setMapCenter(coords)
+    console.log(window.ymaps)
     setSelectedCoordinates([
       {
         key: `${coords[0]}${coords[1]}`,
