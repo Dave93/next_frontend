@@ -48,17 +48,20 @@ export async function getServerSideProps({
   axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest'
   // console.log(axios.defaults.headers.common)
 
-  // const { data: orderData } = await axios.get(
-  //   `${webAddress}/api/orders?id=${id}`
-  // )
-
-  // console.log(orderData)
+  const { data: orderData } = await axios.get(
+    `${webAddress}/api/orders?id=${id}`,
+    {
+      headers: {
+        Authorization: `Bearer ${otpToken}`,
+      },
+    }
+  )
 
   return {
     props: {
       products,
       categories,
-      orderData: {},
+      orderData: orderData ?? {},
       brands,
       pages,
       topMenu,
