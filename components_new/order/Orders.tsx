@@ -159,7 +159,7 @@ const Orders: FC = () => {
   } = useForm({
     mode: 'onChange',
   })
-
+  console.log('locationData', locationData)
   const onSubmit = (data: any) => console.log(JSON.stringify(data))
 
   const setCredentials = async () => {
@@ -261,10 +261,12 @@ const Orders: FC = () => {
   const activeCity = cities.find((item) => item.active)
 
   const [mapCenter, setMapCenter] = useState(
-    (locationData?.location || activeCity?.mapCenter) as number[]
+    (locationData?.location?.lat
+      ? locationData?.location
+      : activeCity?.mapCenter) as number[]
   )
   const [mapZoom, setMapZoom] = useState(
-    ((locationData?.location ? 17 : 10) || activeCity?.mapZoom) as number
+    ((locationData?.location?.lat ? 17 : 10) || activeCity?.mapZoom) as number
   )
 
   const [configData, setConfigData] = useState({} as any)
@@ -343,7 +345,7 @@ const Orders: FC = () => {
       location: [selection.coordinates.lat, selection.coordinates.long],
     })
     setValue('address', selection.formatted)
-    console.log(selection)
+
     selection.addressItems.map((address: any) => {
       if (address.kind == 'house') {
         setValue('house', address.name)

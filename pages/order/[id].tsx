@@ -44,7 +44,6 @@ export async function getServerSideProps({
   let otpToken: any = c['opt_token']
   c['user_token'] = otpToken
   axios.defaults.headers.get.Cookie = c
-  console.log(c)
   axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest'
   // console.log(axios.defaults.headers.common)
 

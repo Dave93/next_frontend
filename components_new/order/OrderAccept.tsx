@@ -1,6 +1,6 @@
 import useTranslation from 'next-translate/useTranslation'
 import { useUI } from '@components/ui/context'
-import React, { memo, FC } from 'react'
+import React, { memo, FC, useState, useEffect } from 'react'
 import { Disclosure } from '@headlessui/react'
 import { ChevronDownIcon } from '@heroicons/react/solid'
 import { useRouter } from 'next/router'
@@ -8,14 +8,21 @@ import OrdersItems from '@commerce/data/orders'
 import Link from 'next/link'
 import { useForm } from 'react-hook-form'
 import currency from 'currency.js'
+import Image from 'next/image'
+import getConfig from 'next/config'
+import defaultChannel from '@lib/defaultChannel'
 
 type OrderDetailProps = {
   order: any
 }
 
+const { publicRuntimeConfig } = getConfig()
+let webAddress = publicRuntimeConfig.apiUrl
+
 const OrderAccept: FC<OrderDetailProps> = ({ order }) => {
   const { t: tr } = useTranslation('common')
   const router = useRouter()
+  const { locale } = router
   const orderId = router.query.id
   type FormData = {
     review: string
@@ -27,6 +34,18 @@ const OrderAccept: FC<OrderDetailProps> = ({ order }) => {
         review: '',
       },
     })
+  const [channelName, setChannelName] = useState('chopar')
+
+  const getChannel = async () => {
+    const channelData = await defaultChannel()
+    setChannelName(channelData.name)
+  }
+
+  useEffect(() => {
+    getChannel()
+  }, [])
+
+  console.log(order)
 
   return (
     <div>
@@ -47,35 +66,56 @@ const OrderAccept: FC<OrderDetailProps> = ({ order }) => {
           <div className="h-24 relative flex flex-col items-center top-5 w-12">
             <img src="/assets/status.png" />
             <div className="bottom-0 leading-4 mt-2 text-base text-center text-yellow">
-              Заявка принята
+              Не принят
             </div>
           </div>
           <div className="border border-yellow rounded-full w-48"></div>
           <div className="h-24 relative flex flex-col items-center top-5 w-12">
             <img src="/assets/status.png" />
             <div className="bottom-0 leading-4 mt-2 text-base text-center text-yellow">
-              Обработка заказа
+              Не подтверждён
             </div>
           </div>
           <div className="border rounded-full w-48"></div>
           <div className="flex flex-col h-24 items-center relative top-5 w-12">
             <div className="border-2 h-12 rounded-full w-12"></div>
             <div className="bottom-0 leading-4 mt-2 text-base text-center text-gray-400">
-              Заказ готовится
+              Ждём оплату
             </div>
           </div>
           <div className="border rounded-full w-48"></div>
           <div className="flex flex-col h-24 items-center relative top-5 w-12">
             <div className="border-2 h-12 rounded-full w-12"></div>
             <div className="bottom-0 leading-4 mt-2 text-base text-center text-gray-400">
-              Курьер выехал
+              Принят
             </div>
           </div>
           <div className="border rounded-full w-48"></div>
           <div className="flex flex-col h-24 items-center relative top-5 w-12">
             <div className="border-2 h-12 rounded-full w-12"></div>
             <div className="bottom-0 leading-4 mt-2 text-base text-center text-gray-400">
-              Доставлено
+              Готовится
+            </div>
+          </div>
+          <div className="border rounded-full w-48"></div>
+          <div className="flex flex-col h-24 items-center relative top-5 w-12">
+            <div className="border-2 h-12 rounded-full w-12"></div>
+            <div className="bottom-0 leading-4 mt-2 text-base text-center text-gray-400">
+              Готов и ждёт отправки
+            </div>
+          </div>
+          <div className="border rounded-full w-48"></div>
+          <div className="flex flex-col h-24 items-center relative top-5 w-12">
+            <div className="border-2 h-12 rounded-full w-12"></div>
+            <div className="bottom-0 leading-4 mt-2 text-base text-center text-gray-400">
+              В пути
+            </div>
+          </div>
+          <div className="border rounded-full w-48"></div>
+          <div className="flex flex-col h-24 items-center relative top-5 w-12">
+            <div className="border-2 h-12 rounded-full w-12"></div>
+            <div className="bottom-0 leading-4 mt-2 text-base text-center text-gray-400">
+              Доставлен
             </div>
           </div>
         </div>
@@ -95,21 +135,39 @@ const OrderAccept: FC<OrderDetailProps> = ({ order }) => {
             precision: 0,
           }).format()}
         </div>
-        {/*currentOrder?.items.map((pizza, key) => (
+        {order?.basket?.lines.map((pizza: any) => (
           <div
             className="flex items-center justify-between border-b mt-4 pb-4"
-            key={currentOrder.id}
+            key={pizza.id}
           >
             <div className="flex items-center">
-              <img className="w-24" src={pizza.img} />
+              <Image
+                className="w-24"
+                src={`${webAddress}/storage/${pizza?.variant?.product?.assets[0]?.location}/${pizza?.variant?.product?.assets[0]?.filename}`}
+                width={70}
+                height={70}
+              />
               <div className="ml-5">
-                <div className="text-xl font-bold">{pizza.name}</div>
-                <div className="text-gray-400 text-xs">{pizza.type}</div>
+                <div className="text-xl font-bold">
+                  {
+                    pizza?.variant?.product?.attribute_data?.name[channelName][
+                      locale || 'ru'
+                    ]
+                  }
+                </div>
               </div>
             </div>
-            <div>{pizza.price}</div>
+            <div>
+              {currency(pizza?.total, {
+                pattern: '# !',
+                separator: ' ',
+                decimal: '.',
+                symbol: 'сўм',
+                precision: 0,
+              }).format()}
+            </div>
           </div>
-        ))*/}
+        ))}
       </div>
       <div className="p-10 rounded-2xl text-xl mt-5 bg-white">
         <div className="text-lg mb-7 font-bold">Ждем ваш отзыв</div>
