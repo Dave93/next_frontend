@@ -6,23 +6,22 @@ export type profileMenuItem = {
 }
 
 const menuItems: profileMenuItem[] = [
-  {
-    href: '/profile',
-    activeIcon: '/activeBonuses.png',
-    icon: '/bonuses.png',
-    langCode: 'profile_bonuses',
-  },
+  // {
+  //   href: '/profile',
+  //   activeIcon: '/activeBonuses.png',
+  //   icon: '/bonuses.png',
+  //   langCode: 'profile_bonuses',
+  // },
   {
     href: '/profile/orders',
     icon: '/order.png',
     activeIcon: '/activeOrder.png',
     langCode: 'profile_orders',
   },
-
   {
     href: '/profile/address',
-    icon: '/logout.png',
-    activeIcon: '/logout.png',
+    icon: '/address.png',
+    activeIcon: '/activeAddress.png',
     langCode: 'profile_address',
   },
   {
