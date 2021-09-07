@@ -11,6 +11,7 @@ import currency from 'currency.js'
 import Image from 'next/image'
 import getConfig from 'next/config'
 import defaultChannel from '@lib/defaultChannel'
+import { DateTime } from 'luxon'
 
 type OrderDetailProps = {
   order: any
@@ -45,8 +46,6 @@ const OrderAccept: FC<OrderDetailProps> = ({ order }) => {
     getChannel()
   }, [])
 
-  console.log(order)
-
   return (
     <div>
       <div className="p-10 rounded-2xl text-xl mt-5 bg-white">
@@ -59,7 +58,12 @@ const OrderAccept: FC<OrderDetailProps> = ({ order }) => {
             <div className="text-base text-gray-500 mb-2 text-right">
               Время заказа
             </div>
-            <div className="text-base font-bold">{order?.created_at}</div>
+            <div className="text-base font-bold">
+              {DateTime.fromISO(order?.created_at)
+                .setLocale('ru')
+                .setZone('Asia/Tashkent')
+                .toLocaleString(DateTime.DATETIME_MED)}
+            </div>
           </div>
         </div>
         <div className="flex items-center justify-between mb-10 ">
