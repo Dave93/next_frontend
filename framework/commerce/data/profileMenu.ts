@@ -6,12 +6,12 @@ export type profileMenuItem = {
 }
 
 const menuItems: profileMenuItem[] = [
-  {
-    href: '/profile',
-    activeIcon: '/activeBonuses.png',
-    icon: '/bonuses.png',
-    langCode: 'profile_bonuses',
-  },
+  // {
+  //   href: '/profile',
+  //   activeIcon: '/activeBonuses.png',
+  //   icon: '/bonuses.png',
+  //   langCode: 'profile_bonuses',
+  // },
   {
     href: '/profile/orders',
     icon: '/order.png',
