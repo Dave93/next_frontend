@@ -13,6 +13,7 @@ interface IParams extends ParsedUrlQuery {
 
 const { publicRuntimeConfig } = getConfig()
 let webAddress = publicRuntimeConfig.apiUrl
+axios.defaults.withCredentials = true
 
 export async function getServerSideProps({
   preview,
@@ -41,28 +42,23 @@ export async function getServerSideProps({
   const c = cookies(context)
 
   let otpToken: any = c['opt_token']
-
+  c['user_token'] = otpToken
+  axios.defaults.headers.get.Cookie = c
+  console.log(c)
   axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest'
-  console.log(axios.defaults.headers.common)
+  // console.log(axios.defaults.headers.common)
 
-  const { data: orderData } = await axios.get(
-    `${webAddress}/api/orders?id=${id}`,
-    {
-      headers: {
-        'Content-Type': 'application/json',
-        Authorization: `Bearer ${otpToken}`,
-      },
-      withCredentials: true,
-    }
-  )
+  // const { data: orderData } = await axios.get(
+  //   `${webAddress}/api/orders?id=${id}`
+  // )
 
-  console.log(orderData)
+  // console.log(orderData)
 
   return {
     props: {
       products,
       categories,
-      orderData,
+      orderData: {},
       brands,
       pages,
       topMenu,
