@@ -4,7 +4,15 @@ import Cookies from 'js-cookie'
 
 let userData: any = null
 
-let locationData: any = null
+let locationData: any = {
+  address: '',
+  flat: '',
+  house: '',
+  entrance: '',
+  door_code: '',
+  deliveryType: 'deliver',
+  location: [],
+}
 
 let activeCity: City | null = null
 
@@ -25,11 +33,13 @@ if (typeof window !== 'undefined') {
     userData = JSON.parse(userData)
   } catch (e) {}
 
-  locationData = sessionStorage.getItem('yetkazish')
+  locationData = sessionStorage.getItem('yetkazish') ?? locationData
   try {
-    locationData = Buffer.from(locationData, 'base64')
-    locationData = locationData.toString()
-    locationData = JSON.parse(locationData)
+    if (locationData) {
+      let locData: any = Buffer.from(locationData, 'base64')
+      locData = locData.toString()
+      locationData = JSON.parse(locData)
+    }
   } catch (e) {}
 }
 
