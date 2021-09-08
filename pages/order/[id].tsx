@@ -55,12 +55,18 @@ export async function getServerSideProps({
       },
     }
   )
+  const { data: orderStatuses } = await axios.get(
+    `${webAddress}/api/order_statuses/system`
+  )
+
+  console.log(orderStatuses)
 
   return {
     props: {
       products,
       categories,
       orderData: orderData ?? {},
+      orderStatuses: orderStatuses.data ? orderStatuses.data : {},
       brands,
       pages,
       topMenu,
@@ -71,10 +77,16 @@ export async function getServerSideProps({
   }
 }
 
-export default function OrderId({ orderData }: { orderData: any }) {
+export default function OrderId({
+  orderData,
+  orderStatuses,
+}: {
+  orderData: any
+  orderStatuses: any
+}) {
   return (
     <div>
-      <OrderAccept order={orderData} />
+      <OrderAccept order={orderData} orderStatuses={orderStatuses} />
     </div>
   )
 }

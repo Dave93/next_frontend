@@ -4,27 +4,19 @@ import { Layout } from '@components/common'
 import { GetServerSidePropsContext } from 'next'
 import commerce from '@lib/api/commerce'
 import Orders from '@components_new/profile/Orders'
+import cookies from 'next-cookies'
+import axios from 'axios'
+import getConfig from 'next/config'
 
-// export async function getStaticProps({
-//   preview,
-//   locale,
-//   locales,
-// }: GetStaticPropsContext) {
-//   const config = { locale, locales }
-//   const pagesPromise = commerce.getAllPages({ config, preview })
-//   const siteInfoPromise = commerce.getSiteInfo({ config, preview })
-//   const { pages } = await pagesPromise
-//   const { categories, topMenu, footerInfoMenu, socials } = await siteInfoPromise
-
-//   return {
-//     props: { pages, categories, topMenu, footerInfoMenu, socials },
-//   }
-// }
+const { publicRuntimeConfig } = getConfig()
+let webAddress = publicRuntimeConfig.apiUrl
+axios.defaults.withCredentials = true
 
 export async function getServerSideProps({
   preview,
   locale,
   locales,
+  ...context
 }: GetServerSidePropsContext) {
   const config = { locale, locales }
   const productsPromise = commerce.getAllProducts({
@@ -40,6 +32,12 @@ export async function getServerSideProps({
   const { pages } = await pagesPromise
   const { categories, brands, topMenu, footerInfoMenu, socials, cities } =
     await siteInfoPromise
+
+  const c = cookies(context)
+  let otpToken: any = c['opt_token']
+  c['user_token'] = otpToken
+  axios.defaults.headers.get.Cookie = c
+  axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest'
 
   return {
     props: {
