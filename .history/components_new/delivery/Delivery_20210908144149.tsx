@@ -104,7 +104,7 @@ const Delivery: FC = () => {
             </div>
             <div className="md:md:ml-4 md:w-56">
               <div className="text-xl ">Оплата наличными</div>
-              <div className="md:text-xs text-gray-400">
+              <div className="text-xs text-gray-400">
                 Для выбора оплаты товара наличными на странице заказа необходимо
                 выбрать пункт "Наличными при получении". Вы сможете оплатить
                 товар в нашем пункте самовывоза или при доставке курьером,
@@ -118,7 +118,7 @@ const Delivery: FC = () => {
             </div>
             <div className="md:ml-4  md:w-56">
               <div className="text-xl">Оплата картой</div>
-              <div className="md:text-xs text-gray-400">
+              <div className="text-xs text-gray-400">
                 Для выбора оплаты товара картой при получении, на странице
                 заказа необходимо выбрать пункт "Картой при получении". Вы
                 сможете оплатить товар в нашем пункте самовывоза или при
@@ -133,7 +133,7 @@ const Delivery: FC = () => {
             </div>
             <div className="md:ml-4 md:w-56">
               <div className="text-xl">Онлайн оплата</div>
-              <div className="md:text-xs text-gray-400">
+              <div className="text-xs text-gray-400">
                 Для выбора оплаты товара картой при получении, на странице
                 заказа необходимо выбрать пункт онлайн оплата Pay-me, Click. Вы
                 сможете оплатить товар в нашем пункте самовывоза или при

@@ -70,7 +70,7 @@ const Contacts: FC = () => {
         </div>
       </div>
       <form onSubmit={handleSubmit(onSubmit)}>
-        <div className="border border-gray-400 rounded-2xl p-8 md:w-[724px] md:mb-96 mb-8">
+        <div className="border border-gray-400 rounded-2xl p-8 md:w-[724px] md:mb-96">
           <div className="text-2xl mb-7">Оставьте свой отзыв</div>
           <div className="md:flex justify-between">
             <div className="md:w-80">

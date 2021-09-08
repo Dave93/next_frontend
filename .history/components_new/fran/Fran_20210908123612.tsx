@@ -3,12 +3,12 @@ import Image from 'next/image'
 
 const Fran: FC = () => {
   return (
-    <div className="mx-5 md:mx-0">
+    <>
       <div className="text-3xl mb-1">Франшиза</div>
       <div className="border-b-2 w-24 border-yellow mb-10"></div>
       <div className="mb-16">
         <div className="md:grid grid-cols-3">
-          <div className="col-span-2 md:md:text-xl">
+          <div className="col-span-2 md:text-xl">
             <div className="text-2xl md:text-5xl text-yellow font-bold mb-10">
               Льготные условия франчайзинга на 2021 год
             </div>
@@ -43,7 +43,7 @@ const Fran: FC = () => {
               className="rounded-2xl mb-2"
             />
             <div className="text-2xl font-bold mt-7 mb-5">Большой ресторан</div>
-            <div className="md:md:text-xl md:w-80 mb-5 md:mb-0">
+            <div className="text-xl md:w-80 mb-5 md:mb-0">
               <div className="mb-5">
                 Ресторан с полноценным залом и доставкой на дом.
               </div>
@@ -68,7 +68,7 @@ const Fran: FC = () => {
               className="rounded-2xl"
             />
             <div className="text-2xl font-bold mt-7 mb-5">Средний ресторан</div>
-            <div className="md:text-xl md:w-80 mb-5 md:mb-0">
+            <div className="text-xl md:w-80 mb-5 md:mb-0">
               <div className="mb-5">
                 Зал от 20 до 100 посадочных мест и доставка на дом. Площадь
                 Среднемесячный оборот
@@ -92,7 +92,7 @@ const Fran: FC = () => {
             <div className="text-2xl font-bold mt-7 mb-5">
               Маленький ресторан
             </div>
-            <div className="md:text-xl md:w-80 mb-5 md:mb-0">
+            <div className="text-xl md:w-80 mb-5 md:mb-0">
               <div className="mb-5">
                 Ресторан, работающий только на доставку и самовывоз, посадочные
                 места в зале отсутствуют
@@ -112,7 +112,7 @@ const Fran: FC = () => {
         <div className="text-2xl md:text-5xl text-yellow font-bold mb-10">
           О нашей пицце
         </div>
-        <div className="md:grid grid-cols-3 mb-10">
+        <div className="grid grid-cols-3 mb-10">
           <div className="col-span-2">
             It is a long established fact that a reader will be distracted by
             the readable content of a page when looking at its layout. The point
@@ -131,10 +131,10 @@ const Fran: FC = () => {
         </div>
       </div>
       <div className="mb-16">
-        <div className="text-2xl md:text-5xl text-yellow font-bold mb-10 md:w-7/12">
+        <div className="text-5xl text-yellow font-bold mb-10 w-7/12">
           А самые главные секреты восхитительного вкуса
         </div>
-        <div className="md:grid md:grid-cols-3">
+        <div className="grid grid-cols-3">
           <div>
             <Image
               src="/taste.png"
@@ -145,7 +145,7 @@ const Fran: FC = () => {
             <div className="text-2xl font-bold mt-7 mb-5">
               Всегда свежее тесто
             </div>
-            <div className="md:text-xl">
+            <div className="text-xl">
               <div className="mb-5">
                 Мы готовим его по фирменному рецепту, позволяющему получить вкус
                 домашней выпечки. Тесто никогда не замораживается, ведь только
@@ -163,7 +163,7 @@ const Fran: FC = () => {
             <div className="text-2xl font-bold mt-7 mb-5">
               Уникальный томатный соус
             </div>
-            <div className="md:text-xl">
+            <div className="text-xl">
               <div className="mb-5">
                 В секретную рецептуру входят калифорнийские томаты, которые
                 консервируют не более чем через 6 часов после сбора, и
@@ -181,7 +181,7 @@ const Fran: FC = () => {
             <div className="text-2xl font-bold mt-7 mb-5">
               100% натуральный сыр Моцарелла
             </div>
-            <div className="md:text-xl">
+            <div className="text-xl">
               <div className="mb-5">
                 Производится из свежего молока специально для сети наших
                 пиццерий
@@ -191,10 +191,10 @@ const Fran: FC = () => {
         </div>
       </div>
       <div className="mb-16">
-        <div className="text-2xl md:text-5xl text-yellow font-bold mb-10">
+        <div className="text-5xl text-yellow font-bold mb-10">
           форматы продукта
         </div>
-        <div className="md:text-xl grid grid-cols-3 mb-7">
+        <div className="text-xl grid grid-cols-3 mb-7">
           <div className="col-span-2">
             Мы предлагаем гостям выбор из 20 фирменных видов пиццы. Рецепты
             разработаны с учетом сбалансированности вкуса и сочетаемости
@@ -204,12 +204,12 @@ const Fran: FC = () => {
         <div className="text-2xl font-bold mb-7">
           Три размера позволяют заказать пиццу на любой случай:
         </div>
-        <div className="md:gap-8 md:grid grid-cols-4">
+        <div className="gap-8 grid grid-cols-4">
           <div className="flex">
             <div className="w-full">
               <Image src="/35sm.png" width="160" height="160" />
             </div>
-            <div className="ml-5 md:text-xl w-48">
+            <div className="ml-5 text-xl w-48">
               <div className="text-4xl text-yellow">35 см</div>
               <div>Большая 4 персоны 12 кусков</div>
             </div>
@@ -218,7 +218,7 @@ const Fran: FC = () => {
             <div className="w-full">
               <Image src="/32sm.png" width="160" height="160" />
             </div>
-            <div className="ml-5 md:text-xl w-48">
+            <div className="ml-5 text-xl w-48">
               <div className="text-4xl text-yellow">32 см</div>
               <div>Средняя 3 персоны 8 кусков</div>
             </div>
@@ -227,7 +227,7 @@ const Fran: FC = () => {
             <div className="w-full">
               <Image src="/25sm.png" width="160" height="160" />
             </div>
-            <div className="ml-5 md:text-xl w-48">
+            <div className="ml-5 text-xl w-48">
               <div className="text-4xl text-yellow">25 см</div>
               <div>Маленькая 2 персоны 6 кусков</div>
             </div>
@@ -235,13 +235,13 @@ const Fran: FC = () => {
         </div>
       </div>
       <div className="mb-16">
-        <div className="text-2xl md:text-5xl text-yellow font-bold mb-10">
+        <div className="text-5xl text-yellow font-bold mb-10">
           Узнаваемый бренд
         </div>
         <div className="mb-10">
           <Image src="/popularBrand.png" width="1160" height="571" />
         </div>
-        <div className="md:text-xl md:w-[960px]">
+        <div className="text-xl w-[960px]">
           Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas
           pulvinar ullamcorper lorem tristique suscipit. Vestibulum ut tortor
           tincidunt, dictum risus non, pellentesque erat. Vestibulum efficitur
@@ -263,7 +263,7 @@ const Fran: FC = () => {
         </div>
         <div>choparpizza@gmail.com</div>
       </div>
-    </div>
+    </>
   )
 }
 

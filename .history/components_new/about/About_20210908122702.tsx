@@ -58,7 +58,7 @@ const About: FC = () => {
         </div>
       </div>
       <div>
-        <div className="text-2xl md:text-5xl text-yellow md:w-[600px] font-bold mb-10">
+        <div className="text-2xl md:text-5xl text-yellow w-[600px] font-bold mb-10">
           12-ПИЦЦЕРИ открыто по всему Узбекистану
         </div>
         <div className="md:grid grid-cols-4 gap-8 mb-16">
@@ -89,7 +89,7 @@ const About: FC = () => {
             </div>
           </div>
         </div>
-        <div className="md:w-[700px] mb-6 md:mb-0">
+        <div className="w-[700px]">
           <div className="mb-7">
             It is a long established fact that a reader will be distracted by
             the readable content of a page when looking at its layout. The point
