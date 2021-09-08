@@ -39,12 +39,24 @@ export async function getServerSideProps({
   axios.defaults.headers.get.Cookie = c
   axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest'
 
+  let orderData = []
+
+  try {
+    const { data } = await axios.get(`${webAddress}/api/my-orders`, {
+      headers: {
+        Authorization: `Bearer ${otpToken}`,
+      },
+    })
+    orderData = data.data
+  } catch (e) {}
+
   return {
     props: {
       products,
       categories,
       brands,
       pages,
+      orderData,
       topMenu,
       footerInfoMenu,
       socials,
@@ -53,11 +65,11 @@ export async function getServerSideProps({
   }
 }
 
-export default function OrdersPage() {
+export default function OrdersPage({ orderData }: { orderData: any[] }) {
   return (
     <div>
       <UserData />
-      <Orders />
+      <Orders orders={orderData} />
     </div>
   )
 }

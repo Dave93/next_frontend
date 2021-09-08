@@ -44,6 +44,7 @@
     "email-validator": "^2.0.4",
     "express": "^4.17.1",
     "fastify": "^3.18.0",
+    "hashids": "^2.2.8",
     "i18n": "^0.13.3",
     "immutability-helper": "^3.1.1",
     "isomorphic-unfetch": "^3.1.0",
