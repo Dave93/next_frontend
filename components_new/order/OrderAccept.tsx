@@ -15,12 +15,13 @@ import { DateTime } from 'luxon'
 
 type OrderDetailProps = {
   order: any
+  orderStatuses: any
 }
 
 const { publicRuntimeConfig } = getConfig()
 let webAddress = publicRuntimeConfig.apiUrl
 
-const OrderAccept: FC<OrderDetailProps> = ({ order }) => {
+const OrderAccept: FC<OrderDetailProps> = ({ order, orderStatuses }) => {
   const { t: tr } = useTranslation('common')
   const router = useRouter()
   const { locale } = router
@@ -41,6 +42,10 @@ const OrderAccept: FC<OrderDetailProps> = ({ order }) => {
     const channelData = await defaultChannel()
     setChannelName(channelData.name)
   }
+
+  const currentStatusIndex = Object.keys(orderStatuses).findIndex(
+    (status: string) => status == order.status
+  )
 
   useEffect(() => {
     getChannel()
@@ -67,61 +72,31 @@ const OrderAccept: FC<OrderDetailProps> = ({ order }) => {
           </div>
         </div>
         <div className="flex items-center justify-between mb-10 ">
-          <div className="h-24 relative flex flex-col items-center top-5 w-12">
-            <img src="/assets/status.png" />
-            <div className="bottom-0 leading-4 mt-2 text-base text-center text-yellow">
-              Не принят
+          {Object.keys(orderStatuses).map((status: any, key) => (
+            <div key={status} className="flex items-center">
+              <div className="h-24 relative flex flex-col items-center top-5 w-12">
+                {key <= currentStatusIndex ? (
+                  <img src="/assets/status.png" />
+                ) : (
+                  <div className="border-2 h-12 rounded-full w-12"></div>
+                )}
+                <div
+                  className={`bottom-0 leading-4 mt-2 text-base text-center ${
+                    key <= currentStatusIndex ? 'text-yellow' : 'text-gray-400'
+                  }`}
+                >
+                  {tr(`order_status_${status}`)}
+                </div>
+              </div>
+              {key != Object.keys(orderStatuses).length - 1 && (
+                <div
+                  className={`border rounded-full w-24 pr-24 ${
+                    key < currentStatusIndex ? 'border-yellow' : ''
+                  }`}
+                ></div>
+              )}
             </div>
-          </div>
-          <div className="border border-yellow rounded-full w-48"></div>
-          <div className="h-24 relative flex flex-col items-center top-5 w-12">
-            <img src="/assets/status.png" />
-            <div className="bottom-0 leading-4 mt-2 text-base text-center text-yellow">
-              Не подтверждён
-            </div>
-          </div>
-          <div className="border rounded-full w-48"></div>
-          <div className="flex flex-col h-24 items-center relative top-5 w-12">
-            <div className="border-2 h-12 rounded-full w-12"></div>
-            <div className="bottom-0 leading-4 mt-2 text-base text-center text-gray-400">
-              Ждём оплату
-            </div>
-          </div>
-          <div className="border rounded-full w-48"></div>
-          <div className="flex flex-col h-24 items-center relative top-5 w-12">
-            <div className="border-2 h-12 rounded-full w-12"></div>
-            <div className="bottom-0 leading-4 mt-2 text-base text-center text-gray-400">
-              Принят
-            </div>
-          </div>
-          <div className="border rounded-full w-48"></div>
-          <div className="flex flex-col h-24 items-center relative top-5 w-12">
-            <div className="border-2 h-12 rounded-full w-12"></div>
-            <div className="bottom-0 leading-4 mt-2 text-base text-center text-gray-400">
-              Готовится
-            </div>
-          </div>
-          <div className="border rounded-full w-48"></div>
-          <div className="flex flex-col h-24 items-center relative top-5 w-12">
-            <div className="border-2 h-12 rounded-full w-12"></div>
-            <div className="bottom-0 leading-4 mt-2 text-base text-center text-gray-400">
-              Готов и ждёт отправки
-            </div>
-          </div>
-          <div className="border rounded-full w-48"></div>
-          <div className="flex flex-col h-24 items-center relative top-5 w-12">
-            <div className="border-2 h-12 rounded-full w-12"></div>
-            <div className="bottom-0 leading-4 mt-2 text-base text-center text-gray-400">
-              В пути
-            </div>
-          </div>
-          <div className="border rounded-full w-48"></div>
-          <div className="flex flex-col h-24 items-center relative top-5 w-12">
-            <div className="border-2 h-12 rounded-full w-12"></div>
-            <div className="bottom-0 leading-4 mt-2 text-base text-center text-gray-400">
-              Доставлен
-            </div>
-          </div>
+          ))}
         </div>
       </div>
       <div className="p-10 rounded-2xl text-xl mt-5 bg-white">
