@@ -1,4 +1,4 @@
-import React, { FC, memo } from 'react'
+import React, { FC, memo, useEffect, useState } from 'react'
 import OrdersItems from '@commerce/data/orders'
 import useTranslation from 'next-translate/useTranslation'
 import { useUI } from '@components/ui/context'
@@ -10,14 +10,21 @@ import Link from 'next/link'
 import Hashids from 'hashids'
 import { DateTime } from 'luxon'
 import currency from 'currency.js'
+import defaultChannel from '@lib/defaultChannel'
+import Image from 'next/image'
+import getConfig from 'next/config'
 
 type OrdersListProps = {
   orders: any[]
 }
 
+const { publicRuntimeConfig } = getConfig()
+let webAddress = publicRuntimeConfig.apiUrl
+
 const Orders: FC<OrdersListProps> = ({ orders }) => {
   const { t: tr } = useTranslation('common')
   const router = useRouter()
+  const { locale } = router
   const { user } = useUI()
 
   const hashids = new Hashids(
@@ -25,6 +32,15 @@ const Orders: FC<OrdersListProps> = ({ orders }) => {
     15,
     'abcdefghijklmnopqrstuvwxyz1234567890'
   )
+  const [channelName, setChannelName] = useState('chopar')
+
+  const getChannel = async () => {
+    const channelData = await defaultChannel()
+    setChannelName(channelData.name)
+  }
+  useEffect(() => {
+    getChannel()
+  }, [])
 
   return (
     <div>
@@ -85,20 +101,38 @@ const Orders: FC<OrdersListProps> = ({ orders }) => {
                       {tr(`order_status_${order?.status}`)}
                     </div>
                   </div>
-                  {/* {item.items.map((pizza) => (
-                    <Disclosure.Panel className="flex items-center justify-between border-b mt-4 pb-4">
+                  {order?.lines.map((pizza: any) => (
+                    <Disclosure.Panel
+                      className="flex items-center justify-between border-b mt-4 pb-4"
+                      key={pizza.id}
+                    >
                       <div className="flex items-center">
-                        <img className="w-24" src={pizza.img} />
+                        <Image
+                          src={`${webAddress}/storage/${pizza?.variant?.product?.assets[0]?.location}/${pizza?.variant?.product?.assets[0]?.filename}`}
+                          width="100"
+                          height="100"
+                        />
                         <div className="ml-5">
-                          <div className="text-xl font-bold">{pizza.name}</div>
-                          <div className="text-gray-400 text-xs">
-                            {pizza.type}
+                          <div className="text-xl font-bold">
+                            {
+                              pizza?.variant?.product?.attribute_data?.name[
+                                channelName
+                              ][locale || 'ru']
+                            }
                           </div>
                         </div>
                       </div>
-                      <div>{pizza.price}</div>
+                      <div>
+                        {currency(pizza?.line_total / 100, {
+                          pattern: '# !',
+                          separator: ' ',
+                          decimal: '.',
+                          symbol: `${tr('sum')}`,
+                          precision: 0,
+                        }).format()}
+                      </div>
                     </Disclosure.Panel>
-                  ))} */}
+                  ))}
                   {open && (
                     <>
                       <div className="flex items-center justify-between border-b pt-7 pb-7">

@@ -59,8 +59,6 @@ export async function getServerSideProps({
     `${webAddress}/api/order_statuses/system`
   )
 
-  console.log(orderStatuses)
-
   return {
     props: {
       products,
