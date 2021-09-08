@@ -67,7 +67,7 @@ const OrderAccept: FC<OrderDetailProps> = ({ order, orderStatuses }) => {
             </div>
             <div className="text-base font-bold">
               {DateTime.fromISO(order?.created_at)
-                .setLocale(`${locale == 'uz' ? 'uz' : 'ru'}`)
+                .setLocale('ru')
                 .setZone('Asia/Tashkent')
                 .toLocaleString(DateTime.DATETIME_MED)}
             </div>
@@ -160,7 +160,7 @@ const OrderAccept: FC<OrderDetailProps> = ({ order, orderStatuses }) => {
             <textarea
               {...register('review')}
               className="w-96 h-28 bg-gray-100 rounded-2xl p-3 outline-none focus:outline-none resize-none text-xs"
-              placeholder={tr('only_the_courier_will_see_your_comment')}
+              placeholder="Ваш коментарии увидет только куръер"
             ></textarea>
           </div>
         </div>
