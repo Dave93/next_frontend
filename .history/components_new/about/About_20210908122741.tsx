@@ -89,7 +89,7 @@ const About: FC = () => {
             </div>
           </div>
         </div>
-        <div className="md:w-[700px] mb-6 md:mb-0">
+        <div className="w-[700px]">
           <div className="mb-7">
             It is a long established fact that a reader will be distracted by
             the readable content of a page when looking at its layout. The point

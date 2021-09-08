@@ -67,9 +67,12 @@ export default function News({ news }: { news: any }) {
   })
   return (
     <>
-      <div className="flex items-center justify-center my-10 space-x-6 md:space-x-0">
+      <div className="flex items-center justify-center my-10">
         {items.map((item, id) => (
-          <div key={id} className="flex items-center md:ml-10 ">
+          <div
+            key={id}
+            className="flex items-center md:ml-10 space-x-6 md:space-x-0"
+          >
             <img
               src={`${
                 pathname.indexOf(item.href) >= 0 ? item.activeIcon : item.icon

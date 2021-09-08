@@ -3,7 +3,7 @@ import Image from 'next/image'
 
 const Fran: FC = () => {
   return (
-    <div className="mx-5 md:mx-0">
+    <>
       <div className="text-3xl mb-1">Франшиза</div>
       <div className="border-b-2 w-24 border-yellow mb-10"></div>
       <div className="mb-16">
@@ -131,10 +131,10 @@ const Fran: FC = () => {
         </div>
       </div>
       <div className="mb-16">
-        <div className="text-2xl md:text-5xl text-yellow font-bold mb-10 md:w-7/12">
+        <div className="text-5xl text-yellow font-bold mb-10 w-7/12">
           А самые главные секреты восхитительного вкуса
         </div>
-        <div className="md:grid md:grid-cols-3">
+        <div className="grid grid-cols-3">
           <div>
             <Image
               src="/taste.png"
@@ -191,7 +191,7 @@ const Fran: FC = () => {
         </div>
       </div>
       <div className="mb-16">
-        <div className="text-2xl md:text-5xl text-yellow font-bold mb-10">
+        <div className="text-5xl text-yellow font-bold mb-10">
           форматы продукта
         </div>
         <div className="md:text-xl grid grid-cols-3 mb-7">
@@ -204,7 +204,7 @@ const Fran: FC = () => {
         <div className="text-2xl font-bold mb-7">
           Три размера позволяют заказать пиццу на любой случай:
         </div>
-        <div className="md:gap-8 md:grid grid-cols-4">
+        <div className="gap-8 grid grid-cols-4">
           <div className="flex">
             <div className="w-full">
               <Image src="/35sm.png" width="160" height="160" />
@@ -235,13 +235,13 @@ const Fran: FC = () => {
         </div>
       </div>
       <div className="mb-16">
-        <div className="text-2xl md:text-5xl text-yellow font-bold mb-10">
+        <div className="text-5xl text-yellow font-bold mb-10">
           Узнаваемый бренд
         </div>
         <div className="mb-10">
           <Image src="/popularBrand.png" width="1160" height="571" />
         </div>
-        <div className="md:text-xl md:w-[960px]">
+        <div className="md:text-xl w-[960px]">
           Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas
           pulvinar ullamcorper lorem tristique suscipit. Vestibulum ut tortor
           tincidunt, dictum risus non, pellentesque erat. Vestibulum efficitur
@@ -263,7 +263,7 @@ const Fran: FC = () => {
         </div>
         <div>choparpizza@gmail.com</div>
       </div>
-    </div>
+    </>
   )
 }
 

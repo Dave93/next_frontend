@@ -70,7 +70,7 @@ const Contacts: FC = () => {
         </div>
       </div>
       <form onSubmit={handleSubmit(onSubmit)}>
-        <div className="border border-gray-400 rounded-2xl p-8 md:w-[724px] md:mb-96 mb-8">
+        <div className="border border-gray-400 rounded-2xl p-8 md:w-[724px] mb-96">
           <div className="text-2xl mb-7">Оставьте свой отзыв</div>
           <div className="md:flex justify-between">
             <div className="md:w-80">
@@ -95,7 +95,7 @@ const Contacts: FC = () => {
               <label className="text-sm text-gray-400">
                 {tr('phone_number')}
               </label>
-              <div className="md:flex items-center justify-end">
+              <div className="flex items-center justify-end">
                 <input
                   type="text"
                   {...register('phone_number')}
@@ -112,7 +112,7 @@ const Contacts: FC = () => {
               </div>
             </div>
           </div>
-          <div className="md:flex md:mt-7 justify-between">
+          <div className="flex mt-7 justify-between">
             <div className="md:w-80">
               <label className="text-sm text-gray-400">{tr('email')}</label>
               <div className="flex items-center justify-end">
@@ -135,7 +135,7 @@ const Contacts: FC = () => {
               <label className="text-sm text-gray-400">
                 {tr('order_number')}
               </label>
-              <div className="md:flex items-center justify-end">
+              <div className="flex items-center justify-end">
                 <input
                   type="text"
                   {...register('order_number')}
@@ -152,7 +152,7 @@ const Contacts: FC = () => {
               </div>
             </div>
           </div>
-          <div className="md:mt-7">
+          <div className="mt-7">
             <label className="text-sm text-gray-400">{tr('review')}</label>
             <div className="flex items-center justify-end">
               <input
@@ -171,7 +171,7 @@ const Contacts: FC = () => {
             </div>
           </div>
           <div className="ml-auto md:w-80">
-            <button className="bg-yellow rounded-full md:w-80 w-full py-2 mt-10 text-white">
+            <button className="bg-yellow rounded-full w-80 py-2 mt-10 text-white">
               {tr('save')}
             </button>
           </div>

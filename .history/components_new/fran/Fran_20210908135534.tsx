@@ -235,13 +235,13 @@ const Fran: FC = () => {
         </div>
       </div>
       <div className="mb-16">
-        <div className="text-2xl md:text-5xl text-yellow font-bold mb-10">
+        <div className="text-5xl text-yellow font-bold mb-10">
           Узнаваемый бренд
         </div>
         <div className="mb-10">
           <Image src="/popularBrand.png" width="1160" height="571" />
         </div>
-        <div className="md:text-xl md:w-[960px]">
+        <div className="md:text-xl w-[960px]">
           Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas
           pulvinar ullamcorper lorem tristique suscipit. Vestibulum ut tortor
           tincidunt, dictum risus non, pellentesque erat. Vestibulum efficitur

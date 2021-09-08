@@ -71,8 +71,8 @@ const Delivery: FC = () => {
           width={2132}
           height={1075}
         />
-        <div className="border border-yellow md:flex justify-between md:mt-2 mt-5 py-5 px-8 rounded-xl">
-          <div className="md:flex mb-4 md:mb-0">
+        <div className="border border-yellow flex justify-between md:mt-2 mt-5 py-5 px-8 rounded-xl">
+          <div className="md:flex">
             <div className="w-2/12">
               <img src="zoneA.png" />
             </div>
@@ -97,14 +97,14 @@ const Delivery: FC = () => {
       <div className="mb-10">
         <div className="text-2xl md:text-3xl mb-1">Способы оплаты </div>
         <div className="border-b-2 w-24 border-yellow mb-10"></div>
-        <div className="md:grid grid-cols-3 mt-10">
-          <div className="md:flex mb-4">
+        <div className="grid grid-cols-3 mt-10">
+          <div className="flex">
             <div>
               <img src="/cashPayment.jpg" alt="" width="60px" height="60px" />
             </div>
-            <div className="md:md:ml-4 md:w-56">
+            <div className="ml-4 w-56">
               <div className="text-xl ">Оплата наличными</div>
-              <div className="md:text-xs text-gray-400">
+              <div className="text-xs text-gray-400">
                 Для выбора оплаты товара наличными на странице заказа необходимо
                 выбрать пункт "Наличными при получении". Вы сможете оплатить
                 товар в нашем пункте самовывоза или при доставке курьером,
@@ -112,13 +112,13 @@ const Delivery: FC = () => {
               </div>
             </div>
           </div>
-          <div className="md:flex mb-4">
+          <div className="flex">
             <div>
               <img src="/cardPayment.jpg" alt="" width="60px" height="60px" />
             </div>
-            <div className="md:ml-4  md:w-56">
+            <div className="ml-4  w-56">
               <div className="text-xl">Оплата картой</div>
-              <div className="md:text-xs text-gray-400">
+              <div className="text-xs text-gray-400">
                 Для выбора оплаты товара картой при получении, на странице
                 заказа необходимо выбрать пункт "Картой при получении". Вы
                 сможете оплатить товар в нашем пункте самовывоза или при
@@ -127,13 +127,13 @@ const Delivery: FC = () => {
               </div>
             </div>
           </div>
-          <div className="md:flex mb-4">
+          <div className="flex">
             <div>
               <img src="/onlinePayment.jpg" alt="" width="60px" height="60px" />
             </div>
-            <div className="md:ml-4 md:w-56">
+            <div className="ml-4 w-56">
               <div className="text-xl">Онлайн оплата</div>
-              <div className="md:text-xs text-gray-400">
+              <div className="text-xs text-gray-400">
                 Для выбора оплаты товара картой при получении, на странице
                 заказа необходимо выбрать пункт онлайн оплата Pay-me, Click. Вы
                 сможете оплатить товар в нашем пункте самовывоза или при

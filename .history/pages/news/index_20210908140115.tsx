@@ -6,7 +6,7 @@ import axios from 'axios'
 import menuItems from '@commerce/data/newsMenu'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
-import SaleItem from '@components_new/sale/SaleItem'
+import NewsItem from '@components_new/news/NewsItem'
 import useTranslation from 'next-translate/useTranslation'
 
 export async function getServerSideProps({
@@ -67,9 +67,9 @@ export default function News({ news }: { news: any }) {
   })
   return (
     <>
-      <div className="flex items-center justify-center my-10 space-x-6 md:space-x-0">
+      <div className="flex items-center justify-center my-10">
         {items.map((item, id) => (
-          <div key={id} className="flex items-center md:ml-10 ">
+          <div key={id} className="flex items-center ml-10">
             <img
               src={`${
                 pathname.indexOf(item.href) >= 0 ? item.activeIcon : item.icon
@@ -90,7 +90,7 @@ export default function News({ news }: { news: any }) {
         ))}
       </div>
       <div className="md:grid grid-cols-3 gap-10">
-        <SaleItem SaleItems={news} />
+        <NewsItem newsItems={news} />
       </div>
     </>
   )
