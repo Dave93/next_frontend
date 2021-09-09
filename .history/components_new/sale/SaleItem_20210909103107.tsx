@@ -9,23 +9,23 @@ type AnyObject = {
   [key: string]: any
 }
 
-type NewListProps = {
-  newsItems: AnyObject[]
+type SaleListProps = {
+  SaleItems: AnyObject[]
 }
 
-const NewsItem: FC<NewListProps> = ({ newsItems }) => {
+const SaleItem: FC<SaleListProps> = ({ SaleItems }) => {
   const router = useRouter()
   const { locale } = router
   return (
-    <>
-      {newsItems.map((item, key) => (
+    <div className="mx-5 md:mx-0">
+      {SaleItems.map((item, key) => (
         <div
-          className="bg-white rounded-3xl flex flex-col overflow-hidden mb-4 md:mb-0"
+          className="bg-white rounded-3xl flex flex-col overflow-hidden"
           key={item.id}
         >
           <div className="relative">
             {item.asset && item.asset.length ? (
-              <Link href={`${'/news/' + item.id}`} prefetch={false}>
+              <Link href={`${'/sale/' + item.id}`} prefetch={false}>
                 <a>
                   <Image
                     src={item.asset[0].link}
@@ -36,7 +36,7 @@ const NewsItem: FC<NewListProps> = ({ newsItems }) => {
                 </a>
               </Link>
             ) : (
-              <Link href={`${'/news/' + item.id}`} prefetch={false}>
+              <Link href={`${'/sale/' + item.id}`} prefetch={false}>
                 <a>
                   <Image
                     src="/no_photo.svg"
@@ -59,13 +59,13 @@ const NewsItem: FC<NewListProps> = ({ newsItems }) => {
               </div>
             </div> */}
           </div>
-          <div className="md:flex md:flex-col justify-between p-5 flex-grow">
+          <div className="flex flex-col justify-between p-5 flex-grow">
             <div className="md:text-lg mb-3">
-              <Link href={`${'/news/' + item.id}`} prefetch={false}>
+              <Link href={`${'/sale/' + item.id}`} prefetch={false}>
                 {locale == 'ru' ? item.name : item.name_uz}
               </Link>
             </div>
-            <Link href={`${'/news/' + item.id}`} prefetch={false}>
+            <Link href={`${'/sale/' + item.id}`} prefetch={false}>
               <a className="text-xs text-gray-400 hover:underline">
                 Подробное описание
               </a>
@@ -73,8 +73,8 @@ const NewsItem: FC<NewListProps> = ({ newsItems }) => {
           </div>
         </div>
       ))}
-    </>
+    </div>
   )
 }
 
-export default memo(NewsItem)
+export default memo(SaleItem)
