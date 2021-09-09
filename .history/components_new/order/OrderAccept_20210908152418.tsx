@@ -67,7 +67,7 @@ const OrderAccept: FC<OrderDetailProps> = ({ order, orderStatuses }) => {
             </div>
             <div className="text-base font-bold">
               {DateTime.fromISO(order?.created_at)
-                .setLocale(`${locale == 'uz' ? 'uz' : 'ru'}`)
+                .setLocale('ru')
                 .setZone('Asia/Tashkent')
                 .toLocaleString(DateTime.DATETIME_MED)}
             </div>
@@ -107,13 +107,12 @@ const OrderAccept: FC<OrderDetailProps> = ({ order, orderStatuses }) => {
       </div>
       <div className="p-10 rounded-2xl text-xl mt-5 bg-white">
         <div className="text-lg mb-10 font-bold">
-          {order?.basket?.lines.length} {tr('product')}{' '}
-          {locale == 'ru' ? 'на' : ''}{' '}
+          {order?.basket?.lines.length} товар(а) на{' '}
           {currency(order?.order_total / 100, {
             pattern: '# !',
             separator: ' ',
             decimal: '.',
-            symbol: `${tr('sum')}`,
+            symbol: 'сўм',
             precision: 0,
           }).format()}
         </div>
@@ -144,7 +143,7 @@ const OrderAccept: FC<OrderDetailProps> = ({ order, orderStatuses }) => {
                 pattern: '# !',
                 separator: ' ',
                 decimal: '.',
-                symbol: `${tr('sum')}`,
+                symbol: 'сўм',
                 precision: 0,
               }).format()}
             </div>
@@ -152,28 +151,26 @@ const OrderAccept: FC<OrderDetailProps> = ({ order, orderStatuses }) => {
         ))}
       </div>
       <div className="p-10 rounded-2xl text-xl mt-5 bg-white">
-        <div className="text-lg mb-7 font-bold">
-          {tr('waiting_your_feedback')}
-        </div>
+        <div className="text-lg mb-7 font-bold">Ждем ваш отзыв</div>
         <div className="flex mt-3 w-96 h-28">
           <div>
             <textarea
               {...register('review')}
               className="w-96 h-28 bg-gray-100 rounded-2xl p-3 outline-none focus:outline-none resize-none text-xs"
-              placeholder={tr('only_the_courier_will_see_your_comment')}
+              placeholder="Ваш коментарии увидет только куръер"
             ></textarea>
           </div>
         </div>
         <div className="flex justify-between mt-8">
           <button className="text-xl text-gray-500 bg-gray-100 flex h-12 items-center  rounded-full w-80 justify-evenly">
             <img src="/left.png" />
-            <div>{tr('cancel_the_order')}</div>
+            <div>Отменить заказ</div>
           </button>
           <button
             className="text-xl text-white bg-yellow flex h-12 items-center justify-evenly rounded-full w-80"
             onClick={() => router.push('/')}
           >
-            <div>{tr('to_main')}</div>
+            <div>На главную</div>
             <img src="/right.png" />
           </button>
         </div>

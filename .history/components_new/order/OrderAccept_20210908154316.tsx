@@ -67,7 +67,7 @@ const OrderAccept: FC<OrderDetailProps> = ({ order, orderStatuses }) => {
             </div>
             <div className="text-base font-bold">
               {DateTime.fromISO(order?.created_at)
-                .setLocale(`${locale == 'uz' ? 'uz' : 'ru'}`)
+                .setLocale('ru')
                 .setZone('Asia/Tashkent')
                 .toLocaleString(DateTime.DATETIME_MED)}
             </div>

@@ -90,11 +90,6 @@ export default function News({ news }: { news: any }) {
         ))}
       </div>
       <div className="md:grid grid-cols-3 gap-10 mx-5 md:mx-0">
-        {!news.length && (
-          <div className="col-span-3 text-2xl text-center">
-            {tr('yet_no_news')}
-          </div>
-        )}
         <NewsItem newsItems={news} />
       </div>
     </>

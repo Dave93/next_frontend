@@ -20,7 +20,7 @@ const NewsItem: FC<NewListProps> = ({ newsItems }) => {
     <>
       {newsItems.map((item, key) => (
         <div
-          className="bg-white rounded-3xl flex flex-col overflow-hidden mb-4 md:mb-0"
+          className="bg-white rounded-3xl flex flex-col overflow-hidden md:mb-0"
           key={item.id}
         >
           <div className="relative">
