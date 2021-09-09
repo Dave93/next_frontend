@@ -264,21 +264,8 @@ const ProductItemNew: FC<ProductItem> = ({ product, channelName }) => {
     } else {
       addToBasket()
     }
-    try {
-      // send the data to the server
-      // await actions.addToCart({
-      //   product: store,
-      //   quantity: 1,
-      //   size: store.size.id,
-      // })
-      // open the confirmation dialog
-      // setConfirmationOpen(true)
-    } finally {
-      // re-enable the add to cart button
-      // setAddToCartInProgress(false)
-    }
   }
-
+  console.log(modifiers)
   return (
     <>
       {isChoosingModifier ? (
@@ -321,9 +308,9 @@ const ProductItemNew: FC<ProductItem> = ({ product, channelName }) => {
                   onClick={() => addModifier(mod.id)}
                 >
                   <div className="flex-grow pt-2 px-2">
-                    {mod.image ? (
+                    {mod.assets.length ? (
                       <Image
-                        src={mod.image}
+                        src={`${webAddress}/storage/${mod.assets[0]?.location}/${mod.assets[0]?.filename}`}
                         width={80}
                         height={80}
                         alt={mod.name}

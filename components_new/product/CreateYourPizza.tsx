@@ -11,20 +11,31 @@ import Image from 'next/image'
 import { Dialog, Transition } from '@headlessui/react'
 import { XIcon, CheckIcon } from '@heroicons/react/outline'
 import { useRouter } from 'next/router'
-import { divide } from 'lodash'
+import { divide, mixin } from 'lodash'
 import currency from 'currency.js'
+import getConfig from 'next/config'
+import axios from 'axios'
+import Cookies from 'js-cookie'
+import { useCart } from '@framework/cart'
 
 type CreatePizzaProps = {
   sec: any
   channelName: string
 }
 
+const { publicRuntimeConfig } = getConfig()
+let webAddress = publicRuntimeConfig.apiUrl
+axios.defaults.withCredentials = true
+
 const CreateYourPizza: FC<CreatePizzaProps> = ({ sec, channelName }) => {
   const router = useRouter()
   const { locale } = router
   let [isOpen, setIsOpen] = useState(false)
   let completeButtonRef = useRef(null)
+  const { mutate } = useCart()
   let [active, setActive] = useState(true)
+  const [isLoadingBasket, setIsLoadingBasket] = useState(false)
+  const [activeModifiers, setActiveModifeirs] = useState([] as number[])
   const [activeCustomName, setActiveCustomName] = useState('')
   const [leftSelectedProduct, setLeftSelectedProduct] = useState(null as any)
   const [rightSelectedProduct, setRightSelectedProduct] = useState(null as any)
@@ -40,6 +51,132 @@ const CreateYourPizza: FC<CreatePizzaProps> = ({ sec, channelName }) => {
     // setLeftSelectedProduct(null)
     // setRightSelectedProduct(null)
     setActiveCustomName(name)
+  }
+
+  const setCredentials = async () => {
+    let csrf = Cookies.get('X-XSRF-TOKEN')
+    if (!csrf) {
+      const csrfReq = await axios(`${webAddress}/api/keldi`, {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+          crossDomain: true,
+        },
+        withCredentials: true,
+      })
+      let { data: res } = csrfReq
+      csrf = Buffer.from(res.result, 'base64').toString('ascii')
+
+      Cookies.set('X-XSRF-TOKEN', csrf)
+    }
+    axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest'
+    axios.defaults.headers.common['X-CSRF-TOKEN'] = csrf
+    axios.defaults.headers.common['XCSRF-TOKEN'] = csrf
+  }
+
+  const addToBasket = async () => {
+    setIsLoadingBasket(true)
+    await setCredentials()
+    let selectedModifiers: any[] = [...activeModifiers]
+    let allModifiers = [...modifiers]
+    if (selectedModifiers.length == 0) {
+      let freeModifiers = allModifiers.find((mod: any) => mod.price == 0)
+      selectedModifiers.push(freeModifiers.id)
+    }
+
+    selectedModifiers = allModifiers
+      .filter((m: any) => selectedModifiers.includes(m.id))
+      .map((m: any) => ({ id: m.id }))
+
+    let leftProduct = leftSelectedProduct.variants.find((v: any) => {
+      if (locale == 'uz') {
+        return v?.custom_name_uz == activeCustomName
+      } else {
+        return v?.custom_name == activeCustomName
+      }
+    })
+
+    let rightProduct = rightSelectedProduct.variants.find((v: any) => {
+      if (locale == 'uz') {
+        return v?.custom_name_uz == activeCustomName
+      } else {
+        return v?.custom_name == activeCustomName
+      }
+    })
+
+    let basketId = localStorage.getItem('basketId')
+
+    if (basketId) {
+      await axios.post(`${webAddress}/api/baskets-lines`, {
+        basket_id: basketId,
+        variants: [
+          {
+            id: leftProduct.id,
+            quantity: 1,
+            modifiers: selectedModifiers,
+          },
+        ],
+      })
+      const { data: basketData } = await axios.post(
+        `${webAddress}/api/baskets-lines`,
+        {
+          basket_id: basketId,
+          variants: [
+            {
+              id: rightProduct.id,
+              quantity: 1,
+              modifiers: selectedModifiers,
+            },
+          ],
+        }
+      )
+    } else {
+      const { data: basketData } = await axios.post(
+        `${webAddress}/api/baskets`,
+        {
+          variants: [
+            {
+              id: leftProduct.id,
+              quantity: 1,
+              modifiers: selectedModifiers,
+            },
+          ],
+        }
+      )
+      await axios.post(`${webAddress}/api/baskets-lines`, {
+        basket_id: basketData.data.id,
+        variants: [
+          {
+            id: rightProduct.id,
+            quantity: 1,
+            modifiers: selectedModifiers,
+          },
+        ],
+      })
+      localStorage.setItem('basketId', basketData.data.id)
+    }
+
+    basketId = localStorage.getItem('basketId')
+
+    let { data: basket } = await axios.get(
+      `${webAddress}/api/v1/baskets/${basketId}`
+    )
+    const basketResult = {
+      id: basket.data.id,
+      createdAt: '',
+      currency: { code: basket.data.currency },
+      taxesIncluded: basket.data.tax_total,
+      lineItems: basket.data.lines.data,
+      lineItemsSubtotalPrice: basket.data.sub_total,
+      subtotalPrice: basket.data.sub_total,
+      totalPrice: basket.data.total,
+    }
+
+    await mutate(basketResult, false)
+    setIsLoadingBasket(false)
+    setLeftSelectedProduct(null)
+    setRightSelectedProduct(null)
+    closeModal()
   }
 
   const customNames: string[] = useMemo(() => {
@@ -74,6 +211,27 @@ const CreateYourPizza: FC<CreatePizzaProps> = ({ sec, channelName }) => {
     })
   }, [sec, activeCustomName])
 
+  const modifiers = useMemo(() => {
+    if (!leftSelectedProduct || !rightSelectedProduct || !activeCustomName) {
+      return []
+    }
+    let leftModifiers: any[] = []
+
+    leftSelectedProduct.variants.map((vars: any) => {
+      if (locale == 'uz') {
+        if (vars?.custom_name_uz == activeCustomName) {
+          leftModifiers = vars.modifiers
+        }
+      } else {
+        if (vars?.custom_name == activeCustomName) {
+          leftModifiers = vars.modifiers
+        }
+      }
+    })
+
+    return leftModifiers
+  }, [leftSelectedProduct, rightSelectedProduct, activeCustomName])
+
   const totalSummary = useMemo(() => {
     let res = 0
     if (leftSelectedProduct) {
@@ -83,9 +241,34 @@ const CreateYourPizza: FC<CreatePizzaProps> = ({ sec, channelName }) => {
     if (rightSelectedProduct) {
       res += +rightSelectedProduct.price
     }
-    return res
-  }, [leftSelectedProduct, rightSelectedProduct, activeCustomName])
 
+    if (modifiers.length > 0) {
+      const selectedModifiers: any[] = [
+        ...modifiers.filter((mod: any) => activeModifiers.includes(mod.id)),
+      ]
+      selectedModifiers.map((mod: any) => {
+        res += +mod.price * 2
+      })
+    }
+
+    return res
+  }, [
+    leftSelectedProduct,
+    rightSelectedProduct,
+    activeCustomName,
+    activeModifiers,
+  ])
+
+  const addModifier = (id: number) => {
+    if (activeModifiers.includes(id)) {
+      let currentModifier: any = modifiers.find((mod: any) => mod.id == id)
+      if (!currentModifier) return
+      if (currentModifier.price == 0) return
+      setActiveModifeirs([...activeModifiers.filter((modId) => modId != id)])
+    } else {
+      setActiveModifeirs([...activeModifiers, id])
+    }
+  }
   useEffect(() => {
     setActiveCustomName(customNames[0])
   }, [customNames])
@@ -332,6 +515,65 @@ const CreateYourPizza: FC<CreatePizzaProps> = ({ sec, channelName }) => {
                         )}
                       </div>
                     </div>
+                    {modifiers.length > 0 && (
+                      <div>
+                        <div className="my-2">
+                          <span className="font-bold uppercase">
+                            Добавить в пиццу
+                          </span>
+                        </div>
+                        <div className="grid grid-cols-4 gap-2">
+                          {modifiers.map((mod: any) => (
+                            <div
+                              key={mod.id}
+                              className={`border ${
+                                mod.active || activeModifiers.includes(mod.id)
+                                  ? 'border-yellow'
+                                  : 'border-gray-300'
+                              } flex flex-col justify-between overflow-hidden rounded-[15px] cursor-pointer`}
+                              onClick={() => addModifier(mod.id)}
+                            >
+                              <div className="flex-grow pt-2 px-2">
+                                {mod.assets.length ? (
+                                  <Image
+                                    src={`${webAddress}/storage/${mod.assets[0]?.location}/${mod.assets[0]?.filename}`}
+                                    width={80}
+                                    height={80}
+                                    alt={mod.name}
+                                  />
+                                ) : (
+                                  <Image
+                                    src="/no_photo.svg"
+                                    width={80}
+                                    height={80}
+                                    alt={mod.name}
+                                    className="rounded-full"
+                                  />
+                                )}
+                              </div>
+                              <div className="px-2 text-center text-xs pb-1">
+                                {mod.name}
+                              </div>
+                              <div
+                                className={`${
+                                  mod.active || activeModifiers.includes(mod.id)
+                                    ? 'bg-yellow'
+                                    : 'bg-gray-300'
+                                } font-bold px-4 py-2 text-center text-white text-xs`}
+                              >
+                                {currency(mod.price * 2, {
+                                  pattern: '# !',
+                                  separator: ' ',
+                                  decimal: '.',
+                                  symbol: 'сўм',
+                                  precision: 0,
+                                }).format()}
+                              </div>
+                            </div>
+                          ))}
+                        </div>
+                      </div>
+                    )}
                     {!leftSelectedProduct && !rightSelectedProduct ? (
                       <button
                         className="bg-gray-300 w-full rounded-3xl cursor-not-allowed px-10 py-2 text-white mt-7"
@@ -341,17 +583,43 @@ const CreateYourPizza: FC<CreatePizzaProps> = ({ sec, channelName }) => {
                       </button>
                     ) : (
                       <button
-                        className="bg-yellow w-full rounded-3xl px-10 py-2 text-white mt-7"
+                        className="bg-yellow w-full rounded-3xl px-10 py-2 text-white mt-7 flex items-center justify-around"
                         ref={completeButtonRef}
+                        onClick={addToBasket}
                       >
-                        В корзину{' '}
-                        {currency(totalSummary, {
-                          pattern: '# !',
-                          separator: ' ',
-                          decimal: '.',
-                          symbol: 'сум',
-                          precision: 0,
-                        }).format()}
+                        {isLoadingBasket ? (
+                          <svg
+                            className="animate-spin h-5 w-5 text-white flex-grow text-center"
+                            xmlns="http://www.w3.org/2000/svg"
+                            fill="none"
+                            viewBox="0 0 24 24"
+                          >
+                            <circle
+                              className="opacity-25"
+                              cx="12"
+                              cy="12"
+                              r="10"
+                              stroke="currentColor"
+                              stroke-width="4"
+                            ></circle>
+                            <path
+                              className="opacity-75"
+                              fill="currentColor"
+                              d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+                            ></path>
+                          </svg>
+                        ) : (
+                          <span>
+                            В корзину{' '}
+                            {currency(totalSummary, {
+                              pattern: '# !',
+                              separator: ' ',
+                              decimal: '.',
+                              symbol: 'сум',
+                              precision: 0,
+                            }).format()}
+                          </span>
+                        )}
                       </button>
                     )}
                   </div>
