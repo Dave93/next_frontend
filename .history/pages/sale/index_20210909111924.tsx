@@ -6,7 +6,7 @@ import axios from 'axios'
 import menuItems from '@commerce/data/newsMenu'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
-import NewsItem from '@components_new/news/NewsItem'
+import SaleItem from '@components_new/sale/SaleItem'
 import useTranslation from 'next-translate/useTranslation'
 
 export async function getServerSideProps({
@@ -38,7 +38,7 @@ export async function getServerSideProps({
   }
 
   const { data } = await axios.get(
-    `${process.env.API_URL}/api/news/public?city_id=${activeCity.id}`
+    `${process.env.API_URL}/api/sales/public?city_id=${activeCity.id}`
   )
 
   return {
@@ -50,12 +50,12 @@ export async function getServerSideProps({
       socials,
       cleanBackground: true,
       cities,
-      news: data.data,
+      sale: data.data,
     },
   }
 }
 
-export default function News({ news }: { news: any }) {
+export default function Sale({ sale }: { sale: any }) {
   const { t: tr } = useTranslation('common')
   const router = useRouter()
   const { locale, pathname } = router
@@ -90,15 +90,15 @@ export default function News({ news }: { news: any }) {
         ))}
       </div>
       <div className="md:grid grid-cols-3 gap-10 mx-5 md:mx-0">
-        {!news.length && (
+        {!sale.length && (
           <div className="col-span-3 text-2xl text-center">
-            {tr('yet_no_news')}
+            В вашем городе пока нет акций
           </div>
         )}
-        <NewsItem newsItems={news} />
+        <SaleItem SaleItems={sale} />
       </div>
     </>
   )
 }
 
-News.Layout = Layout
+Sale.Layout = Layout
