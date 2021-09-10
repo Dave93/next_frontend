@@ -1,7 +1,7 @@
 import React, { memo, useContext } from 'react'
 import SessionContext from 'react-storefront/session/SessionContext'
 import CartIcon from '../assets/cart_icon.svg'
-import EmptyLeftCart from '../assets/empty_left_cart.svg'
+import EmptyLeftCart from '../assets/empty_left_cart.png'
 import ButtonArrowRound from '../assets/button_arrow_round.svg'
 import get from 'lodash/get'
 import { useForm } from 'react-hook-form'
