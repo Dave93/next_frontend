@@ -61,7 +61,7 @@ type FormData = {
   cvv_code: string
   delivery_day: string
   delivery_time: string
-  payType: string
+  pay_type: string
   delivery_schedule: string
 }
 
@@ -147,7 +147,7 @@ const Orders: FC = () => {
       cvv_code: '',
       delivery_day: '',
       delivery_time: '',
-      payType: '',
+      pay_type: '',
       delivery_schedule: 'now',
     },
   })
@@ -605,7 +605,7 @@ const Orders: FC = () => {
     prepareOrder()
   }
 
-  if (errors.payType) {
+  if (errors.pay_type) {
     toast.error(tr('payment_system_not_selected'), {
       position: toast.POSITION.BOTTOM_RIGHT,
       hideProgressBar: true,
@@ -1374,7 +1374,7 @@ const Orders: FC = () => {
                     <img src={`/assets/${payment}.png`} />
                     <input
                       type="radio"
-                      {...register('payType', { required: openTab === 3 })}
+                      {...register('pay_type', { required: openTab === 3 })}
                       defaultValue={payment}
                       checked={payType === payment}
                       onChange={onValueChange}
