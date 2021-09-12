@@ -288,7 +288,7 @@ const MobLocationTabs: FC<MobLocationTabProps> = ({ setOpen }) => {
   return (
     <>
       <div className="flex items-center pt-5 mb-8">
-        <span onClick={() => { console.log('calling'); setOpen(false) }} className="flex">
+        <span onClick={() => setOpen(false)} className="flex">
           <Image src="/assets/back.png" width="24" height="24" />
         </span>
         <div className="text-lg flex-grow text-center">Адрес</div>

@@ -20,6 +20,11 @@ import { useCart } from '@framework/cart'
 import dynamic from 'next/dynamic'
 import CreateYourPizza from '@components_new/product/CreateYourPizza'
 
+const HalfPizzaNoSSR = dynamic(
+  () => import('@components_new/product/CreateYourPizzaCommon'),
+  { ssr: false }
+)
+
 const CartWithNoSSR = dynamic(
   () => import('@components_new/common/SmallCart'),
   { ssr: false }
@@ -157,7 +162,7 @@ export default function Home({
                   key={sec.id}
                   className="grid grid-cols-1 lg:grid-cols-3 md:grid-cols-2 md:gap-10 divide-y md:divide-y-0 px-4 md:px-0"
                 >
-                  <CreateYourPizza sec={sec} channelName={channelName} />
+                  <HalfPizzaNoSSR sec={sec} channelName={channelName} />
                 </div>
               ) : (
                 <div key={sec.id} id={`productSection_${sec.id}`}>
