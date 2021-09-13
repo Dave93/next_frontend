@@ -260,13 +260,22 @@ const CreateYourPizza: FC<CreatePizzaProps> = ({ sec, channelName }) => {
   ])
 
   const addModifier = (id: number) => {
+    let zeroModifier = modifiers.find((mod: any) => mod.price == 0)
     if (activeModifiers.includes(id)) {
       let currentModifier: any = modifiers.find((mod: any) => mod.id == id)
       if (!currentModifier) return
       if (currentModifier.price == 0) return
       setActiveModifeirs([...activeModifiers.filter((modId) => modId != id)])
     } else {
-      setActiveModifeirs([...activeModifiers, id])
+      let currentModifier: any = modifiers.find((mod: any) => mod.id == id)
+      if (currentModifier.price == 0) {
+        setActiveModifeirs([id])
+      } else {
+        setActiveModifeirs([
+          ...activeModifiers.filter((id: number) => id != zeroModifier.id),
+          id,
+        ])
+      }
     }
   }
   useEffect(() => {
@@ -527,7 +536,7 @@ const CreateYourPizza: FC<CreatePizzaProps> = ({ sec, channelName }) => {
                             <div
                               key={mod.id}
                               className={`border ${
-                                mod.active || activeModifiers.includes(mod.id)
+                                activeModifiers.includes(mod.id)
                                   ? 'border-yellow'
                                   : 'border-gray-300'
                               } flex flex-col justify-between overflow-hidden rounded-[15px] cursor-pointer`}
@@ -556,7 +565,7 @@ const CreateYourPizza: FC<CreatePizzaProps> = ({ sec, channelName }) => {
                               </div>
                               <div
                                 className={`${
-                                  mod.active || activeModifiers.includes(mod.id)
+                                  activeModifiers.includes(mod.id)
                                     ? 'bg-yellow'
                                     : 'bg-gray-300'
                                 } font-bold px-4 py-2 text-center text-white text-xs`}
