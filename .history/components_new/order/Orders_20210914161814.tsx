@@ -620,7 +620,7 @@ const Orders: FC = () => {
   }
 
   return (
-    <div className="mx-5 md:mx-0 pt-1 md:pt-0 pb-1">
+    <div className="mx-5 md:mx-0 pt-1 md:pt-0">
       {/* Contacts */}
       <div className="w-full bg-white my-5 rounded-2xl">
         <div className="p-10">
@@ -1049,7 +1049,7 @@ const Orders: FC = () => {
                 </>
               )}
               {pickupIndex == 2 && (
-                <div className="gap-5 grid md:grid-cols-2">
+                <div className="gap-5 grid grid-cols-2">
                   {pickupPoints.map((point) => (
                     <div
                       key={point.id}
@@ -1733,12 +1733,12 @@ const Orders: FC = () => {
             </div>
           </Dialog>
         </Transition>
-        <div className="md:flex justify-between mt-8 space-y-2 md:space-y-0">
-          <button className="md:text-xl text-gray-400 bg-gray-200 flex h-12 items-center justify-between px-12 rounded-full md:w-80 w-full">
+        <div className="flex justify-between mt-8">
+          <button className="text-xl text-gray-400 bg-gray-200 flex h-12 items-center justify-between px-12 rounded-full w-80">
             <img src="/left.png" /> {tr('back_to_basket')}
           </button>
           <button
-            className={`md:text-xl text-white bg-yellow flex h-12 items-center justify-evenly rounded-full md:w-80 w-full ${
+            className={`text-xl text-white bg-yellow flex h-12 items-center justify-evenly rounded-full w-80 ${
               !locationData?.terminal_id ? 'opacity-25 cursor-not-allowed' : ''
             }`}
             disabled={!locationData?.terminal_id || isSavingOrder}

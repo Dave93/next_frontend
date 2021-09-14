@@ -596,7 +596,7 @@ const ProductItemNew: FC<ProductItem> = ({ product, channelName }) => {
                                 className={`w-full text-center cursor-pointer rounded-2xl outline-none ${
                                   v.active
                                     ? 'bg-yellow text-white shadow-xl'
-                                    : 'bg-gray-200 text-gray-600'
+                                    : 'bg-gray-100 text-gray-600'
                                 }`}
                                 onClick={() => updateOptionSelection(v.id)}
                                 key={v.id}
