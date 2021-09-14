@@ -85,7 +85,7 @@ const MainSlider: FC = () => {
                                   ? item.asset[1].link
                                   : item.asset[0].link
                               }
-                              width={1160}
+                              width={400}
                               height={176}
                               layout="intrinsic"
                             />
@@ -111,7 +111,7 @@ const MainSlider: FC = () => {
                                 ? item.asset[1].link
                                 : item.asset[0].link
                             }
-                            width={1160}
+                            width={400}
                             height={176}
                             layout="intrinsic"
                           />
