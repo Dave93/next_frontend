@@ -620,7 +620,7 @@ const Orders: FC = () => {
   }
 
   return (
-    <div className="mx-5 md:mx-0 pt-1 md:pt-0 pb-1">
+    <div className="mx-5 md:mx-0 pt-1 md:pt-0">
       {/* Contacts */}
       <div className="w-full bg-white my-5 rounded-2xl">
         <div className="p-10">
@@ -1049,7 +1049,7 @@ const Orders: FC = () => {
                 </>
               )}
               {pickupIndex == 2 && (
-                <div className="gap-5 grid md:grid-cols-2">
+                <div className="gap-5 grid grid-cols-2">
                   {pickupPoints.map((point) => (
                     <div
                       key={point.id}
@@ -1094,7 +1094,7 @@ const Orders: FC = () => {
         <div className="text-lg mb-5 font-bold">
           {tr('order_time_of_delivery')}
         </div>
-        <div className="flex  md:block space-x-5">
+        <div className="flex space-x-1 md:block md:space-x-5">
           <button
             className={`${
               deliveryActive == 'now'
@@ -1155,14 +1155,14 @@ const Orders: FC = () => {
       {/* pay */}
       <div className="w-full bg-white mb-5 rounded-2xl p-10 relative">
         {!locationData?.terminal_id && (
-          <div className="absolute md:w-full h-full md:-ml-10 md:-mt-10 bg-opacity-60 bg-gray-100 z-20 items-center flex justify-around">
+          <div className="absolute w-full h-full -ml-10 -mt-10 bg-opacity-60 bg-gray-100 z-20 items-center flex justify-around">
             <div className="text-yellow font-bold text-2xl">
               {tr('no_address_no_restaurant')}
             </div>
           </div>
         )}
         <div className="text-lg mb-5 font-bold">{tr('order_pay')}</div>
-        <div className="flex md:block">
+        <div>
           <button
             className={`${
               openTab !== 1
@@ -1198,7 +1198,7 @@ const Orders: FC = () => {
           <input
             type="number"
             {...register('change', { required: openTab === 1 })}
-            className="borde focus:outline-none outline-none px-6 py-3 rounded-full text-sm md:w-80 w-full bg-gray-100 text-gray-400 mt-8"
+            className="borde focus:outline-none outline-none px-6 py-3 rounded-full text-sm w-80 bg-gray-100 text-gray-400 mt-8"
             placeholder={tr('change')}
           />
           <Disclosure defaultOpen={true}>
@@ -1225,11 +1225,11 @@ const Orders: FC = () => {
                   leaveTo="transform scale-95 opacity-0"
                 >
                   <Disclosure.Panel>
-                    <div className="md:flex mt-3 md:w-96 h-28">
-                      <div className="w-full">
+                    <div className="flex mt-3 w-96 h-28">
+                      <div>
                         <textarea
                           {...register('notes')}
-                          className="md:w-96 w-full h-28 bg-gray-100 rounded-2xl p-3 outline-none focus:outline-none resize-none"
+                          className="w-96 h-28 bg-gray-100 rounded-2xl p-3 outline-none focus:outline-none resize-none"
                           placeholder={tr(
                             'only_the_courier_will_see_your_comment'
                           )}
@@ -1343,7 +1343,7 @@ const Orders: FC = () => {
                       <div>
                         <textarea
                           {...register('notes')}
-                          className="md:w-96 w-full h-28 bg-gray-100 rounded-2xl p-3 outline-none focus:outline-none resize-none"
+                          className="w-96 h-28 bg-gray-100 rounded-2xl p-3 outline-none focus:outline-none resize-none"
                           placeholder={tr(
                             'only_the_courier_will_see_your_comment'
                           )}
@@ -1407,11 +1407,11 @@ const Orders: FC = () => {
                   leaveTo="transform scale-95 opacity-0"
                 >
                   <Disclosure.Panel>
-                    <div className="flex mt-3 md:w-96 h-28">
+                    <div className="flex mt-3 w-96 h-28">
                       <div>
                         <textarea
                           {...register('notes')}
-                          className="md:w-96 w-full h-28 bg-gray-100 rounded-2xl p-3 outline-none focus:outline-none resize-none"
+                          className="w-96 h-28 bg-gray-100 rounded-2xl p-3 outline-none focus:outline-none resize-none"
                           placeholder={tr(
                             'only_the_courier_will_see_your_comment'
                           )}
@@ -1482,7 +1482,7 @@ const Orders: FC = () => {
         )}
       </div>
       <div className="w-full bg-white mb-5 rounded-2xl p-10">
-        <div className="md:flex">
+        <div className="flex">
           <div className="mr-8 text-gray-400">{tr('agree_to_send')}</div>
           <label className="mr-8 cursor-pointer text-gray-400 items-center flex">
             <input
@@ -1507,12 +1507,12 @@ const Orders: FC = () => {
             <div>E-mail {tr('mailing')}</div>
           </label>
         </div>
-        <div className="mt-5 text-gray-400 text-sm md:flex border-b pb-8">
+        <div className="mt-5 text-gray-400 text-sm flex border-b pb-8">
           {tr('processing_of_your_personal_data')}
           <a
             href="/privacy"
             onClick={showPrivacy}
-            className="text-yellow block md:mx-1"
+            className="text-yellow block mx-1"
             target="_blank"
           >
             {tr('terms_of_use')}
@@ -1733,12 +1733,12 @@ const Orders: FC = () => {
             </div>
           </Dialog>
         </Transition>
-        <div className="md:flex justify-between mt-8 space-y-2 md:space-y-0">
-          <button className="md:text-xl text-gray-400 bg-gray-200 flex h-12 items-center justify-between px-12 rounded-full md:w-80 w-full">
+        <div className="flex justify-between mt-8">
+          <button className="text-xl text-gray-400 bg-gray-200 flex h-12 items-center justify-between px-12 rounded-full w-80">
             <img src="/left.png" /> {tr('back_to_basket')}
           </button>
           <button
-            className={`md:text-xl text-white bg-yellow flex h-12 items-center justify-evenly rounded-full md:w-80 w-full ${
+            className={`text-xl text-white bg-yellow flex h-12 items-center justify-evenly rounded-full w-80 ${
               !locationData?.terminal_id ? 'opacity-25 cursor-not-allowed' : ''
             }`}
             disabled={!locationData?.terminal_id || isSavingOrder}
