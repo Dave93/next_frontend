@@ -1,7 +1,16 @@
-import React, { memo, useState, useContext, FC, useMemo } from 'react'
+import React, {
+  memo,
+  useState,
+  useContext,
+  Fragment,
+  FC,
+  useMemo,
+  useRef,
+} from 'react'
 import Image from 'next/image'
 import ProductOptionSelector from './ProductOptionSelector'
 import currency from 'currency.js'
+import { Dialog, Transition } from '@headlessui/react'
 import {
   Product,
   ProductOptionValues,
@@ -14,6 +23,7 @@ import axios from 'axios'
 import Cookies from 'js-cookie'
 import getConfig from 'next/config'
 import { useCart } from '@framework/cart'
+import { XIcon, CheckIcon } from '@heroicons/react/outline'
 // import SessionContext from 'react-storefront/session/SessionContext'
 
 type ProductItem = {
@@ -34,8 +44,18 @@ const ProductItemNew: FC<ProductItem> = ({ product, channelName }) => {
   const [addToCartInProgress, setAddToCartInProgress] = useState(false)
   const [isChoosingModifier, setIsChoosingModifier] = useState(false)
   const [activeModifier, setActiveModifier] = useState(null)
+  let [isOpen, setIsOpen] = useState(false)
+  let completeButtonRef = useRef(null)
   const router = useRouter()
   const { locale } = router
+
+  function closeModal() {
+    setIsOpen(false)
+  }
+
+  function openModal() {
+    setIsOpen(true)
+  }
 
   const updateOptionSelection = (valueId: string) => {
     const prod = store
@@ -200,6 +220,10 @@ const ProductItemNew: FC<ProductItem> = ({ product, channelName }) => {
     if (modifiers && modifiers.length) {
       setIsChoosingModifier(false)
     }
+
+    if (window.innerWidth < 768) {
+      closeModal()
+    }
   }
 
   const discardModifier = async () => {
@@ -265,7 +289,6 @@ const ProductItemNew: FC<ProductItem> = ({ product, channelName }) => {
       addToBasket()
     }
   }
-  console.log(modifiers)
   return (
     <>
       {isChoosingModifier ? (
@@ -450,8 +473,7 @@ const ProductItemNew: FC<ProductItem> = ({ product, channelName }) => {
                   tr('main_to_basket')
                 )}
               </button>
-              <span className="md:text-xl bg-yellow md:bg-white w-28 md:w-auto rounded-full px-2 py-2 text-sm text-center md:px-0 md:py-0 text-white md:text-black">
-                <span className="md:hidden">от</span>{' '}
+              <span className="md:text-xl md:bg-white hidden md:block md:w-auto rounded-full text-sm text-center md:px-0 md:py-0 md:text-black">
                 {currency(totalPrice, {
                   pattern: '# !',
                   separator: ' ',
@@ -460,6 +482,230 @@ const ProductItemNew: FC<ProductItem> = ({ product, channelName }) => {
                   precision: 0,
                 }).format()}
               </span>
+              <button
+                className="md:text-xl md:hidden bg-yellow md:bg-white w-28 md:w-auto rounded-full px-2 py-2 text-sm text-center md:px-0 md:py-0 text-white md:text-black"
+                onClick={openModal}
+              >
+                <span>от</span>{' '}
+                {currency(totalPrice, {
+                  pattern: '# !',
+                  separator: ' ',
+                  decimal: '.',
+                  symbol: 'сўм',
+                  precision: 0,
+                }).format()}
+              </button>
+              <Transition.Root show={isOpen} as={Fragment}>
+                <Dialog
+                  initialFocus={completeButtonRef}
+                  as="div"
+                  className="fixed inset-0 z-50 overflow-y-auto"
+                  open={isOpen}
+                  onClose={closeModal}
+                >
+                  <div className="flex items-end justify-center min-h-screen  text-center sm:block sm:p-0">
+                    <Transition.Child
+                      as={Fragment}
+                      enter="ease-out duration-300"
+                      enterFrom="opacity-0"
+                      enterTo="opacity-100"
+                      leave="ease-in duration-200"
+                      leaveFrom="opacity-100"
+                      leaveTo="opacity-0"
+                    >
+                      <Dialog.Overlay className="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity" />
+                    </Transition.Child>
+
+                    {/* This element is to trick the browser into centering the modal contents. */}
+                    <span
+                      className="hidden sm:inline-block sm:align-middle sm:h-screen"
+                      aria-hidden="true"
+                    >
+                      &#8203;
+                    </span>
+                    <Transition.Child
+                      as={Fragment}
+                      enter="ease-out duration-300"
+                      enterFrom="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
+                      enterTo="opacity-100 translate-y-0 sm:scale-100"
+                      leave="ease-in duration-200"
+                      leaveFrom="opacity-100 translate-y-0 sm:scale-100"
+                      leaveTo="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
+                    >
+                      <div className="bg-white p-4 text-left transform h-screen overflow-y-auto w-full overflow-hidden fixed top-0">
+                        <div className="flex fixed w-full max-h-10 flex-col">
+                          <div className="flex w-full items-center">
+                            <span onClick={closeModal} className="flex">
+                              <Image
+                                src="/assets/back.png"
+                                width="24"
+                                height="24"
+                              />
+                            </span>
+                          </div>
+                        </div>
+                        <div className="h-80 w-80 mx-auto bg-cover flex relative mt-10">
+                          {store.image ? (
+                            <Image
+                              src={store.image}
+                              width={300}
+                              height={300}
+                              alt={
+                                store?.attribute_data?.name[channelName][
+                                  locale || 'ru'
+                                ]
+                              }
+                            />
+                          ) : (
+                            <Image
+                              src="/no_photo.svg"
+                              width={300}
+                              height={300}
+                              alt={
+                                store?.attribute_data?.name[channelName][
+                                  locale || 'ru'
+                                ]
+                              }
+                              className="rounded-full"
+                            />
+                          )}
+                        </div>
+                        <div className="font-black mt-4 text-xl">
+                          {
+                            store?.attribute_data?.name[channelName][
+                              locale || 'ru'
+                            ]
+                          }
+                        </div>
+                        <div
+                          className="mt-1 text-xs flex-grow"
+                          dangerouslySetInnerHTML={{
+                            __html: store?.attribute_data?.description
+                              ? store?.attribute_data?.description[channelName][
+                                  locale || 'ru'
+                                ]
+                              : '',
+                          }}
+                        ></div>
+                        {store.variants && store.variants.length > 0 && (
+                          <div className={styles.productSelectorOption}>
+                            {store.variants.map((v) => (
+                              <div
+                                className={`w-full text-center cursor-pointer rounded-2xl outline-none ${
+                                  v.active ? 'bg-gray-300' : ''
+                                }`}
+                                onClick={() => updateOptionSelection(v.id)}
+                                key={v.id}
+                              >
+                                <button className="outline-none focus:outline-none text-xs py-2">
+                                  {locale == 'ru'
+                                    ? v?.custom_name
+                                    : v?.custom_name_uz}
+                                </button>
+                              </div>
+                            ))}
+                          </div>
+                        )}
+                        {modifiers && (
+                          <div>
+                            <div className="my-2">
+                              <span>Добавить в пиццу</span>
+                            </div>
+                            <div className="flex-grow gap-3 grid grid-cols-4">
+                              {modifiers.map((mod: any) => (
+                                <div
+                                  key={mod.id}
+                                  className={`border ${
+                                    mod.active
+                                      ? 'border-yellow'
+                                      : 'border-gray-300'
+                                  } flex flex-col justify-between overflow-hidden rounded-[15px] cursor-pointer`}
+                                  onClick={() => addModifier(mod.id)}
+                                >
+                                  <div className="flex-grow pt-2 px-2">
+                                    {mod.assets.length ? (
+                                      <Image
+                                        src={`${webAddress}/storage/${mod.assets[0]?.location}/${mod.assets[0]?.filename}`}
+                                        width={80}
+                                        height={80}
+                                        alt={mod.name}
+                                      />
+                                    ) : (
+                                      <Image
+                                        src="/no_photo.svg"
+                                        width={80}
+                                        height={80}
+                                        alt={mod.name}
+                                        className="rounded-full"
+                                      />
+                                    )}
+                                  </div>
+                                  <div className="px-2 text-center text-xs pb-1">
+                                    {mod.name}
+                                  </div>
+                                  <div
+                                    className={`${
+                                      mod.active ? 'bg-yellow' : 'bg-gray-300'
+                                    } font-bold px-4 py-2 text-center text-white text-xs`}
+                                  >
+                                    {currency(mod.price, {
+                                      pattern: '# !',
+                                      separator: ' ',
+                                      decimal: '.',
+                                      symbol: 'сўм',
+                                      precision: 0,
+                                    }).format()}
+                                  </div>
+                                </div>
+                              ))}
+                            </div>
+                          </div>
+                        )}
+                        <div className="w-full fixed -ml-4 px-3 py-5 items-center flex mt-3">
+                          <button
+                            className="bg-yellow flex items-center justify-around focus:outline-none font-bold outline-none py-2 rounded-full text-center text-white w-full"
+                            onClick={addToBasket}
+                          >
+                            {isLoadingBasket ? (
+                              <svg
+                                className="animate-spin h-5 w-5 text-white flex-grow text-center"
+                                xmlns="http://www.w3.org/2000/svg"
+                                fill="none"
+                                viewBox="0 0 24 24"
+                              >
+                                <circle
+                                  className="opacity-25"
+                                  cx="12"
+                                  cy="12"
+                                  r="10"
+                                  stroke="currentColor"
+                                  stroke-width="4"
+                                ></circle>
+                                <path
+                                  className="opacity-75"
+                                  fill="currentColor"
+                                  d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+                                ></path>
+                              </svg>
+                            ) : (
+                              <span>
+                                {tr('main_to_basket')}{' '}
+                                {currency(totalPrice, {
+                                  pattern: '# !',
+                                  separator: ' ',
+                                  decimal: '.',
+                                  symbol: 'сўм',
+                                  precision: 0,
+                                }).format()}
+                              </span>
+                            )}
+                          </button>
+                        </div>
+                      </div>
+                    </Transition.Child>
+                  </div>
+                </Dialog>
+              </Transition.Root>
             </div>
           </div>
         </div>

@@ -29,6 +29,10 @@ const CartWithNoSSR = dynamic(
   () => import('@components_new/common/SmallCart'),
   { ssr: false }
 )
+const MobileCartWithNoSSR = dynamic(
+  () => import('@components_new/common/SmallCartMobile'),
+  { ssr: false }
+)
 
 export async function getServerSideProps({
   preview,
@@ -189,6 +193,7 @@ export default function Home({
           </div>
         </div>
       </div>
+      <MobileCartWithNoSSR />
     </>
   )
 }
