@@ -620,7 +620,7 @@ const Orders: FC = () => {
   }
 
   return (
-    <div className="mx-5 md:mx-0 pt-1 md:pt-0 pb-1">
+    <div className="mx-5 md:mx-0 pt-1 md:pt-0">
       {/* Contacts */}
       <div className="w-full bg-white my-5 rounded-2xl">
         <div className="p-10">
@@ -1049,7 +1049,7 @@ const Orders: FC = () => {
                 </>
               )}
               {pickupIndex == 2 && (
-                <div className="gap-5 grid md:grid-cols-2">
+                <div className="gap-5 grid grid-cols-2">
                   {pickupPoints.map((point) => (
                     <div
                       key={point.id}
