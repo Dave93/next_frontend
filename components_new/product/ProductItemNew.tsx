@@ -209,7 +209,7 @@ const ProductItemNew: FC<ProductItem> = ({ product, channelName }) => {
       createdAt: '',
       currency: { code: basket.data.currency },
       taxesIncluded: basket.data.tax_total,
-      lineItems: basket.data.lines.data,
+      lineItems: basket.data.lines,
       lineItemsSubtotalPrice: basket.data.sub_total,
       subtotalPrice: basket.data.sub_total,
       totalPrice: basket.data.total,

@@ -9,6 +9,7 @@ import Cookies from 'js-cookie'
 import getConfig from 'next/config'
 import { useRouter } from 'next/router'
 import useTranslation from 'next-translate/useTranslation'
+import Hashids from 'hashids'
 
 const { publicRuntimeConfig } = getConfig()
 let webAddress = publicRuntimeConfig.apiUrl
@@ -41,6 +42,12 @@ const SmallCart: FC<SmallCartProps> = ({
   const router = useRouter()
   const { locale } = router
 
+  const hashids = new Hashids(
+    'basket',
+    15,
+    'abcdefghijklmnopqrstuvwxyz1234567890'
+  )
+
   const setCredentials = async () => {
     let csrf = Cookies.get('X-XSRF-TOKEN')
     if (!csrf) {
@@ -66,7 +73,7 @@ const SmallCart: FC<SmallCartProps> = ({
     setIsCartLoading(true)
     await setCredentials()
     const { data } = await axios.delete(
-      `${webAddress}/api/v1/basket-lines/${lineId}`
+      `${webAddress}/api/v1/basket-lines/${hashids.encode(lineId)}`
     )
     if (cartId) {
       let { data: basket } = await axios.get(
@@ -95,7 +102,7 @@ const SmallCart: FC<SmallCartProps> = ({
     setIsCartLoading(true)
     await setCredentials()
     const { data: basket } = await axios.put(
-      `${webAddress}/api/v1/basket-lines/${line.id}/remove`,
+      `${webAddress}/api/v1/basket-lines/${hashids.encode(line.id)}/remove`,
       {
         quantity: 1,
       }
@@ -125,7 +132,7 @@ const SmallCart: FC<SmallCartProps> = ({
     setIsCartLoading(true)
     await setCredentials()
     const { data: basket } = await axios.post(
-      `${webAddress}/api/v1/basket-lines/${lineId}/add`,
+      `${webAddress}/api/v1/basket-lines/${hashids.encode(lineId)}/add`,
       {
         quantity: 1,
       }
