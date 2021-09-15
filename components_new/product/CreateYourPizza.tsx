@@ -153,7 +153,7 @@ const CreateYourPizza: FC<CreatePizzaProps> = ({ sec, channelName }) => {
           ],
         }
       )
-      console.log(basketData)
+      // console.log(basketData)
       // await axios.post(`${webAddress}/api/baskets-lines`, {
       //   basket_id: basketData.data.id,
       //   variants: [
@@ -258,7 +258,7 @@ const CreateYourPizza: FC<CreatePizzaProps> = ({ sec, channelName }) => {
         ...modifiers.filter((mod: any) => activeModifiers.includes(mod.id)),
       ]
       selectedModifiers.map((mod: any) => {
-        res += +mod.price * 2
+        res += +mod.price
       })
     }
 
@@ -583,7 +583,7 @@ const CreateYourPizza: FC<CreatePizzaProps> = ({ sec, channelName }) => {
                                     : 'bg-gray-300'
                                 } font-bold px-4 py-2 text-center text-white text-xs`}
                               >
-                                {currency(mod.price * 2, {
+                                {currency(mod.price, {
                                   pattern: '# !',
                                   separator: ' ',
                                   decimal: '.',
