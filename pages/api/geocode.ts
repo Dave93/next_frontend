@@ -27,13 +27,20 @@ export default async function handler(req: any, res: any) {
   let result = [] as any[]
 
   getCodeData.response.GeoObjectCollection.featureMember.map((item: any) => {
+    let formattedArray: any[] = []
+    item.GeoObject.metaDataProperty.GeocoderMetaData.Address.Components.map(
+      (comp: any) => {
+        if (['country', 'province', 'district'].includes(comp.kind)) {
+          formattedArray.push(comp.name)
+        }
+      }
+    )
     result.push({
       title: item.GeoObject.name,
       description: item.GeoObject.description,
       addressItems:
         item.GeoObject.metaDataProperty.GeocoderMetaData.Address.Components,
-      formatted:
-        item.GeoObject.metaDataProperty.GeocoderMetaData.Address.formatted,
+      formatted: formattedArray.join(', '),
       coordinates: {
         long: item.GeoObject.Point.pos.split(' ')[0],
         lat: item.GeoObject.Point.pos.split(' ')[1],

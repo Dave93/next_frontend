@@ -19,7 +19,6 @@ import Cookies from 'js-cookie'
 import { useCart } from '@framework/cart'
 import useTranslation from 'next-translate/useTranslation'
 
-
 type CreatePizzaProps = {
   sec: any
   channelName: string
@@ -171,7 +170,7 @@ const CreateYourPizza: FC<CreatePizzaProps> = ({ sec, channelName }) => {
     basketId = localStorage.getItem('basketId')
 
     let { data: basket } = await axios.get(
-      `${webAddress}/api/v1/baskets/${basketId}`
+      `${webAddress}/api/baskets/${basketId}`
     )
     const basketResult = {
       id: basket.data.id,
