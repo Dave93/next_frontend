@@ -300,7 +300,7 @@ const CreateYourPizza: FC<CreatePizzaProps> = ({ sec, channelName }) => {
               className="bg-gray-100 focus:outline-none font-bold outline-none px-6 py-2 rounded-full text-center text-yellow uppercase"
               onClick={openModal}
             >
-              {tr('create_pizza')}
+              Создать пиццу
             </button>
           </div>
         </div>
@@ -403,9 +403,9 @@ const CreateYourPizza: FC<CreatePizzaProps> = ({ sec, channelName }) => {
                       ))}
                   </div>
                   <div className="bg-white rounded-3xl p-6 text-center col-span-6 shadow-xl">
-                    <div className="text-2xl">{tr('pizza')} 50/50</div>
+                    <div className="text-2xl">Пицца 50/50</div>
                     <div className="text-gray-400 mb-5">
-                      {tr('combine_your_two_favorite')}
+                      Соедини 2 любимых вкуса
                     </div>
                     <div
                       className="h-80 w-80 mx-auto bg-cover flex relative"
@@ -486,7 +486,7 @@ const CreateYourPizza: FC<CreatePizzaProps> = ({ sec, channelName }) => {
                               />
                             </div>
                             <div className="w-24 text-sm text-gray-400 text-left">
-                              {tr('select_the_left_half')}
+                              Выберите левую половинку
                             </div>
                           </div>
                         )}
@@ -523,7 +523,7 @@ const CreateYourPizza: FC<CreatePizzaProps> = ({ sec, channelName }) => {
                               />
                             </div>
                             <div className="w-24 text-sm text-gray-400 text-left">
-                              {tr('select_the_right_half')}
+                              Выберите правую половинку
                             </div>
                           </div>
                         )}
@@ -533,7 +533,7 @@ const CreateYourPizza: FC<CreatePizzaProps> = ({ sec, channelName }) => {
                       <div>
                         <div className="my-2">
                           <span className="font-bold uppercase">
-                            {tr('add_to_pizza')}
+                            Добавить в пиццу
                           </span>
                         </div>
                         <div className="grid grid-cols-4 gap-2">
@@ -593,7 +593,7 @@ const CreateYourPizza: FC<CreatePizzaProps> = ({ sec, channelName }) => {
                         className="bg-gray-300 w-full rounded-3xl cursor-not-allowed px-10 py-2 text-white mt-7"
                         ref={completeButtonRef}
                       >
-                        {tr('main_to_basket')}
+                        В корзину
                       </button>
                     ) : (
                       <button
@@ -624,7 +624,7 @@ const CreateYourPizza: FC<CreatePizzaProps> = ({ sec, channelName }) => {
                           </svg>
                         ) : (
                           <span>
-                            {tr('main_to_basket')}{' '}
+                            В корзину{' '}
                             {currency(totalSummary, {
                               pattern: '# !',
                               separator: ' ',
