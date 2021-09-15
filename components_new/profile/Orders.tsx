@@ -84,7 +84,9 @@ const Orders: FC<OrdersListProps> = ({ orders }) => {
                         </div>
                         <div className="w-40">{order?.billing_address}</div>
                         <div>
-                          {tr('prod-count', { count: order?.lines.length })}
+                          {tr('prod-count', {
+                            count: order?.basket?.lines.length,
+                          })}
                         </div>
                         <div>
                           {currency(order?.order_total / 100, {
@@ -101,29 +103,81 @@ const Orders: FC<OrdersListProps> = ({ orders }) => {
                       {tr(`order_status_${order?.status}`)}
                     </div>
                   </div>
-                  {order?.lines.map((pizza: any) => (
+                  {order?.basket?.lines.map((pizza: any) => (
                     <Disclosure.Panel
                       className="flex items-center justify-between border-b mt-4 pb-4"
                       key={pizza.id}
                     >
                       <div className="flex items-center">
-                        <Image
-                          src={`${webAddress}/storage/${pizza?.variant?.product?.assets[0]?.location}/${pizza?.variant?.product?.assets[0]?.filename}`}
-                          width="100"
-                          height="100"
-                        />
+                        {pizza.child && pizza.child.length ? (
+                          <div className="h-24 w-24 flex relative">
+                            <div className="w-12 relative overflow-hidden">
+                              <div>
+                                <Image
+                                  src={
+                                    pizza?.variant?.product?.assets?.length
+                                      ? `${webAddress}/storage/${pizza?.variant?.product?.assets[0]?.location}/${pizza?.variant?.product?.assets[0]?.filename}`
+                                      : '/no_photo.svg'
+                                  }
+                                  width="95"
+                                  height="95"
+                                  layout="fixed"
+                                  className="absolute rounded-full"
+                                />
+                              </div>
+                            </div>
+                            <div className="w-12 relative overflow-hidden">
+                              <div className="absolute right-0">
+                                <Image
+                                  src={
+                                    pizza?.child[0].variant?.product?.assets
+                                      ?.length
+                                      ? `${webAddress}/storage/${pizza?.child[0].variant?.product?.assets[0]?.location}/${pizza?.child[0].variant?.product?.assets[0]?.filename}`
+                                      : '/no_photo.svg'
+                                  }
+                                  width="95"
+                                  height="95"
+                                  layout="fixed"
+                                  className="rounded-full"
+                                />
+                              </div>
+                            </div>
+                          </div>
+                        ) : (
+                          <div>
+                            <Image
+                              src={
+                                pizza?.variant?.product?.assets?.length
+                                  ? `${webAddress}/storage/${pizza?.variant?.product?.assets[0]?.location}/${pizza?.variant?.product?.assets[0]?.filename}`
+                                  : '/no_photo.svg'
+                              }
+                              width={95}
+                              height={95}
+                              className="rounded-full w-24"
+                            />
+                          </div>
+                        )}
                         <div className="ml-5">
                           <div className="text-xl font-bold">
-                            {
-                              pizza?.variant?.product?.attribute_data?.name[
-                                channelName
-                              ][locale || 'ru']
-                            }
+                            {pizza.child && pizza.child.length
+                              ? `${
+                                  pizza?.variant?.product?.attribute_data?.name[
+                                    channelName
+                                  ][locale || 'ru']
+                                } + ${
+                                  pizza?.child[0].variant?.product
+                                    ?.attribute_data?.name[channelName][
+                                    locale || 'ru'
+                                  ]
+                                }`
+                              : pizza?.variant?.product?.attribute_data?.name[
+                                  channelName
+                                ][locale || 'ru']}
                           </div>
                         </div>
                       </div>
                       <div>
-                        {currency(pizza?.line_total / 100, {
+                        {currency(pizza?.total, {
                           pattern: '# !',
                           separator: ' ',
                           decimal: '.',

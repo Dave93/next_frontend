@@ -30,7 +30,7 @@ export default async function handler(req: any, res: any) {
     let formattedArray: any[] = []
     item.GeoObject.metaDataProperty.GeocoderMetaData.Address.Components.map(
       (comp: any) => {
-        if (['country', 'province', 'district'].includes(comp.kind)) {
+        if (['country', 'province', 'district', 'street'].includes(comp.kind)) {
           formattedArray.push(comp.name)
         }
       }
