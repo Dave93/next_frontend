@@ -989,17 +989,17 @@ const Orders: FC = () => {
                 </div>
               </div> */}
             </div>
-            {/* <div className="w-full mt-5">
+            <div className="w-full mt-5">
               <input
                 type="text"
                 {...register('address')}
                 placeholder={tr('address')}
                 className="bg-gray-100 px-8 rounded-full w-full outline-none focus:outline-none py-2"
               />
-            </div> */}
+            </div>
             <div className="mt-5">
-              {/* {pickupIndex == 1 && ( */}
-                {/* <>
+              {pickupIndex == 1 && (
+                <>
                   <YMaps>
                     <div>
                       <Map
@@ -1046,9 +1046,9 @@ const Orders: FC = () => {
                       </Map>
                     </div>
                   </YMaps>
-                </> */}
-              {/* )} */}
-              {/* {pickupIndex == 2 && ( */}
+                </>
+              )}
+              {pickupIndex == 2 && (
                 <div className="gap-5 grid md:grid-cols-2">
                   {pickupPoints.map((point) => (
                     <div
@@ -1084,7 +1084,7 @@ const Orders: FC = () => {
                     </div>
                   ))}
                 </div>
-              {/* )} */}
+              )}
             </div>
           </div>
         )}
