@@ -81,8 +81,8 @@ const CreateYourPizza: FC<CreatePizzaProps> = ({ sec, channelName }) => {
     await setCredentials()
     let selectedModifiers: any[] = [...activeModifiers]
     let allModifiers = [...modifiers]
+    let freeModifiers = allModifiers.find((mod: any) => mod.price == 0)
     if (selectedModifiers.length == 0) {
-      let freeModifiers = allModifiers.find((mod: any) => mod.price == 0)
       selectedModifiers.push(freeModifiers.id)
     }
 
@@ -119,23 +119,15 @@ const CreateYourPizza: FC<CreatePizzaProps> = ({ sec, channelName }) => {
             child: {
               id: rightProduct.id,
               quantity: 1,
+              modifiers: [
+                {
+                  id: freeModifiers.id,
+                },
+              ],
             },
           },
         ],
       })
-      // const { data: basketData } = await axios.post(
-      //   `${webAddress}/api/baskets-lines`,
-      //   {
-      //     basket_id: basketId,
-      //     variants: [
-      //       {
-      //         id: rightProduct.id,
-      //         quantity: 1,
-      //         modifiers: selectedModifiers,
-      //       },
-      //     ],
-      //   }
-      // )
     } else {
       const { data: basketData } = await axios.post(
         `${webAddress}/api/baskets`,
@@ -148,22 +140,16 @@ const CreateYourPizza: FC<CreatePizzaProps> = ({ sec, channelName }) => {
               child: {
                 id: rightProduct.id,
                 quantity: 1,
+                modifiers: [
+                  {
+                    id: freeModifiers.id,
+                  },
+                ],
               },
             },
           ],
         }
       )
-      // console.log(basketData)
-      // await axios.post(`${webAddress}/api/baskets-lines`, {
-      //   basket_id: basketData.data.id,
-      //   variants: [
-      //     {
-      //       id: rightProduct.id,
-      //       quantity: 1,
-      //       modifiers: selectedModifiers,
-      //     },
-      //   ],
-      // })
       localStorage.setItem('basketId', basketData.data.id)
     }
 
