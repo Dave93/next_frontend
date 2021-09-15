@@ -189,7 +189,7 @@ export default function Home({
             )}
           </div>
           <div className="mt-20 sticky top-16 max-h-screen hidden md:block">
-            <CartWithNoSSR />
+            <CartWithNoSSR channelName={channelName} />
           </div>
         </div>
       </div>

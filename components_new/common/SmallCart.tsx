@@ -14,7 +14,15 @@ const { publicRuntimeConfig } = getConfig()
 let webAddress = publicRuntimeConfig.apiUrl
 axios.defaults.withCredentials = true
 
-const SmallCart: FC = () => {
+type SmallCartProps = {
+  channelName: any
+}
+
+const SmallCart: FC<SmallCartProps> = ({
+  channelName,
+}: {
+  channelName: any
+}) => {
   const { t: tr } = useTranslation('common')
   let cartId: string | null = null
   if (typeof window !== undefined) {
@@ -31,6 +39,7 @@ const SmallCart: FC = () => {
   const onSubmit = (data: Object) => console.log(JSON.stringify(data))
 
   const router = useRouter()
+  const { locale } = router
 
   const setCredentials = async () => {
     let csrf = Cookies.get('X-XSRF-TOKEN')
@@ -61,14 +70,14 @@ const SmallCart: FC = () => {
     )
     if (cartId) {
       let { data: basket } = await axios.get(
-        `${webAddress}/api/v1/baskets/${cartId}`
+        `${webAddress}/api/baskets/${cartId}`
       )
       const basketResult = {
         id: basket.data.id,
         createdAt: '',
         currency: { code: basket.data.currency },
         taxesIncluded: basket.data.tax_total,
-        lineItems: basket.data.lines.data,
+        lineItems: basket.data.lines,
         lineItemsSubtotalPrice: basket.data.sub_total,
         subtotalPrice: basket.data.sub_total,
         totalPrice: basket.data.total,
@@ -94,14 +103,14 @@ const SmallCart: FC = () => {
 
     if (cartId) {
       let { data: basket } = await axios.get(
-        `${webAddress}/api/v1/baskets/${cartId}`
+        `${webAddress}/api/baskets/${cartId}`
       )
       const basketResult = {
         id: basket.data.id,
         createdAt: '',
         currency: { code: basket.data.currency },
         taxesIncluded: basket.data.tax_total,
-        lineItems: basket.data.lines.data,
+        lineItems: basket.data.lines,
         lineItemsSubtotalPrice: basket.data.sub_total,
         subtotalPrice: basket.data.sub_total,
         totalPrice: basket.data.total,
@@ -124,14 +133,14 @@ const SmallCart: FC = () => {
 
     if (cartId) {
       let { data: basket } = await axios.get(
-        `${webAddress}/api/v1/baskets/${cartId}`
+        `${webAddress}/api/baskets/${cartId}`
       )
       const basketResult = {
         id: basket.data.id,
         createdAt: '',
         currency: { code: basket.data.currency },
         taxesIncluded: basket.data.tax_total,
-        lineItems: basket.data.lines.data,
+        lineItems: basket.data.lines,
         lineItemsSubtotalPrice: basket.data.sub_total,
         subtotalPrice: basket.data.sub_total,
         totalPrice: basket.data.total,
@@ -199,20 +208,67 @@ const SmallCart: FC = () => {
               data?.lineItems.map((lineItem: any) => (
                 <div key={lineItem.id} className="py-3">
                   <div className="flex mb-2">
-                    <Image
-                      src={
-                        lineItem?.variant?.data?.product?.data?.assets?.data
-                          .length
-                          ? lineItem?.variant?.data?.product?.data?.assets
-                              ?.data[0].url
-                          : '/no_photo.svg'
-                      }
-                      width={40}
-                      height={40}
-                      className="rounded-full"
-                    />
+                    {lineItem.child && lineItem.child.length ? (
+                      <div className="h-11 w-11 flex relative">
+                        <div className="w-5 relative overflow-hidden">
+                          <div>
+                            <Image
+                              src={
+                                lineItem?.variant?.product?.assets?.length
+                                  ? `${webAddress}/storage/${lineItem?.variant?.product?.assets[0]?.location}/${lineItem?.variant?.product?.assets[0]?.filename}`
+                                  : '/no_photo.svg'
+                              }
+                              width="40"
+                              height="40"
+                              layout="fixed"
+                              className="absolute rounded-full"
+                            />
+                          </div>
+                        </div>
+                        <div className="w-5 relative overflow-hidden">
+                          <div className="absolute right-0">
+                            <Image
+                              src={
+                                lineItem?.child[0].variant?.product?.assets
+                                  ?.length
+                                  ? `${webAddress}/storage/${lineItem?.child[0].variant?.product?.assets[0]?.location}/${lineItem?.child[0].variant?.product?.assets[0]?.filename}`
+                                  : '/no_photo.svg'
+                              }
+                              width="40"
+                              height="40"
+                              layout="fixed"
+                              className="rounded-full"
+                            />
+                          </div>
+                        </div>
+                      </div>
+                    ) : (
+                      <div>
+                        <Image
+                          src={
+                            lineItem?.variant?.product?.assets?.length
+                              ? `${webAddress}/storage/${lineItem?.variant?.product?.assets[0]?.location}/${lineItem?.variant?.product?.assets[0]?.filename}`
+                              : '/no_photo.svg'
+                          }
+                          width={40}
+                          height={40}
+                          className="rounded-full"
+                        />
+                      </div>
+                    )}
                     <div className="font-bold text-sm flex-grow mx-1">
-                      {lineItem?.variant?.data?.product?.data?.name}
+                      {lineItem.child && lineItem.child.length
+                        ? `${
+                            lineItem?.variant?.product?.attribute_data?.name[
+                              channelName
+                            ][locale || 'ru']
+                          } + ${
+                            lineItem?.child[0].variant?.product?.attribute_data
+                              ?.name[channelName][locale || 'ru']
+                          }`
+                        : lineItem?.variant?.product?.attribute_data?.name[
+                            channelName
+                          ][locale || 'ru']}
                     </div>
                     <div>
                       <XIcon
@@ -242,7 +298,7 @@ const SmallCart: FC = () => {
                       </div>
                     </div>
                     <div className="text-right flex-grow text-sm">
-                      {currency(lineItem.unit_price, {
+                      {currency(lineItem.total, {
                         pattern: '# !',
                         separator: ' ',
                         decimal: '.',

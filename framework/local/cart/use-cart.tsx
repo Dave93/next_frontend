@@ -6,7 +6,7 @@ export default useCart as UseCart<typeof handler>
 
 export const handler: SWRHook<any> = {
   fetchOptions: {
-    query: 'v1/baskets/',
+    query: 'baskets/',
   },
   async fetcher({ input, fetch, options }) {
     if (input.cartId) {
@@ -22,7 +22,7 @@ export const handler: SWRHook<any> = {
           createdAt: '',
           currency: { code: data.currency },
           taxesIncluded: data.tax_total,
-          lineItems: data.lines.data,
+          lineItems: data.lines,
           lineItemsSubtotalPrice: data.sub_total,
           subtotalPrice: data.sub_total,
           totalPrice: data.total,

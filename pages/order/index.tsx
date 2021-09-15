@@ -1,7 +1,9 @@
 import { Layout } from '@components/common'
 import commerce from '@lib/api/commerce'
+import defaultChannel from '@lib/defaultChannel'
 import { GetServerSidePropsContext } from 'next'
 import dynamic from 'next/dynamic'
+import { useEffect, useState } from 'react'
 
 export async function getServerSideProps({
   preview,
@@ -43,9 +45,20 @@ const OrderWithNoSSR = dynamic(() => import('@components_new/order/Orders'), {
 })
 
 export default function Order() {
+  const [channelName, setChannelName] = useState('chopar')
+
+  const getChannel = async () => {
+    const channelData = await defaultChannel()
+    setChannelName(channelData.name)
+  }
+
+  useEffect(() => {
+    getChannel()
+  }, [])
+
   return (
     <div>
-      <OrderWithNoSSR />
+      <OrderWithNoSSR channelName={channelName} />
     </div>
   )
 }
