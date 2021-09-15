@@ -104,11 +104,7 @@ const errors: Errors = {
 
 let otpTimerRef: NodeJS.Timeout
 
-type OrdersProps = {
-  channelName: any
-}
-
-const Orders: FC<OrdersProps> = ({ channelName }: { channelName: any }) => {
+const Orders: FC = () => {
   //Contacts
   const { t: tr } = useTranslation('common')
   const { user, setUserData, locationData, setLocationData } = useUI()
@@ -118,7 +114,6 @@ const Orders: FC<OrdersProps> = ({ channelName }: { channelName: any }) => {
   }
 
   const router = useRouter()
-  const { locale } = router
 
   const { data, isLoading, isEmpty, mutate } = useCart({
     cartId,
@@ -164,7 +159,7 @@ const Orders: FC<OrdersProps> = ({ channelName }: { channelName: any }) => {
   } = useForm({
     mode: 'onChange',
   })
-
+  console.log('locationData', locationData)
   const onSubmit = (data: any) => console.log(JSON.stringify(data))
 
   const setCredentials = async () => {
@@ -625,7 +620,7 @@ const Orders: FC<OrdersProps> = ({ channelName }: { channelName: any }) => {
   }
 
   return (
-    <div className="mx-5 md:mx-0 pt-1 md:pt-0 pb-1">
+    <div className="mx-5 md:mx-0 pt-1 md:pt-0">
       {/* Contacts */}
       <div className="w-full bg-white my-5 rounded-2xl">
         <div className="p-10">
@@ -1054,7 +1049,7 @@ const Orders: FC<OrdersProps> = ({ channelName }: { channelName: any }) => {
                 </>
               )}
               {pickupIndex == 2 && (
-                <div className="gap-5 grid md:grid-cols-2">
+                <div className="gap-5 grid grid-cols-2">
                   {pickupPoints.map((point) => (
                     <div
                       key={point.id}
@@ -1440,71 +1435,24 @@ const Orders: FC<OrdersProps> = ({ channelName }: { channelName: any }) => {
               className="flex justify-between items-center border-b py-2"
               key={lineItem.id}
             >
-              {lineItem.child && lineItem.child.length ? (
-                <div className="h-11 w-11 flex relative">
-                  <div className="w-5 relative overflow-hidden">
-                    <div>
-                      <Image
-                        src={
-                          lineItem?.variant?.product?.assets?.length
-                            ? `${webAddress}/storage/${lineItem?.variant?.product?.assets[0]?.location}/${lineItem?.variant?.product?.assets[0]?.filename}`
-                            : '/no_photo.svg'
-                        }
-                        width="40"
-                        height="40"
-                        layout="fixed"
-                        className="absolute rounded-full"
-                      />
-                    </div>
-                  </div>
-                  <div className="w-5 relative overflow-hidden">
-                    <div className="absolute right-0">
-                      <Image
-                        src={
-                          lineItem?.child[0].variant?.product?.assets?.length
-                            ? `${webAddress}/storage/${lineItem?.child[0].variant?.product?.assets[0]?.location}/${lineItem?.child[0].variant?.product?.assets[0]?.filename}`
-                            : '/no_photo.svg'
-                        }
-                        width="40"
-                        height="40"
-                        layout="fixed"
-                        className="rounded-full"
-                      />
-                    </div>
-                  </div>
-                </div>
-              ) : (
-                <div>
-                  <Image
-                    src={
-                      lineItem?.variant?.product?.assets?.length
-                        ? `${webAddress}/storage/${lineItem?.variant?.product?.assets[0]?.location}/${lineItem?.variant?.product?.assets[0]?.filename}`
-                        : '/no_photo.svg'
-                    }
-                    width={40}
-                    height={40}
-                    className="rounded-full"
-                  />
-                </div>
-              )}
+              <Image
+                src={
+                  lineItem?.variant?.data?.product?.data?.assets?.data.length
+                    ? lineItem?.variant?.data?.product?.data?.assets?.data[0]
+                        .url
+                    : '/no_photo.svg'
+                }
+                width={40}
+                height={40}
+                className="rounded-full"
+              />
               <div className="flex-grow mx-2">
                 <div className="font-bold text-xl mb-2">
-                  {lineItem.child && lineItem.child.length
-                    ? `${
-                        lineItem?.variant?.product?.attribute_data?.name[
-                          channelName
-                        ][locale || 'ru']
-                      } + ${
-                        lineItem?.child[0].variant?.product?.attribute_data
-                          ?.name[channelName][locale || 'ru']
-                      }`
-                    : lineItem?.variant?.product?.attribute_data?.name[
-                        channelName
-                      ][locale || 'ru']}
+                  {lineItem?.variant?.data?.product?.data?.name}
                 </div>
               </div>
               <div className="text-xl">
-                {currency(lineItem.total * lineItem.quantity, {
+                {currency(lineItem.unit_price * lineItem.quantity, {
                   pattern: '# !',
                   separator: ' ',
                   decimal: '.',
@@ -1785,7 +1733,7 @@ const Orders: FC<OrdersProps> = ({ channelName }: { channelName: any }) => {
             </div>
           </Dialog>
         </Transition>
-        <div className="md:flex justify-between mt-8 space-y-2 md:space-y-0">
+        <div className="md:flex justify-between mt-8">
           <button className="md:text-xl text-gray-400 bg-gray-200 flex h-12 items-center justify-between px-12 rounded-full md:w-80 w-full">
             <img src="/left.png" /> {tr('back_to_basket')}
           </button>

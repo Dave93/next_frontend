@@ -480,7 +480,7 @@ const ProductItemNew: FC<ProductItem> = ({ product, channelName }) => {
                   pattern: '# !',
                   separator: ' ',
                   decimal: '.',
-                  symbol: `${locale == 'uz' ? "so'm" : 'сўм'}`,
+                  symbol: 'сўм',
                   precision: 0,
                 }).format()}
               </span>

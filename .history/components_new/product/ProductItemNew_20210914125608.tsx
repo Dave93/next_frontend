@@ -425,13 +425,11 @@ const ProductItemNew: FC<ProductItem> = ({ product, channelName }) => {
             ></div>
             <div className="hidden md:block">
               {store.variants && store.variants.length > 0 && (
-                <div className="flex mt-5 space-x-1">
+                <div className={styles.productSelectorOption}>
                   {store.variants.map((v) => (
                     <div
                       className={`w-full text-center cursor-pointer rounded-2xl outline-none ${
-                        v.active
-                          ? 'bg-yellow text-white'
-                          : 'bg-gray-200 text-gray-400'
+                        v.active ? 'bg-gray-300' : ''
                       }`}
                       onClick={() => updateOptionSelection(v.id)}
                       key={v.id}
@@ -480,7 +478,7 @@ const ProductItemNew: FC<ProductItem> = ({ product, channelName }) => {
                   pattern: '# !',
                   separator: ' ',
                   decimal: '.',
-                  symbol: `${locale == 'uz' ? "so'm" : 'сўм'}`,
+                  symbol: 'сўм',
                   precision: 0,
                 }).format()}
               </span>
@@ -590,13 +588,11 @@ const ProductItemNew: FC<ProductItem> = ({ product, channelName }) => {
                           }}
                         ></div>
                         {store.variants && store.variants.length > 0 && (
-                          <div className="flex mt-5 space-x-1">
+                          <div className={styles.productSelectorOption}>
                             {store.variants.map((v) => (
                               <div
-                                className={`w-full text-center cursor-pointer rounded-2xl outline-none ${
-                                  v.active
-                                    ? 'bg-yellow text-white shadow-xl'
-                                    : 'bg-gray-200 text-gray-600'
+                                className={`w-full text-center cursor-pointer rounded-2xl outline-none border ${
+                                  v.active ? 'bg-yellow' : 'bg-gray-300'
                                 }`}
                                 onClick={() => updateOptionSelection(v.id)}
                                 key={v.id}

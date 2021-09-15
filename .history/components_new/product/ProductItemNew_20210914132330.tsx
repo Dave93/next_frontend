@@ -480,7 +480,7 @@ const ProductItemNew: FC<ProductItem> = ({ product, channelName }) => {
                   pattern: '# !',
                   separator: ' ',
                   decimal: '.',
-                  symbol: `${locale == 'uz' ? "so'm" : 'сўм'}`,
+                  symbol: 'сўм',
                   precision: 0,
                 }).format()}
               </span>
@@ -593,10 +593,10 @@ const ProductItemNew: FC<ProductItem> = ({ product, channelName }) => {
                           <div className="flex mt-5 space-x-1">
                             {store.variants.map((v) => (
                               <div
-                                className={`w-full text-center cursor-pointer rounded-2xl outline-none ${
+                                className={`w-full text-center cursor-pointer rounded-2xl outline-none border ${
                                   v.active
-                                    ? 'bg-yellow text-white shadow-xl'
-                                    : 'bg-gray-200 text-gray-600'
+                                    ? 'bg-yellow text-white'
+                                    : 'bg-gray-100 text-gray-400'
                                 }`}
                                 onClick={() => updateOptionSelection(v.id)}
                                 key={v.id}

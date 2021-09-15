@@ -30,7 +30,7 @@ type ProductItem = {
   product: Product
   channelName: string
 }
-
+console.log(locale)
 const { publicRuntimeConfig } = getConfig()
 let webAddress = publicRuntimeConfig.apiUrl
 axios.defaults.withCredentials = true
@@ -480,7 +480,7 @@ const ProductItemNew: FC<ProductItem> = ({ product, channelName }) => {
                   pattern: '# !',
                   separator: ' ',
                   decimal: '.',
-                  symbol: `${locale == 'uz' ? "so'm" : 'сўм'}`,
+                  symbol: `${path}`'сўм',
                   precision: 0,
                 }).format()}
               </span>
