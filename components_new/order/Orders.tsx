@@ -456,9 +456,11 @@ const Orders: FC<OrdersProps> = ({ channelName }: { channelName: any }) => {
 
   const choosePickupPoint = (pointId: number) => {
     setActivePoint(pointId)
+    let terminalData = pickupPoints.find((pickup: any) => pickup.id == pointId);
     setLocationData({
       ...locationData,
       terminal_id: pointId,
+      terminalData,
     })
   }
 
@@ -471,6 +473,7 @@ const Orders: FC<OrdersProps> = ({ channelName }: { channelName: any }) => {
       setLocationData({
         ...locationData,
         terminal_id: undefined,
+        terminalData: undefined,
       })
       return
     }
@@ -492,6 +495,7 @@ const Orders: FC<OrdersProps> = ({ channelName }: { channelName: any }) => {
       setLocationData({
         ...locationData,
         terminal_id: undefined,
+        terminalData: undefined,
       })
       return
     }
