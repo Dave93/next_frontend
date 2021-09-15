@@ -624,7 +624,7 @@ const CreateYourPizza: FC<CreatePizzaProps> = ({ sec, channelName }) => {
                           </svg>
                         ) : (
                           <span>
-                            {tr('main_to_basket')}{' '}
+                            В корзину{' '}
                             {currency(totalSummary, {
                               pattern: '# !',
                               separator: ' ',

@@ -593,7 +593,7 @@ const CreateYourPizza: FC<CreatePizzaProps> = ({ sec, channelName }) => {
                         className="bg-gray-300 w-full rounded-3xl cursor-not-allowed px-10 py-2 text-white mt-7"
                         ref={completeButtonRef}
                       >
-                        {tr('main_to_basket')}
+                        В корзину
                       </button>
                     ) : (
                       <button
@@ -624,7 +624,7 @@ const CreateYourPizza: FC<CreatePizzaProps> = ({ sec, channelName }) => {
                           </svg>
                         ) : (
                           <span>
-                            {tr('main_to_basket')}{' '}
+                            В корзину{' '}
                             {currency(totalSummary, {
                               pattern: '# !',
                               separator: ' ',
