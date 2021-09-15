@@ -202,7 +202,7 @@ const ProductItemNew: FC<ProductItem> = ({ product, channelName }) => {
     basketId = localStorage.getItem('basketId')
 
     let { data: basket } = await axios.get(
-      `${webAddress}/api/v1/baskets/${basketId}`
+      `${webAddress}/api/baskets/${basketId}`
     )
     const basketResult = {
       id: basket.data.id,
