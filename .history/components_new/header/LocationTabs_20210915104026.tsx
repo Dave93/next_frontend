@@ -316,7 +316,7 @@ const LocationTabs: FC<Props> = ({ setOpen }) => {
 
   const submitPickup = () => {
     if (!activePoint) {
-      toast.warn(`${tr('pickup_point_not_selected')}`, {
+      toast.warn('Не выбран пункт самовывоза', {
         position: toast.POSITION.BOTTOM_RIGHT,
         hideProgressBar: true,
       })

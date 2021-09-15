@@ -316,7 +316,7 @@ const LocationTabs: FC<Props> = ({ setOpen }) => {
 
   const submitPickup = () => {
     if (!activePoint) {
-      toast.warn(`${tr('pickup_point_not_selected')}`, {
+      toast.warn('Не выбран пункт самовывоза', {
         position: toast.POSITION.BOTTOM_RIGHT,
         hideProgressBar: true,
       })
@@ -627,7 +627,7 @@ const LocationTabs: FC<Props> = ({ setOpen }) => {
             >
               {tr('on_the_map')}
             </div> */}
-            {/* <div
+            <div
               className={`${
                 pickupIndex == 2 ? ' text-yellow' : 'text-gray-400'
               } cursor-pointer font-bold text-[18px]`}
@@ -636,11 +636,11 @@ const LocationTabs: FC<Props> = ({ setOpen }) => {
               }}
             >
               {tr('list')}
-            </div> */}
+            </div>
           </div>
           <div className="mt-5">
-            {/* {pickupIndex == 1 && ( */}
-              {/* <YMaps>
+            {pickupIndex == 1 && (
+              <YMaps>
                 <div>
                   <Map
                     defaultState={{
@@ -685,9 +685,9 @@ const LocationTabs: FC<Props> = ({ setOpen }) => {
                     ))}
                   </Map>
                 </div>
-              </YMaps> */}
-            {/* )} */}
-            {/* {pickupIndex == 2 && ( */}
+              </YMaps>
+            )}
+            {pickupIndex == 2 && (
               <div className="gap-5 grid grid-cols-2">
                 {pickupPoints.map((point) => (
                   <div
@@ -721,7 +721,7 @@ const LocationTabs: FC<Props> = ({ setOpen }) => {
                   </div>
                 ))}
               </div>
-            {/* )} */}
+            )}
           </div>
           <div className="flex mt-10 justify-end">
             <button
