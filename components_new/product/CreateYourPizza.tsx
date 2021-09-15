@@ -114,22 +114,26 @@ const CreateYourPizza: FC<CreatePizzaProps> = ({ sec, channelName }) => {
             id: leftProduct.id,
             quantity: 1,
             modifiers: selectedModifiers,
+            child: {
+              id: rightProduct.id,
+              quantity: 1,
+            },
           },
         ],
       })
-      const { data: basketData } = await axios.post(
-        `${webAddress}/api/baskets-lines`,
-        {
-          basket_id: basketId,
-          variants: [
-            {
-              id: rightProduct.id,
-              quantity: 1,
-              modifiers: selectedModifiers,
-            },
-          ],
-        }
-      )
+      // const { data: basketData } = await axios.post(
+      //   `${webAddress}/api/baskets-lines`,
+      //   {
+      //     basket_id: basketId,
+      //     variants: [
+      //       {
+      //         id: rightProduct.id,
+      //         quantity: 1,
+      //         modifiers: selectedModifiers,
+      //       },
+      //     ],
+      //   }
+      // )
     } else {
       const { data: basketData } = await axios.post(
         `${webAddress}/api/baskets`,
@@ -139,20 +143,25 @@ const CreateYourPizza: FC<CreatePizzaProps> = ({ sec, channelName }) => {
               id: leftProduct.id,
               quantity: 1,
               modifiers: selectedModifiers,
+              child: {
+                id: rightProduct.id,
+                quantity: 1,
+              },
             },
           ],
         }
       )
-      await axios.post(`${webAddress}/api/baskets-lines`, {
-        basket_id: basketData.data.id,
-        variants: [
-          {
-            id: rightProduct.id,
-            quantity: 1,
-            modifiers: selectedModifiers,
-          },
-        ],
-      })
+      console.log(basketData)
+      // await axios.post(`${webAddress}/api/baskets-lines`, {
+      //   basket_id: basketData.data.id,
+      //   variants: [
+      //     {
+      //       id: rightProduct.id,
+      //       quantity: 1,
+      //       modifiers: selectedModifiers,
+      //     },
+      //   ],
+      // })
       localStorage.setItem('basketId', basketData.data.id)
     }
 

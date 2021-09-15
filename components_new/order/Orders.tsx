@@ -104,7 +104,11 @@ const errors: Errors = {
 
 let otpTimerRef: NodeJS.Timeout
 
-const Orders: FC = () => {
+type OrdersProps = {
+  channelName: any
+}
+
+const Orders: FC<OrdersProps> = ({ channelName }: { channelName: any }) => {
   //Contacts
   const { t: tr } = useTranslation('common')
   const { user, setUserData, locationData, setLocationData } = useUI()
@@ -114,6 +118,7 @@ const Orders: FC = () => {
   }
 
   const router = useRouter()
+  const { locale } = router
 
   const { data, isLoading, isEmpty, mutate } = useCart({
     cartId,
@@ -159,7 +164,7 @@ const Orders: FC = () => {
   } = useForm({
     mode: 'onChange',
   })
-  console.log('locationData', locationData)
+
   const onSubmit = (data: any) => console.log(JSON.stringify(data))
 
   const setCredentials = async () => {
@@ -1435,24 +1440,71 @@ const Orders: FC = () => {
               className="flex justify-between items-center border-b py-2"
               key={lineItem.id}
             >
-              <Image
-                src={
-                  lineItem?.variant?.data?.product?.data?.assets?.data.length
-                    ? lineItem?.variant?.data?.product?.data?.assets?.data[0]
-                        .url
-                    : '/no_photo.svg'
-                }
-                width={40}
-                height={40}
-                className="rounded-full"
-              />
+              {lineItem.child && lineItem.child.length ? (
+                <div className="h-11 w-11 flex relative">
+                  <div className="w-5 relative overflow-hidden">
+                    <div>
+                      <Image
+                        src={
+                          lineItem?.variant?.product?.assets?.length
+                            ? `${webAddress}/storage/${lineItem?.variant?.product?.assets[0]?.location}/${lineItem?.variant?.product?.assets[0]?.filename}`
+                            : '/no_photo.svg'
+                        }
+                        width="40"
+                        height="40"
+                        layout="fixed"
+                        className="absolute rounded-full"
+                      />
+                    </div>
+                  </div>
+                  <div className="w-5 relative overflow-hidden">
+                    <div className="absolute right-0">
+                      <Image
+                        src={
+                          lineItem?.child[0].variant?.product?.assets?.length
+                            ? `${webAddress}/storage/${lineItem?.child[0].variant?.product?.assets[0]?.location}/${lineItem?.child[0].variant?.product?.assets[0]?.filename}`
+                            : '/no_photo.svg'
+                        }
+                        width="40"
+                        height="40"
+                        layout="fixed"
+                        className="rounded-full"
+                      />
+                    </div>
+                  </div>
+                </div>
+              ) : (
+                <div>
+                  <Image
+                    src={
+                      lineItem?.variant?.product?.assets?.length
+                        ? `${webAddress}/storage/${lineItem?.variant?.product?.assets[0]?.location}/${lineItem?.variant?.product?.assets[0]?.filename}`
+                        : '/no_photo.svg'
+                    }
+                    width={40}
+                    height={40}
+                    className="rounded-full"
+                  />
+                </div>
+              )}
               <div className="flex-grow mx-2">
                 <div className="font-bold text-xl mb-2">
-                  {lineItem?.variant?.data?.product?.data?.name}
+                  {lineItem.child && lineItem.child.length
+                    ? `${
+                        lineItem?.variant?.product?.attribute_data?.name[
+                          channelName
+                        ][locale || 'ru']
+                      } + ${
+                        lineItem?.child[0].variant?.product?.attribute_data
+                          ?.name[channelName][locale || 'ru']
+                      }`
+                    : lineItem?.variant?.product?.attribute_data?.name[
+                        channelName
+                      ][locale || 'ru']}
                 </div>
               </div>
               <div className="text-xl">
-                {currency(lineItem.unit_price * lineItem.quantity, {
+                {currency(lineItem.total * lineItem.quantity, {
                   pattern: '# !',
                   separator: ' ',
                   decimal: '.',
