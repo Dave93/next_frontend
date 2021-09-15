@@ -189,13 +189,24 @@ const OrderAccept: FC<OrderDetailProps> = ({ order, orderStatuses }) => {
               </div>
             </div>
             <div>
-              {currency(pizza?.total, {
-                pattern: '# !',
-                separator: ' ',
-                decimal: '.',
-                symbol: `${tr('sum')}`,
-                precision: 0,
-              }).format()}
+              {pizza.child && pizza.child.length
+                ? currency(
+                    (+pizza.total + +pizza.child[0].total) * pizza.quantity,
+                    {
+                      pattern: '# !',
+                      separator: ' ',
+                      decimal: '.',
+                      symbol: 'сўм',
+                      precision: 0,
+                    }
+                  ).format()
+                : currency(pizza.total * pizza.quantity, {
+                    pattern: '# !',
+                    separator: ' ',
+                    decimal: '.',
+                    symbol: 'сўм',
+                    precision: 0,
+                  }).format()}
             </div>
           </div>
         ))}

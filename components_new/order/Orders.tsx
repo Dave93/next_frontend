@@ -1004,7 +1004,7 @@ const Orders: FC<OrdersProps> = ({ channelName }: { channelName: any }) => {
             </div> */}
             <div className="mt-5">
               {/* {pickupIndex == 1 && ( */}
-                {/* <>
+              {/* <>
                   <YMaps>
                     <div>
                       <Map
@@ -1054,41 +1054,39 @@ const Orders: FC<OrdersProps> = ({ channelName }: { channelName: any }) => {
                 </> */}
               {/* )} */}
               {/* {pickupIndex == 2 && ( */}
-                <div className="gap-5 grid md:grid-cols-2">
-                  {pickupPoints.map((point) => (
+              <div className="gap-5 grid md:grid-cols-2">
+                {pickupPoints.map((point) => (
+                  <div
+                    key={point.id}
+                    className={`border flex items-start p-3 rounded-[15px] cursor-pointer ${
+                      activePoint && activePoint == point.id
+                        ? 'border-yellow'
+                        : 'border-gray-400'
+                    }`}
+                    onClick={() => choosePickupPoint(point.id)}
+                  >
                     <div
-                      key={point.id}
-                      className={`border flex items-start p-3 rounded-[15px] cursor-pointer ${
+                      className={`border mr-4 mt-1 rounded-full ${
                         activePoint && activePoint == point.id
                           ? 'border-yellow'
                           : 'border-gray-400'
                       }`}
-                      onClick={() => choosePickupPoint(point.id)}
                     >
                       <div
-                        className={`border mr-4 mt-1 rounded-full ${
+                        className={`h-3 m-1 rounded-full w-3 ${
                           activePoint && activePoint == point.id
-                            ? 'border-yellow'
-                            : 'border-gray-400'
+                            ? 'bg-yellow'
+                            : 'bg-gray-400'
                         }`}
-                      >
-                        <div
-                          className={`h-3 m-1 rounded-full w-3 ${
-                            activePoint && activePoint == point.id
-                              ? 'bg-yellow'
-                              : 'bg-gray-400'
-                          }`}
-                        ></div>
-                      </div>
-                      <div>
-                        <div className="font-bold">{point.name}</div>
-                        <div className="text-gray-400 text-sm">
-                          {point.desc}
-                        </div>
-                      </div>
+                      ></div>
                     </div>
-                  ))}
-                </div>
+                    <div>
+                      <div className="font-bold">{point.name}</div>
+                      <div className="text-gray-400 text-sm">{point.desc}</div>
+                    </div>
+                  </div>
+                ))}
+              </div>
               {/* )} */}
             </div>
           </div>
@@ -1504,13 +1502,25 @@ const Orders: FC<OrdersProps> = ({ channelName }: { channelName: any }) => {
                 </div>
               </div>
               <div className="text-xl">
-                {currency(lineItem.total * lineItem.quantity, {
-                  pattern: '# !',
-                  separator: ' ',
-                  decimal: '.',
-                  symbol: 'сўм',
-                  precision: 0,
-                }).format()}
+                {lineItem.child && lineItem.child.length
+                  ? currency(
+                      (+lineItem.total + +lineItem.child[0].total) *
+                        lineItem.quantity,
+                      {
+                        pattern: '# !',
+                        separator: ' ',
+                        decimal: '.',
+                        symbol: 'сўм',
+                        precision: 0,
+                      }
+                    ).format()
+                  : currency(lineItem.total * lineItem.quantity, {
+                      pattern: '# !',
+                      separator: ' ',
+                      decimal: '.',
+                      symbol: 'сўм',
+                      precision: 0,
+                    }).format()}
               </div>
             </div>
           ))}

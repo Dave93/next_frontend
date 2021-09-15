@@ -162,7 +162,7 @@ const SmallCart: FC<SmallCartProps> = ({
     e.preventDefault()
     router.push('/order/')
   }
-
+  console.log(data)
   return (
     <div className="mt-2">
       <div className="border border-yellow px-5 py-7 rounded-[15px] relative">
@@ -305,13 +305,25 @@ const SmallCart: FC<SmallCartProps> = ({
                       </div>
                     </div>
                     <div className="text-right flex-grow text-sm">
-                      {currency(lineItem.total, {
-                        pattern: '# !',
-                        separator: ' ',
-                        decimal: '.',
-                        symbol: 'сўм',
-                        precision: 0,
-                      }).format()}
+                      {lineItem.child && lineItem.child.length
+                        ? currency(
+                            (+lineItem.total + +lineItem.child[0].total) *
+                              lineItem.quantity,
+                            {
+                              pattern: '# !',
+                              separator: ' ',
+                              decimal: '.',
+                              symbol: 'сўм',
+                              precision: 0,
+                            }
+                          ).format()
+                        : currency(lineItem.total * lineItem.quantity, {
+                            pattern: '# !',
+                            separator: ' ',
+                            decimal: '.',
+                            symbol: 'сўм',
+                            precision: 0,
+                          }).format()}
                     </div>
                   </div>
                 </div>
