@@ -123,19 +123,68 @@ const OrderAccept: FC<OrderDetailProps> = ({ order, orderStatuses }) => {
             key={pizza.id}
           >
             <div className="flex items-center">
-              <Image
-                className="w-24"
-                src={`${webAddress}/storage/${pizza?.variant?.product?.assets[0]?.location}/${pizza?.variant?.product?.assets[0]?.filename}`}
-                width={70}
-                height={70}
-              />
+              {pizza.child && pizza.child.length ? (
+                <div className="h-24 w-24 flex relative">
+                  <div className="w-12 relative overflow-hidden">
+                    <div>
+                      <Image
+                        src={
+                          pizza?.variant?.product?.assets?.length
+                            ? `${webAddress}/storage/${pizza?.variant?.product?.assets[0]?.location}/${pizza?.variant?.product?.assets[0]?.filename}`
+                            : '/no_photo.svg'
+                        }
+                        width="95"
+                        height="95"
+                        layout="fixed"
+                        className="absolute rounded-full"
+                      />
+                    </div>
+                  </div>
+                  <div className="w-12 relative overflow-hidden">
+                    <div className="absolute right-0">
+                      <Image
+                        src={
+                          pizza?.child[0].variant?.product?.assets?.length
+                            ? `${webAddress}/storage/${pizza?.child[0].variant?.product?.assets[0]?.location}/${pizza?.child[0].variant?.product?.assets[0]?.filename}`
+                            : '/no_photo.svg'
+                        }
+                        width="95"
+                        height="95"
+                        layout="fixed"
+                        className="rounded-full"
+                      />
+                    </div>
+                  </div>
+                </div>
+              ) : (
+                <div>
+                  <Image
+                    src={
+                      pizza?.variant?.product?.assets?.length
+                        ? `${webAddress}/storage/${pizza?.variant?.product?.assets[0]?.location}/${pizza?.variant?.product?.assets[0]?.filename}`
+                        : '/no_photo.svg'
+                    }
+                    width={95}
+                    height={95}
+                    className="rounded-full w-24"
+                  />
+                </div>
+              )}
               <div className="ml-5">
                 <div className="text-xl font-bold">
-                  {
-                    pizza?.variant?.product?.attribute_data?.name[channelName][
-                      locale || 'ru'
-                    ]
-                  }
+                  {pizza.child && pizza.child.length
+                    ? `${
+                        pizza?.variant?.product?.attribute_data?.name[
+                          channelName
+                        ][locale || 'ru']
+                      } + ${
+                        pizza?.child[0].variant?.product?.attribute_data?.name[
+                          channelName
+                        ][locale || 'ru']
+                      }`
+                    : pizza?.variant?.product?.attribute_data?.name[
+                        channelName
+                      ][locale || 'ru']}
                 </div>
               </div>
             </div>
