@@ -316,7 +316,7 @@ export default function Cart() {
                                 pattern: '# !',
                                 separator: ' ',
                                 decimal: '.',
-                                symbol: `${locale == 'uz' ? "so'm" : 'сўм'}`,
+                                symbol: 'сўм',
                                 precision: 0,
                               }
                             ).format()
@@ -324,13 +324,13 @@ export default function Cart() {
                               pattern: '# !',
                               separator: ' ',
                               decimal: '.',
-                              symbol: `${locale == 'uz' ? "so'm" : 'сўм'}`,
+                              symbol: 'сўм',
                               precision: 0,
                             }).format()}
                       </div>
                       <XIcon
                         className="cursor-pointer h-4 text-black w-4"
-                        onClick={() => destroyLine(lineItem.id)}
+                        onClick={() => ''}
                       />
                     </div>
                   </div>
@@ -353,29 +353,16 @@ export default function Cart() {
                 </form>
               </div>
               <div className="flex items-center font-bold">
-                <div className="text-lg text-gray-400">
-                  {tr('basket_order_price')}
-                </div>
-                <div className="ml-7 text-3xl">
-                  {currency(data.totalPrice, {
-                    pattern: '# !',
-                    separator: ' ',
-                    decimal: '.',
-                    symbol: `${locale == 'uz' ? "so'm" : 'сўм'}`,
-                    precision: 0,
-                  }).format()}
-                </div>
+                <div className="text-lg text-gray-400">Сумма заказа:</div>
+                <div className="ml-7 text-3xl">108 000 сум</div>
               </div>
             </div>
             <div className="md:flex justify-between mt-8 space-y-2 md:space-y-0">
-              <button className="md:text-xl text-gray-400 bg-gray-100 flex h-12 items-center justify-between px-12 rounded-full md:w-80 w-full"
-                onClick={(e) => { e.preventDefault(); router.push('/')}}
-              >
+              <button className="md:text-xl text-gray-400 bg-gray-200 flex h-12 items-center justify-between px-12 rounded-full md:w-80 w-full">
                 <img src="/left.png" /> {tr('back_to_menu')}
               </button>
               <button
                 className={`md:text-xl text-white bg-yellow flex h-12 items-center justify-evenly rounded-full md:w-80 w-full`}
-                onClick={goToCheckout}
               >
                 {tr('checkout')} <img src="/right.png" />
               </button>

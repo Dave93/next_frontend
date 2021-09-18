@@ -8,12 +8,10 @@ import { useForm } from 'react-hook-form'
 import useTranslation from 'next-translate/useTranslation'
 import getConfig from 'next/config'
 import { useRouter } from 'next/router'
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 import Hashids from 'hashids'
 import axios from 'axios'
 import Cookies from 'js-cookie'
-import defaultChannel from '@lib/defaultChannel'
-import currency from 'currency.js'
 
 export async function getServerSideProps({
   preview,
@@ -50,22 +48,12 @@ export async function getServerSideProps({
   }
 }
 
+
 const { publicRuntimeConfig } = getConfig()
 let webAddress = publicRuntimeConfig.apiUrl
 axios.defaults.withCredentials = true
 
 export default function Cart() {
-  const [channelName, setChannelName] = useState('chopar')
-
-  const getChannel = async () => {
-    const channelData = await defaultChannel()
-    setChannelName(channelData.name)
-  }
-
-  useEffect(() => {
-    getChannel()
-  }, [])
-
   const { t: tr } = useTranslation('common')
   let cartId: string | null = null
   if (typeof window !== 'undefined') {
@@ -242,99 +230,112 @@ export default function Cart() {
           <div className="p-10 rounded-2xl text-xl mt-5 bg-white mb-3">
             <div className="flex justify-between items-center">
               <div className="text-lg font-bold">
-                {tr('basket')}{' '}
-                {data?.lineItems.length > 0 && (
-                  <span className="font-bold text-[18px] text-yellow">
-                    ({data.lineItems.length})
-                  </span>
-                )}
+                {tr('basket')} <span className="text-yellow">(3)</span>
               </div>
               {/* <div className="text-gray-400 text-sm flex cursor-pointer">
             Очистить всё <TrashIcon className=" w-5 h-5 ml-1" />
           </div> */}
             </div>
             <div className="mt-10 space-y-3">
-              {data &&
-                data?.lineItems.map((lineItem: any) => (
-                  <div
-                    className="flex justify-between items-center border-b pb-3"
-                    key={lineItem.id}
-                  >
-                    {console.log(lineItem)}
-                    <div className="flex items-center">
-                      <Image
-                        src={
-                          lineItem?.variant?.product?.assets?.length
-                            ? `${webAddress}/storage/${lineItem?.variant?.product?.assets[0]?.location}/${lineItem?.variant?.product?.assets[0]?.filename}`
-                            : '/no_photo.svg'
-                        }
-                        width="70"
-                        height="70"
-                      />
-                      <div className="ml-7 space-y-2">
-                        <div className="text-xl font-bold">
-                          {lineItem.child && lineItem.child.length
-                            ? `${
-                                lineItem?.variant?.product?.attribute_data
-                                  ?.name[channelName][locale || 'ru']
-                              } + ${
-                                lineItem?.child[0].variant?.product
-                                  ?.attribute_data?.name[channelName][
-                                  locale || 'ru'
-                                ]
-                              }`
-                            : lineItem?.variant?.product?.attribute_data?.name[
-                                channelName
-                              ][locale || 'ru']}
-                        </div>
-                      </div>
+              <div className="flex justify-between items-center border-b pb-3">
+                <div className="flex">
+                  <Image src="/pizza_img.png" width="70" height="70" />
+                  <div className="ml-7 space-y-2">
+                    <div className="text-xl font-bold">Пепперони</div>
+                    <div className="text-xs text-gray-400">
+                      Средняя 32 см, Традиционное тесто
                     </div>
-                    <div className="flex space-x-10 items-center">
-                      <div className="w-20 h-6 ml-1 bg-yellow rounded-full flex items-center text-white">
-                        <div className="w-6 h-6 items-center flex justify-around">
-                          <MinusIcon
-                            className="cursor-pointer w-5 h-5"
-                            onClick={() => decreaseQuantity(lineItem)}
-                          />
-                        </div>
-                        <div className="flex-grow text-center">
-                          {lineItem.quantity}
-                        </div>
-                        <div className="w-6 h-6 items-center flex justify-around">
-                          <PlusIcon
-                            className="cursor-pointer w-5 h-5"
-                            onClick={() => increaseQuantity(lineItem.id)}
-                          />
-                        </div>
-                      </div>
-                      <div className="text-xl">
-                        {lineItem.child && lineItem.child.length
-                          ? currency(
-                              (+lineItem.total + +lineItem.child[0].total) *
-                                lineItem.quantity,
-                              {
-                                pattern: '# !',
-                                separator: ' ',
-                                decimal: '.',
-                                symbol: `${locale == 'uz' ? "so'm" : 'сўм'}`,
-                                precision: 0,
-                              }
-                            ).format()
-                          : currency(lineItem.total * lineItem.quantity, {
-                              pattern: '# !',
-                              separator: ' ',
-                              decimal: '.',
-                              symbol: `${locale == 'uz' ? "so'm" : 'сўм'}`,
-                              precision: 0,
-                            }).format()}
-                      </div>
-                      <XIcon
-                        className="cursor-pointer h-4 text-black w-4"
-                        onClick={() => destroyLine(lineItem.id)}
+                  </div>
+                </div>
+                <div className="flex space-x-10 items-center">
+                  <div className="w-20 h-6 ml-1 bg-yellow rounded-full flex items-center text-white">
+                    <div className="w-6 h-6 items-center flex justify-around">
+                      <MinusIcon
+                        className="cursor-pointer w-5 h-5"
+                        onClick={() => ''}
+                      />
+                    </div>
+                    <div className="flex-grow text-center">{1}</div>
+                    <div className="w-6 h-6 items-center flex justify-around">
+                      <PlusIcon
+                        className="cursor-pointer w-5 h-5"
+                        onClick={() => ''}
                       />
                     </div>
                   </div>
-                ))}
+                  <div>36 000 сўм</div>
+                  <XIcon
+                    className="cursor-pointer h-4 text-black w-4"
+                    onClick={() => ''}
+                  />
+                </div>
+              </div>
+              <div className="flex justify-between items-center border-b pb-3">
+                <div className="flex">
+                  <Image src="/pizza_img.png" width="70" height="70" />
+                  <div className="ml-7 space-y-2">
+                    <div className="text-xl font-bold">Пепперони</div>
+                    <div className="text-xs text-gray-400">
+                      Средняя 32 см, Традиционное тесто
+                    </div>
+                  </div>
+                </div>
+                <div className="flex space-x-10 items-center">
+                  <div className="w-20 h-6 ml-1 bg-yellow rounded-full flex items-center text-white">
+                    <div className="w-6 h-6 items-center flex justify-around">
+                      <MinusIcon
+                        className="cursor-pointer w-5 h-5"
+                        onClick={() => ''}
+                      />
+                    </div>
+                    <div className="flex-grow text-center">{1}</div>
+                    <div className="w-6 h-6 items-center flex justify-around">
+                      <PlusIcon
+                        className="cursor-pointer w-5 h-5"
+                        onClick={() => ''}
+                      />
+                    </div>
+                  </div>
+                  <div>36 000 сўм</div>
+                  <XIcon
+                    className="cursor-pointer h-4 text-black w-4"
+                    onClick={() => ''}
+                  />
+                </div>
+              </div>
+              <div className="flex justify-between items-center border-b pb-3">
+                <div className="flex">
+                  <Image src="/pizza_img.png" width="70" height="70" />
+                  <div className="ml-7 space-y-2">
+                    <div className="text-xl font-bold">Пепперони</div>
+                    <div className="text-xs text-gray-400">
+                      Средняя 32 см, Традиционное тесто
+                    </div>
+                  </div>
+                </div>
+                <div className="flex space-x-10 items-center">
+                  <div className="w-20 h-6 ml-1 bg-yellow rounded-full flex items-center text-white">
+                    <div className="w-6 h-6 items-center flex justify-around">
+                      <MinusIcon
+                        className="cursor-pointer w-5 h-5"
+                        onClick={() => ''}
+                      />
+                    </div>
+                    <div className="flex-grow text-center">{1}</div>
+                    <div className="w-6 h-6 items-center flex justify-around">
+                      <PlusIcon
+                        className="cursor-pointer w-5 h-5"
+                        onClick={() => ''}
+                      />
+                    </div>
+                  </div>
+                  <div>36 000 сўм</div>
+                  <XIcon
+                    className="cursor-pointer h-4 text-black w-4"
+                    onClick={() => ''}
+                  />
+                </div>
+              </div>
             </div>
           </div>
           <div className="p-10 rounded-2xl bg-white">
@@ -353,29 +354,16 @@ export default function Cart() {
                 </form>
               </div>
               <div className="flex items-center font-bold">
-                <div className="text-lg text-gray-400">
-                  {tr('basket_order_price')}
-                </div>
-                <div className="ml-7 text-3xl">
-                  {currency(data.totalPrice, {
-                    pattern: '# !',
-                    separator: ' ',
-                    decimal: '.',
-                    symbol: `${locale == 'uz' ? "so'm" : 'сўм'}`,
-                    precision: 0,
-                  }).format()}
-                </div>
+                <div className="text-lg text-gray-400">Сумма заказа:</div>
+                <div className="ml-7 text-3xl">108 000 сум</div>
               </div>
             </div>
             <div className="md:flex justify-between mt-8 space-y-2 md:space-y-0">
-              <button className="md:text-xl text-gray-400 bg-gray-100 flex h-12 items-center justify-between px-12 rounded-full md:w-80 w-full"
-                onClick={(e) => { e.preventDefault(); router.push('/')}}
-              >
+              <button className="md:text-xl text-gray-400 bg-gray-200 flex h-12 items-center justify-between px-12 rounded-full md:w-80 w-full">
                 <img src="/left.png" /> {tr('back_to_menu')}
               </button>
               <button
                 className={`md:text-xl text-white bg-yellow flex h-12 items-center justify-evenly rounded-full md:w-80 w-full`}
-                onClick={goToCheckout}
               >
                 {tr('checkout')} <img src="/right.png" />
               </button>
