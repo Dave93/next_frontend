@@ -13,7 +13,6 @@ import Hashids from 'hashids'
 import axios from 'axios'
 import Cookies from 'js-cookie'
 import defaultChannel from '@lib/defaultChannel'
-import currency from 'currency.js'
 
 export async function getServerSideProps({
   preview,
@@ -55,6 +54,8 @@ let webAddress = publicRuntimeConfig.apiUrl
 axios.defaults.withCredentials = true
 
 export default function Cart() {
+
+  
   const [channelName, setChannelName] = useState('chopar')
 
   const getChannel = async () => {
@@ -65,7 +66,7 @@ export default function Cart() {
   useEffect(() => {
     getChannel()
   }, [])
-
+  
   const { t: tr } = useTranslation('common')
   let cartId: string | null = null
   if (typeof window !== 'undefined') {
@@ -261,7 +262,7 @@ export default function Cart() {
                     key={lineItem.id}
                   >
                     {console.log(lineItem)}
-                    <div className="flex items-center">
+                    <div className="flex">
                       <Image
                         src={
                           lineItem?.variant?.product?.assets?.length
@@ -272,20 +273,22 @@ export default function Cart() {
                         height="70"
                       />
                       <div className="ml-7 space-y-2">
-                        <div className="text-xl font-bold">
-                          {lineItem.child && lineItem.child.length
-                            ? `${
-                                lineItem?.variant?.product?.attribute_data
-                                  ?.name[channelName][locale || 'ru']
-                              } + ${
-                                lineItem?.child[0].variant?.product
-                                  ?.attribute_data?.name[channelName][
-                                  locale || 'ru'
-                                ]
-                              }`
-                            : lineItem?.variant?.product?.attribute_data?.name[
-                                channelName
-                              ][locale || 'ru']}
+                        <div className="text-xl font-bold"><div className="font-bold text-sm flex-grow mx-1">
+                      {lineItem.child && lineItem.child.length
+                        ? `${
+                            lineItem?.variant?.product?.attribute_data?.name[
+                              channelName
+                            ][locale || 'ru']
+                          } + ${
+                            lineItem?.child[0].variant?.product?.attribute_data
+                              ?.name[channelName][locale || 'ru']
+                          }`
+                        : lineItem?.variant?.product?.attribute_data?.name[
+                            channelName
+                          ][locale || 'ru']}
+                    </div></div>
+                        <div className="text-xs text-gray-400">
+                          Средняя 32 см, Традиционное тесто
                         </div>
                       </div>
                     </div>
@@ -294,43 +297,21 @@ export default function Cart() {
                         <div className="w-6 h-6 items-center flex justify-around">
                           <MinusIcon
                             className="cursor-pointer w-5 h-5"
-                            onClick={() => decreaseQuantity(lineItem)}
+                            onClick={() => ''}
                           />
                         </div>
-                        <div className="flex-grow text-center">
-                          {lineItem.quantity}
-                        </div>
+                        <div className="flex-grow text-center">{1}</div>
                         <div className="w-6 h-6 items-center flex justify-around">
                           <PlusIcon
                             className="cursor-pointer w-5 h-5"
-                            onClick={() => increaseQuantity(lineItem.id)}
+                            onClick={() => ''}
                           />
                         </div>
                       </div>
-                      <div className="text-xl">
-                        {lineItem.child && lineItem.child.length
-                          ? currency(
-                              (+lineItem.total + +lineItem.child[0].total) *
-                                lineItem.quantity,
-                              {
-                                pattern: '# !',
-                                separator: ' ',
-                                decimal: '.',
-                                symbol: `${locale == 'uz' ? "so'm" : 'сўм'}`,
-                                precision: 0,
-                              }
-                            ).format()
-                          : currency(lineItem.total * lineItem.quantity, {
-                              pattern: '# !',
-                              separator: ' ',
-                              decimal: '.',
-                              symbol: `${locale == 'uz' ? "so'm" : 'сўм'}`,
-                              precision: 0,
-                            }).format()}
-                      </div>
+                      <div>36 000 сўм</div>
                       <XIcon
                         className="cursor-pointer h-4 text-black w-4"
-                        onClick={() => destroyLine(lineItem.id)}
+                        onClick={() => ''}
                       />
                     </div>
                   </div>
@@ -353,29 +334,16 @@ export default function Cart() {
                 </form>
               </div>
               <div className="flex items-center font-bold">
-                <div className="text-lg text-gray-400">
-                  {tr('basket_order_price')}
-                </div>
-                <div className="ml-7 text-3xl">
-                  {currency(data.totalPrice, {
-                    pattern: '# !',
-                    separator: ' ',
-                    decimal: '.',
-                    symbol: `${locale == 'uz' ? "so'm" : 'сўм'}`,
-                    precision: 0,
-                  }).format()}
-                </div>
+                <div className="text-lg text-gray-400">Сумма заказа:</div>
+                <div className="ml-7 text-3xl">108 000 сум</div>
               </div>
             </div>
             <div className="md:flex justify-between mt-8 space-y-2 md:space-y-0">
-              <button className="md:text-xl text-gray-400 bg-gray-100 flex h-12 items-center justify-between px-12 rounded-full md:w-80 w-full"
-                onClick={(e) => { e.preventDefault(); router.push('/')}}
-              >
+              <button className="md:text-xl text-gray-400 bg-gray-200 flex h-12 items-center justify-between px-12 rounded-full md:w-80 w-full">
                 <img src="/left.png" /> {tr('back_to_menu')}
               </button>
               <button
                 className={`md:text-xl text-white bg-yellow flex h-12 items-center justify-evenly rounded-full md:w-80 w-full`}
-                onClick={goToCheckout}
               >
                 {tr('checkout')} <img src="/right.png" />
               </button>
