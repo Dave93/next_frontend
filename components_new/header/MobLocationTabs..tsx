@@ -93,7 +93,9 @@ const MobLocationTabs: FC<MobLocationTabProps> = ({ setOpen }) => {
   )
 
   const [mapCenter, setMapCenter] = useState(
-    (locationData?.location || activeCity?.mapCenter) as number[]
+    (locationData?.location?.lat
+      ? locationData?.location
+      : activeCity?.mapCenter) as number[]
   )
   const [mapZoom, setMapZoom] = useState(
     ((locationData?.location ? 17 : 10) || activeCity?.mapZoom) as number
