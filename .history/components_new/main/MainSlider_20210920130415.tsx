@@ -70,7 +70,7 @@ const MainSlider: FC = () => {
                     <Link href={item.link} prefetch={false}>
                       {item.asset && (
                         <>
-                          <div className="hidden md:flex ">
+                          <div className="hidden md:block">
                             <Image
                               src={item.asset[0].link}
                               width={1160}
@@ -96,7 +96,7 @@ const MainSlider: FC = () => {
                   ) : (
                     item.asset && (
                       <>
-                        <div className="hidden md:flex">
+                        <div className="hidden md:block">
                           <Image
                             src={item.asset[0].link}
                             width={1160}
