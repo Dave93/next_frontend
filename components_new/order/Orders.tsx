@@ -181,7 +181,10 @@ const Orders: FC<OrdersProps> = ({ channelName }: { channelName: any }) => {
       let { data: res } = csrfReq
       csrf = Buffer.from(res.result, 'base64').toString('ascii')
 
-      Cookies.set('X-XSRF-TOKEN', csrf)
+      var inTenMinutes = new Date(new Date().getTime() + 10 * 60 * 1000)
+      Cookies.set('X-XSRF-TOKEN', csrf, {
+        expires: inTenMinutes,
+      })
     }
     axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest'
     axios.defaults.headers.common['X-CSRF-TOKEN'] = csrf
@@ -456,7 +459,7 @@ const Orders: FC<OrdersProps> = ({ channelName }: { channelName: any }) => {
 
   const choosePickupPoint = (pointId: number) => {
     setActivePoint(pointId)
-    let terminalData = pickupPoints.find((pickup: any) => pickup.id == pointId);
+    let terminalData = pickupPoints.find((pickup: any) => pickup.id == pointId)
     setLocationData({
       ...locationData,
       terminal_id: pointId,
@@ -1514,7 +1517,7 @@ const Orders: FC<OrdersProps> = ({ channelName }: { channelName: any }) => {
                         pattern: '# !',
                         separator: ' ',
                         decimal: '.',
-                        symbol: 'сўм',
+                        symbol: `${locale == 'uz' ? "so'm" : 'сўм'}`,
                         precision: 0,
                       }
                     ).format()
@@ -1522,7 +1525,7 @@ const Orders: FC<OrdersProps> = ({ channelName }: { channelName: any }) => {
                       pattern: '# !',
                       separator: ' ',
                       decimal: '.',
-                      symbol: 'сўм',
+                      symbol: `${locale == 'uz' ? "so'm" : 'сўм'}`,
                       precision: 0,
                     }).format()}
               </div>
@@ -1540,7 +1543,7 @@ const Orders: FC<OrdersProps> = ({ channelName }: { channelName: any }) => {
                 pattern: '# !',
                 separator: ' ',
                 decimal: '.',
-                symbol: 'сўм',
+                symbol: `${locale == 'uz' ? "so'm" : 'сўм'}`,
                 precision: 0,
               }).format()}
             </div>
@@ -1800,7 +1803,13 @@ const Orders: FC<OrdersProps> = ({ channelName }: { channelName: any }) => {
           </Dialog>
         </Transition>
         <div className="md:flex justify-between mt-8 space-y-2 md:space-y-0">
-          <button className="md:text-xl text-gray-400 bg-gray-200 flex h-12 items-center justify-between px-12 rounded-full md:w-80 w-full">
+          <button
+            className="md:text-xl text-gray-400 bg-gray-200 flex h-12 items-center justify-between px-12 rounded-full md:w-80 w-full"
+            onClick={(e) => {
+              e.preventDefault()
+              router.push('/cart/')
+            }}
+          >
             <img src="/left.png" /> {tr('back_to_basket')}
           </button>
           <button
@@ -1833,7 +1842,7 @@ const Orders: FC<OrdersProps> = ({ channelName }: { channelName: any }) => {
               </svg>
             ) : (
               <>
-                {tr('pay')} <img src="/right.png" />
+                {tr('checkout')} <img src="/right.png" />
               </>
             )}
           </button>

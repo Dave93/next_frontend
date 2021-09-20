@@ -1,176 +1,396 @@
-import type { GetStaticPropsContext } from 'next'
-import useCart from '@framework/cart/use-cart'
-import usePrice from '@framework/product/use-price'
+import type { GetServerSidePropsContext } from 'next'
 import commerce from '@lib/api/commerce'
 import { Layout } from '@components/common'
-import { Button, Text } from '@components/ui'
-import { Bag, Cross, Check, MapPin, CreditCard } from '@components/icons'
-import { CartItem } from '@components/cart'
+import useCart from '@framework/cart/use-cart'
+import Image from 'next/image'
+import { XIcon, MinusIcon, PlusIcon, TrashIcon } from '@heroicons/react/solid'
+import { useForm } from 'react-hook-form'
+import useTranslation from 'next-translate/useTranslation'
+import getConfig from 'next/config'
+import { useRouter } from 'next/router'
+import { useEffect, useState } from 'react'
+import Hashids from 'hashids'
+import axios from 'axios'
+import Cookies from 'js-cookie'
+import defaultChannel from '@lib/defaultChannel'
+import currency from 'currency.js'
 
-export async function getStaticProps({
+export async function getServerSideProps({
   preview,
   locale,
   locales,
-}: GetStaticPropsContext) {
+}: GetServerSidePropsContext) {
   const config = { locale, locales }
+  const productsPromise = commerce.getAllProducts({
+    variables: { first: 6 },
+    config,
+    preview,
+    // Saleor provider only
+    ...({ featured: true } as any),
+  })
   const pagesPromise = commerce.getAllPages({ config, preview })
   const siteInfoPromise = commerce.getSiteInfo({ config, preview })
+  const { products } = await productsPromise
   const { pages } = await pagesPromise
-  const { categories } = await siteInfoPromise
+  const { categories, brands, topMenu, footerInfoMenu, socials, cities } =
+    await siteInfoPromise
+
   return {
-    props: { pages, categories },
+    props: {
+      products,
+      categories,
+      brands,
+      pages,
+      topMenu,
+      footerInfoMenu,
+      socials,
+      cleanBackground: true,
+      cities,
+    },
   }
 }
 
+const { publicRuntimeConfig } = getConfig()
+let webAddress = publicRuntimeConfig.apiUrl
+axios.defaults.withCredentials = true
+
 export default function Cart() {
-  const error = null
-  const success = null
-  const { data, isLoading, isEmpty } = useCart()
+  const [channelName, setChannelName] = useState('chopar')
 
-  const { price: subTotal } = usePrice(
-    data && {
-      amount: Number(data.subtotalPrice),
-      currencyCode: data.currency.code,
-    }
-  )
-  const { price: total } = usePrice(
-    data && {
-      amount: Number(data.totalPrice),
-      currencyCode: data.currency.code,
-    }
+  const getChannel = async () => {
+    const channelData = await defaultChannel()
+    setChannelName(channelData.name)
+  }
+
+  useEffect(() => {
+    getChannel()
+  }, [])
+
+  const { t: tr } = useTranslation('common')
+  let cartId: string | null = null
+  if (typeof window !== 'undefined') {
+    cartId = localStorage.getItem('basketId')
+  }
+
+  const { data, isLoading, isEmpty, mutate } = useCart({
+    cartId,
+  })
+
+  const [isCartLoading, setIsCartLoading] = useState(false)
+
+  const { register, handleSubmit } = useForm()
+  const onSubmit = (data: Object) => console.log(JSON.stringify(data))
+
+  const router = useRouter()
+  const { locale } = router
+
+  const hashids = new Hashids(
+    'basket',
+    15,
+    'abcdefghijklmnopqrstuvwxyz1234567890'
   )
 
+  const setCredentials = async () => {
+    let csrf = Cookies.get('X-XSRF-TOKEN')
+    if (!csrf) {
+      const csrfReq = await axios(`${webAddress}/api/keldi`, {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+          crossDomain: true,
+        },
+        withCredentials: true,
+      })
+      let { data: res } = csrfReq
+      csrf = Buffer.from(res.result, 'base64').toString('ascii')
+
+      var inTenMinutes = new Date(new Date().getTime() + 10 * 60 * 1000)
+      Cookies.set('X-XSRF-TOKEN', csrf, {
+        expires: inTenMinutes,
+      })
+    }
+    axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest'
+    axios.defaults.headers.common['X-CSRF-TOKEN'] = csrf
+    axios.defaults.headers.common['XCSRF-TOKEN'] = csrf
+  }
+
+  const destroyLine = async (lineId: string) => {
+    setIsCartLoading(true)
+    await setCredentials()
+    const { data } = await axios.delete(
+      `${webAddress}/api/v1/basket-lines/${hashids.encode(lineId)}`
+    )
+    if (cartId) {
+      let { data: basket } = await axios.get(
+        `${webAddress}/api/baskets/${cartId}`
+      )
+      const basketResult = {
+        id: basket.data.id,
+        createdAt: '',
+        currency: { code: basket.data.currency },
+        taxesIncluded: basket.data.tax_total,
+        lineItems: basket.data.lines,
+        lineItemsSubtotalPrice: basket.data.sub_total,
+        subtotalPrice: basket.data.sub_total,
+        totalPrice: basket.data.total,
+      }
+
+      await mutate(basketResult, false)
+      setIsCartLoading(false)
+    }
+  }
+
+  const decreaseQuantity = async (line: any) => {
+    if (line.quantity == 1) {
+      return
+    }
+    setIsCartLoading(true)
+    await setCredentials()
+    const { data: basket } = await axios.put(
+      `${webAddress}/api/v1/basket-lines/${hashids.encode(line.id)}/remove`,
+      {
+        quantity: 1,
+      }
+    )
+
+    if (cartId) {
+      let { data: basket } = await axios.get(
+        `${webAddress}/api/baskets/${cartId}`
+      )
+      const basketResult = {
+        id: basket.data.id,
+        createdAt: '',
+        currency: { code: basket.data.currency },
+        taxesIncluded: basket.data.tax_total,
+        lineItems: basket.data.lines,
+        lineItemsSubtotalPrice: basket.data.sub_total,
+        subtotalPrice: basket.data.sub_total,
+        totalPrice: basket.data.total,
+      }
+
+      await mutate(basketResult, false)
+      setIsCartLoading(false)
+    }
+  }
+
+  const increaseQuantity = async (lineId: string) => {
+    setIsCartLoading(true)
+    await setCredentials()
+    const { data: basket } = await axios.post(
+      `${webAddress}/api/v1/basket-lines/${hashids.encode(lineId)}/add`,
+      {
+        quantity: 1,
+      }
+    )
+
+    if (cartId) {
+      let { data: basket } = await axios.get(
+        `${webAddress}/api/baskets/${cartId}`
+      )
+      const basketResult = {
+        id: basket.data.id,
+        createdAt: '',
+        currency: { code: basket.data.currency },
+        taxesIncluded: basket.data.tax_total,
+        lineItems: basket.data.lines,
+        lineItemsSubtotalPrice: basket.data.sub_total,
+        subtotalPrice: basket.data.sub_total,
+        totalPrice: basket.data.total,
+      }
+
+      await mutate(basketResult, false)
+      setIsCartLoading(false)
+    }
+  }
+
+  const goToCheckout = (e: any) => {
+    e.preventDefault()
+    router.push('/order/')
+  }
+  console.log(data)
   return (
-    <div className="grid lg:grid-cols-12 w-full max-w-7xl mx-auto">
-      <div className="lg:col-span-8">
-        {isLoading || isEmpty ? (
-          <div className="flex-1 px-12 py-24 flex flex-col justify-center items-center ">
-            <span className="border border-dashed border-secondary flex items-center justify-center w-16 h-16 bg-primary p-12 rounded-lg text-primary">
-              <Bag className="absolute" />
-            </span>
-            <h2 className="pt-6 text-2xl font-bold tracking-wide text-center">
-              Your cart is empty
-            </h2>
-            <p className="text-accent-6 px-10 text-center pt-2">
-              Biscuit oat cake wafer icing ice cream tiramisu pudding cupcake.
-            </p>
-          </div>
-        ) : error ? (
-          <div className="flex-1 px-4 flex flex-col justify-center items-center">
-            <span className="border border-white rounded-full flex items-center justify-center w-16 h-16">
-              <Cross width={24} height={24} />
-            </span>
-            <h2 className="pt-6 text-xl font-light text-center">
-              We couldn’t process the purchase. Please check your card
-              information and try again.
-            </h2>
-          </div>
-        ) : success ? (
-          <div className="flex-1 px-4 flex flex-col justify-center items-center">
-            <span className="border border-white rounded-full flex items-center justify-center w-16 h-16">
-              <Check />
-            </span>
-            <h2 className="pt-6 text-xl font-light text-center">
-              Thank you for your order.
-            </h2>
-          </div>
-        ) : (
-          <div className="px-4 sm:px-6 flex-1">
-            <Text variant="pageHeading">My Cart</Text>
-            <Text variant="sectionHeading">Review your Order</Text>
-            <ul className="py-6 space-y-6 sm:py-0 sm:space-y-0 sm:divide-y sm:divide-accent-2 border-b border-accent-2">
-              {data!.lineItems.map((item: any) => (
-                <CartItem
-                  key={item.id}
-                  item={item}
-                  currencyCode={data?.currency.code!}
-                />
-              ))}
-            </ul>
-            <div className="my-6">
-              <Text>
-                Before you leave, take a look at these items. We picked them
-                just for you
-              </Text>
-              <div className="flex py-6 space-x-6">
-                {[1, 2, 3, 4, 5, 6].map((x) => (
-                  <div
-                    key={x}
-                    className="border border-accent-3 w-full h-24 bg-accent-2 bg-opacity-50 transform cursor-pointer hover:scale-110 duration-75"
-                  />
-                ))}
-              </div>
-            </div>
-          </div>
-        )}
-      </div>
-      <div className="lg:col-span-4">
-        <div className="flex-shrink-0 px-4 py-24 sm:px-6">
-          {process.env.COMMERCE_CUSTOMCHECKOUT_ENABLED && (
-            <>
-              {/* Shipping Address */}
-              {/* Only available with customCheckout set to true - Meaning that the provider does offer checkout functionality. */}
-              <div className="rounded-md border border-accent-2 px-6 py-6 mb-4 text-center flex items-center justify-center cursor-pointer hover:border-accent-4">
-                <div className="mr-5">
-                  <MapPin />
-                </div>
-                <div className="text-sm text-center font-medium">
-                  <span className="uppercase">+ Add Shipping Address</span>
-                  {/* <span>
-                    1046 Kearny Street.<br/>
-                    San Franssisco, California
-                  </span> */}
-                </div>
-              </div>
-              {/* Payment Method */}
-              {/* Only available with customCheckout set to true - Meaning that the provider does offer checkout functionality. */}
-              <div className="rounded-md border border-accent-2 px-6 py-6 mb-4 text-center flex items-center justify-center cursor-pointer hover:border-accent-4">
-                <div className="mr-5">
-                  <CreditCard />
-                </div>
-                <div className="text-sm text-center font-medium">
-                  <span className="uppercase">+ Add Payment Method</span>
-                  {/* <span>VISA #### #### #### 2345</span> */}
-                </div>
-              </div>
-            </>
-          )}
-          <div className="border-t border-accent-2">
-            <ul className="py-3">
-              <li className="flex justify-between py-1">
-                <span>Subtotal</span>
-                <span>{subTotal}</span>
-              </li>
-              <li className="flex justify-between py-1">
-                <span>Taxes</span>
-                <span>Calculated at checkout</span>
-              </li>
-              <li className="flex justify-between py-1">
-                <span>Estimated Shipping</span>
-                <span className="font-bold tracking-wide">FREE</span>
-              </li>
-            </ul>
-            <div className="flex justify-between border-t border-accent-2 py-3 font-bold mb-10">
-              <span>Total</span>
-              <span>{total}</span>
-            </div>
-          </div>
-          <div className="flex flex-row justify-end">
-            <div className="w-full lg:w-72">
-              {isEmpty ? (
-                <Button href="/" Component="a" width="100%">
-                  Continue Shopping
-                </Button>
-              ) : (
-                <Button href="/checkout" Component="a" width="100%">
-                  Proceed to Checkout
-                </Button>
-              )}
-            </div>
-          </div>
+    <>
+      {isCartLoading && (
+        <div className="h-full w-full absolute flex items-center justify-around bg-gray-300 top-0 bg-opacity-60 left-0 rounded-[15px]">
+          <svg
+            className="animate-spin text-yellow h-14"
+            xmlns="http://www.w3.org/2000/svg"
+            fill="none"
+            viewBox="0 0 24 24"
+          >
+            <circle
+              className="opacity-25"
+              cx="12"
+              cy="12"
+              r="10"
+              stroke="currentColor"
+              stroke-width="4"
+            ></circle>
+            <path
+              className="opacity-75"
+              fill="currentColor"
+              d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+            ></path>
+          </svg>
         </div>
-      </div>
-    </div>
+      )}
+      {isEmpty && (
+        <div className="flex flex-col items-center mt-2 text-center text-gray-400 text-sm">
+          <Image src="/cart_empty.png" width={130} height={119} />
+          <div className="w-6/12">{tr('basket_empty')}</div>
+        </div>
+      )}
+      {!isEmpty && (
+        <>
+          <div className="p-10 rounded-2xl text-xl mt-5 bg-white mb-3">
+            <div className="flex justify-between items-center">
+              <div className="text-lg font-bold">
+                {tr('basket')}{' '}
+                {data?.lineItems.length > 0 && (
+                  <span className="font-bold text-[18px] text-yellow">
+                    ({data.lineItems.length})
+                  </span>
+                )}
+              </div>
+              {/* <div className="text-gray-400 text-sm flex cursor-pointer">
+            Очистить всё <TrashIcon className=" w-5 h-5 ml-1" />
+          </div> */}
+            </div>
+            <div className="mt-10 space-y-3">
+              {data &&
+                data?.lineItems.map((lineItem: any) => (
+                  <div
+                    className="flex justify-between items-center border-b pb-3"
+                    key={lineItem.id}
+                  >
+                    {console.log(lineItem)}
+                    <div className="flex items-center">
+                      <Image
+                        src={
+                          lineItem?.variant?.product?.assets?.length
+                            ? `${webAddress}/storage/${lineItem?.variant?.product?.assets[0]?.location}/${lineItem?.variant?.product?.assets[0]?.filename}`
+                            : '/no_photo.svg'
+                        }
+                        width="70"
+                        height="70"
+                      />
+                      <div className="ml-7 space-y-2">
+                        <div className="text-xl font-bold">
+                          {lineItem.child && lineItem.child.length
+                            ? `${
+                                lineItem?.variant?.product?.attribute_data
+                                  ?.name[channelName][locale || 'ru']
+                              } + ${
+                                lineItem?.child[0].variant?.product
+                                  ?.attribute_data?.name[channelName][
+                                  locale || 'ru'
+                                ]
+                              }`
+                            : lineItem?.variant?.product?.attribute_data?.name[
+                                channelName
+                              ][locale || 'ru']}
+                        </div>
+                      </div>
+                    </div>
+                    <div className="flex space-x-10 items-center">
+                      <div className="w-20 h-6 ml-1 bg-yellow rounded-full flex items-center text-white">
+                        <div className="w-6 h-6 items-center flex justify-around">
+                          <MinusIcon
+                            className="cursor-pointer w-5 h-5"
+                            onClick={() => decreaseQuantity(lineItem)}
+                          />
+                        </div>
+                        <div className="flex-grow text-center">
+                          {lineItem.quantity}
+                        </div>
+                        <div className="w-6 h-6 items-center flex justify-around">
+                          <PlusIcon
+                            className="cursor-pointer w-5 h-5"
+                            onClick={() => increaseQuantity(lineItem.id)}
+                          />
+                        </div>
+                      </div>
+                      <div className="text-xl">
+                        {lineItem.child && lineItem.child.length
+                          ? currency(
+                              (+lineItem.total + +lineItem.child[0].total) *
+                                lineItem.quantity,
+                              {
+                                pattern: '# !',
+                                separator: ' ',
+                                decimal: '.',
+                                symbol: `${locale == 'uz' ? "so'm" : 'сўм'}`,
+                                precision: 0,
+                              }
+                            ).format()
+                          : currency(lineItem.total * lineItem.quantity, {
+                              pattern: '# !',
+                              separator: ' ',
+                              decimal: '.',
+                              symbol: `${locale == 'uz' ? "so'm" : 'сўм'}`,
+                              precision: 0,
+                            }).format()}
+                      </div>
+                      <XIcon
+                        className="cursor-pointer h-4 text-black w-4"
+                        onClick={() => destroyLine(lineItem.id)}
+                      />
+                    </div>
+                  </div>
+                ))}
+            </div>
+          </div>
+          <div className="p-10 rounded-2xl bg-white">
+            <div className="border-b flex items-center justify-between pb-10">
+              <div className="w-72">
+                <form onSubmit={handleSubmit(onSubmit)} className="relative">
+                  <input
+                    type="text"
+                    placeholder={tr('promocode')}
+                    {...register('discount_code')}
+                    className="bg-gray-100 focus:outline-none outline-none px-5 py-2 rounded-full text-lg w-full"
+                  />
+                  <button className="absolute focus:outline-none outline-none right-1 top-1">
+                    <Image src="/discount_arrow.png" width={37} height={37} />
+                  </button>
+                </form>
+              </div>
+              <div className="flex items-center font-bold">
+                <div className="text-lg text-gray-400">
+                  {tr('basket_order_price')}
+                </div>
+                <div className="ml-7 text-3xl">
+                  {currency(data.totalPrice, {
+                    pattern: '# !',
+                    separator: ' ',
+                    decimal: '.',
+                    symbol: `${locale == 'uz' ? "so'm" : 'сўм'}`,
+                    precision: 0,
+                  }).format()}
+                </div>
+              </div>
+            </div>
+            <div className="md:flex justify-between mt-8 space-y-2 md:space-y-0">
+              <button
+                className="md:text-xl text-gray-400 bg-gray-100 flex h-12 items-center justify-between px-12 rounded-full md:w-80 w-full"
+                onClick={(e) => {
+                  e.preventDefault()
+                  router.push('/')
+                }}
+              >
+                <img src="/left.png" /> {tr('back_to_menu')}
+              </button>
+              <button
+                className={`md:text-xl text-white bg-yellow flex h-12 items-center justify-evenly rounded-full md:w-80 w-full`}
+                onClick={goToCheckout}
+              >
+                {tr('checkout')} <img src="/right.png" />
+              </button>
+            </div>
+          </div>
+        </>
+      )}
+    </>
   )
 }
 

@@ -116,31 +116,31 @@ export default function Home({
             } else {
               v.active = false
             }
-            if (v.modifiers && v.modifiers.length) {
-              v.modifiers = v.modifiers.map((mod: any) => {
-                if (mod.price == 0) {
-                  mod.active = true
-                } else {
-                  mod.active = false
-                }
-                return mod
-              })
-            }
+            // if (v.modifiers && v.modifiers.length) {
+            //   v.modifiers = v.modifiers.map((mod: any) => {
+            //     if (mod.price == 0) {
+            //       mod.active = true
+            //     } else {
+            //       mod.active = false
+            //     }
+            //     return mod
+            //   })
+            // }
 
             return v
           })
 
           if (!item.variants.length) {
-            if (item.modifiers && item.modifiers.length) {
-              item.modifiers = item.modifiers.map((mod: any) => {
-                if (mod.price == 0) {
-                  mod.active = true
-                } else {
-                  mod.active = false
-                }
-                return mod
-              })
-            }
+            // if (item.modifiers && item.modifiers.length) {
+            //   item.modifiers = item.modifiers.map((mod: any) => {
+            //     if (mod.price == 0) {
+            //       mod.active = true
+            //     } else {
+            //       mod.active = false
+            //     }
+            //     return mod
+            //   })
+            // }
           }
 
           return item

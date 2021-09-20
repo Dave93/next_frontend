@@ -26,7 +26,7 @@ const SmallCart: FC<SmallCartProps> = ({
 }) => {
   const { t: tr } = useTranslation('common')
   let cartId: string | null = null
-  if (typeof window !== undefined) {
+  if (typeof window !== 'undefined') {
     cartId = localStorage.getItem('basketId')
   }
 
@@ -62,7 +62,10 @@ const SmallCart: FC<SmallCartProps> = ({
       let { data: res } = csrfReq
       csrf = Buffer.from(res.result, 'base64').toString('ascii')
 
-      Cookies.set('X-XSRF-TOKEN', csrf)
+      var inTenMinutes = new Date(new Date().getTime() + 10 * 60 * 1000)
+      Cookies.set('X-XSRF-TOKEN', csrf, {
+        expires: inTenMinutes,
+      })
     }
     axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest'
     axios.defaults.headers.common['X-CSRF-TOKEN'] = csrf
@@ -193,7 +196,7 @@ const SmallCart: FC<SmallCartProps> = ({
         <div className="border-b-2 border-yellow flex items-center justify-between pb-4">
           <div>
             <span className="font-bold mr-1 text-xl">{tr('basket')}</span>
-            {data?.lineItems.length > 0 && (
+            {data?.lineItems?.length > 0 && (
               <span className="font-bold text-[18px] text-yellow">
                 ({data.lineItems.length})
               </span>
@@ -313,7 +316,7 @@ const SmallCart: FC<SmallCartProps> = ({
                               pattern: '# !',
                               separator: ' ',
                               decimal: '.',
-                              symbol: 'сўм',
+                              symbol: `${locale == 'uz' ? "so'm" : 'сўм'}`,
                               precision: 0,
                             }
                           ).format()
@@ -321,7 +324,7 @@ const SmallCart: FC<SmallCartProps> = ({
                             pattern: '# !',
                             separator: ' ',
                             decimal: '.',
-                            symbol: 'сўм',
+                            symbol: `${locale == 'uz' ? "so'm" : 'сўм'}`,
                             precision: 0,
                           }).format()}
                     </div>
@@ -340,7 +343,7 @@ const SmallCart: FC<SmallCartProps> = ({
                 pattern: '# !',
                 separator: ' ',
                 decimal: '.',
-                symbol: 'сўм',
+                symbol: `${locale == 'uz' ? "so'm" : 'сўм'}`,
                 precision: 0,
               }).format()}
             </div>

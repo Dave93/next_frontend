@@ -43,7 +43,7 @@ const ProductItemNew: FC<ProductItem> = ({ product, channelName }) => {
 
   const [addToCartInProgress, setAddToCartInProgress] = useState(false)
   const [isChoosingModifier, setIsChoosingModifier] = useState(false)
-  const [activeModifier, setActiveModifier] = useState(null)
+  const [activeModifiers, setActiveModifiers] = useState([] as number[])
   let [isOpen, setIsOpen] = useState(false)
   let completeButtonRef = useRef(null)
   const router = useRouter()
@@ -54,6 +54,10 @@ const ProductItemNew: FC<ProductItem> = ({ product, channelName }) => {
   }
 
   function openModal() {
+    if (modifiers && modifiers.length) {
+      let freeModifier = modifiers.find((mod: any) => mod.price == 0)
+      setActiveModifiers([freeModifier.id])
+    }
     setIsOpen(true)
   }
 
@@ -75,56 +79,23 @@ const ProductItemNew: FC<ProductItem> = ({ product, channelName }) => {
   }
 
   const addModifier = (modId: number) => {
-    const prod = { ...store }
-    if (prod.variants && prod.variants.length) {
-      prod.variants = prod.variants.map((v) => {
-        if (v.active) {
-          v.modifiers = v.modifiers.map((mod: any) => {
-            if (mod.id == modId) {
-              mod.active = !mod.active
-            }
-            return mod
-          })
-          const activeMods = v.modifiers.filter((mod: any) => mod.active)
-          if (!activeMods.length) {
-            v.modifiers = v.modifiers.map((mod: any) => {
-              if (mod.price == 0) {
-                mod.active = true
-              }
-              return mod
-            })
-          }
-        } else {
-          v.modifiers = v.modifiers.map((mod: any) => {
-            if (mod.price == 0) {
-              mod.active = true
-            } else {
-              mod.active = false
-            }
-            return mod
-          })
-        }
-        return v
-      })
+    let zeroModifier = modifiers.find((mod: any) => mod.price == 0)
+    if (activeModifiers.includes(modId)) {
+      let currentModifier: any = modifiers.find((mod: any) => mod.id == modId)
+      if (!currentModifier) return
+      if (currentModifier.price == 0) return
+      setActiveModifiers([...activeModifiers.filter((id) => id != modId)])
     } else {
-      prod.modifiers = prod?.modifiers?.map((mod: any) => {
-        if (mod.id == modId) {
-          mod.active = !mod.active
-        }
-        return mod
-      })
-      const activeMods = prod?.modifiers?.filter((mod: any) => mod.active)
-      if (!activeMods?.length) {
-        prod.modifiers = prod?.modifiers?.map((mod: any) => {
-          if (mod.price == 0) {
-            mod.active = true
-          }
-          return mod
-        })
+      let currentModifier: any = modifiers.find((mod: any) => mod.id == modId)
+      if (currentModifier.price == 0) {
+        setActiveModifiers([modId])
+      } else {
+        setActiveModifiers([
+          ...activeModifiers.filter((id: number) => id != zeroModifier.id),
+          modId,
+        ])
       }
     }
-
-    updateStore({ ...prod })
   }
 
   const setCredentials = async () => {
@@ -140,17 +111,24 @@ const ProductItemNew: FC<ProductItem> = ({ product, channelName }) => {
       })
       let { data: res } = csrfReq
       csrf = Buffer.from(res.result, 'base64').toString('ascii')
-
-      Cookies.set('X-XSRF-TOKEN', csrf)
+      var inTenMinutes = new Date(new Date().getTime() + 10 * 60 * 1000)
+      Cookies.set('X-XSRF-TOKEN', csrf, {
+        expires: inTenMinutes,
+      })
     }
     axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest'
     axios.defaults.headers.common['X-CSRF-TOKEN'] = csrf
     axios.defaults.headers.common['XCSRF-TOKEN'] = csrf
   }
 
-  const addToBasket = async () => {
+  const addToBasket = async (mods: any = null) => {
     setIsLoadingBasket(true)
     await setCredentials()
+
+    if (!mods) {
+      mods = activeModifiers
+    }
+
     let selectedProdId = 0
     if (store.variants && store.variants.length) {
       let selectedVariant = store.variants.find((v: any) => v.active == true)
@@ -173,7 +151,7 @@ const ProductItemNew: FC<ProductItem> = ({ product, channelName }) => {
               modifiers:
                 modifiers &&
                 modifiers
-                  .filter((m: any) => m.active)
+                  .filter((m: any) => mods.includes(m.id))
                   .map((m: any) => ({ id: m.id })),
             },
           ],
@@ -190,7 +168,7 @@ const ProductItemNew: FC<ProductItem> = ({ product, channelName }) => {
               modifiers:
                 modifiers &&
                 modifiers
-                  .filter((m: any) => m.active)
+                  .filter((m: any) => mods.includes(m.id))
                   .map((m: any) => ({ id: m.id })),
             },
           ],
@@ -227,28 +205,9 @@ const ProductItemNew: FC<ProductItem> = ({ product, channelName }) => {
   }
 
   const discardModifier = async () => {
-    let prod = { ...store }
-    if (prod.variants && prod.variants.length) {
-      console.log(prod.variants)
-      prod.variants = prod.variants.map((vars: any) => {
-        if (vars.active == true) {
-          vars.modifiers = vars.modifiers.map((mod: any) => {
-            if (mod.price == 0) {
-              mod.active = true
-            } else {
-              mod.active = false
-            }
-
-            return mod
-          })
-        }
-
-        return vars
-      })
-    }
-
-    updateStore({ ...prod })
-    addToBasket()
+    let freeModifier = modifiers.find((mod: any) => mod.price == 0)
+    setActiveModifiers([freeModifier.id])
+    addToBasket([freeModifier.id])
   }
 
   const modifiers = useMemo(() => {
@@ -265,6 +224,20 @@ const ProductItemNew: FC<ProductItem> = ({ product, channelName }) => {
         modifier = store.modifiers
       }
     }
+
+    if (modifier) {
+      modifier.sort(function (a: any, b: any) {
+        if (+a.price > +b.price) {
+          return 1
+        }
+        if (+a.price < +b.price) {
+          return -1
+        }
+        // a должно быть равным b
+        return 0
+      })
+    }
+
     return modifier
   }, [store])
 
@@ -277,13 +250,23 @@ const ProductItemNew: FC<ProductItem> = ({ product, channelName }) => {
       if (activeValue) price += parseInt(activeValue.price, 0)
     }
 
+    if (modifiers && modifiers.length) {
+      modifiers.map((mod: any) => {
+        if (activeModifiers.includes(mod.id)) {
+          price += mod.price
+        }
+      })
+    }
+
     return price
-  }, [store.price, store.variants])
+  }, [store.price, store.variants, modifiers, activeModifiers])
 
   const handleSubmit = async (event: React.MouseEvent<HTMLElement>) => {
     event.preventDefault() // prevent the page location from changing
     // setAddToCartInProgress(true) // disable the add to cart button until the request is finished
     if (modifiers && modifiers.length) {
+      let freeModifier = modifiers.find((mod: any) => mod.price == 0)
+      setActiveModifiers([freeModifier.id])
       setIsChoosingModifier(true)
     } else {
       addToBasket()
@@ -326,7 +309,9 @@ const ProductItemNew: FC<ProductItem> = ({ product, channelName }) => {
                 <div
                   key={mod.id}
                   className={`border ${
-                    mod.active ? 'border-yellow' : 'border-gray-300'
+                    activeModifiers.includes(mod.id)
+                      ? 'border-yellow'
+                      : 'border-gray-300'
                   } flex flex-col justify-between overflow-hidden rounded-[15px] cursor-pointer`}
                   onClick={() => addModifier(mod.id)}
                 >
@@ -353,7 +338,9 @@ const ProductItemNew: FC<ProductItem> = ({ product, channelName }) => {
                   </div>
                   <div
                     className={`${
-                      mod.active ? 'bg-yellow' : 'bg-gray-300'
+                      activeModifiers.includes(mod.id)
+                        ? 'bg-yellow'
+                        : 'bg-gray-300'
                     } font-bold px-4 py-2 text-center text-white text-xs`}
                   >
                     {currency(mod.price, {
@@ -615,53 +602,57 @@ const ProductItemNew: FC<ProductItem> = ({ product, channelName }) => {
                             <div className="my-2">
                               <span>Добавить в пиццу</span>
                             </div>
-                            <div className="flex-grow gap-3 grid grid-cols-4">
-                              {modifiers.map((mod: any) => (
-                                <div
-                                  key={mod.id}
-                                  className={`border ${
-                                    mod.active
-                                      ? 'border-yellow'
-                                      : 'border-gray-300'
-                                  } flex flex-col justify-between overflow-hidden rounded-[15px] cursor-pointer`}
-                                  onClick={() => addModifier(mod.id)}
-                                >
-                                  <div className="flex-grow pt-2 px-2">
-                                    {mod.assets.length ? (
-                                      <Image
-                                        src={`${webAddress}/storage/${mod.assets[0]?.location}/${mod.assets[0]?.filename}`}
-                                        width={80}
-                                        height={80}
-                                        alt={mod.name}
-                                      />
-                                    ) : (
-                                      <Image
-                                        src="/no_photo.svg"
-                                        width={80}
-                                        height={80}
-                                        alt={mod.name}
-                                        className="rounded-full"
-                                      />
-                                    )}
-                                  </div>
-                                  <div className="px-2 text-center text-xs pb-1">
-                                    {mod.name}
-                                  </div>
+                            <div className="overflow-x-scroll">
+                              <div className="-mr-20 flex space-x-2">
+                                {modifiers.map((mod: any) => (
                                   <div
-                                    className={`${
-                                      mod.active ? 'bg-yellow' : 'bg-gray-300'
-                                    } font-bold px-4 py-2 text-center text-white text-xs`}
+                                    key={mod.id}
+                                    className={`border ${
+                                      activeModifiers.includes(mod.id)
+                                        ? 'border-yellow'
+                                        : 'border-gray-300'
+                                    } flex flex-col justify-between overflow-hidden rounded-[15px] cursor-pointer w-24`}
+                                    onClick={() => addModifier(mod.id)}
                                   >
-                                    {currency(mod.price, {
-                                      pattern: '# !',
-                                      separator: ' ',
-                                      decimal: '.',
-                                      symbol: 'сўм',
-                                      precision: 0,
-                                    }).format()}
+                                    <div className="flex-grow pt-2 px-2">
+                                      {mod.assets.length ? (
+                                        <Image
+                                          src={`${webAddress}/storage/${mod.assets[0]?.location}/${mod.assets[0]?.filename}`}
+                                          width={80}
+                                          height={80}
+                                          alt={mod.name}
+                                        />
+                                      ) : (
+                                        <Image
+                                          src="/no_photo.svg"
+                                          width={80}
+                                          height={80}
+                                          alt={mod.name}
+                                          className="rounded-full"
+                                        />
+                                      )}
+                                    </div>
+                                    <div className="px-2 text-center text-xs pb-1">
+                                      {mod.name}
+                                    </div>
+                                    <div
+                                      className={`${
+                                        activeModifiers.includes(mod.id)
+                                          ? 'bg-yellow'
+                                          : 'bg-gray-300'
+                                      } font-bold px-4 py-2 text-center text-white text-xs`}
+                                    >
+                                      {currency(mod.price, {
+                                        pattern: '# !',
+                                        separator: ' ',
+                                        decimal: '.',
+                                        symbol: 'сўм',
+                                        precision: 0,
+                                      }).format()}
+                                    </div>
                                   </div>
-                                </div>
-                              ))}
+                                ))}
+                              </div>
                             </div>
                           </div>
                         )}
