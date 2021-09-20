@@ -63,7 +63,7 @@ export const handler: SWRHook<any> = {
           Object.create(response, {
             isEmpty: {
               get() {
-                return (response.data?.lineItems.length ?? 0) <= 0
+                return (response.data?.lineItems?.length ?? 0) <= 0
               },
               enumerable: true,
             },

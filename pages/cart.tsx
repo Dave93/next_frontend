@@ -104,7 +104,10 @@ export default function Cart() {
       let { data: res } = csrfReq
       csrf = Buffer.from(res.result, 'base64').toString('ascii')
 
-      Cookies.set('X-XSRF-TOKEN', csrf)
+      var inTenMinutes = new Date(new Date().getTime() + 10 * 60 * 1000)
+      Cookies.set('X-XSRF-TOKEN', csrf, {
+        expires: inTenMinutes,
+      })
     }
     axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest'
     axios.defaults.headers.common['X-CSRF-TOKEN'] = csrf
@@ -368,8 +371,12 @@ export default function Cart() {
               </div>
             </div>
             <div className="md:flex justify-between mt-8 space-y-2 md:space-y-0">
-              <button className="md:text-xl text-gray-400 bg-gray-100 flex h-12 items-center justify-between px-12 rounded-full md:w-80 w-full"
-                onClick={(e) => { e.preventDefault(); router.push('/')}}
+              <button
+                className="md:text-xl text-gray-400 bg-gray-100 flex h-12 items-center justify-between px-12 rounded-full md:w-80 w-full"
+                onClick={(e) => {
+                  e.preventDefault()
+                  router.push('/')
+                }}
               >
                 <img src="/left.png" /> {tr('back_to_menu')}
               </button>

@@ -19,11 +19,7 @@ type CartProps = {
   channelName: any
 }
 
-const Cart: FC<CartProps> = ({
-  channelName,
-}: {
-  channelName: any
-}) => {
+const Cart: FC<CartProps> = ({ channelName }: { channelName: any }) => {
   const { t: tr } = useTranslation('common')
   let cartId: string | null = null
   if (typeof window !== 'undefined') {
@@ -62,7 +58,10 @@ const Cart: FC<CartProps> = ({
       let { data: res } = csrfReq
       csrf = Buffer.from(res.result, 'base64').toString('ascii')
 
-      Cookies.set('X-XSRF-TOKEN', csrf)
+      var inTenMinutes = new Date(new Date().getTime() + 10 * 60 * 1000)
+      Cookies.set('X-XSRF-TOKEN', csrf, {
+        expires: inTenMinutes,
+      })
     }
     axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest'
     axios.defaults.headers.common['X-CSRF-TOKEN'] = csrf

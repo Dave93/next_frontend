@@ -42,7 +42,7 @@ const SmallCartMobile: FC = () => {
         <Image src="/mobile_cart.png" width="20" height="20" />
       </div>
       <div className="text-xl pl-2 text-white">
-        {data && data.lineItems.length}
+        {data && data.lineItems ? data.lineItems.length : 0}
       </div>
     </button>
   )
