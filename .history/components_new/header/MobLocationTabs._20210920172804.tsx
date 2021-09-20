@@ -336,7 +336,7 @@ const MobLocationTabs: FC<MobLocationTabProps> = ({ setOpen }) => {
       <div className="bg-gray-100 flex rounded-full w-full h-11 items-center">
         <button
           className={`${
-            tabIndex == 'deliver' ? 'bg-yellow text-white' : ' text-gray-400'
+            tabIndex == 'delivery' ? 'bg-yellow text-white' : ' text-gray-400'
           } flex-1 font-bold  text-[16px] rounded-full outline-none focus:outline-none  h-11`}
           onClick={() => changeTabIndex('deliver')}
         >
