@@ -703,7 +703,7 @@ const MobLocationTabs: FC<MobLocationTabProps> = ({ setOpen }) => {
             {/* )} */}
             {/* {pickupIndex == 2 && ( */}
             <div className="space-y-3">
-              {pickupPoints.map((point) => (
+              {/* {pickupPoints.map((point) => (
                 <div
                   key={point.id}
                   className={`border flex items-start p-3 rounded-[15px] cursor-pointer ${
@@ -733,7 +733,7 @@ const MobLocationTabs: FC<MobLocationTabProps> = ({ setOpen }) => {
                     <div className="text-gray-400 text-sm">{point.desc}</div>
                   </div>
                 </div>
-              ))}
+              ))} */}
             </div>
             {/* )} */}
           </div>
