@@ -125,7 +125,7 @@ const ProductItemNew: FC<ProductItem> = ({ product, channelName }) => {
     setIsLoadingBasket(true)
     await setCredentials()
 
-    if (!mods) {
+    if (!mods || !mods.length) {
       mods = activeModifiers
     }
 

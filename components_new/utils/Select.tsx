@@ -44,7 +44,7 @@ const Select: FC<SelectProps> = ({
       </button>
       <ul
         {...getMenuProps()}
-        className="absolute bg-gray-100 md:w-44 shadow-md rounded-b-md overflow-hidden max-h-28 overflow-y-auto"
+        className="absolute bg-gray-100 md:w-44 shadow-md z-40 rounded-b-md overflow-hidden max-h-28 overflow-y-auto"
       >
         {isOpen &&
           items.map((item, index) => (
