@@ -336,7 +336,7 @@ const MobLocationTabs: FC<MobLocationTabProps> = ({ setOpen }) => {
       <div className="bg-gray-100 flex rounded-full w-full h-11 items-center">
         <button
           className={`${
-            tabIndex == 'deliver' ? 'bg-yellow text-white' : ' text-gray-400'
+            tabIndex == 1 ? 'bg-yellow text-white' : ' text-gray-400'
           } flex-1 font-bold  text-[16px] rounded-full outline-none focus:outline-none  h-11`}
           onClick={() => changeTabIndex('deliver')}
         >
@@ -344,7 +344,7 @@ const MobLocationTabs: FC<MobLocationTabProps> = ({ setOpen }) => {
         </button>
         <button
           className={`${
-            tabIndex == 'pickup' ? 'bg-yellow text-white' : ' text-gray-400'
+            tabIndex == 2 ? 'bg-yellow text-white' : ' text-gray-400'
           } flex-1 font-bold  text-[16px] rounded-full outline-none focus:outline-none  h-11`}
           onClick={() => changeTabIndex('pickup')}
         >
@@ -707,7 +707,7 @@ const MobLocationTabs: FC<MobLocationTabProps> = ({ setOpen }) => {
                 <div
                   key={point.id}
                   className={`border flex items-start p-3 rounded-[15px] cursor-pointer ${
-                    activePoint && activePoint == point.id
+                    activePoint && activePoint.id == point.id
                       ? 'border-yellow'
                       : 'border-gray-400'
                   }`}
@@ -715,21 +715,21 @@ const MobLocationTabs: FC<MobLocationTabProps> = ({ setOpen }) => {
                 >
                   <div
                     className={`border mr-4 mt-1 rounded-full ${
-                      activePoint && activePoint == point.id
+                      activePoint && activePoint.id == point.id
                         ? 'border-yellow'
                         : 'border-gray-400'
                     }`}
                   >
                     <div
                       className={`h-3 m-1 rounded-full w-3 ${
-                        activePoint && activePoint == point.id
+                        activePoint && activePoint.id == point.id
                           ? 'bg-yellow'
                           : 'bg-gray-400'
                       }`}
                     ></div>
                   </div>
                   <div>
-                    <div className="font-bold">{point.name}</div>
+                    <div className="font-bold">{point.label}</div>
                     <div className="text-gray-400 text-sm">{point.desc}</div>
                   </div>
                 </div>

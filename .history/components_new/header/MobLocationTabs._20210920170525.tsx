@@ -11,7 +11,7 @@ import React, {
   useCallback,
 } from 'react'
 import { Menu, Transition, Disclosure } from '@headlessui/react'
-import { CheckIcon, ChevronDownIcon, ChevronRightIcon } from '@heroicons/react/solid'
+import { ChevronDownIcon, ChevronRightIcon } from '@heroicons/react/solid'
 import {
   YMaps,
   Map,
@@ -336,22 +336,22 @@ const MobLocationTabs: FC<MobLocationTabProps> = ({ setOpen }) => {
       <div className="bg-gray-100 flex rounded-full w-full h-11 items-center">
         <button
           className={`${
-            tabIndex == 'deliver' ? 'bg-yellow text-white' : ' text-gray-400'
+            tabIndex == 1 ? 'bg-yellow text-white' : ' text-gray-400'
           } flex-1 font-bold  text-[16px] rounded-full outline-none focus:outline-none  h-11`}
-          onClick={() => changeTabIndex('deliver')}
+          onClick={() => setTabIndex(1)}
         >
           {tr('delivery')}
         </button>
         <button
           className={`${
-            tabIndex == 'pickup' ? 'bg-yellow text-white' : ' text-gray-400'
+            tabIndex == 2 ? 'bg-yellow text-white' : ' text-gray-400'
           } flex-1 font-bold  text-[16px] rounded-full outline-none focus:outline-none  h-11`}
-          onClick={() => changeTabIndex('pickup')}
+          onClick={() => setTabIndex(2)}
         >
           {tr('pickup')}
         </button>
       </div>
-      {tabIndex == 'deliver' && (
+      {tabIndex == 1 && (
         <div className="mt-5">
           <div className="flex justify-between">
             <div className="text-gray-400 font-bold text-[18px]">
@@ -404,32 +404,12 @@ const MobLocationTabs: FC<MobLocationTabProps> = ({ setOpen }) => {
                   state={mapState}
                   width="100%"
                   height="270px"
-                  onClick={clickOnMap}
                   modules={[
                     'control.ZoomControl',
                     'control.FullscreenControl',
                     'control.GeolocationControl',
                   ]}
-                >
-                  {selectedCoordinates.map((item: any, index: number) => (
-                    <Placemark
-                      modules={['geoObject.addon.balloon']}
-                      defaultGeometry={[
-                        item?.coordinates?.lat,
-                        item?.coordinates?.long,
-                      ]}
-                      geomerty={[
-                        item?.coordinates?.lat,
-                        item?.coordinates?.long,
-                      ]}
-                      key={item.key}
-                      defaultOptions={{
-                        iconLayout: 'default#image',
-                        iconImageHref: '/map_placemark.png',
-                      }}
-                    />
-                  ))}
-                </Map>
+                />
               </div>
             </YMaps>
           </div>
@@ -455,7 +435,7 @@ const MobLocationTabs: FC<MobLocationTabProps> = ({ setOpen }) => {
                   }) => (
                     <>
                       <div
-                        className="w-full"
+                        className="relative w-7/12"
                         {...getRootProps(undefined, { suppressRefError: true })}
                       >
                         <input
@@ -465,7 +445,7 @@ const MobLocationTabs: FC<MobLocationTabProps> = ({ setOpen }) => {
                             onChange: debouncedAddressInputChangeHandler,
                           })}
                           placeholder={tr('address')}
-                          className="bg-gray-100 focus:outline-none outline-none px-8 py-2 rounded-full w-full"
+                          className="bg-gray-100 px-8 py-3 rounded-full w-full outline-none focus:outline-none"
                         />
                         <ul
                           {...getMenuProps()}
@@ -506,6 +486,15 @@ const MobLocationTabs: FC<MobLocationTabProps> = ({ setOpen }) => {
                     </>
                   )}
                 </Downshift>
+
+                {/* <div className="w-full">
+                  <input
+                    type="text"
+                    {...register('address')}
+                    placeholder={tr('address')}
+                    className="bg-gray-100 px-8 py-2 rounded-full w-full outline-none focus:outline-none "
+                  />
+                </div> */}
                 <div className="flex justify-between">
                   <input
                     type="text"
@@ -573,43 +562,16 @@ const MobLocationTabs: FC<MobLocationTabProps> = ({ setOpen }) => {
               <div className="flex mt-12">
                 <button
                   type="submit"
-                  className="bg-yellow font-bold px-12 py-3 rounded-full text-[18px] text-white outline-none focus:outline-none"
-                  disabled={isSearchingTerminals}
-                  onClick={(event: React.MouseEvent) =>
-                    saveDeliveryData(undefined, event)
-                  }
+                  className="bg-yellow font-bold px-12 py-2 rounded-full text-[18px] text-white outline-none focus:outline-none w-full"
                 >
-                  {isSearchingTerminals ? (
-                    <svg
-                      className="animate-spin h-5 mx-auto text-center text-white w-5"
-                      xmlns="http://www.w3.org/2000/svg"
-                      fill="none"
-                      viewBox="0 0 24 24"
-                    >
-                      <circle
-                        className="opacity-25"
-                        cx="12"
-                        cy="12"
-                        r="10"
-                        stroke="currentColor"
-                        strokeWidth="4"
-                      ></circle>
-                      <path
-                        className="opacity-75"
-                        fill="currentColor"
-                        d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
-                      ></path>
-                    </svg>
-                  ) : (
-                    tr('confirm')
-                  )}
+                  {tr('confirm')}
                 </button>
               </div>
             </form>
           </div>
         </div>
       )}
-      {tabIndex == 'pickup' && (
+      {tabIndex == 2 && (
         <div className="mt-5">
           {/* <div> */}
           <div className="font-bold text-[18px] text-gray-400">
@@ -707,29 +669,29 @@ const MobLocationTabs: FC<MobLocationTabProps> = ({ setOpen }) => {
                 <div
                   key={point.id}
                   className={`border flex items-start p-3 rounded-[15px] cursor-pointer ${
-                    activePoint && activePoint == point.id
+                    activePoint && activePoint.id == point.id
                       ? 'border-yellow'
                       : 'border-gray-400'
                   }`}
-                  onClick={() => choosePickupPoint(point.id)}
+                  onClick={() => setActivePoint(point.id)}
                 >
                   <div
                     className={`border mr-4 mt-1 rounded-full ${
-                      activePoint && activePoint == point.id
+                      activePoint && activePoint.id == point.id
                         ? 'border-yellow'
                         : 'border-gray-400'
                     }`}
                   >
                     <div
                       className={`h-3 m-1 rounded-full w-3 ${
-                        activePoint && activePoint == point.id
+                        activePoint && activePoint.id == point.id
                           ? 'bg-yellow'
                           : 'bg-gray-400'
                       }`}
                     ></div>
                   </div>
                   <div>
-                    <div className="font-bold">{point.name}</div>
+                    <div className="font-bold">{point.label}</div>
                     <div className="text-gray-400 text-sm">{point.desc}</div>
                   </div>
                 </div>
@@ -744,7 +706,9 @@ const MobLocationTabs: FC<MobLocationTabProps> = ({ setOpen }) => {
                 activePoint ? 'bg-yellow' : 'bg-gray-200'
               } font-bold px-12 rounded-full text-[18px] text-white outline-none focus:outline-none w-full py-2`}
               disabled={!activePoint}
-              onClick={submitPickup}
+              onClick={() => {
+                // console.log('davr')
+              }}
             >
               {tr('confirm')}
             </button>
