@@ -11,7 +11,11 @@ import React, {
   useCallback,
 } from 'react'
 import { Menu, Transition, Disclosure } from '@headlessui/react'
-import { CheckIcon, ChevronDownIcon, ChevronRightIcon } from '@heroicons/react/solid'
+import {
+  CheckIcon,
+  ChevronDownIcon,
+  ChevronRightIcon,
+} from '@heroicons/react/solid'
 import {
   YMaps,
   Map,
@@ -32,12 +36,12 @@ import { toast } from 'react-toastify'
 
 const { publicRuntimeConfig } = getConfig()
 
+let webAddress = publicRuntimeConfig.apiUrl
 interface MobLocationTabProps {
   setOpen: Dispatch<SetStateAction<boolean>>
 }
 
 const MobLocationTabs: FC<MobLocationTabProps> = ({ setOpen }) => {
-  
   const { locationData, setLocationData } = useUI()
   const [tabIndex, setTabIndex] = useState(
     locationData?.deliveryType || 'deliver'
@@ -101,7 +105,7 @@ const MobLocationTabs: FC<MobLocationTabProps> = ({ setOpen }) => {
 
   const [configData, setConfigData] = useState({} as any)
 
-  const { register, handleSubmit, getValues, setValue } = useForm({
+  const { register, handleSubmit, getValues, setValue, watch } = useForm({
     defaultValues: {
       address: locationData?.address || '',
       flat: locationData?.flat || '',
@@ -122,9 +126,7 @@ const MobLocationTabs: FC<MobLocationTabProps> = ({ setOpen }) => {
   }
 
   const loadPickupItems = async () => {
-    const { data } = await axios.get(
-      `${publicRuntimeConfig.apiUrl}/api/terminals/pickup`
-    )
+    const { data } = await axios.get(`${webAddress}/api/terminals/pickup`)
     let res: any[] = []
     data.data.map((item: any) => {
       if (item.latitude) {
@@ -137,9 +139,7 @@ const MobLocationTabs: FC<MobLocationTabProps> = ({ setOpen }) => {
   const fetchConfig = async () => {
     let configData
     if (!sessionStorage.getItem('configData')) {
-      let { data } = await axios.get(
-        `${publicRuntimeConfig.apiUrl}/api/configs/public`
-      )
+      let { data } = await axios.get(`${webAddress}/api/configs/public`)
       configData = data.data
       sessionStorage.setItem('configData', data.data)
     } else {
@@ -211,10 +211,15 @@ const MobLocationTabs: FC<MobLocationTabProps> = ({ setOpen }) => {
       ...locationData,
       location: [selection.coordinates.lat, selection.coordinates.long],
     })
-    setValue('address', selection.title)
+    setValue('address', selection.formatted)
+    selection.addressItems.map((address: any) => {
+      if (address.kind == 'house') {
+        setValue('house', address.name)
+      }
+    })
   }
 
-  const clickOnMap = (event: any) => {
+  const clickOnMap = async (event: any) => {
     const coords = event.get('coords')
     setMapCenter(coords)
     setSelectedCoordinates([
@@ -227,7 +232,23 @@ const MobLocationTabs: FC<MobLocationTabProps> = ({ setOpen }) => {
       },
     ])
     setMapZoom(17)
-    setLocationData({ ...locationData, location: coords })
+    const { data } = await axios.get(
+      `${webAddress}/api/geocode?lat=${coords[0]}&lon=${coords[1]}`
+    )
+    let house = ''
+    data.data.addressItems.map((item: any) => {
+      if (item.kind == 'house') {
+        house = item.name
+      }
+    })
+    setValue('house', house)
+    setValue('address', data.data.formatted)
+    setLocationData({
+      ...locationData,
+      location: coords,
+      address: data.data.formatted,
+      house,
+    })
   }
 
   const mapState = useMemo<MapState>(() => {
@@ -278,7 +299,7 @@ const MobLocationTabs: FC<MobLocationTabProps> = ({ setOpen }) => {
     }
 
     const { data: terminalsData } = await axios.get(
-      `${publicRuntimeConfig.apiUrl}/api/terminals/find_nearest?lat=${locationData.location[0]}&lon=${locationData.location[1]}`
+      `${webAddress}/api/terminals/find_nearest?lat=${locationData.location[0]}&lon=${locationData.location[1]}`
     )
 
     if (terminalsData.data && !terminalsData.data.items.length) {
@@ -441,6 +462,7 @@ const MobLocationTabs: FC<MobLocationTabProps> = ({ setOpen }) => {
                   onChange={(selection) => setSelectedAddress(selection)}
                   itemToString={(item) => (item ? item.formatted : '')}
                   initialInputValue={locationData?.address || ''}
+                  inputValue={watch('address')}
                 >
                   {({
                     getInputProps,
