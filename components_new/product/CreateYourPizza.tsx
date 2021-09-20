@@ -563,7 +563,7 @@ const CreateYourPizza: FC<CreatePizzaProps> = ({ sec, channelName }) => {
                                 )}
                               </div>
                               <div className="px-2 text-center text-xs pb-1">
-                                {mod.name}
+                                {locale == 'uz' ? mod.name_uz : mod.name}
                               </div>
                               <div
                                 className={`${
