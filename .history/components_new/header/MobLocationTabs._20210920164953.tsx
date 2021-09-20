@@ -8,10 +8,9 @@ import React, {
   FC,
   Dispatch,
   SetStateAction,
-  useCallback,
 } from 'react'
 import { Menu, Transition, Disclosure } from '@headlessui/react'
-import { CheckIcon, ChevronDownIcon, ChevronRightIcon } from '@heroicons/react/solid'
+import { ChevronDownIcon, ChevronRightIcon } from '@heroicons/react/solid'
 import {
   YMaps,
   Map,
@@ -23,25 +22,13 @@ import {
 import { useForm } from 'react-hook-form'
 import Image from 'next/image'
 import useTranslation from 'next-translate/useTranslation'
-import getConfig from 'next/config'
-import axios from 'axios'
-import Downshift from 'downshift'
-import debounce from 'lodash.debounce'
-import { useUI } from '@components/ui/context'
-import { toast } from 'react-toastify'
-
-const { publicRuntimeConfig } = getConfig()
 
 interface MobLocationTabProps {
   setOpen: Dispatch<SetStateAction<boolean>>
 }
 
 const MobLocationTabs: FC<MobLocationTabProps> = ({ setOpen }) => {
-  
-  const { locationData, setLocationData } = useUI()
-  const [tabIndex, setTabIndex] = useState(
-    locationData?.deliveryType || 'deliver'
-  )
+  const [tabIndex, setTabIndex] = useState(1)
   const [pickupIndex, setPickupIndex] = useState(1)
   const [cities, setCities] = useState([
     {
@@ -66,121 +53,193 @@ const MobLocationTabs: FC<MobLocationTabProps> = ({ setOpen }) => {
       mapZoom: 13.06,
     },
   ])
-  const [pickupPoints, setPickupPoint] = useState([] as any[])
-
-  const [geoSuggestions, setGeoSuggestions] = useState([])
-  const [isSearchingTerminals, setIsSearchingTerminals] = useState(false)
+  const [pickupPoints, setPickupPoint] = useState([
+    {
+      id: '8fbb73fa-5b54-e46e-016f-39e9c456cf69',
+      label: 'Эко парк',
+      active: false,
+      mapCenter: [41.311801, 69.2937486],
+      desc: `Ц-1 Экопарк
+📱 712051111
+Режим работы:
+10:00 – 22:00
+М. Улугбекский р. Ц-1 Узбекистон овози 49
+Ориентир: Экопарк, школа №64
+🚗 доставка
+🅿️ парковка`,
+      mapZoom: 11.76,
+    },
+    {
+      id: 'b49bc4a2-b9ac-6869-0172-959449754927',
+      label: 'Ойбек',
+      active: false,
+      mapCenter: [41.295713, 69.277302],
+      desc: `Ойбек
+📱 712051111
+Режим работы:
+10:00 – 03:00
+Мирабадский р. Ойбек 49
+🚗 доставка
+🅿️ парковка`,
+      mapZoom: 12.73,
+    },
+    {
+      id: '8fbb73fa-5b54-e46e-016f-39f4c194a71b',
+      label: 'Parus',
+      active: false,
+      mapCenter: [41.2919486, 69.2111247],
+      desc: `ТРЦ Parus
+📱 712051111
+Режим работы:
+10:00 – 22:00
+Чиланзарский р-н, Катартал 60, дом 2
+Ориентир: ТРЦ Parus 4-этаж
+Имеются:
+🚗 доставка
+🏰 детская площадка
+🅿️ парковка`,
+      mapZoom: 13.06,
+    },
+    {
+      id: 'd40b7507-18e0-de80-0176-1021c8785833',
+      label: 'Samarqand Darvoza',
+      active: false,
+      mapCenter: [41.316332, 69.231129],
+      desc: `ТРЦ Samarqand Darvoza
+📱 712051111
+Режим работы:
+10:00 – 22:00
+Шайхантаурский р. Коратош 5А
+🚗 доставка
+🏰 детская площадка
+🅿️ парковка`,
+      mapZoom: 13.06,
+    },
+    {
+      id: '796859c4-0dbb-e58b-0174-5e024e94adf8',
+      label: 'Сергели',
+      active: false,
+      mapCenter: [41.222536, 69.2249],
+      desc: `Сергели
+📱 712051111
+Режим работы:
+10:00 – 22:00
+Сергелийский р. Янги Сергели 11
+🚗 доставка
+🏰 детская площадка
+🅿️ парковка`,
+      mapZoom: 13.06,
+    },
+    {
+      id: '8fbb73fa-5b54-e46e-016f-3c2c544b153e',
+      label: 'Буюк ипак йули',
+      active: false,
+      mapCenter: [41.3272276, 69.3393392],
+      desc: `Буюк ипак йули
+📱 712051111
+Режим работы:
+10:00 – 22:00
+М. Улугбекский р. Буюк ипак йули 154
+🚗 доставка
+🏰 детская площадка
+🅿️ парковка`,
+      mapZoom: 13.06,
+    },
+    {
+      id: '8fbb73fa-5b54-e46e-016f-39c03efeb44d',
+      label: 'O’zbegim',
+      active: false,
+      mapCenter: [40.7863073, 72.346673],
+      desc: `Андижан ТРЦ O’zbegim
+📱 979996060
+Режим работы:
+10:00 – 22:00
+г. Андижан, проспект Чулпон 10
+Ориентир:
+ТРЦ O’zbegim
+🚗 доставка
+🏰 детская площадка
+🅿️ парковка`,
+      mapZoom: 13.06,
+    },
+    {
+      id: '26639a16-7813-3e88-0178-74cefbe829bd',
+      label: 'Compas',
+      active: false,
+      mapCenter: [41.2389984, 69.3286705],
+      desc: ` ТРЦ Compass
+📱 712051111
+Режим работы:
+10:00 – 22:00
+Бектемирский р. Пересечение улицы Фаргона йули и ТКАД
+Ориентир: Мост Куйлюк
+🚗 доставка
+🏰 детская площадка
+🅿️ парковка`,
+      mapZoom: 13.06,
+    },
+    {
+      id: '0ee0d30c-0662-e682-0174-90531d2bc636',
+      label: 'Nukus Asia.uz',
+      active: false,
+      mapCenter: [41.350566, 69.217489],
+      desc: `ТРЦ Nukus Asia.uz
+📱 712051111
+Режим работы:
+10:00 – 22:00
+Алмазарский р. Шифокорлар 8
+Ориентир: Asia.uz Nukus
+🚗 доставка
+🏰 детская площадка
+🅿️парковка`,
+      mapZoom: 13.06,
+    },
+    {
+      id: '8fbb73fa-5b54-e46e-016f-39c9927685e2',
+      label: 'Миллий тикланиш',
+      active: false,
+      mapCenter: [40.764064, 72.355316],
+      desc: `Миллий тикланиш
+📱 979996060
+Режим работы:
+10:00 – 03:00
+г. Андижан, Миллий тикланиш 26
+🚗 доставка
+🅿️ парковка`,
+      mapZoom: 13.06,
+    },
+    {
+      id: '0d562a04-0abe-72bc-0171-1ccd85df7a57',
+      label: 'Самарканд',
+      active: false,
+      mapCenter: [39.644253, 66.9537613],
+      desc: `Самарканд
+📱 977143315
+Режим работы:
+10:00 – 03:00
+г. Самарканд, ул. О. Махмудова
+🚗 доставка
+🅿️ парковка`,
+      mapZoom: 13.06,
+    },
+    {
+      id: '0e1f7fcc-1db0-a410-0173-236144e3b4e4',
+      label: 'Коканд',
+      active: false,
+      mapCenter: [40.537005, 70.93409],
+      desc: `г. Коканд
+📱 907034040
+Режим работы:
+10:00 – 03:00
+г. Коканд, Истиклол 10
+🚗 доставка
+🅿️ парковка`,
+      mapZoom: 13.06,
+    },
+  ])
 
   const activeLabel = cities.find((item) => item.active)?.label
   const activeCity = cities.find((item) => item.active)
-
-  const [selectedCoordinates, setSelectedCoordinates] = useState(
-    locationData && locationData.location
-      ? [
-          {
-            coordinates: {
-              lat: locationData.location[0],
-              long: locationData.location[1],
-            },
-            key: `${locationData.location[0]}${locationData.location[1]}`,
-          },
-        ]
-      : ([] as any)
-  )
-
-  const [mapCenter, setMapCenter] = useState(
-    (locationData?.location || activeCity?.mapCenter) as number[]
-  )
-  const [mapZoom, setMapZoom] = useState(
-    ((locationData?.location ? 17 : 10) || activeCity?.mapZoom) as number
-  )
-
-  const [activePoint, setActivePoint] = useState(
-    (locationData ? locationData.terminal_id : null) as number | null
-  )
-
-  const [configData, setConfigData] = useState({} as any)
-
-  const { register, handleSubmit, getValues, setValue } = useForm({
-    defaultValues: {
-      address: locationData?.address || '',
-      flat: locationData?.flat || '',
-      house: locationData?.house || '',
-      entrance: locationData?.entrance || '',
-      door_code: locationData?.door_code || '',
-    },
-  })
-
-  const changeTabIndex = async (index: string) => {
-    setLocationData({ ...locationData, deliveryType: index })
-
-    if (index == 'pickup') {
-      await loadPickupItems()
-    }
-
-    setTabIndex(index)
-  }
-
-  const loadPickupItems = async () => {
-    const { data } = await axios.get(
-      `${publicRuntimeConfig.apiUrl}/api/terminals/pickup`
-    )
-    let res: any[] = []
-    data.data.map((item: any) => {
-      if (item.latitude) {
-        res.push(item)
-      }
-    })
-    setPickupPoint(res)
-  }
-
-  const fetchConfig = async () => {
-    let configData
-    if (!sessionStorage.getItem('configData')) {
-      let { data } = await axios.get(
-        `${publicRuntimeConfig.apiUrl}/api/configs/public`
-      )
-      configData = data.data
-      sessionStorage.setItem('configData', data.data)
-    } else {
-      configData = sessionStorage.getItem('configData')
-    }
-
-    try {
-      configData = Buffer.from(configData, 'base64')
-      configData = configData.toString('ascii')
-      configData = JSON.parse(configData)
-      setConfigData(configData)
-    } catch (e) {}
-  }
-
-  useEffect(() => {
-    fetchConfig()
-    if (locationData && locationData.deliveryType == 'pickup') {
-      loadPickupItems()
-    }
-    return
-  }, [locationData])
-
-  const addressInputChangeHandler = async (event: any) => {
-    if (!configData) {
-      return []
-    }
-
-    if (!configData.yandexGeoKey) {
-      return []
-    }
-    const { data: getCodeData } = await axios.get(
-      `/api/geocode?text=${encodeURI(event.target.value)}`
-    )
-
-    setGeoSuggestions(getCodeData)
-  }
-
-  const debouncedAddressInputChangeHandler = useCallback(
-    debounce(addressInputChangeHandler, 300),
-    [configData]
-  )
 
   const setActive = (id: string) => {
     setCities(
@@ -193,136 +252,37 @@ const MobLocationTabs: FC<MobLocationTabProps> = ({ setOpen }) => {
         return item
       })
     )
-
-    const activeCity = cities.find((item) => item.id == id)
-    if (activeCity) setMapCenter(activeCity.mapCenter)
   }
 
-  const setSelectedAddress = (selection: any) => {
-    setMapCenter([selection.coordinates.lat, selection.coordinates.long])
-    setSelectedCoordinates([
-      {
-        ...selection,
-        key: `${selection.coordinates.lat}${selection.coordinates.long}`,
-      },
-    ])
-    setMapZoom(17)
-    setLocationData({
-      ...locationData,
-      location: [selection.coordinates.lat, selection.coordinates.long],
-    })
-    setValue('address', selection.title)
+  const setActivePoint = (id: string) => {
+    setPickupPoint(
+      pickupPoints.map((item) => {
+        if (item.id == id) {
+          item.active = true
+        } else {
+          item.active = false
+        }
+        return item
+      })
+    )
   }
-
-  const clickOnMap = (event: any) => {
-    const coords = event.get('coords')
-    setMapCenter(coords)
-    setSelectedCoordinates([
-      {
-        key: `${coords[0]}${coords[1]}`,
-        coordinates: {
-          lat: coords[0],
-          long: coords[1],
-        },
-      },
-    ])
-    setMapZoom(17)
-    setLocationData({ ...locationData, location: coords })
-  }
+  const activePoint = pickupPoints.find((item) => item.active)
 
   const mapState = useMemo<MapState>(() => {
     const baseState: MapStateBase = {
       controls: ['zoomControl', 'fullscreenControl', 'geolocationControl'],
     }
     const mapStateCenter: MapStateCenter = {
-      center: mapCenter || [],
-      zoom: mapZoom || 10,
+      center: activeCity?.mapCenter || [],
+      zoom: activeCity?.mapZoom || 10,
     }
 
     const res: MapState = Object.assign({}, baseState, mapStateCenter)
     return res
-  }, [mapCenter, mapZoom])
+  }, [activeCity?.mapCenter, activeCity?.mapZoom])
 
-  const onSubmit = (data: Object) => {
-    saveDeliveryData(data, null)
-  }
-
-  const choosePickupPoint = (pointId: number) => {
-    setActivePoint(pointId)
-    let terminalData = pickupPoints.find((pickup: any) => pickup.id == pointId)
-    setLocationData({
-      ...locationData,
-      terminal_id: pointId,
-      terminalData,
-    })
-  }
-
-  const saveDeliveryData = async (
-    data: Object = {},
-    event: React.MouseEvent | null
-  ) => {
-    event?.preventDefault()
-    event?.stopPropagation()
-    setIsSearchingTerminals(true)
-    if (!Object.keys(data).length) {
-      data = getValues()
-    }
-
-    if (!locationData || !locationData.location) {
-      toast.warn('Не указан адрес или точка доставки', {
-        position: toast.POSITION.BOTTOM_RIGHT,
-        hideProgressBar: true,
-      })
-      setIsSearchingTerminals(false)
-      return
-    }
-
-    const { data: terminalsData } = await axios.get(
-      `${publicRuntimeConfig.apiUrl}/api/terminals/find_nearest?lat=${locationData.location[0]}&lon=${locationData.location[1]}`
-    )
-
-    if (terminalsData.data && !terminalsData.data.items.length) {
-      toast.warn(
-        terminalsData.data.message
-          ? terminalsData.data.message
-          : 'Ресторан не найден',
-        {
-          position: toast.POSITION.BOTTOM_RIGHT,
-          hideProgressBar: true,
-        }
-      )
-      setIsSearchingTerminals(false)
-      return
-    }
-
-    setIsSearchingTerminals(false)
-    if (terminalsData.data) {
-      setLocationData({
-        ...locationData,
-        ...data,
-        location: [
-          terminalsData.data.items[0].latitude,
-          terminalsData.data.items[0].longitude,
-        ],
-        terminal_id: terminalsData.data.items[0].id,
-        terminalData: terminalsData.data.items[0],
-      })
-      setOpen(false)
-    }
-  }
-
-  const submitPickup = () => {
-    if (!activePoint) {
-      toast.warn(`${tr('pickup_point_not_selected')}`, {
-        position: toast.POSITION.BOTTOM_RIGHT,
-        hideProgressBar: true,
-      })
-      return
-    }
-
-    setOpen(false)
-  }
-
+  const { register, handleSubmit } = useForm()
+  const onSubmit = (data: Object) => console.log(JSON.stringify(data))
   const { t: tr } = useTranslation('common')
 
   return (
@@ -336,22 +296,22 @@ const MobLocationTabs: FC<MobLocationTabProps> = ({ setOpen }) => {
       <div className="bg-gray-100 flex rounded-full w-full h-11 items-center">
         <button
           className={`${
-            tabIndex == 'deliver' ? 'bg-yellow text-white' : ' text-gray-400'
+            tabIndex == 1 ? 'bg-yellow text-white' : ' text-gray-400'
           } flex-1 font-bold  text-[16px] rounded-full outline-none focus:outline-none  h-11`}
-          onClick={() => changeTabIndex('deliver')}
+          onClick={() => setTabIndex(1)}
         >
           {tr('delivery')}
         </button>
         <button
           className={`${
-            tabIndex == 'pickup' ? 'bg-yellow text-white' : ' text-gray-400'
+            tabIndex == 2 ? 'bg-yellow text-white' : ' text-gray-400'
           } flex-1 font-bold  text-[16px] rounded-full outline-none focus:outline-none  h-11`}
-          onClick={() => changeTabIndex('pickup')}
+          onClick={() => setTabIndex(2)}
         >
           {tr('pickup')}
         </button>
       </div>
-      {tabIndex == 'deliver' && (
+      {tabIndex == 1 && (
         <div className="mt-5">
           <div className="flex justify-between">
             <div className="text-gray-400 font-bold text-[18px]">
@@ -404,32 +364,12 @@ const MobLocationTabs: FC<MobLocationTabProps> = ({ setOpen }) => {
                   state={mapState}
                   width="100%"
                   height="270px"
-                  onClick={clickOnMap}
                   modules={[
                     'control.ZoomControl',
                     'control.FullscreenControl',
                     'control.GeolocationControl',
                   ]}
-                >
-                  {selectedCoordinates.map((item: any, index: number) => (
-                    <Placemark
-                      modules={['geoObject.addon.balloon']}
-                      defaultGeometry={[
-                        item?.coordinates?.lat,
-                        item?.coordinates?.long,
-                      ]}
-                      geomerty={[
-                        item?.coordinates?.lat,
-                        item?.coordinates?.long,
-                      ]}
-                      key={item.key}
-                      defaultOptions={{
-                        iconLayout: 'default#image',
-                        iconImageHref: '/map_placemark.png',
-                      }}
-                    />
-                  ))}
-                </Map>
+                />
               </div>
             </YMaps>
           </div>
@@ -437,75 +377,14 @@ const MobLocationTabs: FC<MobLocationTabProps> = ({ setOpen }) => {
             <form onSubmit={handleSubmit(onSubmit)}>
               <div className="font-bold text-[18px]">{tr('address')}</div>
               <div className="mt-3 space-y-6">
-                <Downshift
-                  onChange={(selection) => setSelectedAddress(selection)}
-                  itemToString={(item) => (item ? item.formatted : '')}
-                  initialInputValue={locationData?.address || ''}
-                >
-                  {({
-                    getInputProps,
-                    getItemProps,
-                    getLabelProps,
-                    getMenuProps,
-                    isOpen,
-                    inputValue,
-                    highlightedIndex,
-                    selectedItem,
-                    getRootProps,
-                  }) => (
-                    <>
-                      <div
-                        className="w-full"
-                        {...getRootProps(undefined, { suppressRefError: true })}
-                      >
-                        <input
-                          type="text"
-                          {...register('address')}
-                          {...getInputProps({
-                            onChange: debouncedAddressInputChangeHandler,
-                          })}
-                          placeholder={tr('address')}
-                          className="bg-gray-100 focus:outline-none outline-none px-8 py-2 rounded-full w-full"
-                        />
-                        <ul
-                          {...getMenuProps()}
-                          className="absolute w-full z-[1000] rounded-[15px] shadow-lg"
-                        >
-                          {isOpen
-                            ? geoSuggestions.map((item: any, index: number) => (
-                                <li
-                                  {...getItemProps({
-                                    key: index,
-                                    index,
-                                    item,
-                                    className: `py-2 px-4 flex items-center ${
-                                      highlightedIndex == index
-                                        ? 'bg-gray-100'
-                                        : 'bg-white'
-                                    }`,
-                                  })}
-                                >
-                                  <CheckIcon
-                                    className={`w-5 text-yellow font-bold mr-2 ${
-                                      highlightedIndex == index
-                                        ? ''
-                                        : 'invisible'
-                                    }`}
-                                  />
-                                  <div>
-                                    <div>{item.title}</div>
-                                    <div className="text-sm">
-                                      {item.description}
-                                    </div>
-                                  </div>
-                                </li>
-                              ))
-                            : null}
-                        </ul>
-                      </div>
-                    </>
-                  )}
-                </Downshift>
+                <div className="w-full">
+                  <input
+                    type="text"
+                    {...register('address')}
+                    placeholder={tr('address')}
+                    className="bg-gray-100 px-8 py-2 rounded-full w-full outline-none focus:outline-none "
+                  />
+                </div>
                 <div className="flex justify-between">
                   <input
                     type="text"
@@ -573,43 +452,16 @@ const MobLocationTabs: FC<MobLocationTabProps> = ({ setOpen }) => {
               <div className="flex mt-12">
                 <button
                   type="submit"
-                  className="bg-yellow font-bold px-12 py-3 rounded-full text-[18px] text-white outline-none focus:outline-none"
-                  disabled={isSearchingTerminals}
-                  onClick={(event: React.MouseEvent) =>
-                    saveDeliveryData(undefined, event)
-                  }
+                  className="bg-yellow font-bold px-12 py-2 rounded-full text-[18px] text-white outline-none focus:outline-none w-full"
                 >
-                  {isSearchingTerminals ? (
-                    <svg
-                      className="animate-spin h-5 mx-auto text-center text-white w-5"
-                      xmlns="http://www.w3.org/2000/svg"
-                      fill="none"
-                      viewBox="0 0 24 24"
-                    >
-                      <circle
-                        className="opacity-25"
-                        cx="12"
-                        cy="12"
-                        r="10"
-                        stroke="currentColor"
-                        strokeWidth="4"
-                      ></circle>
-                      <path
-                        className="opacity-75"
-                        fill="currentColor"
-                        d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
-                      ></path>
-                    </svg>
-                  ) : (
-                    tr('confirm')
-                  )}
+                  {tr('confirm')}
                 </button>
               </div>
             </form>
           </div>
         </div>
       )}
-      {tabIndex == 'pickup' && (
+      {tabIndex == 2 && (
         <div className="mt-5">
           {/* <div> */}
           <div className="font-bold text-[18px] text-gray-400">
@@ -707,29 +559,29 @@ const MobLocationTabs: FC<MobLocationTabProps> = ({ setOpen }) => {
                 <div
                   key={point.id}
                   className={`border flex items-start p-3 rounded-[15px] cursor-pointer ${
-                    activePoint && activePoint == point.id
+                    activePoint && activePoint.id == point.id
                       ? 'border-yellow'
                       : 'border-gray-400'
                   }`}
-                  onClick={() => choosePickupPoint(point.id)}
+                  onClick={() => setActivePoint(point.id)}
                 >
                   <div
                     className={`border mr-4 mt-1 rounded-full ${
-                      activePoint && activePoint == point.id
+                      activePoint && activePoint.id == point.id
                         ? 'border-yellow'
                         : 'border-gray-400'
                     }`}
                   >
                     <div
                       className={`h-3 m-1 rounded-full w-3 ${
-                        activePoint && activePoint == point.id
+                        activePoint && activePoint.id == point.id
                           ? 'bg-yellow'
                           : 'bg-gray-400'
                       }`}
                     ></div>
                   </div>
                   <div>
-                    <div className="font-bold">{point.name}</div>
+                    <div className="font-bold">{point.label}</div>
                     <div className="text-gray-400 text-sm">{point.desc}</div>
                   </div>
                 </div>
@@ -744,7 +596,9 @@ const MobLocationTabs: FC<MobLocationTabProps> = ({ setOpen }) => {
                 activePoint ? 'bg-yellow' : 'bg-gray-200'
               } font-bold px-12 rounded-full text-[18px] text-white outline-none focus:outline-none w-full py-2`}
               disabled={!activePoint}
-              onClick={submitPickup}
+              onClick={() => {
+                // console.log('davr')
+              }}
             >
               {tr('confirm')}
             </button>

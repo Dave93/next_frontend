@@ -39,6 +39,8 @@ import Cookies from 'js-cookie'
 import { useRouter } from 'next/router'
 import OtpInput from 'react-otp-input'
 import styles from './Orders.module.css'
+import { DateTime } from 'luxon'
+import Input from 'react-phone-number-input/input'
 
 const { publicRuntimeConfig } = getConfig()
 let webAddress = publicRuntimeConfig.apiUrl
@@ -75,20 +77,45 @@ const deliveryTimeOptions = [] as SelectItem[]
 const zeroPad = (num: number, places: number) =>
   String(num).padStart(places, '0')
 
-Array.from(Array(24).keys()).map((item: number) => {
-  let val = `${zeroPad(item, 2)}:${zeroPad(0, 2)}`
-  deliveryTimeOptions.push({
-    value: val,
-    label: val,
+let startTime = DateTime.now()
+startTime = startTime.plus({ minutes: 40 })
+startTime = startTime.set({
+  minute: Math.ceil(startTime.minute / 10) * 10,
+})
+
+while (startTime.hour < 23) {
+  let val = `${zeroPad(startTime.hour, 2)}:${zeroPad(startTime.minute, 2)}`
+  startTime = startTime.plus({ minutes: 20 })
+  startTime = startTime.set({
+    minute: Math.ceil(startTime.minute / 10) * 10,
   })
-  val = `${zeroPad(item, 2)}:${zeroPad(30, 2)}`
+
+  val += ` - ${zeroPad(startTime.hour, 2)}:${zeroPad(startTime.minute, 2)}`
   deliveryTimeOptions.push({
     value: val,
     label: val,
   })
 
-  return item
-})
+  startTime = startTime.plus({ minutes: 40 })
+  startTime = startTime.set({
+    minute: Math.ceil(startTime.minute / 10) * 10,
+  })
+}
+
+// Array.from(Array(24).keys()).map((item: number) => {
+//   let val = `${zeroPad(item, 2)}:${zeroPad(0, 2)}`
+//   deliveryTimeOptions.push({
+//     value: val,
+//     label: val,
+//   })
+//   val = `${zeroPad(item, 2)}:${zeroPad(30, 2)}`
+//   deliveryTimeOptions.push({
+//     value: val,
+//     label: val,
+//   })
+
+//   return item
+// })
 
 const paymentTypes = ['payme', 'click', 'oson']
 
@@ -670,14 +697,34 @@ const Orders: FC<OrdersProps> = ({ channelName }: { channelName: any }) => {
                 {tr('personal_phone')}
               </label>
               <div className="relative">
-                <input
+                {/* <input
                   type="text"
                   {...register('phone', {
                     required: true,
                     pattern: /^\+998\d\d\d\d\d\d\d\d\d$/i,
                   })}
                   className="focus:outline-none outline-none px-6 py-3 rounded-full text-sm w-full bg-gray-100 text-gray-400 "
+                /> */}
+                <Controller
+                  render={({ field: { onChange, value } }) => (
+                    <Input
+                      defaultCountry="UZ"
+                      country="UZ"
+                      international
+                      withCountryCallingCode
+                      value={value}
+                      className="focus:outline-none outline-none px-6 py-3 rounded-full text-sm w-full bg-gray-100 text-gray-400"
+                      onChange={(e: any) => onChange(e)}
+                    />
+                  )}
+                  rules={{
+                    required: true,
+                  }}
+                  key="phone"
+                  name="phone"
+                  control={control}
                 />
+
                 {authPhone && (
                   <button
                     className="absolute focus:outline-none inset-y-0 outline-none right-4 text-gray-400"
@@ -1128,7 +1175,7 @@ const Orders: FC<OrdersProps> = ({ channelName }: { channelName: any }) => {
         </div>
         {deliveryActive == 'later' && (
           <div className="mt-8 flex">
-            <Controller
+            {/* <Controller
               render={({ field: { onChange } }) => (
                 <Select
                   items={dayOptions}
@@ -1142,7 +1189,7 @@ const Orders: FC<OrdersProps> = ({ channelName }: { channelName: any }) => {
               key="delivery_day"
               name="delivery_day"
               control={control}
-            />
+            /> */}
             <Controller
               render={({ field: { onChange } }) => (
                 <Select
@@ -1208,6 +1255,7 @@ const Orders: FC<OrdersProps> = ({ channelName }: { channelName: any }) => {
           <input
             type="number"
             {...register('change', { required: openTab === 1 })}
+            min="10000"
             className="borde focus:outline-none outline-none px-6 py-3 rounded-full text-sm md:w-80 w-full bg-gray-100 text-gray-400 mt-8"
             placeholder={tr('change')}
           />
