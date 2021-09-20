@@ -308,9 +308,7 @@ const Orders: FC<OrdersProps> = ({ channelName }: { channelName: any }) => {
   const fetchConfig = async () => {
     let configData
     if (!sessionStorage.getItem('configData')) {
-      let { data } = await axios.get(
-        `${publicRuntimeConfig.apiUrl}/api/configs/public`
-      )
+      let { data } = await axios.get(`${webAddress}/api/configs/public`)
       configData = data.data
       sessionStorage.setItem('configData', data.data)
     } else {
@@ -392,7 +390,7 @@ const Orders: FC<OrdersProps> = ({ channelName }: { channelName: any }) => {
     })
   }
 
-  const clickOnMap = (event: any) => {
+  const clickOnMap = async (event: any) => {
     const coords = event.get('coords')
     setMapCenter(coords)
     // console.log(window.ymaps)
@@ -406,7 +404,23 @@ const Orders: FC<OrdersProps> = ({ channelName }: { channelName: any }) => {
       },
     ])
     setMapZoom(17)
-    setLocationData({ ...locationData, location: coords })
+    const { data } = await axios.get(
+      `${webAddress}/api/geocode?lat=${coords[0]}&lon=${coords[1]}`
+    )
+    let house = ''
+    data.data.addressItems.map((item: any) => {
+      if (item.kind == 'house') {
+        house = item.name
+      }
+    })
+    setValue('house', house)
+    setValue('address', data.data.formatted)
+    setLocationData({
+      ...locationData,
+      location: coords,
+      address: data.data.formatted,
+      house,
+    })
     searchTerminal({ ...locationData, location: coords })
   }
 
@@ -472,9 +486,7 @@ const Orders: FC<OrdersProps> = ({ channelName }: { channelName: any }) => {
   }
 
   const loadPickupItems = async () => {
-    const { data } = await axios.get(
-      `${publicRuntimeConfig.apiUrl}/api/terminals/pickup`
-    )
+    const { data } = await axios.get(`${webAddress}/api/terminals/pickup`)
     let res: any[] = []
     data.data.map((item: any) => {
       if (item.latitude) {
@@ -509,7 +521,7 @@ const Orders: FC<OrdersProps> = ({ channelName }: { channelName: any }) => {
     }
 
     const { data: terminalsData } = await axios.get(
-      `${publicRuntimeConfig.apiUrl}/api/terminals/find_nearest?lat=${locationData.location[0]}&lon=${locationData.location[1]}`
+      `${webAddress}/api/terminals/find_nearest?lat=${locationData.location[0]}&lon=${locationData.location[1]}`
     )
 
     if (terminalsData.data && !terminalsData.data.items.length) {
@@ -879,6 +891,7 @@ const Orders: FC<OrdersProps> = ({ channelName }: { channelName: any }) => {
                       onChange={(selection) => setSelectedAddress(selection)}
                       itemToString={(item) => (item ? item.formatted : '')}
                       initialInputValue={locationData?.address || ''}
+                      inputValue={watch('address')}
                     >
                       {({
                         getInputProps,
