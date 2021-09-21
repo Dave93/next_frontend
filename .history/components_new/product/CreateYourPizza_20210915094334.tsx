@@ -19,7 +19,6 @@ import Cookies from 'js-cookie'
 import { useCart } from '@framework/cart'
 import useTranslation from 'next-translate/useTranslation'
 
-
 type CreatePizzaProps = {
   sec: any
   channelName: string
@@ -395,7 +394,7 @@ const CreateYourPizza: FC<CreatePizzaProps> = ({ sec, channelName }) => {
                               pattern: '# !',
                               separator: ' ',
                               decimal: '.',
-                              symbol: `${locale == 'uz' ? "so'm" : 'сўм'}`,
+                              symbol: `${locale == 'uz' ? "so'm" : 'сум'}`,
                               precision: 0,
                             }).format()}
                           </div>
@@ -579,7 +578,7 @@ const CreateYourPizza: FC<CreatePizzaProps> = ({ sec, channelName }) => {
                                   pattern: '# !',
                                   separator: ' ',
                                   decimal: '.',
-                                  symbol: `${locale == 'uz' ? "so'm" : 'сўм'}`,
+                                  symbol: `${locale == 'uz' ? "so'm" : 'сум'}`,
                                   precision: 0,
                                 }).format()}
                               </div>
@@ -629,7 +628,7 @@ const CreateYourPizza: FC<CreatePizzaProps> = ({ sec, channelName }) => {
                               pattern: '# !',
                               separator: ' ',
                               decimal: '.',
-                              symbol: `${locale == 'uz' ? "so'm" : 'сўм'}`,
+                              symbol: `${locale == 'uz' ? "so'm" : 'сум'}`,
                               precision: 0,
                             }).format()}
                           </span>
@@ -683,7 +682,7 @@ const CreateYourPizza: FC<CreatePizzaProps> = ({ sec, channelName }) => {
                               pattern: '# !',
                               separator: ' ',
                               decimal: '.',
-                              symbol: `${locale == 'uz' ? "so'm" : 'сўм'}`,
+                              symbol: `${locale == 'uz' ? "so'm" : 'сум'}`,
                               precision: 0,
                             }).format()}
                           </div>

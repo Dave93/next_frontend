@@ -72,6 +72,7 @@ const MobLocationTabs: FC<MobLocationTabProps> = ({ setOpen }) => {
   ])
   const [pickupPoints, setPickupPoint] = useState([] as any[])
 
+  const downshiftControl = useRef<any>(null)
   const [geoSuggestions, setGeoSuggestions] = useState([])
   const [isSearchingTerminals, setIsSearchingTerminals] = useState(false)
 
@@ -214,6 +215,9 @@ const MobLocationTabs: FC<MobLocationTabProps> = ({ setOpen }) => {
       location: [selection.coordinates.lat, selection.coordinates.long],
     })
     setValue('address', selection.formatted)
+    downshiftControl?.current?.reset({
+      inputValue: selection.formatted,
+    })
     selection.addressItems.map((address: any) => {
       if (address.kind == 'house') {
         setValue('house', address.name)
@@ -245,6 +249,9 @@ const MobLocationTabs: FC<MobLocationTabProps> = ({ setOpen }) => {
     })
     setValue('house', house)
     setValue('address', data.data.formatted)
+    downshiftControl?.current?.reset({
+      inputValue: data.data.formatted,
+    })
     setLocationData({
       ...locationData,
       location: coords,
@@ -462,6 +469,7 @@ const MobLocationTabs: FC<MobLocationTabProps> = ({ setOpen }) => {
               <div className="mt-3 space-y-6">
                 <Downshift
                   onChange={(selection) => setSelectedAddress(selection)}
+                  ref={downshiftControl}
                   itemToString={(item) => (item ? item.formatted : '')}
                   initialInputValue={locationData?.address || ''}
                   inputValue={watch('address')}

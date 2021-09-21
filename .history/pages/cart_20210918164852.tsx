@@ -259,20 +259,22 @@ export default function Cart() {
                         height="70"
                       />
                       <div className="ml-7 space-y-2">
-                        <div className="text-xl font-bold"><div className="font-bold text-sm flex-grow mx-1">
-                      {lineItem.child && lineItem.child.length
-                        ? `${
-                            lineItem?.variant?.product?.attribute_data?.name[
-                              channelName
-                            ][locale || 'ru']
-                          } + ${
-                            lineItem?.child[0].variant?.product?.attribute_data
-                              ?.name[channelName][locale || 'ru']
-                          }`
-                        : lineItem?.variant?.product?.attribute_data?.name[
-                            channelName
-                          ][locale || 'ru']}
-                    </div></div>
+                        <div className="text-xl font-bold">
+                          <div className="font-bold text-sm flex-grow mx-1">
+                            {lineItem.child && lineItem.child.length
+                              ? `${
+                                  lineItem?.variant?.product?.attribute_data
+                                    ?.name[channelName][locale || 'ru']
+                                } + ${
+                                  lineItem?.child[0].variant?.product
+                                    ?.attribute_data?.name[channelName][
+                                    locale || 'ru'
+                                  ]
+                                }`
+                              : lineItem?.variant?.product?.attribute_data
+                                  ?.name[channelName][locale || 'ru']}
+                          </div>
+                        </div>
                         <div className="text-xs text-gray-400">
                           Средняя 32 см, Традиционное тесто
                         </div>
@@ -294,7 +296,7 @@ export default function Cart() {
                           />
                         </div>
                       </div>
-                      <div>36 000 сўм</div>
+                      <div>36 000 сум</div>
                       <XIcon
                         className="cursor-pointer h-4 text-black w-4"
                         onClick={() => ''}

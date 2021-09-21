@@ -1049,7 +1049,7 @@ const OrderId: FC = () => {
               Средняя 32 см, Традиционное тесто
             </div>
           </div>
-          <div className="text-xl">36 000 сўм</div>
+          <div className="text-xl">36 000 сум</div>
         </div>
         <div className="flex justify-between items-center border-b pb-2">
           <div>
@@ -1058,7 +1058,7 @@ const OrderId: FC = () => {
               Средняя 32 см, Традиционное тесто
             </div>
           </div>
-          <div className="text-xl">36 000 сўм</div>
+          <div className="text-xl">36 000 сум</div>
         </div>
         <div className="flex justify-between items-center border-b pb-2">
           <div>
@@ -1067,7 +1067,7 @@ const OrderId: FC = () => {
               Средняя 32 см, Традиционное тесто
             </div>
           </div>
-          <div className="text-xl">36 000 сўм</div>
+          <div className="text-xl">36 000 сум</div>
         </div>
         <div className="flex justify-between items-center mt-8">
           <div>

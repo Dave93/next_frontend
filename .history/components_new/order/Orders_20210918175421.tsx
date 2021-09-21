@@ -456,7 +456,7 @@ const Orders: FC<OrdersProps> = ({ channelName }: { channelName: any }) => {
 
   const choosePickupPoint = (pointId: number) => {
     setActivePoint(pointId)
-    let terminalData = pickupPoints.find((pickup: any) => pickup.id == pointId);
+    let terminalData = pickupPoints.find((pickup: any) => pickup.id == pointId)
     setLocationData({
       ...locationData,
       terminal_id: pointId,
@@ -1514,7 +1514,7 @@ const Orders: FC<OrdersProps> = ({ channelName }: { channelName: any }) => {
                         pattern: '# !',
                         separator: ' ',
                         decimal: '.',
-                        symbol: `${locale == 'uz' ? "so'm" : 'сўм'}`,
+                        symbol: `${locale == 'uz' ? "so'm" : 'сум'}`,
                         precision: 0,
                       }
                     ).format()
@@ -1522,7 +1522,7 @@ const Orders: FC<OrdersProps> = ({ channelName }: { channelName: any }) => {
                       pattern: '# !',
                       separator: ' ',
                       decimal: '.',
-                      symbol: `${locale == 'uz' ? "so'm" : 'сўм'}`,
+                      symbol: `${locale == 'uz' ? "so'm" : 'сум'}`,
                       precision: 0,
                     }).format()}
               </div>
@@ -1540,7 +1540,7 @@ const Orders: FC<OrdersProps> = ({ channelName }: { channelName: any }) => {
                 pattern: '# !',
                 separator: ' ',
                 decimal: '.',
-                symbol: `${locale == 'uz' ? "so'm" : 'сўм'}`,
+                symbol: `${locale == 'uz' ? "so'm" : 'сум'}`,
                 precision: 0,
               }).format()}
             </div>
@@ -1800,8 +1800,12 @@ const Orders: FC<OrdersProps> = ({ channelName }: { channelName: any }) => {
           </Dialog>
         </Transition>
         <div className="md:flex justify-between mt-8 space-y-2 md:space-y-0">
-          <button className="md:text-xl text-gray-400 bg-gray-200 flex h-12 items-center justify-between px-12 rounded-full md:w-80 w-full"
-            onClick={(e) => { e.preventDefault(); router.push('/cart/')}}
+          <button
+            className="md:text-xl text-gray-400 bg-gray-200 flex h-12 items-center justify-between px-12 rounded-full md:w-80 w-full"
+            onClick={(e) => {
+              e.preventDefault()
+              router.push('/cart/')
+            }}
           >
             <img src="/left.png" /> {tr('back_to_basket')}
           </button>

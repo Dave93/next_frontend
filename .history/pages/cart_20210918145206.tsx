@@ -70,7 +70,7 @@ export default function Cart() {
               <div>1</div>
               <div>+</div>
             </div>
-            <div>36 000 сўм</div>
+            <div>36 000 сум</div>
             <div>X</div>
           </div>
         </div>
@@ -90,7 +90,7 @@ export default function Cart() {
               <div>1</div>
               <div>+</div>
             </div>
-            <div>36 000 сўм</div>
+            <div>36 000 сум</div>
             <div>X</div>
           </div>
         </div>
@@ -110,7 +110,7 @@ export default function Cart() {
               <div>1</div>
               <div>+</div>
             </div>
-            <div>36 000 сўм</div>
+            <div>36 000 сум</div>
             <div>X</div>
           </div>
         </div>

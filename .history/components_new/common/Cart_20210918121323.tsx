@@ -1,7 +1,7 @@
-import { memo } from "react"
+import { memo } from 'react'
 
 export default function Cart() {
-    return (
+  return (
     <div className="mt-2">
       <div className="border border-yellow px-5 py-7 rounded-[15px] relative">
         {isCartLoading && (
@@ -151,7 +151,7 @@ export default function Cart() {
                               pattern: '# !',
                               separator: ' ',
                               decimal: '.',
-                              symbol: 'сўм',
+                              symbol: 'сум',
                               precision: 0,
                             }
                           ).format()
@@ -159,7 +159,7 @@ export default function Cart() {
                             pattern: '# !',
                             separator: ' ',
                             decimal: '.',
-                            symbol: 'сўм',
+                            symbol: 'сум',
                             precision: 0,
                           }).format()}
                     </div>
@@ -178,7 +178,7 @@ export default function Cart() {
                 pattern: '# !',
                 separator: ' ',
                 decimal: '.',
-                symbol: 'сўм',
+                symbol: 'сум',
                 precision: 0,
               }).format()}
             </div>

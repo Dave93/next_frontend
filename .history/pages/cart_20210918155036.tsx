@@ -83,7 +83,7 @@ export default function Cart() {
                   />
                 </div>
               </div>
-              <div>36 000 сўм</div>
+              <div>36 000 сум</div>
               <XIcon
                 className="cursor-pointer h-4 text-black w-4"
                 onClick={() => ''}
@@ -116,7 +116,7 @@ export default function Cart() {
                   />
                 </div>
               </div>
-              <div>36 000 сўм</div>
+              <div>36 000 сум</div>
               <XIcon
                 className="cursor-pointer h-4 text-black w-4"
                 onClick={() => ''}
@@ -149,7 +149,7 @@ export default function Cart() {
                   />
                 </div>
               </div>
-              <div>36 000 сўм</div>
+              <div>36 000 сум</div>
               <XIcon
                 className="cursor-pointer h-4 text-black w-4"
                 onClick={() => ''}
@@ -185,9 +185,7 @@ export default function Cart() {
           <button
             className={`md:text-xl text-white bg-yellow flex h-12 items-center justify-evenly rounded-full md:w-80 w-full`}
           >
-              
-                {tr('pay')} <img src="/right.png" />
-            
+            {tr('pay')} <img src="/right.png" />
           </button>
         </div>
       </div>

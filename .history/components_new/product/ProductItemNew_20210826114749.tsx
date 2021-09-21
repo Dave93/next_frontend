@@ -325,7 +325,7 @@ const ProductItemNew: FC<ProductItem> = ({ product, channelName }) => {
                       pattern: '# !',
                       separator: ' ',
                       decimal: '.',
-                      symbol: 'сўм',
+                      symbol: 'сум',
                       precision: 0,
                     }).format()}
                   </div>
@@ -449,7 +449,7 @@ const ProductItemNew: FC<ProductItem> = ({ product, channelName }) => {
                   pattern: '# !',
                   separator: ' ',
                   decimal: '.',
-                  symbol: 'сўм',
+                  symbol: 'сум',
                   precision: 0,
                 }).format()}
               </span>

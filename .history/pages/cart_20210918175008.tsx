@@ -316,7 +316,7 @@ export default function Cart() {
                                 pattern: '# !',
                                 separator: ' ',
                                 decimal: '.',
-                                symbol: `${locale == 'uz' ? "so'm" : 'сўм'}`,
+                                symbol: `${locale == 'uz' ? "so'm" : 'сум'}`,
                                 precision: 0,
                               }
                             ).format()
@@ -324,7 +324,7 @@ export default function Cart() {
                               pattern: '# !',
                               separator: ' ',
                               decimal: '.',
-                              symbol: `${locale == 'uz' ? "so'm" : 'сўм'}`,
+                              symbol: `${locale == 'uz' ? "so'm" : 'сум'}`,
                               precision: 0,
                             }).format()}
                       </div>
@@ -361,7 +361,7 @@ export default function Cart() {
                     pattern: '# !',
                     separator: ' ',
                     decimal: '.',
-                    symbol: `${locale == 'uz' ? "so'm" : 'сўм'}`,
+                    symbol: `${locale == 'uz' ? "so'm" : 'сум'}`,
                     precision: 0,
                   }).format()}
                 </div>

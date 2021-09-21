@@ -493,7 +493,9 @@ const CreateYourPizza: FC<CreatePizzaProps> = ({ sec, channelName }) => {
                                     pattern: '# !',
                                     separator: ' ',
                                     decimal: '.',
-                                    symbol: 'сўм',
+                                    symbol: `${
+                                      locale == 'uz' ? "so'm" : 'сум'
+                                    }`,
                                     precision: 0,
                                   }).format()}
                                 </div>
@@ -545,7 +547,7 @@ const CreateYourPizza: FC<CreatePizzaProps> = ({ sec, channelName }) => {
                                 pattern: '# !',
                                 separator: ' ',
                                 decimal: '.',
-                                symbol: 'сум',
+                                symbol: `${locale == 'uz' ? "so'm" : 'сум'}`,
                                 precision: 0,
                               }).format()}
                             </span>
@@ -635,7 +637,7 @@ const CreateYourPizza: FC<CreatePizzaProps> = ({ sec, channelName }) => {
                                   pattern: '# !',
                                   separator: ' ',
                                   decimal: '.',
-                                  symbol: 'сум',
+                                  symbol: `${locale == 'uz' ? "so'm" : 'сум'}`,
                                   precision: 0,
                                 }).format()}
                               </div>
@@ -692,7 +694,7 @@ const CreateYourPizza: FC<CreatePizzaProps> = ({ sec, channelName }) => {
                                   pattern: '# !',
                                   separator: ' ',
                                   decimal: '.',
-                                  symbol: 'сум',
+                                  symbol: `${locale == 'uz' ? "so'm" : 'сум'}`,
                                   precision: 0,
                                 }).format()}
                               </div>

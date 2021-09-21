@@ -83,7 +83,7 @@ startTime = startTime.set({
   minute: Math.ceil(startTime.minute / 10) * 10,
 })
 
-while (startTime.hour < 23) {
+while (startTime.hour < 3 || startTime.hour > 10) {
   let val = `${zeroPad(startTime.hour, 2)}:${zeroPad(startTime.minute, 2)}`
   startTime = startTime.plus({ minutes: 20 })
   startTime = startTime.set({
@@ -102,20 +102,7 @@ while (startTime.hour < 23) {
   })
 }
 
-// Array.from(Array(24).keys()).map((item: number) => {
-//   let val = `${zeroPad(item, 2)}:${zeroPad(0, 2)}`
-//   deliveryTimeOptions.push({
-//     value: val,
-//     label: val,
-//   })
-//   val = `${zeroPad(item, 2)}:${zeroPad(30, 2)}`
-//   deliveryTimeOptions.push({
-//     value: val,
-//     label: val,
-//   })
-
-//   return item
-// })
+// console.log(deliveryTimeOptions)
 
 const paymentTypes = ['payme', 'click', 'oson']
 
@@ -146,7 +133,7 @@ const Orders: FC<OrdersProps> = ({ channelName }: { channelName: any }) => {
 
   const router = useRouter()
   const { locale } = router
-
+  const downshiftControl = useRef<any>(null)
   const { data, isLoading, isEmpty, mutate } = useCart({
     cartId,
   })
@@ -378,6 +365,9 @@ const Orders: FC<OrdersProps> = ({ channelName }: { channelName: any }) => {
       location: [selection.coordinates.lat, selection.coordinates.long],
     })
     setValue('address', selection.formatted)
+    downshiftControl?.current?.reset({
+      inputValue: selection.formatted,
+    })
 
     selection.addressItems.map((address: any) => {
       if (address.kind == 'house') {
@@ -415,6 +405,9 @@ const Orders: FC<OrdersProps> = ({ channelName }: { channelName: any }) => {
     })
     setValue('house', house)
     setValue('address', data.data.formatted)
+    downshiftControl?.current?.reset({
+      inputValue: data.data.formatted,
+    })
     setLocationData({
       ...locationData,
       location: coords,
@@ -889,9 +882,11 @@ const Orders: FC<OrdersProps> = ({ channelName }: { channelName: any }) => {
                   <div className="md:flex justify-between md:w-full space-y-2 md:space-y-0">
                     <Downshift
                       onChange={(selection) => setSelectedAddress(selection)}
-                      itemToString={(item) => (item ? item.formatted : '')}
+                      ref={downshiftControl}
+                      itemToString={(item) =>
+                        item ? item.formatted : watch('address')
+                      }
                       initialInputValue={locationData?.address || ''}
-                      inputValue={watch('address')}
                     >
                       {({
                         getInputProps,
@@ -1209,7 +1204,6 @@ const Orders: FC<OrdersProps> = ({ channelName }: { channelName: any }) => {
                   items={deliveryTimeOptions}
                   placeholder={tr('time')}
                   onChange={(e: any) => onChange(e)}
-                  className="ml-5"
                 />
               )}
               rules={{
@@ -1578,7 +1572,7 @@ const Orders: FC<OrdersProps> = ({ channelName }: { channelName: any }) => {
                         pattern: '# !',
                         separator: ' ',
                         decimal: '.',
-                        symbol: `${locale == 'uz' ? "so'm" : 'сўм'}`,
+                        symbol: `${locale == 'uz' ? "so'm" : 'сум'}`,
                         precision: 0,
                       }
                     ).format()
@@ -1586,7 +1580,7 @@ const Orders: FC<OrdersProps> = ({ channelName }: { channelName: any }) => {
                       pattern: '# !',
                       separator: ' ',
                       decimal: '.',
-                      symbol: `${locale == 'uz' ? "so'm" : 'сўм'}`,
+                      symbol: `${locale == 'uz' ? "so'm" : 'сум'}`,
                       precision: 0,
                     }).format()}
               </div>
@@ -1604,7 +1598,7 @@ const Orders: FC<OrdersProps> = ({ channelName }: { channelName: any }) => {
                 pattern: '# !',
                 separator: ' ',
                 decimal: '.',
-                symbol: `${locale == 'uz' ? "so'm" : 'сўм'}`,
+                symbol: `${locale == 'uz' ? "so'm" : 'сум'}`,
                 precision: 0,
               }).format()}
             </div>

@@ -312,7 +312,7 @@ const Cart: FC<CartProps> = ({ channelName }: { channelName: any }) => {
                               pattern: '# !',
                               separator: ' ',
                               decimal: '.',
-                              symbol: 'сўм',
+                              symbol: 'сум',
                               precision: 0,
                             }
                           ).format()
@@ -320,7 +320,7 @@ const Cart: FC<CartProps> = ({ channelName }: { channelName: any }) => {
                             pattern: '# !',
                             separator: ' ',
                             decimal: '.',
-                            symbol: 'сўм',
+                            symbol: 'сум',
                             precision: 0,
                           }).format()}
                     </div>
@@ -339,7 +339,7 @@ const Cart: FC<CartProps> = ({ channelName }: { channelName: any }) => {
                 pattern: '# !',
                 separator: ' ',
                 decimal: '.',
-                symbol: 'сўм',
+                symbol: 'сум',
                 precision: 0,
               }).format()}
             </div>

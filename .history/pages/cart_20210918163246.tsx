@@ -244,7 +244,7 @@ export default function Cart() {
               {data &&
                 data?.lineItems.map((lineItem: any) => (
                   <div className="flex justify-between items-center border-b pb-3">
-                    { console.log(lineItem) }
+                    {console.log(lineItem)}
                     <div className="flex">
                       <Image src="/pizza_img.png" width="70" height="70" />
                       <div className="ml-7 space-y-2">
@@ -270,7 +270,7 @@ export default function Cart() {
                           />
                         </div>
                       </div>
-                      <div>36 000 сўм</div>
+                      <div>36 000 сум</div>
                       <XIcon
                         className="cursor-pointer h-4 text-black w-4"
                         onClick={() => ''}

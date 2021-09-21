@@ -1456,7 +1456,7 @@ const Orders: FC = () => {
                   pattern: '# !',
                   separator: ' ',
                   decimal: '.',
-                  symbol: 'сўм',
+                  symbol: 'сум',
                   precision: 0,
                 }).format()}
               </div>
@@ -1474,7 +1474,7 @@ const Orders: FC = () => {
                 pattern: '# !',
                 separator: ' ',
                 decimal: '.',
-                symbol: 'сўм',
+                symbol: 'сум',
                 precision: 0,
               }).format()}
             </div>

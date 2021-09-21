@@ -360,7 +360,7 @@ const ProductItemNew: FC<ProductItem> = ({ product, channelName }) => {
                       pattern: '# !',
                       separator: ' ',
                       decimal: '.',
-                      symbol: 'сўм',
+                      symbol: 'сум',
                       precision: 0,
                     }).format()}
                   </div>
@@ -478,7 +478,7 @@ const ProductItemNew: FC<ProductItem> = ({ product, channelName }) => {
                   pattern: '# !',
                   separator: ' ',
                   decimal: '.',
-                  symbol: 'сўм',
+                  symbol: 'сум',
                   precision: 0,
                 }).format()}
               </span>
@@ -491,7 +491,7 @@ const ProductItemNew: FC<ProductItem> = ({ product, channelName }) => {
                   pattern: '# !',
                   separator: ' ',
                   decimal: '.',
-                  symbol: 'сўм',
+                  symbol: 'сум',
                   precision: 0,
                 }).format()}
               </button>
@@ -592,7 +592,9 @@ const ProductItemNew: FC<ProductItem> = ({ product, channelName }) => {
                             {store.variants.map((v) => (
                               <div
                                 className={`w-full text-center cursor-pointer rounded-2xl outline-none border ${
-                                  v.active ? 'bg-yellow text-white' : 'bg-gray-300 text-gray-600'
+                                  v.active
+                                    ? 'bg-yellow text-white'
+                                    : 'bg-gray-300 text-gray-600'
                                 }`}
                                 onClick={() => updateOptionSelection(v.id)}
                                 key={v.id}
@@ -652,7 +654,7 @@ const ProductItemNew: FC<ProductItem> = ({ product, channelName }) => {
                                       pattern: '# !',
                                       separator: ' ',
                                       decimal: '.',
-                                      symbol: 'сўм',
+                                      symbol: 'сум',
                                       precision: 0,
                                     }).format()}
                                   </div>
@@ -694,7 +696,7 @@ const ProductItemNew: FC<ProductItem> = ({ product, channelName }) => {
                                   pattern: '# !',
                                   separator: ' ',
                                   decimal: '.',
-                                  symbol: 'сўм',
+                                  symbol: 'сум',
                                   precision: 0,
                                 }).format()}
                               </span>

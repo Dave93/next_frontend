@@ -2,7 +2,7 @@ import React, { Fragment, useState, memo, useRef, FC, useMemo } from 'react'
 import { Dialog, Transition } from '@headlessui/react'
 import useTranslation from 'next-translate/useTranslation'
 import { XIcon } from '@heroicons/react/outline'
-import { useForm } from 'react-hook-form'
+import { useForm, Controller } from 'react-hook-form'
 import OtpInput from 'react-otp-input'
 import axios from 'axios'
 import Cookies from 'js-cookie'
@@ -10,6 +10,7 @@ import { useUI } from '@components/ui/context'
 
 import styles from './SignInButton.module.css'
 import UserProfileDropDown from './UserProfileDropDown'
+import Input from 'react-phone-number-input/input'
 
 axios.defaults.withCredentials = true
 
@@ -51,10 +52,17 @@ const SignInButton: FC = () => {
     setIsOpen(false)
   }
 
-  const { register, handleSubmit, reset, watch, formState, getValues } =
-    useForm({
-      mode: 'onChange',
-    })
+  const {
+    register,
+    handleSubmit,
+    reset,
+    watch,
+    formState,
+    getValues,
+    control,
+  } = useForm({
+    mode: 'onChange',
+  })
 
   const startTimeout = () => {
     otpTimerRef = setInterval(() => {
@@ -380,13 +388,26 @@ const SignInButton: FC = () => {
                                   Номер телефона
                                 </label>
                                 <div className="relative">
-                                  <input
-                                    type="text"
-                                    {...register('phone', {
+                                  <Controller
+                                    render={({
+                                      field: { onChange, value },
+                                    }) => (
+                                      <Input
+                                        defaultCountry="UZ"
+                                        country="UZ"
+                                        international
+                                        withCountryCallingCode
+                                        value={value}
+                                        className="border border-yellow focus:outline-none outline-none px-6 py-3 rounded-full text-sm w-full"
+                                        onChange={(e: any) => onChange(e)}
+                                      />
+                                    )}
+                                    rules={{
                                       required: true,
-                                      pattern: /^\+998\d\d\d\d\d\d\d\d\d$/i,
-                                    })}
-                                    className="border border-yellow focus:outline-none outline-none px-6 py-3 rounded-full text-sm w-full"
+                                    }}
+                                    key="phone"
+                                    name="phone"
+                                    control={control}
                                   />
                                   {authPhone && (
                                     <button
