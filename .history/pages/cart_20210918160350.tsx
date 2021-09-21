@@ -48,7 +48,6 @@ export async function getServerSideProps({
   }
 }
 
-
 const { publicRuntimeConfig } = getConfig()
 let webAddress = publicRuntimeConfig.apiUrl
 axios.defaults.withCredentials = true
@@ -231,7 +230,7 @@ export default function Cart() {
                   />
                 </div>
               </div>
-              <div>36 000 сўм</div>
+              <div>36 000 сум</div>
               <XIcon
                 className="cursor-pointer h-4 text-black w-4"
                 onClick={() => ''}
@@ -264,7 +263,7 @@ export default function Cart() {
                   />
                 </div>
               </div>
-              <div>36 000 сўм</div>
+              <div>36 000 сум</div>
               <XIcon
                 className="cursor-pointer h-4 text-black w-4"
                 onClick={() => ''}
@@ -297,7 +296,7 @@ export default function Cart() {
                   />
                 </div>
               </div>
-              <div>36 000 сўм</div>
+              <div>36 000 сум</div>
               <XIcon
                 className="cursor-pointer h-4 text-black w-4"
                 onClick={() => ''}

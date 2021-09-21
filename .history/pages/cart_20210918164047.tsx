@@ -243,7 +243,10 @@ export default function Cart() {
             <div className="mt-10 space-y-3">
               {data &&
                 data?.lineItems.map((lineItem: any) => (
-                  <div className="flex justify-between items-center border-b pb-3" key={lineItem.id}>
+                  <div
+                    className="flex justify-between items-center border-b pb-3"
+                    key={lineItem.id}
+                  >
                     {console.log(lineItem)}
                     <div className="flex">
                       <Image
@@ -278,7 +281,7 @@ export default function Cart() {
                           />
                         </div>
                       </div>
-                      <div>36 000 сўм</div>
+                      <div>36 000 сум</div>
                       <XIcon
                         className="cursor-pointer h-4 text-black w-4"
                         onClick={() => ''}

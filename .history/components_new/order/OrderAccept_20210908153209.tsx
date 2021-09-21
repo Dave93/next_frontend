@@ -144,7 +144,7 @@ const OrderAccept: FC<OrderDetailProps> = ({ order, orderStatuses }) => {
                 pattern: '# !',
                 separator: ' ',
                 decimal: '.',
-                symbol: 'сўм',
+                symbol: 'сум',
                 precision: 0,
               }).format()}
             </div>

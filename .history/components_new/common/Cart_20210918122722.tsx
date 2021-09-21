@@ -19,11 +19,7 @@ type CartProps = {
   channelName: any
 }
 
-const Cart: FC<CartProps> = ({
-  channelName,
-}: {
-  channelName: any
-}) => {
+const Cart: FC<CartProps> = ({ channelName }: { channelName: any }) => {
   const { t: tr } = useTranslation('common')
   let cartId: string | null = null
   if (typeof window !== 'undefined') {
@@ -313,7 +309,7 @@ const Cart: FC<CartProps> = ({
                               pattern: '# !',
                               separator: ' ',
                               decimal: '.',
-                              symbol: 'сўм',
+                              symbol: 'сум',
                               precision: 0,
                             }
                           ).format()
@@ -321,7 +317,7 @@ const Cart: FC<CartProps> = ({
                             pattern: '# !',
                             separator: ' ',
                             decimal: '.',
-                            symbol: 'сўм',
+                            symbol: 'сум',
                             precision: 0,
                           }).format()}
                     </div>
@@ -340,7 +336,7 @@ const Cart: FC<CartProps> = ({
                 pattern: '# !',
                 separator: ' ',
                 decimal: '.',
-                symbol: 'сўм',
+                symbol: 'сум',
                 precision: 0,
               }).format()}
             </div>

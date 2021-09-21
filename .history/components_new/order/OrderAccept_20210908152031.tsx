@@ -63,7 +63,7 @@ const OrderAccept: FC<OrderDetailProps> = ({ order, orderStatuses }) => {
           </div>
           <div>
             <div className="text-base text-gray-500 mb-2 text-right">
-              { tr('order_time')}
+              {tr('order_time')}
             </div>
             <div className="text-base font-bold">
               {DateTime.fromISO(order?.created_at)
@@ -112,7 +112,7 @@ const OrderAccept: FC<OrderDetailProps> = ({ order, orderStatuses }) => {
             pattern: '# !',
             separator: ' ',
             decimal: '.',
-            symbol: 'сўм',
+            symbol: 'сум',
             precision: 0,
           }).format()}
         </div>
@@ -143,7 +143,7 @@ const OrderAccept: FC<OrderDetailProps> = ({ order, orderStatuses }) => {
                 pattern: '# !',
                 separator: ' ',
                 decimal: '.',
-                symbol: 'сўм',
+                symbol: 'сум',
                 precision: 0,
               }).format()}
             </div>

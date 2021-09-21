@@ -313,7 +313,7 @@ const SmallCart: FC<SmallCartProps> = ({
                               pattern: '# !',
                               separator: ' ',
                               decimal: '.',
-                              symbol: 'сўм',
+                              symbol: 'сум',
                               precision: 0,
                             }
                           ).format()
@@ -321,7 +321,7 @@ const SmallCart: FC<SmallCartProps> = ({
                             pattern: '# !',
                             separator: ' ',
                             decimal: '.',
-                            symbol: 'сўм',
+                            symbol: 'сум',
                             precision: 0,
                           }).format()}
                     </div>
@@ -340,7 +340,7 @@ const SmallCart: FC<SmallCartProps> = ({
                 pattern: '# !',
                 separator: ' ',
                 decimal: '.',
-                symbol: 'сўм',
+                symbol: 'сум',
                 precision: 0,
               }).format()}
             </div>

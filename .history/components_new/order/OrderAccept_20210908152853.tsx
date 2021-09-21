@@ -108,12 +108,12 @@ const OrderAccept: FC<OrderDetailProps> = ({ order, orderStatuses }) => {
       </div>
       <div className="p-10 rounded-2xl text-xl mt-5 bg-white">
         <div className="text-lg mb-10 font-bold">
-          {order?.basket?.lines.length} { tr('product')} на{' '}
+          {order?.basket?.lines.length} {tr('product')} на{' '}
           {currency(order?.order_total / 100, {
             pattern: '# !',
             separator: ' ',
             decimal: '.',
-            symbol: 'сўм',
+            symbol: 'сум',
             precision: 0,
           }).format()}
         </div>
@@ -144,7 +144,7 @@ const OrderAccept: FC<OrderDetailProps> = ({ order, orderStatuses }) => {
                 pattern: '# !',
                 separator: ' ',
                 decimal: '.',
-                symbol: 'сўм',
+                symbol: 'сум',
                 precision: 0,
               }).format()}
             </div>

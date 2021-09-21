@@ -283,7 +283,7 @@ const ProductItemNew: FC<ProductItem> = ({ product, channelName }) => {
             </div>
           )}
           <div className="border-b border-yellow pb-3 text-center text-xl w-full">
-            {tr("add")}
+            {tr('add')}
           </div>
           <div className="flex-grow gap-3 grid grid-cols-2">
             {modifiers &&
@@ -325,7 +325,7 @@ const ProductItemNew: FC<ProductItem> = ({ product, channelName }) => {
                       pattern: '# !',
                       separator: ' ',
                       decimal: '.',
-                      symbol: 'сўм',
+                      symbol: 'сум',
                       precision: 0,
                     }).format()}
                   </div>
@@ -443,7 +443,7 @@ const ProductItemNew: FC<ProductItem> = ({ product, channelName }) => {
                   pattern: '# !',
                   separator: ' ',
                   decimal: '.',
-                  symbol: 'сўм',
+                  symbol: 'сум',
                   precision: 0,
                 }).format()}
               </span>

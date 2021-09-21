@@ -93,7 +93,7 @@ const Orders: FC<OrdersListProps> = ({ orders }) => {
                             pattern: '# !',
                             separator: ' ',
                             decimal: '.',
-                            symbol: 'сўм',
+                            symbol: 'сум',
                             precision: 0,
                           }).format()}
                         </div>
@@ -185,7 +185,7 @@ const Orders: FC<OrdersListProps> = ({ orders }) => {
                                 pattern: '# !',
                                 separator: ' ',
                                 decimal: '.',
-                                symbol: 'сўм',
+                                symbol: 'сум',
                                 precision: 0,
                               }
                             ).format()
@@ -193,7 +193,7 @@ const Orders: FC<OrdersListProps> = ({ orders }) => {
                               pattern: '# !',
                               separator: ' ',
                               decimal: '.',
-                              symbol: 'сўм',
+                              symbol: 'сум',
                               precision: 0,
                             }).format()}
                       </div>
@@ -208,7 +208,7 @@ const Orders: FC<OrdersListProps> = ({ orders }) => {
                             pattern: '# !',
                             separator: ' ',
                             decimal: '.',
-                            symbol: 'сўм',
+                            symbol: 'сум',
                             precision: 0,
                           }).format()}
                         </div>

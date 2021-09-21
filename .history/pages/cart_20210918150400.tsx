@@ -46,7 +46,9 @@ export default function Cart() {
         <div className="text-lg font-bold">
           Корзина <span className="text-yellow">(3)</span>
         </div>
-        <div className="text-gray-400 text-sm">Очистить всё <TrashIcon/> </div>
+        <div className="text-gray-400 text-sm">
+          Очистить всё <TrashIcon />{' '}
+        </div>
       </div>
       <div className="mt-10 space-y-3">
         <div className="flex justify-between items-center border-b pb-3">
@@ -75,7 +77,7 @@ export default function Cart() {
                 />
               </div>
             </div>
-            <div>36 000 сўм</div>
+            <div>36 000 сум</div>
             <XIcon
               className="cursor-pointer h-4 text-black w-4"
               onClick={() => ''}
@@ -108,7 +110,7 @@ export default function Cart() {
                 />
               </div>
             </div>
-            <div>36 000 сўм</div>
+            <div>36 000 сум</div>
             <XIcon
               className="cursor-pointer h-4 text-black w-4"
               onClick={() => ''}
@@ -141,7 +143,7 @@ export default function Cart() {
                 />
               </div>
             </div>
-            <div>36 000 сўм</div>
+            <div>36 000 сум</div>
             <XIcon
               className="cursor-pointer h-4 text-black w-4"
               onClick={() => ''}

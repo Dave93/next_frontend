@@ -47,7 +47,7 @@ export async function getServerSideProps({
 }
 
 export default function Cart() {
-const { t: tr } = useTranslation('common')
+  const { t: tr } = useTranslation('common')
   return (
     <div className="border  p-10 rounded-2xl text-xl mt-5" key={order.id}>
       <Disclosure>
@@ -85,7 +85,7 @@ const { t: tr } = useTranslation('common')
                       pattern: '# !',
                       separator: ' ',
                       decimal: '.',
-                      symbol: 'сўм',
+                      symbol: 'сум',
                       precision: 0,
                     }).format()}
                   </div>
@@ -173,7 +173,7 @@ const { t: tr } = useTranslation('common')
                           pattern: '# !',
                           separator: ' ',
                           decimal: '.',
-                          symbol: 'сўм',
+                          symbol: 'сум',
                           precision: 0,
                         }
                       ).format()
@@ -181,7 +181,7 @@ const { t: tr } = useTranslation('common')
                         pattern: '# !',
                         separator: ' ',
                         decimal: '.',
-                        symbol: 'сўм',
+                        symbol: 'сум',
                         precision: 0,
                       }).format()}
                 </div>
@@ -196,7 +196,7 @@ const { t: tr } = useTranslation('common')
                       pattern: '# !',
                       separator: ' ',
                       decimal: '.',
-                      symbol: 'сўм',
+                      symbol: 'сум',
                       precision: 0,
                     }).format()}
                   </div>

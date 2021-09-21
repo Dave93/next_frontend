@@ -54,8 +54,6 @@ let webAddress = publicRuntimeConfig.apiUrl
 axios.defaults.withCredentials = true
 
 export default function Cart() {
-
-  
   const [channelName, setChannelName] = useState('chopar')
 
   const getChannel = async () => {
@@ -273,20 +271,22 @@ export default function Cart() {
                         height="70"
                       />
                       <div className="ml-7 space-y-2">
-                        <div className="text-xl font-bold"><div className="font-bold text-sm flex-grow mx-1">
-                      {lineItem.child && lineItem.child.length
-                        ? `${
-                            lineItem?.variant?.product?.attribute_data?.name[
-                              channelName
-                            ][locale || 'ru']
-                          } + ${
-                            lineItem?.child[0].variant?.product?.attribute_data
-                              ?.name[channelName][locale || 'ru']
-                          }`
-                        : lineItem?.variant?.product?.attribute_data?.name[
-                            channelName
-                          ][locale || 'ru']}
-                    </div></div>
+                        <div className="text-xl font-bold">
+                          <div className="font-bold text-sm flex-grow mx-1">
+                            {lineItem.child && lineItem.child.length
+                              ? `${
+                                  lineItem?.variant?.product?.attribute_data
+                                    ?.name[channelName][locale || 'ru']
+                                } + ${
+                                  lineItem?.child[0].variant?.product
+                                    ?.attribute_data?.name[channelName][
+                                    locale || 'ru'
+                                  ]
+                                }`
+                              : lineItem?.variant?.product?.attribute_data
+                                  ?.name[channelName][locale || 'ru']}
+                          </div>
+                        </div>
                       </div>
                     </div>
                     <div className="flex space-x-10 items-center">
@@ -305,7 +305,7 @@ export default function Cart() {
                           />
                         </div>
                       </div>
-                      <div>36 000 сўм</div>
+                      <div>36 000 сум</div>
                       <XIcon
                         className="cursor-pointer h-4 text-black w-4"
                         onClick={() => ''}

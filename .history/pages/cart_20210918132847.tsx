@@ -98,7 +98,7 @@ export default function Cart() {
                             pattern: '# !',
                             separator: ' ',
                             decimal: '.',
-                            symbol: 'сўм',
+                            symbol: 'сум',
                             precision: 0,
                           }).format()}
                         </div>
@@ -190,7 +190,7 @@ export default function Cart() {
                                 pattern: '# !',
                                 separator: ' ',
                                 decimal: '.',
-                                symbol: 'сўм',
+                                symbol: 'сум',
                                 precision: 0,
                               }
                             ).format()
@@ -198,7 +198,7 @@ export default function Cart() {
                               pattern: '# !',
                               separator: ' ',
                               decimal: '.',
-                              symbol: 'сўм',
+                              symbol: 'сум',
                               precision: 0,
                             }).format()}
                       </div>
@@ -213,7 +213,7 @@ export default function Cart() {
                             pattern: '# !',
                             separator: ' ',
                             decimal: '.',
-                            symbol: 'сўм',
+                            symbol: 'сум',
                             precision: 0,
                           }).format()}
                         </div>

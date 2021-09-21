@@ -456,7 +456,7 @@ const Orders: FC<OrdersProps> = ({ channelName }: { channelName: any }) => {
 
   const choosePickupPoint = (pointId: number) => {
     setActivePoint(pointId)
-    let terminalData = pickupPoints.find((pickup: any) => pickup.id == pointId);
+    let terminalData = pickupPoints.find((pickup: any) => pickup.id == pointId)
     setLocationData({
       ...locationData,
       terminal_id: pointId,
@@ -1514,7 +1514,7 @@ const Orders: FC<OrdersProps> = ({ channelName }: { channelName: any }) => {
                         pattern: '# !',
                         separator: ' ',
                         decimal: '.',
-                        symbol: `${locale == 'uz' ? "so'm" : 'сўм'}`,
+                        symbol: `${locale == 'uz' ? "so'm" : 'сум'}`,
                         precision: 0,
                       }
                     ).format()
@@ -1522,7 +1522,7 @@ const Orders: FC<OrdersProps> = ({ channelName }: { channelName: any }) => {
                       pattern: '# !',
                       separator: ' ',
                       decimal: '.',
-                      symbol: `${locale == 'uz' ? "so'm" : 'сўм'}`,
+                      symbol: `${locale == 'uz' ? "so'm" : 'сум'}`,
                       precision: 0,
                     }).format()}
               </div>
@@ -1540,7 +1540,7 @@ const Orders: FC<OrdersProps> = ({ channelName }: { channelName: any }) => {
                 pattern: '# !',
                 separator: ' ',
                 decimal: '.',
-                symbol: `${locale == 'uz' ? "so'm" : 'сўм'}`,
+                symbol: `${locale == 'uz' ? "so'm" : 'сум'}`,
                 precision: 0,
               }).format()}
             </div>

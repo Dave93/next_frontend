@@ -316,7 +316,7 @@ const SmallCart: FC<SmallCartProps> = ({
                               pattern: '# !',
                               separator: ' ',
                               decimal: '.',
-                              symbol: `${locale == 'uz' ? "so'm" : 'сўм'}`,
+                              symbol: `${locale == 'uz' ? "so'm" : 'сум'}`,
                               precision: 0,
                             }
                           ).format()
@@ -324,7 +324,7 @@ const SmallCart: FC<SmallCartProps> = ({
                             pattern: '# !',
                             separator: ' ',
                             decimal: '.',
-                            symbol: `${locale == 'uz' ? "so'm" : 'сўм'}`,
+                            symbol: `${locale == 'uz' ? "so'm" : 'сум'}`,
                             precision: 0,
                           }).format()}
                     </div>
@@ -343,7 +343,7 @@ const SmallCart: FC<SmallCartProps> = ({
                 pattern: '# !',
                 separator: ' ',
                 decimal: '.',
-                symbol: `${locale == 'uz' ? "so'm" : 'сўм'}`,
+                symbol: `${locale == 'uz' ? "so'm" : 'сум'}`,
                 precision: 0,
               }).format()}
             </div>

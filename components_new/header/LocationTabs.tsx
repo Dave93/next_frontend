@@ -77,6 +77,8 @@ const LocationTabs: FC<Props> = ({ setOpen }) => {
   const [geoSuggestions, setGeoSuggestions] = useState([])
   const [isSearchingTerminals, setIsSearchingTerminals] = useState(false)
 
+  const downshiftControl = useRef<any>(null)
+
   const activeLabel = cities.find((item) => item.active)?.label
   const activeCity = cities.find((item) => item.active)
 
@@ -216,6 +218,9 @@ const LocationTabs: FC<Props> = ({ setOpen }) => {
       location: [selection.coordinates.lat, selection.coordinates.long],
     })
     setValue('address', selection.formatted)
+    downshiftControl?.current?.reset({
+      inputValue: selection.formatted,
+    })
     selection.addressItems.map((address: any) => {
       if (address.kind == 'house') {
         setValue('house', address.name)
@@ -247,6 +252,9 @@ const LocationTabs: FC<Props> = ({ setOpen }) => {
     })
     setValue('house', house)
     setValue('address', data.data.formatted)
+    downshiftControl?.current?.reset({
+      inputValue: data.data.formatted,
+    })
     setLocationData({
       ...locationData,
       location: coords,
@@ -460,9 +468,11 @@ const LocationTabs: FC<Props> = ({ setOpen }) => {
               <div className="flex justify-between mt-3">
                 <Downshift
                   onChange={(selection) => setSelectedAddress(selection)}
-                  itemToString={(item) => (item ? item.formatted : '')}
+                  ref={downshiftControl}
+                  itemToString={(item) =>
+                    item ? item.formatted : watch('address')
+                  }
                   initialInputValue={locationData?.address || ''}
-                  inputValue={watch('address')}
                 >
                   {({
                     getInputProps,

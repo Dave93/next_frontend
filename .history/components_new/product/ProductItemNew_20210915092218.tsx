@@ -360,7 +360,7 @@ const ProductItemNew: FC<ProductItem> = ({ product, channelName }) => {
                       pattern: '# !',
                       separator: ' ',
                       decimal: '.',
-                      symbol: 'сўм',
+                      symbol: 'сум',
                       precision: 0,
                     }).format()}
                   </div>
@@ -480,7 +480,7 @@ const ProductItemNew: FC<ProductItem> = ({ product, channelName }) => {
                   pattern: '# !',
                   separator: ' ',
                   decimal: '.',
-                  symbol: `${locale == 'uz' ? "so'm" : 'сўм'}`,
+                  symbol: `${locale == 'uz' ? "so'm" : 'сум'}`,
                   precision: 0,
                 }).format()}
               </span>
@@ -493,7 +493,7 @@ const ProductItemNew: FC<ProductItem> = ({ product, channelName }) => {
                   pattern: '# !',
                   separator: ' ',
                   decimal: '.',
-                  symbol: 'сўм',
+                  symbol: 'сум',
                   precision: 0,
                 }).format()}
               </button>
@@ -656,7 +656,7 @@ const ProductItemNew: FC<ProductItem> = ({ product, channelName }) => {
                                       pattern: '# !',
                                       separator: ' ',
                                       decimal: '.',
-                                      symbol: 'сўм',
+                                      symbol: 'сум',
                                       precision: 0,
                                     }).format()}
                                   </div>
@@ -698,7 +698,7 @@ const ProductItemNew: FC<ProductItem> = ({ product, channelName }) => {
                                   pattern: '# !',
                                   separator: ' ',
                                   decimal: '.',
-                                  symbol: 'сўм',
+                                  symbol: 'сум',
                                   precision: 0,
                                 }).format()}
                               </span>

@@ -272,6 +272,7 @@ const ProductItemNew: FC<ProductItem> = ({ product, channelName }) => {
       addToBasket()
     }
   }
+
   return (
     <>
       {isChoosingModifier ? (
@@ -322,6 +323,7 @@ const ProductItemNew: FC<ProductItem> = ({ product, channelName }) => {
                         width={80}
                         height={80}
                         alt={mod.name}
+                        priority={true}
                       />
                     ) : (
                       <Image
@@ -347,7 +349,7 @@ const ProductItemNew: FC<ProductItem> = ({ product, channelName }) => {
                       pattern: '# !',
                       separator: ' ',
                       decimal: '.',
-                      symbol: 'сўм',
+                      symbol: `${locale == 'uz' ? "so'm" : 'сум'}`,
                       precision: 0,
                     }).format()}
                   </div>
@@ -379,6 +381,7 @@ const ProductItemNew: FC<ProductItem> = ({ product, channelName }) => {
                   width={250}
                   height={250}
                   alt={store?.attribute_data?.name[channelName][locale || 'ru']}
+                  priority={true}
                 />
               ) : (
                 <Image
@@ -387,6 +390,7 @@ const ProductItemNew: FC<ProductItem> = ({ product, channelName }) => {
                   height={250}
                   alt={store?.attribute_data?.name[channelName][locale || 'ru']}
                   className="rounded-full"
+                  priority={true}
                 />
               )}
             </div>
@@ -467,7 +471,7 @@ const ProductItemNew: FC<ProductItem> = ({ product, channelName }) => {
                   pattern: '# !',
                   separator: ' ',
                   decimal: '.',
-                  symbol: `${locale == 'uz' ? "so'm" : 'сўм'}`,
+                  symbol: `${locale == 'uz' ? "so'm" : 'сум'}`,
                   precision: 0,
                 }).format()}
               </span>
@@ -480,7 +484,7 @@ const ProductItemNew: FC<ProductItem> = ({ product, channelName }) => {
                   pattern: '# !',
                   separator: ' ',
                   decimal: '.',
-                  symbol: 'сўм',
+                  symbol: `${locale == 'uz' ? "so'm" : 'сум'}`,
                   precision: 0,
                 }).format()}
               </button>
@@ -544,6 +548,7 @@ const ProductItemNew: FC<ProductItem> = ({ product, channelName }) => {
                                   locale || 'ru'
                                 ]
                               }
+                              priority={true}
                             />
                           ) : (
                             <Image
@@ -556,6 +561,7 @@ const ProductItemNew: FC<ProductItem> = ({ product, channelName }) => {
                                 ]
                               }
                               className="rounded-full"
+                              priority={true}
                             />
                           )}
                         </div>
@@ -621,6 +627,7 @@ const ProductItemNew: FC<ProductItem> = ({ product, channelName }) => {
                                           width={80}
                                           height={80}
                                           alt={mod.name}
+                                          priority={true}
                                         />
                                       ) : (
                                         <Image
@@ -629,6 +636,7 @@ const ProductItemNew: FC<ProductItem> = ({ product, channelName }) => {
                                           height={80}
                                           alt={mod.name}
                                           className="rounded-full"
+                                          priority={true}
                                         />
                                       )}
                                     </div>
@@ -646,7 +654,9 @@ const ProductItemNew: FC<ProductItem> = ({ product, channelName }) => {
                                         pattern: '# !',
                                         separator: ' ',
                                         decimal: '.',
-                                        symbol: 'сўм',
+                                        symbol: `${
+                                          locale == 'uz' ? "so'm" : 'сум'
+                                        }`,
                                         precision: 0,
                                       }).format()}
                                     </div>
@@ -689,7 +699,7 @@ const ProductItemNew: FC<ProductItem> = ({ product, channelName }) => {
                                   pattern: '# !',
                                   separator: ' ',
                                   decimal: '.',
-                                  symbol: 'сўм',
+                                  symbol: `${locale == 'uz' ? "so'm" : 'сум'}`,
                                   precision: 0,
                                 }).format()}
                               </span>

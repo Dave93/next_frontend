@@ -65,7 +65,7 @@ export default function Cart() {
               <div>1</div>
               <div>+</div>
             </div>
-            <div>36 000 сўм</div>
+            <div>36 000 сум</div>
             <XIcon
               className="cursor-pointer h-4 text-black w-4"
               onClick={() => destroyLine(lineItem.id)}
@@ -88,7 +88,7 @@ export default function Cart() {
               <div>1</div>
               <div>+</div>
             </div>
-            <div>36 000 сўм</div>
+            <div>36 000 сум</div>
             <div>X</div>
           </div>
         </div>
@@ -108,7 +108,7 @@ export default function Cart() {
               <div>1</div>
               <div>+</div>
             </div>
-            <div>36 000 сўм</div>
+            <div>36 000 сум</div>
             <div>X</div>
           </div>
         </div>

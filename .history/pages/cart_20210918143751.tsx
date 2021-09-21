@@ -66,7 +66,7 @@ export default function Cart() {
           </div>
           <div className="flex">
             <div>-1+</div>
-            <div>36 000 сўм</div>
+            <div>36 000 сум</div>
             <div>X</div>
           </div>
         </div>
