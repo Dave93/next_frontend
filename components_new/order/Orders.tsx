@@ -410,6 +410,7 @@ const Orders: FC<OrdersProps> = ({ channelName }: { channelName: any }) => {
   const [payType, setPayType] = useState('')
 
   const onValueChange = (e: any) => {
+    console.log(e.target.value)
     setPayType(e.target.value)
   }
 
@@ -538,7 +539,7 @@ const Orders: FC<OrdersProps> = ({ channelName }: { channelName: any }) => {
     await setCredentials()
     try {
       const { data } = await axios.post(`${webAddress}/api/orders/prepare`, {
-        formData: { ...locationData, ...getValues() },
+        formData: { ...locationData, ...getValues(), pay_type: payType },
         basket_id: cartId,
       })
       if (!data.success) {
@@ -574,7 +575,7 @@ const Orders: FC<OrdersProps> = ({ channelName }: { channelName: any }) => {
       const { data } = await axios.post(
         `${webAddress}/api/orders`,
         {
-          formData: { ...locationData, ...getValues() },
+          formData: { ...locationData, ...getValues(), pay_type: payType },
           code: otpCode,
           basket_id: cartId,
         },
