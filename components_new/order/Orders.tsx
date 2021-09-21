@@ -41,6 +41,7 @@ import OtpInput from 'react-otp-input'
 import styles from './Orders.module.css'
 import { DateTime } from 'luxon'
 import Input from 'react-phone-number-input/input'
+import { City } from '@commerce/types/cities'
 
 const { publicRuntimeConfig } = getConfig()
 let webAddress = publicRuntimeConfig.apiUrl
@@ -102,8 +103,6 @@ while (startTime.hour < 3 || startTime.hour > 10) {
   })
 }
 
-// console.log(deliveryTimeOptions)
-
 const paymentTypes = ['payme', 'click', 'oson']
 
 interface Errors {
@@ -125,7 +124,15 @@ type OrdersProps = {
 const Orders: FC<OrdersProps> = ({ channelName }: { channelName: any }) => {
   //Contacts
   const { t: tr } = useTranslation('common')
-  const { user, setUserData, locationData, setLocationData } = useUI()
+  const {
+    user,
+    setUserData,
+    locationData,
+    setLocationData,
+    cities,
+    activeCity,
+    setActiveCity,
+  } = useUI()
   let cartId: string | null = null
   if (typeof window !== 'undefined') {
     cartId = localStorage.getItem('basketId')
@@ -231,29 +238,6 @@ const Orders: FC<OrdersProps> = ({ channelName }: { channelName: any }) => {
     locationData?.deliveryType || 'deliver'
   )
   const [pickupIndex, setPickupIndex] = useState(1)
-  const [cities, setCities] = useState([
-    {
-      id: 'tash',
-      label: 'Ташкент',
-      active: true,
-      mapCenter: [41.311158, 69.279737],
-      mapZoom: 11.76,
-    },
-    {
-      id: 'ferg',
-      label: 'Фергана',
-      active: false,
-      mapCenter: [40.38942, 71.783009],
-      mapZoom: 12.73,
-    },
-    {
-      id: 'sam',
-      label: 'Самарканд',
-      active: false,
-      mapCenter: [39.654522, 66.96883],
-      mapZoom: 13.06,
-    },
-  ])
   const [pickupPoints, setPickupPoint] = useState([] as any[])
   const [activePoint, setActivePoint] = useState(
     (locationData ? locationData.terminal_id : null) as number | null
@@ -279,16 +263,14 @@ const Orders: FC<OrdersProps> = ({ channelName }: { channelName: any }) => {
 
   let authButtonRef = useRef(null)
   const otpTime = useRef(0)
-  const activeLabel = cities.find((item) => item.active)?.label
-  const activeCity = cities.find((item) => item.active)
 
   const [mapCenter, setMapCenter] = useState(
     (locationData?.location?.lat
       ? locationData?.location
-      : activeCity?.mapCenter) as number[]
+      : [activeCity?.lat, activeCity?.lon]) as number[]
   )
   const [mapZoom, setMapZoom] = useState(
-    ((locationData?.location?.lat ? 17 : 10) || activeCity?.mapZoom) as number
+    ((locationData?.location?.lat ? 17 : 10) || activeCity?.map_zoom) as number
   )
 
   const [configData, setConfigData] = useState({} as any)
@@ -338,17 +320,9 @@ const Orders: FC<OrdersProps> = ({ channelName }: { channelName: any }) => {
     [configData]
   )
 
-  const setActive = (id: string) => {
-    setCities(
-      cities.map((item) => {
-        if (item.id == id) {
-          item.active = true
-        } else {
-          item.active = false
-        }
-        return item
-      })
-    )
+  const setActive = (city: City) => {
+    setActiveCity(city)
+    if (city) setMapCenter([+city.lat, +city.lon])
   }
 
   const setSelectedAddress = (selection: any) => {
@@ -428,7 +402,7 @@ const Orders: FC<OrdersProps> = ({ channelName }: { channelName: any }) => {
 
     const res: MapState = Object.assign({}, baseState, mapStateCenter)
     return res
-  }, [mapCenter, mapZoom])
+  }, [mapCenter, mapZoom, activeCity])
   // time of delivery
   const [deliveryActive, setDeliveryActive] = useState('now' as string)
   // pay
@@ -663,6 +637,14 @@ const Orders: FC<OrdersProps> = ({ channelName }: { channelName: any }) => {
     })
   }
 
+  const chosenCity = useMemo(() => {
+    if (activeCity) {
+      return activeCity
+    }
+    if (cities) return cities[0]
+    return null
+  }, [cities, activeCity])
+
   return (
     <div className="mx-5 md:mx-0 pt-1 md:pt-0 pb-1">
       {/* Contacts */}
@@ -803,7 +785,7 @@ const Orders: FC<OrdersProps> = ({ channelName }: { channelName: any }) => {
                 <Menu as="div" className="relative inline-block text-left">
                   <div>
                     <Menu.Button className="focus:outline-none font-medium inline-flex justify-center px-4 py-2 text-secondary text-sm w-full">
-                      {activeLabel}
+                      {chosenCity?.name}
                       <ChevronDownIcon
                         className="w-5 h-5 ml-2 -mr-1 text-violet-200 hover:text-violet-100"
                         aria-hidden="true"
@@ -820,17 +802,17 @@ const Orders: FC<OrdersProps> = ({ channelName }: { channelName: any }) => {
                     leaveTo="transform opacity-0 scale-95"
                   >
                     <Menu.Items className="z-20 absolute right-0 w-56 mt-2 origin-top-right bg-white divide-y divide-gray-100 rounded-md shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
-                      {cities.map((item) => (
-                        <Menu.Item key={item.id}>
+                      {cities.map((city: City) => (
+                        <Menu.Item key={city.id}>
                           <span
-                            onClick={() => setActive(item.id)}
+                            onClick={() => setActive(city)}
                             className={`block px-4 py-2 text-sm cursor-pointer ${
-                              item.active
+                              city.id == chosenCity.id
                                 ? 'bg-secondary text-white'
                                 : 'text-secondary'
                             }`}
                           >
-                            {item.label}
+                            {city.name}
                           </span>
                         </Menu.Item>
                       ))}
