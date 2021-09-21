@@ -35,6 +35,7 @@ import debounce from 'lodash.debounce'
 import { useUI } from '@components/ui/context'
 import { toast } from 'react-toastify'
 import useTranslation from 'next-translate/useTranslation'
+import { City } from '@commerce/types/cities'
 
 const { publicRuntimeConfig } = getConfig()
 
@@ -44,43 +45,18 @@ interface Props {
 }
 
 const LocationTabs: FC<Props> = ({ setOpen }) => {
-  const { locationData, setLocationData } = useUI()
+  const { locationData, setLocationData, cities, activeCity, setActiveCity } =
+    useUI()
   const [tabIndex, setTabIndex] = useState(
     locationData?.deliveryType || 'deliver'
   )
   const [pickupIndex, setPickupIndex] = useState(1)
-  const [cities, setCities] = useState([
-    {
-      id: 'tash',
-      label: 'Ташкент',
-      active: true,
-      mapCenter: [41.311158, 69.279737],
-      mapZoom: 11.76,
-    },
-    {
-      id: 'ferg',
-      label: 'Фергана',
-      active: false,
-      mapCenter: [40.38942, 71.783009],
-      mapZoom: 12.73,
-    },
-    {
-      id: 'sam',
-      label: 'Самарканд',
-      active: false,
-      mapCenter: [39.654522, 66.96883],
-      mapZoom: 13.06,
-    },
-  ])
   const [pickupPoints, setPickupPoint] = useState([] as any[])
 
   const [geoSuggestions, setGeoSuggestions] = useState([])
   const [isSearchingTerminals, setIsSearchingTerminals] = useState(false)
 
   const downshiftControl = useRef<any>(null)
-
-  const activeLabel = cities.find((item) => item.active)?.label
-  const activeCity = cities.find((item) => item.active)
 
   const [selectedCoordinates, setSelectedCoordinates] = useState(
     locationData && locationData.location
@@ -95,14 +71,13 @@ const LocationTabs: FC<Props> = ({ setOpen }) => {
         ]
       : ([] as any)
   )
-
   const [mapCenter, setMapCenter] = useState(
     (locationData?.location?.lat
       ? locationData?.location
-      : activeCity?.mapCenter) as number[]
+      : [activeCity?.lat, activeCity?.lon]) as number[]
   )
   const [mapZoom, setMapZoom] = useState(
-    ((locationData?.location ? 17 : 10) || activeCity?.mapZoom) as number
+    ((locationData?.location ? 17 : 10) || activeCity?.map_zoom) as number
   )
 
   const [activePoint, setActivePoint] = useState(
@@ -188,20 +163,9 @@ const LocationTabs: FC<Props> = ({ setOpen }) => {
     [configData]
   )
 
-  const setActive = (id: string) => {
-    setCities(
-      cities.map((item) => {
-        if (item.id == id) {
-          item.active = true
-        } else {
-          item.active = false
-        }
-        return item
-      })
-    )
-
-    const activeCity = cities.find((item) => item.id == id)
-    if (activeCity) setMapCenter(activeCity.mapCenter)
+  const setActive = (city: City) => {
+    setActiveCity(city)
+    if (city) setMapCenter([+city.lat, +city.lon])
   }
 
   const setSelectedAddress = (selection: any) => {
@@ -274,7 +238,7 @@ const LocationTabs: FC<Props> = ({ setOpen }) => {
 
     const res: MapState = Object.assign({}, baseState, mapStateCenter)
     return res
-  }, [mapCenter, mapZoom])
+  }, [mapCenter, mapZoom, activeCity])
 
   const onSubmit = (data: Object) => {
     saveDeliveryData(data, null)
@@ -358,6 +322,14 @@ const LocationTabs: FC<Props> = ({ setOpen }) => {
 
   const { t: tr } = useTranslation('common')
 
+  const chosenCity = useMemo(() => {
+    if (activeCity) {
+      return activeCity
+    }
+    if (cities) return cities[0]
+    return null
+  }, [cities, activeCity])
+
   return (
     <>
       <div className="bg-gray-100 flex rounded-full w-full">
@@ -388,7 +360,7 @@ const LocationTabs: FC<Props> = ({ setOpen }) => {
               <Menu as="div" className="relative inline-block text-left">
                 <div>
                   <Menu.Button className="focus:outline-none font-medium inline-flex justify-center px-4 py-2 text-secondary text-sm w-full">
-                    {activeLabel}
+                    {chosenCity?.name}
                     <ChevronDownIcon
                       className="w-5 h-5 ml-2 -mr-1 text-violet-200 hover:text-violet-100"
                       aria-hidden="true"
@@ -405,17 +377,17 @@ const LocationTabs: FC<Props> = ({ setOpen }) => {
                   leaveTo="transform opacity-0 scale-95"
                 >
                   <Menu.Items className="z-20 absolute right-0 w-56 mt-2 origin-top-right bg-white divide-y divide-gray-100 rounded-md shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
-                    {cities.map((item) => (
-                      <Menu.Item key={item.id}>
+                    {cities.map((city: City) => (
+                      <Menu.Item key={city.id}>
                         <span
-                          onClick={() => setActive(item.id)}
+                          onClick={() => setActive(city)}
                           className={`block px-4 py-2 text-sm cursor-pointer ${
-                            item.active
+                            city.id == chosenCity.id
                               ? 'bg-secondary text-white'
                               : 'text-secondary'
                           }`}
                         >
-                          {item.label}
+                          {city.name}
                         </span>
                       </Menu.Item>
                     ))}

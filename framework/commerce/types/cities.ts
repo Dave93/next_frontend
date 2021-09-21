@@ -4,8 +4,8 @@ export type City = {
   name: string
   name_uz: string
   map_zoom: string
-  lat: string
-  lon: string
+  lat: number
+  lon: number
   active: boolean
   sort: number
 }
