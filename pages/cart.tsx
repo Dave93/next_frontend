@@ -207,7 +207,7 @@ export default function Cart() {
     e.preventDefault()
     router.push('/order/')
   }
-  console.log(data)
+
   return (
     <>
       {isCartLoading && (
@@ -235,14 +235,20 @@ export default function Cart() {
         </div>
       )}
       {isEmpty && (
-        <div className="flex flex-col items-center mt-2 text-center text-gray-400 text-sm">
+        <div className="flex flex-col items-center mt-2 text-center text-gray-400 text-sm pb-4">
           <Image src="/cart_empty.png" width={130} height={119} />
           <div className="w-6/12">{tr('basket_empty')}</div>
+          <button
+            className="bg-yellow text-white p-3 mt-4 rounded-full"
+            onClick={() => router.push('/')}
+          >
+            {tr('back_to_menu')}
+          </button>
         </div>
       )}
       {!isEmpty && (
         <>
-          <div className="p-10 rounded-2xl text-xl mt-5 bg-white mb-3">
+          <div className="md:p-10 p-5 md:rounded-2xl text-xl mt-5 bg-white md:mb-3">
             <div className="flex justify-between items-center">
               <div className="text-lg font-bold">
                 {tr('basket')}{' '}
@@ -274,7 +280,7 @@ export default function Cart() {
                         width="70"
                         height="70"
                       />
-                      <div className="ml-7 space-y-2">
+                      <div className="md:ml-7 ml-1 space-y-2">
                         <div className="text-xl font-bold">
                           {lineItem.child && lineItem.child.length
                             ? `${
@@ -292,7 +298,7 @@ export default function Cart() {
                         </div>
                       </div>
                     </div>
-                    <div className="flex space-x-10 items-center">
+                    <div className="md:flex md:space-x-10 items-center hidden">
                       <div className="w-20 h-6 ml-1 bg-yellow rounded-full flex items-center text-white">
                         <div className="w-6 h-6 items-center flex justify-around">
                           <MinusIcon
@@ -336,13 +342,57 @@ export default function Cart() {
                         onClick={() => destroyLine(lineItem.id)}
                       />
                     </div>
+                    <div className="md:space-x-10 items-center md:hidden">
+                      <XIcon
+                        className="cursor-pointer h-4 text-black w-4 ml-auto"
+                        onClick={() => destroyLine(lineItem.id)}
+                      />
+                      <div className="text-xl mb-2">
+                        {lineItem.child && lineItem.child.length
+                          ? currency(
+                              (+lineItem.total + +lineItem.child[0].total) *
+                                lineItem.quantity,
+                              {
+                                pattern: '# !',
+                                separator: ' ',
+                                decimal: '.',
+                                symbol: `${locale == 'uz' ? "so'm" : 'сум'}`,
+                                precision: 0,
+                              }
+                            ).format()
+                          : currency(lineItem.total * lineItem.quantity, {
+                              pattern: '# !',
+                              separator: ' ',
+                              decimal: '.',
+                              symbol: `${locale == 'uz' ? "so'm" : 'сум'}`,
+                              precision: 0,
+                            }).format()}
+                      </div>
+                      <div className="w-20 h-6 bg-yellow rounded-full flex items-center text-white ml-auto">
+                        <div className="w-6 h-6 items-center flex justify-around">
+                          <MinusIcon
+                            className="cursor-pointer w-5 h-5"
+                            onClick={() => decreaseQuantity(lineItem)}
+                          />
+                        </div>
+                        <div className="flex-grow text-center">
+                          {lineItem.quantity}
+                        </div>
+                        <div className="w-6 h-6 items-center flex justify-around">
+                          <PlusIcon
+                            className="cursor-pointer w-5 h-5"
+                            onClick={() => increaseQuantity(lineItem.id)}
+                          />
+                        </div>
+                      </div>
+                    </div>
                   </div>
                 ))}
             </div>
           </div>
-          <div className="p-10 rounded-2xl bg-white">
-            <div className="border-b flex items-center justify-between pb-10">
-              <div className="w-72">
+          <div className="md:p-10 p-5 md:rounded-2xl bg-white">
+            <div className="border-b md:flex items-center justify-between pb-10">
+              <div className="md:w-72">
                 <form onSubmit={handleSubmit(onSubmit)} className="relative">
                   <input
                     type="text"
