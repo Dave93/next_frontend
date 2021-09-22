@@ -23,7 +23,7 @@ import axios from 'axios'
 import Cookies from 'js-cookie'
 import getConfig from 'next/config'
 import { useCart } from '@framework/cart'
-import { XIcon, CheckIcon } from '@heroicons/react/outline'
+import { XIcon } from '@heroicons/react/solid'
 // import SessionContext from 'react-storefront/session/SessionContext'
 
 type ProductItem = {
@@ -79,21 +79,62 @@ const ProductItemNew: FC<ProductItem> = ({ product, channelName }) => {
   }
 
   const addModifier = (modId: number) => {
+    let modifierProduct: any = null
+    if (store.variants && store.variants.length) {
+      const activeValue: any = store.variants.find(
+        (item) => item.active == true
+      )
+
+      if (activeValue.modifierProduct) {
+        modifierProduct = activeValue.modifierProduct
+      }
+    }
     let zeroModifier = modifiers.find((mod: any) => mod.price == 0)
     if (activeModifiers.includes(modId)) {
       let currentModifier: any = modifiers.find((mod: any) => mod.id == modId)
       if (!currentModifier) return
       if (currentModifier.price == 0) return
-      setActiveModifiers([...activeModifiers.filter((id) => id != modId)])
+      let resultModifiers = [
+        ...activeModifiers.filter((id) => modId != id),
+      ].filter((id) => id)
+      if (!resultModifiers.length) {
+        resultModifiers.push(zeroModifier.id)
+      }
+      setActiveModifiers(resultModifiers)
     } else {
       let currentModifier: any = modifiers.find((mod: any) => mod.id == modId)
       if (currentModifier.price == 0) {
         setActiveModifiers([modId])
       } else {
-        setActiveModifiers([
+        let selectedModifiers = [
           ...activeModifiers.filter((id: number) => id != zeroModifier.id),
           modId,
-        ])
+        ]
+
+        if (modifierProduct) {
+          let sausage = modifiers.find(
+            (mod: any) => mod.id == modifierProduct.id
+          )
+          if (
+            selectedModifiers.includes(modifierProduct.id) &&
+            sausage.price < currentModifier.price
+          ) {
+            selectedModifiers = [
+              ...selectedModifiers.filter((modId: any) => modId != sausage.id),
+            ]
+          } else if (currentModifier.id == sausage.id) {
+            let richerModifier = modifiers
+              .filter((mod: any) => mod.price > sausage.price)
+              .map((mod: any) => mod.id)
+            selectedModifiers = [
+              ...selectedModifiers.filter(
+                (modId: any) => !richerModifier.includes(modId)
+              ),
+              modId,
+            ]
+          }
+        }
+        setActiveModifiers(selectedModifiers)
       }
     }
   }
@@ -122,17 +163,43 @@ const ProductItemNew: FC<ProductItem> = ({ product, channelName }) => {
   }
 
   const addToBasket = async (mods: any = null) => {
+    let modifierProduct: any = null
+    let selectedModifiers: any = null
     setIsLoadingBasket(true)
     await setCredentials()
 
     if (!mods || !mods.length) {
       mods = activeModifiers
     }
+    if (modifiers) {
+      selectedModifiers = modifiers
+        .filter((m: any) => mods.includes(m.id))
+        .map((m: any) => ({ id: m.id }))
+    }
 
     let selectedProdId = 0
     if (store.variants && store.variants.length) {
       let selectedVariant = store.variants.find((v: any) => v.active == true)
       selectedProdId = selectedVariant.id
+      if (selectedVariant.modifierProduct) {
+        modifierProduct = selectedVariant.modifierProduct
+      }
+
+      if (mods.length && modifierProduct) {
+        if (mods.includes(modifierProduct.id)) {
+          selectedProdId = modifierProduct.id
+          let currentProductModifiersPrices = [
+            ...modifiers
+              .filter((mod: any) => mod.id != modifierProduct.id)
+              .map((mod: any) => mod.price),
+          ]
+          selectedModifiers = modifierProduct.modifiers
+            .filter((mod: any) =>
+              currentProductModifiersPrices.includes(mod.price)
+            )
+            .map((m: any) => ({ id: m.id }))
+        }
+      }
     } else {
       selectedProdId = +store.id
     }
@@ -148,11 +215,7 @@ const ProductItemNew: FC<ProductItem> = ({ product, channelName }) => {
             {
               id: selectedProdId,
               quantity: 1,
-              modifiers:
-                modifiers &&
-                modifiers
-                  .filter((m: any) => mods.includes(m.id))
-                  .map((m: any) => ({ id: m.id })),
+              modifiers: selectedModifiers,
             },
           ],
         }
@@ -165,11 +228,7 @@ const ProductItemNew: FC<ProductItem> = ({ product, channelName }) => {
             {
               id: selectedProdId,
               quantity: 1,
-              modifiers:
-                modifiers &&
-                modifiers
-                  .filter((m: any) => mods.includes(m.id))
-                  .map((m: any) => ({ id: m.id })),
+              modifiers: selectedModifiers,
             },
           ],
         }
@@ -218,6 +277,15 @@ const ProductItemNew: FC<ProductItem> = ({ product, channelName }) => {
       )
       if (activeValue && activeValue.modifiers) {
         modifier = activeValue.modifiers
+        if (activeValue.modifierProduct) {
+          modifier.push({
+            id: activeValue.modifierProduct.id,
+            name: 'Сосисочный борт',
+            name_uz: 'Sosiskali tomoni',
+            price: +activeValue.modifierProduct.price - +activeValue.price,
+            assets: [],
+          })
+        }
       }
     } else {
       if (store.modifiers && store.modifiers.length) {
@@ -301,60 +369,68 @@ const ProductItemNew: FC<ProductItem> = ({ product, channelName }) => {
               </svg>
             </div>
           )}
+          <div className="absolute right-2">
+            <XIcon
+              className="cursor-pointer h-4 text-black w-4"
+              onClick={() => setIsChoosingModifier(false)}
+            />
+          </div>
           <div className="border-b border-yellow pb-3 text-center text-xl w-full">
             {tr('add')}
           </div>
-          <div className="flex-grow gap-3 grid grid-cols-2">
-            {modifiers &&
-              modifiers.map((mod: any) => (
-                <div
-                  key={mod.id}
-                  className={`border ${
-                    activeModifiers.includes(mod.id)
-                      ? 'border-yellow'
-                      : 'border-gray-300'
-                  } flex flex-col justify-between overflow-hidden rounded-[15px] cursor-pointer`}
-                  onClick={() => addModifier(mod.id)}
-                >
-                  <div className="flex-grow pt-2 px-2">
-                    {mod.assets.length ? (
-                      <Image
-                        src={`${webAddress}/storage/${mod.assets[0]?.location}/${mod.assets[0]?.filename}`}
-                        width={80}
-                        height={80}
-                        alt={mod.name}
-                        priority={true}
-                      />
-                    ) : (
-                      <Image
-                        src="/no_photo.svg"
-                        width={80}
-                        height={80}
-                        alt={mod.name}
-                        className="rounded-full"
-                      />
-                    )}
-                  </div>
-                  <div className="px-2 text-center text-xs pb-1">
-                    {locale == 'uz' ? mod.name_uz : mod.name}
-                  </div>
+          <div className="max-h-96 overflow-y-auto">
+            <div className="flex-grow gap-3 grid grid-cols-2">
+              {modifiers &&
+                modifiers.map((mod: any) => (
                   <div
-                    className={`${
+                    key={mod.id}
+                    className={`border ${
                       activeModifiers.includes(mod.id)
-                        ? 'bg-yellow'
-                        : 'bg-gray-300'
-                    } font-bold px-4 py-2 text-center text-white text-xs`}
+                        ? 'border-yellow'
+                        : 'border-gray-300'
+                    } flex flex-col justify-between overflow-hidden rounded-[15px] cursor-pointer`}
+                    onClick={() => addModifier(mod.id)}
                   >
-                    {currency(mod.price, {
-                      pattern: '# !',
-                      separator: ' ',
-                      decimal: '.',
-                      symbol: `${locale == 'uz' ? "so'm" : 'сум'}`,
-                      precision: 0,
-                    }).format()}
+                    <div className="flex-grow pt-2 px-2">
+                      {mod.assets.length ? (
+                        <Image
+                          src={`${webAddress}/storage/${mod.assets[0]?.location}/${mod.assets[0]?.filename}`}
+                          width={80}
+                          height={80}
+                          alt={mod.name}
+                          priority={true}
+                        />
+                      ) : (
+                        <Image
+                          src="/no_photo.svg"
+                          width={80}
+                          height={80}
+                          alt={mod.name}
+                          className="rounded-full"
+                        />
+                      )}
+                    </div>
+                    <div className="px-2 text-center text-xs pb-1">
+                      {locale == 'uz' ? mod.name_uz : mod.name}
+                    </div>
+                    <div
+                      className={`${
+                        activeModifiers.includes(mod.id)
+                          ? 'bg-yellow'
+                          : 'bg-gray-300'
+                      } font-bold px-4 py-2 text-center text-white text-xs`}
+                    >
+                      {currency(mod.price, {
+                        pattern: '# !',
+                        separator: ' ',
+                        decimal: '.',
+                        symbol: `${locale == 'uz' ? "so'm" : 'сум'}`,
+                        precision: 0,
+                      }).format()}
+                    </div>
                   </div>
-                </div>
-              ))}
+                ))}
+            </div>
           </div>
           <div className="gap-3 grid grid-cols-2 w-full">
             <button

@@ -30,7 +30,7 @@ const SmallCartMobile: FC = () => {
 
   const goToCheckout = (e: any) => {
     e.preventDefault()
-    router.push('/order/')
+    router.push('/cart/')
   }
 
   return (
