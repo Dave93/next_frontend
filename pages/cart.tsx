@@ -269,7 +269,6 @@ export default function Cart() {
                     className="flex justify-between items-center border-b pb-3"
                     key={lineItem.id}
                   >
-                    {console.log(lineItem)}
                     <div className="flex items-center">
                       <Image
                         src={
@@ -297,6 +296,17 @@ export default function Cart() {
                               ][locale || 'ru']}
                         </div>
                       </div>
+                      {lineItem.modifiers && (
+                        <div>
+                          {lineItem.modifiers
+                            .filter((mod: any) => mod.price > 0)
+                            .map((mod: any) => (
+                              <div className="bg-yellow rounded-full px-2 py-1 ml-2 text-xs text-white">
+                                {locale == 'uz' ? mod.name_uz : mod.name}
+                              </div>
+                            ))}
+                        </div>
+                      )}
                     </div>
                     <div className="md:flex md:space-x-10 items-center hidden">
                       <div className="w-20 h-6 ml-1 bg-yellow rounded-full flex items-center text-white">
