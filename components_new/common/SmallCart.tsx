@@ -163,7 +163,7 @@ const SmallCart: FC<SmallCartProps> = ({
 
   const goToCheckout = (e: any) => {
     e.preventDefault()
-    router.push('/order/')
+    router.push('/cart/')
   }
   console.log(data)
   return (
@@ -355,7 +355,7 @@ const SmallCart: FC<SmallCartProps> = ({
               onClick={goToCheckout}
               className="cursor-pointer outline-none focus:outline-none bg-yellow py-3 rounded-full w-full text-white font-bold"
             >
-              {tr('checkout')}
+              {tr('main_to_basket')}
             </button>
           </div>
         )}
