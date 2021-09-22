@@ -72,7 +72,7 @@ const Cart: FC<CartProps> = ({ channelName }: { channelName: any }) => {
     setIsCartLoading(true)
     await setCredentials()
     const { data } = await axios.delete(
-      `${webAddress}/api/v1/basket-lines/${hashids.encode(lineId)}`
+      `${webAddress}/api/basket-lines/${hashids.encode(lineId)}`
     )
     if (cartId) {
       let { data: basket } = await axios.get(
