@@ -297,7 +297,7 @@ export default function Cart() {
                         </div>
                       </div>
                       {lineItem.modifiers && (
-                        <div>
+                        <div className="flex">
                           {lineItem.modifiers
                             .filter((mod: any) => mod.price > 0)
                             .map((mod: any) => (
