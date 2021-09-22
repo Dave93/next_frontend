@@ -33,23 +33,28 @@ let otpTimerRef: NodeJS.Timeout
 const SignInButton: FC = () => {
   const { t: tr } = useTranslation('common')
 
-  let [isOpen, setIsOpen] = useState(false)
   let [isShowPrivacy, setIsShowPrivacy] = useState(false)
   const [otpCode, setOtpCode] = useState('')
   const [submitError, setSubmitError] = useState('')
   const [isShowPasswordForm, setIsShowPasswordForm] = useState(false)
   const [otpShowCode, setOtpShowCode] = useState(0)
 
-  const { user, setUserData } = useUI()
+  const {
+    user,
+    setUserData,
+    showSignInModal,
+    openSignInModal,
+    closeSignInModal,
+  } = useUI()
 
   const otpTime = useRef(0)
 
   const openModal = () => {
-    setIsOpen(true)
+    openSignInModal()
   }
 
   const closeModal = () => {
-    setIsOpen(false)
+    closeSignInModal()
   }
 
   const {
@@ -187,13 +192,13 @@ const SignInButton: FC = () => {
 
   const showPrivacy = (e: React.MouseEvent<HTMLElement>) => {
     e.preventDefault()
-    setIsOpen(false)
+    closeSignInModal()
     setIsShowPrivacy(true)
   }
 
   const closePrivacy = () => {
     setIsShowPrivacy(false)
-    setIsOpen(true)
+    openSignInModal()
   }
 
   let authButtonRef = useRef(null)
@@ -234,7 +239,7 @@ const SignInButton: FC = () => {
           >
             {tr('signIn')}
           </button>
-          <Transition appear show={isOpen} as={Fragment}>
+          <Transition appear show={showSignInModal} as={Fragment}>
             <Dialog
               as="div"
               className="fixed inset-0 z-50 overflow-y-auto"
