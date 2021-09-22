@@ -82,6 +82,7 @@ const CreateYourPizza: FC<CreatePizzaProps> = ({ sec, channelName }) => {
   const addToBasket = async () => {
     setIsLoadingBasket(true)
     await setCredentials()
+    let modifierProduct: any = null
     let selectedModifiers: any[] = [...activeModifiers]
     let allModifiers = [...modifiers]
     let freeModifiers = allModifiers.find((mod: any) => mod.price == 0)
@@ -100,6 +101,26 @@ const CreateYourPizza: FC<CreatePizzaProps> = ({ sec, channelName }) => {
         return v?.custom_name == activeCustomName
       }
     })
+
+    if (leftProduct.modifierProduct) {
+      modifierProduct = leftProduct.modifierProduct
+    }
+
+    if (selectedModifiers.length && modifierProduct) {
+      if ([...activeModifiers].includes(modifierProduct.id)) {
+        leftProduct = modifierProduct
+        let currentProductModifiersPrices = [
+          ...modifiers
+            .filter((mod: any) => mod.id != modifierProduct.id)
+            .map((mod: any) => mod.price),
+        ]
+        selectedModifiers = modifierProduct.modifiers
+          .filter((mod: any) =>
+            currentProductModifiersPrices.includes(mod.price)
+          )
+          .map((m: any) => ({ id: m.id }))
+      }
+    }
 
     let rightProduct = rightSelectedProduct.variants.find((v: any) => {
       if (locale == 'uz') {
@@ -229,6 +250,34 @@ const CreateYourPizza: FC<CreatePizzaProps> = ({ sec, channelName }) => {
       }
     })
 
+    let activeVariant: any = null
+    leftSelectedProduct.variants.map((vars: any) => {
+      if (locale == 'uz') {
+        if (vars?.custom_name_uz == activeCustomName) {
+          activeVariant = vars
+        }
+      } else {
+        if (vars?.custom_name == activeCustomName) {
+          activeVariant = vars
+        }
+      }
+    })
+
+    if (activeVariant && activeVariant.modifierProduct) {
+      let isExistSausage = leftModifiers.find(
+        (mod: any) => mod.id == activeVariant.modifierProduct.id
+      )
+      if (!isExistSausage) {
+        leftModifiers.push({
+          id: activeVariant.modifierProduct.id,
+          name: 'Сосисочный борт',
+          name_uz: 'Sosiskali tomoni',
+          price: +activeVariant.modifierProduct.price - +activeVariant.price,
+          assets: [],
+        })
+      }
+    }
+
     if (leftModifiers) {
       leftModifiers.sort(function (a: any, b: any) {
         if (+a.price > +b.price) {
@@ -272,6 +321,23 @@ const CreateYourPizza: FC<CreatePizzaProps> = ({ sec, channelName }) => {
   ])
 
   const addModifier = (id: number) => {
+    let modifierProduct: any = null
+    let activeVariant: any = null
+
+    leftSelectedProduct.variants.map((vars: any) => {
+      if (locale == 'uz') {
+        if (vars?.custom_name_uz == activeCustomName) {
+          activeVariant = vars
+        }
+      } else {
+        if (vars?.custom_name == activeCustomName) {
+          activeVariant = vars
+        }
+      }
+    })
+    if (activeVariant.modifierProduct) {
+      modifierProduct = activeVariant.modifierProduct
+    }
     let zeroModifier = modifiers.find((mod: any) => mod.price == 0)
     if (activeModifiers.includes(id)) {
       let currentModifier: any = modifiers.find((mod: any) => mod.id == id)
@@ -289,10 +355,37 @@ const CreateYourPizza: FC<CreatePizzaProps> = ({ sec, channelName }) => {
       if (currentModifier.price == 0) {
         setActiveModifeirs([id])
       } else {
-        setActiveModifeirs([
-          ...activeModifiers.filter((id: number) => id != zeroModifier.id),
+        let selectedModifiers = [
+          ...activeModifiers.filter(
+            (modId: number) => modId != zeroModifier.id
+          ),
           id,
-        ])
+        ]
+
+        if (modifierProduct) {
+          let sausage = modifiers.find(
+            (mod: any) => mod.id == modifierProduct.id
+          )
+          if (
+            selectedModifiers.includes(modifierProduct.id) &&
+            sausage.price < currentModifier.price
+          ) {
+            selectedModifiers = [
+              ...selectedModifiers.filter((modId: any) => modId != sausage.id),
+            ]
+          } else if (currentModifier.id == sausage.id) {
+            let richerModifier = modifiers
+              .filter((mod: any) => mod.price > sausage.price)
+              .map((mod: any) => mod.id)
+            selectedModifiers = [
+              ...selectedModifiers.filter(
+                (modId: any) => !richerModifier.includes(modId)
+              ),
+              id,
+            ]
+          }
+        }
+        setActiveModifeirs(selectedModifiers)
       }
     }
   }
@@ -551,7 +644,7 @@ const CreateYourPizza: FC<CreatePizzaProps> = ({ sec, channelName }) => {
                             {tr('add_to_pizza')}
                           </span>
                         </div>
-                        <div className="grid grid-cols-4 gap-2">
+                        <div className="flex space-x-2">
                           {modifiers.map((mod: any) => (
                             <div
                               key={mod.id}
@@ -559,7 +652,7 @@ const CreateYourPizza: FC<CreatePizzaProps> = ({ sec, channelName }) => {
                                 activeModifiers.includes(mod.id)
                                   ? 'border-yellow'
                                   : 'border-gray-300'
-                              } flex flex-col justify-between overflow-hidden rounded-[15px] cursor-pointer`}
+                              } flex w-24 flex-col justify-between overflow-hidden rounded-[15px] cursor-pointer`}
                               onClick={() => addModifier(mod.id)}
                             >
                               <div className="flex-grow pt-2 px-2">
