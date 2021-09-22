@@ -269,15 +269,15 @@ export default function Cart() {
                     className="flex justify-between items-center border-b pb-3"
                     key={lineItem.id}
                   >
-                    <div className="flex items-center">
+                    <div className="md:flex items-center text-center">
                       <Image
                         src={
                           lineItem?.variant?.product?.assets?.length
                             ? `${webAddress}/storage/${lineItem?.variant?.product?.assets[0]?.location}/${lineItem?.variant?.product?.assets[0]?.filename}`
                             : '/no_photo.svg'
                         }
-                        width="70"
-                        height="70"
+                        width="100"
+                        height="100"
                       />
                       <div className="md:ml-7 ml-1 space-y-2">
                         <div className="text-xl font-bold">
@@ -297,11 +297,11 @@ export default function Cart() {
                         </div>
                       </div>
                       {lineItem.modifiers && (
-                        <div className="flex">
+                        <div className="md:flex">
                           {lineItem.modifiers
                             .filter((mod: any) => mod.price > 0)
                             .map((mod: any) => (
-                              <div className="bg-yellow rounded-full px-2 py-1 ml-2 text-xs text-white">
+                              <div className="bg-yellow rounded-full px-2 py-1 md:ml-2 text-xs text-white my-2">
                                 {locale == 'uz' ? mod.name_uz : mod.name}
                               </div>
                             ))}
@@ -415,7 +415,7 @@ export default function Cart() {
                   </button>
                 </form>
               </div>
-              <div className="flex items-center font-bold">
+              <div className="flex font-bold items-center justify-between mt-10">
                 <div className="text-lg text-gray-400">
                   {tr('basket_order_price')}
                 </div>
