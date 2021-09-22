@@ -79,6 +79,7 @@ export interface State {
   locationData: LocationData | null
   cities: City[] | null
   activeCity: City | null
+  showSignInModal: boolean
 }
 
 const initialState = {
@@ -92,6 +93,7 @@ const initialState = {
   locationData,
   cities: null,
   activeCity: activeCity,
+  showSignInModal: false,
 }
 
 type Action =
@@ -140,6 +142,12 @@ type Action =
   | {
       type: 'SET_ACTIVE_CITY'
       value: City
+    }
+  | {
+      type: 'SHOW_SIGNIN_MODAL'
+    }
+  | {
+      type: 'CLOSE_SIGNIN_MODAL'
     }
 
 type MODAL_VIEWS =
@@ -251,6 +259,18 @@ function uiReducer(state: State, action: Action) {
         activeCity: action.value,
       }
     }
+    case 'SHOW_SIGNIN_MODAL': {
+      return {
+        ...state,
+        showSignInModal: true,
+      }
+    }
+    case 'CLOSE_SIGNIN_MODAL': {
+      return {
+        ...state,
+        showSignInModal: false,
+      }
+    }
   }
 }
 
@@ -330,6 +350,16 @@ export const UIProvider: FC = (props) => {
     [dispatch]
   )
 
+  const openSignInModal = useCallback(
+    () => dispatch({ type: 'SHOW_SIGNIN_MODAL' }),
+    [dispatch]
+  )
+
+  const closeSignInModal = useCallback(
+    () => dispatch({ type: 'CLOSE_SIGNIN_MODAL' }),
+    [dispatch]
+  )
+
   const value = useMemo(
     () => ({
       ...state,
@@ -348,6 +378,8 @@ export const UIProvider: FC = (props) => {
       setLocationData,
       setCitiesData,
       setActiveCity,
+      openSignInModal,
+      closeSignInModal,
     }),
     [state]
   )

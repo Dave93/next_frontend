@@ -36,7 +36,6 @@ const Header: FC<{
             {menuOpen ? (
               <div className="flex items-center justify-between w-6/12">
                 <HeaderMenu menuItems={menu} />
-                <SignInButton />
                 <LanguageDropDown />
                 <XIcon
                   className="cursor-pointer h-5 text-secondary w-5"
@@ -51,6 +50,9 @@ const Header: FC<{
                 <div className="flex items-center">
                   <div className="md:flex hidden">
                     <ChooseCityDropDown />
+                    <div className="mx-2">
+                      <SignInButton />
+                    </div>
                   </div>
                   <div className="hidden md:flex">
                     <MenuIcon

@@ -10,6 +10,7 @@ import getConfig from 'next/config'
 import { useRouter } from 'next/router'
 import useTranslation from 'next-translate/useTranslation'
 import Hashids from 'hashids'
+import { useUI } from '@components/ui/context'
 
 const { publicRuntimeConfig } = getConfig()
 let webAddress = publicRuntimeConfig.apiUrl
@@ -33,6 +34,8 @@ const SmallCart: FC<SmallCartProps> = ({
   const { data, isLoading, isEmpty, mutate } = useCart({
     cartId,
   })
+
+  const { user, openSignInModal } = useUI()
 
   const [isCartLoading, setIsCartLoading] = useState(false)
 
@@ -163,9 +166,12 @@ const SmallCart: FC<SmallCartProps> = ({
 
   const goToCheckout = (e: any) => {
     e.preventDefault()
-    router.push('/cart/')
+    if (user) {
+      router.push('/cart/')
+    } else {
+      openSignInModal()
+    }
   }
-  console.log(data)
   return (
     <div className="mt-2">
       <div className="border border-yellow px-5 py-7 rounded-[15px] relative">
