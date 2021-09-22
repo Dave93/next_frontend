@@ -144,6 +144,14 @@ const Orders: FC<OrdersProps> = ({ channelName }: { channelName: any }) => {
   const { data, isLoading, isEmpty, mutate } = useCart({
     cartId,
   })
+  let currentAddress = ''
+  if (activeCity.active) {
+    if (locale == 'ru') {
+      currentAddress = 'Узбекистан, ' + activeCity.name + ','
+    } else {
+      currentAddress = "O'zbekiston, " + activeCity.name_uz + ','
+    }
+  }
   const {
     register,
     handleSubmit,
@@ -160,7 +168,7 @@ const Orders: FC<OrdersProps> = ({ channelName }: { channelName: any }) => {
       name: user?.user?.name,
       phone: user?.user?.phone,
       email: '',
-      address: locationData?.address || '',
+      address: locationData?.address || currentAddress,
       flat: locationData?.flat || '',
       house: locationData?.house || '',
       entrance: locationData?.entrance || '',
@@ -321,6 +329,17 @@ const Orders: FC<OrdersProps> = ({ channelName }: { channelName: any }) => {
   )
 
   const setActive = (city: City) => {
+    if (locale == 'uz') {
+      setValue('address', "O'zbekiston, " + city.name_uz)
+      downshiftControl?.current?.reset({
+        inputValue: "O'zbekiston, " + city.name_uz + ',',
+      })
+    } else {
+      setValue('address', 'Узбекистан, ' + city.name)
+      downshiftControl?.current?.reset({
+        inputValue: 'Узбекистан, ' + city.name + ',',
+      })
+    }
     setActiveCity(city)
     if (city) setMapCenter([+city.lat, +city.lon])
   }
@@ -786,7 +805,7 @@ const Orders: FC<OrdersProps> = ({ channelName }: { channelName: any }) => {
                 <Menu as="div" className="relative inline-block text-left">
                   <div>
                     <Menu.Button className="focus:outline-none font-medium inline-flex justify-center px-4 py-2 text-secondary text-sm w-full">
-                      {chosenCity?.name}
+                      {locale == 'uz' ? chosenCity?.name_uz : chosenCity?.name}
                       <ChevronDownIcon
                         className="w-5 h-5 ml-2 -mr-1 text-violet-200 hover:text-violet-100"
                         aria-hidden="true"
@@ -813,7 +832,7 @@ const Orders: FC<OrdersProps> = ({ channelName }: { channelName: any }) => {
                                 : 'text-secondary'
                             }`}
                           >
-                            {city.name}
+                            {locale == 'uz' ? city.name_uz : city.name}
                           </span>
                         </Menu.Item>
                       ))}
@@ -869,7 +888,9 @@ const Orders: FC<OrdersProps> = ({ channelName }: { channelName: any }) => {
                       itemToString={(item) =>
                         item ? item.formatted : watch('address')
                       }
-                      initialInputValue={locationData?.address || ''}
+                      initialInputValue={
+                        locationData?.address || currentAddress
+                      }
                     >
                       {({
                         getInputProps,
@@ -1530,8 +1551,8 @@ const Orders: FC<OrdersProps> = ({ channelName }: { channelName: any }) => {
                   />
                 </div>
               )}
-              <div className="flex-grow mx-2">
-                <div className="font-bold text-xl mb-2">
+              <div className="flex flex-grow items-center mx-2">
+                <div className="font-bold text-xl">
                   {lineItem.child && lineItem.child.length
                     ? `${
                         lineItem?.variant?.product?.attribute_data?.name[
@@ -1545,6 +1566,14 @@ const Orders: FC<OrdersProps> = ({ channelName }: { channelName: any }) => {
                         channelName
                       ][locale || 'ru']}
                 </div>
+                {lineItem.modifiers &&
+                  lineItem.modifiers
+                    .filter((mod: any) => mod.price > 0)
+                    .map((mod: any) => (
+                      <div className="bg-yellow rounded-full px-2 py-1 ml-2 text-xs text-white">
+                        {locale == 'uz' ? mod.name_uz : mod.name}
+                      </div>
+                    ))}
               </div>
               <div className="text-xl">
                 {lineItem.child && lineItem.child.length
