@@ -36,6 +36,7 @@ import { useUI } from '@components/ui/context'
 import { toast } from 'react-toastify'
 import useTranslation from 'next-translate/useTranslation'
 import { City } from '@commerce/types/cities'
+import { useRouter } from 'next/router'
 
 const { publicRuntimeConfig } = getConfig()
 
@@ -45,6 +46,7 @@ interface Props {
 }
 
 const LocationTabs: FC<Props> = ({ setOpen }) => {
+  const { locale } = useRouter()
   const { locationData, setLocationData, cities, activeCity, setActiveCity } =
     useUI()
   const [tabIndex, setTabIndex] = useState(
@@ -86,9 +88,20 @@ const LocationTabs: FC<Props> = ({ setOpen }) => {
 
   const [configData, setConfigData] = useState({} as any)
 
+  console.log(activeCity)
+
+  let currentAddress = ''
+  if (activeCity.active) {
+    if (locale == 'ru') {
+      currentAddress = 'Узбекистан, ' + activeCity.name + ','
+    } else {
+      currentAddress = "O'zbekiston, " + activeCity.name_uz + ','
+    }
+  }
+
   const { register, handleSubmit, getValues, setValue, watch } = useForm({
     defaultValues: {
-      address: locationData?.address || '',
+      address: locationData?.address || currentAddress,
       flat: locationData?.flat || '',
       house: locationData?.house || '',
       entrance: locationData?.entrance || '',
@@ -164,6 +177,17 @@ const LocationTabs: FC<Props> = ({ setOpen }) => {
   )
 
   const setActive = (city: City) => {
+    if (locale == 'uz') {
+      setValue('address', "O'zbekiston, " + city.name_uz)
+      downshiftControl?.current?.reset({
+        inputValue: "O'zbekiston, " + city.name_uz + ','
+      })
+    } else {
+      setValue('address', 'Узбекистан, ' + city.name)
+      downshiftControl?.current?.reset({
+        inputValue: 'Узбекистан, ' + city.name + ','
+      })
+    }
     setActiveCity(city)
     if (city) setMapCenter([+city.lat, +city.lon])
   }
@@ -360,7 +384,7 @@ const LocationTabs: FC<Props> = ({ setOpen }) => {
               <Menu as="div" className="relative inline-block text-left">
                 <div>
                   <Menu.Button className="focus:outline-none font-medium inline-flex justify-center px-4 py-2 text-secondary text-sm w-full">
-                    {chosenCity?.name}
+                    {locale == 'uz' ? chosenCity?.name_uz : chosenCity?.name}
                     <ChevronDownIcon
                       className="w-5 h-5 ml-2 -mr-1 text-violet-200 hover:text-violet-100"
                       aria-hidden="true"
@@ -387,7 +411,7 @@ const LocationTabs: FC<Props> = ({ setOpen }) => {
                               : 'text-secondary'
                           }`}
                         >
-                          {city.name}
+                          {locale == 'uz' ? city.name_uz : city.name}
                         </span>
                       </Menu.Item>
                     ))}
@@ -444,7 +468,7 @@ const LocationTabs: FC<Props> = ({ setOpen }) => {
                   itemToString={(item) =>
                     item ? item.formatted : watch('address')
                   }
-                  initialInputValue={locationData?.address || ''}
+                  initialInputValue={locationData?.address || currentAddress}
                 >
                   {({
                     getInputProps,

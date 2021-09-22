@@ -229,6 +229,18 @@ const CreateYourPizza: FC<CreatePizzaProps> = ({ sec, channelName }) => {
       }
     })
 
+    if (leftModifiers) {
+      leftModifiers.sort(function (a: any, b: any) {
+        if (+a.price > +b.price) {
+          return 1
+        }
+        if (+a.price < +b.price) {
+          return -1
+        }
+        // a должно быть равным b
+        return 0
+      })
+    }
     return leftModifiers
   }, [leftSelectedProduct, rightSelectedProduct, activeCustomName])
 
@@ -265,7 +277,13 @@ const CreateYourPizza: FC<CreatePizzaProps> = ({ sec, channelName }) => {
       let currentModifier: any = modifiers.find((mod: any) => mod.id == id)
       if (!currentModifier) return
       if (currentModifier.price == 0) return
-      setActiveModifeirs([...activeModifiers.filter((modId) => modId != id)])
+      let resultModifiers = [
+        ...activeModifiers.filter((modId) => modId != id),
+      ].filter((id) => id)
+      if (!resultModifiers.length) {
+        resultModifiers.push(zeroModifier.id)
+      }
+      setActiveModifeirs(resultModifiers)
     } else {
       let currentModifier: any = modifiers.find((mod: any) => mod.id == id)
       if (currentModifier.price == 0) {

@@ -236,6 +236,18 @@ const CreateYourPizza: FC<CreatePizzaProps> = ({ sec, channelName }) => {
       }
     })
 
+    if (leftModifiers) {
+      leftModifiers.sort(function (a: any, b: any) {
+        if (+a.price > +b.price) {
+          return 1
+        }
+        if (+a.price < +b.price) {
+          return -1
+        }
+        // a должно быть равным b
+        return 0
+      })
+    }
     return leftModifiers
   }, [leftSelectedProduct, rightSelectedProduct, activeCustomName])
 

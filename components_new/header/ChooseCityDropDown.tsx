@@ -2,8 +2,12 @@ import { Fragment, useState, FC, memo, useMemo } from 'react'
 import { Menu, Transition } from '@headlessui/react'
 import { useUI } from '@components/ui'
 import { City } from '@commerce/types/cities'
+import { useRouter } from 'next/router'
+import useTranslation from 'next-translate/useTranslation'
 
 const ChooseCityDropDown: FC = () => {
+  const { t: tr } = useTranslation('common')
+  const { locale } = useRouter();
   const { cities, activeCity, setActiveCity } = useUI()
 
   const chosenCity = useMemo(() => {
@@ -20,7 +24,7 @@ const ChooseCityDropDown: FC = () => {
         <>
           <div>
             <Menu.Button className="bg-white focus:outline-none font-medium inline-flex justify-center outline-none px-4 py-2 text-secondary text-sm w-full">
-              {chosenCity?.name}
+              {locale == 'uz' ? chosenCity?.name_uz : chosenCity?.name}
             </Menu.Button>
           </div>
 
@@ -41,7 +45,7 @@ const ChooseCityDropDown: FC = () => {
               <Menu.Item>
                 {({ active }) => (
                   <span className="text-secondary block px-4 py-2 text-sm">
-                    Ваш город
+                    {tr('your_city')}
                   </span>
                 )}
               </Menu.Item>
@@ -55,7 +59,9 @@ const ChooseCityDropDown: FC = () => {
                         : 'text-secondary'
                     }`}
                   >
-                    {item.name}
+                    {locale == 'uz'
+                      ? item.name_uz
+                      : item.name}
                   </span>
                 </Menu.Item>
               ))}
