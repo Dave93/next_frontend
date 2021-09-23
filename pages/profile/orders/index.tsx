@@ -40,7 +40,7 @@ export async function getServerSideProps({
   axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest'
 
   let orderData = []
-
+  console.log(otpToken)
   try {
     const { data } = await axios.get(`${webAddress}/api/my-orders`, {
       headers: {
