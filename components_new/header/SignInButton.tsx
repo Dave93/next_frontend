@@ -11,6 +11,7 @@ import { useUI } from '@components/ui/context'
 import styles from './SignInButton.module.css'
 import UserProfileDropDown from './UserProfileDropDown'
 import Input from 'react-phone-number-input/input'
+import { useRouter } from 'next/router'
 
 axios.defaults.withCredentials = true
 
@@ -32,6 +33,8 @@ let otpTimerRef: NodeJS.Timeout
 
 const SignInButton: FC = () => {
   const { t: tr } = useTranslation('common')
+
+  let router = useRouter()
 
   let [isShowPrivacy, setIsShowPrivacy] = useState(false)
   const [otpCode, setOtpCode] = useState('')
@@ -184,6 +187,10 @@ const SignInButton: FC = () => {
       clearInterval(otpTimerRef)
       setUserData(result)
       setIsShowPasswordForm(false)
+      if (router.query && router.query.backUrl) {
+        let backUrl: string = router.query.backUrl as string
+        router.push(backUrl)
+      }
     }
   }
 

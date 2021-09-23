@@ -132,6 +132,7 @@ const Orders: FC<OrdersProps> = ({ channelName }: { channelName: any }) => {
     cities,
     activeCity,
     setActiveCity,
+    openSignInModal,
   } = useUI()
   let cartId: string | null = null
   if (typeof window !== 'undefined') {
@@ -587,6 +588,9 @@ const Orders: FC<OrdersProps> = ({ channelName }: { channelName: any }) => {
   }
 
   const saveOrder = async () => {
+    if (!user) {
+      return openSignInModal()
+    }
     setIsSavingOrder(true)
     await setCredentials()
     const otpToken = Cookies.get('opt_token')
@@ -609,7 +613,7 @@ const Orders: FC<OrdersProps> = ({ channelName }: { channelName: any }) => {
 
       setIsSavingOrder(false)
       clearInterval(otpTimerRef)
-      setUserData(data.user)
+      // setUserData(data.user)
       localStorage.removeItem('basketId')
       router.push(`/order/${data.order.id}`)
     } catch (e) {
@@ -619,9 +623,6 @@ const Orders: FC<OrdersProps> = ({ channelName }: { channelName: any }) => {
       })
       setIsSavingOrder(false)
     }
-    // if (Object.keys(errors).length) {
-    //   console.log(errors)
-    // }
   }
 
   const otpTimerText = useMemo(() => {
@@ -1570,7 +1571,10 @@ const Orders: FC<OrdersProps> = ({ channelName }: { channelName: any }) => {
                   lineItem.modifiers
                     .filter((mod: any) => mod.price > 0)
                     .map((mod: any) => (
-                      <div className="bg-yellow rounded-full px-2 py-1 ml-2 text-xs text-white">
+                      <div
+                        className="bg-yellow rounded-full px-2 py-1 ml-2 text-xs text-white"
+                        key={mod.id}
+                      >
                         {locale == 'uz' ? mod.name_uz : mod.name}
                       </div>
                     ))}
@@ -1884,7 +1888,7 @@ const Orders: FC<OrdersProps> = ({ channelName }: { channelName: any }) => {
               !locationData?.terminal_id ? 'opacity-25 cursor-not-allowed' : ''
             }`}
             disabled={!locationData?.terminal_id || isSavingOrder}
-            onClick={handleSubmit(prepareOrder)}
+            onClick={handleSubmit(saveOrder)}
           >
             {isSavingOrder ? (
               <svg

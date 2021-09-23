@@ -301,7 +301,10 @@ export default function Cart() {
                           {lineItem.modifiers
                             .filter((mod: any) => mod.price > 0)
                             .map((mod: any) => (
-                              <div className="bg-yellow rounded-full px-2 py-1 md:ml-2 text-xs text-white my-2">
+                              <div
+                                className="bg-yellow rounded-full px-2 py-1 md:ml-2 text-xs text-white my-2"
+                                key={mod.id}
+                              >
                                 {locale == 'uz' ? mod.name_uz : mod.name}
                               </div>
                             ))}

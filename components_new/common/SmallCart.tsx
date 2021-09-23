@@ -169,6 +169,9 @@ const SmallCart: FC<SmallCartProps> = ({
     if (user) {
       router.push('/cart/')
     } else {
+      router.push('/?backUrl=/cart/', undefined, {
+        shallow: true,
+      })
       openSignInModal()
     }
   }
