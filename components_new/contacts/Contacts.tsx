@@ -1,33 +1,42 @@
 import useTranslation from 'next-translate/useTranslation'
 import { FC, memo } from 'react'
-import { useForm } from 'react-hook-form'
+import { useForm, Controller } from 'react-hook-form'
 import { XIcon } from '@heroicons/react/outline'
+import Input from 'react-phone-number-input/input'
 
 const Contacts: FC = () => {
   const { t: tr } = useTranslation('common')
 
   type FormData = {
     name: string
-    phone_number: string
+    phone: string
     email: string
-    order_number: string
-    review: string
+    order_id: string
+    text: string
   }
-  const { register, handleSubmit, reset, watch, formState, getValues } =
-    useForm<FormData>({
-      defaultValues: {
-        name: '',
-        phone_number: '',
-        email: '',
-        order_number: '',
-        review: '',
-      },
-    })
+  const {
+    register,
+    handleSubmit,
+    reset,
+    watch,
+    getValues,
+    control,
+    formState: { errors },
+  } = useForm<FormData>({
+    mode: 'onChange',
+    defaultValues: {
+      name: '',
+      phone: '',
+      email: '',
+      order_id: '',
+      text: '',
+    },
+  })
   const name = watch('name')
-  const phone = watch('phone_number')
+  const phone = watch('phone')
   const email = watch('email')
-  const order = watch('order_number')
-  const review = watch('review')
+  const order_id = watch('order_id')
+  const text = watch('text')
 
   const onSubmit = (data: any) => console.log(JSON.stringify(data))
 
@@ -42,7 +51,7 @@ const Contacts: FC = () => {
   return (
     <div className="mx-5 md:mx-0">
       <div>
-        <div className="text-3xl mb-1">{tr("contacts")}</div>
+        <div className="text-3xl mb-1">{tr('contacts')}</div>
         <div className="border-b-2 w-24 border-yellow mb-10"></div>
       </div>
       <div className="md:grid grid-cols-3 gap-24 mb-16">
@@ -78,7 +87,9 @@ const Contacts: FC = () => {
               <div className="flex items-center justify-end">
                 <input
                   type="text"
-                  {...register('name')}
+                  {...register('name', {
+                    required: true,
+                  })}
                   className="bg-gray-100 px-8 py-2 rounded-full outline-none focus:outline-none w-full"
                 />
                 {name && (
@@ -90,26 +101,51 @@ const Contacts: FC = () => {
                   </button>
                 )}
               </div>
+              {errors.name && (
+                <div className="text-sm text-center text-red-600">
+                  {tr('required')}
+                </div>
+              )}
             </div>
             <div className="md:w-80">
               <label className="text-sm text-gray-400">
                 {tr('phone_number')}
               </label>
               <div className="md:flex items-center justify-end">
-                <input
-                  type="text"
-                  {...register('phone_number')}
-                  className="bg-gray-100 px-8 py-2 rounded-full outline-none focus:outline-none w-full"
+                <Controller
+                  render={({ field: { onChange, value } }) => (
+                    <Input
+                      defaultCountry="UZ"
+                      country="UZ"
+                      international
+                      withCountryCallingCode
+                      value={value}
+                      className="bg-gray-100 px-8 py-2 rounded-full outline-none focus:outline-none w-full"
+                      onChange={(e: any) => onChange(e)}
+                    />
+                  )}
+                  rules={{
+                    required: true,
+                  }}
+                  key="phone"
+                  name="phone"
+                  control={control}
                 />
                 {phone && (
                   <button
                     className="absolute focus:outline-none outline-none  text-gray-400 mr-4"
-                    onClick={() => resetField('phone_number')}
+                    onClick={() => resetField('phone')}
                   >
                     <XIcon className="cursor-pointer h-5 text-gray-400 w-5" />
                   </button>
                 )}
               </div>
+
+              {errors.phone && (
+                <div className="text-sm text-center text-red-600">
+                  {tr('required')}
+                </div>
+              )}
             </div>
           </div>
           <div className="md:flex md:mt-7 justify-between">
@@ -138,13 +174,13 @@ const Contacts: FC = () => {
               <div className="md:flex items-center justify-end">
                 <input
                   type="text"
-                  {...register('order_number')}
+                  {...register('order_id')}
                   className="bg-gray-100 px-8 py-2 rounded-full outline-none focus:outline-none w-full"
                 />
-                {order && (
+                {order_id && (
                   <button
                     className="absolute focus:outline-none outline-none  text-gray-400 mr-4"
-                    onClick={() => resetField('order_number')}
+                    onClick={() => resetField('order_id')}
                   >
                     <XIcon className="cursor-pointer h-5 text-gray-400 w-5" />
                   </button>
@@ -155,20 +191,26 @@ const Contacts: FC = () => {
           <div className="md:mt-7">
             <label className="text-sm text-gray-400">{tr('review')}</label>
             <div className="flex items-center justify-end">
-              <input
-                type="text"
-                {...register('review')}
-                className="bg-gray-100 px-8 py-2 rounded-full outline-none focus:outline-none w-full"
+              <textarea
+                {...register('text', { required: true })}
+                rows={5}
+                className="bg-gray-100 px-8 py-2 rounded-lg outline-none focus:outline-none w-full"
               />
-              {review && (
+              {text && (
                 <button
                   className="absolute focus:outline-none outline-none  text-gray-400 mr-4"
-                  onClick={() => resetField('review')}
+                  onClick={() => resetField('text')}
                 >
                   <XIcon className="cursor-pointer h-5 text-gray-400 w-5" />
                 </button>
               )}
             </div>
+
+            {errors.text && (
+              <div className="text-sm text-center text-red-600">
+                {tr('required')}
+              </div>
+            )}
           </div>
           <div className="ml-auto md:w-80">
             <button className="bg-yellow rounded-full md:w-80 w-full py-2 mt-10 text-white">
