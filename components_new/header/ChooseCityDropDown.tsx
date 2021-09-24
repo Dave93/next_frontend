@@ -23,7 +23,7 @@ const ChooseCityDropDown: FC = () => {
       {({ open }) => (
         <>
           <div>
-            <Menu.Button className="bg-white focus:outline-none font-medium inline-flex justify-center outline-none px-4 py-2 text-secondary text-sm w-full">
+            <Menu.Button className="bg-white focus:outline-none font-medium inline-flex justify-center outline-none py-2 text-secondary text-sm w-full">
               {locale == 'uz' ? chosenCity?.name_uz : chosenCity?.name}
             </Menu.Button>
           </div>

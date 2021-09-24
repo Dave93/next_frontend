@@ -582,7 +582,7 @@ const MobLocationTabs: FC<MobLocationTabProps> = ({ setOpen }) => {
                                 className="bg-gray-100 px-8 py-2 rounded-full w-40  outline-none focus:outline-none"
                               />
                             </div>
-                            <div className="mx-5">
+                            <div className="">
                               <input
                                 type="text"
                                 {...register('door_code')}
@@ -597,7 +597,7 @@ const MobLocationTabs: FC<MobLocationTabProps> = ({ setOpen }) => {
                   )}
                 </Disclosure>
               </div>
-              <div className="flex mt-12">
+              <div className="flex mt-12 justify-center">
                 <button
                   type="submit"
                   className="bg-yellow font-bold px-12 py-3 rounded-full text-[18px] text-white outline-none focus:outline-none"
@@ -764,7 +764,7 @@ const MobLocationTabs: FC<MobLocationTabProps> = ({ setOpen }) => {
             </div>
             {/* )} */}
           </div>
-          <div className="flex mt-12">
+          <div className="flex mt-12 justify-center">
             <button
               type="submit"
               className={`${

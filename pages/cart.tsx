@@ -405,7 +405,7 @@ export default function Cart() {
           </div>
           <div className="md:p-10 p-5 md:rounded-2xl bg-white">
             <div className="border-b md:flex items-center justify-between pb-10">
-              <div className="md:w-72">
+              {/* <div className="md:w-72">
                 <form onSubmit={handleSubmit(onSubmit)} className="relative">
                   <input
                     type="text"
@@ -417,7 +417,7 @@ export default function Cart() {
                     <Image src="/discount_arrow.png" width={37} height={37} />
                   </button>
                 </form>
-              </div>
+              </div> */}
               <div className="flex font-bold items-center justify-between mt-10">
                 <div className="text-lg text-gray-400">
                   {tr('basket_order_price')}
