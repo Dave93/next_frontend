@@ -39,7 +39,7 @@ const SmallCartMobile: FC = () => {
       onClick={goToCheckout}
     >
       <div className="flex">
-        <Image src="/mobile_cart.png" width="20" height="20" />
+        <Image src="/mobile_cart.svg" width="20" height="20" />
       </div>
       <div className="text-xl pl-2 text-white">
         {data && data.lineItems ? data.lineItems.length : 0}
