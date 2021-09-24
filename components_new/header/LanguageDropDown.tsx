@@ -29,7 +29,7 @@ const LanguageDropDown: FC = () => {
   return (
     <>
       <a
-        className="bg-white focus:outline-none font-medium inline-flex justify-center outline-none px-4 py-2 text-secondary text-sm no-underline"
+        className="bg-white focus:outline-none font-medium inline-flex justify-center outline-none px-4 py-2 text-secondary text-sm no-underline items-center"
         href={`/${locale}${pathname}`}
         onClick={(e) => changeLang(e, locale == 'uz' ? 'ru' : 'uz')}
       >
