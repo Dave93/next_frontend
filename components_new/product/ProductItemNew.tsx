@@ -278,17 +278,22 @@ const ProductItemNew: FC<ProductItem> = ({ product, channelName }) => {
       if (activeValue && activeValue.modifiers) {
         modifier = activeValue.modifiers
         if (activeValue.modifierProduct) {
-          modifier.push({
-            id: activeValue.modifierProduct.id,
-            name: 'Сосисочный борт',
-            name_uz: 'Sosiskali tomoni',
-            price: +activeValue.modifierProduct.price - +activeValue.price,
-            assets: [
-              {
-                local: '/sausage_modifier.png',
-              },
-            ],
-          })
+          let isExistSausage = modifier.find(
+            (mod: any) => mod.id == activeValue.modifierProduct.id
+          )
+          if (!isExistSausage) {
+            modifier.push({
+              id: activeValue.modifierProduct.id,
+              name: 'Сосисочный борт',
+              name_uz: 'Sosiskali tomoni',
+              price: +activeValue.modifierProduct.price - +activeValue.price,
+              assets: [
+                {
+                  local: '/sausage_modifier.png',
+                },
+              ],
+            })
+          }
         }
       }
     } else {
