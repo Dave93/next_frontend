@@ -283,7 +283,11 @@ const ProductItemNew: FC<ProductItem> = ({ product, channelName }) => {
             name: 'Сосисочный борт',
             name_uz: 'Sosiskali tomoni',
             price: +activeValue.modifierProduct.price - +activeValue.price,
-            assets: [],
+            assets: [
+              {
+                local: '/sausage_modifier.png',
+              },
+            ],
           })
         }
       }
@@ -394,7 +398,11 @@ const ProductItemNew: FC<ProductItem> = ({ product, channelName }) => {
                     <div className="flex-grow pt-2 px-2">
                       {mod.assets.length ? (
                         <Image
-                          src={`${webAddress}/storage/${mod.assets[0]?.location}/${mod.assets[0]?.filename}`}
+                          src={
+                            mod.assets[0].local
+                              ? mod.assets[0].local
+                              : `${webAddress}/storage/${mod.assets[0]?.location}/${mod.assets[0]?.filename}`
+                          }
                           width={80}
                           height={80}
                           alt={mod.name}
