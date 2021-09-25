@@ -270,7 +270,7 @@ const OrderAccept: FC<OrderDetailProps> = ({ order, orderStatuses }) => {
         ))}
       </div>
       <div className="p-10 rounded-2xl text-xl mt-5 bg-white">
-        {reviewsData && reviewsData.length && (
+        {reviewsData && reviewsData.length > 0 && (
           <div className="mt-2 mb-4">
             <div className="text-lg mb-4 font-bold">{tr('your_reviews')}</div>
             <div className="flex space-y-3 flex-col">

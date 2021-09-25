@@ -34,7 +34,7 @@ const Header: FC<{
               </Link>
             </div>
             {menuOpen ? (
-              <div className="flex items-center justify-between w-6/12">
+              <div className="flex items-center">
                 <HeaderMenu menuItems={menu} />
                 <LanguageDropDown />
                 <XIcon

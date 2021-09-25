@@ -369,7 +369,7 @@ const SmallCart: FC<SmallCartProps> = ({
           </div>
         )}
       </div>
-      <div className="border border-yellow mt-3 p-5 rounded-[15px]">
+      {/* <div className="border border-yellow mt-3 p-5 rounded-[15px]">
         <form onSubmit={handleSubmit(onSubmit)} className="relative">
           <input
             type="text"
@@ -381,7 +381,7 @@ const SmallCart: FC<SmallCartProps> = ({
             <Image src="/discount_arrow.png" width={28} height={28} />
           </button>
         </form>
-      </div>
+      </div> */}
     </div>
   )
 }
