@@ -402,7 +402,7 @@ const ProductItemNew: FC<ProductItem> = ({ product, channelName }) => {
                   >
                     <div className="flex-grow pt-2 px-2">
                       {mod.assets.length ? (
-                        <Image
+                        <img
                           src={
                             mod.assets[0].local
                               ? mod.assets[0].local
@@ -411,10 +411,9 @@ const ProductItemNew: FC<ProductItem> = ({ product, channelName }) => {
                           width={80}
                           height={80}
                           alt={mod.name}
-                          priority={true}
                         />
                       ) : (
-                        <Image
+                        <img
                           src="/no_photo.svg"
                           width={80}
                           height={80}
@@ -465,21 +464,19 @@ const ProductItemNew: FC<ProductItem> = ({ product, channelName }) => {
           <div>
             <div className="text-center">
               {store.image ? (
-                <Image
+                <img
                   src={store.image}
                   width={250}
                   height={250}
                   alt={store?.attribute_data?.name[channelName][locale || 'ru']}
-                  priority={true}
                 />
               ) : (
-                <Image
+                <img
                   src="/no_photo.svg"
                   width={250}
                   height={250}
                   alt={store?.attribute_data?.name[channelName][locale || 'ru']}
                   className="rounded-full"
-                  priority={true}
                 />
               )}
             </div>
@@ -618,7 +615,7 @@ const ProductItemNew: FC<ProductItem> = ({ product, channelName }) => {
                         <div className="flex fixed w-full max-h-10 flex-col">
                           <div className="flex w-full items-center">
                             <span onClick={closeModal} className="flex">
-                              <Image
+                              <img
                                 src="/assets/back.png"
                                 width="24"
                                 height="24"
@@ -628,7 +625,7 @@ const ProductItemNew: FC<ProductItem> = ({ product, channelName }) => {
                         </div>
                         <div className="h-80 w-80 mx-auto bg-cover flex relative mt-10">
                           {store.image ? (
-                            <Image
+                            <img
                               src={store.image}
                               width={300}
                               height={300}
@@ -637,10 +634,9 @@ const ProductItemNew: FC<ProductItem> = ({ product, channelName }) => {
                                   locale || 'ru'
                                 ]
                               }
-                              priority={true}
                             />
                           ) : (
-                            <Image
+                            <img
                               src="/no_photo.svg"
                               width={300}
                               height={300}
@@ -650,7 +646,6 @@ const ProductItemNew: FC<ProductItem> = ({ product, channelName }) => {
                                 ]
                               }
                               className="rounded-full"
-                              priority={true}
                             />
                           )}
                         </div>
@@ -711,21 +706,19 @@ const ProductItemNew: FC<ProductItem> = ({ product, channelName }) => {
                                   >
                                     <div className="flex-grow pt-2 px-2">
                                       {mod.assets.length ? (
-                                        <Image
+                                        <img
                                           src={`${webAddress}/storage/${mod.assets[0]?.location}/${mod.assets[0]?.filename}`}
                                           width={80}
                                           height={80}
                                           alt={mod.name}
-                                          priority={true}
                                         />
                                       ) : (
-                                        <Image
+                                        <img
                                           src="/no_photo.svg"
                                           width={80}
                                           height={80}
                                           alt={mod.name}
                                           className="rounded-full"
-                                          priority={true}
                                         />
                                       )}
                                     </div>
