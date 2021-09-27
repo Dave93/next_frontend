@@ -17,6 +17,7 @@ import {
   CheckIcon,
   ChevronDownIcon,
   ChevronRightIcon,
+  LocationMarkerIcon,
 } from '@heroicons/react/solid'
 import {
   YMaps,
@@ -666,6 +667,8 @@ const Orders: FC<OrdersProps> = ({ channelName }: { channelName: any }) => {
     return null
   }, [cities, activeCity])
 
+  console.log(locationData?.terminalData)
+
   return (
     <div className="mx-5 md:mx-0 pt-1 md:pt-0 pb-1">
       {/* Contacts */}
@@ -972,10 +975,15 @@ const Orders: FC<OrdersProps> = ({ channelName }: { channelName: any }) => {
                     <div className="md:w-2/12">
                       <input
                         type="text"
-                        {...register('house')}
+                        {...register('house', { required: true })}
                         placeholder={tr('house')}
                         className="bg-gray-100 px-8 py-3 rounded-full w-full"
                       />
+                      {errors.house && (
+                        <div className="text-sm text-center text-red-600">
+                          {tr('required')}
+                        </div>
+                      )}
                     </div>
                   </div>
                 </div>
@@ -1028,6 +1036,16 @@ const Orders: FC<OrdersProps> = ({ channelName }: { channelName: any }) => {
                     )}
                   </Disclosure>
                 </div>
+                {locationData?.terminalData && (
+                  <div className="md:mt-3 flex space-x-2 items-center">
+                    <LocationMarkerIcon className="w-5 h-5" />
+                    <div className="font-bold">
+                      {tr('nearest_filial', {
+                        filialName: locationData?.terminalData.name,
+                      })}
+                    </div>
+                  </div>
+                )}
               </form>
             </div>
           </div>
