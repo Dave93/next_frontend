@@ -1,5 +1,5 @@
 import useTranslation from 'next-translate/useTranslation'
-import { FC, memo, useState } from 'react'
+import { FC, memo, useEffect, useState } from 'react'
 import { useForm, Controller } from 'react-hook-form'
 import { XIcon } from '@heroicons/react/outline'
 import Input from 'react-phone-number-input/input'
@@ -7,16 +7,44 @@ import { useUI } from '@components/ui/context'
 import Cookies from 'js-cookie'
 import getConfig from 'next/config'
 import axios from 'axios'
+import { useRouter } from 'next/router'
 
 const { publicRuntimeConfig } = getConfig()
 let webAddress = publicRuntimeConfig.apiUrl
 axios.defaults.withCredentials = true
 
 const Contacts: FC = () => {
+  const { locale } = useRouter()
   const { t: tr } = useTranslation('common')
   const { user } = useUI()
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [successMessage, setSuccessMessage] = useState('')
+
+  const [configData, setConfigData] = useState({} as any)
+  const fetchConfig = async () => {
+    let configData
+    if (!sessionStorage.getItem('configData')) {
+      let { data } = await axios.get(
+        `${publicRuntimeConfig.apiUrl}/api/configs/public`
+      )
+      configData = data.data
+      sessionStorage.setItem('configData', data.data)
+    } else {
+      configData = sessionStorage.getItem('configData')
+    }
+
+    try {
+      configData = Buffer.from(configData, 'base64')
+      configData = configData.toString()
+      configData = JSON.parse(configData)
+      setConfigData(configData)
+    } catch (e) {}
+  }
+
+  useEffect(() => {
+    fetchConfig()
+    return
+  }, [])
 
   type FormData = {
     name: string
@@ -101,22 +129,23 @@ const Contacts: FC = () => {
         <div className="text-3xl mb-1">{tr('contacts')}</div>
         <div className="border-b-2 w-24 border-yellow mb-10"></div>
       </div>
-      <div className="md:grid grid-cols-3 gap-24 mb-16">
+      <div className="md:grid grid-cols-2 gap-24 mb-16">
         <div>
           <div className="mb-3">ООО « Havoqand People »</div>
-          <div className="mb-3">
-            Юридический адрес: г. Ташкент, Чиланзарский район, ул. Катартал, д.
-            28
+          <div>{tr('toshkent')}: (71) 205-11-11</div>
+          <div>{tr('samarqand')}: (97) 577-30-30</div>
+          <div>{tr('qoqon')}: (90) 703-40-40</div>
+          <div>{tr('andijon')}: (97) 999-60-60</div>
+          <div>{tr('fargona')}: (99) 988-42-42</div>          
+          <div className="mt-3">
+            {tr('work_time')}{': '}
+            {locale == 'uz' ? configData.workTimeUz : configData.workTimeRu}
           </div>
-          <div className="mb-3">
-            Режим работы: 10:00 - 22:00, без перерыва и выходных
-          </div>
-          <div>Телефон: 71-200-42-42</div>
         </div>
       </div>
       <form onSubmit={handleSubmit(onSubmit)}>
         <div className="border border-gray-400 rounded-2xl p-8 md:w-[724px] md:mb-96 mb-8">
-          <div className="text-2xl mb-7">Оставьте свой отзыв</div>
+          <div className="text-2xl mb-7">{tr('your_review')}</div>
           <div className="md:flex justify-between">
             <div className="md:w-80">
               <label className="text-sm text-gray-400">{tr('name')}</label>

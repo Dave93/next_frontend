@@ -221,6 +221,7 @@ const Layout: FC<Props> = ({
                               <a
                                 target="_blank"
                                 className="no-underline text-white"
+                                href={soc.link}
                               >
                                 <FontAwesomeIcon icon={socIcons[soc.code]} />
                               </a>

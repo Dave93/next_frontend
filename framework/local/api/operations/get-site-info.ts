@@ -47,15 +47,15 @@ export default function getSiteInfoOperation({
       socials: [
         {
           code: 'fb',
-          link: 'https://facebook.com',
+          link: 'https://www.facebook.com/choparpizza',
         },
         {
           code: 'inst',
-          link: 'https://instagram.com',
+          link: 'https://www.instagram.com/choparpizza/',
         },
         {
           code: 'tg',
-          link: 'https://telegram.org',
+          link: 'https://telegram.me/Chopar_bot',
         },
       ],
     })
