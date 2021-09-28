@@ -275,12 +275,13 @@ const Orders: FC<OrdersProps> = ({ channelName }: { channelName: any }) => {
   const otpTime = useRef(0)
 
   const [mapCenter, setMapCenter] = useState(
-    (locationData?.location?.lat
+    (locationData?.location && locationData.location.length
       ? locationData?.location
       : [activeCity?.lat, activeCity?.lon]) as number[]
   )
   const [mapZoom, setMapZoom] = useState(
-    ((locationData?.location?.lat ? 17 : 10) || activeCity?.map_zoom) as number
+    ((locationData?.location && locationData.location.length ? 17 : 10) ||
+      activeCity?.map_zoom) as number
   )
 
   const [configData, setConfigData] = useState({} as any)
@@ -431,7 +432,6 @@ const Orders: FC<OrdersProps> = ({ channelName }: { channelName: any }) => {
   const [payType, setPayType] = useState('')
 
   const onValueChange = (e: any) => {
-    console.log(e.target.value)
     setPayType(e.target.value)
   }
 
@@ -668,8 +668,6 @@ const Orders: FC<OrdersProps> = ({ channelName }: { channelName: any }) => {
     if (cities) return cities[0]
     return null
   }, [cities, activeCity])
-
-  console.log(locationData?.terminalData)
 
   return (
     <div className="mx-5 md:mx-0 pt-1 md:pt-0 pb-1">
