@@ -162,7 +162,7 @@ const OrderAccept: FC<OrderDetailProps> = ({ order, orderStatuses }) => {
       </div>
       <div className="p-10 rounded-2xl text-xl mt-5 bg-white">
         <div className="text-lg mb-7 font-bold">{tr('delivery_address')}</div>
-        <div>{order?.billing_address}{order.house?  ", " + tr('house') + ": " + order.house : ""}{order.flat?  ", " + tr('flat') + ": " + order.flat : ""}{order.entrance?  ", " + tr('entrance') + ": " + order.entrance : ""}{order.door_code? ", " + tr('code_on_doors') + ": " + order.door_code : ""} {console.log(order)}</div>
+        <div>{order?.billing_address}{order.house?  ", " + tr('house') + ": " + order.house : ""}{order.flat?  ", " + tr('flat') + ": " + order.flat : ""}{order.entrance?  ", " + tr('entrance') + ": " + order.entrance : ""}{order.door_code? ", " + tr('code_on_doors') + ": " + order.door_code : ""}</div>
         <div></div>
       </div>
       <div className="p-10 rounded-2xl text-xl mt-5 bg-white">
