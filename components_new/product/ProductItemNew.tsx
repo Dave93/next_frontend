@@ -408,21 +408,22 @@ const ProductItemNew: FC<ProductItem> = ({ product, channelName }) => {
                               ? mod.assets[0].local
                               : `${webAddress}/storage/${mod.assets[0]?.location}/${mod.assets[0]?.filename}`
                           }
-                          width={80}
-                          height={80}
+                          width={50}
+                          height={50}
                           alt={mod.name}
+                          className="lg:mx-4"
                         />
                       ) : (
                         <img
                           src="/no_photo.svg"
-                          width={80}
-                          height={80}
+                          width={50}
+                          height={50}
                           alt={mod.name}
-                          className="rounded-full"
+                          className="rounded-full lg:mx-4"
                         />
                       )}
                     </div>
-                    <div className="px-2 text-center text-xs pb-1">
+                    <div className="text-center text-xs">
                       {locale == 'uz' ? mod.name_uz : mod.name}
                     </div>
                     <div
@@ -430,7 +431,7 @@ const ProductItemNew: FC<ProductItem> = ({ product, channelName }) => {
                         activeModifiers.includes(mod.id)
                           ? 'bg-yellow'
                           : 'bg-gray-300'
-                      } font-bold px-4 py-2 text-center text-white text-xs`}
+                      } font-bold py-2 text-center text-white text-xs`}
                     >
                       {currency(mod.price, {
                         pattern: '# !',
