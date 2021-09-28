@@ -132,13 +132,31 @@ const Contacts: FC = () => {
       <div className="md:grid grid-cols-2 gap-24 mb-16">
         <div>
           <div className="mb-3">ООО « Havoqand People »</div>
-          <div>{tr('toshkent')}: (71) 205-11-11</div>
-          <div>{tr('samarqand')}: (97) 577-30-30</div>
-          <div>{tr('qoqon')}: (90) 703-40-40</div>
-          <div>{tr('andijon')}: (97) 999-60-60</div>
-          <div>{tr('fargona')}: (99) 988-42-42</div>          
+          <div className="w-60">
+            <div className="flex justify-between">
+              <div>{tr('toshkent')}:</div>{' '}
+              <a href="tel:+998712051111">(71) 205-11-11</a>
+            </div>
+            <div className="flex justify-between">
+              <div>{tr('samarqand')}:</div>{' '}
+              <a href="tel:+998975773030">(97) 577-30-30</a>
+            </div>
+            <div className="flex justify-between">
+              <div>{tr('qoqon')}:</div>{' '}
+              <a href="tel:+998907034040">(90) 703-40-40</a>
+            </div>
+            <div className="flex justify-between">
+              <div>{tr('andijon')}:</div>
+              <a href="tel:+998979996060">(97) 999-60-60</a>
+            </div>
+            <div className="flex justify-between">
+              <div>{tr('fargona')}:</div>
+              <a href="tel:+998999884242">(99) 988-42-42</a>
+            </div>
+          </div>
           <div className="mt-3">
-            {tr('work_time')}{': '}
+            {tr('work_time')}
+            {': '}
             {locale == 'uz' ? configData.workTimeUz : configData.workTimeRu}
           </div>
         </div>
