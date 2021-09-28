@@ -173,17 +173,17 @@ const MobLocationTabs: FC<MobLocationTabProps> = ({ setOpen }) => {
   )
 
   const setActive = (city: City) => {
-     if (locale == 'uz') {
-       setValue('address', "O'zbekiston, " + city.name_uz)
-       downshiftControl?.current?.reset({
-         inputValue: "O'zbekiston, " + city.name_uz + ','
-       })
-     } else {
-       setValue('address', 'Узбекистан, ' + city.name)
-       downshiftControl?.current?.reset({
-         inputValue: 'Узбекистан, ' + city.name + ','
-       })
-     }
+    if (locale == 'uz') {
+      setValue('address', "O'zbekiston, " + city.name_uz)
+      downshiftControl?.current?.reset({
+        inputValue: "O'zbekiston, " + city.name_uz + ',',
+      })
+    } else {
+      setValue('address', 'Узбекистан, ' + city.name)
+      downshiftControl?.current?.reset({
+        inputValue: 'Узбекистан, ' + city.name + ',',
+      })
+    }
     setActiveCity(city)
     if (city) setMapCenter([+city.lat, +city.lon])
   }
@@ -465,9 +465,10 @@ const MobLocationTabs: FC<MobLocationTabProps> = ({ setOpen }) => {
                 <Downshift
                   onChange={(selection) => setSelectedAddress(selection)}
                   ref={downshiftControl}
-                  itemToString={(item) => (item ? item.formatted : '')}
+                  itemToString={(item) =>
+                    item ? item.formatted : watch('address')
+                  }
                   initialInputValue={locationData?.address || currentAddress}
-                  inputValue={watch('address')}
                 >
                   {({
                     getInputProps,
