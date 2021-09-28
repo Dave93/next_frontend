@@ -42,7 +42,7 @@ export default function getSiteInfoOperation({
       categories: categories.filter((cat: any) => !cat.half_mode),
       brands: [],
       topMenu,
-      footerInfoMenu,
+      footerInfoMenu: footerInfoMenu || [],
       cities,
       socials: [
         {

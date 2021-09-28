@@ -11,6 +11,7 @@ import type { APILinkItem, LinkItem } from '@commerce/types/headerMenu'
 import MobHeaderMenu from './header/MobHeaderMenu'
 import MobChooseCityDropDown from './header/MobChooseCityDropDown'
 import MobLanguageDropDown from './header/MobLanguageDropDown'
+import HeaderPhone from './header/HeaderPhone'
 
 const Header: FC<{
   menu: Array<APILinkItem>
@@ -49,6 +50,7 @@ const Header: FC<{
                 </div>
                 <div className="flex items-center">
                   <div className="md:flex hidden">
+                    <HeaderPhone />
                     <ChooseCityDropDown />
                     <div className="mx-2">
                       <SignInButton />

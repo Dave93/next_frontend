@@ -122,7 +122,12 @@ const Layout: FC<Props> = ({
               <Image src="/assets/uzor.svg" width={1920} height={40} />
             </div>
             <div className="md:hidden flex">
-              <Image src="/assets/uzormob.svg" width={1000} height={60} className="object-cover"/>
+              <Image
+                src="/assets/uzormob.svg"
+                width={1000}
+                height={60}
+                className="object-cover"
+              />
             </div>
             <div className="bg-secondary w-full pt-5 pb-2 px-4 md:px-0">
               <div className="container mx-auto md:my-6">
@@ -177,25 +182,29 @@ const Layout: FC<Props> = ({
                         </ul>
                       </div>
                       <div>
-                        <span className="block font-bold mb-3 text-[16px]">
-                          {tr('information')}
-                        </span>
-                        <ul className="ml-3">
-                          {footerInfoMenu.map((item) => {
-                            const keyTyped =
-                              `name_${locale}` as keyof typeof item
-                            return (
-                              <li
-                                key={item.href}
-                                className={styles.footerMenuListItem}
-                              >
-                                <Link href={item.href} prefetch={false}>
-                                  <a>{item[keyTyped]}</a>
-                                </Link>
-                              </li>
-                            )
-                          })}
-                        </ul>
+                        {footerInfoMenu && footerInfoMenu.length > 0 && (
+                          <>
+                            <span className="block font-bold mb-3 text-[16px]">
+                              {tr('information')}
+                            </span>
+                            <ul className="ml-3">
+                              {footerInfoMenu.map((item) => {
+                                const keyTyped =
+                                  `name_${locale}` as keyof typeof item
+                                return (
+                                  <li
+                                    key={item.href}
+                                    className={styles.footerMenuListItem}
+                                  >
+                                    <Link href={item.href} prefetch={false}>
+                                      <a>{item[keyTyped]}</a>
+                                    </Link>
+                                  </li>
+                                )
+                              })}
+                            </ul>
+                          </>
+                        )}
                       </div>
                     </div>
                   </div>

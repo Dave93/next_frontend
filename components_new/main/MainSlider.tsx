@@ -54,7 +54,7 @@ const MainSlider: FC = () => {
 
   return (
     <div className="relative px-4 rounded-2xl">
-      {sliders.length && (
+      {sliders && sliders.length > 0 && (
         <>
           <Flicking
             align="center"
