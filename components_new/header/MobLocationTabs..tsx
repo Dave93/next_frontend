@@ -116,7 +116,9 @@ const MobLocationTabs: FC<MobLocationTabProps> = ({ setOpen }) => {
   }
 
   const loadPickupItems = async () => {
-    const { data } = await axios.get(`${webAddress}/api/terminals/pickup`)
+    const { data } = await axios.get(
+      `${webAddress}/api/terminals/pickup?city_id=${activeCity.id}`
+    )
     let res: any[] = []
     data.data.map((item: any) => {
       if (item.latitude) {

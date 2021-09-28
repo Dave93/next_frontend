@@ -120,7 +120,9 @@ const LocationTabs: FC<Props> = ({ setOpen }) => {
   }
 
   const loadPickupItems = async () => {
-    const { data } = await axios.get(`${webAddress}/api/terminals/pickup`)
+    const { data } = await axios.get(
+      `${webAddress}/api/terminals/pickup?city_id=${activeCity.id}`
+    )
     let res: any[] = []
     data.data.map((item: any) => {
       if (item.latitude) {
@@ -180,12 +182,12 @@ const LocationTabs: FC<Props> = ({ setOpen }) => {
     if (locale == 'uz') {
       setValue('address', "O'zbekiston, " + city.name_uz)
       downshiftControl?.current?.reset({
-        inputValue: "O'zbekiston, " + city.name_uz + ','
+        inputValue: "O'zbekiston, " + city.name_uz + ',',
       })
     } else {
       setValue('address', 'Узбекистан, ' + city.name)
       downshiftControl?.current?.reset({
-        inputValue: 'Узбекистан, ' + city.name + ','
+        inputValue: 'Узбекистан, ' + city.name + ',',
       })
     }
     setActiveCity(city)
