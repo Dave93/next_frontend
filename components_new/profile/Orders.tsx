@@ -213,9 +213,35 @@ const Orders: FC<OrdersListProps> = ({ orders }) => {
                           }).format()}
                         </div>
                       </div>
-                      <div className="flex items-center justify-between border-b pt-7 pb-7">
+                      <div className="flex items-center justify-between border-b pt-7 pb-7 space-x-6 text-right">
                         <div>{tr('order_address')}</div>
-                        <div>{order?.billing_address}</div>
+                        <div>
+                          {order?.billing_address}
+                          {order.house
+                            ? ', ' +
+                              tr('house').toLocaleLowerCase() +
+                              ': ' +
+                              order.house
+                            : ''}
+                          {order.flat
+                            ? ', ' +
+                              tr('flat').toLocaleLowerCase() +
+                              ': ' +
+                              order.flat
+                            : ''}
+                          {order.entrance
+                            ? ', ' +
+                              tr('entrance').toLocaleLowerCase() +
+                              ': ' +
+                              order.entrance
+                            : ''}
+                          {order.door_code
+                            ? ', ' +
+                              tr('code_on_doors').toLocaleLowerCase() +
+                              ': ' +
+                              order.door_code
+                            : ''}
+                        </div>
                       </div>
                       <div className="flex items-center justify-between border-b pt-7 pb-7">
                         <div>{tr('order_time')}</div>
