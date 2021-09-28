@@ -411,7 +411,7 @@ const ProductItemNew: FC<ProductItem> = ({ product, channelName }) => {
                           width={50}
                           height={50}
                           alt={mod.name}
-                          className="lg:mx-4"
+                          className="mx-auto"
                         />
                       ) : (
                         <img
@@ -419,7 +419,7 @@ const ProductItemNew: FC<ProductItem> = ({ product, channelName }) => {
                           width={50}
                           height={50}
                           alt={mod.name}
-                          className="rounded-full lg:mx-4"
+                          className="rounded-full mx-auto"
                         />
                       )}
                     </div>
@@ -624,29 +624,26 @@ const ProductItemNew: FC<ProductItem> = ({ product, channelName }) => {
                             </span>
                           </div>
                         </div>
-                        <div className="h-80 w-80 mx-auto bg-cover flex relative mt-10">
+                        <div className="h-[35vh] mx-auto bg-cover flex relative mt-10">
                           {store.image ? (
                             <img
                               src={store.image}
-                              width={300}
-                              height={300}
                               alt={
                                 store?.attribute_data?.name[channelName][
                                   locale || 'ru'
                                 ]
                               }
+                              className="mx-auto"
                             />
                           ) : (
                             <img
                               src="/no_photo.svg"
-                              width={300}
-                              height={300}
                               alt={
                                 store?.attribute_data?.name[channelName][
                                   locale || 'ru'
                                 ]
                               }
-                              className="rounded-full"
+                              className="rounded-full mx-auto"
                             />
                           )}
                         </div>
@@ -709,21 +706,22 @@ const ProductItemNew: FC<ProductItem> = ({ product, channelName }) => {
                                       {mod.assets.length ? (
                                         <img
                                           src={`${webAddress}/storage/${mod.assets[0]?.location}/${mod.assets[0]?.filename}`}
-                                          width={80}
-                                          height={80}
+                                          width={50}
+                                          height={50}
                                           alt={mod.name}
+                                          className="mx-auto"
                                         />
                                       ) : (
                                         <img
                                           src="/no_photo.svg"
-                                          width={80}
-                                          height={80}
+                                          width={50}
+                                          height={50}
                                           alt={mod.name}
-                                          className="rounded-full"
+                                          className="rounded-full mx-auto"
                                         />
                                       )}
                                     </div>
-                                    <div className="px-2 text-center text-xs pb-1">
+                                    <div className="text-center text-xs">
                                       {locale == 'uz' ? mod.name_uz : mod.name}
                                     </div>
                                     <div
@@ -731,7 +729,7 @@ const ProductItemNew: FC<ProductItem> = ({ product, channelName }) => {
                                         activeModifiers.includes(mod.id)
                                           ? 'bg-yellow'
                                           : 'bg-gray-300'
-                                      } font-bold px-4 py-2 text-center text-white text-xs`}
+                                      } font-bold px-2 py-2 text-center text-white text-xs`}
                                     >
                                       {currency(mod.price, {
                                         pattern: '# !',
