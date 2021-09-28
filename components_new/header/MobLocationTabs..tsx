@@ -72,12 +72,13 @@ const MobLocationTabs: FC<MobLocationTabProps> = ({ setOpen }) => {
   )
 
   const [mapCenter, setMapCenter] = useState(
-    (locationData?.location?.lat
+    (locationData?.location && locationData.location.length
       ? locationData?.location
       : [activeCity?.lat, activeCity?.lon]) as number[]
   )
   const [mapZoom, setMapZoom] = useState(
-    ((locationData?.location ? 17 : 10) || activeCity?.map_zoom) as number
+    ((locationData?.location && locationData.location.length ? 17 : 10) ||
+      activeCity?.map_zoom) as number
   )
 
   const [activePoint, setActivePoint] = useState(
@@ -319,10 +320,10 @@ const MobLocationTabs: FC<MobLocationTabProps> = ({ setOpen }) => {
       setLocationData({
         ...locationData,
         ...data,
-        location: [
-          terminalsData.data.items[0].latitude,
-          terminalsData.data.items[0].longitude,
-        ],
+        // location: [
+        //   terminalsData.data.items[0].latitude,
+        //   terminalsData.data.items[0].longitude,
+        // ],
         terminal_id: terminalsData.data.items[0].id,
         terminalData: terminalsData.data.items[0],
       })

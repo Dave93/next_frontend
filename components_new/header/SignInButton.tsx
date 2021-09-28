@@ -41,6 +41,7 @@ const SignInButton: FC = () => {
   const [submitError, setSubmitError] = useState('')
   const [isShowPasswordForm, setIsShowPasswordForm] = useState(false)
   const [otpShowCode, setOtpShowCode] = useState(0)
+  const [showUserName, setShowUserName] = useState(false)
 
   const {
     user,
@@ -144,6 +145,9 @@ const SignInButton: FC = () => {
 
     if (otpError) {
       setSubmitError(errors[otpError])
+      if (otpError == 'name_field_is_required') {
+        setShowUserName(true)
+      }
     } else if (success) {
       success = Buffer.from(success, 'base64')
       success = success.toString()
@@ -375,28 +379,6 @@ const SignInButton: FC = () => {
                             <form onSubmit={handleSubmit(onSubmit)}>
                               <div className="mt-10">
                                 <label className="text-sm text-gray-400 mb-2 block">
-                                  Ваше имя
-                                </label>
-                                <div className="relative">
-                                  <input
-                                    type="text"
-                                    {...register('name')}
-                                    className="border border-yellow focus:outline-none outline-none px-6 py-3 rounded-full text-sm w-full"
-                                  />
-                                  {authName && (
-                                    <button
-                                      className="absolute focus:outline-none inset-y-0 outline-none right-4 text-gray-400"
-                                      onClick={() => {
-                                        resetField('name')
-                                      }}
-                                    >
-                                      <XIcon className="cursor-pointer h-5 text-gray-400 w-5" />
-                                    </button>
-                                  )}
-                                </div>
-                              </div>
-                              <div className="mt-10">
-                                <label className="text-sm text-gray-400 mb-2 block">
                                   Номер телефона
                                 </label>
                                 <div className="relative">
@@ -433,6 +415,31 @@ const SignInButton: FC = () => {
                                   )}
                                 </div>
                               </div>
+
+                              {showUserName && (
+                                <div className="mt-10">
+                                  <label className="text-sm text-gray-400 mb-2 block">
+                                    Ваше имя
+                                  </label>
+                                  <div className="relative">
+                                    <input
+                                      type="text"
+                                      {...register('name')}
+                                      className="border border-yellow focus:outline-none outline-none px-6 py-3 rounded-full text-sm w-full"
+                                    />
+                                    {authName && (
+                                      <button
+                                        className="absolute focus:outline-none inset-y-0 outline-none right-4 text-gray-400"
+                                        onClick={() => {
+                                          resetField('name')
+                                        }}
+                                      >
+                                        <XIcon className="cursor-pointer h-5 text-gray-400 w-5" />
+                                      </button>
+                                    )}
+                                  </div>
+                                </div>
+                              )}
                               <div className="mt-10">
                                 <button
                                   className={`py-3 md:px-20 text-white font-bold text-xl text-center rounded-full w-full outline-none focus:outline-none ${
