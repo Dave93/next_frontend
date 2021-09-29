@@ -1,4 +1,11 @@
-import React, { useState, useCallback, useContext, Fragment, FC } from 'react'
+import React, {
+  useState,
+  useCallback,
+  useContext,
+  Fragment,
+  FC,
+  useEffect,
+} from 'react'
 import SetLocation from '@components_new/header/SetLocation'
 import Link from 'next/link'
 import ChooseCityDropDown from './header/ChooseCityDropDown'
@@ -12,12 +19,43 @@ import MobHeaderMenu from './header/MobHeaderMenu'
 import MobChooseCityDropDown from './header/MobChooseCityDropDown'
 import MobLanguageDropDown from './header/MobLanguageDropDown'
 import HeaderPhone from './header/HeaderPhone'
+import useTranslation from 'next-translate/useTranslation'
+import getConfig from 'next/config'
+import axios from 'axios'
+const { publicRuntimeConfig } = getConfig()
 
 const Header: FC<{
   menu: Array<APILinkItem>
 }> = ({ menu = [] }) => {
   const [menuOpen, setMenuOpen] = useState(false)
   const [mobMenuOpen, setMobMenuOpen] = useState(false)
+  const { t: tr } = useTranslation('common')
+  const [configData, setConfigData] = useState({} as any)
+
+  const fetchConfig = async () => {
+    let configData
+    if (!sessionStorage.getItem('configData')) {
+      let { data } = await axios.get(
+        `${publicRuntimeConfig.apiUrl}/api/configs/public`
+      )
+      configData = data.data
+      sessionStorage.setItem('configData', data.data)
+    } else {
+      configData = sessionStorage.getItem('configData')
+    }
+
+    try {
+      configData = Buffer.from(configData, 'base64')
+      configData = configData.toString()
+      configData = JSON.parse(configData)
+      setConfigData(configData)
+    } catch (e) {}
+  }
+
+  useEffect(() => {
+    fetchConfig()
+    return
+  }, [])
 
   return (
     <>
@@ -80,7 +118,7 @@ const Header: FC<{
                 <Link href="/" prefetch={false}>
                   <a className="flex">
                     <Image
-                      src="/assets/footer_logo.png"
+                      src="/assets/footer_logo.svg"
                       width="188"
                       height="68"
                     />
@@ -94,16 +132,16 @@ const Header: FC<{
                 />
               </div>
             </div>
-            <div className="border-blue border-b py-5 mb-7">
+            <div className="border-blue border-b py-5 md:mb-7">
               <MobChooseCityDropDown />
             </div>
             <div className="border-b border-blue py-8">
               <SignInButton />
-              <MobHeaderMenu menuItems={menu} />
+              <MobHeaderMenu menuItems={menu} setMobMenuOpen={setMobMenuOpen} />
             </div>
             <div className="ml-9 text-white pt-8">
-              <div className="text-xs mb-1">Телефон доставки</div>
-              <div className="text-2xl mb-5">71 205 11 11</div>
+              <div className="text-xs mb-1">{tr('delivery_phone')}</div>
+              <div className="text-2xl mb-5">{configData.contactPhone}</div>
               <a className="flex mb-5" href="#">
                 <Image src="/assets/appstore.png" width="151" height="49" />
               </a>

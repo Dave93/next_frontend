@@ -135,7 +135,7 @@ const Layout: FC<Props> = ({
                   <div className="md:w-1/5">
                     <div className="hidden md:flex">
                       <Image
-                        src="/assets/footer_logo.png"
+                        src="/assets/footer_logo.svg"
                         width={188}
                         height={68}
                       />
