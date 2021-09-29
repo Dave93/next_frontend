@@ -61,7 +61,6 @@ export default function getSiteInfoOperation({
           link: 'https://telegram.me/Chopar_bot',
         },
       ],
-      geo,
     })
   }
 
