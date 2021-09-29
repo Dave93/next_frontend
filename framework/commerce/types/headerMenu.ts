@@ -11,6 +11,7 @@ export type LinkItem = {
 
 export type HeaderMenuItems = {
   menuItems: APILinkItem[]
+  setMobMenuOpen?: any
 }
 
 export type APILinkItem = {

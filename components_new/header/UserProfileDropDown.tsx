@@ -31,7 +31,7 @@ const UserProfileDropDown: FC = () => {
       {({ open }) => (
         <>
           <div>
-            <Menu.Button className="bg-gray-200 px-8 py-1 rounded-full text-secondary outline-none focus:outline-none">
+            <Menu.Button className="bg-gray-200 px-8 py-1 rounded-full text-secondary outline-none focus:outline-none mb-5">
               {user.user.name}
             </Menu.Button>
           </div>
