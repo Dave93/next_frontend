@@ -11,13 +11,17 @@ import { useUI } from '@components/ui'
 import getConfig from 'next/config'
 import axios from 'axios'
 import Link from 'next/link'
+import { useRouter } from 'next/router'
 
 const { publicRuntimeConfig } = getConfig()
 
 const MainSlider: FC = () => {
+  let router = useRouter()
   const { activeCity } = useUI()
 
   const [sliders, setSliders] = useState([])
+
+  const { locale } = router
 
   const plugins = [
     new Fade('', 0.4),
@@ -41,7 +45,7 @@ const MainSlider: FC = () => {
   const fetchSliders = async () => {
     if (activeCity) {
       const { data } = await axios.get(
-        `${publicRuntimeConfig.apiUrl}/api/sliders?city_id=${activeCity.id}`
+        `${publicRuntimeConfig.apiUrl}/api/sliders/public?locale=${locale}`
       )
       setSliders(data.data)
     }
@@ -50,7 +54,7 @@ const MainSlider: FC = () => {
   useEffect(() => {
     fetchSliders()
     return
-  }, [activeCity])
+  }, [locale])
 
   return (
     <div className="relative px-4 rounded-2xl">
