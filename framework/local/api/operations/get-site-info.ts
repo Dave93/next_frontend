@@ -7,6 +7,8 @@ import getMenus from '../utils/fetch-menus'
 import getCategories from '../utils/fetch-categories'
 import getCities from '../utils/fetch-cities'
 import { City } from '@commerce/types/cities'
+import useSWR from 'swr'
+import fetch from 'isomorphic-unfetch'
 
 export type GetSiteInfoResult<
   T extends { categories: any[]; brands: any[] } = {
@@ -38,6 +40,7 @@ export default function getSiteInfoOperation({
     const cities = await getCities(cfg)
 
     const categories = await getCategories(cfg)
+
     return Promise.resolve({
       categories: categories.filter((cat: any) => !cat.half_mode),
       brands: [],
@@ -58,6 +61,7 @@ export default function getSiteInfoOperation({
           link: 'https://telegram.me/Chopar_bot',
         },
       ],
+      geo,
     })
   }
 
