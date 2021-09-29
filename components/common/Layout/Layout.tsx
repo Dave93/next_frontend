@@ -38,6 +38,7 @@ interface Props {
     socials: SocialIcons[]
     cleanBackground?: boolean
     cities: City[]
+    geo: any
   }
 }
 
@@ -68,6 +69,8 @@ const Layout: FC<Props> = ({
 
   const [configData, setConfigData] = useState({} as any)
 
+  const { setCitiesData, activeCity, setActiveCity } = useUI()
+
   const fetchConfig = async () => {
     let configData
     if (!sessionStorage.getItem('configData')) {
@@ -88,19 +91,22 @@ const Layout: FC<Props> = ({
     } catch (e) {}
   }
 
+  const fetchGeo = async () => {
+    const res = await fetch('/api/geo')
+    const json = await res.json()
+    console.log(json)
+  }
+
   useEffect(() => {
     fetchConfig()
-    return
-  }, [])
-
-  const { setCitiesData, activeCity, setActiveCity } = useUI()
-
-  useEffect(() => {
     setCitiesData(cities)
     if (!activeCity) {
       setActiveCity(cities[0])
     }
+    fetchGeo();
+    return
   }, [])
+
   return (
     <CommerceProvider locale={locale}>
       <div className="font-sans">
