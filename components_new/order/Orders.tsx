@@ -594,6 +594,7 @@ const Orders: FC<OrdersProps> = ({ channelName }: { channelName: any }) => {
     if (!user) {
       return openSignInModal()
     }
+
     setIsSavingOrder(true)
     await setCredentials()
     const otpToken = Cookies.get('opt_token')
@@ -1290,46 +1291,6 @@ const Orders: FC<OrdersProps> = ({ channelName }: { channelName: any }) => {
             className="borde focus:outline-none outline-none px-6 py-3 rounded-full text-sm md:w-80 w-full bg-gray-100 text-gray-400 mt-8"
             placeholder={tr('change')}
           />
-          <Disclosure defaultOpen={true}>
-            {({ open }) => (
-              <>
-                <Disclosure.Button className="flex text-yellow outline-none focus:outline-none mt-8">
-                  <span>{tr('comment_on_the_order')}</span>
-                  {/*
-                          Use the `open` render prop to rotate the icon when the panel is open
-                        */}
-                  <ChevronRightIcon
-                    className={`w-6 transform ${
-                      open ? 'rotate-90' : '-rotate-90'
-                    }`}
-                  />
-                </Disclosure.Button>
-                <Transition
-                  show={open}
-                  enter="transition duration-300 ease-out"
-                  enterFrom="transform scale-95 opacity-0"
-                  enterTo="transform scale-100 opacity-100"
-                  leave="transition duration-300 ease-out"
-                  leaveFrom="transform scale-100 opacity-100"
-                  leaveTo="transform scale-95 opacity-0"
-                >
-                  <Disclosure.Panel>
-                    <div className="md:flex mt-3 md:w-96 h-28">
-                      <div className="w-full">
-                        <textarea
-                          {...register('notes')}
-                          className="md:w-96 w-full h-28 bg-gray-100 rounded-2xl p-3 outline-none focus:outline-none resize-none"
-                          placeholder={tr(
-                            'only_the_courier_will_see_your_comment'
-                          )}
-                        ></textarea>
-                      </div>
-                    </div>
-                  </Disclosure.Panel>
-                </Transition>
-              </>
-            )}
-          </Disclosure>
         </div>
         <div className={openTab === 2 ? 'block' : 'hidden'} id="link2">
           <div className="flex w-[460px] justify-between pt-8 items-center">
@@ -1404,46 +1365,6 @@ const Orders: FC<OrdersProps> = ({ channelName }: { channelName: any }) => {
               />
             </div>
           </div>
-          <Disclosure defaultOpen={true}>
-            {({ open }) => (
-              <>
-                <Disclosure.Button className="flex text-yellow outline-none focus:outline-none mt-8">
-                  <span>{tr('comment_on_the_order')}</span>
-                  {/*
-                          Use the `open` render prop to rotate the icon when the panel is open
-                        */}
-                  <ChevronRightIcon
-                    className={`w-6 transform ${
-                      open ? 'rotate-90' : '-rotate-90'
-                    }`}
-                  />
-                </Disclosure.Button>
-                <Transition
-                  show={open}
-                  enter="transition duration-300 ease-out"
-                  enterFrom="transform scale-95 opacity-0"
-                  enterTo="transform scale-100 opacity-100"
-                  leave="transition duration-300 ease-out"
-                  leaveFrom="transform scale-100 opacity-100"
-                  leaveTo="transform scale-95 opacity-0"
-                >
-                  <Disclosure.Panel>
-                    <div className="flex mt-3 w-96 h-28">
-                      <div>
-                        <textarea
-                          {...register('notes')}
-                          className="md:w-96 w-full h-28 bg-gray-100 rounded-2xl p-3 outline-none focus:outline-none resize-none"
-                          placeholder={tr(
-                            'only_the_courier_will_see_your_comment'
-                          )}
-                        ></textarea>
-                      </div>
-                    </div>
-                  </Disclosure.Panel>
-                </Transition>
-              </>
-            )}
-          </Disclosure>
         </div>
         <div className={openTab === 3 ? 'block' : 'hidden'} id="link3">
           <div className="justify-between pt-8 items-center grid grid-cols-4 w-6/12">
@@ -1472,47 +1393,48 @@ const Orders: FC<OrdersProps> = ({ channelName }: { channelName: any }) => {
                   </label>
                 ))}
           </div>
-          <Disclosure defaultOpen={true}>
-            {({ open }) => (
-              <>
-                <Disclosure.Button className="flex text-yellow outline-none focus:outline-none mt-8">
-                  <span>{tr('comment_on_the_order')} </span>
-                  {/*
+        </div>
+
+        <Disclosure defaultOpen={true}>
+          {({ open }) => (
+            <>
+              <Disclosure.Button className="flex text-yellow outline-none focus:outline-none mt-8">
+                <span>{tr('comment_on_the_order')}</span>
+                {/*
                           Use the `open` render prop to rotate the icon when the panel is open
                         */}
-                  <ChevronRightIcon
-                    className={`w-6 transform ${
-                      open ? 'rotate-90' : '-rotate-90'
-                    }`}
-                  />
-                </Disclosure.Button>
-                <Transition
-                  show={open}
-                  enter="transition duration-300 ease-out"
-                  enterFrom="transform scale-95 opacity-0"
-                  enterTo="transform scale-100 opacity-100"
-                  leave="transition duration-300 ease-out"
-                  leaveFrom="transform scale-100 opacity-100"
-                  leaveTo="transform scale-95 opacity-0"
-                >
-                  <Disclosure.Panel>
-                    <div className="flex mt-3 md:w-96 h-28">
-                      <div>
-                        <textarea
-                          {...register('notes')}
-                          className="md:w-96 w-full h-28 bg-gray-100 rounded-2xl p-3 outline-none focus:outline-none resize-none"
-                          placeholder={tr(
-                            'only_the_courier_will_see_your_comment'
-                          )}
-                        ></textarea>
-                      </div>
+                <ChevronRightIcon
+                  className={`w-6 transform ${
+                    open ? 'rotate-90' : '-rotate-90'
+                  }`}
+                />
+              </Disclosure.Button>
+              <Transition
+                show={open}
+                enter="transition duration-300 ease-out"
+                enterFrom="transform scale-95 opacity-0"
+                enterTo="transform scale-100 opacity-100"
+                leave="transition duration-300 ease-out"
+                leaveFrom="transform scale-100 opacity-100"
+                leaveTo="transform scale-95 opacity-0"
+              >
+                <Disclosure.Panel>
+                  <div className="md:flex mt-3 md:w-96 h-28">
+                    <div className="w-full">
+                      <textarea
+                        {...register('notes')}
+                        className="md:w-96 w-full h-28 bg-gray-100 rounded-2xl p-3 outline-none focus:outline-none resize-none"
+                        placeholder={tr(
+                          'only_the_courier_will_see_your_comment'
+                        )}
+                      ></textarea>
                     </div>
-                  </Disclosure.Panel>
-                </Transition>
-              </>
-            )}
-          </Disclosure>
-        </div>
+                  </div>
+                </Disclosure.Panel>
+              </Transition>
+            </>
+          )}
+        </Disclosure>
       </div>
       {/* order list */}
       <div className="w-full bg-white mb-5 rounded-2xl p-10">

@@ -5,7 +5,6 @@ import parsePhoneNumber from 'libphonenumber-js'
 
 const HeaderPhone: FC = () => {
   const { activeCity, cities } = useUI()
-  console.log(cities)
 
   const chosenCity = useMemo(() => {
     if (activeCity) {
@@ -14,7 +13,6 @@ const HeaderPhone: FC = () => {
     if (cities) return cities[0]
     return null
   }, [cities, activeCity])
-  console.log(chosenCity)
   return (
     <div className="flex items-center mx-3">
       {chosenCity?.phone && (
