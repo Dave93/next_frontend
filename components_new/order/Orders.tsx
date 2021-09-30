@@ -1265,7 +1265,7 @@ const Orders: FC<OrdersProps> = ({ channelName }: { channelName: any }) => {
           >
             {tr('in_cash')}
           </button>
-          {/* <button
+          <button
             className={`${
               openTab !== 2
                 ? 'text-gray-400 bg-gray-100'
@@ -1274,7 +1274,7 @@ const Orders: FC<OrdersProps> = ({ channelName }: { channelName: any }) => {
             onClick={() => setOpenTab(2)}
           >
             Картой
-          </button> */}
+          </button>
           <button
             className={`${
               openTab !== 3
@@ -1298,7 +1298,11 @@ const Orders: FC<OrdersProps> = ({ channelName }: { channelName: any }) => {
         </div>
         <div className={openTab === 2 ? 'block' : 'hidden'} id="link2">
           <div className="flex w-[460px] justify-between pt-8 items-center">
-            <label className="flex justify-around items-center w-24 h-24 p-3 rounded-2xl border-gray-200 border cursor-pointer">
+            <label
+              className={`flex justify-around items-center w-24 h-24 p-3 rounded-2xl ${
+                payType == 'uzcard' ? 'border-yellow' : 'border-gray-200'
+              } border cursor-pointer`}
+            >
               <img src="/assets/uzcard.png" />
               <input
                 type="radio"
@@ -1308,7 +1312,11 @@ const Orders: FC<OrdersProps> = ({ channelName }: { channelName: any }) => {
                 className="hidden"
               />
             </label>
-            <label className="flex justify-around items-center w-24 h-24 p-3 rounded-2xl border-gray-200 border cursor-pointer">
+            {/* <label
+              className={`flex justify-around items-center w-24 h-24 p-3 rounded-2xl ${
+                payType == 'visa' ? 'border-yellow' : 'border-gray-200'
+              } border cursor-pointer`}
+            >
               <img src="/assets/visa.png" />
               <input
                 type="radio"
@@ -1317,8 +1325,12 @@ const Orders: FC<OrdersProps> = ({ channelName }: { channelName: any }) => {
                 checked={payType === 'visa'}
                 className="hidden"
               />
-            </label>
-            <label className="flex justify-around items-center w-24 h-24 p-3 rounded-2xl border-gray-200 border cursor-pointer">
+            </label> */}
+            <label
+              className={`flex justify-around items-center w-24 h-24 p-3 rounded-2xl ${
+                payType == 'humo' ? 'border-yellow' : 'border-gray-200'
+              } border cursor-pointer`}
+            >
               <img src="/assets/humo.png" />
               <input
                 type="radio"
@@ -1328,7 +1340,11 @@ const Orders: FC<OrdersProps> = ({ channelName }: { channelName: any }) => {
                 className="hidden"
               />
             </label>
-            <label className="flex justify-around items-center w-24 h-24 p-3 rounded-2xl border-gray-200 border cursor-pointer">
+            {/* <label
+              className={`flex justify-around items-center w-24 h-24 p-3 rounded-2xl ${
+                payType == 'mastercard' ? 'border-yellow' : 'border-gray-200'
+              } border cursor-pointer`}
+            >
               <img src="/assets/mastercard.png" />
               <input
                 type="radio"
@@ -1337,9 +1353,9 @@ const Orders: FC<OrdersProps> = ({ channelName }: { channelName: any }) => {
                 checked={payType === 'mastercard'}
                 className="hidden"
               />
-            </label>
+            </label> */}
           </div>
-          <div className="md:w-[460px] pt-10">
+          {/* <div className="md:w-[460px] pt-10">
             <div className="flex justify-between">
               <input
                 type="text"
@@ -1368,7 +1384,7 @@ const Orders: FC<OrdersProps> = ({ channelName }: { channelName: any }) => {
                 className="bg-gray-100 px-10 py-2 rounded-full w-32  outline-none focus:outline-none"
               />
             </div>
-          </div>
+          </div> */}
         </div>
         <div className={openTab === 3 ? 'block' : 'hidden'} id="link3">
           <div className="justify-between pt-8 items-center grid grid-cols-4 w-6/12">

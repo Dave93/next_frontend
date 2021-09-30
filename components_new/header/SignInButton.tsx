@@ -394,6 +394,12 @@ const SignInButton: FC = () => {
                                         value={value}
                                         className="border border-yellow focus:outline-none outline-none px-6 py-3 rounded-full text-sm w-full"
                                         onChange={(e: any) => onChange(e)}
+                                        onKeyDown={(e) => {
+                                          if (e.key == 'Enter') {
+                                            e.preventDefault()
+                                            handleSubmit(onSubmit)()
+                                          }
+                                        }}
                                       />
                                     )}
                                     rules={{
