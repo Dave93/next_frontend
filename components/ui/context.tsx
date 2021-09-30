@@ -25,8 +25,19 @@ try {
 
 activeCity = activeCityData
 
+let otpToken: string | null | undefined = Cookies.get('opt_token')
+
 if (typeof window !== 'undefined') {
-  userData = sessionStorage.getItem('mijoz')
+  if (!otpToken) {
+    otpToken = localStorage.getItem('opt_token')
+    if (otpToken) {
+      Cookies.set('opt_token', otpToken)
+    }
+  }
+}
+
+if (typeof window !== 'undefined') {
+  userData = localStorage.getItem('mijoz')
   try {
     userData = Buffer.from(userData, 'base64')
     userData = userData.toString()
@@ -224,7 +235,7 @@ function uiReducer(state: State, action: Action) {
       try {
         let userNewData = JSON.stringify(action.value)
         userNewData = Buffer.from(userNewData).toString('base64')
-        sessionStorage.setItem('mijoz', userNewData)
+        localStorage.setItem('mijoz', userNewData)
       } catch (e) {}
       return {
         ...state,

@@ -153,6 +153,7 @@ const SignInButton: FC = () => {
       success = success.toString()
       success = JSON.parse(success)
       Cookies.set('opt_token', success.user_token)
+      localStorage.setItem('opt_token', success.user_token)
       otpTime.current = result?.time_to_answer
       setOtpShowCode(otpTime.current)
       startTimeout()
@@ -299,8 +300,7 @@ const SignInButton: FC = () => {
                         )}
                         {user && (
                           <div className="mt-10 bg-green-200 font-bold text-green-800 p-4">
-                            {tr('successfully_logged')}{' '}
-                            {user.user.name}!
+                            {tr('successfully_logged')} {user.user.name}!
                           </div>
                         )}
                         {!user && isShowPasswordForm && (
@@ -312,7 +312,7 @@ const SignInButton: FC = () => {
                             >
                               <div className="mt-10">
                                 <label className="text-sm text-gray-400 mb-2 block">
-                                  {tr("sms_code")}
+                                  {tr('sms_code')}
                                 </label>
                                 <OtpInput
                                   value={otpCode}

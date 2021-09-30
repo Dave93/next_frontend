@@ -1273,7 +1273,7 @@ const Orders: FC<OrdersProps> = ({ channelName }: { channelName: any }) => {
             } flex-1 font-bold  rounded-full outline-none focus:outline-none  h-11 md:w-44 ml-5`}
             onClick={() => setOpenTab(2)}
           >
-            Картой
+            {tr('payment_type_card')}
           </button>
           <button
             className={`${
@@ -1297,7 +1297,7 @@ const Orders: FC<OrdersProps> = ({ channelName }: { channelName: any }) => {
           />
         </div>
         <div className={openTab === 2 ? 'block' : 'hidden'} id="link2">
-          <div className="flex w-[460px] justify-between pt-8 items-center">
+          <div className="grid grid-cols-2 w-60 pt-8 items-center">
             <label
               className={`flex justify-around items-center w-24 h-24 p-3 rounded-2xl ${
                 payType == 'uzcard' ? 'border-yellow' : 'border-gray-200'
