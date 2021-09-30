@@ -17,6 +17,7 @@ import getConfig from 'next/config'
 import axios from 'axios'
 import Cookies from 'js-cookie'
 import { useCart } from '@framework/cart'
+import useTranslation from 'next-translate/useTranslation'
 
 type CreatePizzaProps = {
   sec: any
@@ -28,7 +29,8 @@ let webAddress = publicRuntimeConfig.apiUrl
 axios.defaults.withCredentials = true
 
 const CreateYourPizza: FC<CreatePizzaProps> = ({ sec, channelName }) => {
-  const router = useRouter()
+  const router = useRouter()  
+  const { t: tr } = useTranslation('common')
   const { locale } = router
   let [isOpen, setIsOpen] = useState(false)
   let completeButtonRef = useRef(null)
@@ -408,7 +410,7 @@ const CreateYourPizza: FC<CreatePizzaProps> = ({ sec, channelName }) => {
     <>
       <div className="gap-4 grid grid-cols-2 py-4 md:py-0 items-center justify-between md:flex md:flex-col">
         <div className="text-center">
-          <div className="text-lg font-bold mb-2">Создай свою пиццу</div>
+          <div className="text-lg font-bold mb-2">{tr('create_your_own_pizza')}</div>
           <div>
             <Image src="/createYourPizza.png" width="250" height="250" />
           </div>
@@ -417,7 +419,7 @@ const CreateYourPizza: FC<CreatePizzaProps> = ({ sec, channelName }) => {
               className="bg-gray-100 focus:outline-none font-bold outline-none px-6 py-2 rounded-full text-center text-yellow uppercase"
               onClick={openModal}
             >
-              Создать пиццу
+              {tr('create_pizza')}
             </button>
           </div>
         </div>
@@ -563,7 +565,7 @@ const CreateYourPizza: FC<CreatePizzaProps> = ({ sec, channelName }) => {
                       {modifiers.length > 0 && (
                         <div>
                           <div className="my-2">
-                            <span>Добавить в пиццу</span>
+                            <span>{tr('add_to_pizza')}</span>
                           </div>
                           <div className="grid grid-cols-4 gap-2">
                             {modifiers.map((mod: any) => (
@@ -630,7 +632,7 @@ const CreateYourPizza: FC<CreatePizzaProps> = ({ sec, channelName }) => {
                           className="bg-gray-300 w-full rounded-3xl cursor-not-allowed px-10 py-2 text-white mt-7"
                           ref={completeButtonRef}
                         >
-                          В корзину
+                          {tr('main_to_basket')}
                         </button>
                       ) : (
                         <button
@@ -661,7 +663,7 @@ const CreateYourPizza: FC<CreatePizzaProps> = ({ sec, channelName }) => {
                             </svg>
                           ) : (
                             <span>
-                              В корзину{' '}
+                              {tr('main_to_basket')}{' '}
                               {currency(totalSummary, {
                                 pattern: '# !',
                                 separator: ' ',
@@ -687,7 +689,7 @@ const CreateYourPizza: FC<CreatePizzaProps> = ({ sec, channelName }) => {
                           />
                         </span>
                         <div className="text-lg flex-grow text-center -ml-10">
-                          Пицца 50/50 <br /> Соедини 2 любимых вкуса
+                          {tr('pizza')} 50/50 <br /> {tr('combine_your_two_favorite')}
                         </div>
                       </div>
                       <div className="flex justify-center mt-5 space-x-4 w-full -ml-4">
@@ -856,7 +858,7 @@ const CreateYourPizza: FC<CreatePizzaProps> = ({ sec, channelName }) => {
                         disabled={!leftSelectedProduct || !rightSelectedProduct}
                         onClick={changeToSecondPage}
                       >
-                        Соединить половинки
+                        {tr('connect_halves')}
                       </button>
                     </div>
                   </>

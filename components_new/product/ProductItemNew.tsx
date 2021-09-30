@@ -566,7 +566,7 @@ const ProductItemNew: FC<ProductItem> = ({ product, channelName }) => {
                 className="md:text-xl md:hidden bg-yellow md:bg-white w-28 md:w-auto rounded-full px-2 py-2 text-sm text-center md:px-0 md:py-0 text-white md:text-black"
                 onClick={openModal}
               >
-                <span>от</span>{' '}
+                {locale == 'uz' ? '' : <span>от </span>}
                 {currency(totalPrice, {
                   pattern: '# !',
                   separator: ' ',
