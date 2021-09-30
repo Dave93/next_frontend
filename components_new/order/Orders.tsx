@@ -1167,8 +1167,12 @@ const Orders: FC<OrdersProps> = ({ channelName }: { channelName: any }) => {
                       ></div>
                     </div>
                     <div>
-                      <div className="font-bold">{point.name}</div>
-                      <div className="text-gray-400 text-sm">{point.desc}</div>
+                      <div className="font-bold">
+                        {locale == 'uz' ? point.name_uz : point.name}
+                      </div>
+                      <div className="text-gray-400 text-sm">
+                        {locale == 'uz' ? point.desc_uz : point.desc}
+                      </div>
                     </div>
                   </div>
                 ))}
