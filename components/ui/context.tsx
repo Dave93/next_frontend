@@ -26,7 +26,7 @@ try {
 activeCity = activeCityData
 
 if (typeof window !== 'undefined') {
-  userData = localStorage.getItem('mijoz')
+  userData = sessionStorage.getItem('mijoz')
   try {
     userData = Buffer.from(userData, 'base64')
     userData = userData.toString()
@@ -224,7 +224,7 @@ function uiReducer(state: State, action: Action) {
       try {
         let userNewData = JSON.stringify(action.value)
         userNewData = Buffer.from(userNewData).toString('base64')
-        localStorage.setItem('mijoz', userNewData)
+        sessionStorage.setItem('mijoz', userNewData)
       } catch (e) {}
       return {
         ...state,
