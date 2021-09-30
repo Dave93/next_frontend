@@ -290,7 +290,7 @@ const SignInButton: FC = () => {
                     <div className="md:inline-flex my-8 items-start">
                       <div className="align-middle bg-white inline-block overflow-hidden md:px-40 px-6 py-10 rounded-2xl shadow-xl text-center transform transition-all max-w-2xl">
                         <Dialog.Title as="h3" className="leading-6 text-3xl">
-                          Авторизация
+                          {tr('auth')}
                         </Dialog.Title>
                         {submitError && (
                           <div className="bg-red-200 p-5 font-bold text-red-600 my-6">
@@ -299,7 +299,7 @@ const SignInButton: FC = () => {
                         )}
                         {user && (
                           <div className="mt-10 bg-green-200 font-bold text-green-800 p-4">
-                            Вы успешно авторизованы. Здравствуйте,{' '}
+                            {tr('successfully_logged')}{' '}
                             {user.user.name}!
                           </div>
                         )}
@@ -312,7 +312,7 @@ const SignInButton: FC = () => {
                             >
                               <div className="mt-10">
                                 <label className="text-sm text-gray-400 mb-2 block">
-                                  Код из смс
+                                  {tr("sms_code")}
                                 </label>
                                 <OtpInput
                                   value={otpCode}
@@ -331,7 +331,7 @@ const SignInButton: FC = () => {
                                     className="text-xs text-yellow mt-3 outline-none focus:outline-none border-b border-yellow pb-0.5"
                                     onClick={(e) => getNewCode(e)}
                                   >
-                                    Получить код заново
+                                    {tr('get_code_again')}
                                   </button>
                                 )}
                               </div>
@@ -367,7 +367,7 @@ const SignInButton: FC = () => {
                                       ></path>
                                     </svg>
                                   ) : (
-                                    'Войти'
+                                    tr('signIn')
                                   )}
                                 </button>
                               </div>
@@ -379,7 +379,7 @@ const SignInButton: FC = () => {
                             <form onSubmit={handleSubmit(onSubmit)}>
                               <div className="mt-10">
                                 <label className="text-sm text-gray-400 mb-2 block">
-                                  Номер телефона
+                                  {tr('personal_phone')}
                                 </label>
                                 <div className="relative">
                                   <Controller
@@ -419,7 +419,7 @@ const SignInButton: FC = () => {
                               {showUserName && (
                                 <div className="mt-10">
                                   <label className="text-sm text-gray-400 mb-2 block">
-                                    Ваше имя
+                                    {tr('your_name')}
                                   </label>
                                   <div className="relative">
                                     <input
@@ -472,12 +472,12 @@ const SignInButton: FC = () => {
                                       ></path>
                                     </svg>
                                   ) : (
-                                    'Получить код'
+                                    tr('get_code')
                                   )}
                                 </button>
                               </div>
                             </form>
-                            <div className="mt-5 text-gray-400 text-sm">
+                            {/*<div className="mt-5 text-gray-400 text-sm">
                               Нажимая получить код я принимаю условия{' '}
                               <a
                                 href="/privacy"
@@ -487,7 +487,7 @@ const SignInButton: FC = () => {
                               >
                                 пользовательского соглашения
                               </a>
-                            </div>
+                                </div>*/}
                           </>
                         )}
                       </div>
