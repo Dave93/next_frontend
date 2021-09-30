@@ -29,7 +29,7 @@ let webAddress = publicRuntimeConfig.apiUrl
 axios.defaults.withCredentials = true
 
 const CreateYourPizza: FC<CreatePizzaProps> = ({ sec, channelName }) => {
-  const router = useRouter()  
+  const router = useRouter()
   const { t: tr } = useTranslation('common')
   const { locale } = router
   let [isOpen, setIsOpen] = useState(false)
@@ -111,26 +111,6 @@ const CreateYourPizza: FC<CreatePizzaProps> = ({ sec, channelName }) => {
       }
     })
 
-    if (leftProduct.modifierProduct) {
-      modifierProduct = leftProduct.modifierProduct
-    }
-
-    if (selectedModifiers.length && modifierProduct) {
-      if ([...activeModifiers].includes(modifierProduct.id)) {
-        leftProduct = modifierProduct
-        let currentProductModifiersPrices = [
-          ...modifiers
-            .filter((mod: any) => mod.id != modifierProduct.id)
-            .map((mod: any) => mod.price),
-        ]
-        selectedModifiers = modifierProduct.modifiers
-          .filter((mod: any) =>
-            currentProductModifiersPrices.includes(mod.price)
-          )
-          .map((m: any) => ({ id: m.id }))
-      }
-    }
-
     let rightProduct = rightSelectedProduct.variants.find((v: any) => {
       if (locale == 'uz') {
         return v?.custom_name_uz == activeCustomName
@@ -138,6 +118,38 @@ const CreateYourPizza: FC<CreatePizzaProps> = ({ sec, channelName }) => {
         return v?.custom_name == activeCustomName
       }
     })
+
+    if (leftProduct.modifierProduct) {
+      modifierProduct = leftProduct.modifierProduct
+    }
+
+    if (rightProduct.modifierProduct) {
+      rightProduct = rightProduct.modifierProduct
+    }
+
+    if (selectedModifiers.length && modifierProduct) {
+      if ([...activeModifiers].includes(modifierProduct.id)) {
+        leftProduct = modifierProduct
+        let currentProductModifiersPrices = [
+          ...modifiers
+            .filter(
+              (mod: any) =>
+                mod.id != modifierProduct.id &&
+                [...activeModifiers].includes(mod.id)
+            )
+            .map((mod: any) => mod.price),
+        ]
+        if (currentProductModifiersPrices.length) {
+          selectedModifiers = modifierProduct.modifiers
+            .filter((mod: any) =>
+              currentProductModifiersPrices.includes(mod.price)
+            )
+            .map((m: any) => ({ id: m.id }))
+        } else {
+          selectedModifiers = [{ id: freeModifiers.id }]
+        }
+      }
+    }
 
     let basketId = localStorage.getItem('basketId')
 
@@ -271,6 +283,18 @@ const CreateYourPizza: FC<CreatePizzaProps> = ({ sec, channelName }) => {
         }
       }
     })
+    let rightActiveVariant: any = null
+    rightSelectedProduct.variants.map((vars: any) => {
+      if (locale == 'uz') {
+        if (vars?.custom_name_uz == activeCustomName) {
+          rightActiveVariant = vars
+        }
+      } else {
+        if (vars?.custom_name == activeCustomName) {
+          rightActiveVariant = vars
+        }
+      }
+    })
 
     if (activeVariant && activeVariant.modifierProduct) {
       let isExistSausage = leftModifiers.find(
@@ -281,7 +305,11 @@ const CreateYourPizza: FC<CreatePizzaProps> = ({ sec, channelName }) => {
           id: activeVariant.modifierProduct.id,
           name: 'Сосисочный борт',
           name_uz: 'Sosiskali tomoni',
-          price: +activeVariant.modifierProduct.price - +activeVariant.price,
+          price:
+            +activeVariant.modifierProduct.price -
+            +activeVariant.price +
+            (+rightActiveVariant.modifierProduct.price -
+              +rightActiveVariant.price),
           assets: [
             {
               local: '/sausage_modifier.png',
@@ -410,7 +438,9 @@ const CreateYourPizza: FC<CreatePizzaProps> = ({ sec, channelName }) => {
     <>
       <div className="gap-4 grid grid-cols-2 py-4 md:py-0 items-center justify-between md:flex md:flex-col">
         <div className="text-center">
-          <div className="text-lg font-bold mb-2">{tr('create_your_own_pizza')}</div>
+          <div className="text-lg font-bold mb-2">
+            {tr('create_your_own_pizza')}
+          </div>
           <div>
             <Image src="/createYourPizza.png" width="250" height="250" />
           </div>
@@ -689,7 +719,8 @@ const CreateYourPizza: FC<CreatePizzaProps> = ({ sec, channelName }) => {
                           />
                         </span>
                         <div className="text-lg flex-grow text-center -ml-10">
-                          {tr('pizza')} 50/50 <br /> {tr('combine_your_two_favorite')}
+                          {tr('pizza')} 50/50 <br />{' '}
+                          {tr('combine_your_two_favorite')}
                         </div>
                       </div>
                       <div className="flex justify-center mt-5 space-x-4 w-full -ml-4">
