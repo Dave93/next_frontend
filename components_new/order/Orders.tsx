@@ -74,35 +74,8 @@ interface SelectItem {
   label: string
 }
 
-const deliveryTimeOptions = [] as SelectItem[]
-
 const zeroPad = (num: number, places: number) =>
   String(num).padStart(places, '0')
-
-let startTime = DateTime.now()
-startTime = startTime.plus({ minutes: 40 })
-startTime = startTime.set({
-  minute: Math.ceil(startTime.minute / 10) * 10,
-})
-
-while (startTime.hour < 3 || startTime.hour > 10) {
-  let val = `${zeroPad(startTime.hour, 2)}:${zeroPad(startTime.minute, 2)}`
-  startTime = startTime.plus({ minutes: 20 })
-  startTime = startTime.set({
-    minute: Math.ceil(startTime.minute / 10) * 10,
-  })
-
-  val += ` - ${zeroPad(startTime.hour, 2)}:${zeroPad(startTime.minute, 2)}`
-  deliveryTimeOptions.push({
-    value: val,
-    label: val,
-  })
-
-  startTime = startTime.plus({ minutes: 40 })
-  startTime = startTime.set({
-    minute: Math.ceil(startTime.minute / 10) * 10,
-  })
-}
 
 const paymentTypes = ['payme', 'click', 'oson']
 
@@ -123,6 +96,32 @@ type OrdersProps = {
 }
 
 const Orders: FC<OrdersProps> = ({ channelName }: { channelName: any }) => {
+  const deliveryTimeOptions = [] as SelectItem[]
+
+  let startTime = DateTime.now()
+  startTime = startTime.plus({ minutes: 40 })
+  startTime = startTime.set({
+    minute: Math.ceil(startTime.minute / 10) * 10,
+  })
+
+  while (startTime.hour < 3 || startTime.hour > 10) {
+    let val = `${zeroPad(startTime.hour, 2)}:${zeroPad(startTime.minute, 2)}`
+    startTime = startTime.plus({ minutes: 20 })
+    startTime = startTime.set({
+      minute: Math.ceil(startTime.minute / 10) * 10,
+    })
+
+    val += ` - ${zeroPad(startTime.hour, 2)}:${zeroPad(startTime.minute, 2)}`
+    deliveryTimeOptions.push({
+      value: val,
+      label: val,
+    })
+
+    startTime = startTime.plus({ minutes: 40 })
+    startTime = startTime.set({
+      minute: Math.ceil(startTime.minute / 10) * 10,
+    })
+  }
   //Contacts
   const { t: tr } = useTranslation('common')
   const {
