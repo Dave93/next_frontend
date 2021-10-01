@@ -47,7 +47,9 @@ const MainSlider: FC = () => {
       const { data } = await axios.get(
         `${publicRuntimeConfig.apiUrl}/api/sliders/public?locale=${locale}`
       )
+      sliderRef.current?.destroy()
       setSliders(data.data)
+      sliderRef.current?.init()
     }
   }
 
