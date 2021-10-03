@@ -2,11 +2,6 @@ import { FC, memo, createRef, useState, useEffect } from 'react'
 import Flicking, { ViewportSlot } from '@egjs/react-flicking'
 import { Fade, AutoPlay, Pagination } from '@egjs/flicking-plugins'
 import Image from 'next/image'
-import {
-  useWindowSize,
-  useWindowWidth,
-  useWindowHeight,
-} from '@react-hook/window-size'
 import { useUI } from '@components/ui'
 import getConfig from 'next/config'
 import axios from 'axios'
@@ -17,7 +12,6 @@ const { publicRuntimeConfig } = getConfig()
 
 const MainSlider: FC = () => {
   let router = useRouter()
-  const { activeCity } = useUI()
 
   const [sliders, setSliders] = useState([])
 
@@ -37,20 +31,16 @@ const MainSlider: FC = () => {
   const slidePrev = () => {
     sliderRef.current?.prev()
   }
-  const onlyWidth = useWindowWidth({
-    initialWidth: 1920,
-    wait: 400,
-  })
 
   const fetchSliders = async () => {
-    if (activeCity) {
-      const { data } = await axios.get(
-        `${publicRuntimeConfig.apiUrl}/api/sliders/public?locale=${locale}`
-      )
-      sliderRef.current?.destroy()
-      setSliders(data.data)
+    const { data } = await axios.get(
+      `${publicRuntimeConfig.apiUrl}/api/sliders/public?locale=${locale}`
+    )
+    sliderRef.current?.destroy()
+    setSliders(data.data)
+    setTimeout(() => {
       sliderRef.current?.init()
-    }
+    }, 100)
   }
 
   useEffect(() => {
@@ -68,6 +58,9 @@ const MainSlider: FC = () => {
             defaultIndex={1}
             plugins={plugins}
             ref={sliderRef}
+            renderOnlyVisible={true}
+            hideBeforeInit={true}
+            autoResize={true}
           >
             {sliders.map((item: any) => (
               <div className="panel max-w-full mr-6" key={item.id}>
@@ -82,6 +75,7 @@ const MainSlider: FC = () => {
                               width={1160}
                               height={320}
                               layout="intrinsic"
+                              priority={true}
                             />
                           </div>
                           <div className="md:hidden flex">
@@ -94,6 +88,7 @@ const MainSlider: FC = () => {
                               width={400}
                               height={176}
                               layout="intrinsic"
+                              priority={true}
                             />
                           </div>
                         </>
@@ -108,6 +103,7 @@ const MainSlider: FC = () => {
                             width={1160}
                             height={320}
                             layout="intrinsic"
+                            priority={true}
                           />
                         </div>
                         <div className="md:hidden flex">
@@ -120,6 +116,7 @@ const MainSlider: FC = () => {
                             width={400}
                             height={176}
                             layout="intrinsic"
+                            priority={true}
                           />
                         </div>
                       </>

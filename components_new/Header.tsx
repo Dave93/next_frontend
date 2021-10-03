@@ -5,6 +5,7 @@ import React, {
   Fragment,
   FC,
   useEffect,
+  useMemo,
 } from 'react'
 import SetLocation from '@components_new/header/SetLocation'
 import Link from 'next/link'
@@ -22,11 +23,22 @@ import HeaderPhone from './header/HeaderPhone'
 import useTranslation from 'next-translate/useTranslation'
 import getConfig from 'next/config'
 import axios from 'axios'
+import { useUI } from '@components/ui/context'
+import parsePhoneNumber from 'libphonenumber-js'
 const { publicRuntimeConfig } = getConfig()
 
 const Header: FC<{
   menu: Array<APILinkItem>
 }> = ({ menu = [] }) => {
+  const { activeCity, cities } = useUI()
+
+  const chosenCity = useMemo(() => {
+    if (activeCity) {
+      return activeCity
+    }
+    if (cities) return cities[0]
+    return null
+  }, [cities, activeCity])
   const [menuOpen, setMenuOpen] = useState(false)
   const [mobMenuOpen, setMobMenuOpen] = useState(false)
   const { t: tr } = useTranslation('common')
@@ -140,8 +152,18 @@ const Header: FC<{
               <MobHeaderMenu menuItems={menu} setMobMenuOpen={setMobMenuOpen} />
             </div>
             <div className="ml-9 text-white pt-8">
-              <div className="text-xs mb-1">{tr('delivery_phone')}</div>
-              <div className="text-2xl mb-5">{configData.contactPhone}</div>
+              {chosenCity?.phone && (
+                <>
+                  <div className="text-xs mb-1">{tr('delivery_phone')}</div>
+                  <div className="text-2xl mb-5">
+                    <a href={parsePhoneNumber(chosenCity?.phone)?.getURI()}>
+                      {parsePhoneNumber(chosenCity?.phone)
+                        ?.formatNational()
+                        .substring(2)}
+                    </a>
+                  </div>
+                </>
+              )}
               <a className="flex mb-5" href="#">
                 <Image src="/assets/appstore.png" width="151" height="49" />
               </a>

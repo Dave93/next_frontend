@@ -237,6 +237,11 @@ function uiReducer(state: State, action: Action) {
         userNewData = Buffer.from(userNewData).toString('base64')
         localStorage.setItem('mijoz', userNewData)
       } catch (e) {}
+      if (action.value == null) {
+        localStorage.removeItem('mijoz')
+        localStorage.removeItem('opt_token')
+        Cookies.remove('opt_token')
+      }
       return {
         ...state,
         user: action.value,
