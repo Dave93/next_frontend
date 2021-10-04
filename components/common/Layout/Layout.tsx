@@ -103,7 +103,7 @@ const Layout: FC<Props> = ({
     if (!activeCity) {
       setActiveCity(cities[0])
     }
-    fetchGeo();
+    fetchGeo()
     return
   }, [])
 
@@ -185,6 +185,17 @@ const Layout: FC<Props> = ({
                               </li>
                             )
                           })}
+
+                          <li className={styles.footerMenuListItem}>
+                            <a
+                              href="https://telegram.me/HavoqandJamoa_Bot"
+                              target="_blank"
+                            >
+                              {locale == 'uz'
+                                ? 'Jamoamizga qo’shiling'
+                                : 'Присоединяйтесь к нашей команде'}
+                            </a>
+                          </li>
                         </ul>
                       </div>
                       <div>
@@ -208,6 +219,17 @@ const Layout: FC<Props> = ({
                                   </li>
                                 )
                               })}
+
+                              <li className={styles.footerMenuListItem}>
+                                <a
+                                  href="https://telegram.me/HavoqandJamoa_Bot"
+                                  target="_blank"
+                                >
+                                  {locale == 'uz'
+                                    ? 'Jamoamizga qo’shiling'
+                                    : 'Присоединяйтесь к нашей команде'}
+                                </a>
+                              </li>
                             </ul>
                           </>
                         )}
