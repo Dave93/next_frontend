@@ -106,7 +106,7 @@ const Header: FC<{
                   <SetLocation />
                 </div>                
                 <div className="md:flex hidden">
-                  <a href='https://telegram.me/Chopar_bot' target='_blank' className="text-blue flex items-center"><FontAwesomeIcon className='fa-2x mx-2' icon={faTelegram} /> {locale == 'uz' ? "Telegram bot" : "Телеграм бот"}</a>
+                  <a href='https://telegram.me/Chopar_bot' target='_blank' className="text-blue flex items-center"><FontAwesomeIcon className='fa-2x mx-2' icon={faTelegram} /> @chopar_bot</a>
                 </div>
                 <div className="flex items-center">
                   <div className="md:flex hidden">
