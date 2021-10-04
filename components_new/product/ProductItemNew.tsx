@@ -353,7 +353,10 @@ const ProductItemNew: FC<ProductItem> = ({ product, channelName }) => {
   return (
     <>
       {isChoosingModifier ? (
-        <div className="gap-4 grid grid-cols-2 items-center justify-between relative md:flex md:flex-col px-6 py-4 rounded-[15px] shadow-lg">
+        <div
+          className="gap-4 grid grid-cols-2 items-center justify-between relative md:flex md:flex-col px-6 py-4 rounded-[15px] shadow-lg"
+          id={`prod-${store.id}`}
+        >
           {isLoadingBasket && (
             <div className="h-full w-full absolute flex items-center justify-around bg-gray-300 top-0 bg-opacity-60">
               <svg
@@ -461,7 +464,10 @@ const ProductItemNew: FC<ProductItem> = ({ product, channelName }) => {
           </div>
         </div>
       ) : (
-        <div className="gap-4 grid grid-cols-2 py-4 md:py-0 items-center justify-between md:flex md:flex-col">
+        <div
+          className="gap-4 grid grid-cols-2 py-4 md:py-0 items-center justify-between md:flex md:flex-col"
+          id={`prod-${store.id}`}
+        >
           <div>
             <div className="text-center">
               {store.image ? (
