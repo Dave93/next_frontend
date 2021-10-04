@@ -270,27 +270,71 @@ export default function Cart() {
                     key={lineItem.id}
                   >
                     <div className="md:flex items-center text-center">
-                      <Image
-                        src={
-                          lineItem?.variant?.product?.assets?.length
-                            ? `${webAddress}/storage/${lineItem?.variant?.product?.assets[0]?.location}/${lineItem?.variant?.product?.assets[0]?.filename}`
-                            : '/no_photo.svg'
-                        }
-                        width="100"
-                        height="100"
-                      />
-                      <div className="md:ml-7 ml-1 space-y-2">
+                      {lineItem.child &&
+                      lineItem.child.length &&
+                      lineItem.child[0].variant?.product?.id !=
+                        lineItem?.variant?.product?.box_id ? (
+                        <div className="h-28 w-28 flex relative">
+                          <div className="w-12 relative overflow-hidden">
+                            <div>
+                              <Image
+                                src={
+                                  lineItem?.variant?.product?.assets?.length
+                                    ? `${webAddress}/storage/${lineItem?.variant?.product?.assets[0]?.location}/${lineItem?.variant?.product?.assets[0]?.filename}`
+                                    : '/no_photo.svg'
+                                }
+                                width="100"
+                                height="100"
+                                layout="fixed"
+                                className="absolute rounded-full"
+                              />
+                            </div>
+                          </div>
+                          <div className="w-12 relative overflow-hidden">
+                            <div className="absolute right-0">
+                              <Image
+                                src={
+                                  lineItem?.child[0].variant?.product?.assets
+                                    ?.length
+                                    ? `${webAddress}/storage/${lineItem?.child[0].variant?.product?.assets[0]?.location}/${lineItem?.child[0].variant?.product?.assets[0]?.filename}`
+                                    : '/no_photo.svg'
+                                }
+                                width="100"
+                                height="100"
+                                layout="fixed"
+                                className="rounded-full"
+                              />
+                            </div>
+                          </div>
+                        </div>
+                      ) : (
+                        <div className="h-24 w-24 flex relative mr-4">
+                          <Image
+                            src={
+                              lineItem?.variant?.product?.assets?.length
+                                ? `${webAddress}/storage/${lineItem?.variant?.product?.assets[0]?.location}/${lineItem?.variant?.product?.assets[0]?.filename}`
+                                : '/no_photo.svg'
+                            }
+                            width={100}
+                            height={100}
+                            className="rounded-full"
+                          />
+                        </div>
+                      )}
+                      <div className="md:ml-7 ml-1 space-y-2 md:w-72 md:text-left">
                         <div className="text-xl font-bold">
                           {lineItem.child && lineItem.child.length
                             ? `${
                                 lineItem?.variant?.product?.attribute_data
                                   ?.name[channelName][locale || 'ru']
-                              } + ${
-                                lineItem?.child[0].variant?.product
-                                  ?.attribute_data?.name[channelName][
-                                  locale || 'ru'
-                                ]
-                              }`
+                              } + ${lineItem?.child
+                                .map(
+                                  (v: any) =>
+                                    v?.variant?.product?.attribute_data?.name[
+                                      channelName
+                                    ][locale || 'ru']
+                                )
+                                .join(' + ')}`
                             : lineItem?.variant?.product?.attribute_data?.name[
                                 channelName
                               ][locale || 'ru']}

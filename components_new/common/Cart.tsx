@@ -214,7 +214,10 @@ const Cart: FC<CartProps> = ({ channelName }: { channelName: any }) => {
               data?.lineItems.map((lineItem: any) => (
                 <div key={lineItem.id} className="py-3">
                   <div className="flex mb-2">
-                    {lineItem.child && lineItem.child.length ? (
+                    {lineItem.child &&
+                    lineItem.child.length &&
+                    lineItem.child[0].variant?.product?.id !=
+                      lineItem?.variant?.product?.box_id ? (
                       <div className="h-11 w-11 flex relative">
                         <div className="w-5 relative overflow-hidden">
                           <div>
@@ -268,10 +271,14 @@ const Cart: FC<CartProps> = ({ channelName }: { channelName: any }) => {
                             lineItem?.variant?.product?.attribute_data?.name[
                               channelName
                             ][locale || 'ru']
-                          } + ${
-                            lineItem?.child[0].variant?.product?.attribute_data
-                              ?.name[channelName][locale || 'ru']
-                          }`
+                          } + ${lineItem?.child
+                            .map(
+                              (v: any) =>
+                                v?.variant?.product?.attribute_data?.name[
+                                  channelName
+                                ][locale || 'ru']
+                            )
+                            .join(' + ')}`
                         : lineItem?.variant?.product?.attribute_data?.name[
                             channelName
                           ][locale || 'ru']}

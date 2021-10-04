@@ -200,7 +200,10 @@ const OrderAccept: FC<OrderDetailProps> = ({ order, orderStatuses }) => {
             key={pizza.id}
           >
             <div className="flex items-center">
-              {pizza.child && pizza.child.length ? (
+              {pizza.child &&
+              pizza.child.length &&
+              pizza.child[0].variant?.product?.id !=
+                pizza?.variant?.product?.box_id ? (
                 <div className="h-24 w-24 flex relative">
                   <div className="w-12 relative overflow-hidden">
                     <div>
