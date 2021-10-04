@@ -1465,7 +1465,10 @@ const Orders: FC<OrdersProps> = ({ channelName }: { channelName: any }) => {
               className="flex justify-between items-center border-b py-2"
               key={lineItem.id}
             >
-              {lineItem.child && lineItem.child.length ? (
+              {lineItem.child &&
+              lineItem.child.length &&
+              lineItem.child[0].variant?.product?.id !=
+                lineItem?.variant?.product?.box_id ? (
                 <div className="h-11 w-11 flex relative">
                   <div className="w-5 relative overflow-hidden">
                     <div>
@@ -1519,10 +1522,14 @@ const Orders: FC<OrdersProps> = ({ channelName }: { channelName: any }) => {
                         lineItem?.variant?.product?.attribute_data?.name[
                           channelName
                         ][locale || 'ru']
-                      } + ${
-                        lineItem?.child[0].variant?.product?.attribute_data
-                          ?.name[channelName][locale || 'ru']
-                      }`
+                      } + ${lineItem?.child
+                        .map(
+                          (v: any) =>
+                            v?.variant?.product?.attribute_data?.name[
+                              channelName
+                            ][locale || 'ru']
+                        )
+                        .join(' + ')}`
                     : lineItem?.variant?.product?.attribute_data?.name[
                         channelName
                       ][locale || 'ru']}
