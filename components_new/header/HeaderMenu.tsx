@@ -18,9 +18,6 @@ const HeaderMenu: FC<HeaderMenuItems> = ({ menuItems }) => {
             </li>
           )
         })}
-        <li className="px-4">
-          <a href="https://telegram.me/HavoqandJamoa_Bot" target="_blank" className="no-underline text-secondary">{locale == "uz" ? "Jamoamizga qo’shiling" : "Присоединяйтесь к нашей команде"}</a>
-        </li>
     </ul>
   )
 }

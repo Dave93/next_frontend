@@ -14,6 +14,7 @@ type NewListProps = {
 }
 
 const NewsItem: FC<NewListProps> = ({ newsItems }) => {
+  const { t: tr } = useTranslation('common')
   const router = useRouter()
   const { locale } = router
   return (
@@ -67,7 +68,7 @@ const NewsItem: FC<NewListProps> = ({ newsItems }) => {
             </div>
             <Link href={`${'/news/' + item.id}`} prefetch={false}>
               <a className="text-xs text-gray-400 hover:underline">
-                Подробное описание
+                {tr("more")}
               </a>
             </Link>
           </div>

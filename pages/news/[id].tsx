@@ -160,7 +160,7 @@ export default function NewsId({
       </div>
       {relatedNews.length && (
         <>
-          <div className="text-2xl mb-4 mt-10">Рекомендуем другие новости</div>
+          <div className="text-2xl mb-4 mt-10">{tr('recommended_news')}</div>
           <div className="bg-white rounded-3xl flex justify-between p-4">
             {relatedNews.map((item: any) => (
               <div key={item.id}>
@@ -207,7 +207,7 @@ export default function NewsId({
                   </div>
                   <Link href={`${'/news/' + item.id}`} prefetch={false}>
                     <a className="text-xs text-gray-400 hover:underline">
-                      Подробное описание
+                      {tr("more")}
                     </a>
                   </Link>
                 </div>
