@@ -185,17 +185,6 @@ const Layout: FC<Props> = ({
                               </li>
                             )
                           })}
-
-                          <li className={styles.footerMenuListItem}>
-                            <a
-                              href="https://telegram.me/HavoqandJamoa_Bot"
-                              target="_blank"
-                            >
-                              {locale == 'uz'
-                                ? 'Jamoamizga qo’shiling'
-                                : 'Присоединяйтесь к нашей команде'}
-                            </a>
-                          </li>
                         </ul>
                       </div>
                       <div>
@@ -219,17 +208,6 @@ const Layout: FC<Props> = ({
                                   </li>
                                 )
                               })}
-
-                              <li className={styles.footerMenuListItem}>
-                                <a
-                                  href="https://telegram.me/HavoqandJamoa_Bot"
-                                  target="_blank"
-                                >
-                                  {locale == 'uz'
-                                    ? 'Jamoamizga qo’shiling'
-                                    : 'Присоединяйтесь к нашей команде'}
-                                </a>
-                              </li>
                             </ul>
                           </>
                         )}

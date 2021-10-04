@@ -47,7 +47,7 @@ export async function getServerSideProps({
   }
 
   const { data } = await axios.get(
-    `${process.env.API_URL}/api/sale/public/${id}/?city_id=${activeCity.id}`
+    `${process.env.API_URL}/api/sales/public/${id}/?city_id=${activeCity.id}`
   )
 
   if (!data.data.length) {
@@ -57,7 +57,7 @@ export async function getServerSideProps({
   }
 
   const { data: relatedData } = await axios.get(
-    `${process.env.API_URL}/api/sale/related/${id}/?city_id=${activeCity.id}`
+    `${process.env.API_URL}/api/sales/related/${id}/?city_id=${activeCity.id}`
   )
 
   return {
@@ -160,7 +160,7 @@ export default function SaleId({
       </div>
       {relatedSale.length && (
         <>
-          <div className="text-2xl mb-4 mt-10">Рекомендуем другие новости</div>
+          <div className="text-2xl mb-4 mt-10">{tr('recommended_sales')}</div>
           <div className="bg-white rounded-3xl flex justify-between p-4">
             {relatedSale.map((item: any) => (
               <div key={item.id}>
@@ -207,7 +207,7 @@ export default function SaleId({
                   </div>
                   <Link href={`${'/sale/' + item.id}`} prefetch={false}>
                     <a className="text-xs text-gray-400 hover:underline">
-                      Подробное описание
+                      {tr("more")}
                     </a>
                   </Link>
                 </div>

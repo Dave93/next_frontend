@@ -13,7 +13,8 @@ type SaleListProps = {
   SaleItems: AnyObject[]
 }
 
-const SaleItem: FC<SaleListProps> = ({ SaleItems }) => {
+const SaleItem: FC<SaleListProps> = ({ SaleItems }) => {  
+  const { t: tr } = useTranslation('common')
   const router = useRouter()
   const { locale } = router
   return (
@@ -67,7 +68,7 @@ const SaleItem: FC<SaleListProps> = ({ SaleItems }) => {
             </div>
             <Link href={`${'/sale/' + item.id}`} prefetch={false}>
               <a className="text-xs text-gray-400 hover:underline">
-                Подробное описание
+                {tr("more")}
               </a>
             </Link>
           </div>
