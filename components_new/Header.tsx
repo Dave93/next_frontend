@@ -109,7 +109,7 @@ const Header: FC<{
                     className="text-blue flex items-center"
                   >
                     <FontAwesomeIcon
-                      className="fa-2x mx-2"
+                      className="fa-2x mx-2 w-8 h-8"
                       size="xs"
                       icon={faTelegram}
                     />{' '}
