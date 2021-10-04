@@ -25,9 +25,7 @@ import getConfig from 'next/config'
 import axios from 'axios'
 import { useUI } from '@components/ui/context'
 import parsePhoneNumber from 'libphonenumber-js'
-import {
-  faTelegram,
-} from '@fortawesome/free-brands-svg-icons'
+import { faTelegram } from '@fortawesome/free-brands-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { useRouter } from 'next/router'
 const { publicRuntimeConfig } = getConfig()
@@ -35,8 +33,7 @@ const { publicRuntimeConfig } = getConfig()
 const Header: FC<{
   menu: Array<APILinkItem>
 }> = ({ menu = [] }) => {
-  
-  const { locale = 'ru'} = useRouter()
+  const { locale = 'ru' } = useRouter()
   const { activeCity, cities } = useUI()
 
   const chosenCity = useMemo(() => {
@@ -104,9 +101,20 @@ const Header: FC<{
               <>
                 <div className="w-1/3 md:flex hidden">
                   <SetLocation />
-                </div>                
+                </div>
                 <div className="md:flex hidden">
-                  <a href='https://telegram.me/Chopar_bot' target='_blank' className="text-blue flex items-center"><FontAwesomeIcon className='fa-2x mx-2' icon={faTelegram} /> @chopar_bot</a>
+                  <a
+                    href="https://telegram.me/Chopar_bot"
+                    target="_blank"
+                    className="text-blue flex items-center"
+                  >
+                    <FontAwesomeIcon
+                      className="fa-2x mx-2 w-8 h-8"
+                      size="xs"
+                      icon={faTelegram}
+                    />{' '}
+                    @chopar_bot
+                  </a>
                 </div>
                 <div className="flex items-center">
                   <div className="md:flex hidden">

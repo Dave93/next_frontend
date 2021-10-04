@@ -66,48 +66,17 @@ const MainSlider: FC = () => {
               <div className="panel max-w-full mr-6" key={item.id}>
                 <div className="rounded-[15px] overflow-hidden flex mb-[10px]">
                   {item.link ? (
-                    <Link href={item.link} prefetch={false}>
+                    <a href={item.link}>
                       {item.asset && (
                         <>
-                          <div className="hidden md:flex ">
-                            <Image
-                              src={item.asset[0].link}
-                              width={1160}
-                              height={320}
-                              layout="intrinsic"
-                              priority={true}
-                            />
-                          </div>
-                          <div className="md:hidden flex">
-                            <Image
-                              src={
-                                item.asset[1]
-                                  ? item.asset[1].link
-                                  : item.asset[0].link
-                              }
-                              width={400}
-                              height={176}
-                              layout="intrinsic"
-                              priority={true}
-                            />
-                          </div>
-                        </>
-                      )}
-                    </Link>
-                  ) : (
-                    item.asset && (
-                      <>
-                        <div className="hidden md:flex">
-                          <Image
+                          <img
                             src={item.asset[0].link}
                             width={1160}
                             height={320}
-                            layout="intrinsic"
-                            priority={true}
+                            data-href={item.link}
+                            className="hidden md:flex "
                           />
-                        </div>
-                        <div className="md:hidden flex">
-                          <Image
+                          <img
                             src={
                               item.asset[1]
                                 ? item.asset[1].link
@@ -115,8 +84,31 @@ const MainSlider: FC = () => {
                             }
                             width={400}
                             height={176}
-                            layout="intrinsic"
-                            priority={true}
+                            data-href={item.link}
+                            className="md:hidden flex"
+                          />
+                        </>
+                      )}
+                    </a>
+                  ) : (
+                    item.asset && (
+                      <>
+                        <div className="hidden md:flex">
+                          <img
+                            src={item.asset[0].link}
+                            width={1160}
+                            height={320}
+                          />
+                        </div>
+                        <div className="md:hidden flex">
+                          <img
+                            src={
+                              item.asset[1]
+                                ? item.asset[1].link
+                                : item.asset[0].link
+                            }
+                            width={400}
+                            height={176}
                           />
                         </div>
                       </>
