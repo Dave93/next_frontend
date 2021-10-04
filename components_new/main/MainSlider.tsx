@@ -19,7 +19,7 @@ const MainSlider: FC = () => {
 
   const plugins = [
     new Fade('', 0.4),
-    // new AutoPlay({ duration: 3000, direction: 'NEXT', stopOnHover: false }),
+    new AutoPlay({ duration: 3000, direction: 'NEXT', stopOnHover: false }),
     new Pagination({ type: 'bullet' }),
   ]
   const sliderRef = createRef<Flicking>()
