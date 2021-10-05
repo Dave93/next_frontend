@@ -3,9 +3,11 @@ import { Menu, Transition } from '@headlessui/react'
 import Image from 'next/image'
 import { useUI } from '@components/ui'
 import { City } from '@commerce/types/cities'
+import { useRouter } from 'next/router'
 
 const ChooseCityDropDown: FC = () => {
   const { cities, activeCity, setActiveCity } = useUI()
+  const { locale } = useRouter()
 
   const chosenCity = useMemo(() => {
     if (activeCity) {
@@ -24,7 +26,11 @@ const ChooseCityDropDown: FC = () => {
               <div className="flex items-center">
                 <Image src="/assets/location.png" width="14" height="16" />
                 <div className="ml-3 text-xl">
-                  {chosenCity?.name ? chosenCity?.name : 'Ваш город'}
+                  {chosenCity?.name
+                    ? locale == 'uz'
+                      ? chosenCity?.name_uz
+                      : chosenCity?.name
+                    : 'Ваш город'}
                 </div>
               </div>
             </Menu.Button>

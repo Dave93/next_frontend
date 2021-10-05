@@ -14,6 +14,7 @@ const MainSlider: FC = () => {
   let router = useRouter()
 
   const [sliders, setSliders] = useState([])
+  const [defaultIndex, setDefaultIndex] = useState(1)
 
   const { locale } = router
 
@@ -36,7 +37,9 @@ const MainSlider: FC = () => {
     const { data } = await axios.get(
       `${publicRuntimeConfig.apiUrl}/api/sliders/public?locale=${locale}`
     )
+    // sliderRef.current?.moveTo(0)
     sliderRef.current?.destroy()
+    setDefaultIndex(1)
     setSliders(data.data)
     setTimeout(() => {
       sliderRef.current?.init()
@@ -55,12 +58,12 @@ const MainSlider: FC = () => {
           <Flicking
             align="center"
             circular={true}
-            defaultIndex={1}
+            defaultIndex={defaultIndex}
             plugins={plugins}
             ref={sliderRef}
             renderOnlyVisible={true}
-            hideBeforeInit={true}
             autoResize={true}
+            autoInit={true}
           >
             {sliders.map((item: any) => (
               <div className="panel max-w-full mr-6" key={item.id}>

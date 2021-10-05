@@ -349,7 +349,7 @@ const ProductItemNew: FC<ProductItem> = ({ product, channelName }) => {
       addToBasket()
     }
   }
-
+  console.log(modifiers)
   return (
     <>
       {isChoosingModifier ? (
@@ -711,7 +711,11 @@ const ProductItemNew: FC<ProductItem> = ({ product, channelName }) => {
                                     <div className="flex-grow pt-2 px-2">
                                       {mod.assets.length ? (
                                         <img
-                                          src={`${webAddress}/storage/${mod.assets[0]?.location}/${mod.assets[0]?.filename}`}
+                                          src={
+                                            mod.assets[0].local
+                                              ? mod.assets[0].local
+                                              : `${webAddress}/storage/${mod.assets[0]?.location}/${mod.assets[0]?.filename}`
+                                          }
                                           width={50}
                                           height={50}
                                           alt={mod.name}

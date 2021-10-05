@@ -8,7 +8,7 @@ const HeaderMenu: FC<HeaderMenuItems> = ({ menuItems, setMobMenuOpen }) => {
   const router = useRouter()
 
   const goTo = (link: string) => {
-    setMobMenuOpen(false);
+    setMobMenuOpen(false)
     router.push(link)
   }
 
@@ -19,7 +19,7 @@ const HeaderMenu: FC<HeaderMenuItems> = ({ menuItems, setMobMenuOpen }) => {
           const keyTyped = `name_${locale}` as keyof typeof item
           return (
             <li key={item.id}>
-              <button onClick={() => goTo(item.href)}>
+              <button onClick={() => goTo(item.href)} className="text-left">
                 <a className="no-underline text-white">{item[keyTyped]}</a>
               </button>
             </li>

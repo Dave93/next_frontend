@@ -1,5 +1,5 @@
 import cn from 'classnames'
-import React, { FC, useEffect, useState } from 'react'
+import React, { FC, useEffect, useMemo, useState } from 'react'
 import { useRouter } from 'next/router'
 import { CommerceProvider } from '@framework'
 import type { Page } from '@commerce/types/page'
@@ -24,6 +24,7 @@ import {
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { SocialIcons } from '@commerce/types/socialIcons'
 import useTranslation from 'next-translate/useTranslation'
+import parsePhoneNumber from 'libphonenumber-js'
 import getConfig from 'next/config'
 import axios from 'axios'
 import { City } from '@commerce/types/cities'
@@ -59,7 +60,6 @@ const Layout: FC<Props> = ({
     topMenu = [],
     footerInfoMenu = [],
     socials = [],
-    cities = [],
     cleanBackground = false,
     ...pageProps
   },
@@ -69,7 +69,7 @@ const Layout: FC<Props> = ({
 
   const [configData, setConfigData] = useState({} as any)
 
-  const { setCitiesData, activeCity, setActiveCity } = useUI()
+  const { setCitiesData, activeCity, setActiveCity, cities } = useUI()
 
   const fetchConfig = async () => {
     let configData
@@ -99,13 +99,17 @@ const Layout: FC<Props> = ({
 
   useEffect(() => {
     fetchConfig()
-    setCitiesData(cities)
-    if (!activeCity) {
-      setActiveCity(cities[0])
-    }
     fetchGeo()
     return
   }, [])
+
+  const chosenCity = useMemo(() => {
+    if (activeCity) {
+      return activeCity
+    }
+    if (cities) return cities[0]
+    return null
+  }, [cities, activeCity])
 
   return (
     <CommerceProvider locale={locale}>
@@ -149,7 +153,11 @@ const Layout: FC<Props> = ({
                     <div className="md:hidden border-b border-blue md:border-0 pb-5">
                       <div>{tr('delivery_phone')}</div>
                       <div className="text-[30px] font-bold">
-                        {configData.contactPhone}
+                        <a href={parsePhoneNumber(chosenCity?.phone)?.getURI()}>
+                          {parsePhoneNumber(chosenCity?.phone)
+                            ?.formatNational()
+                            .substring(2)}
+                        </a>
                       </div>
                     </div>
                     <span className="md:block mt-7 text-xl hidden">
@@ -218,7 +226,11 @@ const Layout: FC<Props> = ({
                     <div className="hidden md:block">
                       <div>{tr('delivery_phone')}</div>
                       <div className="text-[30px] font-bold">
-                        {configData.contactPhone}
+                        <a href={parsePhoneNumber(chosenCity?.phone)?.getURI()}>
+                          {parsePhoneNumber(chosenCity?.phone)
+                            ?.formatNational()
+                            .substring(2)}
+                        </a>
                       </div>
                     </div>
                     <div className=" border-b border-blue md:border-0 pb-5 md:pb-0">
