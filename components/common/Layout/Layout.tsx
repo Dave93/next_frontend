@@ -24,10 +24,10 @@ import {
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { SocialIcons } from '@commerce/types/socialIcons'
 import useTranslation from 'next-translate/useTranslation'
-import parsePhoneNumber from 'libphonenumber-js'
 import getConfig from 'next/config'
 import axios from 'axios'
 import { City } from '@commerce/types/cities'
+import { parsePhoneNumber } from 'libphonenumber-js'
 const { publicRuntimeConfig } = getConfig()
 
 interface Props {
@@ -60,6 +60,7 @@ const Layout: FC<Props> = ({
     topMenu = [],
     footerInfoMenu = [],
     socials = [],
+    cities = [],
     cleanBackground = false,
     ...pageProps
   },
@@ -69,7 +70,7 @@ const Layout: FC<Props> = ({
 
   const [configData, setConfigData] = useState({} as any)
 
-  const { setCitiesData, activeCity, setActiveCity, cities } = useUI()
+  const { setCitiesData, activeCity, setActiveCity } = useUI()
 
   const fetchConfig = async () => {
     let configData
@@ -99,6 +100,10 @@ const Layout: FC<Props> = ({
 
   useEffect(() => {
     fetchConfig()
+    setCitiesData(cities)
+    if (!activeCity) {
+      setActiveCity(cities[0])
+    }
     fetchGeo()
     return
   }, [])
