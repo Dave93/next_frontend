@@ -129,7 +129,7 @@ const MainSlider: FC = () => {
             onClick={() => slidePrev()}
           >
             <Image
-              src="/assets/slider_arrow_blue_left.png"
+              src="/assets/slide_arrow_yellow_left.png"
               width={46}
               height={46}
             />
@@ -139,7 +139,7 @@ const MainSlider: FC = () => {
             onClick={() => slideNext()}
           >
             <Image
-              src="/assets/slider_arrow_blue_right.png"
+              src="/assets/slide_arrow_yellow_right.png"
               width={46}
               height={46}
             />
