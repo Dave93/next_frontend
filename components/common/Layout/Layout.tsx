@@ -153,8 +153,12 @@ const Layout: FC<Props> = ({
                     <div className="md:hidden border-b border-blue md:border-0 pb-5">
                       <div>{tr('delivery_phone')}</div>
                       <div className="text-[30px] font-bold">
-                        <a href={parsePhoneNumber(chosenCity?.phone)?.getURI()}>
-                          {parsePhoneNumber(chosenCity?.phone)
+                        <a
+                          href={parsePhoneNumber(
+                            chosenCity?.phone ?? ''
+                          )?.getURI()}
+                        >
+                          {parsePhoneNumber(chosenCity?.phone ?? '')
                             ?.formatNational()
                             .substring(2)}
                         </a>
@@ -226,8 +230,12 @@ const Layout: FC<Props> = ({
                     <div className="hidden md:block">
                       <div>{tr('delivery_phone')}</div>
                       <div className="text-[30px] font-bold">
-                        <a href={parsePhoneNumber(chosenCity?.phone)?.getURI()}>
-                          {parsePhoneNumber(chosenCity?.phone)
+                        <a
+                          href={parsePhoneNumber(
+                            chosenCity?.phone ?? ''
+                          )?.getURI()}
+                        >
+                          {parsePhoneNumber(chosenCity?.phone ?? '')
                             ?.formatNational()
                             .substring(2)}
                         </a>
