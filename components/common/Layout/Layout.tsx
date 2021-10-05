@@ -158,15 +158,17 @@ const Layout: FC<Props> = ({
                     <div className="md:hidden border-b border-blue md:border-0 pb-5">
                       <div>{tr('delivery_phone')}</div>
                       <div className="text-[30px] font-bold">
-                        <a
-                          href={parsePhoneNumber(
-                            chosenCity?.phone ?? ''
-                          )?.getURI()}
-                        >
-                          {parsePhoneNumber(chosenCity?.phone ?? '')
-                            ?.formatNational()
-                            .substring(2)}
-                        </a>
+                        {chosenCity?.phone && (
+                          <a
+                            href={parsePhoneNumber(
+                              chosenCity?.phone ?? ''
+                            )?.getURI()}
+                          >
+                            {parsePhoneNumber(chosenCity?.phone ?? '')
+                              ?.formatNational()
+                              .substring(2)}
+                          </a>
+                        )}
                       </div>
                     </div>
                     <span className="md:block mt-7 text-xl hidden">
@@ -235,15 +237,17 @@ const Layout: FC<Props> = ({
                     <div className="hidden md:block">
                       <div>{tr('delivery_phone')}</div>
                       <div className="text-[30px] font-bold">
-                        <a
-                          href={parsePhoneNumber(
-                            chosenCity?.phone ?? ''
-                          )?.getURI()}
-                        >
-                          {parsePhoneNumber(chosenCity?.phone ?? '')
-                            ?.formatNational()
-                            .substring(2)}
-                        </a>
+                        {chosenCity?.phone && (
+                          <a
+                            href={parsePhoneNumber(
+                              chosenCity?.phone ?? ''
+                            )?.getURI()}
+                          >
+                            {parsePhoneNumber(chosenCity?.phone ?? '')
+                              ?.formatNational()
+                              .substring(2)}
+                          </a>
+                        )}
                       </div>
                     </div>
                     <div className=" border-b border-blue md:border-0 pb-5 md:pb-0">
