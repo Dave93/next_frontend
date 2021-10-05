@@ -1288,7 +1288,7 @@ const Orders: FC<OrdersProps> = ({ channelName }: { channelName: any }) => {
         <div className={openTab === 1 ? 'block' : 'hidden'} id="link1">
           <input
             type="number"
-            {...register('change', { required: openTab === 1 })}
+            {...register('change')}
             min="10000"
             step="1000"
             className="borde focus:outline-none outline-none px-6 py-3 rounded-full text-sm md:w-80 w-full bg-gray-100 text-gray-400 mt-8"
