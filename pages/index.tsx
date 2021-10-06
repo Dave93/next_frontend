@@ -64,6 +64,7 @@ export async function getServerSideProps({
       footerInfoMenu,
       socials,
       cities,
+      cleanBackground: true,
     },
   }
 }
@@ -97,57 +98,75 @@ export default function Home({
   }, [])
 
   const readyProducts = useMemo(() => {
-    return products.map((prod: any) => {
-      if (prod.variants && prod.variants.length) {
-        prod.variants = prod.variants.map((v: any, index: number) => {
-          if (index === 0) {
-            v.active = true
-          } else {
-            v.active = false
-          }
-
-          return v
-        })
-      } else if (prod.items && prod.items.length) {
-        prod.items = prod.items.map((item: any) => {
-          item.variants = item.variants.map((v: any, index: number) => {
+    return products
+      .map((prod: any) => {
+        if (prod.half_mode) {
+          return null
+        }
+        if (prod.variants && prod.variants.length) {
+          prod.variants = prod.variants.map((v: any, index: number) => {
             if (index === 0) {
               v.active = true
             } else {
               v.active = false
             }
-            // if (v.modifiers && v.modifiers.length) {
-            //   v.modifiers = v.modifiers.map((mod: any) => {
-            //     if (mod.price == 0) {
-            //       mod.active = true
-            //     } else {
-            //       mod.active = false
-            //     }
-            //     return mod
-            //   })
-            // }
 
             return v
           })
+        } else if (prod.items && prod.items.length) {
+          prod.items = prod.items.map((item: any) => {
+            item.variants = item.variants.map((v: any, index: number) => {
+              if (index === 0) {
+                v.active = true
+              } else {
+                v.active = false
+              }
 
-          if (!item.variants.length) {
-            // if (item.modifiers && item.modifiers.length) {
-            //   item.modifiers = item.modifiers.map((mod: any) => {
-            //     if (mod.price == 0) {
-            //       mod.active = true
-            //     } else {
-            //       mod.active = false
-            //     }
-            //     return mod
-            //   })
-            // }
-          }
+              return v
+            })
 
-          return item
-        })
-      }
-      return prod
-    })
+            return item
+          })
+        }
+        return prod
+      })
+      .filter((prod: any) => prod != null)
+  }, [products])
+
+  const halfModeProds = useMemo(() => {
+    return products
+      .map((prod: any) => {
+        if (!prod.half_mode) {
+          return null
+        }
+        if (prod.variants && prod.variants.length) {
+          prod.variants = prod.variants.map((v: any, index: number) => {
+            if (index === 0) {
+              v.active = true
+            } else {
+              v.active = false
+            }
+
+            return v
+          })
+        } else if (prod.items && prod.items.length) {
+          prod.items = prod.items.map((item: any) => {
+            item.variants = item.variants.map((v: any, index: number) => {
+              if (index === 0) {
+                v.active = true
+              } else {
+                v.active = false
+              }
+
+              return v
+            })
+
+            return item
+          })
+        }
+        return prod
+      })
+      .filter((prod: any) => prod != null)
   }, [products])
 
   return (
@@ -159,6 +178,16 @@ export default function Home({
       <CategoriesMenu categories={categories} channelName={channelName} />
       <div className="container mx-auto">
         <div className="grid lg:grid-cols-4 grid-cols-1 md:grid-cols-2 gap-10 mt-10">
+          <div className="col-span-3 md:hidden">
+            {halfModeProds.map((sec: any) => (
+              <div
+                key={sec.id}
+                className="border border-yellow mt-4 p-3 mx-4 relative rounded-[15px] bg-white shadow-sm hover:shadow-xl"
+              >
+                <HalfPizzaNoSSR sec={sec} channelName={channelName} />
+              </div>
+            ))}
+          </div>
           <div className="col-span-3 space-y-16">
             {readyProducts.map((sec: any) =>
               sec.half_mode ? (
@@ -175,7 +204,7 @@ export default function Home({
                       sec?.attribute_data?.name[channelName][locale || 'ru']
                     }
                   />
-                  <div className="grid grid-cols-1 lg:grid-cols-3 md:grid-cols-2 md:gap-10 divide-y md:divide-y-0 px-4 md:px-0">
+                  <div className="grid grid-cols-1 lg:grid-cols-3 md:grid-cols-2 md:gap-3 divide-y md:divide-y-0 px-4 md:px-0 space-y-3 md:space-y-0">
                     {sec.items.map((prod: any) => (
                       <ProductItemNew
                         product={prod}
@@ -189,6 +218,14 @@ export default function Home({
             )}
           </div>
           <div className="mt-20 sticky top-16 max-h-screen hidden md:block">
+            {halfModeProds.map((sec: any) => (
+              <div
+                key={sec.id}
+                className="border border-yellow mt-4 px-5 py-7 relative rounded-[15px] bg-white shadow-sm hover:shadow-xl"
+              >
+                <HalfPizzaNoSSR sec={sec} channelName={channelName} />
+              </div>
+            ))}
             <CartWithNoSSR channelName={channelName} />
           </div>
         </div>

@@ -41,7 +41,6 @@ const Orders: FC<OrdersListProps> = ({ orders }) => {
   useEffect(() => {
     getChannel()
   }, [])
-
   return (
     <div>
       <div className="text-2xl mt-8 mb-5">{tr('order_myOrders')}</div>
@@ -82,7 +81,33 @@ const Orders: FC<OrdersListProps> = ({ orders }) => {
                             .setZone('Asia/Tashkent')
                             .toLocaleString(DateTime.DATETIME_MED)}
                         </div>
-                        <div className="w-40">{order?.billing_address}</div>
+                        <div className="w-40">
+                          {order?.billing_address}
+                          {order.house
+                            ? ', ' +
+                              tr('house').toLocaleLowerCase() +
+                              ': ' +
+                              order.house
+                            : ''}
+                          {order.flat
+                            ? ', ' +
+                              tr('flat').toLocaleLowerCase() +
+                              ': ' +
+                              order.flat
+                            : ''}
+                          {order.entrance
+                            ? ', ' +
+                              tr('entrance').toLocaleLowerCase() +
+                              ': ' +
+                              order.entrance
+                            : ''}
+                          {order.door_code
+                            ? ', ' +
+                              tr('code_on_doors').toLocaleLowerCase() +
+                              ': ' +
+                              order.door_code
+                            : ''}
+                        </div>
                         <div>
                           {tr('prod-count', {
                             count: order?.basket?.lines.length,
@@ -109,7 +134,10 @@ const Orders: FC<OrdersListProps> = ({ orders }) => {
                       key={pizza.id}
                     >
                       <div className="flex items-center">
-                        {pizza.child && pizza.child.length ? (
+                        {pizza.child &&
+                        pizza.child.length &&
+                        pizza.child[0].variant?.product?.id !=
+                          pizza?.variant?.product?.box_id ? (
                           <div className="h-24 w-24 flex relative">
                             <div className="w-12 relative overflow-hidden">
                               <div>
@@ -241,6 +269,14 @@ const Orders: FC<OrdersListProps> = ({ orders }) => {
                               ': ' +
                               order.door_code
                             : ''}
+                        </div>
+                      </div>
+                      <div className="flex items-center justify-between border-b pt-7 pb-7 space-x-6 text-right">
+                        <div>{tr('branch')}</div>
+                        <div>
+                          {locale == 'uz'
+                            ? order?.terminalData.name_uz
+                            : order?.terminalData.name}
                         </div>
                       </div>
                       <div className="flex items-center justify-between border-b pt-7 pb-7">

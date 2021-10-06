@@ -3,6 +3,7 @@ import '@assets/chrome-bug.css'
 import 'keen-slider/keen-slider.min.css'
 
 import 'react-toastify/dist/ReactToastify.css'
+import '@egjs/flicking-plugins/dist/arrow.css'
 
 import { FC, useEffect } from 'react'
 import type { AppProps } from 'next/app'

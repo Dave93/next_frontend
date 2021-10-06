@@ -1,6 +1,6 @@
 import { FC, memo, createRef, useState, useEffect } from 'react'
 import Flicking, { ViewportSlot } from '@egjs/react-flicking'
-import { Fade, AutoPlay, Pagination } from '@egjs/flicking-plugins'
+import { Fade, AutoPlay, Pagination, Arrow } from '@egjs/flicking-plugins'
 import Image from 'next/image'
 import { useUI } from '@components/ui'
 import getConfig from 'next/config'
@@ -22,6 +22,7 @@ const MainSlider: FC = () => {
     new Fade('', 0.4),
     new AutoPlay({ duration: 3000, direction: 'NEXT', stopOnHover: false }),
     new Pagination({ type: 'bullet' }),
+    new Arrow(),
   ]
   const sliderRef = createRef<Flicking>()
 
@@ -122,9 +123,11 @@ const MainSlider: FC = () => {
             ))}
             <ViewportSlot>
               <div className="md:hidden flicking-pagination justify-center flex"></div>
+              <span className="flicking-arrow-prev is-circle hidden md:block"></span>
+              <span className="flicking-arrow-next is-circle hidden md:block"></span>
             </ViewportSlot>
           </Flicking>
-          <div
+          {/* <div
             className="hidden md:block md:absolute cursor-pointer left-72 lg:left-28 top-36 z-10"
             onClick={() => slidePrev()}
           >
@@ -143,7 +146,7 @@ const MainSlider: FC = () => {
               width={46}
               height={46}
             />
-          </div>
+          </div> */}
         </>
       )}
 

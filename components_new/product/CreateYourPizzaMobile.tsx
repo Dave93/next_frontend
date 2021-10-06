@@ -438,15 +438,17 @@ const CreateYourPizza: FC<CreatePizzaProps> = ({ sec, channelName }) => {
     <>
       <div className="gap-4 grid grid-cols-2 py-4 md:py-0 items-center justify-between md:flex md:flex-col">
         <div className="text-center">
-          <div className="text-lg font-bold mb-2">
-            {tr('create_your_own_pizza')}
-          </div>
           <div>
             <Image src="/createYourPizza.png" width="250" height="250" />
           </div>
+        </div>
+        <div>
+          <div className="text-lg font-bold mb-2">
+            {tr('create_your_own_pizza')}
+          </div>
           <div className="mt-10">
             <button
-              className="bg-gray-100 focus:outline-none font-bold outline-none px-6 py-2 rounded-full text-center text-yellow uppercase"
+              className="bg-gray-100 focus:outline-none font-bold outline-none px-6 py-2 text-sm rounded-full text-center text-yellow uppercase"
               onClick={openModal}
             >
               {tr('create_pizza')}

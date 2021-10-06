@@ -176,7 +176,7 @@ const SmallCart: FC<SmallCartProps> = ({
     }
   }
   return (
-    <div className="mt-2">
+    <div className="mt-2 rounded-[15px] bg-white ">
       <div className="border border-yellow px-5 py-7 rounded-[15px] relative">
         {isCartLoading && (
           <div className="h-full w-full absolute flex items-center justify-around bg-gray-300 top-0 bg-opacity-60 left-0 rounded-[15px]">

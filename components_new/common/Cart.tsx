@@ -161,7 +161,6 @@ const Cart: FC<CartProps> = ({ channelName }: { channelName: any }) => {
     e.preventDefault()
     router.push('/order/')
   }
-  console.log(data)
   return (
     <div className="mt-2">
       <div className="border border-yellow px-5 py-7 rounded-[15px] relative">

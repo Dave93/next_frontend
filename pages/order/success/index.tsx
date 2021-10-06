@@ -37,7 +37,6 @@ export async function getServerSideProps({
     orderData = data
   }
 
-  console.log(orderData)
   return {
     props: {
       products,

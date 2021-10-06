@@ -26,7 +26,7 @@ const CategoriesMenu: FC<{ categories: any[]; channelName: string }> = ({
     <div
       className={`${
         fixed
-          ? 'fixed left-0 m-auto right-0 top-0 z-30 bg-white w-full shadow-lg'
+          ? 'fixed left-0 m-auto right-0 top-0 z-30 bg-secondary w-full shadow-lg'
           : ''
       }`}
     >
@@ -53,7 +53,9 @@ const CategoriesMenu: FC<{ categories: any[]; channelName: string }> = ({
           {categories.map((item: any) => {
             return (
               <div
-                className="font-bold text-base text-center text-secondary cursor-pointer uppercase min-w-max px-4"
+                className={`${
+                  fixed ? 'text-white' : 'text-secondary'
+                } font-bold text-base text-center  cursor-pointer uppercase min-w-max px-4`}
                 key={item.id}
               >
                 <Link

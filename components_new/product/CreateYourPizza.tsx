@@ -433,9 +433,9 @@ const CreateYourPizza: FC<CreatePizzaProps> = ({ sec, channelName }) => {
             {tr('create_your_own_pizza')}
           </div>
           <div>
-            <Image src="/createYourPizza.png" width="250" height="250" />
+            <Image src="/createYourPizza.png" width="150" height="150" />
           </div>
-          <div className="mt-10">
+          <div className="mt-5">
             <button
               className="bg-gray-100 focus:outline-none font-bold outline-none px-6 py-2 rounded-full text-center text-yellow uppercase"
               onClick={openModal}

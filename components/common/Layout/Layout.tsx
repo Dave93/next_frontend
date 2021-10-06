@@ -92,11 +92,10 @@ const Layout: FC<Props> = ({
     } catch (e) {}
   }
 
-  const fetchGeo = async () => {
-    const res = await fetch('/api/geo')
-    const json = await res.json()
-    console.log(json)
-  }
+  // const fetchGeo = async () => {
+  //   const res = await fetch('/api/geo')
+  //   const json = await res.json()
+  // }
 
   useEffect(() => {
     fetchConfig()
@@ -104,9 +103,10 @@ const Layout: FC<Props> = ({
     if (!activeCity) {
       setActiveCity(cities[0])
     }
-    fetchGeo()
+    document.body.className = cleanBackground ? 'bg-gray-100' : ''
+
     return
-  }, [])
+  }, [cleanBackground])
 
   const chosenCity = useMemo(() => {
     if (activeCity) {
@@ -123,7 +123,7 @@ const Layout: FC<Props> = ({
           <Header menu={topMenu} />
           <main
             className={`${
-              cleanBackground == true ? 'bg-gray-200' : ''
+              cleanBackground == true ? 'bg-gray-100' : ''
             } flex-grow md:pb-14`}
           >
             {pathname == '/' ? (

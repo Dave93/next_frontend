@@ -349,7 +349,7 @@ const ProductItemNew: FC<ProductItem> = ({ product, channelName }) => {
       addToBasket()
     }
   }
-  console.log(modifiers)
+  // console.log(modifiers)
   return (
     <>
       {isChoosingModifier ? (
@@ -465,7 +465,7 @@ const ProductItemNew: FC<ProductItem> = ({ product, channelName }) => {
         </div>
       ) : (
         <div
-          className="gap-4 grid grid-cols-2 py-4 md:py-0 items-center justify-between md:flex md:flex-col"
+          className="gap-4 grid grid-cols-2 py-4 px-2 md:py-3 md:px-3 border border-yellow overflow-hidden bg-white rounded-[15px] hover:shadow-xl shadow-sm group items-center justify-between md:flex md:flex-col"
           id={`prod-${store.id}`}
         >
           <div>
@@ -476,6 +476,7 @@ const ProductItemNew: FC<ProductItem> = ({ product, channelName }) => {
                   width={250}
                   height={250}
                   alt={store?.attribute_data?.name[channelName][locale || 'ru']}
+                  className="transform motion-safe:group-hover:scale-105 transition duration-500"
                 />
               ) : (
                 <img
@@ -483,7 +484,7 @@ const ProductItemNew: FC<ProductItem> = ({ product, channelName }) => {
                   width={250}
                   height={250}
                   alt={store?.attribute_data?.name[channelName][locale || 'ru']}
-                  className="rounded-full"
+                  className="rounded-full transform motion-safe:group-hover:scale-105 transition duration-500"
                 />
               )}
             </div>

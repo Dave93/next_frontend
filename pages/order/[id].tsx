@@ -82,7 +82,6 @@ export default function OrderId({
   orderData: any
   orderStatuses: any
 }) {
-  console.log(orderData)
   return (
     <div>
       <OrderAccept order={orderData} orderStatuses={orderStatuses} />
