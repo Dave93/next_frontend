@@ -26,14 +26,6 @@ const MainSlider: FC = () => {
   ]
   const sliderRef = createRef<Flicking>()
 
-  const slideNext = () => {
-    sliderRef.current?.next()
-  }
-
-  const slidePrev = () => {
-    sliderRef.current?.prev()
-  }
-
   const fetchSliders = async () => {
     const { data } = await axios.get(
       `${publicRuntimeConfig.apiUrl}/api/sliders/public?locale=${locale}`
@@ -53,7 +45,7 @@ const MainSlider: FC = () => {
   }, [locale])
 
   return (
-    <div className="relative px-4 rounded-2xl">
+    <div className="relative rounded-2xl">
       {sliders && sliders.length > 0 && (
         <>
           <Flicking
@@ -127,26 +119,6 @@ const MainSlider: FC = () => {
               <span className="flicking-arrow-next is-circle hidden md:block"></span>
             </ViewportSlot>
           </Flicking>
-          {/* <div
-            className="hidden md:block md:absolute cursor-pointer left-72 lg:left-28 top-36 z-10"
-            onClick={() => slidePrev()}
-          >
-            <Image
-              src="/assets/slide_arrow_yellow_left.png"
-              width={46}
-              height={46}
-            />
-          </div>
-          <div
-            className="hidden md:block md:absolute cursor-pointer right-72 lg:right-28 top-36 z-10"
-            onClick={() => slideNext()}
-          >
-            <Image
-              src="/assets/slide_arrow_yellow_right.png"
-              width={46}
-              height={46}
-            />
-          </div> */}
         </>
       )}
 
