@@ -1,4 +1,4 @@
-const getConfig = require('next/config')
+const getConfig = require('next/config').getConfig
 
 const { publicRuntimeConfig } = getConfig()
 module.exports = {
