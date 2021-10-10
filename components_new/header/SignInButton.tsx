@@ -12,8 +12,10 @@ import styles from './SignInButton.module.css'
 import UserProfileDropDown from './UserProfileDropDown'
 import Input from 'react-phone-number-input/input'
 import { useRouter } from 'next/router'
+import getConfig from 'next/config'
 
 axios.defaults.withCredentials = true
+const { publicRuntimeConfig } = getConfig()
 
 interface Errors {
   [key: string]: string
@@ -107,7 +109,7 @@ const SignInButton: FC = () => {
   })
   const onSubmit = async (data: Object) => {
     setSubmitError('')
-    const csrfReq = await axios('https://api.hq.fungeek.net/api/keldi', {
+    const csrfReq = await axios(`${publicRuntimeConfig.apiUrl}/api/keldi`, {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
@@ -123,7 +125,7 @@ const SignInButton: FC = () => {
     axios.defaults.headers.common['X-CSRF-TOKEN'] = csrf
     axios.defaults.headers.common['XCSRF-TOKEN'] = csrf
     let ress = await axios.post(
-      'https://api.hq.fungeek.net/api/send_otp',
+      `${publicRuntimeConfig.apiUrl}/api/send_otp`,
       data,
       {
         headers: {
@@ -165,7 +167,7 @@ const SignInButton: FC = () => {
     setSubmitError('')
     const otpToken = Cookies.get('opt_token')
     let ress = await axios.post(
-      'https://api.hq.fungeek.net/api/auth_otp',
+      `${publicRuntimeConfig.apiUrl}/api/auth_otp`,
       {
         phone: authPhone,
         code: otpCode,

@@ -45,7 +45,12 @@ module.exports =
         ].filter(Boolean)
       },
       images: {
-        domains: ['store.hq.fungeek.net', 'api.hq.fungeek.net', "choparpizza.uz"],
+        domains: [
+          'store.hq.fungeek.net',
+          'api.hq.fungeek.net',
+          'choparpizza.uz',
+          'api.choparpizza.uz',
+        ],
       },
       pwa: {
         dest: 'public',

@@ -1,7 +1,8 @@
+require('dotenv').config()
 module.exports = {
   apps: [
     {
-      name: 'hq_frontend',
+      name: process.env.PM2_APP_NAME,
       script: './server.js',
       watch: false,
       env: {
@@ -9,7 +10,7 @@ module.exports = {
         NODE_ENV: 'development',
       },
       env_production: {
-        PORT: 5656,
+        PORT: process.env.NODE_PORT,
         NODE_ENV: 'production',
       },
     },
