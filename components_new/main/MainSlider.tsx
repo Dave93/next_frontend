@@ -3,10 +3,10 @@ import Flicking, { ViewportSlot } from '@egjs/react-flicking'
 import { Fade, AutoPlay, Pagination, Arrow } from '@egjs/flicking-plugins'
 import Image from 'next/image'
 import { useUI } from '@components/ui'
-import getConfig from 'next/config'
 import axios from 'axios'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
+import getConfig from 'next/config'
 
 const { publicRuntimeConfig } = getConfig()
 
