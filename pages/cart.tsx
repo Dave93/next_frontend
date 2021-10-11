@@ -328,6 +328,11 @@ export default function Cart() {
                                 lineItem?.variant?.product?.attribute_data
                                   ?.name[channelName][locale || 'ru']
                               } + ${lineItem?.child
+                                .filter(
+                                  (v: any) =>
+                                    lineItem?.variant?.product?.box_id !=
+                                    v?.variant?.product?.id
+                                )
                                 .map(
                                   (v: any) =>
                                     v?.variant?.product?.attribute_data?.name[

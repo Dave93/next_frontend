@@ -18,12 +18,12 @@ import {
 } from '@commerce/types/product'
 import { useRouter } from 'next/router'
 import useTranslation from 'next-translate/useTranslation'
-import styles from './ProductOptionSelector.module.css'
 import axios from 'axios'
 import Cookies from 'js-cookie'
 import getConfig from 'next/config'
 import { useCart } from '@framework/cart'
 import { XIcon } from '@heroicons/react/solid'
+import styles from './ProductItemNew.module.css'
 // import SessionContext from 'react-storefront/session/SessionContext'
 
 type ProductItem = {
@@ -354,7 +354,7 @@ const ProductItemNew: FC<ProductItem> = ({ product, channelName }) => {
     <>
       {isChoosingModifier ? (
         <div
-          className="gap-4 grid grid-cols-2 items-center justify-between relative md:flex md:flex-col px-6 py-4 rounded-[15px] shadow-lg"
+          className="gap-4 grid grid-cols-2 items-center bg-white justify-between relative md:flex md:flex-col px-6 py-4 rounded-[15px] shadow-lg"
           id={`prod-${store.id}`}
         >
           {isLoadingBasket && (
@@ -450,13 +450,13 @@ const ProductItemNew: FC<ProductItem> = ({ product, channelName }) => {
           </div>
           <div className="gap-3 grid grid-cols-2 w-full">
             <button
-              className="bg-yellow focus:outline-none font-bold outline-none px-6 py-2 rounded-full text-center text-white uppercase"
+              className="bg-yellow focus:outline-none font-bold outline-none py-2 rounded-full text-center text-white uppercase"
               onClick={addToBasket}
             >
               {tr('yes')}
             </button>
             <button
-              className="bg-gray-200 focus:outline-none font-bold outline-none px-6 py-2 rounded-full text-center text-white uppercase"
+              className="bg-gray-200 focus:outline-none font-bold outline-none py-2 rounded-full text-center text-white uppercase"
               onClick={discardModifier}
             >
               {tr('no')}
@@ -465,7 +465,7 @@ const ProductItemNew: FC<ProductItem> = ({ product, channelName }) => {
         </div>
       ) : (
         <div
-          className="gap-4 grid grid-cols-2 py-4 px-2 md:py-3 md:px-3 border border-yellow overflow-hidden bg-white rounded-[15px] hover:shadow-xl shadow-sm group items-center justify-between md:flex md:flex-col"
+          className={`${styles.gridItemOutline} gap-4 grid grid-cols-2 py-4 px-2 md:py-3 md:px-3 overflow-hidden bg-white rounded-[15px] hover:shadow-xl shadow-sm group items-center justify-between md:flex md:flex-col`}
           id={`prod-${store.id}`}
         >
           <div>
@@ -531,7 +531,7 @@ const ProductItemNew: FC<ProductItem> = ({ product, channelName }) => {
             </div>
             <div className="md:mt-10 mt-2 flex justify-between items-center text-sm">
               <button
-                className="bg-yellow focus:outline-none md:w-32 md:justify-around font-bold outline-none px-6 py-2 rounded-full text-white uppercase md:inline-flex items-center hidden"
+                className="bg-yellow focus:outline-none md:w-32 md:justify-around font-bold outline-none py-2 rounded-full text-white uppercase md:inline-flex items-center hidden"
                 onClick={handleSubmit}
                 disabled={isLoadingBasket}
               >

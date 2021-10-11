@@ -604,7 +604,8 @@ const CreateYourPizza: FC<CreatePizzaProps> = ({ sec, channelName }) => {
                               <div
                                 key={mod.id}
                                 className={`border ${
-                                  activeModifiers.includes(mod.id)
+                                  activeModifiers.includes(mod.id) ||
+                                  (!activeModifiers.length && mod.price == 0)
                                     ? 'border-yellow'
                                     : 'border-gray-300'
                                 } flex flex-col justify-between overflow-hidden rounded-[15px] cursor-pointer`}
@@ -637,7 +638,8 @@ const CreateYourPizza: FC<CreatePizzaProps> = ({ sec, channelName }) => {
                                 </div>
                                 <div
                                   className={`${
-                                    activeModifiers.includes(mod.id)
+                                    activeModifiers.includes(mod.id) ||
+                                    (!activeModifiers.length && mod.price == 0)
                                       ? 'bg-yellow'
                                       : 'bg-gray-300'
                                   } font-bold px-4 py-2 text-center text-white text-xs`}

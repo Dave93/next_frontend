@@ -105,7 +105,7 @@ export default function Home({
         }
         if (prod.variants && prod.variants.length) {
           prod.variants = prod.variants.map((v: any, index: number) => {
-            if (index === 0) {
+            if (index === 1) {
               v.active = true
             } else {
               v.active = false
@@ -116,7 +116,7 @@ export default function Home({
         } else if (prod.items && prod.items.length) {
           prod.items = prod.items.map((item: any) => {
             item.variants = item.variants.map((v: any, index: number) => {
-              if (index === 0) {
+              if (index === 1) {
                 v.active = true
               } else {
                 v.active = false
@@ -141,7 +141,7 @@ export default function Home({
         }
         if (prod.variants && prod.variants.length) {
           prod.variants = prod.variants.map((v: any, index: number) => {
-            if (index === 0) {
+            if (index === 1) {
               v.active = true
             } else {
               v.active = false
@@ -152,7 +152,7 @@ export default function Home({
         } else if (prod.items && prod.items.length) {
           prod.items = prod.items.map((item: any) => {
             item.variants = item.variants.map((v: any, index: number) => {
-              if (index === 0) {
+              if (index === 1) {
                 v.active = true
               } else {
                 v.active = false

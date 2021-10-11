@@ -1523,6 +1523,11 @@ const Orders: FC<OrdersProps> = ({ channelName }: { channelName: any }) => {
                           channelName
                         ][locale || 'ru']
                       } + ${lineItem?.child
+                        .filter(
+                          (v: any) =>
+                            lineItem?.variant?.product?.box_id !=
+                            v?.variant?.product?.id
+                        )
                         .map(
                           (v: any) =>
                             v?.variant?.product?.attribute_data?.name[

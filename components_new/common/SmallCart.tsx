@@ -285,6 +285,11 @@ const SmallCart: FC<SmallCartProps> = ({
                               channelName
                             ][locale || 'ru']
                           } + ${lineItem?.child
+                            .filter(
+                              (v: any) =>
+                                lineItem?.variant?.product?.box_id !=
+                                v?.variant?.product?.id
+                            )
                             .map(
                               (v: any) =>
                                 v?.variant?.product?.attribute_data?.name[

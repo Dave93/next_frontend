@@ -421,6 +421,15 @@ const CreateYourPizza: FC<CreatePizzaProps> = ({ sec, channelName }) => {
       }
     }
   }
+
+  const setSelectedProduct = (item: any, side: string = 'left') => {
+    if (side == 'left') {
+      setLeftSelectedProduct(item)
+    } else {
+      setRightSelectedProduct(item)
+    }
+  }
+
   useEffect(() => {
     setActiveCustomName(customNames[0])
   }, [customNames])
@@ -513,7 +522,7 @@ const CreateYourPizza: FC<CreatePizzaProps> = ({ sec, channelName }) => {
                               rightSelectedProduct.id == item.id
                             )
                               return
-                            setLeftSelectedProduct(item)
+                            setSelectedProduct(item, 'left')
                           }}
                         >
                           {leftSelectedProduct &&
@@ -681,7 +690,8 @@ const CreateYourPizza: FC<CreatePizzaProps> = ({ sec, channelName }) => {
                             <div
                               key={mod.id}
                               className={`border ${
-                                activeModifiers.includes(mod.id)
+                                activeModifiers.includes(mod.id) ||
+                                (!activeModifiers.length && mod.price == 0)
                                   ? 'border-yellow'
                                   : 'border-gray-300'
                               } flex w-24 flex-col justify-between overflow-hidden rounded-[15px] cursor-pointer`}
@@ -714,7 +724,8 @@ const CreateYourPizza: FC<CreatePizzaProps> = ({ sec, channelName }) => {
                               </div>
                               <div
                                 className={`${
-                                  activeModifiers.includes(mod.id)
+                                  activeModifiers.includes(mod.id) ||
+                                  (!activeModifiers.length && mod.price == 0)
                                     ? 'bg-yellow'
                                     : 'bg-gray-300'
                                 } font-bold px-4 py-2 text-center text-white text-xs`}
@@ -805,7 +816,7 @@ const CreateYourPizza: FC<CreatePizzaProps> = ({ sec, channelName }) => {
                               leftSelectedProduct.id == item.id
                             )
                               return
-                            setRightSelectedProduct(item)
+                            setSelectedProduct(item, 'right')
                           }}
                         >
                           {rightSelectedProduct &&
