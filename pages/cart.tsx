@@ -323,7 +323,7 @@ export default function Cart() {
                       )}
                       <div className="md:ml-7 ml-1 space-y-2 md:w-72 md:text-left">
                         <div className="text-xl font-bold">
-                          {lineItem.child && lineItem.child.length
+                          {lineItem.child && lineItem.child.length > 1
                             ? `${
                                 lineItem?.variant?.product?.attribute_data
                                   ?.name[channelName][locale || 'ru']

@@ -1517,7 +1517,7 @@ const Orders: FC<OrdersProps> = ({ channelName }: { channelName: any }) => {
               )}
               <div className="flex flex-grow items-center mx-2">
                 <div className="font-bold text-xl">
-                  {lineItem.child && lineItem.child.length
+                  {lineItem.child && lineItem.child.length > 1
                     ? `${
                         lineItem?.variant?.product?.attribute_data?.name[
                           channelName

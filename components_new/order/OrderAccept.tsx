@@ -252,7 +252,7 @@ const OrderAccept: FC<OrderDetailProps> = ({ order, orderStatuses }) => {
               )}
               <div className="ml-5">
                 <div className="text-xl font-bold">
-                  {pizza.child && pizza.child.length
+                  {pizza.child && pizza.child.length > 1
                     ? `${
                         pizza?.variant?.product?.attribute_data?.name[
                           channelName
