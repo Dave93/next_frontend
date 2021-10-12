@@ -152,27 +152,50 @@ const CreateYourPizza: FC<CreatePizzaProps> = ({ sec, channelName }) => {
     }
 
     let basketId = localStorage.getItem('basketId')
+    const otpToken = Cookies.get('opt_token')
+
+    let basketResult = {}
 
     if (basketId) {
-      await axios.post(`${webAddress}/api/baskets-lines`, {
-        basket_id: basketId,
-        variants: [
-          {
-            id: leftProduct.id,
-            quantity: 1,
-            modifiers: selectedModifiers,
-            child: {
-              id: rightProduct.id,
+      const { data: basketData } = await axios.post(
+        `${webAddress}/api/baskets-lines`,
+        {
+          basket_id: basketId,
+          variants: [
+            {
+              id: leftProduct.id,
               quantity: 1,
-              modifiers: [
-                {
-                  id: freeModifiers.id,
-                },
-              ],
+              modifiers: selectedModifiers,
+              child: {
+                id: rightProduct.id,
+                quantity: 1,
+                modifiers: [
+                  {
+                    id: freeModifiers.id,
+                  },
+                ],
+              },
             },
+          ],
+        },
+        {
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${otpToken}`,
           },
-        ],
-      })
+          withCredentials: true,
+        }
+      )
+      basketResult = {
+        id: basketData.data.id,
+        createdAt: '',
+        currency: { code: basketData.data.currency },
+        taxesIncluded: basketData.data.tax_total,
+        lineItems: basketData.data.lines,
+        lineItemsSubtotalPrice: basketData.data.sub_total,
+        subtotalPrice: basketData.data.sub_total,
+        totalPrice: basketData.data.total,
+      }
     } else {
       const { data: basketData } = await axios.post(
         `${webAddress}/api/baskets`,
@@ -193,25 +216,26 @@ const CreateYourPizza: FC<CreatePizzaProps> = ({ sec, channelName }) => {
               },
             },
           ],
+        },
+        {
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${otpToken}`,
+          },
+          withCredentials: true,
         }
       )
-      localStorage.setItem('basketId', basketData.data.id)
-    }
-
-    basketId = localStorage.getItem('basketId')
-
-    let { data: basket } = await axios.get(
-      `${webAddress}/api/baskets/${basketId}`
-    )
-    const basketResult = {
-      id: basket.data.id,
-      createdAt: '',
-      currency: { code: basket.data.currency },
-      taxesIncluded: basket.data.tax_total,
-      lineItems: basket.data.lines,
-      lineItemsSubtotalPrice: basket.data.sub_total,
-      subtotalPrice: basket.data.sub_total,
-      totalPrice: basket.data.total,
+      localStorage.setItem('basketId', basketData.data.encoded_id)
+      basketResult = {
+        id: basketData.data.id,
+        createdAt: '',
+        currency: { code: basketData.data.currency },
+        taxesIncluded: basketData.data.tax_total,
+        lineItems: basketData.data.lines,
+        lineItemsSubtotalPrice: basketData.data.sub_total,
+        subtotalPrice: basketData.data.sub_total,
+        totalPrice: basketData.data.total,
+      }
     }
 
     await mutate(basketResult, false)
