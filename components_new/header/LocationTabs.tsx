@@ -18,6 +18,7 @@ import {
 } from '@heroicons/react/solid'
 import {
   YMaps,
+  withYMaps,
   Map,
   Placemark,
   MapState,
