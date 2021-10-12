@@ -10,155 +10,19 @@ const About: FC = () => {
     <>
       {locale == 'ru' ? (
         <div>
-          <p
-            style={{
-              margin: '0cm',
-              marginBottom: '.0001pt',
-              fontSize: '16px',
-              fontFamily: '"Calibri",sans-serif',
-            }}
-          >
-            <span style={{ fontFamily: '"Times",serif' }}>
-              Бренд <strong>Chopar</strong> («гонец» с узбекского) - это часть
-              группы компаний{' '}
-              <strong>
-                <em>«</em>
-              </strong>
-              <strong>
-                Havoqand people<em>»</em>
-              </strong>
-              , успешно работает на рынке Узбекистана и СНГ.
-            </span>
-          </p>
-          <p
-            style={{
-              margin: '0cm',
-              marginBottom: '.0001pt',
-              fontSize: '16px',
-              fontFamily: '"Calibri",sans-serif',
-            }}
-          >
-            <span style={{ fontFamily: '"Times",serif' }}>
-              С 2015 года бренд борется за звание лучшей сети пиццерий в
-              Республике и в данный момент оперирует более 19 филиалами по всей
-              стране и за ее пределами.&nbsp;
-            </span>
-          </p>
-          <p
-            style={{
-              margin: '0cm',
-              marginBottom: '.0001pt',
-              fontSize: '16px',
-              fontFamily: '"Calibri",sans-serif',
-            }}
-          >
-            <span style={{ fontFamily: '"Times",serif' }}>
-              В 2021 году мы вышли на рынок Казахстана.&nbsp;
-            </span>
-          </p>
-          <p
-            style={{
-              margin: '0cm',
-              marginBottom: '.0001pt',
-              fontSize: '16px',
-              fontFamily: '"Calibri",sans-serif',
-            }}
-          >
-            <strong>
-              <span style={{ fontFamily: '"Times",serif' }}>Chopar</span>
-            </strong>
-            <span style={{ fontFamily: '"Times",serif' }}>
-              &nbsp;- это коллаборация восточных ценностей и современных
-              традиций.&nbsp;
-            </span>
-          </p>
-          <p>
-            <span style={{ fontSize: '16px', fontFamily: '"Times",serif' }}>
-              Семейная пицца Chopar - отличный повод провести время в компании
-              друзей или в семейном кругу. За 6 лет Chopar стал большой семьей,
-              командой, где ценятся таланты и вырастают успешные кадры. Нас
-              любят за качество и бережное отношение к традициям. Мы ценим
-              каждого нашего клиента, сохраняем стандарты и стремимся быть лучше
-              из года в год.
-            </span>
-          </p>
+          <p style={{marginTop: '0cm', marginRight: '0cm', marginBottom: '8.0pt', marginLeft: '0cm', lineHeight: '107%', fontSize: '15px', fontFamily: '"Calibri",sans-serif'}}>Бренд <strong>Chopar</strong> («гонец» с узбекского) — это часть группы компаний <strong>“Havoqand people”</strong>, которая успешно работает на рынке Узбекистана и СНГ.</p>
+          <p style={{marginTop: '0cm', marginRight: '0cm', marginBottom: '8.0pt', marginLeft: '0cm', lineHeight: '107%', fontSize: '15px', fontFamily: '"Calibri",sans-serif'}}>История бренда начинается с 2015 года и в данный момент Chopar Pizza имеет 18 филиалов по всей стране и за ее пределами.</p>
+          <p style={{marginTop: '0cm', marginRight: '0cm', marginBottom: '8.0pt', marginLeft: '0cm', lineHeight: '107%', fontSize: '15px', fontFamily: '"Calibri",sans-serif'}}>В 2021 году мы вышли на рынок Казахстана.</p>
+          <p style={{marginTop: '0cm', marginRight: '0cm', marginBottom: '8.0pt', marginLeft: '0cm', lineHeight: '107%', fontSize: '15px', fontFamily: '"Calibri",sans-serif'}}><strong>Chopar Pizza</strong> — это коллаборация восточных ценностей и современных традиций.</p>
+          <p style={{marginTop: '0cm', marginRight: '0cm', marginBottom: '8.0pt', marginLeft: '0cm', lineHeight: '107%', fontSize: '15px', fontFamily: '"Calibri",sans-serif'}}>Семейная пицца <strong>Chopar</strong> - отличный повод провести время в компании друзей или в семейном кругу. За 6 лет <strong>Chopar</strong> стал большой семьей, командой, где ценятся таланты и вырастают успешные кадры. Нас любят за качество и бережное отношение к традициям. Мы ценим каждого нашего клиента, сохраняем стандарты и стремимся быть лучше из года в год.</p>
         </div>
       ) : (
         <div>
-          <p
-            style={{
-              margin: '0cm',
-              marginBottom: '.0001pt',
-              fontSize: '16px',
-              fontFamily: '"Calibri",sans-serif',
-            }}
-          >
-            <strong>
-              <span style={{ fontFamily: '"Times",serif' }}>Chopar</span>
-            </strong>
-            <span style={{ fontFamily: '"Times",serif' }}>
-              &nbsp;brendi -{' '}
-              <strong>
-                <em>«</em>
-              </strong>
-              <strong>
-                Havoqand people<em>»</em>
-              </strong>{' '}
-              kompaniyalar guruhining bir qismi bo'lib, O'zbekiston va MDH
-              bozorida faoliyat yuritib kelmoqda.&nbsp;
-            </span>
-          </p>
-          <p
-            style={{
-              margin: '0cm',
-              marginBottom: '.0001pt',
-              fontSize: '16px',
-              fontFamily: '"Calibri",sans-serif',
-            }}
-          >
-            <span style={{ fontFamily: '"Times",serif' }}>
-              2015-yildan buyon brendimiz O'zbekistondagi eng yaxshi
-              pitseriyalar tarmog'i maqomi uchun kurashmoqda va hozirgi paytda
-              mamlakatimizda va undan tashqarida __ dan ortiq filiallariga ega.
-              2021-yilda biz Qozog'iston bozoriga kirdik.&nbsp;
-            </span>
-          </p>
-          <p
-            style={{
-              margin: '0cm',
-              marginBottom: '.0001pt',
-              fontSize: '16px',
-              fontFamily: '"Calibri",sans-serif',
-            }}
-          >
-            <strong>
-              <span style={{ fontFamily: '"Times",serif' }}>Chopar</span>
-            </strong>
-            <span style={{ fontFamily: '"Times",serif' }}>
-              &nbsp;- sharqona qadriyatlar va zamonaviy an'analar
-              uyg'unligidir.&nbsp;
-            </span>
-          </p>
-          <p
-            style={{
-              margin: '0cm',
-              marginBottom: '.0001pt',
-              fontSize: '16px',
-              fontFamily: '"Calibri",sans-serif',
-            }}
-          >
-            <span style={{ fontFamily: '"Times",serif' }}>
-              Choparning oilaviy pitsasi - oila va do'stlar davrasida vaqt
-              o'tkazish uchun yaxshigina sabab.&nbsp;
-            </span>
-            <span style={{ fontFamily: '"Times",serif' }}>
-              6 yil ichida Chopar iqtidorlilar qadrlanadigan va muvaffaqiyatli
-              insonlar yetishib chiqadigan katta oilaga aylandi. Bizni sifat va
-              an'analarga bo'lgan nozik yondashuv uchun yaxshi ko'rishadi. Biz
-              har bir mijozimizni qadrlaymiz, standartlarni saqlagan holda
-              yildan-yilga yanada mukammal bo'lishga intilamiz
-            </span>
-          </p>
+          <p style={{marginTop: '0cm', marginRight: '0cm', marginBottom: '8.0pt', marginLeft: '0cm', lineHeight: '107%', fontSize: '15px', fontFamily: '"Calibri",sans-serif'}}><strong>Chopar</strong> brendi – <strong>“Havoqand people”</strong> kompaniyasining bir qismi bo’lib, O’zbekiston va MDH bozorida muvaffaqiyatli faoliyat ko’rsatib kelmoqda.</p>
+          <p style={{marginTop: '0cm', marginRight: '0cm', marginBottom: '8.0pt', marginLeft: '0cm', lineHeight: '107%', fontSize: '15px', fontFamily: '"Calibri",sans-serif'}}>Brend tarixi 2015 yildan boshlanadi &nbsp;va hozirda butun mamlakat bo’ylab hamda chet elda, umumiy 18 ta filialga ega.</p>
+          <p style={{marginTop: '0cm', marginRight: '0cm', marginBottom: '8.0pt', marginLeft: '0cm', lineHeight: '107%', fontSize: '15px', fontFamily: '"Calibri",sans-serif'}}>Biz 2021 yilda Qozog’iston bozoriga kirdik.</p>
+          <p style={{marginTop: '0cm', marginRight: '0cm', marginBottom: '8.0pt', marginLeft: '0cm', lineHeight: '107%', fontSize: '15px', fontFamily: '"Calibri",sans-serif'}}><strong>Chopar</strong> – sharqona qadriyatlar va zamonaviy urf-odatlar uyg’unligidir!</p>
+          <p style={{marginTop: '0cm', marginRight: '0cm', marginBottom: '8.0pt', marginLeft: '0cm', lineHeight: '107%', fontSize: '15px', fontFamily: '"Calibri",sans-serif'}}>Oilaviy pizza <strong>Chopar</strong> – oila va do’stlar davrasida vaqt o’tkazish uchun ajoyib sabab. Olti yil ichida <strong>Chopar</strong> iqtidorlilar qadrlanadigan va muvaffaqiyatli insonlar yetishib chiqadigan katta oilaga, katta jamoaga aylandi. Bizni sifat va an`analarga nisbatan nozik yondoshuvimiz sabab yaxshi ko’rishadi. Biz har bir mijozni qadrlaymiz, standartlarni saqlagan holda yildan-yilga yanada yaxshi bo’lishga intilamiz.</p>
         </div>
       )}
     </>
