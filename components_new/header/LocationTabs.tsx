@@ -748,8 +748,8 @@ const LocationTabs: FC<Props> = ({ setOpen }) => {
                     ></div>
                   </div>
                   <div>
-                    <div className="font-bold">{point.name}</div>
-                    <div className="text-gray-400 text-sm">{point.desc}</div>
+                    <div className="font-bold">{locale == 'ru' ? point.name : point.name_uz}</div>
+                    <div className="text-gray-400 text-sm">{locale == 'ru' ? point.desc : point.desc_uz}</div>
                   </div>
                 </div>
               ))}
