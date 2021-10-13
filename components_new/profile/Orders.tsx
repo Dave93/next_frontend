@@ -62,7 +62,7 @@ const Orders: FC<OrdersListProps> = ({ orders }) => {
                 <>
                   <div className="flex  text-base justify-between border-b pb-8">
                     {open ? (
-                      <div className="font-bold text-xl">
+                      <div className="font-bold text-xl text-secondary">
                         <Link href={`${'/order/' + hashids.encode(order.id)}`}>
                           <a>
                             {tr('order')} № {order.id}
@@ -124,7 +124,7 @@ const Orders: FC<OrdersListProps> = ({ orders }) => {
                         </div>
                       </>
                     )}
-                    <div className={`ml-56 `}>
+                    <div className={`md:ml-56 `}>
                       {tr(`order_status_${order?.status}`)}
                     </div>
                   </div>

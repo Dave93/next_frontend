@@ -132,17 +132,17 @@ const OrderAccept: FC<OrderDetailProps> = ({ order, orderStatuses }) => {
             </div>
           </div>
         </div>
-        <div className="flex items-center justify-between mb-10 ">
+        <div className="md:flex items-center justify-between md:mb-10 ">
           {Object.keys(orderStatuses).map((status: any, key) => (
-            <div key={status} className="flex items-center">
-              <div className="h-24 relative flex flex-col items-center top-5 w-12">
+            <div key={status} className="md:flex items-center">
+              <div className="md:h-24 md:relative flex md:flex-col items-center top-5 md:w-12">
                 {key <= currentStatusIndex ? (
                   <img src="/assets/status.png" />
                 ) : (
                   <div className="border-2 h-12 rounded-full w-12"></div>
                 )}
                 <div
-                  className={`bottom-0 leading-4 mt-2 text-base text-center ${
+                  className={`bottom-0 leading-4 md:mt-2 md:text-base text-center ml-4 md:ml-0 ${
                     key <= currentStatusIndex ? 'text-yellow' : 'text-gray-400'
                   }`}
                 >
@@ -151,7 +151,7 @@ const OrderAccept: FC<OrderDetailProps> = ({ order, orderStatuses }) => {
               </div>
               {key != Object.keys(orderStatuses).length - 1 && (
                 <div
-                  className={`border rounded-full w-24 pr-24 ${
+                  className={`transform rotate-90 md:rotate-0 border rounded-full md:w-24 w-12 md:pr-24 md:ml-0 my-7 ${
                     key < currentStatusIndex ? 'border-yellow' : ''
                   }`}
                 ></div>
@@ -291,7 +291,7 @@ const OrderAccept: FC<OrderDetailProps> = ({ order, orderStatuses }) => {
           </div>
         ))}
       </div>
-      <div className="p-10 rounded-2xl text-xl mt-5 bg-white">
+      <div className="p-10 rounded-2xl text-xl mt-5 bg-white mb-3">
         {reviewsData && reviewsData.length > 0 && (
           <div className="mt-2 mb-4">
             <div className="text-lg mb-4 font-bold">{tr('your_reviews')}</div>
@@ -317,11 +317,11 @@ const OrderAccept: FC<OrderDetailProps> = ({ order, orderStatuses }) => {
           <div className="text-lg mb-7 font-bold">
             {tr('waiting_your_feedback')}
           </div>
-          <div className="flex mt-3 w-96 h-28">
-            <div>
+          <div className="flex mt-3 md:w-96 h-28">
+            <div className="w-full">
               <textarea
                 {...register('review')}
-                className="w-96 h-28 bg-gray-100 rounded-2xl p-3 outline-none focus:outline-none resize-none text-xs"
+                className="md:w-96 w-full h-28 bg-gray-100 rounded-2xl p-3 outline-none focus:outline-none resize-none text-xs"
                 placeholder={tr('order_review_placeholder')}
               ></textarea>
             </div>
@@ -359,7 +359,7 @@ const OrderAccept: FC<OrderDetailProps> = ({ order, orderStatuses }) => {
             <div>{tr('cancel_the_order')}</div>
           </button> */}
           <button
-            className="text-xl text-white bg-yellow flex h-12 items-center justify-evenly rounded-full w-80"
+            className="text-xl text-white bg-yellow flex h-12 items-center justify-evenly rounded-full md:w-80 w-full"
             onClick={() => router.push('/')}
           >
             <div>{tr('to_main')}</div>
