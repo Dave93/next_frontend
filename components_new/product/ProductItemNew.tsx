@@ -73,7 +73,7 @@ const ProductItemNew: FC<ProductItem> = ({ product, channelName }) => {
         return v
       })
     }
-
+    setActiveModifiers([])
     // console.log(prod)
     updateStore({ ...prod })
   }
@@ -359,6 +359,28 @@ const ProductItemNew: FC<ProductItem> = ({ product, channelName }) => {
     return price
   }, [store.price, store.variants, modifiers, activeModifiers])
 
+  const prodPriceDesktop = useMemo(() => {
+    let price: number = parseInt(store.price, 0) || 0
+    if (store.variants && store.variants.length > 0) {
+      const activeValue: any = store.variants.find(
+        (item) => item.active == true
+      )
+      if (activeValue) price += parseInt(activeValue.price, 0)
+    }
+
+    return price
+  }, [store.price, store.variants])
+
+  const prodPriceMobile = useMemo(() => {
+    let price: number = parseInt(store.price, 0) || 0
+    if (store.variants && store.variants.length > 0) {
+      const activeValue: any = store.variants[0]
+      if (activeValue) price += parseInt(activeValue.price, 0)
+    }
+
+    return price
+  }, [store.price, store.variants])
+
   const handleSubmit = async (event: React.MouseEvent<HTMLElement>) => {
     event.preventDefault() // prevent the page location from changing
     // setAddToCartInProgress(true) // disable the add to cart button until the request is finished
@@ -582,7 +604,7 @@ const ProductItemNew: FC<ProductItem> = ({ product, channelName }) => {
                 )}
               </button>
               <span className="md:text-xl md:bg-white hidden md:block md:w-auto rounded-full text-sm text-center md:px-0 md:py-0 md:text-black">
-                {currency(totalPrice, {
+                {currency(prodPriceDesktop, {
                   pattern: '# !',
                   separator: ' ',
                   decimal: '.',
@@ -595,7 +617,7 @@ const ProductItemNew: FC<ProductItem> = ({ product, channelName }) => {
                 onClick={openModal}
               >
                 {locale == 'uz' ? '' : <span>от </span>}
-                {currency(totalPrice, {
+                {currency(prodPriceMobile, {
                   pattern: '# !',
                   separator: ' ',
                   decimal: '.',
@@ -640,8 +662,8 @@ const ProductItemNew: FC<ProductItem> = ({ product, channelName }) => {
                       leaveFrom="opacity-100 translate-y-0 sm:scale-100"
                       leaveTo="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
                     >
-                      <div className="bg-white p-4 text-left transform h-screen overflow-y-auto w-full overflow-hidden fixed top-0">
-                        <div className="flex fixed w-full max-h-10 flex-col">
+                      <div className="bg-white p-4 text-left transform h-screen w-full overflow-hidden fixed top-0">
+                        <div className="flex fixed w-full max-h-10 -ml-4 -mt-4 bg-white pt-8 pl-4 top-0 flex-col">
                           <div className="flex w-full items-center">
                             <span onClick={closeModal} className="flex">
                               <img
@@ -652,134 +674,143 @@ const ProductItemNew: FC<ProductItem> = ({ product, channelName }) => {
                             </span>
                           </div>
                         </div>
-                        <div className="h-[35vh] mx-auto bg-cover flex relative mt-10">
-                          {store.image ? (
-                            <img
-                              src={store.image}
-                              alt={
-                                store?.attribute_data?.name[channelName][
-                                  locale || 'ru'
-                                ]
-                              }
-                              className="mx-auto"
-                            />
-                          ) : (
-                            <img
-                              src="/no_photo.svg"
-                              alt={
-                                store?.attribute_data?.name[channelName][
-                                  locale || 'ru'
-                                ]
-                              }
-                              className="rounded-full mx-auto"
-                            />
+                        <div className="h-[calc(85vh-24px)] overflow-y-auto mt-6 overflow-hidden">
+                          <div className="h-[35vh] mx-auto bg-cover flex relative mt-10">
+                            {store.image ? (
+                              <img
+                                src={store.image}
+                                alt={
+                                  store?.attribute_data?.name[channelName][
+                                    locale || 'ru'
+                                  ]
+                                }
+                                className="mx-auto"
+                              />
+                            ) : (
+                              <img
+                                src="/no_photo.svg"
+                                alt={
+                                  store?.attribute_data?.name[channelName][
+                                    locale || 'ru'
+                                  ]
+                                }
+                                className="rounded-full mx-auto"
+                              />
+                            )}
+                          </div>
+                          <div className="font-black mt-4 text-xl">
+                            {
+                              store?.attribute_data?.name[channelName][
+                                locale || 'ru'
+                              ]
+                            }
+                          </div>
+                          <div
+                            className="mt-1 text-xs flex-grow"
+                            dangerouslySetInnerHTML={{
+                              __html: store?.attribute_data?.description
+                                ? store?.attribute_data?.description[
+                                    channelName
+                                  ][locale || 'ru']
+                                : '',
+                            }}
+                          ></div>
+                          {store.variants && store.variants.length > 0 && (
+                            <div className="flex mt-5 space-x-1">
+                              {store.variants.map((v) => (
+                                <div
+                                  className={`w-full text-center cursor-pointer rounded-2xl outline-none ${
+                                    v.active
+                                      ? 'bg-yellow text-white shadow-xl'
+                                      : 'bg-gray-200 text-gray-600'
+                                  }`}
+                                  onClick={() => updateOptionSelection(v.id)}
+                                  key={v.id}
+                                >
+                                  <button className="outline-none focus:outline-none text-xs py-2">
+                                    {locale == 'ru'
+                                      ? v?.custom_name
+                                      : v?.custom_name_uz}
+                                  </button>
+                                </div>
+                              ))}
+                            </div>
+                          )}
+                          {modifiers && (
+                            <div className="pb-10">
+                              <div className="my-2">
+                                <span>Добавить в пиццу</span>
+                              </div>
+                              <div className="overflow-x-scroll">
+                                <div className="-mr-20 flex space-x-2">
+                                  {modifiers.map((mod: any, index: number) => (
+                                    <div
+                                      key={mod.id}
+                                      className={`border ${
+                                        (activeModifiers.length &&
+                                          activeModifiers.includes(mod.id)) ||
+                                        (!activeModifiers.length && index == 0)
+                                          ? 'border-yellow'
+                                          : 'border-gray-300'
+                                      } flex flex-col justify-between overflow-hidden rounded-[15px] cursor-pointer w-24`}
+                                      onClick={() => addModifier(mod.id)}
+                                    >
+                                      <div className="flex-grow pt-2 px-2">
+                                        {mod.assets.length ? (
+                                          <img
+                                            src={
+                                              mod.assets[0].local
+                                                ? mod.assets[0].local
+                                                : `${webAddress}/storage/${mod.assets[0]?.location}/${mod.assets[0]?.filename}`
+                                            }
+                                            width={50}
+                                            height={50}
+                                            alt={mod.name}
+                                            className="mx-auto"
+                                          />
+                                        ) : (
+                                          <img
+                                            src="/no_photo.svg"
+                                            width={50}
+                                            height={50}
+                                            alt={mod.name}
+                                            className="rounded-full mx-auto"
+                                          />
+                                        )}
+                                      </div>
+                                      <div className="text-center text-xs">
+                                        {locale == 'uz'
+                                          ? mod.name_uz
+                                          : mod.name}
+                                      </div>
+                                      <div
+                                        className={`${
+                                          (activeModifiers.length &&
+                                            activeModifiers.includes(mod.id)) ||
+                                          (!activeModifiers.length &&
+                                            index == 0)
+                                            ? 'bg-yellow'
+                                            : 'bg-gray-300'
+                                        } font-bold px-2 py-2 text-center text-white text-xs`}
+                                      >
+                                        {currency(mod.price, {
+                                          pattern: '# !',
+                                          separator: ' ',
+                                          decimal: '.',
+                                          symbol: `${
+                                            locale == 'uz' ? "so'm" : 'сум'
+                                          }`,
+                                          precision: 0,
+                                        }).format()}
+                                      </div>
+                                    </div>
+                                  ))}
+                                </div>
+                              </div>
+                            </div>
                           )}
                         </div>
-                        <div className="font-black mt-4 text-xl">
-                          {
-                            store?.attribute_data?.name[channelName][
-                              locale || 'ru'
-                            ]
-                          }
-                        </div>
-                        <div
-                          className="mt-1 text-xs flex-grow"
-                          dangerouslySetInnerHTML={{
-                            __html: store?.attribute_data?.description
-                              ? store?.attribute_data?.description[channelName][
-                                  locale || 'ru'
-                                ]
-                              : '',
-                          }}
-                        ></div>
-                        {store.variants && store.variants.length > 0 && (
-                          <div className="flex mt-5 space-x-1">
-                            {store.variants.map((v) => (
-                              <div
-                                className={`w-full text-center cursor-pointer rounded-2xl outline-none ${
-                                  v.active
-                                    ? 'bg-yellow text-white shadow-xl'
-                                    : 'bg-gray-200 text-gray-600'
-                                }`}
-                                onClick={() => updateOptionSelection(v.id)}
-                                key={v.id}
-                              >
-                                <button className="outline-none focus:outline-none text-xs py-2">
-                                  {locale == 'ru'
-                                    ? v?.custom_name
-                                    : v?.custom_name_uz}
-                                </button>
-                              </div>
-                            ))}
-                          </div>
-                        )}
-                        {modifiers && (
-                          <div>
-                            <div className="my-2">
-                              <span>Добавить в пиццу</span>
-                            </div>
-                            <div className="overflow-x-scroll">
-                              <div className="-mr-20 flex space-x-2">
-                                {modifiers.map((mod: any) => (
-                                  <div
-                                    key={mod.id}
-                                    className={`border ${
-                                      activeModifiers.includes(mod.id)
-                                        ? 'border-yellow'
-                                        : 'border-gray-300'
-                                    } flex flex-col justify-between overflow-hidden rounded-[15px] cursor-pointer w-24`}
-                                    onClick={() => addModifier(mod.id)}
-                                  >
-                                    <div className="flex-grow pt-2 px-2">
-                                      {mod.assets.length ? (
-                                        <img
-                                          src={
-                                            mod.assets[0].local
-                                              ? mod.assets[0].local
-                                              : `${webAddress}/storage/${mod.assets[0]?.location}/${mod.assets[0]?.filename}`
-                                          }
-                                          width={50}
-                                          height={50}
-                                          alt={mod.name}
-                                          className="mx-auto"
-                                        />
-                                      ) : (
-                                        <img
-                                          src="/no_photo.svg"
-                                          width={50}
-                                          height={50}
-                                          alt={mod.name}
-                                          className="rounded-full mx-auto"
-                                        />
-                                      )}
-                                    </div>
-                                    <div className="text-center text-xs">
-                                      {locale == 'uz' ? mod.name_uz : mod.name}
-                                    </div>
-                                    <div
-                                      className={`${
-                                        activeModifiers.includes(mod.id)
-                                          ? 'bg-yellow'
-                                          : 'bg-gray-300'
-                                      } font-bold px-2 py-2 text-center text-white text-xs`}
-                                    >
-                                      {currency(mod.price, {
-                                        pattern: '# !',
-                                        separator: ' ',
-                                        decimal: '.',
-                                        symbol: `${
-                                          locale == 'uz' ? "so'm" : 'сум'
-                                        }`,
-                                        precision: 0,
-                                      }).format()}
-                                    </div>
-                                  </div>
-                                ))}
-                              </div>
-                            </div>
-                          </div>
-                        )}
-                        <div className="w-full fixed -ml-4 px-3 py-5 items-center flex mt-3">
+                        <div className="w-full fixed bottom-0 bg-white -ml-4 px-3 py-5 items-center flex mt-3">
                           <button
                             className="bg-yellow flex items-center justify-around focus:outline-none font-bold outline-none py-2 rounded-full text-center text-white w-full"
                             onClick={addToBasket}
