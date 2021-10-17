@@ -561,7 +561,13 @@ const Orders: FC<OrdersProps> = ({ channelName }: { channelName: any }) => {
     await setCredentials()
     try {
       const { data } = await axios.post(`${webAddress}/api/orders/prepare`, {
-        formData: { ...locationData, ...getValues(), pay_type: payType },
+        formData: {
+          ...locationData,
+          ...getValues(),
+          pay_type: payType,
+          sms_sub: sms,
+          email_sub: newsletter,
+        },
         basket_id: cartId,
       })
       if (!data.success) {
@@ -601,7 +607,13 @@ const Orders: FC<OrdersProps> = ({ channelName }: { channelName: any }) => {
       const { data } = await axios.post(
         `${webAddress}/api/orders`,
         {
-          formData: { ...locationData, ...getValues(), pay_type: payType },
+          formData: {
+            ...locationData,
+            ...getValues(),
+            pay_type: payType,
+            sms_sub: sms,
+            email_sub: newsletter,
+          },
           code: otpCode,
           basket_id: cartId,
         },
@@ -668,6 +680,28 @@ const Orders: FC<OrdersProps> = ({ channelName }: { channelName: any }) => {
     if (cities) return cities[0]
     return null
   }, [cities, activeCity])
+
+  const isWorkTime = useMemo(() => {
+    let currentHour = new Date().getHours()
+    // let currentHour = 4
+    if (
+      configData.workTimeStart <= currentHour ||
+      configData.workTimeEnd > currentHour
+    )
+      return true
+    return false
+  }, [configData])
+
+  if (!isWorkTime) {
+    return (
+      <div className="bg-white flex py-20 text-xl text-yellow font-bold px-10">
+        <div>
+          {tr('isNotWorkTime')}{' '}
+          {locale == 'uz' ? configData.workTimeUz : configData.workTimeRu}
+        </div>
+      </div>
+    )
+  }
 
   return (
     <div className="mx-5 md:mx-0 pt-1 md:pt-0 pb-1">
@@ -1595,29 +1629,36 @@ const Orders: FC<OrdersProps> = ({ channelName }: { channelName: any }) => {
       </div>
       <div className="w-full bg-white mb-5 rounded-2xl p-10">
         <div className="md:flex">
-          <div className="mr-8 text-gray-400">{tr('agree_to_send')}</div>
-          <label className="mr-8 cursor-pointer text-gray-400 items-center flex">
-            <input
-              type="checkbox"
-              defaultValue="sms"
-              className={` ${
-                sms ? 'text-yellow' : 'bg-gray-200'
-              } form-checkbox h-5 w-5  rounded-md  mr-2`}
-              onChange={smsValueChange}
-            />
-            <div>SMS</div>
-          </label>
-          <label className="cursor-pointer text-gray-400 items-center flex">
-            <input
-              type="checkbox"
-              defaultValue="newsletter"
-              className={` ${
-                newsletter ? 'text-yellow' : 'bg-gray-200'
-              } form-checkbox h-5 w-5  rounded-md mr-2`}
-              onChange={newsletterValueChange}
-            />
-            <div>E-mail {tr('mailing')}</div>
-          </label>
+          {!!user.user.sms_sub != true ||
+            (!!user.user.email_sub != true && (
+              <div className="mr-8 text-gray-400">{tr('agree_to_send')}</div>
+            ))}
+          {!!user.user.sms_sub != true && (
+            <label className="mr-8 cursor-pointer text-gray-400 items-center flex">
+              <input
+                type="checkbox"
+                defaultValue="sms"
+                className={` ${
+                  sms ? 'text-yellow' : 'bg-gray-200'
+                } form-checkbox h-5 w-5  rounded-md  mr-2`}
+                onChange={smsValueChange}
+              />
+              <div>SMS</div>
+            </label>
+          )}
+          {!!user.user.email_sub != true && authEmail && (
+            <label className="cursor-pointer text-gray-400 items-center flex">
+              <input
+                type="checkbox"
+                defaultValue="newsletter"
+                className={` ${
+                  newsletter ? 'text-yellow' : 'bg-gray-200'
+                } form-checkbox h-5 w-5  rounded-md mr-2`}
+                onChange={newsletterValueChange}
+              />
+              <div>E-mail {tr('mailing')}</div>
+            </label>
+          )}
         </div>
         <div className="mt-5 text-gray-400 text-sm md:flex border-b pb-8">
           {tr('processing_of_your_personal_data')}

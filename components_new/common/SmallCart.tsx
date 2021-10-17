@@ -1,4 +1,4 @@
-import { FC, memo, useState } from 'react'
+import { FC, memo, useEffect, useMemo, useState } from 'react'
 import useCart from '@framework/cart/use-cart'
 import { useForm } from 'react-hook-form'
 import Image from 'next/image'
@@ -11,6 +11,7 @@ import { useRouter } from 'next/router'
 import useTranslation from 'next-translate/useTranslation'
 import Hashids from 'hashids'
 import { useUI } from '@components/ui/context'
+import { toast } from 'react-toastify'
 
 const { publicRuntimeConfig } = getConfig()
 let webAddress = publicRuntimeConfig.apiUrl
@@ -50,6 +51,24 @@ const SmallCart: FC<SmallCartProps> = ({
     15,
     'abcdefghijklmnopqrstuvwxyz1234567890'
   )
+  const [configData, setConfigData] = useState({} as any)
+  const fetchConfig = async () => {
+    let configData
+    if (!sessionStorage.getItem('configData')) {
+      let { data } = await axios.get(`${webAddress}/api/configs/public`)
+      configData = data.data
+      sessionStorage.setItem('configData', data.data)
+    } else {
+      configData = sessionStorage.getItem('configData')
+    }
+
+    try {
+      configData = Buffer.from(configData, 'base64')
+      configData = configData.toString('ascii')
+      configData = JSON.parse(configData)
+      setConfigData(configData)
+    } catch (e) {}
+  }
 
   const setCredentials = async () => {
     let csrf = Cookies.get('X-XSRF-TOKEN')
@@ -163,9 +182,30 @@ const SmallCart: FC<SmallCartProps> = ({
       setIsCartLoading(false)
     }
   }
+  const isWorkTime = useMemo(() => {
+    let currentHour = new Date().getHours()
+    if (
+      configData.workTimeStart <= currentHour ||
+      configData.workTimeEnd > currentHour
+    )
+      return true
+    return false
+  }, [configData])
 
   const goToCheckout = (e: any) => {
     e.preventDefault()
+    if (!isWorkTime) {
+      toast.warn(
+        `${tr('isNotWorkTime')} ${
+          locale == 'uz' ? configData.workTimeUz : configData.workTimeRu
+        }`,
+        {
+          position: toast.POSITION.BOTTOM_RIGHT,
+          hideProgressBar: true,
+        }
+      )
+      return
+    }
     if (user) {
       router.push('/cart/')
     } else {
@@ -175,6 +215,11 @@ const SmallCart: FC<SmallCartProps> = ({
       openSignInModal()
     }
   }
+
+  useEffect(() => {
+    fetchConfig()
+    return
+  }, [])
   return (
     <div className="mt-2 rounded-[15px] bg-white ">
       <div className="border border-yellow px-5 py-7 rounded-[15px] relative">

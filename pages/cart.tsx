@@ -8,7 +8,7 @@ import { useForm } from 'react-hook-form'
 import useTranslation from 'next-translate/useTranslation'
 import getConfig from 'next/config'
 import { useRouter } from 'next/router'
-import { useEffect, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import Hashids from 'hashids'
 import axios from 'axios'
 import Cookies from 'js-cookie'
@@ -89,6 +89,24 @@ export default function Cart() {
     15,
     'abcdefghijklmnopqrstuvwxyz1234567890'
   )
+  const [configData, setConfigData] = useState({} as any)
+  const fetchConfig = async () => {
+    let configData
+    if (!sessionStorage.getItem('configData')) {
+      let { data } = await axios.get(`${webAddress}/api/configs/public`)
+      configData = data.data
+      sessionStorage.setItem('configData', data.data)
+    } else {
+      configData = sessionStorage.getItem('configData')
+    }
+
+    try {
+      configData = Buffer.from(configData, 'base64')
+      configData = configData.toString('ascii')
+      configData = JSON.parse(configData)
+      setConfigData(configData)
+    } catch (e) {}
+  }
 
   const setCredentials = async () => {
     let csrf = Cookies.get('X-XSRF-TOKEN')
@@ -206,6 +224,32 @@ export default function Cart() {
   const goToCheckout = (e: any) => {
     e.preventDefault()
     router.push('/order/')
+  }
+
+  useEffect(() => {
+    fetchConfig()
+    return
+  }, [])
+
+  const isWorkTime = useMemo(() => {
+    let currentHour = new Date().getHours()
+    if (
+      configData.workTimeStart <= currentHour ||
+      configData.workTimeEnd > currentHour
+    )
+      return true
+    return false
+  }, [configData])
+
+  if (!isWorkTime) {
+    return (
+      <div className="bg-white flex py-20 text-xl text-yellow font-bold px-10">
+        <div>
+          {tr('isNotWorkTime')}{' '}
+          {locale == 'uz' ? configData.workTimeUz : configData.workTimeRu}
+        </div>
+      </div>
+    )
   }
 
   return (
