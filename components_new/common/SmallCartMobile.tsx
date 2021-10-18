@@ -54,23 +54,18 @@ const SmallCartMobile: FC = () => {
   const [isShowPasswordForm, setIsShowPasswordForm] = useState(false)
   const [otpShowCode, setOtpShowCode] = useState(0)
   const [showUserName, setShowUserName] = useState(false)
+  const [showSignInModal, setShowSignInModal] = useState(false)
 
-  const {
-    user,
-    setUserData,
-    showSignInModal,
-    openSignInModal,
-    closeSignInModal,
-  } = useUI()
+  const { user, setUserData, openSignInModal, closeSignInModal } = useUI()
 
   const otpTime = useRef(0)
 
   const openModal = () => {
-    openSignInModal()
+    setShowSignInModal(true)
   }
 
   const closeModal = () => {
-    closeSignInModal()
+    setShowSignInModal(false)
   }
 
   const {
@@ -204,10 +199,8 @@ const SmallCartMobile: FC = () => {
       clearInterval(otpTimerRef)
       setUserData(result)
       setIsShowPasswordForm(false)
-      if (router.query && router.query.backUrl) {
-        let backUrl: string = router.query.backUrl as string
-        router.push(backUrl)
-      }
+
+      router.push('/cart/')
     }
   }
 
@@ -259,7 +252,7 @@ const SmallCartMobile: FC = () => {
   return (
     <>
       <button
-        className="md:hidden fixed outline-none focus:outline-none top-1/2 right-4 divide-x flex w-20 px-2 bg-red-700 h-12 items-center justify-around rounded-full"
+        className="md:hidden fixed outline-none focus:outline-none top-24 right-4 divide-x flex w-20 px-2 bg-red-700 h-12 items-center justify-around rounded-full"
         onClick={goToCheckout}
       >
         <div className="flex">
