@@ -14,13 +14,15 @@ import axios from 'axios'
 import Cookies from 'js-cookie'
 import defaultChannel from '@lib/defaultChannel'
 import currency from 'currency.js'
+import { useUI } from '@components/ui/context'
 
 export async function getServerSideProps({
   preview,
   locale,
   locales,
+  query,
 }: GetServerSidePropsContext) {
-  const config = { locale, locales }
+  const config = { locale, locales, queryParams: query }
   const productsPromise = commerce.getAllProducts({
     variables: { first: 6 },
     config,
@@ -32,8 +34,20 @@ export async function getServerSideProps({
   const siteInfoPromise = commerce.getSiteInfo({ config, preview })
   const { products } = await productsPromise
   const { pages } = await pagesPromise
-  const { categories, brands, topMenu, footerInfoMenu, socials, cities } =
-    await siteInfoPromise
+  const {
+    categories,
+    brands,
+    topMenu,
+    footerInfoMenu,
+    socials,
+    cities,
+    currentCity,
+  } = await siteInfoPromise
+  if (!currentCity) {
+    return {
+      notFound: true,
+    }
+  }
 
   return {
     props: {
@@ -42,6 +56,7 @@ export async function getServerSideProps({
       brands,
       pages,
       topMenu,
+      currentCity,
       footerInfoMenu,
       socials,
       cleanBackground: true,
@@ -62,6 +77,7 @@ export default function Cart() {
     setChannelName(channelData.name)
   }
 
+  const { activeCity } = useUI()
   useEffect(() => {
     getChannel()
   }, [])
@@ -223,7 +239,7 @@ export default function Cart() {
 
   const goToCheckout = (e: any) => {
     e.preventDefault()
-    router.push('/order/')
+    router.push(`/${activeCity.slug}/order/`)
   }
 
   useEffect(() => {
@@ -284,7 +300,7 @@ export default function Cart() {
           <div className="w-6/12">{tr('basket_empty')}</div>
           <button
             className="bg-yellow text-white p-3 mt-4 rounded-full"
-            onClick={() => router.push('/')}
+            onClick={() => router.push(`/${activeCity.slug}`)}
           >
             {tr('back_to_menu')}
           </button>
@@ -531,7 +547,7 @@ export default function Cart() {
                 className="md:text-xl text-gray-400 bg-gray-100 flex h-12 items-center justify-between px-12 rounded-full md:w-80 w-full"
                 onClick={(e) => {
                   e.preventDefault()
-                  router.push('/')
+                  router.push(`/${activeCity.slug}`)
                 }}
               >
                 <img src="/left.png" /> {tr('back_to_menu')}

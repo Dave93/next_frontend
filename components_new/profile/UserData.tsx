@@ -10,8 +10,8 @@ const UserData: FC = () => {
   const router = useRouter()
   const { locale, pathname } = router
 
-  const { user, setUserData } = useUI()
-  
+  const { user, setUserData, activeCity } = useUI()
+
   let items = menuItems.map((item) => {
     return {
       ...item,
@@ -24,16 +24,16 @@ const UserData: FC = () => {
     e.stopPropagation()
     localStorage.removeItem('mijoz')
     setUserData(null)
-    router.push('/')
+    router.push(`/${activeCity.slug}`)
   }
 
   return (
     <div className="border-b justify-between md:flex pb-5">
       <div>
-        <div className="text-3xl mb-1">{tr('profile_hello')}, {user?.user?.name}!</div>
-        <div className="text-xs w-80 text-gray-400">
-          {tr('profile_desc')}
+        <div className="text-3xl mb-1">
+          {tr('profile_hello')}, {user?.user?.name}!
         </div>
+        <div className="text-xs w-80 text-gray-400">{tr('profile_desc')}</div>
       </div>
       <div className="flex items-end">
         {items.map((item, id) => (

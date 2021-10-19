@@ -22,32 +22,30 @@ export async function getServerSideProps({
   locale,
   locales,
   params,
+  query,
   ...context
 }: GetServerSidePropsContext) {
-  const config = { locale, locales }
+  const config = { locale, locales, queryParams: query }
   const siteInfoPromise = commerce.getSiteInfo({ config, preview })
-  const { categories, brands, topMenu, footerInfoMenu, socials, cities } =
-    await siteInfoPromise
+  const {
+    categories,
+    brands,
+    topMenu,
+    footerInfoMenu,
+    socials,
+    cities,
+    currentCity,
+  } = await siteInfoPromise
   const { id } = params as IParams
   const c = cookies(context)
-
-  let activeCity = null
-
-  let activeCityData: any = c.activeCity
-  try {
-    activeCityData = Buffer.from(activeCityData, 'base64')
-    activeCityData = activeCityData.toString()
-    activeCityData = JSON.parse(activeCityData)
-  } catch (e) {}
-
-  activeCity = activeCityData
-
-  if (!activeCity) {
-    activeCity = cities[0]
+  if (!currentCity) {
+    return {
+      notFound: true,
+    }
   }
 
   const { data } = await axios.get(
-    `${process.env.API_URL}/api/news/public/${id}/?city_id=${activeCity.id}`
+    `${process.env.API_URL}/api/news/public/${id}/?city_id=${currentCity.id}`
   )
 
   if (!data.data.length) {
@@ -57,7 +55,7 @@ export async function getServerSideProps({
   }
 
   const { data: relatedData } = await axios.get(
-    `${process.env.API_URL}/api/news/related/${id}/?city_id=${activeCity.id}`
+    `${process.env.API_URL}/api/news/related/${id}/?city_id=${currentCity.id}`
   )
 
   return {
@@ -69,6 +67,7 @@ export async function getServerSideProps({
       socials,
       cleanBackground: true,
       cities,
+      currentCity,
       newsItem: data.data[0],
       relatedNews: relatedData.data,
     },
@@ -207,7 +206,7 @@ export default function NewsId({
                   </div>
                   <Link href={`${'/news/' + item.id}`} prefetch={false}>
                     <a className="text-xs text-gray-400 hover:underline">
-                      {tr("more")}
+                      {tr('more')}
                     </a>
                   </Link>
                 </div>

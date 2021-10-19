@@ -1,23 +1,37 @@
 import { Layout } from '@components/common'
 import commerce from '@lib/api/commerce'
 import { GetServerSidePropsContext } from 'next'
-import Contacts from '@components_new/contacts/Contacts'
+import Fran from '@components_new/fran/Fran'
 
 export async function getServerSideProps({
   preview,
   locale,
   locales,
+  query,
 }: GetServerSidePropsContext) {
-  const config = { locale, locales }
+  const config = { locale, locales, queryParams: query }
   const siteInfoPromise = commerce.getSiteInfo({ config, preview })
-  const { categories, brands, topMenu, footerInfoMenu, socials, cities } =
-    await siteInfoPromise
+  const {
+    categories,
+    brands,
+    topMenu,
+    footerInfoMenu,
+    socials,
+    cities,
+    currentCity,
+  } = await siteInfoPromise
+  if (!currentCity) {
+    return {
+      notFound: true,
+    }
+  }
 
   return {
     props: {
       categories,
       brands,
       topMenu,
+      currentCity,
       footerInfoMenu,
       socials,
       cities,
@@ -25,12 +39,12 @@ export async function getServerSideProps({
   }
 }
 
-export default function ContactsPage() {
+export default function FranPage() {
   return (
     <>
-      <Contacts />
+      <Fran />
     </>
   )
 }
 
-ContactsPage.Layout = Layout
+FranPage.Layout = Layout

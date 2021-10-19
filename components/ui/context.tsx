@@ -269,6 +269,7 @@ function uiReducer(state: State, action: Action) {
         let locationNewData = JSON.stringify(action.value)
         locationNewData = Buffer.from(locationNewData).toString('base64')
         Cookies.set('activeCity', locationNewData)
+        Cookies.set('city_slug', action.value.slug)
       } catch (e) {}
       return {
         ...state,
@@ -290,7 +291,15 @@ function uiReducer(state: State, action: Action) {
   }
 }
 
-export const UIProvider: FC = (props) => {
+type UIProviderProps = {
+  children?: React.ReactNode
+  pageProps?: any
+}
+
+export const UIProvider: FC<UIProviderProps> = (props) => {
+  if (props.pageProps.currentCity) {
+    initialState.activeCity = props.pageProps.currentCity
+  }
   const [state, dispatch] = React.useReducer(uiReducer, initialState)
 
   const openSidebar = useCallback(
@@ -411,6 +420,7 @@ export const useUI = () => {
   return context
 }
 
-export const ManagedUIContext: FC = ({ children }) => (
-  <UIProvider>{children}</UIProvider>
-)
+export const ManagedUIContext: FC<UIProviderProps> = ({
+  children,
+  pageProps,
+}) => <UIProvider pageProps={pageProps}>{children}</UIProvider>

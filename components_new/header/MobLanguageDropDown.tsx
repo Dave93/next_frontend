@@ -1,14 +1,17 @@
 import { FC, memo } from 'react'
 import { Ru, Uz } from 'react-flags-select'
 import { useRouter } from 'next/router'
+import { useUI } from '@components/ui/context'
 
 const LanguageDropDown: FC = () => {
   const router = useRouter()
+  const { activeCity } = useUI()
   const { locale, pathname } = router
 
   const changeLang = (e: any, loc: string | undefined) => {
     e.preventDefault()
-    return router.push(pathname, pathname, {
+    let path = pathname.replace('[city]', activeCity.slug)
+    return router.push(path, path, {
       locale: loc,
     })
   }
@@ -19,7 +22,7 @@ const LanguageDropDown: FC = () => {
         href={`/${locale}${pathname}`}
         onClick={(e) => changeLang(e, 'ru')}
       >
-        <Ru className="w-5"/>
+        <Ru className="w-5" />
         <span className="ml-1.5">Ru</span>
       </a>
       <a
@@ -27,7 +30,7 @@ const LanguageDropDown: FC = () => {
         href={`/${locale}${pathname}`}
         onClick={(e) => changeLang(e, 'uz')}
       >
-        <Uz className="w-5"/>
+        <Uz className="w-5" />
         <span className="ml-1.5">Uz</span>
       </a>
     </>

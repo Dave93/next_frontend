@@ -31,7 +31,7 @@ const OrderAccept: FC<OrderDetailProps> = ({ order, orderStatuses }) => {
   const router = useRouter()
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [reviewsData, setReviewsData] = useState([])
-  const { user } = useUI()
+  const { user, activeCity } = useUI()
   const { locale } = router
   const orderId = router.query.id
   type FormData = {
@@ -360,7 +360,7 @@ const OrderAccept: FC<OrderDetailProps> = ({ order, orderStatuses }) => {
           </button> */}
           <button
             className="text-xl text-white bg-yellow flex h-12 items-center justify-evenly rounded-full md:w-80 w-full"
-            onClick={() => router.push('/')}
+            onClick={() => router.push(`/${activeCity}`)}
           >
             <div>{tr('to_main')}</div>
             <img src="/right.png" />

@@ -56,7 +56,8 @@ const SmallCartMobile: FC = () => {
   const [showUserName, setShowUserName] = useState(false)
   const [showSignInModal, setShowSignInModal] = useState(false)
 
-  const { user, setUserData, openSignInModal, closeSignInModal } = useUI()
+  const { user, setUserData, openSignInModal, closeSignInModal, activeCity } =
+    useUI()
 
   const otpTime = useRef(0)
 
@@ -200,7 +201,7 @@ const SmallCartMobile: FC = () => {
       setUserData(result)
       setIsShowPasswordForm(false)
 
-      router.push('/cart/')
+      router.push(`/${activeCity.slug}/cart/`)
     }
   }
 
@@ -245,7 +246,7 @@ const SmallCartMobile: FC = () => {
     if (!user) {
       openModal()
     } else {
-      router.push('/cart/')
+      router.push(`/${activeCity.slug}/cart/`)
     }
   }
 

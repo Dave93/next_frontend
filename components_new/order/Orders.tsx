@@ -630,7 +630,7 @@ const Orders: FC<OrdersProps> = ({ channelName }: { channelName: any }) => {
       clearInterval(otpTimerRef)
       // setUserData(data.user)
       localStorage.removeItem('basketId')
-      router.push(`/order/${data.order.id}`)
+      router.push(`/${activeCity.slug}/order/${data.order.id}`)
     } catch (e) {
       toast.error(e.response.data.error.message, {
         position: toast.POSITION.BOTTOM_RIGHT,
@@ -1891,7 +1891,7 @@ const Orders: FC<OrdersProps> = ({ channelName }: { channelName: any }) => {
             className="md:text-xl text-gray-400 bg-gray-200 flex h-12 items-center justify-between px-12 rounded-full md:w-80 w-full"
             onClick={(e) => {
               e.preventDefault()
-              router.push('/cart/')
+              router.push(`/${activeCity.slug}/cart/`)
             }}
           >
             <img src="/left.png" /> {tr('back_to_basket')}

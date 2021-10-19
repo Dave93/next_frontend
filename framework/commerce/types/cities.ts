@@ -8,4 +8,6 @@ export type City = {
   lon: number
   active: boolean
   sort: number
+  phone: string
+  slug: string
 }

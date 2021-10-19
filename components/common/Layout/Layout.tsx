@@ -39,6 +39,7 @@ interface Props {
     socials: SocialIcons[]
     cleanBackground?: boolean
     cities: City[]
+    currentCity?: City
     geo: any
   }
 }
@@ -61,11 +62,12 @@ const Layout: FC<Props> = ({
     footerInfoMenu = [],
     socials = [],
     cities = [],
+    currentCity,
     cleanBackground = false,
     ...pageProps
   },
 }) => {
-  const { locale = 'ru', pathname } = useRouter()
+  const { locale = 'ru', pathname, query } = useRouter()
   const { t: tr } = useTranslation('common')
 
   const [configData, setConfigData] = useState({} as any)
@@ -100,21 +102,10 @@ const Layout: FC<Props> = ({
   useEffect(() => {
     fetchConfig()
     setCitiesData(cities)
-    if (!activeCity) {
-      setActiveCity(cities[0])
-    }
     document.body.className = cleanBackground ? 'bg-gray-100' : ''
 
     return
-  }, [cleanBackground])
-
-  const chosenCity = useMemo(() => {
-    if (activeCity) {
-      return activeCity
-    }
-    if (cities) return cities[0]
-    return null
-  }, [cities, activeCity])
+  }, [cleanBackground, currentCity])
 
   return (
     <CommerceProvider locale={locale}>
@@ -126,7 +117,7 @@ const Layout: FC<Props> = ({
               cleanBackground == true ? 'bg-gray-100' : ''
             } flex-grow md:pb-14`}
           >
-            {pathname == '/' ? (
+            {pathname == '/[city]' ? (
               children
             ) : (
               <div className="container mx-auto">{children}</div>
@@ -158,13 +149,13 @@ const Layout: FC<Props> = ({
                     <div className="md:hidden border-b border-blue md:border-0 pb-5">
                       <div>{tr('delivery_phone')}</div>
                       <div className="text-[30px] font-bold">
-                        {chosenCity?.phone && (
+                        {currentCity?.phone && (
                           <a
                             href={parsePhoneNumber(
-                              chosenCity?.phone ?? ''
+                              currentCity?.phone ?? ''
                             )?.getURI()}
                           >
-                            {parsePhoneNumber(chosenCity?.phone ?? '')
+                            {parsePhoneNumber(currentCity?.phone ?? '')
                               ?.formatNational()
                               .substring(2)}
                           </a>
@@ -188,19 +179,32 @@ const Layout: FC<Props> = ({
                                 key={item.id}
                                 className={styles.footerMenuListItem}
                               >
-                                <LinkScroll
-                                  to={`productSection_${item.id}`}
-                                  spy={true}
-                                  smooth={true}
-                                  offset={-100}
-                                  className="w-full cursor-pointer block"
-                                >
-                                  {
-                                    item?.attribute_data?.name['chopar'][
-                                      locale || 'ru'
-                                    ] // TODO: fix static value chopar
-                                  }
-                                </LinkScroll>
+                                {pathname == '/[city]' ? (
+                                  <LinkScroll
+                                    to={`productSection_${item.id}`}
+                                    spy={true}
+                                    smooth={true}
+                                    offset={-100}
+                                    className="w-full cursor-pointer block"
+                                  >
+                                    {
+                                      item?.attribute_data?.name['chopar'][
+                                        locale || 'ru'
+                                      ] // TODO: fix static value chopar
+                                    }
+                                  </LinkScroll>
+                                ) : (
+                                  <Link
+                                    href={`/${currentCity?.slug}/#productSection_${item.id}`}
+                                    prefetch={false}
+                                  >
+                                    {
+                                      item?.attribute_data?.name['chopar'][
+                                        locale || 'ru'
+                                      ] // TODO: fix static value chopar
+                                    }
+                                  </Link>
+                                )}
                               </li>
                             )
                           })}
@@ -216,12 +220,16 @@ const Layout: FC<Props> = ({
                               {footerInfoMenu.map((item) => {
                                 const keyTyped =
                                   `name_${locale}` as keyof typeof item
+                                let href = item.href
+                                if (href.indexOf('http') < 0) {
+                                  href = `/${currentCity?.slug}${item.href}`
+                                }
                                 return (
                                   <li
                                     key={item.href}
                                     className={styles.footerMenuListItem}
                                   >
-                                    <Link href={item.href} prefetch={false}>
+                                    <Link href={href} prefetch={false}>
                                       <a>{item[keyTyped]}</a>
                                     </Link>
                                   </li>
@@ -237,13 +245,13 @@ const Layout: FC<Props> = ({
                     <div className="hidden md:block">
                       <div>{tr('delivery_phone')}</div>
                       <div className="text-[30px] font-bold">
-                        {chosenCity?.phone && (
+                        {currentCity?.phone && (
                           <a
                             href={parsePhoneNumber(
-                              chosenCity?.phone ?? ''
+                              currentCity?.phone ?? ''
                             )?.getURI()}
                           >
-                            {parsePhoneNumber(chosenCity?.phone ?? '')
+                            {parsePhoneNumber(currentCity?.phone ?? '')
                               ?.formatNational()
                               .substring(2)}
                           </a>

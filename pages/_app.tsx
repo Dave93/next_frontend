@@ -30,7 +30,7 @@ export default function MyApp({ Component, pageProps }: AppProps) {
   return (
     <>
       <Head />
-      <ManagedUIContext>
+      <ManagedUIContext pageProps={pageProps}>
         <Layout pageProps={pageProps}>
           <Component {...pageProps} />
         </Layout>

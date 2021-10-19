@@ -11,7 +11,7 @@ const UserProfileDropDown: FC = () => {
   const router = useRouter()
   const { locale, pathname } = router
 
-  const { user, setUserData } = useUI()
+  const { user, setUserData, activeCity } = useUI()
   let items = menuItems.map((item) => {
     return {
       ...item,
@@ -50,24 +50,32 @@ const UserProfileDropDown: FC = () => {
               static
               className="absolute bg-white divide-gray-100 divide-y focus:outline-none mt-2 origin-top-right right-0 ring-1 ring-black ring-opacity-5 overflow-hidden rounded-2xl shadow-lg z-20"
             >
-              {items.map((item) => (
-                <Menu.Item key={item.href}>
-                  {item.href == '/profile/logout' ? (
-                    <span
-                      className="block px-4 py-2 text-sm cursor-pointer text-secondary hover:text-white hover:bg-secondary"
-                      onClick={logout}
-                    >
-                      {item.name}
-                    </span>
-                  ) : (
-                    <Link href={item.href} locale={locale} prefetch={false}>
-                      <a className="block px-4 py-2 text-sm cursor-pointer text-secondary hover:text-white hover:bg-secondary">
+              {items.map((item) => {
+                let href = `${item.href}`
+
+                if (href.indexOf('http') < 0) {
+                  href = `/${activeCity.slug}${item.href}`
+                }
+
+                return (
+                  <Menu.Item key={item.href}>
+                    {href == `/${activeCity.slug}/profile/logout` ? (
+                      <span
+                        className="block px-4 py-2 text-sm cursor-pointer text-secondary hover:text-white hover:bg-secondary"
+                        onClick={logout}
+                      >
                         {item.name}
-                      </a>
-                    </Link>
-                  )}
-                </Menu.Item>
-              ))}
+                      </span>
+                    ) : (
+                      <Link href={href} locale={locale} prefetch={false}>
+                        <a className="block px-4 py-2 text-sm cursor-pointer text-secondary hover:text-white hover:bg-secondary">
+                          {item.name}
+                        </a>
+                      </Link>
+                    )}
+                  </Menu.Item>
+                )
+              })}
             </Menu.Items>
           </Transition>
         </>

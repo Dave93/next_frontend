@@ -2,6 +2,7 @@ import { Fragment, FC, memo } from 'react'
 import { Menu, Transition } from '@headlessui/react'
 import { Ru, Uz } from 'react-flags-select'
 import { useRouter } from 'next/router'
+import { useUI } from '@components/ui/context'
 
 const locales = {
   ru: Ru,
@@ -19,10 +20,12 @@ const LanguageDropDown: FC = () => {
   const keyTyped = locale as keyof typeof locales
   const keyTypedLabel = locale as keyof typeof locales
   const localeComponent = locales[keyTyped]({})
+  const { activeCity } = useUI()
 
   const changeLang = (e: any, loc: string | undefined) => {
     e.preventDefault()
-    return router.push(pathname, pathname, {
+    let path = pathname.replace('[city]', activeCity.slug)
+    return router.push(path, path, {
       locale: loc,
     })
   }

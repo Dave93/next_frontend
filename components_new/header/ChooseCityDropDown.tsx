@@ -2,12 +2,12 @@ import { Fragment, useState, FC, memo, useMemo } from 'react'
 import { Menu, Transition } from '@headlessui/react'
 import { useUI } from '@components/ui'
 import { City } from '@commerce/types/cities'
-import { useRouter } from 'next/router'
+import router, { useRouter } from 'next/router'
 import useTranslation from 'next-translate/useTranslation'
 
 const ChooseCityDropDown: FC = () => {
   const { t: tr } = useTranslation('common')
-  const { locale } = useRouter();
+  const { locale, pathname, query } = useRouter()
   const { cities, activeCity, setActiveCity } = useUI()
 
   const chosenCity = useMemo(() => {
@@ -17,6 +17,19 @@ const ChooseCityDropDown: FC = () => {
     if (cities) return cities[0]
     return null
   }, [cities, activeCity])
+
+  const changeCity = (city: City) => {
+    let link = pathname
+    Object.keys(query).map((k: string) => {
+      if (k == 'city') {
+        link = link.replace('[city]', city.slug)
+      } else {
+        link = link.replace(`[${k}]`, query[k]!.toString())
+      }
+    })
+    router.push(link)
+    setActiveCity(city)
+  }
 
   return (
     <Menu as="div" className="relative inline-block text-left">
@@ -52,16 +65,14 @@ const ChooseCityDropDown: FC = () => {
               {cities?.map((item: City) => (
                 <Menu.Item key={item.id}>
                   <span
-                    onClick={() => setActiveCity(item)}
+                    onClick={() => changeCity(item)}
                     className={`block px-4 py-2 text-sm cursor-pointer ${
                       chosenCity.id == item.id
                         ? 'bg-secondary text-white'
                         : 'text-secondary'
                     }`}
                   >
-                    {locale == 'uz'
-                      ? item.name_uz
-                      : item.name}
+                    {locale == 'uz' ? item.name_uz : item.name}
                   </span>
                 </Menu.Item>
               ))}

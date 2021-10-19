@@ -17,6 +17,7 @@ const config: LocalConfig = {
   cartCookie: '',
   customerCookie: '',
   cartCookieMaxAge: 2592000,
+  queryParams: {},
   fetch: createFetcher(() => getCommerceApi().getConfig()),
 }
 

@@ -20,9 +20,10 @@ export async function getServerSideProps({
   locale,
   locales,
   params,
+  query,
   ...context
 }: GetServerSidePropsContext) {
-  const config = { locale, locales }
+  const config = { locale, locales, queryParams: query }
   const productsPromise = commerce.getAllProducts({
     variables: { first: 6 },
     config,
@@ -34,8 +35,13 @@ export async function getServerSideProps({
   const siteInfoPromise = commerce.getSiteInfo({ config, preview })
   const { products } = await productsPromise
   const { pages } = await pagesPromise
-  const { categories, brands, topMenu, footerInfoMenu, socials } =
+  const { categories, brands, topMenu, footerInfoMenu, socials, currentCity } =
     await siteInfoPromise
+  if (!currentCity) {
+    return {
+      notFound: true,
+    }
+  }
 
   const { id } = params as IParams
 
@@ -67,6 +73,7 @@ export async function getServerSideProps({
       orderStatuses: orderStatuses.data ? orderStatuses.data : {},
       brands,
       pages,
+      currentCity,
       topMenu,
       footerInfoMenu,
       socials,

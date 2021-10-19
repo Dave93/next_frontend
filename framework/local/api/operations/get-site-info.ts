@@ -34,10 +34,15 @@ export default function getSiteInfoOperation({
     config?: Partial<LocalConfig>
     preview?: boolean
   } = {}): Promise<GetSiteInfoResult> {
+    console.log(config)
     const cfg = commerce.getConfig(config)
     const { footer_info: footerInfoMenu, header: topMenu } = await getMenus(cfg)
 
     const cities = await getCities(cfg)
+
+    const currentCity = cities.find(
+      (city: City) => city.slug == config?.queryParams?.city
+    )
 
     const categories = await getCategories(cfg)
 
@@ -47,6 +52,7 @@ export default function getSiteInfoOperation({
       topMenu,
       footerInfoMenu: footerInfoMenu || [],
       cities,
+      currentCity,
       socials: [
         {
           code: 'fb',

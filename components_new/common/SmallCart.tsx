@@ -36,7 +36,7 @@ const SmallCart: FC<SmallCartProps> = ({
     cartId,
   })
 
-  const { user, openSignInModal } = useUI()
+  const { user, openSignInModal, activeCity } = useUI()
 
   const [isCartLoading, setIsCartLoading] = useState(false)
 
@@ -207,11 +207,15 @@ const SmallCart: FC<SmallCartProps> = ({
       return
     }
     if (user) {
-      router.push('/cart/')
+      router.push(`/${activeCity.slug}/cart/`)
     } else {
-      router.push('/?backUrl=/cart/', undefined, {
-        shallow: true,
-      })
+      router.push(
+        `/${activeCity.slug}?backUrl=/${activeCity.slug}/cart/`,
+        undefined,
+        {
+          shallow: true,
+        }
+      )
       openSignInModal()
     }
   }

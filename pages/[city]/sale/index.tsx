@@ -6,39 +6,37 @@ import axios from 'axios'
 import menuItems from '@commerce/data/newsMenu'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
-import NewsItem from '@components_new/news/NewsItem'
+import SaleItem from '@components_new/sale/SaleItem'
 import useTranslation from 'next-translate/useTranslation'
 
 export async function getServerSideProps({
   preview,
   locale,
   locales,
+  query,
   ...context
 }: GetServerSidePropsContext) {
-  const config = { locale, locales }
+  const config = { locale, locales, queryParams: query }
   const siteInfoPromise = commerce.getSiteInfo({ config, preview })
-  const { categories, brands, topMenu, footerInfoMenu, socials, cities } =
-    await siteInfoPromise
+  const {
+    categories,
+    brands,
+    topMenu,
+    footerInfoMenu,
+    socials,
+    cities,
+    currentCity,
+  } = await siteInfoPromise
+  if (!currentCity) {
+    return {
+      notFound: true,
+    }
+  }
 
   const c = cookies(context)
 
-  let activeCity = null
-
-  let activeCityData: any = c.activeCity
-  try {
-    activeCityData = Buffer.from(activeCityData, 'base64')
-    activeCityData = activeCityData.toString()
-    activeCityData = JSON.parse(activeCityData)
-  } catch (e) {}
-
-  activeCity = activeCityData
-
-  if (!activeCity) {
-    activeCity = cities[0]
-  }
-
   const { data } = await axios.get(
-    `${process.env.API_URL}/api/news/public?city_id=${activeCity.id}`
+    `${process.env.API_URL}/api/sales/public?city_id=${currentCity.id}`
   )
 
   return {
@@ -48,14 +46,15 @@ export async function getServerSideProps({
       topMenu,
       footerInfoMenu,
       socials,
+      currentCity,
       cleanBackground: true,
       cities,
-      news: data.data,
+      sale: data.data,
     },
   }
 }
 
-export default function News({ news }: { news: any }) {
+export default function Sale({ sale }: { sale: any }) {
   const { t: tr } = useTranslation('common')
   const router = useRouter()
   const { locale, pathname } = router
@@ -90,15 +89,15 @@ export default function News({ news }: { news: any }) {
         ))}
       </div>
       <div className="md:grid grid-cols-3 gap-10 mx-5 md:mx-0">
-        {!news.length && (
+        {!sale.length && (
           <div className="col-span-3 text-2xl text-center">
-            {tr('yet_no_news')}
+            {tr('yet_no_sale')}
           </div>
         )}
-        <NewsItem newsItems={news} />
+        <SaleItem SaleItems={sale} />
       </div>
     </>
   )
 }
 
-News.Layout = Layout
+Sale.Layout = Layout
