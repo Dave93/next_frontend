@@ -3,11 +3,11 @@ import { Menu, Transition } from '@headlessui/react'
 import Image from 'next/image'
 import { useUI } from '@components/ui'
 import { City } from '@commerce/types/cities'
-import { useRouter } from 'next/router'
+import router, { useRouter } from 'next/router'
 
 const ChooseCityDropDown: FC = () => {
   const { cities, activeCity, setActiveCity } = useUI()
-  const { locale } = useRouter()
+  const { locale, pathname, query } = useRouter()
 
   const chosenCity = useMemo(() => {
     if (activeCity) {
@@ -16,6 +16,19 @@ const ChooseCityDropDown: FC = () => {
     if (cities) return cities[0]
     return null
   }, [cities, activeCity])
+
+  const changeCity = (city: City) => {
+    let link = pathname
+    Object.keys(query).map((k: string) => {
+      if (k == 'city') {
+        link = link.replace('[city]', city.slug)
+      } else {
+        link = link.replace(`[${k}]`, query[k]!.toString())
+      }
+    })
+    router.push(link)
+    setActiveCity(city)
+  }
 
   return (
     <Menu as="div">
@@ -53,7 +66,7 @@ const ChooseCityDropDown: FC = () => {
               {cities.map((item: City) => (
                 <Menu.Item key={item.id}>
                   <span
-                    onClick={() => setActiveCity(item)}
+                    onClick={() => changeCity(item)}
                     className={`block px-4 py-2 cursor-pointer text-xl ml-12`}
                   >
                     {item.name}

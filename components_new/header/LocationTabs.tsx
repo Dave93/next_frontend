@@ -37,7 +37,7 @@ import { useUI } from '@components/ui/context'
 import { toast } from 'react-toastify'
 import useTranslation from 'next-translate/useTranslation'
 import { City } from '@commerce/types/cities'
-import { useRouter } from 'next/router'
+import router, { useRouter } from 'next/router'
 
 const { publicRuntimeConfig } = getConfig()
 
@@ -47,7 +47,7 @@ interface Props {
 }
 
 const LocationTabs: FC<Props> = ({ setOpen }) => {
-  const { locale } = useRouter()
+  const { locale, pathname, query } = useRouter()
   const { locationData, setLocationData, cities, activeCity, setActiveCity } =
     useUI()
   const [tabIndex, setTabIndex] = useState(
@@ -192,6 +192,15 @@ const LocationTabs: FC<Props> = ({ setOpen }) => {
         inputValue: 'Узбекистан, ' + city.name + ',',
       })
     }
+    let link = pathname
+    Object.keys(query).map((k: string) => {
+      if (k == 'city') {
+        link = link.replace('[city]', city.slug)
+      } else {
+        link = link.replace(`[${k}]`, query[k]!.toString())
+      }
+    })
+    router.push(link)
     setActiveCity(city)
     if (city) setMapCenter([+city.lat, +city.lon])
   }
@@ -748,8 +757,12 @@ const LocationTabs: FC<Props> = ({ setOpen }) => {
                     ></div>
                   </div>
                   <div>
-                    <div className="font-bold">{locale == 'ru' ? point.name : point.name_uz}</div>
-                    <div className="text-gray-400 text-sm">{locale == 'ru' ? point.desc : point.desc_uz}</div>
+                    <div className="font-bold">
+                      {locale == 'ru' ? point.name : point.name_uz}
+                    </div>
+                    <div className="text-gray-400 text-sm">
+                      {locale == 'ru' ? point.desc : point.desc_uz}
+                    </div>
                   </div>
                 </div>
               ))}

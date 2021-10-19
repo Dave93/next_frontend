@@ -34,7 +34,7 @@ import debounce from 'lodash.debounce'
 import { useUI } from '@components/ui/context'
 import { toast } from 'react-toastify'
 import { City } from '@commerce/types/cities'
-import { useRouter } from 'next/router'
+import router, { useRouter } from 'next/router'
 
 const { publicRuntimeConfig } = getConfig()
 
@@ -44,7 +44,7 @@ interface MobLocationTabProps {
 }
 
 const MobLocationTabs: FC<MobLocationTabProps> = ({ setOpen }) => {
-  const { locale } = useRouter()
+  const { locale, pathname, query } = useRouter()
   const { locationData, setLocationData, cities, activeCity, setActiveCity } =
     useUI()
   const [tabIndex, setTabIndex] = useState(
@@ -187,6 +187,15 @@ const MobLocationTabs: FC<MobLocationTabProps> = ({ setOpen }) => {
         inputValue: 'Узбекистан, ' + city.name + ',',
       })
     }
+    let link = pathname
+    Object.keys(query).map((k: string) => {
+      if (k == 'city') {
+        link = link.replace('[city]', city.slug)
+      } else {
+        link = link.replace(`[${k}]`, query[k]!.toString())
+      }
+    })
+    router.push(link)
     setActiveCity(city)
     if (city) setMapCenter([+city.lat, +city.lon])
   }
@@ -760,8 +769,12 @@ const MobLocationTabs: FC<MobLocationTabProps> = ({ setOpen }) => {
                     ></div>
                   </div>
                   <div>
-                    <div className="font-bold">{locale == 'uz' ? point.name_uz : point.name}</div>
-                    <div className="text-gray-400 text-sm">{locale == 'uz' ? point.desc_uz : point.desc}</div>
+                    <div className="font-bold">
+                      {locale == 'uz' ? point.name_uz : point.name}
+                    </div>
+                    <div className="text-gray-400 text-sm">
+                      {locale == 'uz' ? point.desc_uz : point.desc}
+                    </div>
                   </div>
                 </div>
               ))}

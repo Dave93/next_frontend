@@ -6,7 +6,7 @@ import { Fragment, useEffect, useMemo } from 'react'
 import { useUI } from '@components/ui'
 import { City } from '@commerce/types/cities'
 import cookies from 'next-cookies'
-import { useRouter } from 'next/router'
+import router, { useRouter } from 'next/router'
 import useTranslation from 'next-translate/useTranslation'
 
 export async function getServerSideProps({
@@ -28,6 +28,7 @@ export async function getServerSideProps({
       },
     }
   }
+
   return {
     props: {
       categories,
@@ -52,64 +53,50 @@ export default function DevPage({ cities }: { cities: any }) {
     return null
   }, [cities, activeCity])
 
+  const changeCity = (city: City) => {
+    setActiveCity(city)
+    router.push(`/${city.slug}`)
+  }
+
   useEffect(() => {
     setCitiesData(cities)
   }, [])
 
   return (
-    <div className="bg-secondary w-full h-screen">
-      <div className="m-auto w-max pt-40">
+    <div className="bg-secondary md:w-full h-screen">
+      <div className="m-auto w-max">
         <Image src="/assets/footer_logo.svg " width={300} height={200} />
       </div>
-      <div className="m-auto w-96 bg-white rounded-2xl">
+      <div className="m-auto w-max mb-8 text-white md:text-5xl text-3xl">
+        {tr('choose_your_city')}
+      </div>
+      <div className="m-auto md:w-96 bg-white rounded-2xl w-max">
         <Menu as="div" className="text-center">
-          {({ open }) => (
-            <>
-              <div>
-                <Menu.Button className=" focus:outline-none font-medium inline-flex justify-center outline-none py-2 text-secondary w-full">
-                  {locale == 'uz' ? chosenCity?.name_uz : chosenCity?.name}
-                </Menu.Button>
-              </div>
-
-              <Transition
-                show={open}
-                as={Fragment}
-                enter="transition ease-out duration-100"
-                enterFrom="transform opacity-0 scale-95"
-                enterTo="transform opacity-100 scale-100"
-                leave="transition ease-in duration-75"
-                leaveFrom="transform opacity-100 scale-100"
-                leaveTo="transform opacity-0 scale-95"
-              >
-                <Menu.Items
-                  static
-                  className="cursor-pointer divide-gray-100 divide-y focus:outline-none  ring-1 ring-black ring-opacity-5 shadow-lg top-0 z-20"
-                >
-                  <Menu.Item>
-                    {({ active }) => (
-                      <span className="text-secondary block px-4 py-2 text-sm">
-                        {tr('your_city')}
-                      </span>
-                    )}
+          <>
+            <Transition
+              show={true}
+              as={Fragment}
+              enter="transition ease-out duration-100"
+              enterFrom="transform opacity-0 scale-95"
+              enterTo="transform opacity-100 scale-100"
+              leave="transition ease-in duration-75"
+              leaveFrom="transform opacity-100 scale-100"
+              leaveTo="transform opacity-0 scale-95"
+            >
+              <Menu.Items static>
+                {cities?.map((item: City) => (
+                  <Menu.Item key={item.id}>
+                    <span
+                      onClick={() => changeCity(item)}
+                      className={`block px-4 py-2 cursor-pointer text-3xl text-secondary hover:text-white hover:bg-secondary`}
+                    >
+                      {locale == 'uz' ? item.name_uz : item.name}
+                    </span>
                   </Menu.Item>
-                  {cities?.map((item: City) => (
-                    <Menu.Item key={item.id}>
-                      <span
-                        onClick={() => setActiveCity(item)}
-                        className={`block px-4 py-2 text-sm cursor-pointer ${
-                          chosenCity.id == item.id
-                            ? 'bg-secondary text-white'
-                            : 'text-secondary'
-                        }`}
-                      >
-                        {locale == 'uz' ? item.name_uz : item.name}
-                      </span>
-                    </Menu.Item>
-                  ))}
-                </Menu.Items>
-              </Transition>
-            </>
-          )}
+                ))}
+              </Menu.Items>
+            </Transition>
+          </>
         </Menu>
       </div>
     </div>
