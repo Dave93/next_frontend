@@ -50,7 +50,7 @@ export async function getServerSideProps({
   })
   const pagesPromise = commerce.getAllPages({ config, preview })
   const siteInfoPromise = commerce.getSiteInfo({ config, preview })
-  const { products } = await productsPromise
+  const { products }: { products: any[] } = await productsPromise
   const { pages } = await pagesPromise
   const {
     categories,
@@ -96,8 +96,10 @@ interface CategoriesType {
 export default function Home({
   products,
   categories,
-  cities,
-}: InferGetServerSidePropsType<typeof getServerSideProps>) {
+}: {
+  products: any[]
+  categories: any[]
+}) {
   const router = useRouter()
   const { locale } = router
   const [channelName, setChannelName] = useState('chopar')
