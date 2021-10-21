@@ -27,6 +27,12 @@ export async function getServerSideProps({
         destination: `/${c['city_slug']}`,
       },
     }
+  } else {
+    return {
+      redirect: {
+        destination: `/tashkent`,
+      },
+    }
   }
 
   return {

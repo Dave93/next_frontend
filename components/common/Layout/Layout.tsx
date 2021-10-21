@@ -1,5 +1,12 @@
 import cn from 'classnames'
-import React, { FC, useEffect, useMemo, useState } from 'react'
+import React, {
+  FC,
+  Fragment,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+} from 'react'
 import { useRouter } from 'next/router'
 import { CommerceProvider } from '@framework'
 import type { Page } from '@commerce/types/page'
@@ -28,6 +35,9 @@ import getConfig from 'next/config'
 import axios from 'axios'
 import { City } from '@commerce/types/cities'
 import { parsePhoneNumber } from 'libphonenumber-js'
+import { Dialog, Transition } from '@headlessui/react'
+import Cookies from 'js-cookie'
+import CityModal from './CityModal'
 const { publicRuntimeConfig } = getConfig()
 
 interface Props {
@@ -103,7 +113,6 @@ const Layout: FC<Props> = ({
     fetchConfig()
     setCitiesData(cities)
     document.body.className = cleanBackground ? 'bg-gray-100' : ''
-
     return
   }, [cleanBackground, currentCity])
 
@@ -291,6 +300,8 @@ const Layout: FC<Props> = ({
             </div>
           </footer>
         </div>
+
+        <CityModal cities={cities} />
       </div>
       <div className={cn(styles.root)}>
         {/* <Navbar links={navBarlinks} />
