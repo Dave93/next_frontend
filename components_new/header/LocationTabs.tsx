@@ -388,7 +388,7 @@ const LocationTabs: FC<Props> = ({ setOpen }) => {
         </button>
       </div>
       {tabIndex == 'deliver' && (
-        <div className="mt-8">
+        <div className="mt-2">
           <div className="flex justify-between">
             <div className="text-gray-400 font-bold text-[18px]">
               {tr('chooseLocation')}
@@ -439,7 +439,7 @@ const LocationTabs: FC<Props> = ({ setOpen }) => {
                 <Map
                   state={mapState}
                   width="100%"
-                  height="530px"
+                  height="35vh"
                   onClick={clickOnMap}
                   modules={[
                     'control.ZoomControl',
@@ -469,7 +469,7 @@ const LocationTabs: FC<Props> = ({ setOpen }) => {
               </div>
             </YMaps>
           </div>
-          <div className="mt-4">
+          <div className="mt-2">
             <form onSubmit={handleSubmit(onSubmit)}>
               <div className="font-bold text-[18px] text-gray-400">
                 {tr('order_address')}
@@ -565,7 +565,7 @@ const LocationTabs: FC<Props> = ({ setOpen }) => {
                 </div>
               </div>
 
-              <div className="mt-5">
+              <div className="mt-2">
                 <Disclosure defaultOpen={true}>
                   {({ open }) => (
                     <>
@@ -654,7 +654,7 @@ const LocationTabs: FC<Props> = ({ setOpen }) => {
         </div>
       )}
       {tabIndex == 'pickup' && (
-        <div className="mt-8">
+        <div className="mt-2">
           <div className="flex">
             <div className="font-bold text-[18px] text-gray-400">
               {tr('select_pizzeries')}
@@ -730,7 +730,7 @@ const LocationTabs: FC<Props> = ({ setOpen }) => {
               </YMaps> */}
             {/* )} */}
             {/* {pickupIndex == 2 && ( */}
-            <div className="gap-5 grid grid-cols-2">
+            <div className="gap-2 grid grid-cols-4">
               {pickupPoints.map((point) => (
                 <div
                   key={point.id}
@@ -769,7 +769,7 @@ const LocationTabs: FC<Props> = ({ setOpen }) => {
             </div>
             {/* )} */}
           </div>
-          <div className="flex mt-10 justify-end">
+          <div className="flex mt-2 justify-end">
             <button
               type="submit"
               className={`${

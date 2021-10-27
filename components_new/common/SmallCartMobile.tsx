@@ -253,7 +253,7 @@ const SmallCartMobile: FC = () => {
   return (
     <>
       <button
-        className="md:hidden fixed outline-none focus:outline-none top-24 right-4 divide-x flex w-20 px-2 bg-red-700 h-12 items-center justify-around rounded-full"
+        className="md:hidden fixed outline-none focus:outline-none bottom-20 right-4 divide-x flex w-20 px-2 bg-red-700 h-12 items-center justify-around rounded-full"
         onClick={goToCheckout}
       >
         <div className="flex">

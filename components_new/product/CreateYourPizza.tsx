@@ -22,13 +22,18 @@ import useTranslation from 'next-translate/useTranslation'
 type CreatePizzaProps = {
   sec: any
   channelName: string
+  isSmall?: boolean
 }
 
 const { publicRuntimeConfig } = getConfig()
 let webAddress = publicRuntimeConfig.apiUrl
 axios.defaults.withCredentials = true
 
-const CreateYourPizza: FC<CreatePizzaProps> = ({ sec, channelName }) => {
+const CreateYourPizza: FC<CreatePizzaProps> = ({
+  sec,
+  channelName,
+  isSmall,
+}) => {
   const { t: tr } = useTranslation('common')
   const router = useRouter()
   const { locale } = router
@@ -461,14 +466,26 @@ const CreateYourPizza: FC<CreatePizzaProps> = ({ sec, channelName }) => {
   return (
     <>
       <div className="gap-4 grid grid-cols-2 py-4 md:py-0 items-center justify-between md:flex md:flex-col">
-        <div className="text-center">
-          <div className="text-lg font-bold mb-2">
-            {tr('create_your_own_pizza')}
-          </div>
-          <div>
+        <img
+          src="/barbekyu.webp"
+          alt=""
+          className={`${isSmall ? 'absolute' : 'hidden'} -left-12 w-1/3 -top-8`}
+        />
+        <img
+          src="/bayram.webp"
+          alt=""
+          className={`${
+            isSmall ? 'absolute' : 'hidden'
+          } -right-12 w-1/3 -bottom-8`}
+        />
+        <div className="text-center z-10">
+          <div className={isSmall ? 'hidden' : ''}>
+            <div className="text-lg font-bold mb-2">
+              {tr('create_your_own_pizza')}
+            </div>
             <Image src="/createYourPizza.png" width="150" height="150" />
           </div>
-          <div className="mt-5">
+          <div className={isSmall ? '' : 'mt-5'}>
             <button
               className="bg-gray-100 focus:outline-none font-bold outline-none px-6 py-2 rounded-full text-center text-yellow uppercase"
               onClick={openModal}

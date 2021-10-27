@@ -103,14 +103,30 @@ export default function Home({
   const router = useRouter()
   const { locale } = router
   const [channelName, setChannelName] = useState('chopar')
+  const [isStickySmall, setIsStickySmall] = useState(false)
 
   const getChannel = async () => {
     const channelData = await defaultChannel()
     setChannelName(channelData.name)
   }
 
+  const hideCreatePizza = (e: any) => {
+    if (window.scrollY > 500) {
+      setIsStickySmall(true)
+    } else {
+      setIsStickySmall(false)
+    }
+  }
+
   useEffect(() => {
     getChannel()
+
+    window.addEventListener('scroll', hideCreatePizza)
+    return () => {
+      window.removeEventListener('scroll', hideCreatePizza)
+    }
+
+    // return () => document.removeEventListener('sticky-change', handleKeyUp)
   }, [])
 
   const readyProducts = useMemo(() => {
@@ -237,9 +253,13 @@ export default function Home({
             {halfModeProds.map((sec: any) => (
               <div
                 key={sec.id}
-                className="border border-yellow mt-4 px-5 py-7 relative rounded-[15px] bg-white shadow-sm hover:shadow-xl"
+                className="border transition-all overflow-hidden duration-500 border-yellow mt-4 px-5 py-7 relative rounded-[15px] bg-white shadow-sm hover:shadow-xl"
               >
-                <HalfPizzaNoSSR sec={sec} channelName={channelName} />
+                <HalfPizzaNoSSR
+                  sec={sec}
+                  channelName={channelName}
+                  isSmall={isStickySmall}
+                />
               </div>
             ))}
             <CartWithNoSSR channelName={channelName} />

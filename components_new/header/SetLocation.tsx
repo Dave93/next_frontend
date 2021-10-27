@@ -4,6 +4,7 @@ import { Dialog, Transition } from '@headlessui/react'
 import LocationTabs from './LocationTabs'
 import Image from 'next/image'
 import { useUI } from '@components/ui/context'
+import { XIcon } from '@heroicons/react/solid'
 
 const SetLocation: FC = () => {
   const { t: tr } = useTranslation('common')
@@ -64,7 +65,15 @@ const SetLocation: FC = () => {
               leaveFrom="opacity-100 translate-y-0 sm:scale-100"
               leaveTo="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
             >
-              <div className="inline-block align-bottom bg-white p-10 rounded-lg text-left shadow-xl transform transition-all sm:my-8 sm:align-middle container sm:w-full">
+              <div className="inline-block align-bottom bg-white p-5 rounded-lg text-left shadow-xl transform transition-all sm:my-8 sm:align-middle container sm:w-full">
+                <button
+                  className="absolute focus:outline-none outline-none -right-10 top-2"
+                  onClick={() => {
+                    setOpen(false)
+                  }}
+                >
+                  <XIcon className="cursor-pointer h-7 text-white w-7" />
+                </button>
                 <LocationTabs setOpen={setOpen} />
               </div>
             </Transition.Child>
