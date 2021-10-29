@@ -1,11 +1,14 @@
 import type { GetServerSidePropsContext } from 'next'
 import commerce from '@lib/api/commerce'
-import React, { useMemo, useState } from 'react'
+import React, { Fragment, useMemo, useState } from 'react'
 import Image from 'next/image'
 import { useRouter } from 'next/router'
 import { Ru, Uz } from 'react-flags-select'
 import { useUI } from '@components/ui/context'
 import Link from '@components/ui/Link'
+import { motion } from 'framer-motion'
+import { shuffle as lodashShuffle } from 'lodash'
+import { Dialog, Transition } from '@headlessui/react'
 
 export async function getServerSideProps({
   preview,
@@ -65,6 +68,40 @@ export default function Dev() {
   const { locale, pathname } = router
   const { activeCity, cities } = useUI()
   const [shuffle, setShuffle] = useState(false)
+  const [chosenCard, setChosenCard] = useState('')
+  const [isOpenCard, setIsOpenCard] = useState(false)
+  const [shuffleItems, setShuffleItems] = useState([
+    {
+      id: 45,
+      image: '/surprise/box.png',
+      name: 'пицца пепперони',
+    },
+    {
+      id: 46,
+      image: '/surprise/box.png',
+      name: ' Соca-cola 0,5 литр',
+    },
+    {
+      id: 47,
+      image: '/surprise/box.png',
+      name: 'греческий салат',
+    },
+    {
+      id: 48,
+      image: '/surprise/box.png',
+      name: 'пицца пепперони',
+    },
+    {
+      id: 49,
+      image: '/surprise/box.png',
+      name: ' Соca-cola 0,5 литр',
+    },
+    {
+      id: 50,
+      image: '/surprise/box.png',
+      name: 'греческий салат',
+    },
+  ])
 
   const chosenCity = useMemo(() => {
     if (activeCity) {
@@ -82,13 +119,32 @@ export default function Dev() {
     })
   }
 
+  const openCard = (sh: any) => {
+    if (shuffle) {
+      setChosenCard(sh)
+      setIsOpenCard(true)
+    }
+  }
+
+  const closeCard = () => {
+    router.push('/')
+  }
+
   const startShuffle = () => {
     setShuffle(true)
+    setTimeout(() => {
+      let items = lodashShuffle([...shuffleItems])
+      items = lodashShuffle(items)
+      items = lodashShuffle(items)
+      items = lodashShuffle(items)
+
+      setShuffleItems(items)
+    }, 300)
   }
 
   return (
     <div
-      className="h-screen w-screen bg-secondary px-36 py-4"
+      className="h-screen w-screen bg-secondary md:px-36 px-2 py-4 fixed overflow-auto"
       style={{
         backgroundImage: `url("/Union.png")`,
         backgroundSize: 'cover',
@@ -121,131 +177,104 @@ export default function Dev() {
           </a>
         </div>
       </div>
-      {!shuffle && (
+
+      {!shuffle ? (
         <div className="font-bold mt-5 text-4xl text-center text-white uppercase">
           Перемешайте чтобы{' '}
           <span className="text-yellow"> получить подарок</span>
         </div>
+      ) : (
+        !isOpenCard && (
+          <div className="font-bold mt-5 text-4xl text-center text-white uppercase">
+            Выберите один из коробок
+          </div>
+        )
       )}
 
-      <div className="grid grid-cols-4 gap-8 gap-y-28 relative mt-32">
-        <div className="bg-white rounded-3xl h-32 text-center relative">
-          <div className="ml-10 w-56 absolute -top-28">
-            <img
-              src={shuffle ? '/surprise/box.png' : '/surprise/2.png'}
-              alt=""
-            />
-          </div>
-          {!shuffle && (
-            <div className="text-xl font-bold absolute bottom-2 ml-auto w-full ">
-              пицца пепперони
-            </div>
-          )}
+      {!isOpenCard && (
+        <div className="grid md:grid-cols-4 gap-8 gap-y-28 relative mt-32">
+          {shuffleItems.map((sh, i) => (
+            <motion.div
+              className="bg-white rounded-3xl h-32 text-center relative"
+              key={sh.id}
+              layout
+              transition={{ type: 'spring', stiffness: 1000, damping: 25 }}
+              onClick={() => openCard(sh)}
+            >
+              <div className="ml-10 w-56 absolute -top-28">
+                <img src={shuffle ? sh.image : '/surprise/2.png'} alt="" />
+              </div>
+              {!shuffle && (
+                <div className="text-xl font-bold absolute bottom-2 ml-auto w-full ">
+                  {sh.name}
+                </div>
+              )}
+            </motion.div>
+          ))}
         </div>
-        <div className="bg-white rounded-3xl h-32 text-center relative">
-          <div className="ml-10 w-56 absolute -top-28">
-            <img
-              src={shuffle ? '/surprise/box.png' : '/surprise/3.png'}
-              alt=""
-            />
-          </div>
-          {!shuffle && (
-            <div className="text-xl font-bold absolute bottom-2 ml-auto w-full ">
-              Соca-cola 0,5 литр
-            </div>
-          )}
-        </div>
-        <div className="bg-white rounded-3xl h-32 text-center relative">
-          <div className="ml-10 w-56 absolute -top-28">
-            <img
-              src={shuffle ? '/surprise/box.png' : '/surprise/4.png'}
-              alt=""
-            />
-          </div>
-          {!shuffle && (
-            <div className="text-xl font-bold absolute bottom-2 ml-auto w-full">
-              греческий салат
-            </div>
-          )}
-        </div>
-        <div className="bg-white rounded-3xl h-32 text-center relative">
-          <div className="ml-10 w-56 absolute -top-28">
-            <img
-              src={shuffle ? '/surprise/box.png' : '/surprise/5.png'}
-              alt=""
-            />
-          </div>
-          {!shuffle && (
-            <div className="text-xl font-bold absolute bottom-2 ml-auto w-full">
-              салат цезарь
-            </div>
-          )}
-        </div>
-        <div className="bg-white rounded-3xl h-32 text-center relative">
-          <div className="ml-10 w-56 absolute -top-28">
-            <img
-              src={shuffle ? '/surprise/box.png' : '/surprise/6.png'}
-              alt=""
-            />
-          </div>
-          {!shuffle && (
-            <div className="text-xl font-bold absolute bottom-2 ml-auto w-full">
-              картофель по деревенски
-            </div>
-          )}
-        </div>
-        <div className="bg-white rounded-3xl h-32 text-center relative">
-          <div className="ml-10 w-56 absolute -top-28">
-            <img
-              src={shuffle ? '/surprise/box.png' : '/surprise/7.png'}
-              alt=""
-            />
-          </div>
-          {!shuffle && (
-            <div className="text-xl font-bold absolute bottom-2 ml-auto w-full">
-              Соca-cola 1 литр
-            </div>
-          )}
-        </div>
-        <div className="bg-white rounded-3xl h-32 text-center relative">
-          <div className="ml-10 w-56 absolute -top-28">
-            <img
-              src={shuffle ? '/surprise/box.png' : '/surprise/8.png'}
-              alt=""
-            />
-          </div>
-          {!shuffle && (
-            <div className="text-xl font-bold absolute bottom-2 ml-auto w-full">
-              пицца маргарита
-            </div>
-          )}
-        </div>
-        <div className="bg-white rounded-3xl h-32 text-center relative">
-          <div className="ml-10 w-56 absolute -top-28">
-            <img
-              src={shuffle ? '/surprise/box.png' : '/surprise/9.png'}
-              alt=""
-            />
-          </div>
-          {!shuffle && (
-            <div className="text-xl font-bold absolute bottom-2 ml-auto w-full">
-              шоколадная
-            </div>
-          )}
-        </div>
-      </div>
+      )}
       {!shuffle && (
         <div className="m-auto w-max mt-8">
           <button
             onClick={() => {
               startShuffle()
             }}
-            className="text-white text-4xl font-bold bg-yellow border-white border-2 rounded-full px-32 pt-1 pb-3"
+            className="text-white md:text-4xl text-2xl px-3 font-bold bg-yellow border-white border-2 rounded-full md:px-32 pt-1 pb-3"
           >
             перемешать
           </button>
         </div>
       )}
+      <Transition appear show={isOpenCard} as={Fragment}>
+        <Dialog
+          as="div"
+          className="fixed inset-0 z-10 overflow-y-auto"
+          onClose={() => { }}
+        >
+          <div className="min-h-screen px-4 text-center">
+            <Transition.Child
+              as={Fragment}
+              enter="ease-out duration-300"
+              enterFrom="opacity-0"
+              enterTo="opacity-100"
+              leave="ease-in duration-200"
+              leaveFrom="opacity-100"
+              leaveTo="opacity-0"
+            >
+              <Dialog.Overlay className="fixed inset-0" />
+            </Transition.Child>
+
+            {/* This element is to trick the browser into centering the modal contents. */}
+            <span
+              className="inline-block h-screen align-middle"
+              aria-hidden="true"
+            >
+              &#8203;
+            </span>
+            <div className="align-middle bg-white inline-block overflow-hidden px-20 py-10 rounded-2xl shadow-xl text-center transform transition-all">
+              <Dialog.Title
+                as="h3"
+                className="leading-6 md:text-6xl text-secondary md:w-72"
+              >
+                {chosenCard.name}
+              </Dialog.Title>
+              <img className="m-auto" src="/surprise/2.png" alt="" />
+              <div className="md:w-72 m-auto">
+                <span className="text-yellow">Поздравляем!</span>{' '}
+                <span className="font-bold">ваш выиграш</span> автоматическии
+                добавлен в корзину, что-бы продолжить покупку нажмите кнопку
+                “перейти в меню”
+              </div>
+              <button
+                onClick={() => closeCard()}
+                className="bg-secondary rounded-full px-12 py-3 text-xl text-white mt-3"
+              >
+                Перейти в меню
+              </button>
+            </div>
+          </div>
+        </Dialog>
+      </Transition>
     </div>
   )
 }
