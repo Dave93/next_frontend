@@ -73,32 +73,32 @@ export default function Dev() {
   const [shuffleItems, setShuffleItems] = useState([
     {
       id: 45,
-      image: '/surprise/box.png',
+      image: '/surprise/2.png',
       name: 'пицца пепперони',
     },
     {
       id: 46,
-      image: '/surprise/box.png',
+      image: '/surprise/3.png',
       name: ' Соca-cola 0,5 литр',
     },
     {
       id: 47,
-      image: '/surprise/box.png',
+      image: '/surprise/4.png',
       name: 'греческий салат',
     },
     {
       id: 48,
-      image: '/surprise/box.png',
+      image: '/surprise/2.png',
       name: 'пицца пепперони',
     },
     {
       id: 49,
-      image: '/surprise/box.png',
-      name: ' Соca-cola 0,5 литр',
+      image: '/surprise/7.png',
+      name: ' Соca-cola 1,5 литр',
     },
     {
       id: 50,
-      image: '/surprise/box.png',
+      image: '/surprise/4.png',
       name: 'греческий салат',
     },
   ])
@@ -135,11 +135,20 @@ export default function Dev() {
     setTimeout(() => {
       let items = lodashShuffle([...shuffleItems])
       items = lodashShuffle(items)
-      items = lodashShuffle(items)
+      // items = lodashShuffle(items)
       items = lodashShuffle(items)
 
       setShuffleItems(items)
-    }, 300)
+
+      setTimeout(() => {
+        items = lodashShuffle([...items])
+        items = lodashShuffle(items)
+        // items = lodashShuffle(items)
+        items = lodashShuffle(items)
+
+        setShuffleItems(items)
+      }, 200)
+    }, 600)
   }
 
   return (
@@ -192,17 +201,17 @@ export default function Dev() {
       )}
 
       {!isOpenCard && (
-        <div className="grid md:grid-cols-4 gap-8 gap-y-28 relative mt-32">
+        <div className="grid md:grid-cols-3 lg:grid-cols-4 grid-cols-2 gap-8 gap-y-28 relative mt-32">
           {shuffleItems.map((sh, i) => (
             <motion.div
               className="bg-white rounded-3xl h-32 text-center relative"
               key={sh.id}
               layout
-              transition={{ type: 'spring', stiffness: 1000, damping: 25 }}
+              transition={{ type: 'spring' }}
               onClick={() => openCard(sh)}
             >
-              <div className="ml-10 w-56 absolute -top-28">
-                <img src={shuffle ? sh.image : '/surprise/2.png'} alt="" />
+              <div className="lg:ml-10 md:-top-24 absolute lg:-top-28 lg:w-56 w-56 md:w-auto -top-32">
+                <img src={shuffle ? '/surprise/box.png' : sh.image} alt="" />
               </div>
               {!shuffle && (
                 <div className="text-xl font-bold absolute bottom-2 ml-auto w-full ">
@@ -256,9 +265,9 @@ export default function Dev() {
                 as="h3"
                 className="leading-6 md:text-6xl text-secondary md:w-72"
               >
-                {chosenCard.name}
+                {chosenCard?.name}
               </Dialog.Title>
-              <img className="m-auto" src="/surprise/2.png" alt="" />
+              <img className="m-auto" src={chosenCard?.image} alt="" />
               <div className="md:w-72 m-auto">
                 <span className="text-yellow">Поздравляем!</span>{' '}
                 <span className="font-bold">ваш выиграш</span> автоматическии
