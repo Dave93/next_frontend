@@ -24,7 +24,7 @@ import {
   MapStateBase,
   MapStateCenter,
 } from 'react-yandex-maps'
-import { useForm } from 'react-hook-form'
+import { useForm, SubmitHandler } from 'react-hook-form'
 import Image from 'next/image'
 import useTranslation from 'next-translate/useTranslation'
 import getConfig from 'next/config'
@@ -41,6 +41,10 @@ const { publicRuntimeConfig } = getConfig()
 let webAddress = publicRuntimeConfig.apiUrl
 interface MobLocationTabProps {
   setOpen: Dispatch<SetStateAction<boolean>>
+}
+
+interface AnyObject {
+  [key: string]: any
 }
 
 const MobLocationTabs: FC<MobLocationTabProps> = ({ setOpen }) => {
@@ -96,15 +100,16 @@ const MobLocationTabs: FC<MobLocationTabProps> = ({ setOpen }) => {
     }
   }
 
-  const { register, handleSubmit, getValues, setValue, watch } = useForm({
-    defaultValues: {
-      address: locationData?.address || currentAddress,
-      flat: locationData?.flat || '',
-      house: locationData?.house || '',
-      entrance: locationData?.entrance || '',
-      door_code: locationData?.door_code || '',
-    },
-  })
+  const { register, handleSubmit, getValues, setValue, watch } =
+    useForm<AnyObject>({
+      defaultValues: {
+        address: locationData?.address || currentAddress,
+        flat: locationData?.flat || '',
+        house: locationData?.house || '',
+        entrance: locationData?.entrance || '',
+        door_code: locationData?.door_code || '',
+      },
+    })
 
   const changeTabIndex = async (index: string) => {
     setLocationData({ ...locationData, deliveryType: index })
@@ -272,7 +277,7 @@ const MobLocationTabs: FC<MobLocationTabProps> = ({ setOpen }) => {
     return res
   }, [mapCenter, mapZoom, activeCity])
 
-  const onSubmit = (data: Object) => {
+  const onSubmit: SubmitHandler<AnyObject> = (data) => {
     saveDeliveryData(data, null)
   }
 

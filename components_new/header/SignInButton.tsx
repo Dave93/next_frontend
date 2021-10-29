@@ -2,7 +2,7 @@ import React, { Fragment, useState, memo, useRef, FC, useMemo } from 'react'
 import { Dialog, Transition } from '@headlessui/react'
 import useTranslation from 'next-translate/useTranslation'
 import { XIcon } from '@heroicons/react/outline'
-import { useForm, Controller } from 'react-hook-form'
+import { useForm, Controller, SubmitHandler } from 'react-hook-form'
 import OtpInput from 'react-otp-input'
 import axios from 'axios'
 import Cookies from 'js-cookie'
@@ -71,7 +71,7 @@ const SignInButton: FC = () => {
     formState,
     getValues,
     control,
-  } = useForm({
+  } = useForm<AnyObject>({
     mode: 'onChange',
   })
 
@@ -107,7 +107,7 @@ const SignInButton: FC = () => {
   } = useForm({
     mode: 'onChange',
   })
-  const onSubmit = async (data: Object) => {
+  const onSubmit: SubmitHandler<AnyObject> = async (data) => {
     setSubmitError('')
     const csrfReq = await axios(`${publicRuntimeConfig.apiUrl}/api/keldi`, {
       method: 'GET',
@@ -163,7 +163,7 @@ const SignInButton: FC = () => {
     }
   }
 
-  const submitPasswordForm = async (data: React.SyntheticEvent) => {
+  const submitPasswordForm: SubmitHandler<AnyObject> = async (data) => {
     setSubmitError('')
     const otpToken = Cookies.get('opt_token')
     let ress = await axios.post(
@@ -396,7 +396,7 @@ const SignInButton: FC = () => {
                                         value={value}
                                         className="border border-yellow focus:outline-none outline-none px-6 py-3 rounded-full text-sm w-full"
                                         onChange={(e: any) => onChange(e)}
-                                        onKeyDown={(e) => {
+                                        onKeyDown={(e: any) => {
                                           if (e.key == 'Enter') {
                                             e.preventDefault()
                                             handleSubmit(onSubmit)()

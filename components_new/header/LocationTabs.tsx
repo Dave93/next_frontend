@@ -26,7 +26,7 @@ import {
   MapStateCenter,
   PlacemarkGeometry,
 } from 'react-yandex-maps'
-import { useForm } from 'react-hook-form'
+import { useForm, SubmitHandler } from 'react-hook-form'
 import Autosuggest from 'react-autosuggest'
 import useSWR from 'swr'
 import getConfig from 'next/config'
@@ -44,6 +44,10 @@ const { publicRuntimeConfig } = getConfig()
 let webAddress = publicRuntimeConfig.apiUrl
 interface Props {
   setOpen?: any
+}
+
+interface AnyObject {
+  [key: string]: any
 }
 
 const LocationTabs: FC<Props> = ({ setOpen }) => {
@@ -101,15 +105,16 @@ const LocationTabs: FC<Props> = ({ setOpen }) => {
     }
   }
 
-  const { register, handleSubmit, getValues, setValue, watch } = useForm({
-    defaultValues: {
-      address: locationData?.address || currentAddress,
-      flat: locationData?.flat || '',
-      house: locationData?.house || '',
-      entrance: locationData?.entrance || '',
-      door_code: locationData?.door_code || '',
-    },
-  })
+  const { register, handleSubmit, getValues, setValue, watch } =
+    useForm<AnyObject>({
+      defaultValues: {
+        address: locationData?.address || currentAddress,
+        flat: locationData?.flat || '',
+        house: locationData?.house || '',
+        entrance: locationData?.entrance || '',
+        door_code: locationData?.door_code || '',
+      },
+    })
 
   const changeTabIndex = async (index: string) => {
     setLocationData({ ...locationData, deliveryType: index })
@@ -277,7 +282,7 @@ const LocationTabs: FC<Props> = ({ setOpen }) => {
     return res
   }, [mapCenter, mapZoom, activeCity])
 
-  const onSubmit = (data: Object) => {
+  const onSubmit: SubmitHandler<AnyObject> = (data) => {
     saveDeliveryData(data, null)
   }
 
