@@ -88,7 +88,7 @@ export default function Dev() {
   }
   return (
     <div
-      className="w-screen bg-secondary px-36 py-4 h-screen"
+      className="w-screen bg-secondary md:px-36 px-2 py-4 h-screen fixed overflow-auto"
       style={{
         backgroundImage: `url("/Union.png")`,
         backgroundSize: 'cover',
@@ -123,36 +123,41 @@ export default function Dev() {
           </a>
         </div>
       </div>
-      <div className="flex">
+      <div className="xl:flex">
         <div>
-          <div className="mt-20 text-5xl">
+          <div className="md:mt-20 text-5xl">
             <span className="text-yellow">CHOPAR</span> ДАРИТ
           </div>
-          <div className="text-8xl font-black text-white mt-2">ПОДАРКИ</div>
-          <div className="text-white w-[400px] mt-10">
+          <div className="md:text-8xl text-2xl font-black text-white mt-2">
+            ПОДАРКИ
+          </div>
+          <div className="text-white md:w-[400px] mt-10">
             Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas
             pulvinar ullamcorper lorem tristique suscipit. Vestibulum ut tortor
             tincidunt, dictum risus non, pellentesque erat. Vestibulum efficitur
             sapien odio, at sagittis nulla
           </div>
+          <button
+            onClick={() => {
+              router.push(asPath + '/' + 'start')
+            }}
+            className="h-32 md:w-[500px] w-full"
+            style={{
+              backgroundImage: `url("/surpriseButton.png")`,
+              backgroundRepeat: 'no-repeat',
+            }}
+          >
+            <div className="text-white md:text-3xl font-bold">
+              ПОЛУЧИТЬ ПОДАРОК
+            </div>
+          </button>
         </div>
 
         <div className="ml-auto">
           <img src="/surpriseMainLogo.png" alt="" width="550" />
         </div>
       </div>
-      <button
-        onClick={() => {
-          router.push(asPath + '/' + 'start')
-        }}
-        className="h-32 md:w-[500px] absolute bottom-40 left-24"
-        style={{
-          backgroundImage: `url("/surpriseButton.png")`,
-          backgroundRepeat: 'no-repeat',
-        }}
-      >
-        <div className="text-white text-3xl font-bold">ПОЛУЧИТЬ ПОДАРОК</div>
-      </button>
+
       <div className="text-white flex justify-between w-32 items-center h-14">
         <a
           target="_blank"
