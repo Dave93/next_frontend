@@ -363,7 +363,7 @@ const Cart: FC<CartProps> = ({ channelName }: { channelName: any }) => {
         )}
       </div>
       <div className="border border-yellow mt-3 p-5 rounded-[15px]">
-        <form onSubmit={handleSubmit(onSubmit)} className="relative">
+        <form className="relative">
           <input
             type="text"
             placeholder={tr('promocode')}
