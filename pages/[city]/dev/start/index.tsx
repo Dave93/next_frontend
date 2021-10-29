@@ -68,7 +68,7 @@ export default function Dev() {
   const { locale, pathname } = router
   const { activeCity, cities } = useUI()
   const [shuffle, setShuffle] = useState(false)
-  const [chosenCard, setChosenCard] = useState('')
+  const [chosenCard, setChosenCard] = useState(null as any)
   const [isOpenCard, setIsOpenCard] = useState(false)
   const [shuffleItems, setShuffleItems] = useState([
     {
@@ -229,7 +229,7 @@ export default function Dev() {
         <Dialog
           as="div"
           className="fixed inset-0 z-10 overflow-y-auto"
-          onClose={() => { }}
+          onClose={() => {}}
         >
           <div className="min-h-screen px-4 text-center">
             <Transition.Child

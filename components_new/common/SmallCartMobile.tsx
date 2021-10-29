@@ -1,6 +1,14 @@
-import { FC, Fragment, memo, useMemo, useRef, useState } from 'react'
+import {
+  FC,
+  Fragment,
+  memo,
+  useMemo,
+  useRef,
+  useState,
+  useCallback,
+} from 'react'
 import useCart from '@framework/cart/use-cart'
-import { useForm, Controller } from 'react-hook-form'
+import { useForm, Controller, SubmitHandler } from 'react-hook-form'
 import Image from 'next/image'
 import { XIcon, MinusIcon, PlusIcon } from '@heroicons/react/solid'
 import currency from 'currency.js'
@@ -77,7 +85,7 @@ const SmallCartMobile: FC = () => {
     formState,
     getValues,
     control,
-  } = useForm({
+  } = useForm<AnyObject>({
     mode: 'onChange',
   })
 
@@ -110,10 +118,10 @@ const SmallCartMobile: FC = () => {
     register: passwordFormRegister,
     handleSubmit: handlePasswordSubmit,
     formState: passwordFormState,
-  } = useForm({
+  } = useForm<AnyObject>({
     mode: 'onChange',
   })
-  const onSubmit = async (data: Object) => {
+  const onSubmit: SubmitHandler<AnyObject> = async (data) => {
     setSubmitError('')
     const csrfReq = await axios(`${publicRuntimeConfig.apiUrl}/api/keldi`, {
       method: 'GET',
@@ -169,7 +177,7 @@ const SmallCartMobile: FC = () => {
     }
   }
 
-  const submitPasswordForm = async (data: React.SyntheticEvent) => {
+  const submitPasswordForm: SubmitHandler<AnyObject> = async (data) => {
     setSubmitError('')
     const otpToken = Cookies.get('opt_token')
     let ress = await axios.post(
@@ -403,7 +411,7 @@ const SmallCartMobile: FC = () => {
                                     value={value}
                                     className="border border-yellow focus:outline-none outline-none px-6 py-3 rounded-full text-sm w-full"
                                     onChange={(e: any) => onChange(e)}
-                                    onKeyDown={(e) => {
+                                    onKeyDown={(e: any) => {
                                       if (e.key == 'Enter') {
                                         e.preventDefault()
                                         handleSubmit(onSubmit)()
