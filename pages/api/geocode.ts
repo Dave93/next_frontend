@@ -2,7 +2,7 @@ import axios from 'axios'
 
 export default async function handler(req: any, res: any) {
   const {
-    query: { text },
+    query: { text, bounds },
   } = req
 
   if (!text) {
@@ -18,10 +18,14 @@ export default async function handler(req: any, res: any) {
     configData = JSON.parse(configData)
   } catch (e) {}
 
+  let boundsArray = bounds.split(',')
+
   const { data: getCodeData } = await axios.get(
     `https://geocode-maps.yandex.ru/1.x/?apikey=${
       configData.yandexGeoKey
-    }&geocode=${encodeURI(text)}&format=json`
+    }&geocode=${encodeURI(text)}&bbox=${boundsArray[0]},${boundsArray[1]}~${
+      boundsArray[2]
+    },${boundsArray[3]}&format=json`
   )
 
   let result = [] as any[]
