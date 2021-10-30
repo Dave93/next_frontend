@@ -21,11 +21,7 @@ type SmallCartProps = {
   channelName: any
 }
 
-const SmallCart: FC<SmallCartProps> = ({
-  channelName,
-}: {
-  channelName: any
-}) => {
+const SmallCart: FC<SmallCartProps> = ({ channelName }) => {
   const { t: tr } = useTranslation('common')
   let cartId: string | null = null
   if (typeof window !== 'undefined') {
