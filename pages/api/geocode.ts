@@ -1,6 +1,7 @@
 import axios from 'axios'
+import { withSentry } from '@sentry/nextjs'
 
-export default async function handler(req: any, res: any) {
+const handler = async function handler(req: any, res: any) {
   const {
     query: { text, bounds },
   } = req
@@ -54,3 +55,5 @@ export default async function handler(req: any, res: any) {
 
   res.status(200).json(result)
 }
+
+export default withSentry(handler)
