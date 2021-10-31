@@ -25,6 +25,7 @@ import {
   MapStateBase,
   MapStateCenter,
   PlacemarkGeometry,
+  Polygon,
 } from 'react-yandex-maps'
 import { useForm, SubmitHandler } from 'react-hook-form'
 import Autosuggest from 'react-autosuggest'
@@ -38,6 +39,7 @@ import { toast } from 'react-toastify'
 import useTranslation from 'next-translate/useTranslation'
 import { City } from '@commerce/types/cities'
 import router, { useRouter } from 'next/router'
+import { chunk, sortBy } from 'lodash'
 
 const { publicRuntimeConfig } = getConfig()
 
@@ -64,6 +66,9 @@ const LocationTabs: FC<Props> = ({ setOpen }) => {
   const [isSearchingTerminals, setIsSearchingTerminals] = useState(false)
 
   const downshiftControl = useRef<any>(null)
+  const map = useRef<any>(null)
+  const [ymaps, setYmaps] = useState<any>(null)
+  const objects = useRef<any>(null)
 
   const [selectedCoordinates, setSelectedCoordinates] = useState(
     locationData && locationData.location
@@ -93,8 +98,6 @@ const LocationTabs: FC<Props> = ({ setOpen }) => {
   )
 
   const [configData, setConfigData] = useState({} as any)
-
-  // console.log(activeCity)
 
   let currentAddress = ''
   if (activeCity.active) {
@@ -235,10 +238,36 @@ const LocationTabs: FC<Props> = ({ setOpen }) => {
       }
     })
   }
+  const changeCity = (city: City) => {
+    let link = pathname
+    Object.keys(query).map((k: string) => {
+      if (k == 'city') {
+        link = link.replace('[city]', city.slug)
+      } else {
+        link = link.replace(`[${k}]`, query[k]!.toString())
+      }
+    })
+    router.push(link)
+    setActiveCity(city)
+  }
 
   const clickOnMap = async (event: any) => {
     const coords = event.get('coords')
-    setMapCenter(coords)
+    let polygon = objects.current.searchContaining(coords).get(0)
+    if (!polygon) {
+      toast.warn(tr('point_delivery_not_available'), {
+        position: toast.POSITION.BOTTOM_RIGHT,
+        hideProgressBar: true,
+      })
+      return
+    } else {
+      let pickedCity = cities.find(
+        (city: City) => city.slug == polygon.properties._data.slug
+      )
+
+      changeCity(pickedCity)
+    }
+    // setMapCenter(coords)
     setSelectedCoordinates([
       {
         key: `${coords[0]}${coords[1]}`,
@@ -352,6 +381,54 @@ const LocationTabs: FC<Props> = ({ setOpen }) => {
     }
   }
 
+  const loadPolygonsToMap = (ymaps: any) => {
+    setYmaps(ymaps)
+    let geoObjects: any = {
+      type: 'FeatureCollection',
+      metadata: {
+        name: 'delivery',
+        creator: 'Yandex Map Constructor',
+      },
+      features: [],
+    }
+    cities.map((city: any) => {
+      if (city.polygons) {
+        let arrPolygons = city.polygons.split(',').map((poly: any) => +poly)
+        arrPolygons = chunk(arrPolygons, 2)
+        arrPolygons = arrPolygons.map((poly: any) => sortBy(poly))
+        let polygon: any = {
+          type: 'Feature',
+          id: 0,
+          geometry: {
+            type: 'Polygon',
+            coordinates: [arrPolygons],
+          },
+          properties: {
+            fill: '#FAAF04',
+            fillOpacity: 0.5,
+            stroke: '#FAAF04',
+            strokeWidth: '0',
+            strokeOpacity: 0,
+            slug: city.slug,
+          },
+        }
+        geoObjects.features.push(polygon)
+      }
+    })
+    let deliveryZones = ymaps.geoQuery(geoObjects).addToMap(map.current)
+    deliveryZones.each((obj: any) => {
+      obj.options.set({
+        fillColor: obj.properties.get('fill'),
+        fillOpacity: obj.properties.get('fillOpacity'),
+        strokeColor: obj.properties.get('stroke'),
+        strokeWidth: obj.properties.get('strokeWidth'),
+        strokeOpacity: obj.properties.get('strokeOpacity'),
+      })
+      obj.events.add('click', clickOnMap)
+    })
+    objects.current = deliveryZones
+  }
+
   const submitPickup = () => {
     if (!activePoint) {
       toast.warn(`${tr('pickup_point_not_selected')}`, {
@@ -445,6 +522,8 @@ const LocationTabs: FC<Props> = ({ setOpen }) => {
               <div>
                 <Map
                   state={mapState}
+                  onLoad={(ymaps: any) => loadPolygonsToMap(ymaps)}
+                  instanceRef={(ref) => (map.current = ref)}
                   width="100%"
                   height="35vh"
                   onClick={clickOnMap}
@@ -452,6 +531,7 @@ const LocationTabs: FC<Props> = ({ setOpen }) => {
                     'control.ZoomControl',
                     'control.FullscreenControl',
                     'control.GeolocationControl',
+                    'geoQuery',
                   ]}
                 >
                   {selectedCoordinates.map((item: any, index: number) => (

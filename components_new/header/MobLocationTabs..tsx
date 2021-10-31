@@ -35,6 +35,7 @@ import { useUI } from '@components/ui/context'
 import { toast } from 'react-toastify'
 import { City } from '@commerce/types/cities'
 import router, { useRouter } from 'next/router'
+import { chunk, sortBy } from 'lodash'
 
 const { publicRuntimeConfig } = getConfig()
 
@@ -48,6 +49,7 @@ interface AnyObject {
 }
 
 const MobLocationTabs: FC<MobLocationTabProps> = ({ setOpen }) => {
+  const { t: tr } = useTranslation('common')
   const { locale, pathname, query } = useRouter()
   const { locationData, setLocationData, cities, activeCity, setActiveCity } =
     useUI()
@@ -58,6 +60,9 @@ const MobLocationTabs: FC<MobLocationTabProps> = ({ setOpen }) => {
   const [pickupPoints, setPickupPoint] = useState([] as any[])
 
   const downshiftControl = useRef<any>(null)
+  const map = useRef<any>(null)
+  const [ymaps, setYmaps] = useState<any>(null)
+  const objects = useRef<any>(null)
   const [geoSuggestions, setGeoSuggestions] = useState([])
   const [isSearchingTerminals, setIsSearchingTerminals] = useState(false)
 
@@ -231,8 +236,35 @@ const MobLocationTabs: FC<MobLocationTabProps> = ({ setOpen }) => {
     })
   }
 
+  const changeCity = (city: City) => {
+    let link = pathname
+    Object.keys(query).map((k: string) => {
+      if (k == 'city') {
+        link = link.replace('[city]', city.slug)
+      } else {
+        link = link.replace(`[${k}]`, query[k]!.toString())
+      }
+    })
+    router.push(link)
+    setActiveCity(city)
+  }
+
   const clickOnMap = async (event: any) => {
     const coords = event.get('coords')
+    let polygon = objects.current.searchContaining(coords).get(0)
+    if (!polygon) {
+      toast.warn(tr('point_delivery_not_available'), {
+        position: toast.POSITION.BOTTOM_RIGHT,
+        hideProgressBar: true,
+      })
+      return
+    } else {
+      let pickedCity = cities.find(
+        (city: City) => city.slug == polygon.properties._data.slug
+      )
+
+      changeCity(pickedCity)
+    }
     setMapCenter(coords)
     setSelectedCoordinates([
       {
@@ -359,7 +391,53 @@ const MobLocationTabs: FC<MobLocationTabProps> = ({ setOpen }) => {
     setOpen(false)
   }
 
-  const { t: tr } = useTranslation('common')
+  const loadPolygonsToMap = (ymaps: any) => {
+    setYmaps(ymaps)
+    let geoObjects: any = {
+      type: 'FeatureCollection',
+      metadata: {
+        name: 'delivery',
+        creator: 'Yandex Map Constructor',
+      },
+      features: [],
+    }
+    cities.map((city: any) => {
+      if (city.polygons) {
+        let arrPolygons = city.polygons.split(',').map((poly: any) => +poly)
+        arrPolygons = chunk(arrPolygons, 2)
+        arrPolygons = arrPolygons.map((poly: any) => sortBy(poly))
+        let polygon: any = {
+          type: 'Feature',
+          id: 0,
+          geometry: {
+            type: 'Polygon',
+            coordinates: [arrPolygons],
+          },
+          properties: {
+            fill: '#FAAF04',
+            fillOpacity: 0.5,
+            stroke: '#FAAF04',
+            strokeWidth: '0',
+            strokeOpacity: 0,
+            slug: city.slug,
+          },
+        }
+        geoObjects.features.push(polygon)
+      }
+    })
+    let deliveryZones = ymaps.geoQuery(geoObjects).addToMap(map.current)
+    deliveryZones.each((obj: any) => {
+      obj.options.set({
+        fillColor: obj.properties.get('fill'),
+        fillOpacity: obj.properties.get('fillOpacity'),
+        strokeColor: obj.properties.get('stroke'),
+        strokeWidth: obj.properties.get('strokeWidth'),
+        strokeOpacity: obj.properties.get('strokeOpacity'),
+      })
+      obj.events.add('click', clickOnMap)
+    })
+    objects.current = deliveryZones
+  }
 
   const chosenCity = useMemo(() => {
     if (activeCity) {
@@ -446,6 +524,8 @@ const MobLocationTabs: FC<MobLocationTabProps> = ({ setOpen }) => {
               <div>
                 <Map
                   state={mapState}
+                  onLoad={(ymaps: any) => loadPolygonsToMap(ymaps)}
+                  instanceRef={(ref) => (map.current = ref)}
                   width="100%"
                   height="270px"
                   onClick={clickOnMap}
@@ -453,6 +533,7 @@ const MobLocationTabs: FC<MobLocationTabProps> = ({ setOpen }) => {
                     'control.ZoomControl',
                     'control.FullscreenControl',
                     'control.GeolocationControl',
+                    'geoQuery',
                   ]}
                 >
                   {selectedCoordinates.map((item: any, index: number) => (
