@@ -8,6 +8,7 @@ import Link from 'next/link'
 import { useRouter } from 'next/router'
 import NewsItem from '@components_new/news/NewsItem'
 import useTranslation from 'next-translate/useTranslation'
+import { useUI } from '@components/ui/context'
 
 export async function getServerSideProps({
   preview,
@@ -55,6 +56,7 @@ export async function getServerSideProps({
 export default function News({ news }: { news: any }) {
   const { t: tr } = useTranslation('common')
   const router = useRouter()
+  const { activeCity } = useUI()
   const { locale, pathname } = router
   let items = menuItems.map((item) => {
     return {
@@ -65,26 +67,33 @@ export default function News({ news }: { news: any }) {
   return (
     <>
       <div className="flex items-center justify-center md:my-10 space-x-6 py-6 md:py-0">
-        {items.map((item, id) => (
-          <div key={id} className="flex items-center md:ml-10 ">
-            <img
-              src={`${
-                pathname.indexOf(item.href) >= 0 ? item.activeIcon : item.icon
-              }`}
-            />
-            <Link href={item.href} locale={locale} prefetch={false}>
-              <a
-                className={`${
-                  pathname.indexOf(item.href) >= 0
-                    ? 'text-yellow'
-                    : 'text-gray-400'
-                } ml-1 text-sm`}
-              >
-                {item.name}
-              </a>
-            </Link>
-          </div>
-        ))}
+        {items.map((item, id) => {
+          let href = `${item.href}`
+
+          if (href.indexOf('http') < 0) {
+            href = `/${activeCity.slug}${item.href}`
+          }
+          return (
+            <div key={id} className="flex items-center md:ml-10 ">
+              <img
+                src={`${
+                  pathname.indexOf(item.href) >= 0 ? item.activeIcon : item.icon
+                }`}
+              />
+              <Link href={href} locale={locale} prefetch={false}>
+                <a
+                  className={`${
+                    pathname.indexOf(item.href) >= 0
+                      ? 'text-yellow'
+                      : 'text-gray-400'
+                  } ml-1 text-sm`}
+                >
+                  {item.name}
+                </a>
+              </Link>
+            </div>
+          )
+        })}
       </div>
       <div className="md:grid grid-cols-3 gap-10 mx-5 md:mx-0">
         {!news.length && (

@@ -520,7 +520,7 @@ const CreateYourPizza: FC<CreatePizzaProps> = ({ sec, channelName }) => {
               <div className="bg-white p-4 text-left transform h-screen overflow-y-auto w-full overflow-hidden fixed top-0">
                 {isSecondPage ? (
                   <>
-                    <div className="flex fixed w-full max-h-10 flex-col">
+                    <div className="flex my-2 w-full max-h-10 flex-col">
                       <div className="flex w-full items-center">
                         <span
                           onClick={() => setIsSecondPage(false)}
@@ -534,7 +534,7 @@ const CreateYourPizza: FC<CreatePizzaProps> = ({ sec, channelName }) => {
                         </span>
                       </div>
                     </div>
-                    <div className="mt-10 h-[calc(100%-100px)] overflow-hidden overflow-y-auto">
+                    <div className="h-[calc(100vh-180px)] overflow-hidden overflow-y-auto">
                       <div
                         className="h-80 w-80 mx-auto bg-cover flex relative"
                         style={{ backgroundImage: 'url(/createYourPizza.png)' }}
@@ -687,14 +687,14 @@ const CreateYourPizza: FC<CreatePizzaProps> = ({ sec, channelName }) => {
                     <div className="w-full pt-3">
                       {!activeModifiers.length ? (
                         <button
-                          className="bg-gray-300 w-full rounded-3xl cursor-not-allowed px-10 py-2 text-white mt-7"
+                          className="bg-gray-300 w-full rounded-3xl cursor-not-allowed px-10 py-2 text-white"
                           ref={completeButtonRef}
                         >
                           {tr('main_to_basket')}
                         </button>
                       ) : (
                         <button
-                          className="bg-yellow w-full rounded-3xl px-10 py-2 text-white mt-7 flex items-center justify-around"
+                          className="bg-yellow w-full rounded-3xl px-10 py-2 text-white flex items-center justify-around"
                           ref={completeButtonRef}
                           onClick={addToBasket}
                         >
@@ -737,7 +737,7 @@ const CreateYourPizza: FC<CreatePizzaProps> = ({ sec, channelName }) => {
                   </>
                 ) : (
                   <>
-                    <div className="flex fixed w-full max-h-32 flex-col">
+                    <div className="flex w-full max-h-32 flex-col">
                       <div className="flex w-full items-center">
                         <span onClick={closeModal} className="flex">
                           <Image
@@ -751,7 +751,7 @@ const CreateYourPizza: FC<CreatePizzaProps> = ({ sec, channelName }) => {
                           {tr('combine_your_two_favorite')}
                         </div>
                       </div>
-                      <div className="flex justify-center mt-5 space-x-4 w-full -ml-4">
+                      <div className="flex justify-center mt-5 mb-2 space-x-4 w-full">
                         {customNames.map((name: string) => (
                           <button
                             key={name}
@@ -767,7 +767,7 @@ const CreateYourPizza: FC<CreatePizzaProps> = ({ sec, channelName }) => {
                         ))}
                       </div>
                     </div>
-                    <div className="flex justify-around mt-32 h-[calc(100%-220px)] overflow-hidden overflow-y-auto">
+                    <div className="flex justify-around h-[calc(100vh-310px)] overflow-hidden overflow-y-auto">
                       <div className="text-center">
                         {readyProductList &&
                           readyProductList.map((item: any) => (

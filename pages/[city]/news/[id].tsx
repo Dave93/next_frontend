@@ -16,6 +16,7 @@ interface IParams extends ParsedUrlQuery {
 }
 
 import menuItems from '@commerce/data/newsMenu'
+import { useUI } from '@components/ui/context'
 
 export async function getServerSideProps({
   preview,
@@ -83,6 +84,7 @@ export default function NewsId({
 }) {
   const { t: tr } = useTranslation('common')
   const router = useRouter()
+  const { activeCity } = useUI()
   const { locale, pathname } = router
   let items = menuItems.map((item) => {
     return {
@@ -94,31 +96,43 @@ export default function NewsId({
     <>
       <div>
         <div className="flex items-center justify-center my-10">
-          {items.map((item, id) => (
-            <div key={id} className="flex items-center ml-10">
-              <img
-                src={`${
-                  pathname.indexOf(item.href) >= 0 ? item.activeIcon : item.icon
-                }`}
-              />
-              <Link href={item.href} locale={locale} prefetch={false}>
-                <a
-                  className={`${
+          {items.map((item, id) => {
+            let href = `${item.href}`
+
+            if (href.indexOf('http') < 0) {
+              href = `/${activeCity.slug}${item.href}`
+            }
+            return (
+              <div key={id} className="flex items-center ml-10">
+                <img
+                  src={`${
                     pathname.indexOf(item.href) >= 0
-                      ? 'text-yellow'
-                      : 'text-gray-400'
-                  } ml-1 text-sm`}
-                >
-                  {item.name}
-                </a>
-              </Link>
-            </div>
-          ))}
+                      ? item.activeIcon
+                      : item.icon
+                  }`}
+                />
+                <Link href={href} locale={locale} prefetch={false}>
+                  <a
+                    className={`${
+                      pathname.indexOf(item.href) >= 0
+                        ? 'text-yellow'
+                        : 'text-gray-400'
+                    } ml-1 text-sm`}
+                  >
+                    {item.name}
+                  </a>
+                </Link>
+              </div>
+            )
+          })}
         </div>
         <div className="bg-white rounded-3xl flex p-5">
           <div className="">
             {newsItem.asset && newsItem.asset.length ? (
-              <Link href={`${'/news/' + newsItem.id}`} prefetch={false}>
+              <Link
+                href={`${'/' + activeCity.slug + '/news/' + newsItem.id}`}
+                prefetch={false}
+              >
                 <a>
                   <Image
                     src={newsItem.asset[0].link}
@@ -129,7 +143,10 @@ export default function NewsId({
                 </a>
               </Link>
             ) : (
-              <Link href={`${'/news/' + newsItem.id}`} prefetch={false}>
+              <Link
+                href={`${'/' + activeCity.slug + '/news/' + newsItem.id}`}
+                prefetch={false}
+              >
                 <a>
                   <Image
                     src="/no_photo.svg"
@@ -157,37 +174,44 @@ export default function NewsId({
           </div>
         </div>
       </div>
-      {relatedNews.length && (
+      {relatedNews && relatedNews.length > 0 && (
         <>
           <div className="text-2xl mb-4 mt-10">{tr('recommended_news')}</div>
           <div className="bg-white rounded-3xl flex justify-between p-4">
-            {relatedNews.map((item: any) => (
-              <div key={item.id}>
-                <div className="relative rounded-t-lg overflow-hidden">
-                  {item.asset && item.asset.length ? (
-                    <Link href={`${'/news/' + item.id}`} prefetch={false}>
-                      <a>
-                        <Image
-                          src={item.asset[0].link}
-                          width="350"
-                          height="350"
-                          alt={locale == 'ru' ? item.name : item.name_uz}
-                        />
-                      </a>
-                    </Link>
-                  ) : (
-                    <Link href={`${'/news/' + item.id}`} prefetch={false}>
-                      <a>
-                        <Image
-                          src="/no_photo.svg"
-                          width="350"
-                          height="350"
-                          alt={locale == 'ru' ? item.name : item.name_uz}
-                        />
-                      </a>
-                    </Link>
-                  )}
-                  {/* <div className="absolute bottom-5 flex justify-between px-4 text-white w-full">
+            <div className="md:grid grid-cols-3 gap-10 mx-5 md:mx-0">
+              {relatedNews.map((item: any) => (
+                <div key={item.id}>
+                  <div className="relative rounded-t-lg overflow-hidden">
+                    {item.asset && item.asset.length ? (
+                      <Link
+                        href={`${'/' + activeCity.slug + '/news/' + item.id}`}
+                        prefetch={false}
+                      >
+                        <a>
+                          <Image
+                            src={item.asset[0].link}
+                            width="350"
+                            height="350"
+                            alt={locale == 'ru' ? item.name : item.name_uz}
+                          />
+                        </a>
+                      </Link>
+                    ) : (
+                      <Link
+                        href={`${'/' + activeCity.slug + '/news/' + item.id}`}
+                        prefetch={false}
+                      >
+                        <a>
+                          <Image
+                            src="/no_photo.svg"
+                            width="350"
+                            height="350"
+                            alt={locale == 'ru' ? item.name : item.name_uz}
+                          />
+                        </a>
+                      </Link>
+                    )}
+                    {/* <div className="absolute bottom-5 flex justify-between px-4 text-white w-full">
                     <div className="flex items-center">
                       <ClockIcon className="h-5 w-5 mr-2" />
                       <div>22:00-03:00</div>
@@ -197,21 +221,28 @@ export default function NewsId({
                       <div>01.07-31.07</div>
                     </div>
                   </div> */}
-                </div>
-                <div className="flex flex-col justify-between p-5 flex-grow">
-                  <div className="text-lg mb-3">
-                    <Link href={`${'/news/' + item.id}`} prefetch={false}>
-                      {locale == 'ru' ? item.name : item.name_uz}
+                  </div>
+                  <div className="flex flex-col justify-between p-5 flex-grow">
+                    <div className="text-lg mb-3">
+                      <Link
+                        href={`${'/' + activeCity.slug + '/news/' + item.id}`}
+                        prefetch={false}
+                      >
+                        {locale == 'ru' ? item.name : item.name_uz}
+                      </Link>
+                    </div>
+                    <Link
+                      href={`${'/' + activeCity.slug + '/news/' + item.id}`}
+                      prefetch={false}
+                    >
+                      <a className="text-xs text-gray-400 hover:underline">
+                        {tr('more')}
+                      </a>
                     </Link>
                   </div>
-                  <Link href={`${'/news/' + item.id}`} prefetch={false}>
-                    <a className="text-xs text-gray-400 hover:underline">
-                      {tr('more')}
-                    </a>
-                  </Link>
                 </div>
-              </div>
-            ))}
+              ))}
+            </div>
           </div>
         </>
       )}
