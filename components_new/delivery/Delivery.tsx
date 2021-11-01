@@ -15,30 +15,22 @@ const Delivery: FC = () => {
           {locale == 'ru' ? (
             <div>
               <p>
-                <span style={{ fontFamily: '"Times",serif' }}>
-                  Доставка ежедневно с 10:00 до 03:00.
-                </span>
+                <span>Доставка ежедневно с 10:00 до 03:00.</span>
               </p>
               <p>
-                <span style={{ fontFamily: '"Times",serif' }}>
-                  Телефон доставки +998971 205 11 11
-                </span>
+                <span>Телефон доставки +998971 205 11 11</span>
               </p>
               <p>
-                <span style={{ fontFamily: '"Times",serif' }}>
-                  Оплата наличными, оплата картой, онлайн оплата
-                </span>
+                <span>Оплата наличными, оплата картой, онлайн оплата</span>
               </p>
               <p>
-                <span style={{ fontFamily: '"Times",serif' }}>&nbsp;</span>
+                <span>&nbsp;</span>
               </p>
               <p>
-                <span style={{ fontFamily: '"Times",serif' }}>
-                  Как сделать заказ в Chopar Pizza&nbsp;
-                </span>
+                <span>Как сделать заказ в Chopar Pizza&nbsp;</span>
               </p>
               <p>
-                <span style={{ fontFamily: '"Times",serif' }}>
+                <span>
                   Достаточно просто выбрать заинтересовавшие вас блюда из меню и
                   добавить их в корзину (нажимайте на кнопку с ценой рядом с
                   каждым блюдом — оно будет добавлено в Ваш заказ), затем
@@ -48,26 +40,24 @@ const Delivery: FC = () => {
                 </span>
               </p>
               <p>
-                <span style={{ fontFamily: '"Times",serif' }}>&nbsp;</span>
+                <span>&nbsp;</span>
               </p>
               <p>
-                <span style={{ fontFamily: '"Times",serif' }}>
+                <span>
                   Доставка по Ташкенту минимальная сумма заказа составляет 44
                   000 UZS, среднее время доставки 60 минут
                 </span>
               </p>
               <p>
-                <span style={{ fontFamily: '"Times",serif' }}>&nbsp;</span>
+                <span>&nbsp;</span>
               </p>
               <p>
                 <strong>
-                  <span style={{ fontFamily: '"Times",serif' }}>
-                    Оплата наличными
-                  </span>
+                  <span>Оплата наличными</span>
                 </strong>
               </p>
               <p>
-                <span style={{ fontFamily: '"Times",serif' }}>
+                <span>
                   Для выбора оплаты товара наличными на странице заказа
                   необходимо выбрать пункт "Наличными при получении". Вы сможете
                   оплатить товар в нашем пункте самовывоза или при доставке
@@ -75,17 +65,15 @@ const Delivery: FC = () => {
                 </span>
               </p>
               <p>
-                <span style={{ fontFamily: '"Times",serif' }}>&nbsp;</span>
+                <span>&nbsp;</span>
               </p>
               <p>
                 <strong>
-                  <span style={{ fontFamily: '"Times",serif' }}>
-                    Оплата картой
-                  </span>
+                  <span>Оплата картой</span>
                 </strong>
               </p>
               <p>
-                <span style={{ fontFamily: '"Times",serif' }}>
+                <span>
                   Для выбора оплаты товара картой при получении, на странице
                   заказа необходимо выбрать пункт "Картой при получении". Вы
                   сможете оплатить товар в нашем пункте самовывоза или при
@@ -94,17 +82,15 @@ const Delivery: FC = () => {
                 </span>
               </p>
               <p>
-                <span style={{ fontFamily: '"Times",serif' }}>&nbsp;</span>
+                <span>&nbsp;</span>
               </p>
               <p>
                 <strong>
-                  <span style={{ fontFamily: '"Times",serif' }}>
-                    Онлайн оплата
-                  </span>
+                  <span>Онлайн оплата</span>
                 </strong>
               </p>
               <p>
-                <span style={{ fontFamily: '"Times",serif' }}>
+                <span>
                   Для выбора оплаты товара картой, на странице заказа необходимо
                   выбрать пункт: онлайн оплата Payme, Click.
                 </span>
