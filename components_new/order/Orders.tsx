@@ -37,12 +37,13 @@ import Downshift from 'downshift'
 import Select from '@components_new/utils/Select'
 import { toast } from 'react-toastify'
 import Cookies from 'js-cookie'
-import { useRouter } from 'next/router'
+import router, { useRouter } from 'next/router'
 import OtpInput from 'react-otp-input'
 import styles from './Orders.module.css'
 import { DateTime } from 'luxon'
 import Input from 'react-phone-number-input/input'
 import { City } from '@commerce/types/cities'
+import { chunk, sortBy } from 'lodash'
 
 const { publicRuntimeConfig } = getConfig()
 let webAddress = publicRuntimeConfig.apiUrl
@@ -139,9 +140,11 @@ const Orders: FC<OrdersProps> = ({ channelName }: { channelName: any }) => {
     cartId = localStorage.getItem('basketId')
   }
 
-  const router = useRouter()
-  const { locale } = router
+  const { locale, pathname, query } = useRouter()
   const downshiftControl = useRef<any>(null)
+  const map = useRef<any>(null)
+  const [ymaps, setYmaps] = useState<any>(null)
+  const objects = useRef<any>(null)
   const { data, isLoading, isEmpty, mutate } = useCart({
     cartId,
   })
@@ -319,7 +322,9 @@ const Orders: FC<OrdersProps> = ({ channelName }: { channelName: any }) => {
       return []
     }
     const { data: getCodeData } = await axios.get(
-      `/api/geocode?text=${encodeURI(event.target.value)}`
+      `/api/geocode?text=${encodeURI(event.target.value)}&bounds=${
+        activeCity.bounds
+      }`
     )
 
     setGeoSuggestions(getCodeData)
@@ -374,11 +379,36 @@ const Orders: FC<OrdersProps> = ({ channelName }: { channelName: any }) => {
       location: [selection.coordinates.lat, selection.coordinates.long],
     })
   }
+  const changeCity = (city: City) => {
+    let link = pathname
+    Object.keys(query).map((k: string) => {
+      if (k == 'city') {
+        link = link.replace('[city]', city.slug)
+      } else {
+        link = link.replace(`[${k}]`, query[k]!.toString())
+      }
+    })
+    router.push(link)
+    setActiveCity(city)
+  }
 
   const clickOnMap = async (event: any) => {
     const coords = event.get('coords')
-    setMapCenter(coords)
-    // console.log(window.ymaps)
+    let polygon = objects.current.searchContaining(coords).get(0)
+    if (!polygon) {
+      toast.warn(tr('point_delivery_not_available'), {
+        position: toast.POSITION.BOTTOM_RIGHT,
+        hideProgressBar: true,
+      })
+      return
+    } else {
+      let pickedCity = cities.find(
+        (city: City) => city.slug == polygon.properties._data.slug
+      )
+
+      changeCity(pickedCity)
+    }
+    // setMapCenter(coords)
     setSelectedCoordinates([
       {
         key: `${coords[0]}${coords[1]}`,
@@ -586,13 +616,61 @@ const Orders: FC<OrdersProps> = ({ channelName }: { channelName: any }) => {
         setIsPhoneConfirmOpen(true)
       }
       setIsSavingOrder(false)
-    } catch (e) {
+    } catch (e: any) {
       toast.error(e.response.data.error.message, {
         position: toast.POSITION.BOTTOM_RIGHT,
         hideProgressBar: true,
       })
       setIsSavingOrder(false)
     }
+  }
+
+  const loadPolygonsToMap = (ymaps: any) => {
+    setYmaps(ymaps)
+    let geoObjects: any = {
+      type: 'FeatureCollection',
+      metadata: {
+        name: 'delivery',
+        creator: 'Yandex Map Constructor',
+      },
+      features: [],
+    }
+    cities.map((city: any) => {
+      if (city.polygons) {
+        let arrPolygons = city.polygons.split(',').map((poly: any) => +poly)
+        arrPolygons = chunk(arrPolygons, 2)
+        arrPolygons = arrPolygons.map((poly: any) => sortBy(poly))
+        let polygon: any = {
+          type: 'Feature',
+          id: 0,
+          geometry: {
+            type: 'Polygon',
+            coordinates: [arrPolygons],
+          },
+          properties: {
+            fill: '#FAAF04',
+            fillOpacity: 0.5,
+            stroke: '#FAAF04',
+            strokeWidth: '0',
+            strokeOpacity: 0,
+            slug: city.slug,
+          },
+        }
+        geoObjects.features.push(polygon)
+      }
+    })
+    let deliveryZones = ymaps.geoQuery(geoObjects).addToMap(map.current)
+    deliveryZones.each((obj: any) => {
+      obj.options.set({
+        fillColor: obj.properties.get('fill'),
+        fillOpacity: obj.properties.get('fillOpacity'),
+        strokeColor: obj.properties.get('stroke'),
+        strokeWidth: obj.properties.get('strokeWidth'),
+        strokeOpacity: obj.properties.get('strokeOpacity'),
+      })
+      obj.events.add('click', clickOnMap)
+    })
+    objects.current = deliveryZones
   }
 
   const saveOrder = async () => {
@@ -631,7 +709,7 @@ const Orders: FC<OrdersProps> = ({ channelName }: { channelName: any }) => {
       // setUserData(data.user)
       localStorage.removeItem('basketId')
       router.push(`/${activeCity.slug}/order/${data.order.id}`)
-    } catch (e) {
+    } catch (e: any) {
       toast.error(e.response.data.error.message, {
         position: toast.POSITION.BOTTOM_RIGHT,
         hideProgressBar: true,
@@ -884,6 +962,8 @@ const Orders: FC<OrdersProps> = ({ channelName }: { channelName: any }) => {
                 <div>
                   <Map
                     state={mapState}
+                    onLoad={(ymaps: any) => loadPolygonsToMap(ymaps)}
+                    instanceRef={(ref) => (map.current = ref)}
                     width="100%"
                     height="530px"
                     onClick={clickOnMap}
@@ -891,6 +971,7 @@ const Orders: FC<OrdersProps> = ({ channelName }: { channelName: any }) => {
                       'control.ZoomControl',
                       'control.FullscreenControl',
                       'control.GeolocationControl',
+                      'geoQuery',
                     ]}
                   >
                     {selectedCoordinates.map((item: any, index: number) => (
