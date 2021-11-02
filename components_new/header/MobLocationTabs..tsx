@@ -263,7 +263,9 @@ const MobLocationTabs: FC<MobLocationTabProps> = ({ setOpen }) => {
         (city: City) => city.slug == polygon.properties._data.slug
       )
 
-      changeCity(pickedCity)
+      if (pickedCity.id != activeCity.id) {
+        changeCity(pickedCity)
+      }
     }
     setMapCenter(coords)
     setSelectedCoordinates([
@@ -415,10 +417,10 @@ const MobLocationTabs: FC<MobLocationTabProps> = ({ setOpen }) => {
           },
           properties: {
             fill: '#FAAF04',
-            fillOpacity: 0.5,
+            fillOpacity: 0.1,
             stroke: '#FAAF04',
-            strokeWidth: '0',
-            strokeOpacity: 0,
+            strokeWidth: '7',
+            strokeOpacity: 0.4,
             slug: city.slug,
           },
         }
@@ -637,15 +639,15 @@ const MobLocationTabs: FC<MobLocationTabProps> = ({ setOpen }) => {
                 <div className="flex justify-between">
                   <input
                     type="text"
-                    {...register('flat')}
-                    placeholder={tr('flat')}
-                    className="bg-gray-100 px-8 py-2 rounded-full w-40  outline-none focus:outline-none"
-                  />
-                  <input
-                    type="text"
                     {...register('house')}
                     placeholder={tr('house')}
                     className="bg-gray-100 px-8 py-2 rounded-full w-40 "
+                  />
+                  <input
+                    type="text"
+                    {...register('flat')}
+                    placeholder={tr('flat')}
+                    className="bg-gray-100 px-8 py-2 rounded-full w-40  outline-none focus:outline-none"
                   />
                 </div>
               </div>

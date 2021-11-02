@@ -171,7 +171,7 @@ const Orders: FC<OrdersProps> = ({ channelName }: { channelName: any }) => {
     defaultValues: {
       name: user?.user?.name,
       phone: user?.user?.phone,
-      email: '',
+      email: user?.user?.email,
       address: locationData?.address || currentAddress,
       flat: locationData?.flat || '',
       house: locationData?.house || '',
@@ -406,7 +406,9 @@ const Orders: FC<OrdersProps> = ({ channelName }: { channelName: any }) => {
         (city: City) => city.slug == polygon.properties._data.slug
       )
 
-      changeCity(pickedCity)
+      if (pickedCity.id != activeCity.id) {
+        changeCity(pickedCity)
+      }
     }
     // setMapCenter(coords)
     setSelectedCoordinates([
@@ -649,10 +651,10 @@ const Orders: FC<OrdersProps> = ({ channelName }: { channelName: any }) => {
           },
           properties: {
             fill: '#FAAF04',
-            fillOpacity: 0.5,
+            fillOpacity: 0.1,
             stroke: '#FAAF04',
-            strokeWidth: '0',
-            strokeOpacity: 0,
+            strokeWidth: '7',
+            strokeOpacity: 0.4,
             slug: city.slug,
           },
         }
@@ -1079,15 +1081,7 @@ const Orders: FC<OrdersProps> = ({ channelName }: { channelName: any }) => {
                         </>
                       )}
                     </Downshift>
-                    <div className="md:mx-5 md:w-3/12">
-                      <input
-                        type="text"
-                        {...register('flat')}
-                        placeholder={tr('flat')}
-                        className="bg-gray-100 px-8 py-3 rounded-full w-full outline-none focus:outline-none"
-                      />
-                    </div>
-                    <div className="md:w-2/12">
+                    <div className="md:mx-5 md:w-2/12">
                       <input
                         type="text"
                         {...register('house', { required: true })}
@@ -1099,6 +1093,14 @@ const Orders: FC<OrdersProps> = ({ channelName }: { channelName: any }) => {
                           {tr('required')}
                         </div>
                       )}
+                    </div>
+                    <div className="md:w-3/12">
+                      <input
+                        type="text"
+                        {...register('flat')}
+                        placeholder={tr('flat')}
+                        className="bg-gray-100 px-8 py-3 rounded-full w-full outline-none focus:outline-none"
+                      />
                     </div>
                   </div>
                 </div>

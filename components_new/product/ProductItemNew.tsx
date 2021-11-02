@@ -494,18 +494,12 @@ const ProductItemNew: FC<ProductItem> = ({ product, channelName }) => {
                 ))}
             </div>
           </div>
-          <div className="gap-3 grid grid-cols-2 w-full">
+          <div className="mx-auto">
             <button
-              className="bg-yellow focus:outline-none font-bold outline-none py-2 rounded-full text-center text-white uppercase"
+              className="bg-yellow focus:outline-none font-bold outline-none px-10 py-2 rounded-full text-center text-white uppercase"
               onClick={addToBasket}
             >
-              {tr('yes')}
-            </button>
-            <button
-              className="bg-gray-200 focus:outline-none font-bold outline-none py-2 rounded-full text-center text-white uppercase"
-              onClick={discardModifier}
-            >
-              {tr('no')}
+              {tr('add')}
             </button>
           </div>
         </div>

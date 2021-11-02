@@ -265,7 +265,9 @@ const LocationTabs: FC<Props> = ({ setOpen }) => {
         (city: City) => city.slug == polygon.properties._data.slug
       )
 
-      changeCity(pickedCity)
+      if (pickedCity.id != activeCity.id) {
+        changeCity(pickedCity)
+      }
     }
     // setMapCenter(coords)
     setSelectedCoordinates([
@@ -405,10 +407,10 @@ const LocationTabs: FC<Props> = ({ setOpen }) => {
           },
           properties: {
             fill: '#FAAF04',
-            fillOpacity: 0.5,
+            fillOpacity: 0.1,
             stroke: '#FAAF04',
-            strokeWidth: '0',
-            strokeOpacity: 0,
+            strokeWidth: '7',
+            strokeOpacity: 0.4,
             slug: city.slug,
           },
         }
@@ -634,20 +636,20 @@ const LocationTabs: FC<Props> = ({ setOpen }) => {
                     </>
                   )}
                 </Downshift>
-                <div className="mx-5 w-3/12">
-                  <input
-                    type="text"
-                    {...register('flat')}
-                    placeholder={tr('flat')}
-                    className="bg-gray-100 px-8 py-3 rounded-full w-full outline-none focus:outline-none"
-                  />
-                </div>
-                <div className="w-2/12">
+                <div className="mx-5 w-2/12">
                   <input
                     type="text"
                     {...register('house')}
                     placeholder={tr('house')}
                     className="bg-gray-100 px-8 py-3 rounded-full w-full"
+                  />
+                </div>
+                <div className=" w-3/12">
+                  <input
+                    type="text"
+                    {...register('flat')}
+                    placeholder={tr('flat')}
+                    className="bg-gray-100 px-8 py-3 rounded-full w-full outline-none focus:outline-none"
                   />
                 </div>
               </div>
