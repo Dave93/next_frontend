@@ -190,7 +190,10 @@ const ProductItemNew: FC<ProductItem> = ({ product, channelName }) => {
           selectedProdId = modifierProduct.id
           let currentProductModifiersPrices = [
             ...modifiers
-              .filter((mod: any) => mod.id != modifierProduct.id)
+              .filter(
+                (mod: any) =>
+                  mod.id != modifierProduct.id && mods.includes(mod.id)
+              )
               .map((mod: any) => mod.price),
           ]
           selectedModifiers = modifierProduct.modifiers
