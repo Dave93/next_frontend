@@ -385,6 +385,16 @@ const LocationTabs: FC<Props> = ({ setOpen }) => {
 
   const loadPolygonsToMap = (ymaps: any) => {
     setYmaps(ymaps)
+    console.log(ymaps)
+    var geolocation = ymaps.geolocation
+    geolocation
+      .get({
+        provider: 'yandex',
+        mapStateAutoApply: true,
+      })
+      .then((result: any) => {
+        console.log(result)
+      })
     let geoObjects: any = {
       type: 'FeatureCollection',
       metadata: {
@@ -520,7 +530,12 @@ const LocationTabs: FC<Props> = ({ setOpen }) => {
             </div>
           </div>
           <div>
-            <YMaps>
+            <YMaps
+              // enterprise
+              query={{
+                apikey: configData.yandexGeoKey,
+              }}
+            >
               <div>
                 <Map
                   state={mapState}
@@ -534,6 +549,7 @@ const LocationTabs: FC<Props> = ({ setOpen }) => {
                     'control.FullscreenControl',
                     'control.GeolocationControl',
                     'geoQuery',
+                    'geolocation',
                   ]}
                 >
                   {selectedCoordinates.map((item: any, index: number) => (
