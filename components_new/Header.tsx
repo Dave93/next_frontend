@@ -102,20 +102,6 @@ const Header: FC<{
                 <div className="w-1/3 md:flex hidden">
                   <SetLocation />
                 </div>
-                <div className="md:flex hidden">
-                  <a
-                    href="https://telegram.me/Chopar_bot"
-                    target="_blank"
-                    className="text-blue flex items-center"
-                  >
-                    <FontAwesomeIcon
-                      className="fa-2x mx-2 w-8 h-8"
-                      size="xs"
-                      icon={faTelegram}
-                    />{' '}
-                    @chopar_bot
-                  </a>
-                </div>
                 <div className="flex items-center">
                   <div className="md:flex hidden">
                     <HeaderPhone />
