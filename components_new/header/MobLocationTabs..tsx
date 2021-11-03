@@ -36,6 +36,7 @@ import { toast } from 'react-toastify'
 import { City } from '@commerce/types/cities'
 import router, { useRouter } from 'next/router'
 import { chunk, sortBy } from 'lodash'
+import { DateTime } from 'luxon'
 
 const { publicRuntimeConfig } = getConfig()
 
@@ -131,8 +132,46 @@ const MobLocationTabs: FC<MobLocationTabProps> = ({ setOpen }) => {
       `${webAddress}/api/terminals/pickup?city_id=${activeCity.id}`
     )
     let res: any[] = []
+    let currentTime = DateTime.now()
+    // currentTime = currentTime.set({ hour: 23 }) // TODO: remove this line
+    let weekDay = currentTime.weekday
     data.data.map((item: any) => {
       if (item.latitude) {
+        item.isWorking = false
+        if (weekDay >= 1 && weekDay < 6) {
+          let openWork = DateTime.fromISO(item.open_work)
+          openWork = openWork.set({ day: currentTime.day })
+          openWork = openWork.set({ year: currentTime.year })
+          openWork = openWork.set({ month: currentTime.month })
+          let closeWork = DateTime.fromISO(item.close_work)
+          closeWork = closeWork.set({ day: currentTime.day })
+          closeWork = closeWork.set({ year: currentTime.year })
+          closeWork = closeWork.set({ month: currentTime.month })
+          if (closeWork.hour < openWork.hour) {
+            closeWork = closeWork.set({ day: currentTime.day + 1 })
+          }
+
+          if (currentTime >= openWork && currentTime < closeWork) {
+            item.isWorking = true
+          }
+        } else {
+          let openWork = DateTime.fromISO(item.open_weekend)
+          openWork = openWork.set({ day: currentTime.day })
+          openWork = openWork.set({ year: currentTime.year })
+          openWork = openWork.set({ month: currentTime.month })
+          let closeWork = DateTime.fromISO(item.close_weekend)
+          closeWork = closeWork.set({ day: currentTime.day })
+          closeWork = closeWork.set({ year: currentTime.year })
+          closeWork = closeWork.set({ month: currentTime.month })
+          if (closeWork.hour < openWork.hour) {
+            closeWork = closeWork.set({ day: currentTime.day + 1 })
+          }
+
+          if (currentTime >= openWork && currentTime < closeWork) {
+            item.isWorking = true
+          }
+        }
+
         res.push(item)
       }
     })
@@ -317,12 +356,19 @@ const MobLocationTabs: FC<MobLocationTabProps> = ({ setOpen }) => {
     saveDeliveryData(data, null)
   }
 
-  const choosePickupPoint = (pointId: number) => {
-    setActivePoint(pointId)
-    let terminalData = pickupPoints.find((pickup: any) => pickup.id == pointId)
+  const choosePickupPoint = (point: any) => {
+    if (!point.isWorking) {
+      toast.warn(tr('terminal_is_not_working'), {
+        position: toast.POSITION.BOTTOM_RIGHT,
+        hideProgressBar: true,
+      })
+      return
+    }
+    setActivePoint(point.id)
+    let terminalData = pickupPoints.find((pickup: any) => pickup.id == point.id)
     setLocationData({
       ...locationData,
-      terminal_id: pointId,
+      terminal_id: point.id,
       terminalData,
     })
   }
@@ -840,8 +886,8 @@ const MobLocationTabs: FC<MobLocationTabProps> = ({ setOpen }) => {
                     activePoint && activePoint == point.id
                       ? 'border-yellow'
                       : 'border-gray-400'
-                  }`}
-                  onClick={() => choosePickupPoint(point.id)}
+                  } ${!point.isWorking ? 'opacity-30' : ''}`}
+                  onClick={() => choosePickupPoint(point)}
                 >
                   <div
                     className={`border mr-4 mt-1 rounded-full ${
