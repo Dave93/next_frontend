@@ -550,7 +550,7 @@ const ProductItemNew: FC<ProductItem> = ({ product, channelName }) => {
             ></div>
             <div className="hidden md:block">
               {store.variants && store.variants.length > 0 && (
-                <div className="flex mt-5 space-x-1">
+                <div className="flex mt-5 space-x-1 -mx-2">
                   {store.variants.map((v) => (
                     <div
                       className={`w-full text-center cursor-pointer rounded-2xl outline-none ${

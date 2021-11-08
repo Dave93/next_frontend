@@ -249,7 +249,11 @@ export default function Home({
               )
             )}
           </div>
-          <div className="mt-20 sticky top-16 max-h-screen hidden md:block">
+          <div
+            className={`mt-[71px] sticky ${
+              isStickySmall ? 'top-[21px]' : 'top-16'
+            } max-h-screen hidden md:block`}
+          >
             {halfModeProds.map((sec: any) => (
               <div
                 key={sec.id}

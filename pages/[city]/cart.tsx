@@ -242,6 +242,26 @@ export default function Cart() {
     router.push(`/${activeCity.slug}/order/`)
   }
 
+  const clearBasket = async () => {
+    if (cartId) {
+      const { data: basket } = await axios.post(
+        `${webAddress}/api/baskets/${cartId}/clear`
+      )
+      const basketResult = {
+        id: basket.data.id,
+        createdAt: '',
+        currency: { code: basket.data.currency },
+        taxesIncluded: basket.data.tax_total,
+        lineItems: basket.data.lines,
+        lineItemsSubtotalPrice: basket.data.sub_total,
+        subtotalPrice: basket.data.sub_total,
+        totalPrice: basket.data.total,
+      }
+
+      await mutate(basketResult, false)
+    }
+  }
+
   useEffect(() => {
     fetchConfig()
     return
@@ -318,9 +338,12 @@ export default function Cart() {
                   </span>
                 )}
               </div>
-              {/* <div className="text-gray-400 text-sm flex cursor-pointer">
-            Очистить всё <TrashIcon className=" w-5 h-5 ml-1" />
-          </div> */}
+              <div
+                className="text-gray-400 text-sm flex cursor-pointer"
+                onClick={clearBasket}
+              >
+                Очистить всё <TrashIcon className=" w-5 h-5 ml-1" />
+              </div>
             </div>
             <div className="mt-10 space-y-3">
               {data &&
