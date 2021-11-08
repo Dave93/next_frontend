@@ -37,7 +37,7 @@ export async function getServerSideProps({
   const c = cookies(context)
 
   const { data } = await axios.get(
-    `${process.env.API_URL}/api/sales/public?city_id=${currentCity.id}`
+    `${process.env.API_URL}/api/sales/public?city_id=${currentCity.id}&locale=${locale}`
   )
 
   return {

@@ -37,7 +37,7 @@ const SaleItem: FC<SaleListProps> = ({ SaleItems }) => {
                     src={item.asset[0].link}
                     width="400"
                     height="400"
-                    alt={locale == 'ru' ? item.name : item.name_uz}
+                    alt={item.name}
                   />
                 </a>
               </Link>
@@ -51,7 +51,7 @@ const SaleItem: FC<SaleListProps> = ({ SaleItems }) => {
                     src="/no_photo.svg"
                     width="400"
                     height="400"
-                    alt={locale == 'ru' ? item.name : item.name_uz}
+                    alt={item.name}
                   />
                 </a>
               </Link>
@@ -74,7 +74,7 @@ const SaleItem: FC<SaleListProps> = ({ SaleItems }) => {
                 href={`${'/' + activeCity.slug + '/sale/' + item.id}`}
                 prefetch={false}
               >
-                {locale == 'ru' ? item.name : item.name_uz}
+                {item.name}
               </Link>
             </div>
             <Link

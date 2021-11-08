@@ -3,10 +3,25 @@ import { XIcon } from '@heroicons/react/outline'
 import { useForm } from 'react-hook-form'
 import useTranslation from 'next-translate/useTranslation'
 import { useUI } from '@components/ui/context'
+import { DateTime } from 'luxon'
+import axios from 'axios'
+import Cookies from 'js-cookie'
+import getConfig from 'next/config'
+import { toast } from 'react-toastify'
 
+const { publicRuntimeConfig } = getConfig()
+let webAddress = publicRuntimeConfig.apiUrl
+axios.defaults.withCredentials = true
 const PersonalData: FC = () => {
   const { t: tr } = useTranslation('common')
   const { user, setUserData } = useUI()
+
+  let birth = user?.user?.birth
+  // birthDay, birthMonth, birthYear from date string of format YYYY-MM-DD
+
+  let birthDay = birth?.split('-')[2]
+  let birthMonth = birth?.split('-')[1]
+  let birthYear = birth?.split('-')[0]
 
   type FormData = {
     name: string
@@ -22,14 +37,91 @@ const PersonalData: FC = () => {
       defaultValues: {
         name: user?.user?.name,
         phone: user?.user?.phone,
-        email: '',
-        birthDay: '',
-        birthMonth: '',
-        birthYear: '',
+        email: user?.user?.email,
+        birthDay: birthDay,
+        birthMonth: birthMonth,
+        birthYear: birthYear,
       },
     })
 
-  const onSubmit = (data: any) => console.log(JSON.stringify(data))
+  const setCredentials = async () => {
+    let csrf = Cookies.get('X-XSRF-TOKEN')
+    if (!csrf) {
+      const csrfReq = await axios(`${webAddress}/api/keldi`, {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+          crossDomain: true,
+        },
+        withCredentials: true,
+      })
+      let { data: res } = csrfReq
+      csrf = Buffer.from(res.result, 'base64').toString('ascii')
+
+      var inTenMinutes = new Date(new Date().getTime() + 10 * 60 * 1000)
+      Cookies.set('X-XSRF-TOKEN', csrf, {
+        expires: inTenMinutes,
+      })
+    }
+    axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest'
+    axios.defaults.headers.common['X-CSRF-TOKEN'] = csrf
+    axios.defaults.headers.common['XCSRF-TOKEN'] = csrf
+  }
+
+  const onSubmit = async (data: any) => {
+    let birth = null
+    if (data.birthDay && data.birthMonth && data.birthYear) {
+      // init current date
+      let currentTime = DateTime.local()
+
+      // Change month, day and year of current date
+      currentTime = currentTime.set({
+        day: data.birthDay,
+        month: data.birthMonth,
+        year: data.birthYear,
+      })
+      // Convert date to format YYYY-MM-DD
+      birth = currentTime.toFormat('yyyy-MM-dd')
+    }
+
+    const { name, phone, email } = data
+
+    await setCredentials()
+
+    const otpToken = Cookies.get('opt_token')
+    try {
+      const { data } = await axios.post(
+        `${webAddress}/api/me`,
+        {
+          name,
+          phone,
+          email,
+          birth,
+        },
+        {
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${otpToken}`,
+          },
+          withCredentials: true,
+        }
+      )
+      setUserData({
+        user: {
+          ...user?.user,
+          name,
+          phone,
+          email,
+          birth,
+        },
+      })
+    } catch (e: any) {
+      toast.error(e.response.data.error.message, {
+        position: toast.POSITION.BOTTOM_RIGHT,
+        hideProgressBar: true,
+      })
+    }
+  }
 
   const authName = watch('name')
   const authPhone = watch('phone')

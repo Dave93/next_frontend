@@ -35,7 +35,7 @@ export async function getServerSideProps({
   }
 
   const { data } = await axios.get(
-    `${process.env.API_URL}/api/news/public?city_id=${currentCity.id}`
+    `${process.env.API_URL}/api/news/public?city_id=${currentCity.id}&locale=${locale}`
   )
 
   return {

@@ -56,7 +56,7 @@ export async function getServerSideProps({
   }
 
   const { data: relatedData } = await axios.get(
-    `${process.env.API_URL}/api/sales/related/${id}/?city_id=${currentCity.id}`
+    `${process.env.API_URL}/api/sales/related/${id}/?city_id=${currentCity.id}&locale=${locale}`
   )
 
   return {
@@ -138,7 +138,7 @@ export default function SaleId({
                     src={SaleItem.asset[0].link}
                     width="450"
                     height="450"
-                    alt={locale == 'ru' ? SaleItem.name : SaleItem.name_uz}
+                    alt={SaleItem.name}
                   />
                 </a>
               </Link>
@@ -152,23 +152,18 @@ export default function SaleId({
                     src="/no_photo.svg"
                     width="450"
                     height="450"
-                    alt={locale == 'ru' ? SaleItem.name : SaleItem.name_uz}
+                    alt={SaleItem.name}
                   />
                 </a>
               </Link>
             )}
           </div>
           <div className="ml-16 w-[430px]">
-            <div className="text-2xl">
-              {locale == 'ru' ? SaleItem.name : SaleItem.name_uz}
-            </div>
+            <div className="text-2xl">{SaleItem.name}</div>
             {/* <div className="text-sm text-gray-400 mb-8">{SaleItem.}</div> */}
             <div
               dangerouslySetInnerHTML={{
-                __html:
-                  locale == 'ru'
-                    ? SaleItem.description
-                    : SaleItem.description_uz,
+                __html: SaleItem.description,
               }}
             ></div>
           </div>
@@ -192,7 +187,7 @@ export default function SaleId({
                             src={item.asset[0].link}
                             width="350"
                             height="350"
-                            alt={locale == 'ru' ? item.name : item.name_uz}
+                            alt={item.name}
                           />
                         </a>
                       </Link>
@@ -206,7 +201,7 @@ export default function SaleId({
                             src="/no_photo.svg"
                             width="350"
                             height="350"
-                            alt={locale == 'ru' ? item.name : item.name_uz}
+                            alt={item.name}
                           />
                         </a>
                       </Link>
@@ -228,7 +223,7 @@ export default function SaleId({
                         href={`${'/' + activeCity.slug + '/sale/' + item.id}`}
                         prefetch={false}
                       >
-                        {locale == 'ru' ? item.name : item.name_uz}
+                        {item.name}
                       </Link>
                     </div>
                     <Link
