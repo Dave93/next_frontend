@@ -47,7 +47,7 @@ const CityModal: FC<Props> = ({ cities }) => {
     if (!Cookies.get('city_slug')) {
       setIsShowCityList(true)
     } else {
-      setIsShowCityPrompt(true)
+      // setIsShowCityPrompt(true)
     }
     return () => {}
   }, [])
