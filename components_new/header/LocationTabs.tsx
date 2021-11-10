@@ -157,6 +157,8 @@ const LocationTabs: FC<Props> = ({ setOpen }) => {
           if (currentTime >= openWork && currentTime < closeWork) {
             item.isWorking = true
           }
+          item.workTimeStart = openWork.toFormat('HH:mm')
+          item.workTimeEnd = closeWork.toFormat('HH:mm')
         } else {
           let openWork = DateTime.fromISO(item.open_weekend)
           openWork = openWork.set({ day: currentTime.day })
@@ -173,6 +175,8 @@ const LocationTabs: FC<Props> = ({ setOpen }) => {
           if (currentTime >= openWork && currentTime < closeWork) {
             item.isWorking = true
           }
+          item.workTimeStart = openWork.toFormat('HH:mm')
+          item.workTimeEnd = closeWork.toFormat('HH:mm')
         }
 
         res.push(item)
@@ -911,9 +915,36 @@ const LocationTabs: FC<Props> = ({ setOpen }) => {
                     <div className="font-bold">
                       {locale == 'ru' ? point.name : point.name_uz}
                     </div>
-                    <div className="text-gray-400 text-sm">
-                      {locale == 'ru' ? point.desc : point.desc_uz}
+                    {point.desc && (
+                      <div className="text-gray-400 text-sm">
+                        {tr('address')}:{' '}
+                        {locale == 'ru' ? point.desc : point.desc_uz}
+                      </div>
+                    )}
+                    {point.near && (
+                      <div className="text-gray-400 text-sm">
+                        {tr('nearLabel')}:{' '}
+                        {locale == 'ru' ? point.near : point.near_uz}
+                      </div>
+                    )}
+                    <div className="font-bold text-gray-700">
+                      {tr('terminalWorkTime', {
+                        workTimeStart: point.workTimeStart,
+                        workTimeEnd: point.workTimeEnd,
+                      })}
                     </div>
+                    {point.services && (
+                      <div className="flex py-2 space-x-3">
+                        {point.services.split(',').map((service: string) => (
+                          <span key={service}>
+                            <img
+                              src={`/assets/services/${service}.webp`}
+                              alt=""
+                            />
+                          </span>
+                        ))}
+                      </div>
+                    )}
                   </div>
                 </div>
               ))}
