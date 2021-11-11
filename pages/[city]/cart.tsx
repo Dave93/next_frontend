@@ -244,7 +244,7 @@ export default function Cart() {
 
   const clearBasket = async () => {
     if (cartId) {
-      const { data: basket } = await axios.post(
+      const { data: basket } = await axios.get(
         `${webAddress}/api/baskets/${cartId}/clear`
       )
       const basketResult = {
@@ -425,7 +425,10 @@ export default function Cart() {
                                 .join(' + ')}`
                             : lineItem?.variant?.product?.attribute_data?.name[
                                 channelName
-                              ][locale || 'ru']}
+                              ][locale || 'ru']}{' '}
+                          {lineItem.bonus_id && (
+                            <span className="text-yellow">({tr('bonus')})</span>
+                          )}
                         </div>
                       </div>
                       {lineItem.modifiers && (
@@ -444,23 +447,25 @@ export default function Cart() {
                       )}
                     </div>
                     <div className="md:flex md:space-x-10 items-center hidden">
-                      <div className="w-20 h-6 ml-1 bg-yellow rounded-full flex items-center text-white">
-                        <div className="w-6 h-6 items-center flex justify-around">
-                          <MinusIcon
-                            className="cursor-pointer w-5 h-5"
-                            onClick={() => decreaseQuantity(lineItem)}
-                          />
+                      {!lineItem.bonus_id && (
+                        <div className="w-20 h-6 ml-1 bg-yellow rounded-full flex items-center text-white">
+                          <div className="w-6 h-6 items-center flex justify-around">
+                            <MinusIcon
+                              className="cursor-pointer w-5 h-5"
+                              onClick={() => decreaseQuantity(lineItem)}
+                            />
+                          </div>
+                          <div className="flex-grow text-center">
+                            {lineItem.quantity}
+                          </div>
+                          <div className="w-6 h-6 items-center flex justify-around">
+                            <PlusIcon
+                              className="cursor-pointer w-5 h-5"
+                              onClick={() => increaseQuantity(lineItem.id)}
+                            />
+                          </div>
                         </div>
-                        <div className="flex-grow text-center">
-                          {lineItem.quantity}
-                        </div>
-                        <div className="w-6 h-6 items-center flex justify-around">
-                          <PlusIcon
-                            className="cursor-pointer w-5 h-5"
-                            onClick={() => increaseQuantity(lineItem.id)}
-                          />
-                        </div>
-                      </div>
+                      )}
                       <div className="text-xl">
                         {lineItem.child && lineItem.child.length
                           ? currency(
@@ -482,16 +487,22 @@ export default function Cart() {
                               precision: 0,
                             }).format()}
                       </div>
-                      <XIcon
-                        className="cursor-pointer h-4 text-black w-4"
-                        onClick={() => destroyLine(lineItem.id)}
-                      />
+                      {!lineItem.bonus_id && (
+                        <>
+                          <XIcon
+                            className="cursor-pointer h-4 text-black w-4"
+                            onClick={() => destroyLine(lineItem.id)}
+                          />
+                        </>
+                      )}
                     </div>
                     <div className="md:space-x-10 items-center md:hidden">
-                      <XIcon
-                        className="cursor-pointer h-4 text-black w-4 ml-auto"
-                        onClick={() => destroyLine(lineItem.id)}
-                      />
+                      {!lineItem.bonus_id && (
+                        <XIcon
+                          className="cursor-pointer h-4 text-black w-4 ml-auto"
+                          onClick={() => destroyLine(lineItem.id)}
+                        />
+                      )}
                       <div className="text-xl mb-2">
                         {lineItem.child && lineItem.child.length
                           ? currency(
@@ -513,23 +524,25 @@ export default function Cart() {
                               precision: 0,
                             }).format()}
                       </div>
-                      <div className="w-20 h-6 bg-yellow rounded-full flex items-center text-white ml-auto">
-                        <div className="w-6 h-6 items-center flex justify-around">
-                          <MinusIcon
-                            className="cursor-pointer w-5 h-5"
-                            onClick={() => decreaseQuantity(lineItem)}
-                          />
+                      {!lineItem.bonus_id && (
+                        <div className="w-20 h-6 bg-yellow rounded-full flex items-center text-white ml-auto">
+                          <div className="w-6 h-6 items-center flex justify-around">
+                            <MinusIcon
+                              className="cursor-pointer w-5 h-5"
+                              onClick={() => decreaseQuantity(lineItem)}
+                            />
+                          </div>
+                          <div className="flex-grow text-center">
+                            {lineItem.quantity}
+                          </div>
+                          <div className="w-6 h-6 items-center flex justify-around">
+                            <PlusIcon
+                              className="cursor-pointer w-5 h-5"
+                              onClick={() => increaseQuantity(lineItem.id)}
+                            />
+                          </div>
                         </div>
-                        <div className="flex-grow text-center">
-                          {lineItem.quantity}
-                        </div>
-                        <div className="w-6 h-6 items-center flex justify-around">
-                          <PlusIcon
-                            className="cursor-pointer w-5 h-5"
-                            onClick={() => increaseQuantity(lineItem.id)}
-                          />
-                        </div>
-                      </div>
+                      )}
                     </div>
                   </div>
                 ))}

@@ -344,35 +344,42 @@ const SmallCart: FC<SmallCartProps> = ({ channelName }) => {
                             .join(' + ')}`
                         : lineItem?.variant?.product?.attribute_data?.name[
                             channelName
-                          ][locale || 'ru']}
+                          ][locale || 'ru']}{' '}
+                      {lineItem.bonus_id && (
+                        <span className="text-yellow">({tr('bonus')})</span>
+                      )}
                     </div>
-                    <div>
-                      <XIcon
-                        className="cursor-pointer h-4 text-black w-4"
-                        onClick={() => destroyLine(lineItem.id)}
-                      />
-                    </div>
+                    {!lineItem.bonus_id && (
+                      <div>
+                        <XIcon
+                          className="cursor-pointer h-4 text-black w-4"
+                          onClick={() => destroyLine(lineItem.id)}
+                        />
+                      </div>
+                    )}
                   </div>
                   <div className="flex items-center">
-                    <div className="ml-10">
-                      <div className="w-20 h-6 ml-1 bg-yellow rounded-full flex items-center text-white">
-                        <div className="w-6 h-6 items-center flex justify-around">
-                          <MinusIcon
-                            className="cursor-pointer w-5 h-5"
-                            onClick={() => decreaseQuantity(lineItem)}
-                          />
-                        </div>
-                        <div className="flex-grow text-center">
-                          {lineItem.quantity}
-                        </div>
-                        <div className="w-6 h-6 items-center flex justify-around">
-                          <PlusIcon
-                            className="cursor-pointer w-5 h-5"
-                            onClick={() => increaseQuantity(lineItem.id)}
-                          />
+                    {!lineItem.bonus_id && (
+                      <div className="ml-10">
+                        <div className="w-20 h-6 ml-1 bg-yellow rounded-full flex items-center text-white">
+                          <div className="w-6 h-6 items-center flex justify-around">
+                            <MinusIcon
+                              className="cursor-pointer w-5 h-5"
+                              onClick={() => decreaseQuantity(lineItem)}
+                            />
+                          </div>
+                          <div className="flex-grow text-center">
+                            {lineItem.quantity}
+                          </div>
+                          <div className="w-6 h-6 items-center flex justify-around">
+                            <PlusIcon
+                              className="cursor-pointer w-5 h-5"
+                              onClick={() => increaseQuantity(lineItem.id)}
+                            />
+                          </div>
                         </div>
                       </div>
-                    </div>
+                    )}
                     <div className="text-right flex-grow text-sm">
                       {lineItem.child && lineItem.child.length
                         ? currency(

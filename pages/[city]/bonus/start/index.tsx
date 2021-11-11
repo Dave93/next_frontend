@@ -163,6 +163,8 @@ export default function Dev({
       )
       setChosenCard(data.data.prodData)
       setIsOpenCard(true)
+      let basketData = data.data.basketResponse
+      localStorage.setItem('basketId', basketData.encoded_id)
     }
   }
 
