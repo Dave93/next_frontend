@@ -1,6 +1,6 @@
 import type { GetServerSidePropsContext } from 'next'
 import commerce from '@lib/api/commerce'
-import React, { Fragment, useMemo, useState } from 'react'
+import React, { Fragment, useEffect, useMemo, useState } from 'react'
 import Image from 'next/image'
 import { useRouter } from 'next/router'
 import { Ru, Uz } from 'react-flags-select'
@@ -9,12 +9,23 @@ import Link from '@components/ui/Link'
 import { motion } from 'framer-motion'
 import { shuffle as lodashShuffle } from 'lodash'
 import { Dialog, Transition } from '@headlessui/react'
+import getConfig from 'next/config'
+import axios from 'axios'
+import cookies from 'next-cookies'
+import useTranslation from 'next-translate/useTranslation'
+import defaultChannel from '@lib/defaultChannel'
+import Cookies from 'js-cookie'
+
+const { publicRuntimeConfig } = getConfig()
+let webAddress = publicRuntimeConfig.apiUrl
+axios.defaults.withCredentials = true
 
 export async function getServerSideProps({
   preview,
   locale,
   locales,
   query,
+  ...context
 }: GetServerSidePropsContext) {
   const config = { locale, locales, queryParams: query }
   const productsPromise = commerce.getAllProducts({
@@ -28,6 +39,33 @@ export async function getServerSideProps({
   const siteInfoPromise = commerce.getSiteInfo({ config, preview })
   const { products } = await productsPromise
   const { pages } = await pagesPromise
+
+  const c = cookies(context)
+  let otpToken: any = c['opt_token']
+  c['user_token'] = otpToken
+  axios.defaults.headers.get.Cookie = c
+  axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest'
+  let isBonusListSuccess = false
+  let errorMessage = ''
+  let bonusList: any[] = []
+  try {
+    const { data } = await axios.get(`${webAddress}/api/bonus_prods`, {
+      headers: {
+        Authorization: `Bearer ${otpToken}`,
+      },
+    })
+
+    console.log(data)
+    isBonusListSuccess = data.success
+    if (!data.success) {
+      errorMessage = data.message
+    } else {
+      bonusList = data.data
+    }
+  } catch (e) {
+    console.log('error', e)
+  }
+
   const {
     categories,
     brands,
@@ -54,6 +92,9 @@ export async function getServerSideProps({
       footerInfoMenu,
       socials,
       cities,
+      isBonusListSuccess,
+      bonusList,
+      errorMessage,
     },
   }
 }
@@ -63,45 +104,29 @@ const localeLabel = {
   uz: 'Uz',
 }
 
-export default function Dev() {
+export default function Dev({
+  isBonusListSuccess,
+  errorMessage,
+  bonusList,
+}: {
+  isBonusListSuccess: boolean
+  errorMessage: string
+  bonusList: any[]
+}) {
   const router = useRouter()
+  const { t: tr } = useTranslation('common')
+  const [channelName, setChannelName] = useState('chopar')
   const { locale, pathname } = router
   const { activeCity, cities } = useUI()
   const [shuffle, setShuffle] = useState(false)
   const [chosenCard, setChosenCard] = useState(null as any)
   const [isOpenCard, setIsOpenCard] = useState(false)
-  const [shuffleItems, setShuffleItems] = useState([
-    {
-      id: 45,
-      image: '/surprise/2.png',
-      name: 'пицца пепперони',
-    },
-    {
-      id: 46,
-      image: '/surprise/3.png',
-      name: ' Соca-cola 0,5 литр',
-    },
-    {
-      id: 47,
-      image: '/surprise/4.png',
-      name: 'греческий салат',
-    },
-    {
-      id: 48,
-      image: '/surprise/2.png',
-      name: 'пицца пепперони',
-    },
-    {
-      id: 49,
-      image: '/surprise/7.png',
-      name: ' Соca-cola 1,5 литр',
-    },
-    {
-      id: 50,
-      image: '/surprise/4.png',
-      name: 'греческий салат',
-    },
-  ])
+
+  const getChannel = async () => {
+    const channelData = await defaultChannel()
+    setChannelName(channelData.name)
+  }
+  const [shuffleItems, setShuffleItems] = useState(bonusList)
 
   const chosenCity = useMemo(() => {
     if (activeCity) {
@@ -119,15 +144,34 @@ export default function Dev() {
     })
   }
 
-  const openCard = (sh: any) => {
+  const openCard = async (sh: any) => {
     if (shuffle) {
-      setChosenCard(sh)
+      const otpToken = Cookies.get('opt_token')
+
+      let basketId = localStorage.getItem('basketId')
+      const { data } = await axios.get(
+        `${webAddress}/api/bonus_prods/show${
+          basketId ? '?basketId=' + basketId : ''
+        }`,
+        {
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${otpToken}`,
+          },
+          withCredentials: true,
+        }
+      )
+      setChosenCard(data.data.prodData)
       setIsOpenCard(true)
     }
   }
 
   const closeCard = () => {
     router.push('/')
+  }
+
+  const goHome = () => {
+    router.push(`/${activeCity.slug}`)
   }
 
   const startShuffle = () => {
@@ -150,6 +194,11 @@ export default function Dev() {
       }, 200)
     }, 600)
   }
+
+  useEffect(() => {
+    getChannel()
+    return () => {}
+  }, [])
 
   return (
     <div
@@ -187,103 +236,125 @@ export default function Dev() {
         </div>
       </div>
 
-      {!shuffle ? (
-        <div className="font-bold mt-5 text-4xl text-center text-white uppercase">
-          Перемешайте чтобы{' '}
-          <span className="text-yellow"> получить подарок</span>
-        </div>
-      ) : (
-        !isOpenCard && (
-          <div className="font-bold mt-5 text-4xl text-center text-white uppercase">
-            Выберите один из коробок
-          </div>
-        )
-      )}
-
-      {!isOpenCard && (
-        <div className="grid md:grid-cols-3 lg:grid-cols-4 grid-cols-2 gap-8 gap-y-28 relative mt-32">
-          {shuffleItems.map((sh, i) => (
-            <motion.div
-              className="bg-white rounded-3xl h-32 text-center relative"
-              key={sh.id}
-              layout
-              transition={{ type: 'spring' }}
-              onClick={() => openCard(sh)}
-            >
-              <div className="lg:ml-10 md:-top-24 absolute lg:-top-28 lg:w-56 w-56 md:w-auto -top-32">
-                <img src={shuffle ? '/surprise/box.png' : sh.image} alt="" />
+      {isBonusListSuccess && (
+        <>
+          {!shuffle ? (
+            <div className="font-bold mt-5 text-4xl text-center text-white uppercase">
+              Перемешайте чтобы{' '}
+              <span className="text-yellow"> получить подарок</span>
+            </div>
+          ) : (
+            !isOpenCard && (
+              <div className="font-bold mt-5 text-4xl text-center text-white uppercase">
+                Выберите один из коробок
               </div>
-              {!shuffle && (
-                <div className="text-xl font-bold absolute bottom-2 ml-auto w-full ">
-                  {sh.name}
-                </div>
-              )}
-            </motion.div>
-          ))}
-        </div>
-      )}
-      {!shuffle && (
-        <div className="m-auto w-max mt-8">
-          <button
-            onClick={() => {
-              startShuffle()
-            }}
-            className="text-white md:text-4xl text-2xl px-3 font-bold bg-yellow border-white border-2 rounded-full md:px-32 pt-1 pb-3"
-          >
-            перемешать
-          </button>
-        </div>
-      )}
-      <Transition appear show={isOpenCard} as={Fragment}>
-        <Dialog
-          as="div"
-          className="fixed inset-0 z-10 overflow-y-auto"
-          onClose={() => {}}
-        >
-          <div className="min-h-screen px-4 text-center">
-            <Transition.Child
-              as={Fragment}
-              enter="ease-out duration-300"
-              enterFrom="opacity-0"
-              enterTo="opacity-100"
-              leave="ease-in duration-200"
-              leaveFrom="opacity-100"
-              leaveTo="opacity-0"
-            >
-              <Dialog.Overlay className="fixed inset-0" />
-            </Transition.Child>
+            )
+          )}
 
-            {/* This element is to trick the browser into centering the modal contents. */}
-            <span
-              className="inline-block h-screen align-middle"
-              aria-hidden="true"
-            >
-              &#8203;
-            </span>
-            <div className="align-middle bg-white inline-block overflow-hidden px-20 py-10 rounded-2xl shadow-xl text-center transform transition-all">
-              <Dialog.Title
-                as="h3"
-                className="leading-6 md:text-6xl text-secondary md:w-72"
-              >
-                {chosenCard?.name}
-              </Dialog.Title>
-              <img className="m-auto" src={chosenCard?.image} alt="" />
-              <div className="md:w-72 m-auto">
-                <span className="text-yellow">Поздравляем!</span>{' '}
-                <span className="font-bold">ваш выиграш</span> автоматическии
-                добавлен в корзину, что-бы продолжить покупку нажмите кнопку
-                “перейти в меню”
-              </div>
+          {!isOpenCard && (
+            <div className="grid md:grid-cols-3 lg:grid-cols-4 grid-cols-2 gap-8 gap-y-28 relative mt-32">
+              {shuffleItems.map((sh, i) => (
+                <motion.div
+                  className="bg-white rounded-3xl h-32 text-center relative"
+                  key={sh.id}
+                  layout
+                  transition={{ type: 'spring' }}
+                  onClick={() => openCard(sh)}
+                >
+                  <div className="lg:ml-10 md:-top-24 absolute lg:-top-28 lg:w-56 w-56 md:w-auto -top-32">
+                    <img
+                      src={shuffle ? '/surprise/box.png' : sh.image}
+                      alt=""
+                    />
+                  </div>
+                  {!shuffle && (
+                    <div className="text-xl font-bold absolute bottom-2 ml-auto w-full ">
+                      {sh.attribute_data?.name[channelName][locale || 'ru']}
+                    </div>
+                  )}
+                </motion.div>
+              ))}
+            </div>
+          )}
+          {!shuffle && (
+            <div className="m-auto w-max mt-8">
               <button
-                onClick={() => closeCard()}
-                className="bg-secondary rounded-full px-12 py-3 text-xl text-white mt-3"
+                onClick={() => {
+                  startShuffle()
+                }}
+                className="text-white md:text-4xl text-2xl px-3 font-bold bg-yellow border-white border-2 rounded-full md:px-32 pt-1 pb-3"
               >
-                Перейти в меню
+                перемешать
               </button>
             </div>
+          )}
+          <Transition appear show={isOpenCard} as={Fragment}>
+            <Dialog
+              as="div"
+              className="fixed inset-0 z-10 overflow-y-auto"
+              onClose={() => {}}
+            >
+              <div className="min-h-screen px-4 text-center">
+                <Transition.Child
+                  as={Fragment}
+                  enter="ease-out duration-300"
+                  enterFrom="opacity-0"
+                  enterTo="opacity-100"
+                  leave="ease-in duration-200"
+                  leaveFrom="opacity-100"
+                  leaveTo="opacity-0"
+                >
+                  <Dialog.Overlay className="fixed inset-0" />
+                </Transition.Child>
+
+                {/* This element is to trick the browser into centering the modal contents. */}
+                <span
+                  className="inline-block h-screen align-middle"
+                  aria-hidden="true"
+                >
+                  &#8203;
+                </span>
+                <div className="align-middle bg-white inline-block overflow-hidden px-20 py-10 rounded-2xl shadow-xl text-center transform transition-all">
+                  <Dialog.Title
+                    as="h3"
+                    className="leading-6 md:text-6xl text-secondary md:w-72"
+                  >
+                    {chosenCard?.name}
+                  </Dialog.Title>
+                  <img className="m-auto w-48" src={chosenCard?.image} alt="" />
+                  <div className="md:w-72 m-auto">
+                    <span className="text-yellow">Поздравляем!</span>{' '}
+                    <span className="font-bold">ваш выиграш</span>{' '}
+                    автоматическии добавлен в корзину, что-бы продолжить покупку
+                    нажмите кнопку “перейти в меню”
+                  </div>
+                  <button
+                    onClick={() => closeCard()}
+                    className="bg-secondary rounded-full px-12 py-3 text-xl text-white mt-3"
+                  >
+                    Перейти в меню
+                  </button>
+                </div>
+              </div>
+            </Dialog>
+          </Transition>
+        </>
+      )}
+      {!isBonusListSuccess && (
+        <>
+          <div className="font-bold mt-5 text-4xl text-center text-white uppercase">
+            {tr(errorMessage)}
           </div>
-        </Dialog>
-      </Transition>
+          <div className="m-auto w-max mt-8">
+            <button
+              className="text-white md:text-4xl text-2xl px-3 font-bold bg-yellow border-white border-2 rounded-full md:px-32 pt-1 pb-3"
+              onClick={goHome}
+            >
+              {tr('go_to_home')}
+            </button>
+          </div>
+        </>
+      )}
     </div>
   )
 }
