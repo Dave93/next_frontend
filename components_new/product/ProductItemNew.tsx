@@ -201,6 +201,14 @@ const ProductItemNew: FC<ProductItem> = ({ product, channelName }) => {
               currentProductModifiersPrices.includes(mod.price)
             )
             .map((m: any) => ({ id: m.id }))
+
+          if (selectedModifiers.length == 0) {
+            selectedModifiers = [
+              {
+                id: modifierProduct.modifiers.find((m: any) => m.price == 0).id,
+              },
+            ]
+          }
         }
       }
     } else {
