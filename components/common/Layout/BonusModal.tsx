@@ -116,12 +116,12 @@ const BonusModal: FC = () => {
               leaveFrom="opacity-100 scale-100"
               leaveTo="opacity-0 scale-95"
             >
-              <div className="align-middle inline-block">
-                <div className="md:inline-flex my-8 items-start">
+              <div className="align-middle inline-block md:w-auto overflow-hidden w-full">
+                <div className="md:inline-flex my-8 items-start flex">
                   <div className="inline-block p-6 overflow-hidden text-left align-middle transition-all transform bg-secondary shadow-xl rounded-2xl">
-                    <div className="md:flex items-center">
+                    <div className="flex-col md:flex-row md:flex items-center">
                       <div>
-                        <div className="text-4xl">
+                        <div className="text-2xl md:text-4xl">
                           <span className="text-yellow">CHOPAR</span> ДАРИТ
                         </div>
                         <div className="md:text-6xl text-2xl font-black text-white mt-2">
@@ -130,7 +130,7 @@ const BonusModal: FC = () => {
                         <button
                           ref={cityListRef}
                           onClick={gotToBonus}
-                          className="flex h-28 items-center justify-around w-80 outline-none"
+                          className="h-28 items-center justify-around w-80 outline-none hidden md:flex"
                           style={{
                             backgroundImage: `url("/surpriseButton.png")`,
                             backgroundRepeat: 'no-repeat',
@@ -143,14 +143,33 @@ const BonusModal: FC = () => {
                         </button>
                       </div>
 
-                      <div className="ml-auto">
-                        <img src="/surpriseMainLogo.png" alt="" width="350" />
+                      <div className="ml-auto md:w-80 w-52">
+                        <img
+                          src="/surpriseMainLogo.png"
+                          alt=""
+                          className="w-full"
+                        />
                       </div>
+
+                      <button
+                        ref={cityListRef}
+                        onClick={gotToBonus}
+                        className="h-28 justify-around w-52 outline-none md:hidden flex"
+                        style={{
+                          backgroundImage: `url("/surpriseButton.png")`,
+                          backgroundRepeat: 'no-repeat',
+                          backgroundSize: 'contain',
+                        }}
+                      >
+                        <div className="font-bold pt-4 text-sm text-white">
+                          ПОЛУЧИТЬ ПОДАРОК
+                        </div>
+                      </button>
                     </div>
                   </div>
 
                   <button
-                    className="text-white outline-none focus:outline-none transform hidden md:block"
+                    className="text-white outline-none focus:outline-none transform "
                     onClick={closeModal}
                   >
                     <XIcon className="text-white cursor-pointer w-10 h-10" />
