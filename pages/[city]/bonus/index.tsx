@@ -11,6 +11,7 @@ import {
   faFacebook,
   faInstagram,
   faYoutube,
+  faTelegramPlane,
 } from '@fortawesome/free-brands-svg-icons'
 import Link from 'next/link'
 
@@ -142,7 +143,7 @@ export default function Dev() {
             onClick={() => {
               router.push(asPath + '/' + 'start')
             }}
-            className="h-32 md:w-[500px] w-full"
+            className="h-32 md:w-[500px] w-full hidden md:block"
             style={{
               backgroundImage: `url("/surpriseButton.png")`,
               backgroundRepeat: 'no-repeat',
@@ -157,9 +158,24 @@ export default function Dev() {
         <div className="ml-auto">
           <img src="/surpriseMainLogo.png" alt="" width="550" />
         </div>
+        <button
+          onClick={() => {
+            router.push(asPath + '/' + 'start')
+          }}
+          className="flex h-32 items-center justify-around md:hidden md:w-[500px] w-full"
+          style={{
+            backgroundImage: `url("/surpriseButton.png")`,
+            backgroundRepeat: 'no-repeat',
+            backgroundSize: 'cover',
+          }}
+        >
+          <div className="font-bold md:text-3xl pb-10 text-2xl text-white">
+            ПОЛУЧИТЬ ПОДАРОК
+          </div>
+        </button>
       </div>
 
-      <div className="text-white flex justify-between w-32 items-center h-14">
+      <div className="text-white flex justify-between w-32 items-center h-14 m-auto md:mx-0">
         <a
           target="_blank"
           href="https://www.instagram.com/choparpizza"
@@ -176,13 +192,15 @@ export default function Dev() {
         </a>
         <a
           target="_blank"
-          href="#"
+          href="https://telegram.me/Chopar_bot"
           className="border border-white rounded-full px-2 py-1"
         >
-          <FontAwesomeIcon icon={faYoutube} size="lg" />
+          <FontAwesomeIcon icon={faTelegramPlane} size="lg" />
         </a>
       </div>
-      <div className="text-white">ПОДПИСЫВАЙТЕСЬ НА НАС</div>
+      <div className="text-white text-center md:text-left">
+        ПОДПИСЫВАЙТЕСЬ НА НАС
+      </div>
     </div>
   )
 }
