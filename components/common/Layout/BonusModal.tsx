@@ -117,10 +117,10 @@ const BonusModal: FC = () => {
               leaveTo="opacity-0 scale-95"
             >
               <div className="align-middle inline-block md:w-auto overflow-hidden w-full">
-                <div className="md:inline-flex my-8 items-start flex">
+                <div className="md:inline-flex my-8 items-start flex relative">
                   <div className="inline-block p-6 overflow-hidden text-left align-middle transition-all transform bg-secondary shadow-xl rounded-2xl">
                     <div className="flex-col md:flex-row md:flex items-center">
-                      <div>
+                      <div className="text-center">
                         <div className="text-2xl md:text-4xl">
                           <span className="text-yellow">CHOPAR</span> ДАРИТ
                         </div>
@@ -143,7 +143,7 @@ const BonusModal: FC = () => {
                         </button>
                       </div>
 
-                      <div className="ml-auto md:w-80 w-52">
+                      <div className="m-auto md:w-80 w-52">
                         <img
                           src="/surpriseMainLogo.png"
                           alt=""
@@ -154,14 +154,14 @@ const BonusModal: FC = () => {
                       <button
                         ref={cityListRef}
                         onClick={gotToBonus}
-                        className="h-28 justify-around w-52 outline-none md:hidden flex"
+                        className="h-28 justify-around w-64 outline-none md:hidden flex"
                         style={{
                           backgroundImage: `url("/surpriseButton.png")`,
                           backgroundRepeat: 'no-repeat',
                           backgroundSize: 'contain',
                         }}
                       >
-                        <div className="font-bold pt-4 text-sm text-white">
+                        <div className="font-bold pt-5 text-white">
                           ПОЛУЧИТЬ ПОДАРОК
                         </div>
                       </button>
@@ -169,7 +169,7 @@ const BonusModal: FC = () => {
                   </div>
 
                   <button
-                    className="text-white outline-none focus:outline-none transform "
+                    className="text-white outline-none focus:outline-none transform absolute right-0"
                     onClick={closeModal}
                   >
                     <XIcon className="text-white cursor-pointer w-10 h-10" />
