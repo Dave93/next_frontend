@@ -204,10 +204,11 @@ export default function Dev({
 
   return (
     <div
-      className="h-screen w-screen bg-secondary md:px-36 px-2 py-4 fixed overflow-auto"
+      className="h-full w-screen bg-secondary md:px-36 px-2 py-4 fixed overflow-y-auto"
       style={{
         backgroundImage: `url("/Union.png")`,
         backgroundSize: 'cover',
+        backgroundAttachment: 'fixed',
       }}
     >
       <div className="flex justify-between items-center">
@@ -242,13 +243,13 @@ export default function Dev({
         <>
           {!shuffle ? (
             <div className="font-bold mt-5 text-4xl text-center text-white uppercase">
-              Перемешайте чтобы{' '}
-              <span className="text-yellow"> получить подарок</span>
+              {tr('stir_to')}{' '}
+              <span className="text-yellow">{tr('get_a_gift')}</span>
             </div>
           ) : (
             !isOpenCard && (
               <div className="font-bold mt-5 text-4xl text-center text-white uppercase">
-                Выберите один из коробок
+                {tr('choose_one_of_the_boxes')}
               </div>
             )
           )}
@@ -263,14 +264,14 @@ export default function Dev({
                   transition={{ type: 'spring' }}
                   onClick={() => openCard(sh)}
                 >
-                  <div className="lg:ml-10 md:-top-24 absolute lg:-top-28 lg:w-56 w-56 md:w-auto -top-32">
+                  <div className="lg:ml-10 md:-top-24 absolute lg:-top-28 lg:w-56 md:w-auto -top-24">
                     <img
                       src={shuffle ? '/surprise/box.png' : sh.image}
                       alt=""
                     />
                   </div>
                   {!shuffle && (
-                    <div className="text-xl font-bold absolute bottom-2 ml-auto w-full ">
+                    <div className="text-xl font-bold absolute bottom-2 ml-auto w-full capitalize">
                       {sh.attribute_data?.name[channelName][locale || 'ru']}
                     </div>
                   )}
@@ -279,15 +280,13 @@ export default function Dev({
             </div>
           )}
           {!shuffle && (
-            <div className="m-auto w-max mt-8">
-              <button
-                onClick={() => {
-                  startShuffle()
-                }}
-                className="text-white md:text-4xl text-2xl px-3 font-bold bg-yellow border-white border-2 rounded-full md:px-32 pt-1 pb-3"
-              >
-                перемешать
-              </button>
+            <div
+              className="m-auto w-max mt-8 md:text-4xl text-2xl px-3 font-bold bg-yellow border-white border-2 rounded-full md:px-32 py-1  text-white cursor-pointer mb-10 md:mb-0"
+              onClick={() => {
+                startShuffle()
+              }}
+            >
+              {tr('mix')}
             </div>
           )}
           <Transition appear show={isOpenCard} as={Fragment}>
@@ -325,16 +324,17 @@ export default function Dev({
                   </Dialog.Title>
                   <img className="m-auto w-48" src={chosenCard?.image} alt="" />
                   <div className="md:w-72 m-auto">
-                    <span className="text-yellow">Поздравляем!</span>{' '}
-                    <span className="font-bold">ваш выиграш</span>{' '}
-                    автоматическии добавлен в корзину, что-бы продолжить покупку
-                    нажмите кнопку “перейти в меню”
+                    <span className="text-yellow">
+                      {tr('congratulations')}!
+                    </span>{' '}
+                    <span className="font-bold">{tr('your_winnings')}</span>{' '}
+                    {tr('automatic_added')}
                   </div>
                   <button
                     onClick={() => closeCard()}
                     className="bg-secondary rounded-full px-12 py-3 text-xl text-white mt-3"
                   >
-                    Перейти в меню
+                    {tr('go_to_home')}
                   </button>
                 </div>
               </div>

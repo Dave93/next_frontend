@@ -14,6 +14,7 @@ import {
   faTelegramPlane,
 } from '@fortawesome/free-brands-svg-icons'
 import Link from 'next/link'
+import useTranslation from 'next-translate/useTranslation'
 
 export async function getServerSideProps({
   preview,
@@ -88,6 +89,8 @@ export default function Dev() {
       locale: loc,
     })
   }
+
+  const { t: tr } = useTranslation('common')
   return (
     <div
       className="w-screen bg-secondary md:px-36 px-2 py-4 h-screen fixed overflow-auto"
@@ -127,17 +130,15 @@ export default function Dev() {
       </div>
       <div className="xl:flex">
         <div>
-          <div className="md:mt-20 text-5xl">
-            <span className="text-yellow">CHOPAR</span> ДАРИТ
+          <div className="md:mt-20 text-5xl uppercase">
+            <span className="text-yellow">CHOPAR</span>{' '}
+            {locale == 'ru' ? tr('gives') : tr('gift')}
           </div>
-          <div className="md:text-8xl text-2xl font-black text-white mt-2">
-            ПОДАРКИ
+          <div className="md:text-8xl text-2xl font-black text-white mt-2 uppercase">
+            {locale == 'ru' ? tr('gift') : tr('gives')}
           </div>
           <div className="text-white md:w-[400px] mt-10">
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas
-            pulvinar ullamcorper lorem tristique suscipit. Vestibulum ut tortor
-            tincidunt, dictum risus non, pellentesque erat. Vestibulum efficitur
-            sapien odio, at sagittis nulla
+            <div dangerouslySetInnerHTML={{ __html: tr('gift_text') }} />
           </div>
           <button
             onClick={() => {
@@ -149,8 +150,8 @@ export default function Dev() {
               backgroundRepeat: 'no-repeat',
             }}
           >
-            <div className="text-white md:text-3xl font-bold">
-              ПОЛУЧИТЬ ПОДАРОК
+            <div className="text-white md:text-3xl font-bold uppercase">
+              {tr('get_a_gift')}
             </div>
           </button>
         </div>
@@ -169,8 +170,8 @@ export default function Dev() {
             backgroundSize: 'cover',
           }}
         >
-          <div className="font-bold md:text-3xl pb-10 text-2xl text-white">
-            ПОЛУЧИТЬ ПОДАРОК
+          <div className="font-bold md:text-3xl pb-10 text-2xl text-white uppercase">
+            {tr('get_a_gift')}
           </div>
         </button>
       </div>
@@ -199,7 +200,7 @@ export default function Dev() {
         </a>
       </div>
       <div className="text-white text-center md:text-left">
-        ПОДПИСЫВАЙТЕСЬ НА НАС
+        {tr('follow_us')}
       </div>
     </div>
   )
