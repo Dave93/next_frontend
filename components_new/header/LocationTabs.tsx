@@ -435,7 +435,6 @@ const LocationTabs: FC<Props> = ({ setOpen }) => {
 
   const loadPolygonsToMap = (ymaps: any) => {
     setYmaps(ymaps)
-    console.log(ymaps)
     var geolocation = ymaps.geolocation
     geolocation
       .get({
