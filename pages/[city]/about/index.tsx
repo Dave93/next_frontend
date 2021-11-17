@@ -47,6 +47,7 @@ export default function AboutPage() {
         <title>О компании Chopar Pizza</title>
         <meta property="og:title" content="О компании Chopar Pizza" />
         <meta name="og:description" content="История бренда Chopar Pizza" />
+        <meta name="description" content="История бренда Chopar Pizza" />
       </Head>    
       <About />
     </>

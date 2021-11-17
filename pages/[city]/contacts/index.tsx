@@ -51,6 +51,10 @@ export default function ContactsPage() {
           name="og:description"
           content="Контакты и график работы Chopar Pizza"
         />
+        <meta
+          name="description"
+          content="Контакты и график работы Chopar Pizza"
+        />
       </Head>
       <Contacts />
     </>

@@ -51,6 +51,10 @@ export default function DeliveryPage() {
           name="og:description"
           content="Как сделать заказ, инструкция и дополнительная информация"
         />
+        <meta
+          name="description"
+          content="Как сделать заказ, инструкция и дополнительная информация"
+        />
       </Head>
       <Delivery />
     </>
