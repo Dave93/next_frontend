@@ -19,6 +19,7 @@ import defaultChannel from '@lib/defaultChannel'
 import { useCart } from '@framework/cart'
 import dynamic from 'next/dynamic'
 import CreateYourPizza from '@components_new/product/CreateYourPizza'
+import Head from 'next/head'
 
 const HalfPizzaNoSSR = dynamic(
   () => import('@components_new/product/CreateYourPizzaCommon'),
@@ -203,6 +204,11 @@ export default function Home({
 
   return (
     <>
+      <Head>
+        <title>Заказать пиццу с доставкой в Ташкенте | Chopar Pizza</title>
+        <meta property="og:title" content="Заказать пиццу с доставкой в Ташкенте | Chopar Pizza" />
+        <meta name="og:description" content="Бесплатная доставка пиццы в Ташкенте, заказать можно на нашем сайте или позвонив по номеру телефона +998 71 205-11-11 | Chopar Pizza " />
+      </Head>
       <MainSlider />
       <div className="lg:hidden mx-8 my-5">
         <MobSetLocation />

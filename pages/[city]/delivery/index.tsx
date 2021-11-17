@@ -2,6 +2,8 @@ import { Layout } from '@components/common'
 import commerce from '@lib/api/commerce'
 import { GetServerSidePropsContext } from 'next'
 import Delivery from '@components_new/delivery/Delivery'
+import React from 'react'
+import Head from 'next/head'
 
 export async function getServerSideProps({
   preview,
@@ -42,6 +44,14 @@ export async function getServerSideProps({
 export default function DeliveryPage() {
   return (
     <>
+      <Head>
+        <title>Доставка и оплата</title>
+        <meta property="og:title" content="Доставка и оплата" />
+        <meta
+          name="og:description"
+          content="Как сделать заказ, инструкция и дополнительная информация"
+        />
+      </Head>
       <Delivery />
     </>
   )

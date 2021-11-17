@@ -2,6 +2,8 @@ import { Layout } from '@components/common'
 import commerce from '@lib/api/commerce'
 import { GetServerSidePropsContext } from 'next'
 import Contacts from '@components_new/contacts/Contacts'
+import React from 'react'
+import Head from 'next/head'
 
 export async function getServerSideProps({
   preview,
@@ -42,6 +44,14 @@ export async function getServerSideProps({
 export default function ContactsPage() {
   return (
     <>
+      <Head>
+        <title>Наши контакты </title>
+        <meta property="og:title" content="Наши контакты" />
+        <meta
+          name="og:description"
+          content="Контакты и график работы Chopar Pizza"
+        />
+      </Head>
       <Contacts />
     </>
   )

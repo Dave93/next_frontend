@@ -9,6 +9,8 @@ import { useRouter } from 'next/router'
 import NewsItem from '@components_new/news/NewsItem'
 import useTranslation from 'next-translate/useTranslation'
 import { useUI } from '@components/ui/context'
+import React from 'react'
+import Head from 'next/head'
 
 export async function getServerSideProps({
   preview,
@@ -66,6 +68,11 @@ export default function News({ news }: { news: any }) {
   })
   return (
     <>
+      <Head>
+        <title>Акции от Chopar Pizza</title>
+        <meta property="og:title" content="Акции от Chopar Pizza" />
+        <meta name="og:description" content="Акции проводимые компанией " />
+      </Head>
       <div className="flex items-center justify-center md:my-10 space-x-6 py-6 md:py-0">
         {items.map((item, id) => {
           let href = `${item.href}`
