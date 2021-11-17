@@ -4,6 +4,7 @@ import { GetServerSidePropsContext } from 'next'
 import Contacts from '@components_new/contacts/Contacts'
 import React from 'react'
 import Head from 'next/head'
+import { NextSeo } from 'next-seo'
 
 export async function getServerSideProps({
   preview,
@@ -44,18 +45,10 @@ export async function getServerSideProps({
 export default function ContactsPage() {
   return (
     <>
-      <Head>
-        <title>Наши контакты </title>
-        <meta property="og:title" content="Наши контакты" />
-        <meta
-          name="og:description"
-          content="Контакты и график работы Chopar Pizza"
-        />
-        <meta
-          name="description"
-          content="Контакты и график работы Chopar Pizza"
-        />
-      </Head>
+      <NextSeo
+        title="Наши контакты"
+        description="Контакты и график работы Chopar Pizza"
+      />
       <Contacts />
     </>
   )

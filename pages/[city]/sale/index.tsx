@@ -9,6 +9,7 @@ import { useRouter } from 'next/router'
 import SaleItem from '@components_new/sale/SaleItem'
 import useTranslation from 'next-translate/useTranslation'
 import { useUI } from '@components/ui/context'
+import { NextSeo } from 'next-seo'
 
 export async function getServerSideProps({
   preview,
@@ -68,6 +69,10 @@ export default function Sale({ sale }: { sale: any }) {
   })
   return (
     <>
+      <NextSeo
+        title="Акции от Chopar Pizza"
+        description="Акции проводимые компанией "
+      />
       <div className="flex items-center justify-center md:my-10 space-x-6 py-6 md:py-0">
         {items.map((item, id) => {
           let href = `${item.href}`

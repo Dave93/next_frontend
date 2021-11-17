@@ -4,6 +4,7 @@ import { GetServerSidePropsContext } from 'next'
 import Delivery from '@components_new/delivery/Delivery'
 import React from 'react'
 import Head from 'next/head'
+import { NextSeo } from 'next-seo'
 
 export async function getServerSideProps({
   preview,
@@ -44,18 +45,10 @@ export async function getServerSideProps({
 export default function DeliveryPage() {
   return (
     <>
-      <Head>
-        <title>Доставка и оплата</title>
-        <meta property="og:title" content="Доставка и оплата" />
-        <meta
-          name="og:description"
-          content="Как сделать заказ, инструкция и дополнительная информация"
-        />
-        <meta
-          name="description"
-          content="Как сделать заказ, инструкция и дополнительная информация"
-        />
-      </Head>
+      <NextSeo
+        title="Доставка и оплата"
+        description="Как сделать заказ, инструкция и дополнительная информация"
+      />
       <Delivery />
     </>
   )

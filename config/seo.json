@@ -1,13 +1,13 @@
 {
   "title": "Chopar",
-  "titleTemplate": "%s | Chopar Pizza",
+  "titleTemplate": "%s",
   "description": "Chopar Pizza",
   "openGraph": {
     "title": "Chopar Pizza",
     "description": "Chopar Pizza",
     "type": "website",
     "locale": "en_IE",
-    "url": "https://store.hq.fungeek.net",
+    "url": "https://choparpizza.uz",
     "site_name": "Chopar Pizza",
     "images": [
       {

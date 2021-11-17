@@ -3,6 +3,7 @@ import commerce from '@lib/api/commerce'
 import { GetServerSidePropsContext } from 'next'
 import About from '@components_new/about/About'
 import Head from 'next/head'
+import { NextSeo } from 'next-seo'
 
 export async function getServerSideProps({
   preview,
@@ -43,12 +44,10 @@ export async function getServerSideProps({
 export default function AboutPage() {
   return (
     <>
-      <Head>
-        <title>О компании Chopar Pizza</title>
-        <meta property="og:title" content="О компании Chopar Pizza" />
-        <meta name="og:description" content="История бренда Chopar Pizza" />
-        <meta name="description" content="История бренда Chopar Pizza" />
-      </Head>    
+      <NextSeo
+        title="О компании Chopar Pizza"
+        description="История бренда Chopar Pizza"
+      />
       <About />
     </>
   )
