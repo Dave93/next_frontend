@@ -36,31 +36,41 @@ const UserData: FC = () => {
         <div className="text-xs w-80 text-gray-400">{tr('profile_desc')}</div>
       </div>
       <div className="flex items-end">
-        {items.map((item, id) => (
-          <div className="flex items-center ml-10" key={id}>
-            <img
-              src={`${pathname == item.href ? item.activeIcon : item.icon}`}
-            />
-            {item.href == '/profile/logout' ? (
-              <span
-                className="block ml-1 text-sm cursor-pointer text-gray-400"
-                onClick={logout}
-              >
-                {item.name}
-              </span>
-            ) : (
-              <Link href={item.href} locale={locale} prefetch={false}>
-                <a
-                  className={`${
-                    pathname == item.href ? 'text-yellow' : 'text-gray-400'
-                  } ml-1 text-sm`}
+        {items.map((item, id) => {
+          let href = item.href
+          if (href.indexOf('http') < 0) {
+            href = `/${activeCity.slug}${item.href}`
+          }
+          return (
+            <div className="flex items-center ml-10" key={id}>
+              <img
+                src={`${
+                  pathname.indexOf(item.href) >= 0 ? item.activeIcon : item.icon
+                }`}
+              />
+              {item.href == '/profile/logout' ? (
+                <span
+                  className="block ml-1 text-sm cursor-pointer text-gray-400"
+                  onClick={logout}
                 >
                   {item.name}
-                </a>
-              </Link>
-            )}
-          </div>
-        ))}
+                </span>
+              ) : (
+                <Link href={href} locale={locale} prefetch={false}>
+                  <a
+                    className={`${
+                      pathname.indexOf(item.href) >= 0
+                        ? 'text-yellow'
+                        : 'text-gray-400'
+                    } ml-1 text-sm`}
+                  >
+                    {item.name}
+                  </a>
+                </Link>
+              )}
+            </div>
+          )
+        })}
       </div>
     </div>
   )
