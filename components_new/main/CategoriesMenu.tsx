@@ -55,7 +55,7 @@ const CategoriesMenu: FC<{ categories: any[]; channelName: string }> = ({
               <div
                 className={`${
                   fixed ? 'text-white' : 'text-secondary'
-                } font-bold text-base text-center  cursor-pointer uppercase min-w-max px-4`}
+                } font-serif text-base text-center  cursor-pointer uppercase min-w-max px-4`}
                 key={item.id}
               >
                 <Link

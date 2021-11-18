@@ -1,6 +1,7 @@
 import 'tailwindcss/tailwind.css'
 import '@assets/chrome-bug.css'
 import 'keen-slider/keen-slider.min.css'
+import '@assets/fonts.css'
 
 import 'react-toastify/dist/ReactToastify.css'
 import '@egjs/flicking-plugins/dist/arrow.css'

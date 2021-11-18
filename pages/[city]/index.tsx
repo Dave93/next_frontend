@@ -263,7 +263,7 @@ export default function Home({
             {halfModeProds.map((sec: any) => (
               <div
                 key={sec.id}
-                className="border transition-all overflow-hidden duration-500 border-yellow mt-4 px-5 py-7 relative rounded-[15px] bg-white shadow-sm hover:shadow-xl"
+                className="border transition-all overflow-hidden duration-500 border-yellow mt-10 px-5 py-7 relative rounded-[15px] bg-white shadow-sm hover:shadow-xl"
               >
                 <HalfPizzaNoSSR
                   sec={sec}
