@@ -25,7 +25,7 @@ const Orders: FC<OrdersListProps> = ({ orders }) => {
   const { t: tr } = useTranslation('common')
   const router = useRouter()
   const { locale } = router
-  const { user } = useUI()
+  const { user, activeCity } = useUI()
 
   const hashids = new Hashids(
     'order',
@@ -63,7 +63,7 @@ const Orders: FC<OrdersListProps> = ({ orders }) => {
                   <div className="flex  text-base justify-between border-b pb-8">
                     {open ? (
                       <div className="font-bold text-xl text-secondary">
-                        <Link href={`${'/order/' + hashids.encode(order.id)}`}>
+                        <Link href={`${'/' + activeCity.slug + '/order/' + hashids.encode(order.id)}`}>
                           <a>
                             {tr('order')} № {order.id}
                           </a>

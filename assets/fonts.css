@@ -1,10 +1,10 @@
 
 @font-face {
   font-family: 'pfhandbookprobold';
-  src: local('pfhandbookprobold'), url("/fonts/pfhandbookprobold.ttf") format('truetype');
+  src: local('pfhandbookprobold'), url("/pfhandbookprobold.ttf") format('truetype');
 }
 
 @font-face {
   font-family: 'pfhandbookproregular';
-  src: local('pfhandbookproregular'), url("/fonts/pfhandbookproregular.ttf") format('truetype');
+  src: local('pfhandbookproregular'), url("/pfhandbookproregular.ttf") format('truetype');
 }
