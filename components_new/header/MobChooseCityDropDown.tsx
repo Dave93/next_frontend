@@ -69,7 +69,7 @@ const ChooseCityDropDown: FC = () => {
                     onClick={() => changeCity(item)}
                     className={`block px-4 py-2 cursor-pointer text-xl ml-12`}
                   >
-                    {item.name}
+                    {locale == 'ru' ? item.name : item.name_uz}
                   </span>
                 </Menu.Item>
               ))}
