@@ -6,7 +6,13 @@ import { useUI } from '@components/ui/context'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
 
-const UserProfileDropDown: FC = () => {
+type UserProfileDropdownProps = {
+  setMobMenuOpen?: any
+}
+
+const UserProfileDropDown: FC<UserProfileDropdownProps> = ({
+  setMobMenuOpen,
+}) => {
   const { t: tr } = useTranslation('common')
   const router = useRouter()
   const { locale, pathname } = router
@@ -68,7 +74,10 @@ const UserProfileDropDown: FC = () => {
                       </span>
                     ) : (
                       <Link href={href} locale={locale} prefetch={false}>
-                        <a className="block px-4 py-2 text-sm cursor-pointer text-secondary hover:text-white hover:bg-secondary">
+                        <a
+                          className="block px-4 py-2 text-sm cursor-pointer text-secondary hover:text-white hover:bg-secondary"
+                          onClick={() => setMobMenuOpen(false)}
+                        >
                           {item.name}
                         </a>
                       </Link>

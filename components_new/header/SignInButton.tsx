@@ -249,7 +249,7 @@ const SignInButton: FC<SingInButtonProps> = ({ setMobMenuOpen }) => {
     <>
       {user && (
         <div>
-          <UserProfileDropDown />
+          <UserProfileDropDown setMobMenuOpen={setMobMenuOpen} />
         </div>
       )}
       {!user && (
