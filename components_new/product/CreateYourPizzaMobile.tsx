@@ -146,7 +146,11 @@ const CreateYourPizza: FC<CreatePizzaProps> = ({ sec, channelName }) => {
             )
             .map((m: any) => ({ id: m.id }))
         } else {
-          selectedModifiers = [{ id: freeModifiers.id }]
+          selectedModifiers = [
+            {
+              id: leftProduct.modifiers.find((m: any) => m.price == 0).id,
+            },
+          ]
         }
       }
     }
@@ -171,7 +175,8 @@ const CreateYourPizza: FC<CreatePizzaProps> = ({ sec, channelName }) => {
                 quantity: 1,
                 modifiers: [
                   {
-                    id: freeModifiers.id,
+                    id: rightProduct.modifiers.find((m: any) => m.price == 0)
+                      .id,
                   },
                 ],
               },
@@ -210,7 +215,8 @@ const CreateYourPizza: FC<CreatePizzaProps> = ({ sec, channelName }) => {
                 quantity: 1,
                 modifiers: [
                   {
-                    id: freeModifiers.id,
+                    id: rightProduct.modifiers.find((m: any) => m.price == 0)
+                      .id,
                   },
                 ],
               },
