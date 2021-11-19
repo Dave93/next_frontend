@@ -33,7 +33,11 @@ const errors: Errors = {
 
 let otpTimerRef: NodeJS.Timeout
 
-const SignInButton: FC = () => {
+type SingInButtonProps = {
+  setMobMenuOpen?: any
+}
+
+const SignInButton: FC<SingInButtonProps> = ({ setMobMenuOpen }) => {
   const { t: tr } = useTranslation('common')
 
   let router = useRouter()
@@ -56,6 +60,9 @@ const SignInButton: FC = () => {
   const otpTime = useRef(0)
 
   const openModal = () => {
+    if (setMobMenuOpen) {
+      setMobMenuOpen(false)
+    }
     openSignInModal()
   }
 

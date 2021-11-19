@@ -152,7 +152,7 @@ const Header: FC<{
               <MobChooseCityDropDown />
             </div>
             <div className="border-b border-blue py-8">
-              <SignInButton />
+              <SignInButton setMobMenuOpen={setMobMenuOpen} />
               <MobHeaderMenu menuItems={menu} setMobMenuOpen={setMobMenuOpen} />
             </div>
             <div className="ml-9 text-white pt-8">
