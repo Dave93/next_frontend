@@ -121,6 +121,7 @@ export default function Dev({
   const [shuffle, setShuffle] = useState(false)
   const [chosenCard, setChosenCard] = useState(null as any)
   const [isOpenCard, setIsOpenCard] = useState(false)
+  const [isLookingForBonus, setIsLookingForBonus] = useState(false)
 
   const getChannel = async () => {
     const channelData = await defaultChannel()
@@ -146,6 +147,11 @@ export default function Dev({
 
   const openCard = async (sh: any) => {
     if (shuffle) {
+      if (isLookingForBonus) {
+        return
+      }
+
+      setIsLookingForBonus(true)
       const otpToken = Cookies.get('opt_token')
 
       let basketId = localStorage.getItem('basketId')
