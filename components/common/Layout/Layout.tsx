@@ -38,6 +38,14 @@ import { parsePhoneNumber } from 'libphonenumber-js'
 import { Dialog, Transition } from '@headlessui/react'
 import Cookies from 'js-cookie'
 import CityModal from './CityModal'
+import dynamic from 'next/dynamic'
+import SignInModal from '@components_new/header/SignInModal'
+
+const BonusModalNoSSR = dynamic(
+  () => import('@components/common/Layout/BonusModal'),
+  { ssr: false }
+)
+
 const { publicRuntimeConfig } = getConfig()
 
 interface Props {
@@ -302,6 +310,8 @@ const Layout: FC<Props> = ({
         </div>
 
         <CityModal cities={cities} />
+        <BonusModalNoSSR />
+        <SignInModal />
       </div>
       <div className={cn(styles.root)}>
         {/* <Navbar links={navBarlinks} />
