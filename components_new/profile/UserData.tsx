@@ -23,6 +23,7 @@ const UserData: FC = () => {
     e.preventDefault()
     e.stopPropagation()
     localStorage.removeItem('mijoz')
+    localStorage.removeItem('basketId')
     setUserData(null)
     router.push(`/${activeCity.slug}`)
   }
