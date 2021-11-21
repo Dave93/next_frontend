@@ -29,6 +29,7 @@ const UserProfileDropDown: FC<UserProfileDropdownProps> = ({
     e.preventDefault()
     e.stopPropagation()
     localStorage.removeItem('mijoz')
+    localStorage.removeItem('basketId')
     setUserData(null)
   }
 
