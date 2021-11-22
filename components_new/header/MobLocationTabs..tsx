@@ -301,7 +301,7 @@ const MobLocationTabs: FC<MobLocationTabProps> = ({ setOpen }) => {
   }
 
   const clickOnMap = async (event: any) => {
-    const coords = event.get('coords')
+    const coords = event.get('coords') || event.get('position')
     let polygon = objects.current.searchContaining(coords).get(0)
     if (!polygon) {
       toast.warn(tr('point_delivery_not_available'), {
@@ -453,6 +453,20 @@ const MobLocationTabs: FC<MobLocationTabProps> = ({ setOpen }) => {
 
   const loadPolygonsToMap = (ymaps: any) => {
     setYmaps(ymaps)
+    map.current.controls.remove('geolocationControl')
+    var geolocationControl = new ymaps.control.GeolocationControl({
+      options: { noPlacemark: true },
+    })
+    geolocationControl.events.add('locationchange', function (event: any) {
+      var position = event.get('position'),
+        // При создании метки можно задать ей любой внешний вид.
+        locationPlacemark = new ymaps.Placemark(position)
+
+      clickOnMap(event)
+      // Установим новый центр карты в текущее местоположение пользователя.
+      map.current.panTo(position)
+    })
+    map.current.controls.add(geolocationControl)
     let geoObjects: any = {
       type: 'FeatureCollection',
       metadata: {
