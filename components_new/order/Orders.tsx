@@ -752,6 +752,23 @@ const Orders: FC<OrdersProps> = ({ channelName }: { channelName: any }) => {
       return openSignInModal()
     }
 
+    if (!locationData) {
+      toast.warn(tr('location_tabs_incorrect_data'), {
+        position: toast.POSITION.BOTTOM_RIGHT,
+        hideProgressBar: true,
+      })
+      return
+    } else if (
+      locationData.deliveryType === 'deliver' &&
+      (!locationData.location || !locationData.location.length)
+    ) {
+      toast.warn(tr('location_tabs_incorrect_data'), {
+        position: toast.POSITION.BOTTOM_RIGHT,
+        hideProgressBar: true,
+      })
+      return
+    }
+
     setIsSavingOrder(true)
     await setCredentials()
     const otpToken = Cookies.get('opt_token')

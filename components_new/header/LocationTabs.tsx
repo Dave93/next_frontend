@@ -393,13 +393,18 @@ const LocationTabs: FC<Props> = ({ setOpen }) => {
   ) => {
     event?.preventDefault()
     event?.stopPropagation()
+
     setIsSearchingTerminals(true)
     if (!Object.keys(data).length) {
       data = getValues()
     }
 
-    if (!locationData || !locationData.location) {
-      toast.warn('Не указан адрес или точка доставки', {
+    if (
+      !locationData ||
+      !locationData.location ||
+      !locationData.location.length
+    ) {
+      toast.warn(tr('location_tabs_incorrect_data'), {
         position: toast.POSITION.BOTTOM_RIGHT,
         hideProgressBar: true,
       })
@@ -524,8 +529,6 @@ const LocationTabs: FC<Props> = ({ setOpen }) => {
     if (cities) return cities[0]
     return null
   }, [cities, activeCity])
-
-  console.log(yandexGeoKey)
 
   return (
     <>

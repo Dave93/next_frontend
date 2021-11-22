@@ -396,8 +396,12 @@ const MobLocationTabs: FC<MobLocationTabProps> = ({ setOpen }) => {
       data = getValues()
     }
 
-    if (!locationData || !locationData.location) {
-      toast.warn('Не указан адрес или точка доставки', {
+    if (
+      !locationData ||
+      !locationData.location ||
+      !locationData.location.length
+    ) {
+      toast.warn(tr('location_tabs_incorrect_data'), {
         position: toast.POSITION.BOTTOM_RIGHT,
         hideProgressBar: true,
       })
