@@ -179,9 +179,9 @@ const Layout: FC<Props> = ({
                         )}
                       </div>
                     </div>
-                    <span className="md:block mt-7 text-xl hidden">
+                    <h3 className="md:block mt-7 text-xl hidden">
                       {tr('footer_pizza_unites')}
-                    </span>
+                    </h3>
                   </div>
                   <div className="flex-grow border-b border-blue md:border-0 mt-5 md:mt-0 pb-5 md:pb-0">
                     <div className="md:flex justify-center">
@@ -292,7 +292,7 @@ const Layout: FC<Props> = ({
                                 className="no-underline text-white"
                                 href={soc.link}
                               >
-                                <FontAwesomeIcon icon={socIcons[soc.code]} />
+                                <FontAwesomeIcon icon={socIcons[soc.code]} className="w-10 h-10"/>
                               </a>
                             </li>
                           )

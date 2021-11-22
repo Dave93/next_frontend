@@ -21,6 +21,7 @@ import dynamic from 'next/dynamic'
 import CreateYourPizza from '@components_new/product/CreateYourPizza'
 import Head from 'next/head'
 import { NextSeo } from 'next-seo'
+import useTranslation from 'next-translate/useTranslation'
 
 const HalfPizzaNoSSR = dynamic(
   () => import('@components_new/product/CreateYourPizzaCommon'),
@@ -54,6 +55,7 @@ export async function getServerSideProps({
   const siteInfoPromise = commerce.getSiteInfo({ config, preview })
   const { products }: { products: any[] } = await productsPromise
   const { pages } = await pagesPromise
+
   const {
     categories,
     brands,
@@ -63,6 +65,7 @@ export async function getServerSideProps({
     cities,
     currentCity,
   } = await siteInfoPromise
+
   if (!currentCity) {
     return {
       notFound: true,
@@ -106,6 +109,7 @@ export default function Home({
   const { locale } = router
   const [channelName, setChannelName] = useState('chopar')
   const [isStickySmall, setIsStickySmall] = useState(false)
+  const { t: tr } = useTranslation('common')
 
   const getChannel = async () => {
     const channelData = await defaultChannel()
@@ -215,6 +219,9 @@ export default function Home({
       </div>
       <CategoriesMenu categories={categories} channelName={channelName} />
       <div className="container mx-auto">
+        <h1 className="border-b-4 border-yellow py-1 text-3xl w-max my-10 ml-4 md:ml-0">
+          {tr('pizza_for_family')}
+        </h1>
         <div className="grid lg:grid-cols-4 grid-cols-1 md:grid-cols-2 gap-10 mt-10">
           <div className="col-span-3 md:hidden">
             {halfModeProds.map((sec: any) => (
