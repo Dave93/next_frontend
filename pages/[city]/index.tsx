@@ -22,6 +22,7 @@ import CreateYourPizza from '@components_new/product/CreateYourPizza'
 import Head from 'next/head'
 import { NextSeo } from 'next-seo'
 import useTranslation from 'next-translate/useTranslation'
+import { useUI } from '@components/ui/context'
 
 const HalfPizzaNoSSR = dynamic(
   () => import('@components_new/product/CreateYourPizzaCommon'),
@@ -110,6 +111,7 @@ export default function Home({
   const [channelName, setChannelName] = useState('chopar')
   const [isStickySmall, setIsStickySmall] = useState(false)
   const { t: tr } = useTranslation('common')
+  const { setCitiesData, activeCity, setActiveCity } = useUI()
 
   const getChannel = async () => {
     const channelData = await defaultChannel()
@@ -220,7 +222,7 @@ export default function Home({
       <CategoriesMenu categories={categories} channelName={channelName} />
       <div className="container mx-auto">
         <h1 className="py-1 md:text-4xl text-2xl w-max my-10 m-auto">
-          {tr('pizza_for_family')}
+          {tr('pizza_for_family_' + activeCity.slug)}
         </h1>
         <div className="grid lg:grid-cols-4 grid-cols-1 md:grid-cols-2 gap-10 mt-10">
           <div className="col-span-3 md:hidden">

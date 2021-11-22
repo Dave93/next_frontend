@@ -112,13 +112,29 @@ const OrderAccept: FC<OrderDetailProps> = ({ order, orderStatuses }) => {
 
   return (
     <div>
-      <div className="p-10 rounded-2xl text-xl mt-5 bg-white">
-        <div className=" flex justify-between">
+      <div className="md:p-10 p-5 rounded-2xl text-xl mt-5 bg-white">
+        <div className=" flex justify-between items-center">
           <div>
-            <div className="text-base text-gray-500 mb-2">
+            <div className="text-base text-gray-500">
               {tr('order_is_accepted')}
             </div>
-            <div className="text-3xl mb-7 font-bold">№ {order.id}</div>
+            <div className="text-3xl  font-bold">№ {order.id}</div>
+          </div>
+
+          <div className="text-center">
+            <div className="text-base font-bold text-gray-500 mb-2">
+              {tr('order_status')}
+            </div>
+            {Object.keys(orderStatuses).map(
+              (status: any, key) =>
+                key == currentStatusIndex && (
+                  <div key={status} className="text-center">
+                    <div className="bg-yellow rounded-full px-2 text-white">
+                      {tr(`order_status_${status}`)}
+                    </div>
+                  </div>
+                )
+            )}
           </div>
           <div>
             <div className="text-base text-gray-500 mb-2 text-right">
@@ -132,35 +148,8 @@ const OrderAccept: FC<OrderDetailProps> = ({ order, orderStatuses }) => {
             </div>
           </div>
         </div>
-        <div className="md:flex items-center justify-between md:mb-10 ">
-          {Object.keys(orderStatuses).map((status: any, key) => (
-            <div key={status} className="md:flex items-center">
-              <div className="md:h-24 md:relative flex md:flex-col items-center top-5 md:w-12">
-                {key <= currentStatusIndex ? (
-                  <img src="/assets/status.png" />
-                ) : (
-                  <div className="border-2 h-12 rounded-full w-12"></div>
-                )}
-                <div
-                  className={`bottom-0 leading-4 md:mt-2 md:text-base text-center ml-4 md:ml-0 ${
-                    key <= currentStatusIndex ? 'text-yellow' : 'text-gray-400'
-                  }`}
-                >
-                  {tr(`order_status_${status}`)}
-                </div>
-              </div>
-              {key != Object.keys(orderStatuses).length - 1 && (
-                <div
-                  className={`transform rotate-90 md:rotate-0 border rounded-full md:w-24 w-12 md:pr-24 md:ml-0 my-7 ${
-                    key < currentStatusIndex ? 'border-yellow' : ''
-                  }`}
-                ></div>
-              )}
-            </div>
-          ))}
-        </div>
       </div>
-      <div className="p-10 rounded-2xl text-xl mt-5 bg-white">
+      <div className="md:p-10 p-5 rounded-2xl text-xl mt-5 bg-white">
         <div className="text-lg mb-7 font-bold">{tr('delivery_address')}</div>
         <div>
           {order?.billing_address}
@@ -182,7 +171,7 @@ const OrderAccept: FC<OrderDetailProps> = ({ order, orderStatuses }) => {
         </div>
         <div></div>
       </div>
-      <div className="p-10 rounded-2xl text-xl mt-5 bg-white">
+      <div className="md:p-10 p-5 rounded-2xl text-xl mt-5 bg-white">
         <div className="text-lg mb-10 font-bold">
           {order?.basket?.lines.length} {tr('product')}{' '}
           {locale == 'ru' ? 'на' : ''}{' '}
@@ -291,7 +280,7 @@ const OrderAccept: FC<OrderDetailProps> = ({ order, orderStatuses }) => {
           </div>
         ))}
       </div>
-      <div className="p-10 rounded-2xl text-xl mt-5 bg-white mb-3">
+      <div className="md:p-10 p-5 rounded-2xl text-xl mt-5 bg-white mb-3">
         {reviewsData && reviewsData.length > 0 && (
           <div className="mt-2 mb-4">
             <div className="text-lg mb-4 font-bold">{tr('your_reviews')}</div>

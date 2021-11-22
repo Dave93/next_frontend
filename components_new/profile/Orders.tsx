@@ -42,7 +42,7 @@ const Orders: FC<OrdersListProps> = ({ orders }) => {
     getChannel()
   }, [])
   return (
-    <div>
+    <div className="mx-5 md:mx-0">
       <div className="text-2xl mt-8 mb-5">{tr('order_myOrders')}</div>
       {orders.length === 0 && (
         <div className="flex justify-around">

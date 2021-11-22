@@ -136,7 +136,7 @@ const PersonalData: FC = () => {
   }
 
   return (
-    <div className="w-full max-w-xs">
+    <div className="md:w-full md:max-w-xs mx-5 md:mx-0 mb-5">
       <div className="text-2xl mt-8 mb-5">{tr('personal_data')}</div>
       <form onSubmit={handleSubmit(onSubmit)}>
         <div className="mt-10">

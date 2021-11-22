@@ -29,21 +29,21 @@ const UserData: FC = () => {
   }
 
   return (
-    <div className="border-b justify-between md:flex pb-5">
+    <div className="border-b justify-between md:flex pb-5 mx-5 md:mx-0">
       <div>
         <div className="text-3xl mb-1">
           {tr('profile_hello')}, {user?.user?.name}!
         </div>
-        <div className="text-xs w-80 text-gray-400">{tr('profile_desc')}</div>
+        <div className="md:text-xs md:w-80 text-gray-400">{tr('profile_desc')}</div>
       </div>
-      <div className="flex items-end">
+      <div className="flex items-end justify-between mt-5">
         {items.map((item, id) => {
           let href = item.href
           if (href.indexOf('http') < 0) {
             href = `/${activeCity.slug}${item.href}`
           }
           return (
-            <div className="flex items-center ml-10" key={id}>
+            <div className="flex items-center md:ml-10 " key={id}>
               <img
                 src={`${
                   pathname.indexOf(item.href) >= 0 ? item.activeIcon : item.icon

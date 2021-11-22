@@ -14,8 +14,8 @@ const menuItems: profileMenuItem[] = [
   },
   {
     href: '/sale',
-    icon: '/order.png',
-    activeIcon: '/activeOrder.png',
+    icon: '/order.svg',
+    activeIcon: '/activeOrder.svg',
     langCode: 'sale',
   },
 ]

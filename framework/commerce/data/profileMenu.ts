@@ -14,8 +14,8 @@ const menuItems: profileMenuItem[] = [
   // },
   {
     href: '/profile/orders',
-    icon: '/order.png',
-    activeIcon: '/activeOrder.png',
+    icon: '/order.svg',
+    activeIcon: '/activeOrder.svg',
     langCode: 'profile_orders',
   },
   // {
@@ -26,14 +26,14 @@ const menuItems: profileMenuItem[] = [
   // },
   {
     href: '/profile/account',
-    icon: '/personal.png',
-    activeIcon: '/activePersonal.png',
+    icon: '/personal.svg',
+    activeIcon: '/activePersonal.svg',
     langCode: 'profile_account',
   },
   {
     href: '/profile/logout',
-    icon: '/logout.png',
-    activeIcon: '/logout.png',
+    icon: '/logout.svg',
+    activeIcon: '/logout.svg',
     langCode: 'profile_logout',
   },
 ]
