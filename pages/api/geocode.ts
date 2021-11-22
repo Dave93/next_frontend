@@ -19,14 +19,18 @@ const handler = async function handler(req: any, res: any) {
     configData = JSON.parse(configData)
   } catch (e) {}
 
+  let yandexKey = configData.yandexGeoKey
+  yandexKey = yandexKey.split(',')
+  yandexKey = yandexKey[Math.floor(Math.random() * yandexKey.length)]
+
   let boundsArray = bounds.split(',')
 
   const { data: getCodeData } = await axios.get(
-    `https://geocode-maps.yandex.ru/1.x/?apikey=${
-      configData.yandexGeoKey
-    }&geocode=${encodeURI(text)}&bbox=${boundsArray[0]},${boundsArray[1]}~${
-      boundsArray[2]
-    },${boundsArray[3]}&format=json`
+    `https://geocode-maps.yandex.ru/1.x/?apikey=${yandexKey}&geocode=${encodeURI(
+      text
+    )}&bbox=${boundsArray[0]},${boundsArray[1]}~${boundsArray[2]},${
+      boundsArray[3]
+    }&format=json`
   )
 
   let result = [] as any[]

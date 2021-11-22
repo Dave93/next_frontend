@@ -66,6 +66,7 @@ const MobLocationTabs: FC<MobLocationTabProps> = ({ setOpen }) => {
   const objects = useRef<any>(null)
   const [geoSuggestions, setGeoSuggestions] = useState([])
   const [isSearchingTerminals, setIsSearchingTerminals] = useState(false)
+  const [yandexGeoKey, setYandexGeoKey] = useState('')
 
   const [selectedCoordinates, setSelectedCoordinates] = useState(
     locationData && locationData.location
@@ -198,6 +199,13 @@ const MobLocationTabs: FC<MobLocationTabProps> = ({ setOpen }) => {
       configData = JSON.parse(configData)
       setConfigData(configData)
     } catch (e) {}
+
+    let yandexGeoKey = configData.yandexGeoKey
+    yandexGeoKey = yandexGeoKey.split(',')
+    // get random item from yandexGeoKey
+    yandexGeoKey = yandexGeoKey[Math.floor(Math.random() * yandexGeoKey.length)]
+
+    setYandexGeoKey(yandexGeoKey)
   }
 
   useEffect(() => {
@@ -226,7 +234,7 @@ const MobLocationTabs: FC<MobLocationTabProps> = ({ setOpen }) => {
   }
 
   const debouncedAddressInputChangeHandler = useCallback(
-    debounce(addressInputChangeHandler, 300),
+    debounce(addressInputChangeHandler, 400),
     [configData]
   )
 
@@ -572,7 +580,12 @@ const MobLocationTabs: FC<MobLocationTabProps> = ({ setOpen }) => {
             </div>
           </div>
           <div>
-            <YMaps>
+            <YMaps
+              // enterprise
+              query={{
+                apikey: yandexGeoKey,
+              }}
+            >
               <div>
                 <Map
                   state={mapState}
