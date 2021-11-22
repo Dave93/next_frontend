@@ -146,32 +146,30 @@ export default function Dev({
   }
 
   const openCard = async (sh: any) => {
-    if (shuffle) {
-      if (isLookingForBonus) {
-        return
-      }
-
-      setIsLookingForBonus(true)
-      const otpToken = Cookies.get('opt_token')
-
-      let basketId = localStorage.getItem('basketId')
-      const { data } = await axios.get(
-        `${webAddress}/api/bonus_prods/show${
-          basketId ? '?basketId=' + basketId : ''
-        }`,
-        {
-          headers: {
-            'Content-Type': 'application/json',
-            Authorization: `Bearer ${otpToken}`,
-          },
-          withCredentials: true,
-        }
-      )
-      setChosenCard(data.data.prodData)
-      setIsOpenCard(true)
-      let basketData = data.data.basketResponse
-      localStorage.setItem('basketId', basketData.encoded_id)
+    if (isLookingForBonus) {
+      return
     }
+
+    setIsLookingForBonus(true)
+    const otpToken = Cookies.get('opt_token')
+
+    let basketId = localStorage.getItem('basketId')
+    const { data } = await axios.get(
+      `${webAddress}/api/bonus_prods/show${
+        basketId ? '?basketId=' + basketId : ''
+      }`,
+      {
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${otpToken}`,
+        },
+        withCredentials: true,
+      }
+    )
+    setChosenCard(data.data.prodData)
+    setIsOpenCard(true)
+    let basketData = data.data.basketResponse
+    localStorage.setItem('basketId', basketData.encoded_id)
   }
 
   const closeCard = () => {
@@ -192,14 +190,21 @@ export default function Dev({
 
       setShuffleItems(items)
 
-      setTimeout(() => {
-        items = lodashShuffle([...items])
-        items = lodashShuffle(items)
-        // items = lodashShuffle(items)
-        items = lodashShuffle(items)
+      // setTimeout(() => {
+      //   items = lodashShuffle([...items])
+      //   items = lodashShuffle(items)
+      //   // items = lodashShuffle(items)
+      //   items = lodashShuffle(items)
 
-        setShuffleItems(items)
-      }, 200)
+      //   setShuffleItems(items)
+      // }, 200)
+      for (let i = 0; i < items.length; i++) {
+        setTimeout(() => {
+          items = lodashShuffle([...items])
+          setShuffleItems(items)
+        }, i * 100)
+      }
+      openCard(items[0])
     }, 600)
   }
 
@@ -247,17 +252,11 @@ export default function Dev({
 
       {isBonusListSuccess && (
         <>
-          {!shuffle ? (
+          {!shuffle && (
             <div className="font-bold mt-5 text-4xl text-center text-white uppercase">
               {tr('stir_to')}{' '}
               <span className="text-yellow">{tr('get_a_gift')}</span>
             </div>
-          ) : (
-            !isOpenCard && (
-              <div className="font-bold mt-5 text-4xl text-center text-white uppercase">
-                {tr('choose_one_of_the_boxes')}
-              </div>
-            )
           )}
 
           {!isOpenCard && (
@@ -267,8 +266,7 @@ export default function Dev({
                   className="bg-white rounded-3xl h-32 text-center relative"
                   key={sh.id}
                   layout
-                  transition={{ type: 'spring' }}
-                  onClick={() => openCard(sh)}
+                  transition={{ type: 'spring', stiffness: 2000, damping: 50 }}
                 >
                   <div className="lg:ml-10 md:-top-24 absolute lg:-top-28 lg:w-56 md:w-auto -top-24">
                     <img

@@ -42,7 +42,7 @@ const Orders: FC<OrdersListProps> = ({ orders }) => {
     getChannel()
   }, [])
   return (
-    <div className="mx-5 md:mx-0">
+    <div className="mx-5 md:mx-0 mb-5">
       <div className="text-2xl mt-8 mb-5">{tr('order_myOrders')}</div>
       {orders.length === 0 && (
         <div className="flex justify-around">
@@ -60,7 +60,7 @@ const Orders: FC<OrdersListProps> = ({ orders }) => {
             <Disclosure>
               {({ open }) => (
                 <>
-                  <div className="flex  text-base justify-between border-b pb-8">
+                  <div className="md:flex text-base justify-between border-b pb-8">
                     {open ? (
                       <div className="font-bold text-xl text-secondary">
                         <Link href={`${'/' + activeCity.slug + '/order/' + hashids.encode(order.id)}`}>
