@@ -301,7 +301,7 @@ const MobLocationTabs: FC<MobLocationTabProps> = ({ setOpen }) => {
   }
 
   const clickOnMap = async (event: any) => {
-    const coords = event.get('coords')
+    const coords = event.get('coords') || event.get('position')
     let polygon = objects.current.searchContaining(coords).get(0)
     if (!polygon) {
       toast.warn(tr('point_delivery_not_available'), {
@@ -396,8 +396,12 @@ const MobLocationTabs: FC<MobLocationTabProps> = ({ setOpen }) => {
       data = getValues()
     }
 
-    if (!locationData || !locationData.location) {
-      toast.warn('Не указан адрес или точка доставки', {
+    if (
+      !locationData ||
+      !locationData.location ||
+      !locationData.location.length
+    ) {
+      toast.warn(tr('location_tabs_incorrect_data'), {
         position: toast.POSITION.BOTTOM_RIGHT,
         hideProgressBar: true,
       })
@@ -453,6 +457,20 @@ const MobLocationTabs: FC<MobLocationTabProps> = ({ setOpen }) => {
 
   const loadPolygonsToMap = (ymaps: any) => {
     setYmaps(ymaps)
+    map.current.controls.remove('geolocationControl')
+    var geolocationControl = new ymaps.control.GeolocationControl({
+      options: { noPlacemark: true },
+    })
+    geolocationControl.events.add('locationchange', function (event: any) {
+      var position = event.get('position'),
+        // При создании метки можно задать ей любой внешний вид.
+        locationPlacemark = new ymaps.Placemark(position)
+
+      clickOnMap(event)
+      // Установим новый центр карты в текущее местоположение пользователя.
+      map.current.panTo(position)
+    })
+    map.current.controls.add(geolocationControl)
     let geoObjects: any = {
       type: 'FeatureCollection',
       metadata: {
@@ -580,48 +598,50 @@ const MobLocationTabs: FC<MobLocationTabProps> = ({ setOpen }) => {
             </div>
           </div>
           <div>
-            <YMaps
-              // enterprise
-              query={{
-                apikey: yandexGeoKey,
-              }}
-            >
-              <div>
-                <Map
-                  state={mapState}
-                  onLoad={(ymaps: any) => loadPolygonsToMap(ymaps)}
-                  instanceRef={(ref) => (map.current = ref)}
-                  width="100%"
-                  height="270px"
-                  onClick={clickOnMap}
-                  modules={[
-                    'control.ZoomControl',
-                    'control.FullscreenControl',
-                    'control.GeolocationControl',
-                    'geoQuery',
-                  ]}
-                >
-                  {selectedCoordinates.map((item: any, index: number) => (
-                    <Placemark
-                      modules={['geoObject.addon.balloon']}
-                      defaultGeometry={[
-                        item?.coordinates?.lat,
-                        item?.coordinates?.long,
-                      ]}
-                      geomerty={[
-                        item?.coordinates?.lat,
-                        item?.coordinates?.long,
-                      ]}
-                      key={item.key}
-                      defaultOptions={{
-                        iconLayout: 'default#image',
-                        iconImageHref: '/map_placemark.png',
-                      }}
-                    />
-                  ))}
-                </Map>
-              </div>
-            </YMaps>
+            {yandexGeoKey && (
+              <YMaps
+                // enterprise
+                query={{
+                  apikey: yandexGeoKey,
+                }}
+              >
+                <div>
+                  <Map
+                    state={mapState}
+                    onLoad={(ymaps: any) => loadPolygonsToMap(ymaps)}
+                    instanceRef={(ref) => (map.current = ref)}
+                    width="100%"
+                    height="270px"
+                    onClick={clickOnMap}
+                    modules={[
+                      'control.ZoomControl',
+                      'control.FullscreenControl',
+                      'control.GeolocationControl',
+                      'geoQuery',
+                    ]}
+                  >
+                    {selectedCoordinates.map((item: any, index: number) => (
+                      <Placemark
+                        modules={['geoObject.addon.balloon']}
+                        defaultGeometry={[
+                          item?.coordinates?.lat,
+                          item?.coordinates?.long,
+                        ]}
+                        geomerty={[
+                          item?.coordinates?.lat,
+                          item?.coordinates?.long,
+                        ]}
+                        key={item.key}
+                        defaultOptions={{
+                          iconLayout: 'default#image',
+                          iconImageHref: '/map_placemark.png',
+                        }}
+                      />
+                    ))}
+                  </Map>
+                </div>
+              </YMaps>
+            )}
           </div>
           <div className="mt-3">
             <form onSubmit={handleSubmit(onSubmit)}>
