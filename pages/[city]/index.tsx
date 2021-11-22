@@ -219,7 +219,7 @@ export default function Home({
       </div>
       <CategoriesMenu categories={categories} channelName={channelName} />
       <div className="container mx-auto">
-        <h1 className="border-b-4 border-yellow py-1 text-3xl w-max my-10 ml-4 md:ml-0">
+        <h1 className="py-1 md:text-4xl text-2xl w-max my-10 m-auto">
           {tr('pizza_for_family')}
         </h1>
         <div className="grid lg:grid-cols-4 grid-cols-1 md:grid-cols-2 gap-10 mt-10">
