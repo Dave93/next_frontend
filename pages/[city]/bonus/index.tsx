@@ -176,31 +176,32 @@ export default function Dev() {
         </button>
       </div>
 
-      <div className="text-white flex justify-between w-32 items-center h-14 m-auto md:mx-0">
+      <div className="text-white text-center md:text-left">
+        {tr('follow_us')}
+      </div>
+
+      <div className="text-white flex space-x-2 w-max items-center  m-auto md:mx-0">
         <a
           target="_blank"
           href="https://www.instagram.com/choparpizza"
-          className="border border-white rounded-full px-2 py-1"
+          className="border border-white rounded-full p-2"
         >
-          <FontAwesomeIcon icon={faInstagram} size="lg" />
+          <FontAwesomeIcon icon={faInstagram} className="w-5 h-5" />
         </a>
         <a
           target="_blank"
           href="https://www.facebook.com/choparpizza"
-          className="border border-white rounded-full px-2 py-1"
+          className="border border-white rounded-full p-2"
         >
-          <FontAwesomeIcon icon={faFacebook} size="lg" />
+          <FontAwesomeIcon icon={faFacebook} className="w-5 h-5" />
         </a>
         <a
           target="_blank"
           href="https://telegram.me/Chopar_bot"
-          className="border border-white rounded-full px-2 py-1"
+          className="border border-white rounded-full p-2"
         >
-          <FontAwesomeIcon icon={faTelegramPlane} size="lg" />
+          <FontAwesomeIcon icon={faTelegramPlane} className="w-5 h-5" />
         </a>
-      </div>
-      <div className="text-white text-center md:text-left">
-        {tr('follow_us')}
       </div>
     </div>
   )

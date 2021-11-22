@@ -204,7 +204,9 @@ export default function Dev({
           setShuffleItems(items)
         }, i * 100)
       }
-      openCard(items[0])
+      setTimeout(() => {
+        openCard(items[0])
+      }, items.length * 100)
     }, 600)
   }
 
@@ -322,9 +324,13 @@ export default function Dev({
                 <div className="align-middle bg-white inline-block overflow-hidden px-20 py-10 rounded-2xl shadow-xl text-center transform transition-all">
                   <Dialog.Title
                     as="h3"
-                    className="leading-6 md:text-6xl text-secondary md:w-72"
+                    className="leading-6 text-4xl text-secondary md:w-72 uppercase"
                   >
-                    {chosenCard?.name}
+                    {
+                      chosenCard?.attribute_data?.name[channelName][
+                        locale || 'ru'
+                      ]
+                    }
                   </Dialog.Title>
                   <img className="m-auto w-48" src={chosenCard?.image} alt="" />
                   <div className="md:w-72 m-auto">
