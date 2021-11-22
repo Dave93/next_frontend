@@ -257,6 +257,7 @@ const Orders: FC<OrdersProps> = ({ channelName }: { channelName: any }) => {
   const [isPhoneConfirmOpen, setIsPhoneConfirmOpen] = useState(false)
   const [otpCode, setOtpCode] = useState('')
   const [otpShowCode, setOtpShowCode] = useState(0)
+  const [yandexGeoKey, setYandexGeoKey] = useState('')
 
   const [geoSuggestions, setGeoSuggestions] = useState([])
   const [selectedCoordinates, setSelectedCoordinates] = useState(
@@ -303,6 +304,13 @@ const Orders: FC<OrdersProps> = ({ channelName }: { channelName: any }) => {
       configData = JSON.parse(configData)
       setConfigData(configData)
     } catch (e) {}
+
+    let yandexGeoKey = configData.yandexGeoKey
+    yandexGeoKey = yandexGeoKey.split(',')
+    // get random item from yandexGeoKey
+    yandexGeoKey = yandexGeoKey[Math.floor(Math.random() * yandexGeoKey.length)]
+
+    setYandexGeoKey(yandexGeoKey)
   }
 
   useEffect(() => {
@@ -1010,7 +1018,12 @@ const Orders: FC<OrdersProps> = ({ channelName }: { channelName: any }) => {
               </div>
             </div>
             <div>
-              <YMaps>
+              <YMaps
+                // enterprise
+                query={{
+                  apikey: yandexGeoKey,
+                }}
+              >
                 <div>
                   <Map
                     state={mapState}
