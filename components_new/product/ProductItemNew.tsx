@@ -538,7 +538,7 @@ const ProductItemNew: FC<ProductItem> = ({ product, channelName }) => {
             </div>
           </div>
           <div className="flex flex-col flex-grow w-full">
-            <div className="font-serif mt-4 text-xl">
+            <div className="font-serif mt-4 text-xl uppercase">
               {store?.attribute_data?.name[channelName][locale || 'ru']}
             </div>
             {store.sizeDesc && (

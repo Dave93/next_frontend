@@ -323,7 +323,7 @@ const SmallCart: FC<SmallCartProps> = ({ channelName }) => {
                         />
                       </div>
                     )}
-                    <div className="font-bold text-sm flex-grow mx-1">
+                    <div className="font-bold text-sm flex-grow mx-1 uppercase">
                       {lineItem.child && lineItem.child.length > 1
                         ? `${
                             lineItem?.variant?.product?.attribute_data?.name[

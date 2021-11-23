@@ -264,7 +264,7 @@ const Cart: FC<CartProps> = ({ channelName }: { channelName: any }) => {
                         />
                       </div>
                     )}
-                    <div className="font-bold text-sm flex-grow mx-1">
+                    <div className="font-bold text-sm flex-grow mx-1 uppercase">
                       {lineItem.child && lineItem.child.length
                         ? `${
                             lineItem?.variant?.product?.attribute_data?.name[
