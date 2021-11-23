@@ -5,6 +5,7 @@ import useTranslation from 'next-translate/useTranslation'
 import { useUI } from '@components/ui/context'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
+import useCart from '@framework/cart/use-cart'
 
 type UserProfileDropdownProps = {
   setMobMenuOpen?: any
@@ -16,6 +17,13 @@ const UserProfileDropDown: FC<UserProfileDropdownProps> = ({
   const { t: tr } = useTranslation('common')
   const router = useRouter()
   const { locale, pathname } = router
+  let cartId: string | null = null
+  if (typeof window !== 'undefined') {
+    cartId = localStorage.getItem('basketId')
+  }
+  const { mutate } = useCart({
+    cartId,
+  })
 
   const { user, setUserData, activeCity } = useUI()
   let items = menuItems.map((item) => {
@@ -25,11 +33,22 @@ const UserProfileDropDown: FC<UserProfileDropdownProps> = ({
     }
   })
 
-  const logout = (e: React.SyntheticEvent<EventTarget>) => {
+  const logout = async (e: React.SyntheticEvent<EventTarget>) => {
     e.preventDefault()
     e.stopPropagation()
     localStorage.removeItem('mijoz')
     localStorage.removeItem('basketId')
+    let basketData = {
+      id: '',
+      createdAt: '',
+      currency: { code: '' },
+      taxesIncluded: '',
+      lineItems: [],
+      lineItemsSubtotalPrice: '',
+      subtotalPrice: 0,
+      totalPrice: 0,
+    }
+    await mutate(basketData, false)
     setUserData(null)
   }
 

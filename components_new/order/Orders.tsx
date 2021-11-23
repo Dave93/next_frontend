@@ -799,6 +799,18 @@ const Orders: FC<OrdersProps> = ({ channelName }: { channelName: any }) => {
       clearInterval(otpTimerRef)
       // setUserData(data.user)
       localStorage.removeItem('basketId')
+
+      let basketData = {
+        id: '',
+        createdAt: '',
+        currency: { code: '' },
+        taxesIncluded: '',
+        lineItems: [],
+        lineItemsSubtotalPrice: '',
+        subtotalPrice: 0,
+        totalPrice: 0,
+      }
+      await mutate(basketData, false)
       router.push(`/${activeCity.slug}/order/${data.order.id}`)
     } catch (e: any) {
       toast.error(e.response.data.error.message, {
