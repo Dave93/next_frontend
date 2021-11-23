@@ -352,7 +352,7 @@ export default function Cart() {
                     className="flex justify-between items-center border-b pb-3"
                     key={lineItem.id}
                   >
-                    <div className="md:flex items-center text-center">
+                    <div className="md:flex items-center text-center uppercase">
                       {lineItem.child &&
                       lineItem.child.length &&
                       lineItem.child[0].variant?.product?.id !=
