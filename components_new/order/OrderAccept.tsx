@@ -112,6 +112,7 @@ const OrderAccept: FC<OrderDetailProps> = ({ order, orderStatuses }) => {
 
   return (
     <div>
+      {console.log(order)}
       <div className="md:p-10 p-5 rounded-2xl text-xl mt-5 bg-white">
         <div className=" flex justify-between items-center">
           <div>
@@ -169,7 +170,16 @@ const OrderAccept: FC<OrderDetailProps> = ({ order, orderStatuses }) => {
               order.door_code
             : ''}
         </div>
-        <div></div>
+        <div>
+          <div className="text-lg mb-7 font-bold mt-7">
+            {tr('order_time_of_delivery')}
+          </div>
+          <div>
+            {order.delivery_schedule == 'now'
+              ? tr('hurry_up')
+              : order?.delivery_time}
+          </div>
+        </div>
       </div>
       <div className="md:p-10 p-5 rounded-2xl text-xl mt-5 bg-white">
         <div className="text-lg mb-10 font-bold">
@@ -280,7 +290,7 @@ const OrderAccept: FC<OrderDetailProps> = ({ order, orderStatuses }) => {
           </div>
         ))}
       </div>
-      <div className="md:p-10 p-5 rounded-2xl text-xl mt-5 bg-white mb-3">
+      <div className="md:p-10 p-5 rounded-2xl text-xl mt-5 bg-white mb-5">
         {reviewsData && reviewsData.length > 0 && (
           <div className="mt-2 mb-4">
             <div className="text-lg mb-4 font-bold">{tr('your_reviews')}</div>

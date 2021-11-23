@@ -16,7 +16,7 @@ const localeLabel = {
 
 const LanguageDropDown: FC = () => {
   const router = useRouter()
-  const { locale, pathname } = router
+  const { locale, pathname, query } = router
   const keyTyped = locale as keyof typeof locales
   const keyTypedLabel = locale as keyof typeof locales
   const localeComponent = locales[keyTyped]({})
@@ -24,8 +24,15 @@ const LanguageDropDown: FC = () => {
 
   const changeLang = (e: any, loc: string | undefined) => {
     e.preventDefault()
-    let path = pathname.replace('[city]', activeCity.slug)
-    return router.push(path, path, {
+    let link = pathname
+    Object.keys(query).map((k: string) => {
+      if (k == 'city') {
+        link = link.replace('[city]', activeCity.slug)
+      } else {
+        link = link.replace(`[${k}]`, query[k]!.toString())
+      }
+    })
+    return router.push(link, link, {
       locale: loc,
     })
   }
