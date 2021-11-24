@@ -1638,7 +1638,7 @@ const Orders: FC<OrdersProps> = ({ channelName }: { channelName: any }) => {
           </div> */}
         </div>
         <div className={openTab === 3 ? 'block' : 'hidden'} id="link3">
-          <div className="justify-between pt-8 items-center grid md:grid-cols-10 grid-cols-3 gap-1">
+          <div className="pt-8 items-center flex gap-1">
             {locationData?.terminal_id &&
               paymentTypes
                 .filter(
@@ -1652,7 +1652,7 @@ const Orders: FC<OrdersProps> = ({ channelName }: { channelName: any }) => {
                     } border cursor-pointer`}
                     key={payment}
                   >
-                    <img src={`/assets/${payment}.png`} />
+                    <img src={`/assets/${payment}.svg`} />
                     <input
                       type="radio"
                       {...register('pay_type', { required: openTab === 3 })}
