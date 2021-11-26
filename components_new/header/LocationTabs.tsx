@@ -15,6 +15,7 @@ import {
   ChevronDownIcon,
   ChevronRightIcon,
   CheckIcon,
+  LocationMarkerIcon,
 } from '@heroicons/react/solid'
 import {
   YMaps,
@@ -45,18 +46,23 @@ import { DateTime } from 'luxon'
 const { publicRuntimeConfig } = getConfig()
 
 let webAddress = publicRuntimeConfig.apiUrl
-interface Props {
-  setOpen?: any
-}
 
 interface AnyObject {
   [key: string]: any
 }
 
-const LocationTabs: FC<Props> = ({ setOpen }) => {
+const LocationTabs: FC = () => {
   const { locale, pathname, query } = useRouter()
-  const { locationData, setLocationData, cities, activeCity, setActiveCity } =
-    useUI()
+  const {
+    locationData,
+    setLocationData,
+    cities,
+    activeCity,
+    setActiveCity,
+    setLocationTabsClosable,
+    closeLocationTabs,
+    setStopProducts,
+  } = useUI()
   const [tabIndex, setTabIndex] = useState(
     locationData?.deliveryType || 'deliver'
   )
@@ -266,6 +272,51 @@ const LocationTabs: FC<Props> = ({ setOpen }) => {
     if (city) setMapCenter([+city.lat, +city.lon])
   }
 
+  const searchTerminal = async (locationData: any = {}) => {
+    if (!locationData || !locationData.location) {
+      toast.warn(tr('no_address_specified'), {
+        position: toast.POSITION.BOTTOM_RIGHT,
+        hideProgressBar: true,
+      })
+      setLocationData({
+        ...locationData,
+        terminal_id: undefined,
+        terminalData: undefined,
+      })
+      return
+    }
+
+    const { data: terminalsData } = await axios.get(
+      `${webAddress}/api/terminals/find_nearest?lat=${locationData.location[0]}&lon=${locationData.location[1]}`
+    )
+
+    if (terminalsData.data && !terminalsData.data.items.length) {
+      toast.warn(
+        terminalsData.data.message
+          ? terminalsData.data.message
+          : tr('restaurant_not_found'),
+        {
+          position: toast.POSITION.BOTTOM_RIGHT,
+          hideProgressBar: true,
+        }
+      )
+      setLocationData({
+        ...locationData,
+        terminal_id: undefined,
+        terminalData: undefined,
+      })
+      return
+    }
+
+    if (terminalsData.data) {
+      setLocationData({
+        ...locationData,
+        terminal_id: terminalsData.data.items[0].id,
+        terminalData: terminalsData.data.items[0],
+      })
+    }
+  }
+
   const setSelectedAddress = (selection: any) => {
     setMapCenter([selection.coordinates.lat, selection.coordinates.long])
     setSelectedCoordinates([
@@ -287,6 +338,10 @@ const LocationTabs: FC<Props> = ({ setOpen }) => {
       if (address.kind == 'house') {
         setValue('house', address.name)
       }
+    })
+    searchTerminal({
+      ...locationData,
+      location: [selection.coordinates.lat, selection.coordinates.long],
     })
   }
   const changeCity = (city: City) => {
@@ -351,6 +406,7 @@ const LocationTabs: FC<Props> = ({ setOpen }) => {
       address: data.data.formatted,
       house,
     })
+    searchTerminal({ ...locationData, location: coords })
   }
 
   const mapState = useMemo<MapState>(() => {
@@ -442,7 +498,23 @@ const LocationTabs: FC<Props> = ({ setOpen }) => {
         terminal_id: terminalsData.data.items[0].id,
         terminalData: terminalsData.data.items[0],
       })
-      setOpen(false)
+
+      const { data: terminalStock } = await axios.get(
+        `${webAddress}/api/terminals/get_stock?terminal_id=${terminalsData.data.items[0].id}`
+      )
+
+      if (!terminalStock.success) {
+        toast.warn(terminalStock.message, {
+          position: toast.POSITION.BOTTOM_RIGHT,
+          hideProgressBar: true,
+        })
+        return
+      } else {
+        setStopProducts(terminalStock.data)
+      }
+
+      setLocationTabsClosable(false)
+      closeLocationTabs()
     }
   }
 
@@ -508,7 +580,7 @@ const LocationTabs: FC<Props> = ({ setOpen }) => {
     objects.current = deliveryZones
   }
 
-  const submitPickup = () => {
+  const submitPickup = async () => {
     if (!activePoint) {
       toast.warn(`${tr('pickup_point_not_selected')}`, {
         position: toast.POSITION.BOTTOM_RIGHT,
@@ -517,7 +589,22 @@ const LocationTabs: FC<Props> = ({ setOpen }) => {
       return
     }
 
-    setOpen(false)
+    const { data: terminalStock } = await axios.get(
+      `${webAddress}/api/terminals/get_stock?terminal_id=${activePoint}`
+    )
+
+    if (!terminalStock.success) {
+      toast.warn(terminalStock.message, {
+        position: toast.POSITION.BOTTOM_RIGHT,
+        hideProgressBar: true,
+      })
+      return
+    } else {
+      setStopProducts(terminalStock.data)
+    }
+
+    setLocationTabsClosable(false)
+    closeLocationTabs()
   }
 
   const { t: tr } = useTranslation('common')
@@ -787,6 +874,16 @@ const LocationTabs: FC<Props> = ({ setOpen }) => {
                   )}
                 </Disclosure>
               </div>
+              {locationData?.terminalData && (
+                <div className="md:mt-3 flex space-x-2 items-center">
+                  <LocationMarkerIcon className="w-5 h-5" />
+                  <div className="font-bold">
+                    {tr('nearest_filial', {
+                      filialName: locationData?.terminalData.name,
+                    })}
+                  </div>
+                </div>
+              )}
               <div className="flex justify-end mt-3">
                 <button
                   type="submit"

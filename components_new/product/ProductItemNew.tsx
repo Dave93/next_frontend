@@ -24,6 +24,7 @@ import getConfig from 'next/config'
 import { useCart } from '@framework/cart'
 import { XIcon } from '@heroicons/react/solid'
 import styles from './ProductItemNew.module.css'
+import { useUI } from '@components/ui/context'
 // import SessionContext from 'react-storefront/session/SessionContext'
 
 type ProductItem = {
@@ -39,6 +40,7 @@ const ProductItemNew: FC<ProductItem> = ({ product, channelName }) => {
   const { t: tr } = useTranslation('common')
   const [store, updateStore] = useState(product)
   const [isLoadingBasket, setIsLoadingBasket] = useState(false)
+  const { stopProducts } = useUI()
   const { mutate } = useCart()
 
   const [addToCartInProgress, setAddToCartInProgress] = useState(false)
@@ -215,6 +217,11 @@ const ProductItemNew: FC<ProductItem> = ({ product, channelName }) => {
       selectedProdId = +store.id
     }
 
+    if (isProductInStop) {
+      setIsLoadingBasket(false)
+      return
+    }
+
     let basketId = localStorage.getItem('basketId')
     const otpToken = Cookies.get('opt_token')
 
@@ -370,6 +377,22 @@ const ProductItemNew: FC<ProductItem> = ({ product, channelName }) => {
     return price
   }, [store.price, store.variants, modifiers, activeModifiers])
 
+  const isProductInStop = useMemo(() => {
+    if (store.variants && store.variants.length) {
+      let selectedVariant = store.variants.find((v: any) => v.active == true)
+      let selectedProdId = selectedVariant.id
+      if (stopProducts.includes(selectedProdId)) {
+        return true
+      }
+    } else {
+      let selectedProdId = +store.id
+      if (stopProducts.includes(selectedProdId)) {
+        return true
+      }
+    }
+    return false
+  }, [stopProducts, store])
+
   const prodPriceDesktop = useMemo(() => {
     let price: number = parseInt(store.price, 0) || 0
     if (store.variants && store.variants.length > 0) {
@@ -396,6 +419,15 @@ const ProductItemNew: FC<ProductItem> = ({ product, channelName }) => {
     event.preventDefault() // prevent the page location from changing
     // setAddToCartInProgress(true) // disable the add to cart button until the request is finished
     if (modifiers && modifiers.length) {
+      if (store.variants && store.variants.length) {
+        let selectedVariant = store.variants.find((v: any) => v.active == true)
+        let selectedProdId = selectedVariant.id
+      } else {
+        let selectedProdId = store.id
+      }
+      if (isProductInStop) {
+        return // if the product is in stop, do not add to basket
+      }
       let freeModifier = modifiers.find((mod: any) => mod.price == 0)
       setActiveModifiers([freeModifier.id])
       setIsChoosingModifier(true)
@@ -513,7 +545,9 @@ const ProductItemNew: FC<ProductItem> = ({ product, channelName }) => {
         </div>
       ) : (
         <div
-          className={`${styles.gridItemOutline} gap-4 grid grid-cols-2 py-4 px-2 md:py-3 md:px-3 overflow-hidden bg-white rounded-[15px] hover:shadow-xl shadow-sm group items-center justify-between md:flex md:flex-col`}
+          className={`${styles.gridItemOutline} ${
+            isProductInStop ? 'opacity-25' : ''
+          } gap-4 grid grid-cols-2 py-4 px-2 md:py-3 md:px-3 overflow-hidden bg-white rounded-[15px] hover:shadow-xl shadow-sm group items-center justify-between md:flex md:flex-col`}
           id={`prod-${store.id}`}
         >
           <div>
@@ -542,9 +576,7 @@ const ProductItemNew: FC<ProductItem> = ({ product, channelName }) => {
               {store?.attribute_data?.name[channelName][locale || 'ru']}
             </div>
             {store.sizeDesc && (
-              <div className="mt-2 text-gray-700 text-xs">
-                {store.sizeDesc}
-              </div>
+              <div className="mt-2 text-gray-700 text-xs">{store.sizeDesc}</div>
             )}
             <div
               className="mt-1 md:text-xs flex-grow"
