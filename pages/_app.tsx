@@ -13,6 +13,7 @@ import { ManagedUIContext } from '@components/ui/context'
 import { ToastContainer } from 'react-toastify'
 import { pwaTrackingListeners } from '../scripts/pwaEventlisteners'
 import FacebookPixel from '@components/common/FacebookPixel'
+import { YMInitializer } from 'react-yandex-metrika'
 
 const isBrowser = typeof window !== 'undefined'
 
@@ -39,6 +40,16 @@ export default function MyApp({ Component, pageProps }: AppProps) {
         </Layout>
       </ManagedUIContext>
       <ToastContainer />
+      <YMInitializer
+        accounts={[86632071]}
+        options={{
+          webvisor: true,
+          clickmap: true,
+          trackLinks: true,
+          accurateTrackBounce: true,
+        }}
+        version="2"
+      />
     </>
   )
 }
