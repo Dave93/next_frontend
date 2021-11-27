@@ -155,7 +155,7 @@ export default function Home({
   const showLocationTabsController = async () => {
     if (locationData?.terminalData) {
       const { data: terminalStock } = await axios.get(
-        `${webAddress}/api/terminals/get_stock?terminal_id=${locationData?.terminalData.data.items[0].id}`
+        `${webAddress}/api/terminals/get_stock?terminal_id=${locationData?.terminalData.id}`
       )
 
       if (!terminalStock.success) {
