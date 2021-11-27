@@ -56,6 +56,9 @@ const ProductItemNew: FC<ProductItem> = ({ product, channelName }) => {
   }
 
   function openModal() {
+    if (isProductInStop) {
+      return
+    }
     if (modifiers && modifiers.length) {
       let freeModifier = modifiers.find((mod: any) => mod.price == 0)
       setActiveModifiers([freeModifier.id])
