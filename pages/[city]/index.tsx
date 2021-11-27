@@ -27,6 +27,12 @@ import LocationTabs from '@components_new/header/LocationTabs'
 import { Dialog, Transition } from '@headlessui/react'
 import { XIcon } from '@heroicons/react/solid'
 import MobLocationTabs from '@components_new/header/MobLocationTabs.'
+import axios from 'axios'
+import getConfig from 'next/config'
+
+const { publicRuntimeConfig } = getConfig()
+
+let webAddress = publicRuntimeConfig.apiUrl
 
 const HalfPizzaNoSSR = dynamic(
   () => import('@components_new/product/CreateYourPizzaCommon'),
@@ -127,6 +133,7 @@ export default function Home({
     showMobileLocationTabs,
     closeMobileLocationTabs,
     setLocationTabsClosable,
+    setStopProducts,
     locationData,
   } = useUI()
   const cancelButtonRef = useRef(null)
@@ -145,8 +152,17 @@ export default function Home({
     }
   }
 
-  const showLocationTabsController = () => {
+  const showLocationTabsController = async () => {
     if (locationData?.terminalData) {
+      const { data: terminalStock } = await axios.get(
+        `${webAddress}/api/terminals/get_stock?terminal_id=${locationData?.terminalData.data.items[0].id}`
+      )
+
+      if (!terminalStock.success) {
+        return
+      } else {
+        setStopProducts(terminalStock.data)
+      }
       return
     }
 
