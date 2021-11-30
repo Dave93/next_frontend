@@ -287,7 +287,7 @@ export default function Cart() {
       </div>
     )
   }
-
+  console.log(data?.lineItems)
   return (
     <>
       {isCartLoading && (

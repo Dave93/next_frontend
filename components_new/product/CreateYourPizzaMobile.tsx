@@ -123,13 +123,13 @@ const CreateYourPizza: FC<CreatePizzaProps> = ({ sec, channelName }) => {
       modifierProduct = leftProduct.modifierProduct
     }
 
-    if (rightProduct.modifierProduct) {
-      rightProduct = rightProduct.modifierProduct
-    }
-
     if (selectedModifiers.length && modifierProduct) {
       if ([...activeModifiers].includes(modifierProduct.id)) {
         leftProduct = modifierProduct
+
+        if (rightProduct.modifierProduct) {
+          rightProduct = rightProduct.modifierProduct
+        }
         let currentProductModifiersPrices = [
           ...modifiers
             .filter(
