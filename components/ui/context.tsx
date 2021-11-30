@@ -1,6 +1,7 @@
 import { City } from '@commerce/types/cities'
 import React, { FC, useCallback, useMemo } from 'react'
 import Cookies from 'js-cookie'
+import { Address } from '@commerce/types/address'
 
 let userData: any = null
 
@@ -12,6 +13,7 @@ let locationData: any = {
   door_code: '',
   deliveryType: 'deliver',
   location: [],
+  label: '',
 }
 
 let activeCity: City | null = null
@@ -77,6 +79,7 @@ export interface LocationData {
   location?: number[]
   terminalId?: number
   terminalData?: AnyObject
+  label?: string
 }
 
 export interface State {
@@ -95,6 +98,8 @@ export interface State {
   showMobileLocationTabs: boolean
   locationTabsClosable: boolean
   stopProducts: number[]
+  addressId: number | null
+  addressList: Address[] | null
 }
 
 const initialState = {
@@ -113,6 +118,8 @@ const initialState = {
   showMobileLocationTabs: false,
   locationTabsClosable: false,
   stopProducts: [],
+  addressId: null,
+  addressList: null,
 }
 
 type Action =
@@ -187,6 +194,14 @@ type Action =
   | {
       type: 'SET_STOP_PRODUCTS'
       value: number[]
+    }
+  | {
+      type: 'SET_ADDRESS_ID'
+      value: number
+    }
+  | {
+      type: 'SET_ADDRESS_LIST'
+      value: Address[]
     }
 
 type MODAL_VIEWS =
@@ -361,6 +376,18 @@ function uiReducer(state: State, action: Action) {
         stopProducts: action.value,
       }
     }
+    case 'SET_ADDRESS_ID': {
+      return {
+        ...state,
+        addressId: action.value,
+      }
+    }
+    case 'SET_ADDRESS_LIST': {
+      return {
+        ...state,
+        addressList: action.value,
+      }
+    }
   }
 }
 
@@ -488,6 +515,16 @@ export const UIProvider: FC<UIProviderProps> = (props) => {
     [dispatch]
   )
 
+  const setAddressId = useCallback(
+    (value: number) => dispatch({ type: 'SET_ADDRESS_ID', value }),
+    [dispatch]
+  )
+
+  const setAddressList = useCallback(
+    (value: Address[]) => dispatch({ type: 'SET_ADDRESS_LIST', value }),
+    [dispatch]
+  )
+
   const value = useMemo(
     () => ({
       ...state,
@@ -514,6 +551,8 @@ export const UIProvider: FC<UIProviderProps> = (props) => {
       closeMobileLocationTabs,
       setLocationTabsClosable,
       setStopProducts,
+      setAddressId,
+      setAddressList,
     }),
     [state]
   )

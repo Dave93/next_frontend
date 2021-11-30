@@ -38,6 +38,9 @@ import { City } from '@commerce/types/cities'
 import router, { useRouter } from 'next/router'
 import { chunk, sortBy } from 'lodash'
 import { DateTime } from 'luxon'
+import Cookies from 'js-cookie'
+import getAddressList from '@lib/load_addreses'
+import { Address } from '@commerce/types/address'
 
 const { publicRuntimeConfig } = getConfig()
 
@@ -59,6 +62,11 @@ const MobLocationTabs: FC = () => {
     closeMobileLocationTabs,
     locationTabsClosable,
     setStopProducts,
+    addressId,
+    setAddressId,
+    setAddressList,
+    openSignInModal,
+    addressList,
   } = useUI()
   const [tabIndex, setTabIndex] = useState(
     locationData?.deliveryType || 'deliver'
@@ -113,7 +121,7 @@ const MobLocationTabs: FC = () => {
     }
   }
 
-  const { register, handleSubmit, getValues, setValue, watch } =
+  const { register, handleSubmit, getValues, setValue, watch, reset } =
     useForm<AnyObject>({
       defaultValues: {
         address: locationData?.address || currentAddress,
@@ -121,6 +129,8 @@ const MobLocationTabs: FC = () => {
         house: locationData?.house || '',
         entrance: locationData?.entrance || '',
         door_code: locationData?.door_code || '',
+        label: locationData?.label || '',
+        addressId: addressId || null,
       },
     })
 
@@ -214,8 +224,31 @@ const MobLocationTabs: FC = () => {
     setYandexGeoKey(yandexGeoKey)
   }
 
+  const loadAddresses = async () => {
+    const addresses = await getAddressList()
+    if (!addresses) {
+      setAddressList(null)
+    } else {
+      setAddressList(addresses)
+    }
+  }
+
   useEffect(() => {
+    let formValues = getValues()
+
+    if (formValues.addressId != addressId) {
+      reset({
+        address: locationData?.address || currentAddress,
+        flat: locationData?.flat || '',
+        house: locationData?.house || '',
+        entrance: locationData?.entrance || '',
+        door_code: locationData?.door_code || '',
+        label: locationData?.label || '',
+      })
+    }
+
     fetchConfig()
+    loadAddresses()
     if (locationData && locationData.deliveryType == 'pickup') {
       loadPickupItems()
     }
@@ -419,6 +452,30 @@ const MobLocationTabs: FC = () => {
     return res
   }, [mapCenter, mapZoom, activeCity])
 
+  const setCredentials = async () => {
+    let csrf = Cookies.get('X-XSRF-TOKEN')
+    if (!csrf) {
+      const csrfReq = await axios(`${webAddress}/api/keldi`, {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+          crossDomain: true,
+        },
+        withCredentials: true,
+      })
+      let { data: res } = csrfReq
+      csrf = Buffer.from(res.result, 'base64').toString('ascii')
+
+      var inTenMinutes = new Date(new Date().getTime() + 10 * 60 * 1000)
+      Cookies.set('X-XSRF-TOKEN', csrf, {
+        expires: inTenMinutes,
+      })
+    }
+    axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest'
+    axios.defaults.headers.common['X-CSRF-TOKEN'] = csrf
+    axios.defaults.headers.common['XCSRF-TOKEN'] = csrf
+  }
+
   const onSubmit: SubmitHandler<AnyObject> = (data) => {
     saveDeliveryData(data, null)
   }
@@ -512,6 +569,44 @@ const MobLocationTabs: FC = () => {
       setLocationTabsClosable(false)
       closeMobileLocationTabs()
     }
+
+    const otpToken = Cookies.get('opt_token')
+    if (otpToken) {
+      if (addressId) {
+        await setCredentials()
+        await axios.post(
+          `${webAddress}/api/address/${addressId}`,
+
+          {
+            ...data,
+            lat: locationData.location[0],
+            lon: locationData.location[1],
+          },
+          {
+            headers: {
+              Authorization: `Bearer ${otpToken}`,
+            },
+          }
+        )
+      } else {
+        await setCredentials()
+        const { data: addressData } = await axios.post(
+          `${webAddress}/api/address/new`,
+          {
+            ...data,
+            lat: locationData.location[0],
+            lon: locationData.location[1],
+          },
+          {
+            headers: {
+              Authorization: `Bearer ${otpToken}`,
+            },
+          }
+        )
+
+        setAddressId(addressData.data.id)
+      }
+    }
   }
 
   const submitPickup = async () => {
@@ -601,6 +696,18 @@ const MobLocationTabs: FC = () => {
       obj.events.add('click', clickOnMap)
     })
     objects.current = deliveryZones
+  }
+
+  const selectAddress = (address: Address) => {
+    if (address.id == addressId) {
+      setAddressId(null)
+    } else {
+      setLocationData({
+        ...address,
+        location: [address.lat, address.lon],
+      })
+      setAddressId(address.id)
+    }
   }
 
   const chosenCity = useMemo(() => {
@@ -739,6 +846,30 @@ const MobLocationTabs: FC = () => {
               </YMaps>
             )}
           </div>
+          {addressList && addressList.length > 0 && (
+            <div className="mt-3">
+              <div className="font-bold text-[18px]">
+                {tr('profile_address')}
+              </div>
+              <div className="mt-2">
+                <div className="grid grid-cols-3 gap-1">
+                  {addressList.map((item: Address) => (
+                    <div
+                      key={item.id}
+                      className={`px-2 py-1 truncate rounded-full cursor-pointer ${
+                        addressId == item.id
+                          ? 'bg-primary text-white'
+                          : 'bg-gray-100'
+                      }`}
+                      onClick={() => selectAddress(item)}
+                    >
+                      {item.label ? item.label : item.address}
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </div>
+          )}
           <div className="mt-3">
             <form onSubmit={handleSubmit(onSubmit)}>
               <div className="font-bold text-[18px]">{tr('address')}</div>
@@ -879,7 +1010,16 @@ const MobLocationTabs: FC = () => {
                   )}
                 </Disclosure>
               </div>
-
+              <div className="mt-5">
+                <div className="flex">
+                  <input
+                    type="text"
+                    {...register('label')}
+                    placeholder={tr('address_label')}
+                    className="bg-gray-100 px-8 py-2 rounded-full outline-none w-full focus:outline-none"
+                  />
+                </div>
+              </div>
               {locationData?.terminalData && (
                 <div className="md:mt-3 flex space-x-2 items-center">
                   <LocationMarkerIcon className="w-5 h-5" />
