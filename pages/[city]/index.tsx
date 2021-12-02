@@ -294,6 +294,9 @@ export default function Home({
                       />
                     ))}
                   </div>
+                  <div className="mt-5 px-4 md:px-0">
+                    <p>{locale == 'ru' ? sec.desc : sec.desc_uz}</p>
+                  </div>
                 </div>
               )
             )}

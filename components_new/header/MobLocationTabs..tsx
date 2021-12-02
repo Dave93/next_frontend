@@ -707,6 +707,22 @@ const MobLocationTabs: FC = () => {
         location: [address.lat, address.lon],
       })
       setAddressId(address.id)
+      if (address.lat && address.lon) {
+        setSelectedCoordinates([
+          {
+            key: `${address.lat}${address.lon}`,
+            coordinates: {
+              lat: address.lat,
+              long: address.lon,
+            },
+          },
+        ])
+        setMapCenter([address.lat, address.lon])
+        searchTerminal({
+          ...address,
+          location: [address.lat, address.lon],
+        })
+      }
     }
   }
 

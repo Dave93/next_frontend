@@ -241,9 +241,18 @@ const LocationTabs: FC = () => {
     if (locationData && locationData.deliveryType == 'pickup') {
       loadPickupItems()
     }
-
     let formValues = getValues()
-    if (/*formValues.addressId && */ formValues.addressId != addressId) {
+    console.log({
+      ...formValues,
+      address: locationData?.address || currentAddress,
+      flat: locationData?.flat || '',
+      house: locationData?.house || '',
+      entrance: locationData?.entrance || '',
+      door_code: locationData?.door_code || '',
+      label: locationData?.label || '',
+      addressId: addressId || null,
+    })
+    if (formValues.addressId && formValues.addressId != addressId) {
       reset({
         ...formValues,
         address: locationData?.address || currentAddress,
@@ -714,6 +723,22 @@ const LocationTabs: FC = () => {
         location: [address.lat, address.lon],
       })
       setAddressId(address.id)
+      if (address.lat && address.lon) {
+        setSelectedCoordinates([
+          {
+            key: `${address.lat}${address.lon}`,
+            coordinates: {
+              lat: address.lat,
+              long: address.lon,
+            },
+          },
+        ])
+        setMapCenter([address.lat, address.lon])
+        searchTerminal({
+          ...address,
+          location: [address.lat, address.lon],
+        })
+      }
     }
   }
 
