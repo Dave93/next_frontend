@@ -243,7 +243,7 @@ const LocationTabs: FC = () => {
     }
 
     let formValues = getValues()
-    if (formValues.addressId && formValues.addressId != addressId) {
+    if (/*formValues.addressId && */ formValues.addressId != addressId) {
       reset({
         ...formValues,
         address: locationData?.address || currentAddress,
@@ -252,6 +252,7 @@ const LocationTabs: FC = () => {
         entrance: locationData?.entrance || '',
         door_code: locationData?.door_code || '',
         label: locationData?.label || '',
+        addressId: addressId || null,
       })
     }
     return
