@@ -44,6 +44,8 @@ import { DateTime } from 'luxon'
 import Input from 'react-phone-number-input/input'
 import { City } from '@commerce/types/cities'
 import { chunk, sortBy } from 'lodash'
+import getAddressList from '@lib/load_addreses'
+import { Address } from '@commerce/types/address'
 
 const { publicRuntimeConfig } = getConfig()
 let webAddress = publicRuntimeConfig.apiUrl
@@ -68,6 +70,8 @@ type FormData = {
   delivery_time: string
   pay_type: string
   delivery_schedule: string
+  label?: string
+  addressId?: number
 }
 
 interface SelectItem {
@@ -134,6 +138,10 @@ const Orders: FC<OrdersProps> = ({ channelName }: { channelName: any }) => {
     activeCity,
     setActiveCity,
     openSignInModal,
+    addressId,
+    setAddressId,
+    setAddressList,
+    addressList,
   } = useUI()
   let cartId: string | null = null
   if (typeof window !== 'undefined') {
@@ -187,6 +195,8 @@ const Orders: FC<OrdersProps> = ({ channelName }: { channelName: any }) => {
       delivery_time: '',
       pay_type: '',
       delivery_schedule: 'now',
+      label: locationData?.label || '',
+      addressId: addressId || null,
     },
   })
 
@@ -313,8 +323,32 @@ const Orders: FC<OrdersProps> = ({ channelName }: { channelName: any }) => {
     setYandexGeoKey(yandexGeoKey)
   }
 
+  const loadAddresses = async () => {
+    const addresses = await getAddressList()
+    if (!addresses) {
+      setAddressList(null)
+    } else {
+      setAddressList(addresses)
+    }
+  }
+
   useEffect(() => {
+    let formValues = getValues()
+
+    if (formValues.addressId && formValues.addressId != addressId) {
+      reset({
+        ...formValues,
+        address: locationData?.address || currentAddress,
+        flat: locationData?.flat || '',
+        house: locationData?.house || '',
+        entrance: locationData?.entrance || '',
+        door_code: locationData?.door_code || '',
+        label: locationData?.label || '',
+        addressId: addressId || null,
+      })
+    }
     fetchConfig()
+    loadAddresses()
     if (locationData && locationData.deliveryType == 'pickup') {
       loadPickupItems()
     }
@@ -854,6 +888,24 @@ const Orders: FC<OrdersProps> = ({ channelName }: { channelName: any }) => {
     })
   }
 
+  const selectAddress = (address: Address) => {
+    if (address.id == addressId) {
+      setAddressId(null)
+    } else {
+      setLocationData({
+        ...address,
+        location: [address.lat, address.lon],
+      })
+      setAddressId(address.id)
+      if (address.lat) {
+        searchTerminal({
+          ...address,
+          location: [address.lat, address.lon],
+        })
+      }
+    }
+  }
+
   const chosenCity = useMemo(() => {
     if (activeCity) {
       return activeCity
@@ -1106,6 +1158,30 @@ const Orders: FC<OrdersProps> = ({ channelName }: { channelName: any }) => {
                 </YMaps>
               )}
             </div>
+            {addressList && addressList.length > 0 && (
+              <div className="mt-3">
+                <div className="font-bold text-[18px]">
+                  {tr('profile_address')}
+                </div>
+                <div className="mt-2">
+                  <div className="grid grid-cols-3 gap-1 md:gap-2 md:grid-cols-4 max-h-28 overflow-y-auto">
+                    {addressList.map((item: Address) => (
+                      <div
+                        key={item.id}
+                        className={`px-2 py-1 truncate rounded-full cursor-pointer ${
+                          addressId == item.id
+                            ? 'bg-primary text-white'
+                            : 'bg-gray-100'
+                        }`}
+                        onClick={() => selectAddress(item)}
+                      >
+                        {item.label ? item.label : item.address}
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              </div>
+            )}
             <div className="mt-3">
               <form onSubmit={handleSubmit(onSubmit)}>
                 <div className="font-bold text-lg">{tr('address')}</div>
@@ -1212,54 +1288,66 @@ const Orders: FC<OrdersProps> = ({ channelName }: { channelName: any }) => {
                     </div>
                   </div>
                 </div>
-                <div className="md:mt-5">
-                  <Disclosure defaultOpen={true}>
-                    {({ open }) => (
-                      <>
-                        <Disclosure.Button className="flex text-yellow outline-none focus:outline-none">
-                          <span>{tr('indicate_intercom_and_entrance')}</span>
-                          {/*
+                <div className="md:mt-5 flex items-end">
+                  <div className="w-6/12">
+                    <Disclosure defaultOpen={true}>
+                      {({ open }) => (
+                        <>
+                          <Disclosure.Button className="flex text-yellow outline-none focus:outline-none">
+                            <span>{tr('indicate_intercom_and_entrance')}</span>
+                            {/*
                           Use the `open` render prop to rotate the icon when the panel is open
                         */}
-                          <ChevronRightIcon
-                            className={`w-6 transform ${
-                              open ? 'rotate-90' : '-rotate-90'
-                            }`}
-                          />
-                        </Disclosure.Button>
-                        <Transition
-                          show={open}
-                          enter="transition duration-300 ease-out"
-                          enterFrom="transform scale-95 opacity-0"
-                          enterTo="transform scale-100 opacity-100"
-                          leave="transition duration-300 ease-out"
-                          leaveFrom="transform scale-100 opacity-100"
-                          leaveTo="transform scale-95 opacity-0"
-                        >
-                          <Disclosure.Panel>
-                            <div className="md:flex mt-3 space-y-2 md:space-y-0">
-                              <div>
-                                <input
-                                  type="text"
-                                  {...register('entrance')}
-                                  placeholder={tr('entrance')}
-                                  className="bg-gray-100 px-8 py-2 rounded-full w-60  outline-none focus:outline-none"
-                                />
+                            <ChevronRightIcon
+                              className={`w-6 transform ${
+                                open ? 'rotate-90' : '-rotate-90'
+                              }`}
+                            />
+                          </Disclosure.Button>
+                          <Transition
+                            show={open}
+                            enter="transition duration-300 ease-out"
+                            enterFrom="transform scale-95 opacity-0"
+                            enterTo="transform scale-100 opacity-100"
+                            leave="transition duration-300 ease-out"
+                            leaveFrom="transform scale-100 opacity-100"
+                            leaveTo="transform scale-95 opacity-0"
+                          >
+                            <Disclosure.Panel>
+                              <div className="md:flex mt-3 space-y-2 md:space-y-0">
+                                <div>
+                                  <input
+                                    type="text"
+                                    {...register('entrance')}
+                                    placeholder={tr('entrance')}
+                                    className="bg-gray-100 px-8 py-2 rounded-full w-60  outline-none focus:outline-none"
+                                  />
+                                </div>
+                                <div className="md:mx-5">
+                                  <input
+                                    type="text"
+                                    {...register('door_code')}
+                                    placeholder={tr('door_code')}
+                                    className="bg-gray-100 px-8 py-2 rounded-full w-60 outline-none focus:outline-none"
+                                  />
+                                </div>
                               </div>
-                              <div className="md:mx-5">
-                                <input
-                                  type="text"
-                                  {...register('door_code')}
-                                  placeholder={tr('door_code')}
-                                  className="bg-gray-100 px-8 py-2 rounded-full w-60 outline-none focus:outline-none"
-                                />
-                              </div>
-                            </div>
-                          </Disclosure.Panel>
-                        </Transition>
-                      </>
-                    )}
-                  </Disclosure>
+                            </Disclosure.Panel>
+                          </Transition>
+                        </>
+                      )}
+                    </Disclosure>
+                  </div>
+                  <div className="w-6/12">
+                    <div className="flex">
+                      <input
+                        type="text"
+                        {...register('label')}
+                        placeholder={tr('address_label')}
+                        className="bg-gray-100 px-8 py-2 rounded-full w-full outline-none focus:outline-none"
+                      />
+                    </div>
+                  </div>
                 </div>
                 {locationData?.terminalData && (
                   <div className="md:mt-3 flex space-x-2 items-center">

@@ -18,12 +18,12 @@ const menuItems: profileMenuItem[] = [
     activeIcon: '/activeOrder.svg',
     langCode: 'profile_orders',
   },
-  // {
-  //   href: '/profile/address',
-  //   icon: '/address.png',
-  //   activeIcon: '/activeAddress.png',
-  //   langCode: 'profile_address',
-  // },
+  {
+    href: '/profile/address',
+    icon: '/address.png',
+    activeIcon: '/activeAddress.png',
+    langCode: 'profile_address',
+  },
   {
     href: '/profile/account',
     icon: '/personal.svg',

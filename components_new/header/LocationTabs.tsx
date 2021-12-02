@@ -15,6 +15,7 @@ import {
   ChevronDownIcon,
   ChevronRightIcon,
   CheckIcon,
+  LocationMarkerIcon,
 } from '@heroicons/react/solid'
 import {
   YMaps,
@@ -41,22 +42,34 @@ import { City } from '@commerce/types/cities'
 import router, { useRouter } from 'next/router'
 import { chunk, sortBy } from 'lodash'
 import { DateTime } from 'luxon'
+import Cookies from 'js-cookie'
+import getAddressList from '@lib/load_addreses'
+import { Address } from '@commerce/types/address'
 
 const { publicRuntimeConfig } = getConfig()
 
 let webAddress = publicRuntimeConfig.apiUrl
-interface Props {
-  setOpen?: any
-}
 
 interface AnyObject {
   [key: string]: any
 }
 
-const LocationTabs: FC<Props> = ({ setOpen }) => {
+const LocationTabs: FC = () => {
   const { locale, pathname, query } = useRouter()
-  const { locationData, setLocationData, cities, activeCity, setActiveCity } =
-    useUI()
+  const {
+    locationData,
+    setLocationData,
+    cities,
+    activeCity,
+    setActiveCity,
+    setLocationTabsClosable,
+    closeLocationTabs,
+    setStopProducts,
+    addressId,
+    setAddressId,
+    setAddressList,
+    addressList,
+  } = useUI()
   const [tabIndex, setTabIndex] = useState(
     locationData?.deliveryType || 'deliver'
   )
@@ -110,7 +123,7 @@ const LocationTabs: FC<Props> = ({ setOpen }) => {
     }
   }
 
-  const { register, handleSubmit, getValues, setValue, watch } =
+  const { register, handleSubmit, getValues, setValue, watch, reset } =
     useForm<AnyObject>({
       defaultValues: {
         address: locationData?.address || currentAddress,
@@ -118,6 +131,8 @@ const LocationTabs: FC<Props> = ({ setOpen }) => {
         house: locationData?.house || '',
         entrance: locationData?.entrance || '',
         door_code: locationData?.door_code || '',
+        label: locationData?.label || '',
+        addressId: addressId || null,
       },
     })
 
@@ -211,13 +226,37 @@ const LocationTabs: FC<Props> = ({ setOpen }) => {
     setYandexGeoKey(yandexGeoKey)
   }
 
+  const loadAddresses = async () => {
+    const addresses = await getAddressList()
+    if (!addresses) {
+      setAddressList(null)
+    } else {
+      setAddressList(addresses)
+    }
+  }
+
   useEffect(() => {
     fetchConfig()
+    loadAddresses()
     if (locationData && locationData.deliveryType == 'pickup') {
       loadPickupItems()
     }
+
+    let formValues = getValues()
+    if (/*formValues.addressId && */ formValues.addressId != addressId) {
+      reset({
+        ...formValues,
+        address: locationData?.address || currentAddress,
+        flat: locationData?.flat || '',
+        house: locationData?.house || '',
+        entrance: locationData?.entrance || '',
+        door_code: locationData?.door_code || '',
+        label: locationData?.label || '',
+        addressId: addressId || null,
+      })
+    }
     return
-  }, [locationData])
+  }, [locationData, addressId])
 
   const addressInputChangeHandler = async (event: any) => {
     if (!configData) {
@@ -266,6 +305,51 @@ const LocationTabs: FC<Props> = ({ setOpen }) => {
     if (city) setMapCenter([+city.lat, +city.lon])
   }
 
+  const searchTerminal = async (locationData: any = {}) => {
+    if (!locationData || !locationData.location) {
+      toast.warn(tr('no_address_specified'), {
+        position: toast.POSITION.BOTTOM_RIGHT,
+        hideProgressBar: true,
+      })
+      setLocationData({
+        ...locationData,
+        terminal_id: undefined,
+        terminalData: undefined,
+      })
+      return
+    }
+
+    const { data: terminalsData } = await axios.get(
+      `${webAddress}/api/terminals/find_nearest?lat=${locationData.location[0]}&lon=${locationData.location[1]}`
+    )
+
+    if (terminalsData.data && !terminalsData.data.items.length) {
+      toast.warn(
+        terminalsData.data.message
+          ? terminalsData.data.message
+          : tr('restaurant_not_found'),
+        {
+          position: toast.POSITION.BOTTOM_RIGHT,
+          hideProgressBar: true,
+        }
+      )
+      setLocationData({
+        ...locationData,
+        terminal_id: undefined,
+        terminalData: undefined,
+      })
+      return
+    }
+
+    if (terminalsData.data) {
+      setLocationData({
+        ...locationData,
+        terminal_id: terminalsData.data.items[0].id,
+        terminalData: terminalsData.data.items[0],
+      })
+    }
+  }
+
   const setSelectedAddress = (selection: any) => {
     setMapCenter([selection.coordinates.lat, selection.coordinates.long])
     setSelectedCoordinates([
@@ -275,18 +359,24 @@ const LocationTabs: FC<Props> = ({ setOpen }) => {
       },
     ])
     setMapZoom(17)
+    let house = ''
+    selection.addressItems.map((address: any) => {
+      if (address.kind == 'house') {
+        setValue('house', address.name)
+      }
+    })
     setLocationData({
       ...locationData,
+      house: house,
       location: [selection.coordinates.lat, selection.coordinates.long],
     })
     setValue('address', selection.formatted)
     downshiftControl?.current?.reset({
       inputValue: selection.formatted,
     })
-    selection.addressItems.map((address: any) => {
-      if (address.kind == 'house') {
-        setValue('house', address.name)
-      }
+    searchTerminal({
+      ...locationData,
+      location: [selection.coordinates.lat, selection.coordinates.long],
     })
   }
   const changeCity = (city: City) => {
@@ -351,6 +441,7 @@ const LocationTabs: FC<Props> = ({ setOpen }) => {
       address: data.data.formatted,
       house,
     })
+    searchTerminal({ ...locationData, location: coords })
   }
 
   const mapState = useMemo<MapState>(() => {
@@ -365,6 +456,30 @@ const LocationTabs: FC<Props> = ({ setOpen }) => {
     const res: MapState = Object.assign({}, baseState, mapStateCenter)
     return res
   }, [mapCenter, mapZoom, activeCity])
+
+  const setCredentials = async () => {
+    let csrf = Cookies.get('X-XSRF-TOKEN')
+    if (!csrf) {
+      const csrfReq = await axios(`${webAddress}/api/keldi`, {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+          crossDomain: true,
+        },
+        withCredentials: true,
+      })
+      let { data: res } = csrfReq
+      csrf = Buffer.from(res.result, 'base64').toString('ascii')
+
+      var inTenMinutes = new Date(new Date().getTime() + 10 * 60 * 1000)
+      Cookies.set('X-XSRF-TOKEN', csrf, {
+        expires: inTenMinutes,
+      })
+    }
+    axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest'
+    axios.defaults.headers.common['X-CSRF-TOKEN'] = csrf
+    axios.defaults.headers.common['XCSRF-TOKEN'] = csrf
+  }
 
   const onSubmit: SubmitHandler<AnyObject> = (data) => {
     saveDeliveryData(data, null)
@@ -442,7 +557,60 @@ const LocationTabs: FC<Props> = ({ setOpen }) => {
         terminal_id: terminalsData.data.items[0].id,
         terminalData: terminalsData.data.items[0],
       })
-      setOpen(false)
+
+      const { data: terminalStock } = await axios.get(
+        `${webAddress}/api/terminals/get_stock?terminal_id=${terminalsData.data.items[0].id}`
+      )
+
+      if (!terminalStock.success) {
+        toast.warn(terminalStock.message, {
+          position: toast.POSITION.BOTTOM_RIGHT,
+          hideProgressBar: true,
+        })
+        return
+      } else {
+        setStopProducts(terminalStock.data)
+      }
+
+      setLocationTabsClosable(false)
+      closeLocationTabs()
+    }
+    const otpToken = Cookies.get('opt_token')
+    if (otpToken) {
+      if (addressId) {
+        await setCredentials()
+        await axios.post(
+          `${webAddress}/api/address/${addressId}`,
+
+          {
+            ...data,
+            lat: locationData.location[0],
+            lon: locationData.location[1],
+          },
+          {
+            headers: {
+              Authorization: `Bearer ${otpToken}`,
+            },
+          }
+        )
+      } else {
+        await setCredentials()
+        const { data: addressData } = await axios.post(
+          `${webAddress}/api/address/new`,
+          {
+            ...data,
+            lat: locationData.location[0],
+            lon: locationData.location[1],
+          },
+          {
+            headers: {
+              Authorization: `Bearer ${otpToken}`,
+            },
+          }
+        )
+
+        setAddressId(addressData.data.id)
+      }
     }
   }
 
@@ -508,7 +676,7 @@ const LocationTabs: FC<Props> = ({ setOpen }) => {
     objects.current = deliveryZones
   }
 
-  const submitPickup = () => {
+  const submitPickup = async () => {
     if (!activePoint) {
       toast.warn(`${tr('pickup_point_not_selected')}`, {
         position: toast.POSITION.BOTTOM_RIGHT,
@@ -517,10 +685,37 @@ const LocationTabs: FC<Props> = ({ setOpen }) => {
       return
     }
 
-    setOpen(false)
+    const { data: terminalStock } = await axios.get(
+      `${webAddress}/api/terminals/get_stock?terminal_id=${activePoint}`
+    )
+
+    if (!terminalStock.success) {
+      toast.warn(terminalStock.message, {
+        position: toast.POSITION.BOTTOM_RIGHT,
+        hideProgressBar: true,
+      })
+      return
+    } else {
+      setStopProducts(terminalStock.data)
+    }
+
+    setLocationTabsClosable(false)
+    closeLocationTabs()
   }
 
   const { t: tr } = useTranslation('common')
+
+  const selectAddress = (address: Address) => {
+    if (address.id == addressId) {
+      setAddressId(null)
+    } else {
+      setLocationData({
+        ...address,
+        location: [address.lat, address.lon],
+      })
+      setAddressId(address.id)
+    }
+  }
 
   const chosenCity = useMemo(() => {
     if (activeCity) {
@@ -642,6 +837,30 @@ const LocationTabs: FC<Props> = ({ setOpen }) => {
               </YMaps>
             )}
           </div>
+          {addressList && addressList.length > 0 && (
+            <div className="mt-3">
+              <div className="font-bold text-[18px]">
+                {tr('profile_address')}
+              </div>
+              <div className="mt-2">
+                <div className="grid grid-cols-3 gap-1 md:gap-2 md:grid-cols-4 max-h-28 overflow-y-auto">
+                  {addressList.map((item: Address) => (
+                    <div
+                      key={item.id}
+                      className={`px-2 py-1 truncate rounded-full cursor-pointer ${
+                        addressId == item.id
+                          ? 'bg-primary text-white'
+                          : 'bg-gray-100'
+                      }`}
+                      onClick={() => selectAddress(item)}
+                    >
+                      {item.label ? item.label : item.address}
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </div>
+          )}
           <div className="mt-2">
             <form onSubmit={handleSubmit(onSubmit)}>
               <div className="font-bold text-[18px] text-gray-400">
@@ -738,55 +957,77 @@ const LocationTabs: FC<Props> = ({ setOpen }) => {
                 </div>
               </div>
 
-              <div className="mt-2">
-                <Disclosure defaultOpen={true}>
-                  {({ open }) => (
-                    <>
-                      <Disclosure.Button className="flex text-yellow w-1/4 outline-none focus:outline-none">
-                        <span>{tr('indicate_intercom_and_entrance')}</span>
-                        {/*
+              <div className="mt-2 flex items-end">
+                <div className="w-6/12">
+                  <Disclosure defaultOpen={true}>
+                    {({ open }) => (
+                      <>
+                        <Disclosure.Button className="flex text-yellow outline-none focus:outline-none">
+                          <span>{tr('indicate_intercom_and_entrance')}</span>
+                          {/*
                           Use the `open` render prop to rotate the icon when the panel is open
                         */}
-                        <ChevronRightIcon
-                          className={`w-6 transform ${
-                            open ? 'rotate-90' : '-rotate-90'
-                          }`}
-                        />
-                      </Disclosure.Button>
-                      <Transition
-                        show={open}
-                        enter="transition duration-300 ease-out"
-                        enterFrom="transform scale-95 opacity-0"
-                        enterTo="transform scale-100 opacity-100"
-                        leave="transition duration-300 ease-out"
-                        leaveFrom="transform scale-100 opacity-100"
-                        leaveTo="transform scale-95 opacity-0"
-                      >
-                        <Disclosure.Panel>
-                          <div className="flex mt-3">
-                            <div>
-                              <input
-                                type="text"
-                                {...register('entrance')}
-                                placeholder={tr('entrance')}
-                                className="bg-gray-100 px-8 py-3 rounded-full w-full outline-none focus:outline-none"
-                              />
+                          <ChevronRightIcon
+                            className={`w-6 transform ${
+                              open ? 'rotate-90' : '-rotate-90'
+                            }`}
+                          />
+                        </Disclosure.Button>
+                        <Transition
+                          show={open}
+                          enter="transition duration-300 ease-out"
+                          enterFrom="transform scale-95 opacity-0"
+                          enterTo="transform scale-100 opacity-100"
+                          leave="transition duration-300 ease-out"
+                          leaveFrom="transform scale-100 opacity-100"
+                          leaveTo="transform scale-95 opacity-0"
+                        >
+                          <Disclosure.Panel>
+                            <div className="flex mt-3">
+                              <div>
+                                <input
+                                  type="text"
+                                  {...register('entrance')}
+                                  placeholder={tr('entrance')}
+                                  className="bg-gray-100 px-8 py-3 rounded-full w-full outline-none focus:outline-none"
+                                />
+                              </div>
+                              <div className="mx-5">
+                                <input
+                                  type="text"
+                                  {...register('door_code')}
+                                  placeholder={tr('door_code')}
+                                  className="bg-gray-100 px-8 py-3 rounded-full w-full outline-none focus:outline-none"
+                                />
+                              </div>
                             </div>
-                            <div className="mx-5">
-                              <input
-                                type="text"
-                                {...register('door_code')}
-                                placeholder={tr('door_code')}
-                                className="bg-gray-100 px-8 py-3 rounded-full w-full outline-none focus:outline-none"
-                              />
-                            </div>
-                          </div>
-                        </Disclosure.Panel>
-                      </Transition>
-                    </>
-                  )}
-                </Disclosure>
+                          </Disclosure.Panel>
+                        </Transition>
+                      </>
+                    )}
+                  </Disclosure>
+                </div>
+                <div className="w-6/12">
+                  <div className="flex">
+                    <input
+                      type="text"
+                      {...register('label')}
+                      placeholder={tr('address_label')}
+                      className="bg-gray-100 px-8 py-3 rounded-full w-full outline-none focus:outline-none"
+                    />
+                  </div>
+                </div>
               </div>
+              {locationData?.terminalData && (
+                <div className="md:mt-3 flex space-x-2 items-center">
+                  <LocationMarkerIcon className="w-5 h-5" />
+                  <div className="font-bold">
+                    {tr('nearest_filial', {
+                      filialName: locationData?.terminalData.name,
+                    })}
+                  </div>
+                </div>
+              )}
               <div className="flex justify-end mt-3">
                 <button
                   type="submit"

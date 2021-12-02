@@ -15,6 +15,7 @@ import {
   CheckIcon,
   ChevronDownIcon,
   ChevronRightIcon,
+  LocationMarkerIcon,
 } from '@heroicons/react/solid'
 import {
   YMaps,
@@ -37,23 +38,36 @@ import { City } from '@commerce/types/cities'
 import router, { useRouter } from 'next/router'
 import { chunk, sortBy } from 'lodash'
 import { DateTime } from 'luxon'
+import Cookies from 'js-cookie'
+import getAddressList from '@lib/load_addreses'
+import { Address } from '@commerce/types/address'
 
 const { publicRuntimeConfig } = getConfig()
 
 let webAddress = publicRuntimeConfig.apiUrl
-interface MobLocationTabProps {
-  setOpen: Dispatch<SetStateAction<boolean>>
-}
-
 interface AnyObject {
   [key: string]: any
 }
 
-const MobLocationTabs: FC<MobLocationTabProps> = ({ setOpen }) => {
+const MobLocationTabs: FC = () => {
   const { t: tr } = useTranslation('common')
   const { locale, pathname, query } = useRouter()
-  const { locationData, setLocationData, cities, activeCity, setActiveCity } =
-    useUI()
+  const {
+    locationData,
+    setLocationData,
+    cities,
+    activeCity,
+    setActiveCity,
+    setLocationTabsClosable,
+    closeMobileLocationTabs,
+    locationTabsClosable,
+    setStopProducts,
+    addressId,
+    setAddressId,
+    setAddressList,
+    openSignInModal,
+    addressList,
+  } = useUI()
   const [tabIndex, setTabIndex] = useState(
     locationData?.deliveryType || 'deliver'
   )
@@ -107,7 +121,7 @@ const MobLocationTabs: FC<MobLocationTabProps> = ({ setOpen }) => {
     }
   }
 
-  const { register, handleSubmit, getValues, setValue, watch } =
+  const { register, handleSubmit, getValues, setValue, watch, reset } =
     useForm<AnyObject>({
       defaultValues: {
         address: locationData?.address || currentAddress,
@@ -115,6 +129,8 @@ const MobLocationTabs: FC<MobLocationTabProps> = ({ setOpen }) => {
         house: locationData?.house || '',
         entrance: locationData?.entrance || '',
         door_code: locationData?.door_code || '',
+        label: locationData?.label || '',
+        addressId: addressId || null,
       },
     })
 
@@ -208,8 +224,31 @@ const MobLocationTabs: FC<MobLocationTabProps> = ({ setOpen }) => {
     setYandexGeoKey(yandexGeoKey)
   }
 
+  const loadAddresses = async () => {
+    const addresses = await getAddressList()
+    if (!addresses) {
+      setAddressList(null)
+    } else {
+      setAddressList(addresses)
+    }
+  }
+
   useEffect(() => {
+    let formValues = getValues()
+
+    if (formValues.addressId != addressId) {
+      reset({
+        address: locationData?.address || currentAddress,
+        flat: locationData?.flat || '',
+        house: locationData?.house || '',
+        entrance: locationData?.entrance || '',
+        door_code: locationData?.door_code || '',
+        label: locationData?.label || '',
+      })
+    }
+
     fetchConfig()
+    loadAddresses()
     if (locationData && locationData.deliveryType == 'pickup') {
       loadPickupItems()
     }
@@ -262,6 +301,50 @@ const MobLocationTabs: FC<MobLocationTabProps> = ({ setOpen }) => {
     setActiveCity(city)
     if (city) setMapCenter([+city.lat, +city.lon])
   }
+  const searchTerminal = async (locationData: any = {}) => {
+    if (!locationData || !locationData.location) {
+      toast.warn(tr('no_address_specified'), {
+        position: toast.POSITION.BOTTOM_RIGHT,
+        hideProgressBar: true,
+      })
+      setLocationData({
+        ...locationData,
+        terminal_id: undefined,
+        terminalData: undefined,
+      })
+      return
+    }
+
+    const { data: terminalsData } = await axios.get(
+      `${webAddress}/api/terminals/find_nearest?lat=${locationData.location[0]}&lon=${locationData.location[1]}`
+    )
+
+    if (terminalsData.data && !terminalsData.data.items.length) {
+      toast.warn(
+        terminalsData.data.message
+          ? terminalsData.data.message
+          : tr('restaurant_not_found'),
+        {
+          position: toast.POSITION.BOTTOM_RIGHT,
+          hideProgressBar: true,
+        }
+      )
+      setLocationData({
+        ...locationData,
+        terminal_id: undefined,
+        terminalData: undefined,
+      })
+      return
+    }
+
+    if (terminalsData.data) {
+      setLocationData({
+        ...locationData,
+        terminal_id: terminalsData.data.items[0].id,
+        terminalData: terminalsData.data.items[0],
+      })
+    }
+  }
 
   const setSelectedAddress = (selection: any) => {
     setMapCenter([selection.coordinates.lat, selection.coordinates.long])
@@ -284,6 +367,10 @@ const MobLocationTabs: FC<MobLocationTabProps> = ({ setOpen }) => {
       if (address.kind == 'house') {
         setValue('house', address.name)
       }
+    })
+    searchTerminal({
+      ...locationData,
+      location: [selection.coordinates.lat, selection.coordinates.long],
     })
   }
 
@@ -349,6 +436,7 @@ const MobLocationTabs: FC<MobLocationTabProps> = ({ setOpen }) => {
       address: data.data.formatted,
       house,
     })
+    searchTerminal({ ...locationData, location: coords })
   }
 
   const mapState = useMemo<MapState>(() => {
@@ -363,6 +451,30 @@ const MobLocationTabs: FC<MobLocationTabProps> = ({ setOpen }) => {
     const res: MapState = Object.assign({}, baseState, mapStateCenter)
     return res
   }, [mapCenter, mapZoom, activeCity])
+
+  const setCredentials = async () => {
+    let csrf = Cookies.get('X-XSRF-TOKEN')
+    if (!csrf) {
+      const csrfReq = await axios(`${webAddress}/api/keldi`, {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+          crossDomain: true,
+        },
+        withCredentials: true,
+      })
+      let { data: res } = csrfReq
+      csrf = Buffer.from(res.result, 'base64').toString('ascii')
+
+      var inTenMinutes = new Date(new Date().getTime() + 10 * 60 * 1000)
+      Cookies.set('X-XSRF-TOKEN', csrf, {
+        expires: inTenMinutes,
+      })
+    }
+    axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest'
+    axios.defaults.headers.common['X-CSRF-TOKEN'] = csrf
+    axios.defaults.headers.common['XCSRF-TOKEN'] = csrf
+  }
 
   const onSubmit: SubmitHandler<AnyObject> = (data) => {
     saveDeliveryData(data, null)
@@ -439,11 +551,65 @@ const MobLocationTabs: FC<MobLocationTabProps> = ({ setOpen }) => {
         terminal_id: terminalsData.data.items[0].id,
         terminalData: terminalsData.data.items[0],
       })
-      setOpen(false)
+
+      const { data: terminalStock } = await axios.get(
+        `${webAddress}/api/terminals/get_stock?terminal_id=${terminalsData.data.items[0].id}`
+      )
+
+      if (!terminalStock.success) {
+        toast.warn(terminalStock.message, {
+          position: toast.POSITION.BOTTOM_RIGHT,
+          hideProgressBar: true,
+        })
+        return
+      } else {
+        setStopProducts(terminalStock.data)
+      }
+
+      setLocationTabsClosable(false)
+      closeMobileLocationTabs()
+    }
+
+    const otpToken = Cookies.get('opt_token')
+    if (otpToken) {
+      if (addressId) {
+        await setCredentials()
+        await axios.post(
+          `${webAddress}/api/address/${addressId}`,
+
+          {
+            ...data,
+            lat: locationData.location[0],
+            lon: locationData.location[1],
+          },
+          {
+            headers: {
+              Authorization: `Bearer ${otpToken}`,
+            },
+          }
+        )
+      } else {
+        await setCredentials()
+        const { data: addressData } = await axios.post(
+          `${webAddress}/api/address/new`,
+          {
+            ...data,
+            lat: locationData.location[0],
+            lon: locationData.location[1],
+          },
+          {
+            headers: {
+              Authorization: `Bearer ${otpToken}`,
+            },
+          }
+        )
+
+        setAddressId(addressData.data.id)
+      }
     }
   }
 
-  const submitPickup = () => {
+  const submitPickup = async () => {
     if (!activePoint) {
       toast.warn(`${tr('pickup_point_not_selected')}`, {
         position: toast.POSITION.BOTTOM_RIGHT,
@@ -452,7 +618,22 @@ const MobLocationTabs: FC<MobLocationTabProps> = ({ setOpen }) => {
       return
     }
 
-    setOpen(false)
+    const { data: terminalStock } = await axios.get(
+      `${webAddress}/api/terminals/get_stock?terminal_id=${activePoint}`
+    )
+
+    if (!terminalStock.success) {
+      toast.warn(terminalStock.message, {
+        position: toast.POSITION.BOTTOM_RIGHT,
+        hideProgressBar: true,
+      })
+      return
+    } else {
+      setStopProducts(terminalStock.data)
+    }
+
+    setLocationTabsClosable(false)
+    closeMobileLocationTabs()
   }
 
   const loadPolygonsToMap = (ymaps: any) => {
@@ -517,6 +698,18 @@ const MobLocationTabs: FC<MobLocationTabProps> = ({ setOpen }) => {
     objects.current = deliveryZones
   }
 
+  const selectAddress = (address: Address) => {
+    if (address.id == addressId) {
+      setAddressId(null)
+    } else {
+      setLocationData({
+        ...address,
+        location: [address.lat, address.lon],
+      })
+      setAddressId(address.id)
+    }
+  }
+
   const chosenCity = useMemo(() => {
     if (activeCity) {
       return activeCity
@@ -528,9 +721,19 @@ const MobLocationTabs: FC<MobLocationTabProps> = ({ setOpen }) => {
   return (
     <>
       <div className="flex items-center pt-5 mb-8">
-        <span onClick={() => setOpen(false)} className="flex">
-          <Image src="/assets/back.png" width="24" height="24" />
-        </span>
+        {locationTabsClosable && (
+          <span
+            onClick={() => {
+              if (locationTabsClosable) {
+                setLocationTabsClosable(false)
+                closeMobileLocationTabs()
+              }
+            }}
+            className="flex"
+          >
+            <Image src="/assets/back.png" width="24" height="24" />
+          </span>
+        )}
         <div className="text-lg flex-grow text-center">Адрес</div>
       </div>
       <div className="bg-gray-100 flex rounded-full w-full h-11 items-center">
@@ -643,6 +846,30 @@ const MobLocationTabs: FC<MobLocationTabProps> = ({ setOpen }) => {
               </YMaps>
             )}
           </div>
+          {addressList && addressList.length > 0 && (
+            <div className="mt-3">
+              <div className="font-bold text-[18px]">
+                {tr('profile_address')}
+              </div>
+              <div className="mt-2">
+                <div className="grid grid-cols-3 gap-1">
+                  {addressList.map((item: Address) => (
+                    <div
+                      key={item.id}
+                      className={`px-2 py-1 truncate rounded-full cursor-pointer ${
+                        addressId == item.id
+                          ? 'bg-primary text-white'
+                          : 'bg-gray-100'
+                      }`}
+                      onClick={() => selectAddress(item)}
+                    >
+                      {item.label ? item.label : item.address}
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </div>
+          )}
           <div className="mt-3">
             <form onSubmit={handleSubmit(onSubmit)}>
               <div className="font-bold text-[18px]">{tr('address')}</div>
@@ -783,6 +1010,26 @@ const MobLocationTabs: FC<MobLocationTabProps> = ({ setOpen }) => {
                   )}
                 </Disclosure>
               </div>
+              <div className="mt-5">
+                <div className="flex">
+                  <input
+                    type="text"
+                    {...register('label')}
+                    placeholder={tr('address_label')}
+                    className="bg-gray-100 px-8 py-2 rounded-full outline-none w-full focus:outline-none"
+                  />
+                </div>
+              </div>
+              {locationData?.terminalData && (
+                <div className="md:mt-3 flex space-x-2 items-center">
+                  <LocationMarkerIcon className="w-5 h-5" />
+                  <div className="font-bold">
+                    {tr('nearest_filial', {
+                      filialName: locationData?.terminalData.name,
+                    })}
+                  </div>
+                </div>
+              )}
               <div className="flex mt-12 justify-center">
                 <button
                   type="submit"

@@ -9,20 +9,22 @@ import type {
 } from 'next'
 import { useRouter } from 'next/router'
 import MainSlider from '@components_new/main/MainSlider'
-import React, { useEffect, useMemo, useState } from 'react'
+import React, { Fragment, useEffect, useMemo, useRef, useState } from 'react'
 import ProductListSectionTitle from '@components_new/product/ProductListSectionTitle'
 import ProductItemNew from '@components_new/product/ProductItemNew'
 import CategoriesMenu from '@components_new/main/CategoriesMenu'
-import SetLocation from '@components_new/header/SetLocation'
 import MobSetLocation from '@components_new/header/MobSetLocation'
 import defaultChannel from '@lib/defaultChannel'
-import { useCart } from '@framework/cart'
 import dynamic from 'next/dynamic'
-import CreateYourPizza from '@components_new/product/CreateYourPizza'
-import Head from 'next/head'
 import { NextSeo } from 'next-seo'
 import useTranslation from 'next-translate/useTranslation'
 import { useUI } from '@components/ui/context'
+import axios from 'axios'
+import getConfig from 'next/config'
+
+const { publicRuntimeConfig } = getConfig()
+
+let webAddress = publicRuntimeConfig.apiUrl
 
 const HalfPizzaNoSSR = dynamic(
   () => import('@components_new/product/CreateYourPizzaCommon'),
@@ -111,7 +113,15 @@ export default function Home({
   const [channelName, setChannelName] = useState('chopar')
   const [isStickySmall, setIsStickySmall] = useState(false)
   const { t: tr } = useTranslation('common')
-  const { setCitiesData, activeCity, setActiveCity } = useUI()
+  const {
+    setCitiesData,
+    activeCity,
+    setActiveCity,
+    openLocationTabs,
+    openMobileLocationTabs,
+    setStopProducts,
+    locationData,
+  } = useUI()
 
   const getChannel = async () => {
     const channelData = await defaultChannel()
@@ -126,16 +136,40 @@ export default function Home({
     }
   }
 
+  const showLocationTabsController = async () => {
+    if (locationData?.terminalData) {
+      const { data: terminalStock } = await axios.get(
+        `${webAddress}/api/terminals/get_stock?terminal_id=${locationData?.terminalData.id}`
+      )
+
+      if (!terminalStock.success) {
+        return
+      } else {
+        setStopProducts(terminalStock.data)
+      }
+      return
+    }
+
+    setTimeout(() => {
+      if (window.innerWidth < 768) {
+        openMobileLocationTabs()
+      } else {
+        openLocationTabs()
+      }
+    }, 400)
+  }
+
   useEffect(() => {
     getChannel()
 
     window.addEventListener('scroll', hideCreatePizza)
+
+    showLocationTabsController()
     return () => {
       window.removeEventListener('scroll', hideCreatePizza)
     }
-
     // return () => document.removeEventListener('sticky-change', handleKeyUp)
-  }, [])
+  }, [locationData])
 
   const readyProducts = useMemo(() => {
     return products

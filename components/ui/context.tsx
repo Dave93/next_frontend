@@ -1,6 +1,7 @@
 import { City } from '@commerce/types/cities'
 import React, { FC, useCallback, useMemo } from 'react'
 import Cookies from 'js-cookie'
+import { Address } from '@commerce/types/address'
 
 let userData: any = null
 
@@ -12,6 +13,7 @@ let locationData: any = {
   door_code: '',
   deliveryType: 'deliver',
   location: [],
+  label: '',
 }
 
 let activeCity: City | null = null
@@ -44,7 +46,7 @@ if (typeof window !== 'undefined') {
     userData = JSON.parse(userData)
   } catch (e) {}
 
-  locationData = sessionStorage.getItem('yetkazish') ?? locationData
+  locationData = Cookies.get('yetkazish') ?? locationData
   try {
     if (locationData) {
       let locData: any = Buffer.from(locationData, 'base64')
@@ -77,6 +79,7 @@ export interface LocationData {
   location?: number[]
   terminalId?: number
   terminalData?: AnyObject
+  label?: string
 }
 
 export interface State {
@@ -91,6 +94,12 @@ export interface State {
   cities: City[] | null
   activeCity: City | null
   showSignInModal: boolean
+  showLocationTabs: boolean
+  showMobileLocationTabs: boolean
+  locationTabsClosable: boolean
+  stopProducts: number[]
+  addressId: number | null
+  addressList: Address[] | null
 }
 
 const initialState = {
@@ -105,6 +114,12 @@ const initialState = {
   cities: null,
   activeCity: activeCity,
   showSignInModal: false,
+  showLocationTabs: false,
+  showMobileLocationTabs: false,
+  locationTabsClosable: false,
+  stopProducts: [],
+  addressId: null,
+  addressList: null,
 }
 
 type Action =
@@ -159,6 +174,34 @@ type Action =
     }
   | {
       type: 'CLOSE_SIGNIN_MODAL'
+    }
+  | {
+      type: 'SHOW_LOCATION_TABS'
+    }
+  | {
+      type: 'CLOSE_LOCATION_TABS'
+    }
+  | {
+      type: 'SHOW_MOBILE_LOCATION_TABS'
+    }
+  | {
+      type: 'CLOSE_MOBILE_LOCATION_TABS'
+    }
+  | {
+      type: 'SET_LOCATION_TABS_CLOSABLE'
+      value: boolean
+    }
+  | {
+      type: 'SET_STOP_PRODUCTS'
+      value: number[]
+    }
+  | {
+      type: 'SET_ADDRESS_ID'
+      value: number
+    }
+  | {
+      type: 'SET_ADDRESS_LIST'
+      value: Address[]
     }
 
 type MODAL_VIEWS =
@@ -251,7 +294,12 @@ function uiReducer(state: State, action: Action) {
       try {
         let locationNewData = JSON.stringify(action.value)
         locationNewData = Buffer.from(locationNewData).toString('base64')
-        sessionStorage.setItem('yetkazish', locationNewData)
+        // set cookies for 30 minutes
+        var inFifteenMinutes = new Date(new Date().getTime() + 30 * 60 * 1000)
+        Cookies.set('yetkazish', locationNewData, {
+          expires: inFifteenMinutes,
+        })
+        // sessionStorage.setItem('yetkazish', locationNewData)
       } catch (e) {}
       return {
         ...state,
@@ -290,6 +338,54 @@ function uiReducer(state: State, action: Action) {
       return {
         ...state,
         showSignInModal: false,
+      }
+    }
+    case 'SHOW_LOCATION_TABS': {
+      return {
+        ...state,
+        showLocationTabs: true,
+      }
+    }
+    case 'CLOSE_LOCATION_TABS': {
+      return {
+        ...state,
+        showLocationTabs: false,
+      }
+    }
+    case 'SHOW_MOBILE_LOCATION_TABS': {
+      return {
+        ...state,
+        showMobileLocationTabs: true,
+      }
+    }
+    case 'CLOSE_MOBILE_LOCATION_TABS': {
+      return {
+        ...state,
+        showMobileLocationTabs: false,
+      }
+    }
+    case 'SET_LOCATION_TABS_CLOSABLE': {
+      return {
+        ...state,
+        locationTabsClosable: action.value,
+      }
+    }
+    case 'SET_STOP_PRODUCTS': {
+      return {
+        ...state,
+        stopProducts: action.value,
+      }
+    }
+    case 'SET_ADDRESS_ID': {
+      return {
+        ...state,
+        addressId: action.value,
+      }
+    }
+    case 'SET_ADDRESS_LIST': {
+      return {
+        ...state,
+        addressList: action.value,
       }
     }
   }
@@ -389,6 +485,46 @@ export const UIProvider: FC<UIProviderProps> = (props) => {
     [dispatch]
   )
 
+  const openLocationTabs = useCallback(
+    () => dispatch({ type: 'SHOW_LOCATION_TABS' }),
+    [dispatch]
+  )
+
+  const closeLocationTabs = useCallback(
+    () => dispatch({ type: 'CLOSE_LOCATION_TABS' }),
+    [dispatch]
+  )
+
+  const openMobileLocationTabs = useCallback(
+    () => dispatch({ type: 'SHOW_MOBILE_LOCATION_TABS' }),
+    [dispatch]
+  )
+
+  const closeMobileLocationTabs = useCallback(
+    () => dispatch({ type: 'CLOSE_MOBILE_LOCATION_TABS' }),
+    [dispatch]
+  )
+
+  const setLocationTabsClosable = useCallback(
+    (value: boolean) => dispatch({ type: 'SET_LOCATION_TABS_CLOSABLE', value }),
+    [dispatch]
+  )
+
+  const setStopProducts = useCallback(
+    (value: number[]) => dispatch({ type: 'SET_STOP_PRODUCTS', value }),
+    [dispatch]
+  )
+
+  const setAddressId = useCallback(
+    (value: number) => dispatch({ type: 'SET_ADDRESS_ID', value }),
+    [dispatch]
+  )
+
+  const setAddressList = useCallback(
+    (value: Address[]) => dispatch({ type: 'SET_ADDRESS_LIST', value }),
+    [dispatch]
+  )
+
   const value = useMemo(
     () => ({
       ...state,
@@ -409,6 +545,14 @@ export const UIProvider: FC<UIProviderProps> = (props) => {
       setActiveCity,
       openSignInModal,
       closeSignInModal,
+      openLocationTabs,
+      closeLocationTabs,
+      openMobileLocationTabs,
+      closeMobileLocationTabs,
+      setLocationTabsClosable,
+      setStopProducts,
+      setAddressId,
+      setAddressList,
     }),
     [state]
   )

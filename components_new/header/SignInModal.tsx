@@ -13,6 +13,7 @@ import UserProfileDropDown from './UserProfileDropDown'
 import Input from 'react-phone-number-input/input'
 import { useRouter } from 'next/router'
 import getConfig from 'next/config'
+import getAddressList from '@lib/load_addreses'
 
 axios.defaults.withCredentials = true
 const { publicRuntimeConfig } = getConfig()
@@ -51,6 +52,7 @@ const SignInButton: FC = () => {
     showSignInModal,
     openSignInModal,
     closeSignInModal,
+    setAddressList,
   } = useUI()
 
   const otpTime = useRef(0)
@@ -193,6 +195,12 @@ const SignInButton: FC = () => {
     } else {
       clearInterval(otpTimerRef)
       setUserData(result)
+      const addresses = await getAddressList()
+      if (!addresses) {
+        setAddressList(null)
+      } else {
+        setAddressList(addresses)
+      }
       setIsShowPasswordForm(false)
       if (router.query && router.query.backUrl) {
         let backUrl: string = router.query.backUrl as string
@@ -278,7 +286,7 @@ const SignInButton: FC = () => {
                   leaveFrom="opacity-100 scale-100"
                   leaveTo="opacity-0 scale-95"
                 >
-                  <div className="align-middle inline-block overflow-hidden w-full">
+                  <div className="align-middle inline-block overflow-hidden w-full z-[200]">
                     <div className="md:inline-flex my-8 items-start">
                       <div className="align-middle bg-white inline-block overflow-hidden md:px-40 px-6 py-10 rounded-2xl shadow-xl text-center transform transition-all max-w-2xl">
                         <Dialog.Title as="h3" className="leading-6 text-3xl">
