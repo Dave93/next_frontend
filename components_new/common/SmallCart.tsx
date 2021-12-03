@@ -218,15 +218,17 @@ const SmallCart: FC<SmallCartProps> = ({ channelName }) => {
 
   const readonlyItems = useMemo(() => {
     let res: number[] = []
-    data?.lineItems.map((lineItem: any) => {
-      if (lineItem.bonus_id) {
-        res.push(lineItem.id)
-      }
+    if (!isEmpty) {
+      data?.lineItems.map((lineItem: any) => {
+        if (lineItem.bonus_id) {
+          res.push(lineItem.id)
+        }
 
-      if (lineItem.sale_id) {
-        res.push(lineItem.id)
-      }
-    })
+        if (lineItem.sale_id) {
+          res.push(lineItem.id)
+        }
+      })
+    }
     return res
   }, [data])
 
