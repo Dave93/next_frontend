@@ -264,6 +264,12 @@ const OrderAccept: FC<OrderDetailProps> = ({ order, orderStatuses }) => {
                     : pizza?.variant?.product?.attribute_data?.name[
                         channelName
                       ][locale || 'ru']}
+                  {pizza.bonus_id && (
+                    <span className="text-yellow">({tr('bonus')})</span>
+                  )}
+                  {pizza.sale_id && (
+                    <span className="text-yellow">({tr('sale_label')})</span>
+                  )}
                 </div>
               </div>
             </div>

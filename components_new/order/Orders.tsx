@@ -53,7 +53,7 @@ axios.defaults.withCredentials = true
 
 type FormData = {
   name: string
-  address: string
+  address: string | null | undefined
   phone: string
   email: string
   flat: string
@@ -71,7 +71,7 @@ type FormData = {
   pay_type: string
   delivery_schedule: string
   label?: string
-  addressId?: number
+  addressId: number | null
 }
 
 interface SelectItem {
@@ -142,6 +142,7 @@ const Orders: FC<OrdersProps> = ({ channelName }: { channelName: any }) => {
     setAddressId,
     setAddressList,
     addressList,
+    selectAddress,
   } = useUI()
   let cartId: string | null = null
   if (typeof window !== 'undefined') {
@@ -338,20 +339,6 @@ const Orders: FC<OrdersProps> = ({ channelName }: { channelName: any }) => {
     if (locationData && locationData.deliveryType == 'pickup') {
       loadPickupItems()
     }
-    let formValues = getValues()
-
-    if (/*formValues.addressId && */ formValues.addressId != addressId) {
-      reset({
-        ...formValues,
-        address: locationData?.address || currentAddress,
-        flat: locationData?.flat || '',
-        house: locationData?.house || '',
-        entrance: locationData?.entrance || '',
-        door_code: locationData?.door_code || '',
-        label: locationData?.label || '',
-        addressId: addressId || null,
-      })
-    }
     return
   }, [locationData])
 
@@ -393,7 +380,7 @@ const Orders: FC<OrdersProps> = ({ channelName }: { channelName: any }) => {
     if (city) setMapCenter([+city.lat, +city.lon])
   }
 
-  const setSelectedAddress = (selection: any) => {
+  const setSelectedAddress = async (selection: any) => {
     setMapCenter([selection.coordinates.lat, selection.coordinates.long])
     setSelectedCoordinates([
       {
@@ -402,23 +389,29 @@ const Orders: FC<OrdersProps> = ({ channelName }: { channelName: any }) => {
       },
     ])
     setMapZoom(17)
-    setLocationData({
-      ...locationData,
-      location: [selection.coordinates.lat, selection.coordinates.long],
-    })
     setValue('address', selection.formatted)
     downshiftControl?.current?.reset({
       inputValue: selection.formatted,
     })
-
+    let house = ''
     selection.addressItems.map((address: any) => {
       if (address.kind == 'house') {
         setValue('house', address.name)
+        house = address.name
       }
     })
-    searchTerminal({
+    let terminalData = await searchTerminal(
+      {
+        location: [selection.coordinates.lat, selection.coordinates.long],
+      },
+      true
+    )
+    setLocationData({
       ...locationData,
+      house: house,
       location: [selection.coordinates.lat, selection.coordinates.long],
+      terminal_id: terminalData.terminal_id,
+      terminalData: terminalData.terminalData,
     })
   }
   const changeCity = (city: City) => {
@@ -477,13 +470,21 @@ const Orders: FC<OrdersProps> = ({ channelName }: { channelName: any }) => {
     downshiftControl?.current?.reset({
       inputValue: data.data.formatted,
     })
+
+    let terminalData = await searchTerminal(
+      {
+        location: coords,
+      },
+      true
+    )
     setLocationData({
       ...locationData,
       location: coords,
       address: data.data.formatted,
       house,
+      terminal_id: terminalData.terminal_id,
+      terminalData: terminalData.terminalData,
     })
-    searchTerminal({ ...locationData, location: coords })
   }
 
   const mapState = useMemo<MapState>(() => {
@@ -620,18 +621,26 @@ const Orders: FC<OrdersProps> = ({ channelName }: { channelName: any }) => {
     })
   }
 
-  const searchTerminal = async (locationData: any = {}) => {
+  const searchTerminal = async (
+    locationData: any = {},
+    returnResult: boolean = false
+  ) => {
     if (!locationData || !locationData.location) {
       toast.warn(tr('no_address_specified'), {
         position: toast.POSITION.BOTTOM_RIGHT,
         hideProgressBar: true,
       })
-      setLocationData({
-        ...locationData,
-        terminal_id: undefined,
-        terminalData: undefined,
-      })
-      return
+      // if returnResult is true, return object else return setLocationData
+      return returnResult
+        ? {
+            terminal_id: undefined,
+            terminalData: undefined,
+          }
+        : setLocationData({
+            ...locationData,
+            terminal_id: undefined,
+            terminalData: undefined,
+          })
     }
 
     const { data: terminalsData } = await axios.get(
@@ -648,20 +657,32 @@ const Orders: FC<OrdersProps> = ({ channelName }: { channelName: any }) => {
           hideProgressBar: true,
         }
       )
-      setLocationData({
-        ...locationData,
-        terminal_id: undefined,
-        terminalData: undefined,
-      })
-      return
+
+      // if returnResult is true, return object else return setLocationData
+      return returnResult
+        ? {
+            terminal_id: undefined,
+            terminalData: undefined,
+          }
+        : setLocationData({
+            ...locationData,
+            terminal_id: undefined,
+            terminalData: undefined,
+          })
     }
 
     if (terminalsData.data) {
-      setLocationData({
-        ...locationData,
-        terminal_id: terminalsData.data.items[0].id,
-        terminalData: terminalsData.data.items[0],
-      })
+      // if returnResult is true, return object else return setLocationData
+      return returnResult
+        ? {
+            terminal_id: terminalsData.data.items[0].id,
+            terminalData: terminalsData.data.items[0],
+          }
+        : setLocationData({
+            ...locationData,
+            terminal_id: terminalsData.data.items[0].id,
+            terminalData: terminalsData.data.items[0],
+          })
     }
   }
 
@@ -888,15 +909,10 @@ const Orders: FC<OrdersProps> = ({ channelName }: { channelName: any }) => {
     })
   }
 
-  const selectAddress = (address: Address) => {
+  const selectAddressLocal = async (address: Address) => {
     if (address.id == addressId) {
       setAddressId(null)
     } else {
-      setLocationData({
-        ...address,
-        location: [address.lat, address.lon],
-      })
-      setAddressId(address.id)
       if (address.lat && address.lon) {
         setSelectedCoordinates([
           {
@@ -907,10 +923,44 @@ const Orders: FC<OrdersProps> = ({ channelName }: { channelName: any }) => {
             },
           },
         ])
+        setMapZoom(17)
         setMapCenter([address.lat, address.lon])
-        searchTerminal({
-          ...address,
-          location: [address.lat, address.lon],
+        let terminalData = await searchTerminal(
+          {
+            location: [address.lat, address.lon],
+          },
+          true
+        )
+
+        let formValues = getValues()
+        reset({
+          ...formValues,
+          address: address?.address || currentAddress,
+          flat: address?.flat || '',
+          house: address?.house || '',
+          entrance: address?.entrance || '',
+          door_code: address?.door_code || '',
+          label: address?.label || '',
+          addressId: address.id || null,
+        })
+        selectAddress({
+          locationData: {
+            ...address,
+            location: [address.lat, address.lon],
+            terminal_id: terminalData.terminal_id,
+            terminalData: terminalData.terminalData,
+          },
+          addressId: address.id,
+        })
+      } else {
+        selectAddress({
+          locationData: {
+            ...address,
+            location: [],
+            terminal_id: undefined,
+            terminalData: undefined,
+          },
+          addressId: address.id,
         })
       }
     }
@@ -1182,7 +1232,7 @@ const Orders: FC<OrdersProps> = ({ channelName }: { channelName: any }) => {
                             ? 'bg-primary text-white'
                             : 'bg-gray-100'
                         }`}
-                        onClick={() => selectAddress(item)}
+                        onClick={() => selectAddressLocal(item)}
                       >
                         {item.label ? item.label : item.address}
                       </div>
@@ -1204,6 +1254,12 @@ const Orders: FC<OrdersProps> = ({ channelName }: { channelName: any }) => {
                       }
                       // inputValue={locationData?.address || currentAddress}
                       initialInputValue={watch('address') || currentAddress}
+                      inputValue={watch('address')}
+                      onStateChange={(changes, stateAndHelpers) => {
+                        if (changes.hasOwnProperty('inputValue')) {
+                          setValue('address', changes.inputValue)
+                        }
+                      }}
                     >
                       {({
                         getInputProps,
@@ -1886,6 +1942,12 @@ const Orders: FC<OrdersProps> = ({ channelName }: { channelName: any }) => {
                     : lineItem?.variant?.product?.attribute_data?.name[
                         channelName
                       ][locale || 'ru']}
+                  {lineItem.bonus_id && (
+                    <span className="text-yellow">({tr('bonus')})</span>
+                  )}
+                  {lineItem.sale_id && (
+                    <span className="text-yellow">({tr('sale_label')})</span>
+                  )}
                 </div>
                 {lineItem.modifiers &&
                   lineItem.modifiers

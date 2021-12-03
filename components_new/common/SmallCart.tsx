@@ -216,6 +216,20 @@ const SmallCart: FC<SmallCartProps> = ({ channelName }) => {
     }
   }
 
+  const readonlyItems = useMemo(() => {
+    let res: number[] = []
+    data?.lineItems.map((lineItem: any) => {
+      if (lineItem.bonus_id) {
+        res.push(lineItem.id)
+      }
+
+      if (lineItem.sale_id) {
+        res.push(lineItem.id)
+      }
+    })
+    return res
+  }, [data])
+
   useEffect(() => {
     fetchConfig()
     return
@@ -348,8 +362,13 @@ const SmallCart: FC<SmallCartProps> = ({ channelName }) => {
                       {lineItem.bonus_id && (
                         <span className="text-yellow">({tr('bonus')})</span>
                       )}
+                      {lineItem.sale_id && (
+                        <span className="text-yellow">
+                          ({tr('sale_label')})
+                        </span>
+                      )}
                     </div>
-                    {!lineItem.bonus_id && (
+                    {!readonlyItems.includes(lineItem.id) && (
                       <div>
                         <XIcon
                           className="cursor-pointer h-4 text-black w-4"
@@ -359,7 +378,7 @@ const SmallCart: FC<SmallCartProps> = ({ channelName }) => {
                     )}
                   </div>
                   <div className="flex items-center">
-                    {!lineItem.bonus_id && (
+                    {!readonlyItems.includes(lineItem.id) && (
                       <div className="ml-10">
                         <div className="w-20 h-6 ml-1 bg-yellow rounded-full flex items-center text-white">
                           <div className="w-6 h-6 items-center flex justify-around">

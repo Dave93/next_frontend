@@ -262,6 +262,20 @@ export default function Cart() {
     }
   }
 
+  const readonlyItems = useMemo(() => {
+    let res: number[] = []
+    data?.lineItems.map((lineItem: any) => {
+      if (lineItem.bonus_id) {
+        res.push(lineItem.id)
+      }
+
+      if (lineItem.sale_id) {
+        res.push(lineItem.id)
+      }
+    })
+    return res
+  }, [data])
+
   useEffect(() => {
     fetchConfig()
     return
@@ -287,7 +301,7 @@ export default function Cart() {
       </div>
     )
   }
-  console.log(data?.lineItems)
+
   return (
     <>
       {isCartLoading && (
@@ -429,6 +443,11 @@ export default function Cart() {
                           {lineItem.bonus_id && (
                             <span className="text-yellow">({tr('bonus')})</span>
                           )}
+                          {lineItem.sale_id && (
+                            <span className="text-yellow">
+                              ({tr('sale_label')})
+                            </span>
+                          )}
                         </div>
                       </div>
                       {lineItem.modifiers && (
@@ -447,7 +466,7 @@ export default function Cart() {
                       )}
                     </div>
                     <div className="md:flex md:space-x-10 items-center hidden">
-                      {!lineItem.bonus_id && (
+                      {!readonlyItems.includes(lineItem.id) && (
                         <div className="w-20 h-6 ml-1 bg-yellow rounded-full flex items-center text-white">
                           <div className="w-6 h-6 items-center flex justify-around">
                             <MinusIcon
@@ -487,7 +506,7 @@ export default function Cart() {
                               precision: 0,
                             }).format()}
                       </div>
-                      {!lineItem.bonus_id && (
+                      {!readonlyItems.includes(lineItem.id) && (
                         <>
                           <XIcon
                             className="cursor-pointer h-4 text-black w-4"
@@ -497,7 +516,7 @@ export default function Cart() {
                       )}
                     </div>
                     <div className="md:space-x-10 items-center md:hidden">
-                      {!lineItem.bonus_id && (
+                      {!readonlyItems.includes(lineItem.id) && (
                         <XIcon
                           className="cursor-pointer h-4 text-black w-4 ml-auto"
                           onClick={() => destroyLine(lineItem.id)}
@@ -524,7 +543,7 @@ export default function Cart() {
                               precision: 0,
                             }).format()}
                       </div>
-                      {!lineItem.bonus_id && (
+                      {!readonlyItems.includes(lineItem.id) && (
                         <div className="w-20 h-6 bg-yellow rounded-full flex items-center text-white ml-auto">
                           <div className="w-6 h-6 items-center flex justify-around">
                             <MinusIcon
