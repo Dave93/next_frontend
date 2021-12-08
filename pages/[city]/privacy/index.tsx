@@ -39,7 +39,7 @@ export async function getServerSideProps({
   }
 }
 
-export default function AboutPage() {
+export default function Privacy() {
   const { t: tr } = useTranslation('common')
   return (
     <>
@@ -48,4 +48,4 @@ export default function AboutPage() {
   )
 }
 
-AboutPage.Layout = Layout
+Privacy.Layout = Layout
