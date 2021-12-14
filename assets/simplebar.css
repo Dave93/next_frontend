@@ -1,0 +1,7 @@
+.simplebar-track.simplebar-vertical .simplebar-scrollbar:before {
+  background-color: #faaf04;
+}
+
+.simplebar-content-wrapper .simplebar-content {
+  padding: 0px 10px 0px 0px!important;
+}

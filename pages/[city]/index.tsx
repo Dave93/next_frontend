@@ -86,7 +86,7 @@ export async function getServerSideProps({
       socials,
       cities,
       currentCity,
-      cleanBackground: true,
+      cleanBackground: false,
     },
   }
 }

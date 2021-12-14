@@ -500,22 +500,22 @@ const ProductItemNew: FC<ProductItem> = ({ product, channelName }) => {
                               ? mod.assets[0].local
                               : `${webAddress}/storage/${mod.assets[0]?.location}/${mod.assets[0]?.filename}`
                           }
-                          width={50}
-                          height={50}
+                          width={100}
+                          height={100}
                           alt={mod.name}
                           className="mx-auto"
                         />
                       ) : (
                         <img
                           src="/no_photo.svg"
-                          width={50}
-                          height={50}
+                          width={100}
+                          height={100}
                           alt={mod.name}
                           className="rounded-full mx-auto"
                         />
                       )}
                     </div>
-                    <div className="text-center text-xs">
+                    <div className="text-center text-base w-20 m-auto">
                       {locale == 'uz' ? mod.name_uz : mod.name}
                     </div>
                     <div

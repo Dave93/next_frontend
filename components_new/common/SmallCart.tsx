@@ -12,6 +12,8 @@ import useTranslation from 'next-translate/useTranslation'
 import Hashids from 'hashids'
 import { useUI } from '@components/ui/context'
 import { toast } from 'react-toastify'
+import SimpleBar from 'simplebar-react'
+import 'simplebar/dist/simplebar.min.css'
 
 const { publicRuntimeConfig } = getConfig()
 let webAddress = publicRuntimeConfig.apiUrl
@@ -283,149 +285,151 @@ const SmallCart: FC<SmallCartProps> = ({ channelName }) => {
           </div>
         )}
         {!isEmpty && (
-          <div className="grid grid-cols-1 divide-y border-b mb-3 overflow-y-auto max-h-60">
-            {data &&
-              data?.lineItems.map((lineItem: any) => (
-                <div key={lineItem.id} className="py-3">
-                  <div className="flex mb-2">
-                    {lineItem.child &&
-                    lineItem.child.length &&
-                    lineItem.child[0].variant?.product?.id !=
-                      lineItem?.variant?.product?.box_id ? (
-                      <div className="h-11 w-11 flex relative">
-                        <div className="w-5 relative overflow-hidden">
-                          <div>
-                            <Image
-                              src={
-                                lineItem?.variant?.product?.assets?.length
-                                  ? `${webAddress}/storage/${lineItem?.variant?.product?.assets[0]?.location}/${lineItem?.variant?.product?.assets[0]?.filename}`
-                                  : '/no_photo.svg'
-                              }
-                              width="40"
-                              height="40"
-                              layout="fixed"
-                              className="absolute rounded-full"
-                            />
+          <SimpleBar style={{ maxHeight: 300, paddingLeft: 30  }}>
+            <div className="grid grid-cols-1 divide-y border-b mb-3 overflow-y-auto">
+              {data &&
+                data?.lineItems.map((lineItem: any) => (
+                  <div key={lineItem.id} className="py-3">
+                    <div className="flex mb-2">
+                      {lineItem.child &&
+                      lineItem.child.length &&
+                      lineItem.child[0].variant?.product?.id !=
+                        lineItem?.variant?.product?.box_id ? (
+                        <div className="h-11 w-11 flex relative">
+                          <div className="w-5 relative overflow-hidden">
+                            <div>
+                              <Image
+                                src={
+                                  lineItem?.variant?.product?.assets?.length
+                                    ? `${webAddress}/storage/${lineItem?.variant?.product?.assets[0]?.location}/${lineItem?.variant?.product?.assets[0]?.filename}`
+                                    : '/no_photo.svg'
+                                }
+                                width="40"
+                                height="40"
+                                layout="fixed"
+                                className="absolute rounded-full"
+                              />
+                            </div>
+                          </div>
+                          <div className="w-5 relative overflow-hidden">
+                            <div className="absolute right-0">
+                              <Image
+                                src={
+                                  lineItem?.child[0].variant?.product?.assets
+                                    ?.length
+                                    ? `${webAddress}/storage/${lineItem?.child[0].variant?.product?.assets[0]?.location}/${lineItem?.child[0].variant?.product?.assets[0]?.filename}`
+                                    : '/no_photo.svg'
+                                }
+                                width="40"
+                                height="40"
+                                layout="fixed"
+                                className="rounded-full"
+                              />
+                            </div>
                           </div>
                         </div>
-                        <div className="w-5 relative overflow-hidden">
-                          <div className="absolute right-0">
-                            <Image
-                              src={
-                                lineItem?.child[0].variant?.product?.assets
-                                  ?.length
-                                  ? `${webAddress}/storage/${lineItem?.child[0].variant?.product?.assets[0]?.location}/${lineItem?.child[0].variant?.product?.assets[0]?.filename}`
-                                  : '/no_photo.svg'
-                              }
-                              width="40"
-                              height="40"
-                              layout="fixed"
-                              className="rounded-full"
-                            />
-                          </div>
+                      ) : (
+                        <div>
+                          <Image
+                            src={
+                              lineItem?.variant?.product?.assets?.length
+                                ? `${webAddress}/storage/${lineItem?.variant?.product?.assets[0]?.location}/${lineItem?.variant?.product?.assets[0]?.filename}`
+                                : '/no_photo.svg'
+                            }
+                            width={40}
+                            height={40}
+                            className="rounded-full"
+                          />
                         </div>
-                      </div>
-                    ) : (
-                      <div>
-                        <Image
-                          src={
-                            lineItem?.variant?.product?.assets?.length
-                              ? `${webAddress}/storage/${lineItem?.variant?.product?.assets[0]?.location}/${lineItem?.variant?.product?.assets[0]?.filename}`
-                              : '/no_photo.svg'
-                          }
-                          width={40}
-                          height={40}
-                          className="rounded-full"
-                        />
-                      </div>
-                    )}
-                    <div className="font-bold text-sm flex-grow mx-1 uppercase">
-                      {lineItem.child && lineItem.child.length > 1
-                        ? `${
-                            lineItem?.variant?.product?.attribute_data?.name[
-                              channelName
-                            ][locale || 'ru']
-                          } + ${lineItem?.child
-                            .filter(
-                              (v: any) =>
-                                lineItem?.variant?.product?.box_id !=
-                                v?.variant?.product?.id
-                            )
-                            .map(
-                              (v: any) =>
-                                v?.variant?.product?.attribute_data?.name[
-                                  channelName
-                                ][locale || 'ru']
-                            )
-                            .join(' + ')}`
-                        : lineItem?.variant?.product?.attribute_data?.name[
-                            channelName
-                          ][locale || 'ru']}{' '}
-                      {lineItem.bonus_id && (
-                        <span className="text-yellow">({tr('bonus')})</span>
                       )}
-                      {lineItem.sale_id && (
-                        <span className="text-yellow">
-                          ({tr('sale_label')})
-                        </span>
+                      <div className="font-bold text-sm flex-grow mx-1 uppercase">
+                        {lineItem.child && lineItem.child.length > 1
+                          ? `${
+                              lineItem?.variant?.product?.attribute_data?.name[
+                                channelName
+                              ][locale || 'ru']
+                            } + ${lineItem?.child
+                              .filter(
+                                (v: any) =>
+                                  lineItem?.variant?.product?.box_id !=
+                                  v?.variant?.product?.id
+                              )
+                              .map(
+                                (v: any) =>
+                                  v?.variant?.product?.attribute_data?.name[
+                                    channelName
+                                  ][locale || 'ru']
+                              )
+                              .join(' + ')}`
+                          : lineItem?.variant?.product?.attribute_data?.name[
+                              channelName
+                            ][locale || 'ru']}{' '}
+                        {lineItem.bonus_id && (
+                          <span className="text-yellow">({tr('bonus')})</span>
+                        )}
+                        {lineItem.sale_id && (
+                          <span className="text-yellow">
+                            ({tr('sale_label')})
+                          </span>
+                        )}
+                      </div>
+                      {!readonlyItems.includes(lineItem.id) && (
+                        <div>
+                          <XIcon
+                            className="cursor-pointer h-4 text-black w-4"
+                            onClick={() => destroyLine(lineItem.id)}
+                          />
+                        </div>
                       )}
                     </div>
-                    {!readonlyItems.includes(lineItem.id) && (
-                      <div>
-                        <XIcon
-                          className="cursor-pointer h-4 text-black w-4"
-                          onClick={() => destroyLine(lineItem.id)}
-                        />
-                      </div>
-                    )}
-                  </div>
-                  <div className="flex items-center">
-                    {!readonlyItems.includes(lineItem.id) && (
-                      <div className="ml-10">
-                        <div className="w-20 h-6 ml-1 bg-yellow rounded-full flex items-center text-white">
-                          <div className="w-6 h-6 items-center flex justify-around">
-                            <MinusIcon
-                              className="cursor-pointer w-5 h-5"
-                              onClick={() => decreaseQuantity(lineItem)}
-                            />
-                          </div>
-                          <div className="flex-grow text-center">
-                            {lineItem.quantity}
-                          </div>
-                          <div className="w-6 h-6 items-center flex justify-around">
-                            <PlusIcon
-                              className="cursor-pointer w-5 h-5"
-                              onClick={() => increaseQuantity(lineItem.id)}
-                            />
+                    <div className="flex items-center">
+                      {!readonlyItems.includes(lineItem.id) && (
+                        <div className="ml-10">
+                          <div className="w-20 h-6 ml-1 bg-yellow rounded-full flex items-center text-white">
+                            <div className="w-6 h-6 items-center flex justify-around">
+                              <MinusIcon
+                                className="cursor-pointer w-5 h-5"
+                                onClick={() => decreaseQuantity(lineItem)}
+                              />
+                            </div>
+                            <div className="flex-grow text-center">
+                              {lineItem.quantity}
+                            </div>
+                            <div className="w-6 h-6 items-center flex justify-around">
+                              <PlusIcon
+                                className="cursor-pointer w-5 h-5"
+                                onClick={() => increaseQuantity(lineItem.id)}
+                              />
+                            </div>
                           </div>
                         </div>
-                      </div>
-                    )}
-                    <div className="text-right flex-grow text-sm">
-                      {lineItem.child && lineItem.child.length
-                        ? currency(
-                            (+lineItem.total + +lineItem.child[0].total) *
-                              lineItem.quantity,
-                            {
+                      )}
+                      <div className="text-right flex-grow text-sm">
+                        {lineItem.child && lineItem.child.length
+                          ? currency(
+                              (+lineItem.total + +lineItem.child[0].total) *
+                                lineItem.quantity,
+                              {
+                                pattern: '# !',
+                                separator: ' ',
+                                decimal: '.',
+                                symbol: `${locale == 'uz' ? "so'm" : 'сум'}`,
+                                precision: 0,
+                              }
+                            ).format()
+                          : currency(lineItem.total * lineItem.quantity, {
                               pattern: '# !',
                               separator: ' ',
                               decimal: '.',
                               symbol: `${locale == 'uz' ? "so'm" : 'сум'}`,
                               precision: 0,
-                            }
-                          ).format()
-                        : currency(lineItem.total * lineItem.quantity, {
-                            pattern: '# !',
-                            separator: ' ',
-                            decimal: '.',
-                            symbol: `${locale == 'uz' ? "so'm" : 'сум'}`,
-                            precision: 0,
-                          }).format()}
+                            }).format()}
+                      </div>
                     </div>
                   </div>
-                </div>
-              ))}
-          </div>
+                ))}
+            </div>
+          </SimpleBar>
         )}
         {!isEmpty && (
           <div className="flex items-center justify-between">

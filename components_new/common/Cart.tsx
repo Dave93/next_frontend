@@ -10,6 +10,7 @@ import getConfig from 'next/config'
 import { useRouter } from 'next/router'
 import useTranslation from 'next-translate/useTranslation'
 import Hashids from 'hashids'
+import SimpleBar from 'simplebar-react'
 
 const { publicRuntimeConfig } = getConfig()
 let webAddress = publicRuntimeConfig.apiUrl
