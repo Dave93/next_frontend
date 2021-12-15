@@ -31,6 +31,11 @@ const Head: FC = () => {
           name="facebook-domain-verification"
           content="1cbfdowdmxfmaj1ra212tsl5llytrw"
         />
+        <meta
+          name="google-site-verification"
+          content="H21dFJEAqKhW0aNLhQCkmy7tauAQZKlPv8QbQJFKcPQ"
+        />
+        <meta name="yandex-verification" content="7a363d3fcee84347" />
       </NextHead>
     </>
   )

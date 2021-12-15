@@ -50,7 +50,10 @@ const BonusModal: FC = () => {
         options
       )
       if (!data.success) {
-        openModal()
+        let weekDay = new Date().getDay();
+        if (weekDay != 3) {
+          openModal()
+        }
       }
     } catch (error) {
       console.log(error)

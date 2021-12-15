@@ -791,8 +791,6 @@ const LocationTabs: FC = () => {
     return null
   }, [cities, activeCity])
 
-  console.log(mapState)
-
   return (
     <>
       <div className="bg-gray-100 flex rounded-full w-full">
