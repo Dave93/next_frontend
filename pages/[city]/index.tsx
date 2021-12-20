@@ -129,7 +129,7 @@ export default function Home({
   }
 
   const hideCreatePizza = (e: any) => {
-    if (window.scrollY > 500) {
+    if (window.scrollY > 600) {
       setIsStickySmall(true)
     } else {
       setIsStickySmall(false)
@@ -303,7 +303,7 @@ export default function Home({
           </div>
           <div
             className={`mt-[71px] sticky ${
-              isStickySmall ? 'top-[21px]' : 'top-16'
+              isStickySmall ? 'top-11' : 'top-16'
             } max-h-screen hidden md:block`}
           >
             {halfModeProds.map((sec: any) => (
