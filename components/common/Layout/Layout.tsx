@@ -327,7 +327,7 @@ const Layout: FC<Props> = ({
           </footer>
         </div>
 
-        {/* <BonusModalNoSSR /> */}
+        <BonusModalNoSSR />
         <SignInModal />
       </div>
       <div className={cn(styles.root)}>
