@@ -150,13 +150,13 @@ export default function Home({
       return
     }
 
-    setTimeout(() => {
-      if (window.innerWidth < 768) {
-        openMobileLocationTabs()
-      } else {
-        openLocationTabs()
-      }
-    }, 400)
+    // setTimeout(() => {
+    //   if (window.innerWidth < 768) {
+    //     openMobileLocationTabs()
+    //   } else {
+    //     openLocationTabs()
+    //   }
+    // }, 400)
   }
 
   useEffect(() => {
