@@ -275,8 +275,9 @@ const OrderAccept: FC<OrderDetailProps> = ({ order, orderStatuses }) => {
             </div>
             <div>
               {pizza.child && pizza.child.length
-                ? currency(
-                    (+pizza.total + +pizza.child[0].total) * pizza.quantity,
+                ? (pizza.total > 0 ? pizza.quantity + ' X ' : '') +
+                  currency(
+                    (+pizza.total + +pizza.child[0].total),
                     {
                       pattern: '# !',
                       separator: ' ',
