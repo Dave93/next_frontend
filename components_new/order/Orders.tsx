@@ -992,6 +992,24 @@ const Orders: FC<OrdersProps> = ({ channelName }: { channelName: any }) => {
     return null
   }, [cities, activeCity])
 
+  const addresClear = watch('address')
+
+  const deleteAddress = async (addressId: number) => {
+    await setCredentials()
+    const otpToken = Cookies.get('opt_token')
+    const response = await axios.delete(
+      `${webAddress}/api/address/${addressId}`,
+      {
+        headers: {
+          Authorization: `Bearer ${otpToken}`,
+        },
+      }
+    )
+    if (response.status === 200) {
+      loadAddresses()
+    }
+  }
+
   const isWorkTime = useMemo(() => {
     let currentHour = new Date().getHours()
     // let currentHour = 4
@@ -1014,6 +1032,7 @@ const Orders: FC<OrdersProps> = ({ channelName }: { channelName: any }) => {
     }
     return res
   }, [stopProducts, data])
+
   const totalPrice = useMemo(() => {
     let total = 0
     if (!isEmpty) {
@@ -1036,7 +1055,7 @@ const Orders: FC<OrdersProps> = ({ channelName }: { channelName: any }) => {
       </div>
     )
   }
-  console.log()
+
   return (
     <div className="mx-5 md:mx-0 pt-1 md:pt-0 pb-1">
       {/* Contacts */}
@@ -1269,7 +1288,7 @@ const Orders: FC<OrdersProps> = ({ channelName }: { channelName: any }) => {
                     {addressList.map((item: Address) => (
                       <div
                         key={item.id}
-                        className={`px-2 py-1 truncate rounded-full cursor-pointer ${
+                        className={`px-2 py-1 truncate rounded-full cursor-pointer relative pr-7 ${
                           addressId == item.id
                             ? 'bg-primary text-white'
                             : 'bg-gray-100'
@@ -1277,6 +1296,12 @@ const Orders: FC<OrdersProps> = ({ channelName }: { channelName: any }) => {
                         onClick={() => selectAddressLocal(item)}
                       >
                         {item.label ? item.label : item.address}
+                        <button
+                          className="absolute focus:outline-none inset-y-0 outline-none right-2 text-gray-400"
+                          onClick={() => deleteAddress(item.id)}
+                        >
+                          <XIcon className="cursor-pointer h-5 text-gray-400 w-5  hover:text-yellow-light" />
+                        </button>
                       </div>
                     ))}
                   </div>
@@ -1330,6 +1355,14 @@ const Orders: FC<OrdersProps> = ({ channelName }: { channelName: any }) => {
                               placeholder={tr('address')}
                               className="bg-gray-100 px-8 py-3 rounded-full w-full outline-none focus:outline-none"
                             />
+                            {addresClear && (
+                              <button
+                                className="absolute focus:outline-none inset-y-0 outline-none right-4 text-gray-400"
+                                onClick={() => resetField('address')}
+                              >
+                                <XIcon className="cursor-pointer h-5 text-gray-400 w-5 hover:text-yellow-light" />
+                              </button>
+                            )}
                             <ul
                               {...getMenuProps()}
                               className="absolute w-full z-[1000] rounded-[15px] shadow-lg"
@@ -1978,7 +2011,7 @@ const Orders: FC<OrdersProps> = ({ channelName }: { channelName: any }) => {
                 <div
                   className={`${
                     isProductInStop.includes(lineItem.id) ? 'opacity-25' : ''
-                  } font-bold text-xl`}
+                  }font-bold md:text-xl text-base`}
                 >
                   {lineItem.child && lineItem.child.length > 1
                     ? `${
@@ -2023,20 +2056,17 @@ const Orders: FC<OrdersProps> = ({ channelName }: { channelName: any }) => {
               <div
                 className={`${
                   isProductInStop.includes(lineItem.id) ? 'opacity-25' : ''
-                } text-xl`}
+                } md:text-xl text-base`}
               >
                 {lineItem.child && lineItem.child.length
-                  ? currency(
-                      (+lineItem.total + +lineItem.child[0].total) *
-                        lineItem.quantity,
-                      {
-                        pattern: '# !',
-                        separator: ' ',
-                        decimal: '.',
-                        symbol: `${locale == 'uz' ? "so'm" : 'сум'}`,
-                        precision: 0,
-                      }
-                    ).format()
+                  ? (lineItem.total > 0 ? lineItem.quantity + ' X ' : '') +
+                    currency(+lineItem.total + +lineItem.child[0].total, {
+                      pattern: '# !',
+                      separator: ' ',
+                      decimal: '.',
+                      symbol: `${locale == 'uz' ? "so'm" : 'сум'}`,
+                      precision: 0,
+                    }).format()
                   : currency(lineItem.total * lineItem.quantity, {
                       pattern: '# !',
                       separator: ' ',
