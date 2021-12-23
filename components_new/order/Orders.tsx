@@ -1986,7 +1986,7 @@ const Orders: FC<OrdersProps> = ({ channelName }: { channelName: any }) => {
                 <div
                   className={`${
                     isProductInStop.includes(lineItem.id) ? 'opacity-25' : ''
-                  }flex items-center`}
+                  } flex items-center`}
                 >
                   <Image
                     src={
@@ -2064,7 +2064,7 @@ const Orders: FC<OrdersProps> = ({ channelName }: { channelName: any }) => {
                       symbol: `${locale == 'uz' ? "so'm" : 'сум'}`,
                       precision: 0,
                     }).format()
-                  : currency(lineItem.total * lineItem.quantity, {
+                  : (lineItem.total > 0 ? lineItem.quantity + ' X ' : '') + currency(lineItem.total * lineItem.quantity, {
                       pattern: '# !',
                       separator: ' ',
                       decimal: '.',

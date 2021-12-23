@@ -214,17 +214,15 @@ const Orders: FC<OrdersListProps> = ({ orders }) => {
                       <div>
                         {pizza.child && pizza.child.length
                           ? (pizza.total > 0 ? pizza.quantity + ' X ' : '') +
-                            currency(
-                              (+pizza.total + +pizza.child[0].total),
-                              {
-                                pattern: '# !',
-                                separator: ' ',
-                                decimal: '.',
-                                symbol: 'сум',
-                                precision: 0,
-                              }
-                            ).format()
-                          : currency(pizza.total * pizza.quantity, {
+                            currency(+pizza.total + +pizza.child[0].total, {
+                              pattern: '# !',
+                              separator: ' ',
+                              decimal: '.',
+                              symbol: 'сум',
+                              precision: 0,
+                            }).format()
+                          : (pizza.total > 0 ? pizza.quantity + ' X ' : '') +
+                             currency(pizza.total * pizza.quantity, {
                               pattern: '# !',
                               separator: ' ',
                               decimal: '.',

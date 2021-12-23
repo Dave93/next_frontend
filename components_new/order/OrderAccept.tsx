@@ -286,7 +286,7 @@ const OrderAccept: FC<OrderDetailProps> = ({ order, orderStatuses }) => {
                       precision: 0,
                     }
                   ).format()
-                : currency(pizza.total * pizza.quantity, {
+                : (pizza.total > 0 ? pizza.quantity + ' X ' : '') + currency(pizza.total * pizza.quantity, {
                     pattern: '# !',
                     separator: ' ',
                     decimal: '.',
