@@ -1312,7 +1312,7 @@ const Orders: FC<OrdersProps> = ({ channelName }: { channelName: any }) => {
               <form onSubmit={handleSubmit(onSubmit)}>
                 <div className="font-bold text-lg">{tr('address')}</div>
                 <div className="mt-3 space-y-6">
-                  <div className="md:flex justify-between md:w-full space-y-2 md:space-y-0">
+                  <div className="md:flex justify-between md:w-full space-y-2 md:space-y-0 md:space-x-2 space-x-0">
                     <Downshift
                       onChange={(selection) => setSelectedAddress(selection)}
                       ref={downshiftControl}
@@ -1404,7 +1404,7 @@ const Orders: FC<OrdersProps> = ({ channelName }: { channelName: any }) => {
                         </>
                       )}
                     </Downshift>
-                    <div className="md:mx-5 md:w-2/12">
+                    <div className="md:w-2/12">
                       <input
                         type="text"
                         {...register('house', { required: true })}
@@ -1422,6 +1422,14 @@ const Orders: FC<OrdersProps> = ({ channelName }: { channelName: any }) => {
                         type="text"
                         {...register('flat')}
                         placeholder={tr('flat')}
+                        className="bg-gray-100 px-8 py-3 rounded-full w-full outline-none focus:outline-none"
+                      />
+                    </div>
+                    <div className="flex">
+                      <input
+                        type="text"
+                        {...register('label')}
+                        placeholder={tr('address_label')}
                         className="bg-gray-100 px-8 py-3 rounded-full w-full outline-none focus:outline-none"
                       />
                     </div>
@@ -1476,16 +1484,6 @@ const Orders: FC<OrdersProps> = ({ channelName }: { channelName: any }) => {
                         </>
                       )}
                     </Disclosure>
-                  </div>
-                  <div className="w-6/12">
-                    <div className="flex">
-                      <input
-                        type="text"
-                        {...register('label')}
-                        placeholder={tr('address_label')}
-                        className="bg-gray-100 px-8 py-2 rounded-full w-full outline-none focus:outline-none"
-                      />
-                    </div>
                   </div>
                 </div>
                 {locationData?.terminalData && (
@@ -1725,8 +1723,8 @@ const Orders: FC<OrdersProps> = ({ channelName }: { channelName: any }) => {
       {/* pay */}
       <div className="w-full bg-white mb-5 rounded-2xl p-10 relative">
         {!locationData?.terminal_id && (
-          <div className="absolute md:w-full h-full md:-ml-10 md:-mt-10 bg-opacity-60 bg-gray-100 z-20 items-center flex justify-around">
-            <div className="text-yellow font-bold text-2xl">
+          <div className="absolute h-full bg-opacity-60 bg-gray-100 z-20 items-center flex justify-around left-0 bottom-0 right-0">
+            <div className="text-yellow font-bold text-2xl text-center">
               {tr('no_address_no_restaurant')}
             </div>
           </div>
@@ -1988,7 +1986,7 @@ const Orders: FC<OrdersProps> = ({ channelName }: { channelName: any }) => {
                 <div
                   className={`${
                     isProductInStop.includes(lineItem.id) ? 'opacity-25' : ''
-                  } `}
+                  }flex items-center`}
                 >
                   <Image
                     src={
@@ -2000,6 +1998,50 @@ const Orders: FC<OrdersProps> = ({ channelName }: { channelName: any }) => {
                     height={40}
                     className="rounded-full"
                   />
+                  <div
+                    className={`${
+                      isProductInStop.includes(lineItem.id) ? 'opacity-25' : ''
+                    }font-bold md:text-xl text-base ml-4`}
+                  >
+                    {lineItem.child && lineItem.child.length > 1
+                      ? `${
+                          lineItem?.variant?.product?.attribute_data?.name[
+                            channelName
+                          ][locale || 'ru']
+                        } + ${lineItem?.child
+                          .filter(
+                            (v: any) =>
+                              lineItem?.variant?.product?.box_id !=
+                              v?.variant?.product?.id
+                          )
+                          .map(
+                            (v: any) =>
+                              v?.variant?.product?.attribute_data?.name[
+                                channelName
+                              ][locale || 'ru']
+                          )
+                          .join(' + ')}`
+                      : lineItem?.variant?.product?.attribute_data?.name[
+                          channelName
+                        ][locale || 'ru']}
+                    {lineItem.bonus_id && (
+                      <span className="text-yellow">({tr('bonus')})</span>
+                    )}
+                    {lineItem.sale_id && (
+                      <span className="text-yellow">({tr('sale_label')})</span>
+                    )}
+                    {lineItem.modifiers &&
+                      lineItem.modifiers
+                        .filter((mod: any) => mod.price > 0)
+                        .map((mod: any) => (
+                          <div
+                            className="placeholder-blackbg-yellow rounded-full px-2 py-1 ml-2 text-xs text-white"
+                            key={mod.id}
+                          >
+                            {locale == 'uz' ? mod.name_uz : mod.name}
+                          </div>
+                        ))}
+                  </div>
                 </div>
               )}
               {isProductInStop.includes(lineItem.id) && (
@@ -2007,52 +2049,7 @@ const Orders: FC<OrdersProps> = ({ channelName }: { channelName: any }) => {
                   {tr('stop_product')}
                 </div>
               )}
-              <div className="flex flex-grow items-center mx-2">
-                <div
-                  className={`${
-                    isProductInStop.includes(lineItem.id) ? 'opacity-25' : ''
-                  }font-bold md:text-xl text-base`}
-                >
-                  {lineItem.child && lineItem.child.length > 1
-                    ? `${
-                        lineItem?.variant?.product?.attribute_data?.name[
-                          channelName
-                        ][locale || 'ru']
-                      } + ${lineItem?.child
-                        .filter(
-                          (v: any) =>
-                            lineItem?.variant?.product?.box_id !=
-                            v?.variant?.product?.id
-                        )
-                        .map(
-                          (v: any) =>
-                            v?.variant?.product?.attribute_data?.name[
-                              channelName
-                            ][locale || 'ru']
-                        )
-                        .join(' + ')}`
-                    : lineItem?.variant?.product?.attribute_data?.name[
-                        channelName
-                      ][locale || 'ru']}
-                  {lineItem.bonus_id && (
-                    <span className="text-yellow">({tr('bonus')})</span>
-                  )}
-                  {lineItem.sale_id && (
-                    <span className="text-yellow">({tr('sale_label')})</span>
-                  )}
-                </div>
-                {lineItem.modifiers &&
-                  lineItem.modifiers
-                    .filter((mod: any) => mod.price > 0)
-                    .map((mod: any) => (
-                      <div
-                        className="placeholder-blackbg-yellow rounded-full px-2 py-1 ml-2 text-xs text-white"
-                        key={mod.id}
-                      >
-                        {locale == 'uz' ? mod.name_uz : mod.name}
-                      </div>
-                    ))}
-              </div>
+
               <div
                 className={`${
                   isProductInStop.includes(lineItem.id) ? 'opacity-25' : ''
