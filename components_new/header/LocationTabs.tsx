@@ -45,6 +45,7 @@ import { DateTime } from 'luxon'
 import Cookies from 'js-cookie'
 import getAddressList from '@lib/load_addreses'
 import { Address } from '@commerce/types/address'
+import { XIcon } from '@heroicons/react/outline'
 
 const { publicRuntimeConfig } = getConfig()
 
@@ -791,6 +792,32 @@ const LocationTabs: FC = () => {
     return null
   }, [cities, activeCity])
 
+  const addresClear = watch('address')
+
+  const resetField = (fieldName: string) => {
+    const newFields: any = {
+      ...getValues(),
+    }
+    newFields[fieldName] = null
+    reset(newFields)
+  }
+
+    const deleteAddress = async (addressId: number) => {
+      await setCredentials()
+      const otpToken = Cookies.get('opt_token')
+      const response = await axios.delete(
+        `${webAddress}/api/address/${addressId}`,
+        {
+          headers: {
+            Authorization: `Bearer ${otpToken}`,
+          },
+        }
+      )
+      if (response.status === 200) {
+        loadAddresses()
+      }
+    }
+
   return (
     <>
       <div className="bg-gray-100 flex rounded-full w-full">
@@ -913,7 +940,7 @@ const LocationTabs: FC = () => {
                   {addressList.map((item: Address) => (
                     <div
                       key={item.id}
-                      className={`px-2 py-1 truncate rounded-full cursor-pointer ${
+                      className={`px-2 py-1 truncate rounded-full cursor-pointer relative pr-7 ${
                         addressId == item.id
                           ? 'bg-primary text-white'
                           : 'bg-gray-100'
@@ -921,6 +948,12 @@ const LocationTabs: FC = () => {
                       onClick={() => selectAddressLocal(item)}
                     >
                       {item.label ? item.label : item.address}
+                      <button
+                        className="absolute focus:outline-none inset-y-0 outline-none right-2 text-gray-400"
+                        onClick={() => deleteAddress(item.id)}
+                      >
+                        <XIcon className="cursor-pointer h-5 text-gray-400 w-5  hover:text-yellow-light" />
+                      </button>
                     </div>
                   ))}
                 </div>
@@ -972,6 +1005,14 @@ const LocationTabs: FC = () => {
                           placeholder={tr('address')}
                           className="bg-gray-100 px-8 py-3 rounded-full w-full outline-none focus:outline-none"
                         />
+                        {addresClear && (
+                          <button
+                            className="absolute focus:outline-none inset-y-0 outline-none right-4 text-gray-400"
+                            onClick={() => resetField('address')}
+                          >
+                            <XIcon className="cursor-pointer h-5 text-gray-400 w-5 hover:text-yellow-light" />
+                          </button>
+                        )}
                         <ul
                           {...getMenuProps()}
                           className="absolute w-full z-[1000] rounded-[15px] shadow-lg"

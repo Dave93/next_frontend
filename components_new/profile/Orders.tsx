@@ -63,7 +63,14 @@ const Orders: FC<OrdersListProps> = ({ orders }) => {
                   <div className="md:flex text-base justify-between border-b pb-8">
                     {open ? (
                       <div className="font-bold text-xl text-secondary">
-                        <Link href={`${'/' + activeCity.slug + '/order/' + hashids.encode(order.id)}`}>
+                        <Link
+                          href={`${
+                            '/' +
+                            activeCity.slug +
+                            '/order/' +
+                            hashids.encode(order.id)
+                          }`}
+                        >
                           <a>
                             {tr('order')} № {order.id}
                           </a>
@@ -206,18 +213,16 @@ const Orders: FC<OrdersListProps> = ({ orders }) => {
                       </div>
                       <div>
                         {pizza.child && pizza.child.length
-                          ? currency(
-                              (+pizza.total + +pizza.child[0].total) *
-                                pizza.quantity,
-                              {
-                                pattern: '# !',
-                                separator: ' ',
-                                decimal: '.',
-                                symbol: 'сум',
-                                precision: 0,
-                              }
-                            ).format()
-                          : currency(pizza.total * pizza.quantity, {
+                          ? (pizza.total > 0 ? pizza.quantity + ' X ' : '') +
+                            currency(+pizza.total + +pizza.child[0].total, {
+                              pattern: '# !',
+                              separator: ' ',
+                              decimal: '.',
+                              symbol: 'сум',
+                              precision: 0,
+                            }).format()
+                          : (pizza.total > 0 ? pizza.quantity + ' X ' : '') +
+                             currency(pizza.total * pizza.quantity, {
                               pattern: '# !',
                               separator: ' ',
                               decimal: '.',
