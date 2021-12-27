@@ -41,7 +41,7 @@ export default function MyApp({ Component, pageProps }: AppProps) {
         </Layout>
       </ManagedUIContext>
       <ToastContainer />
-      <YMInitializer
+      {/* <YMInitializer
         accounts={[86632071]}
         options={{
           webvisor: true,
@@ -50,7 +50,7 @@ export default function MyApp({ Component, pageProps }: AppProps) {
           accurateTrackBounce: true,
         }}
         version="2"
-      />
+      /> */}
     </>
   )
 }
