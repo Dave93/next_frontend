@@ -845,6 +845,11 @@ const Orders: FC<OrdersProps> = ({ channelName }: { channelName: any }) => {
     setIsSavingOrder(true)
     await setCredentials()
     const otpToken = Cookies.get('opt_token')
+
+    let sourceType = 'web'
+    if (window.innerWidth < 768) {
+      sourceType = 'mobile_web'
+    }
     try {
       const { data } = await axios.post(
         `${webAddress}/api/orders`,
@@ -855,6 +860,7 @@ const Orders: FC<OrdersProps> = ({ channelName }: { channelName: any }) => {
             pay_type: payType,
             sms_sub: sms,
             email_sub: newsletter,
+            sourceType,
           },
           code: otpCode,
           basket_id: cartId,
@@ -2064,7 +2070,8 @@ const Orders: FC<OrdersProps> = ({ channelName }: { channelName: any }) => {
                       symbol: `${locale == 'uz' ? "so'm" : 'сум'}`,
                       precision: 0,
                     }).format()
-                  : (lineItem.total > 0 ? lineItem.quantity + ' X ' : '') + currency(lineItem.total * lineItem.quantity, {
+                  : (lineItem.total > 0 ? lineItem.quantity + ' X ' : '') +
+                    currency(lineItem.total * lineItem.quantity, {
                       pattern: '# !',
                       separator: ' ',
                       decimal: '.',
