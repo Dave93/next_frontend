@@ -41,6 +41,7 @@ import { DateTime } from 'luxon'
 import Cookies from 'js-cookie'
 import getAddressList from '@lib/load_addreses'
 import { Address } from '@commerce/types/address'
+import { XIcon } from '@heroicons/react/outline'
 
 const { publicRuntimeConfig } = getConfig()
 
@@ -818,6 +819,32 @@ const MobLocationTabs: FC = () => {
     return null
   }, [cities, activeCity])
 
+  const addresClear = watch('address')
+
+  const resetField = (fieldName: string) => {
+    const newFields: any = {
+      ...getValues(),
+    }
+    newFields[fieldName] = null
+    reset(newFields)
+  }
+
+  const deleteAddress = async (addressId: number) => {
+    await setCredentials()
+    const otpToken = Cookies.get('opt_token')
+    const response = await axios.delete(
+      `${webAddress}/api/address/${addressId}`,
+      {
+        headers: {
+          Authorization: `Bearer ${otpToken}`,
+        },
+      }
+    )
+    if (response.status === 200) {
+      loadAddresses()
+    }
+  }
+
   return (
     <>
       <div className="flex items-center pt-5 mb-8">
@@ -956,7 +983,7 @@ const MobLocationTabs: FC = () => {
                   {addressList.map((item: Address) => (
                     <div
                       key={item.id}
-                      className={`px-2 py-1 truncate rounded-full cursor-pointer ${
+                      className={`px-2 py-1 truncate rounded-full cursor-pointer relative pr-6 ${
                         addressId == item.id
                           ? 'bg-primary text-white'
                           : 'bg-gray-100'
@@ -964,6 +991,12 @@ const MobLocationTabs: FC = () => {
                       onClick={() => selectAddressLocal(item)}
                     >
                       {item.label ? item.label : item.address}
+                      <button
+                        className="absolute focus:outline-none inset-y-0 outline-none right-2 text-gray-400"
+                        onClick={() => deleteAddress(item.id)}
+                      >
+                        <XIcon className="cursor-pointer h-5 text-gray-400 w-5" />
+                      </button>
                     </div>
                   ))}
                 </div>
@@ -1001,7 +1034,7 @@ const MobLocationTabs: FC = () => {
                   }) => (
                     <>
                       <div
-                        className="w-full"
+                        className="w-full relative"
                         {...getRootProps(undefined, { suppressRefError: true })}
                       >
                         <input
@@ -1013,6 +1046,14 @@ const MobLocationTabs: FC = () => {
                           placeholder={tr('address')}
                           className="bg-gray-100 focus:outline-none outline-none px-8 py-2 rounded-full w-full"
                         />
+                        {addresClear && (
+                          <button
+                            className="absolute focus:outline-none inset-y-0 outline-none right-3 text-gray-400"
+                            onClick={() => resetField('address')}
+                          >
+                            <XIcon className="cursor-pointer h-5 text-gray-400 w-5" />
+                          </button>
+                        )}
                         <ul
                           {...getMenuProps()}
                           className="absolute w-full z-[1000] rounded-[15px] shadow-lg"

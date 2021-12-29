@@ -72,6 +72,7 @@ const AddressWidget: FC = () => {
     } else {
       openLocationTabs(true)
     }
+    loadAddresses()
   }
 
   const editAddress = (address: Address) => {
@@ -86,6 +87,45 @@ const AddressWidget: FC = () => {
       openMobileLocationTabs(true)
     } else {
       openLocationTabs(true)
+    }
+  }
+  const setCredentials = async () => {
+    let csrf = Cookies.get('X-XSRF-TOKEN')
+    if (!csrf) {
+      const csrfReq = await axios(`${webAddress}/api/keldi`, {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+          crossDomain: true,
+        },
+        withCredentials: true,
+      })
+      let { data: res } = csrfReq
+      csrf = Buffer.from(res.result, 'base64').toString('ascii')
+
+      var inTenMinutes = new Date(new Date().getTime() + 10 * 60 * 1000)
+      Cookies.set('X-XSRF-TOKEN', csrf, {
+        expires: inTenMinutes,
+      })
+    }
+    axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest'
+    axios.defaults.headers.common['X-CSRF-TOKEN'] = csrf
+    axios.defaults.headers.common['XCSRF-TOKEN'] = csrf
+  }
+
+  const deleteAddress = async (addressId: number) => {
+    await setCredentials()
+    const otpToken = Cookies.get('opt_token')
+    const response = await axios.delete(
+      `${webAddress}/api/address/${addressId}`,
+      {
+        headers: {
+          Authorization: `Bearer ${otpToken}`,
+        },
+      }
+    )
+    if (response.status === 200) {
+      loadAddresses()
     }
   }
 
@@ -148,7 +188,10 @@ const AddressWidget: FC = () => {
                       className="text-green-500 w-5 h-5 cursor-pointer"
                       onClick={() => editAddress(item)}
                     />
-                    <XIcon className="text-primary w-5 h-5 cursor-pointer" />
+                    <XIcon
+                      className="text-primary w-5 h-5 cursor-pointer"
+                      onClick={() => deleteAddress(item.id)}
+                    />
                   </div>
                 </div>
               )
