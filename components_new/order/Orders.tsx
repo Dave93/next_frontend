@@ -669,6 +669,24 @@ const Orders: FC<OrdersProps> = ({ channelName }: { channelName: any }) => {
             terminal_id: undefined,
             terminalData: undefined,
           })
+    } else {
+      let currentTerminal = terminalsData.data.items[0]
+      if (!currentTerminal.isWorking) {
+        toast.warn(tr('nearest_terminal_is_closed'), {
+          position: toast.POSITION.BOTTOM_RIGHT,
+          hideProgressBar: true,
+        })
+        return returnResult
+          ? {
+              terminal_id: undefined,
+              terminalData: undefined,
+            }
+          : setLocationData({
+              ...locationData,
+              terminal_id: undefined,
+              terminalData: undefined,
+            })
+      }
     }
 
     if (terminalsData.data) {
