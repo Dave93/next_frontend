@@ -1060,12 +1060,16 @@ const Orders: FC<OrdersProps> = ({ channelName }: { channelName: any }) => {
   const totalPrice = useMemo(() => {
     let total = 0
     if (!isEmpty) {
-      data.lineItems.map((item: any) => {
-        if (!stopProducts.includes(item.variant.product_id)) {
-          total += item.variant.total_price
+      data.lineItems.map((lineItem: any) => {
+        if (!stopProducts.includes(lineItem.variant.product_id)) {
+          total +=
+            lineItem.child && lineItem.child.length
+              ? (+lineItem.total + +lineItem.child[0].total) * lineItem.quantity
+              : lineItem.total * lineItem.quantity
         }
       })
     }
+    console.log(total)
     return total
   }, [stopProducts, data])
 
