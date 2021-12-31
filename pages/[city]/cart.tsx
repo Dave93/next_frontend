@@ -287,10 +287,11 @@ export default function Cart() {
   const isWorkTime = useMemo(() => {
     let currentHour = new Date().getHours()
     if (
-      configData.workTimeStart <= currentHour ||
+      configData.workTimeStart <= currentHour &&
       configData.workTimeEnd > currentHour
     )
       return true
+    // if (configData.workTimeEnd > currentHour) return false
     return false
   }, [configData])
 
