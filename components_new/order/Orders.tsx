@@ -1060,12 +1060,16 @@ const Orders: FC<OrdersProps> = ({ channelName }: { channelName: any }) => {
   const totalPrice = useMemo(() => {
     let total = 0
     if (!isEmpty) {
-      data.lineItems.map((item: any) => {
-        if (!stopProducts.includes(item.variant.product_id)) {
-          total += item.variant.total_price
+      data.lineItems.map((lineItem: any) => {
+        if (!stopProducts.includes(lineItem.variant.product_id)) {
+          total +=
+            lineItem.child && lineItem.child.length
+              ? (+lineItem.total + +lineItem.child[0].total) * lineItem.quantity
+              : lineItem.total * lineItem.quantity
         }
       })
     }
+    console.log(total)
     return total
   }, [stopProducts, data])
 
@@ -2022,57 +2026,67 @@ const Orders: FC<OrdersProps> = ({ channelName }: { channelName: any }) => {
                     height={40}
                     className="rounded-full"
                   />
+                </div>
+              )}
+              <div
+                className={`${
+                  isProductInStop.includes(lineItem.id) ? 'opacity-25' : ''
+                }font-bold md:text-xl text-base ml-4`}
+              >
+                {lineItem.child && lineItem.child.length > 1 ? (
+                  `${
+                    lineItem?.variant?.product?.attribute_data?.name[
+                      channelName
+                    ][locale || 'ru']
+                  } + ${lineItem?.child
+                    .filter(
+                      (v: any) =>
+                        lineItem?.variant?.product?.box_id !=
+                        v?.variant?.product?.id
+                    )
+                    .map(
+                      (v: any) =>
+                        v?.variant?.product?.attribute_data?.name[channelName][
+                          locale || 'ru'
+                        ]
+                    )
+                    .join(' + ')}`
+                ) : (
                   <div
-                    className={`${
+                    className={
                       isProductInStop.includes(lineItem.id) ? 'opacity-25' : ''
-                    }font-bold md:text-xl text-base ml-4`}
+                    }
                   >
-                    {lineItem.child && lineItem.child.length > 1
-                      ? `${
-                          lineItem?.variant?.product?.attribute_data?.name[
-                            channelName
-                          ][locale || 'ru']
-                        } + ${lineItem?.child
-                          .filter(
-                            (v: any) =>
-                              lineItem?.variant?.product?.box_id !=
-                              v?.variant?.product?.id
-                          )
-                          .map(
-                            (v: any) =>
-                              v?.variant?.product?.attribute_data?.name[
-                                channelName
-                              ][locale || 'ru']
-                          )
-                          .join(' + ')}`
+                    {isProductInStop.includes(lineItem.id)
+                      ? tr('stop_product')
                       : lineItem?.variant?.product?.attribute_data?.name[
                           channelName
                         ][locale || 'ru']}
-                    {lineItem.bonus_id && (
-                      <span className="text-yellow">({tr('bonus')})</span>
-                    )}
-                    {lineItem.sale_id && (
-                      <span className="text-yellow">({tr('sale_label')})</span>
-                    )}
-                    {lineItem.modifiers &&
-                      lineItem.modifiers
-                        .filter((mod: any) => mod.price > 0)
-                        .map((mod: any) => (
-                          <div
-                            className="placeholder-blackbg-yellow rounded-full px-2 py-1 ml-2 text-xs text-white"
-                            key={mod.id}
-                          >
-                            {locale == 'uz' ? mod.name_uz : mod.name}
-                          </div>
-                        ))}
                   </div>
-                </div>
-              )}
-              {isProductInStop.includes(lineItem.id) && (
-                <div className="absolute text-center left-0 right-0 md:text-yellow  text-opacity-100 text-2xl w-40 md:w-max m-auto leading-5">
+                )}
+                {lineItem.bonus_id && (
+                  <span className="text-yellow">({tr('bonus')})</span>
+                )}
+                {lineItem.sale_id && (
+                  <span className="text-yellow">({tr('sale_label')})</span>
+                )}
+                {lineItem.modifiers &&
+                  lineItem.modifiers
+                    .filter((mod: any) => mod.price > 0)
+                    .map((mod: any) => (
+                      <div
+                        className="placeholder-blackbg-yellow rounded-full px-2 py-1 ml-2 text-xs text-white"
+                        key={mod.id}
+                      >
+                        {locale == 'uz' ? mod.name_uz : mod.name}
+                      </div>
+                    ))}
+              </div>
+              {/* {isProductInStop.includes(lineItem.id) && (
+                <div className="absolute text-center left-0 right-0 md:text-yellow  text-opacity-100 text-2xl w-40 md:w-max m-auto leading-4">
                   {tr('stop_product')}
                 </div>
-              )}
+              )} */}
 
               <div
                 className={`${
