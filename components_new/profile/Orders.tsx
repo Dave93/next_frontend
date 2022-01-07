@@ -131,7 +131,7 @@ const Orders: FC<OrdersListProps> = ({ orders }) => {
                         </div>
                       </>
                     )}
-                    <div className={`md:ml-56 `}>
+                    <div className={`${order?.status == 'cancelled' ? 'text-red-500': 'text-green-600'} md:ml-56 `}>
                       {tr(`order_status_${order?.status}`)}
                     </div>
                   </div>
@@ -222,7 +222,7 @@ const Orders: FC<OrdersListProps> = ({ orders }) => {
                               precision: 0,
                             }).format()
                           : (pizza.total > 0 ? pizza.quantity + ' X ' : '') +
-                             currency(pizza.total * pizza.quantity, {
+                            currency(pizza.total * pizza.quantity, {
                               pattern: '# !',
                               separator: ' ',
                               decimal: '.',

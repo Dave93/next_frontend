@@ -72,6 +72,7 @@ type FormData = {
   delivery_schedule: string
   label?: string
   addressId: number | null
+  additional_phone: string
 }
 
 interface SelectItem {
@@ -200,9 +201,10 @@ const Orders: FC<OrdersProps> = ({ channelName }: { channelName: any }) => {
       delivery_schedule: 'now',
       label: locationData?.label || '',
       addressId: addressId || null,
+      additional_phone: '',
     },
   })
-
+  console.log(getValues())
   const {
     register: passwordFormRegister,
     handleSubmit: handlePasswordSubmit,
@@ -240,6 +242,7 @@ const Orders: FC<OrdersProps> = ({ channelName }: { channelName: any }) => {
   const authName = watch('name')
   const authPhone = watch('phone')
   const authEmail = watch('email')
+  const additionalPhone = watch('additional_phone')
 
   const resetField = (fieldName: string) => {
     const newFields: any = {
@@ -1069,7 +1072,6 @@ const Orders: FC<OrdersProps> = ({ channelName }: { channelName: any }) => {
         }
       })
     }
-    console.log(total)
     return total
   }, [stopProducts, data])
 
@@ -1181,6 +1183,32 @@ const Orders: FC<OrdersProps> = ({ channelName }: { channelName: any }) => {
                   <button
                     className="absolute focus:outline-none inset-y-0 outline-none right-4 text-gray-400"
                     onClick={() => resetField('email')}
+                  >
+                    <XIcon className="cursor-pointer h-5 text-gray-400 w-5" />
+                  </button>
+                )}
+              </div>
+            </div>
+            <div className="mt-8">
+              <div className="text-sm text-gray-400 mb-2 block">
+                {tr('additional_phone')}
+              </div>
+              <div className="relative">
+                <Input
+                  defaultCountry="UZ"
+                  country="UZ"
+                  international
+                  withCountryCallingCode
+                  value={additionalPhone}
+                  className="focus:outline-none outline-none px-6 py-3 rounded-full text-sm w-full bg-gray-100 text-gray-400 "
+                  onChange={(e: any) => {
+                    setValue('additional_phone', e)
+                  }}
+                />
+                {additionalPhone && (
+                  <button
+                    className="absolute focus:outline-none inset-y-0 outline-none right-4 text-gray-400"
+                    onClick={() => resetField('additional_phone')}
                   >
                     <XIcon className="cursor-pointer h-5 text-gray-400 w-5" />
                   </button>
@@ -1464,7 +1492,7 @@ const Orders: FC<OrdersProps> = ({ channelName }: { channelName: any }) => {
                   </div>
                 </div>
                 <div className="md:mt-5 flex items-end">
-                  <div className="w-6/12">
+                  <div className="md:w-6/12">
                     <Disclosure defaultOpen={true}>
                       {({ open }) => (
                         <>
