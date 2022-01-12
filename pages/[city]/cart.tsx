@@ -8,13 +8,17 @@ import { useForm } from 'react-hook-form'
 import useTranslation from 'next-translate/useTranslation'
 import getConfig from 'next/config'
 import { useRouter } from 'next/router'
-import { useEffect, useMemo, useState } from 'react'
+import { createRef, useEffect, useMemo, useState } from 'react'
 import Hashids from 'hashids'
 import axios from 'axios'
 import Cookies from 'js-cookie'
 import defaultChannel from '@lib/defaultChannel'
 import currency from 'currency.js'
 import { useUI } from '@components/ui/context'
+import Flicking, { ViewportSlot } from '@egjs/react-flicking'
+import Slider from 'react-slick'
+import 'slick-carousel/slick/slick.css'
+import 'slick-carousel/slick/slick-theme.css'
 
 export async function getServerSideProps({
   preview,
@@ -71,6 +75,13 @@ axios.defaults.withCredentials = true
 
 export default function Cart() {
   const [channelName, setChannelName] = useState('chopar')
+  const [recomendedItems, setRecomendedItems] = useState([])
+  const [defaultIndex, setDefaultIndex] = useState(1)
+  const sliderRef = createRef<Flicking>()
+
+  const fetchRecomendedItems = async () => {
+    const { data } = await axios.get(`${webAddress}/api/products/recommended`)
+  }
 
   const getChannel = async () => {
     const channelData = await defaultChannel()
@@ -305,6 +316,43 @@ export default function Cart() {
     )
   }
 
+  const settings = {
+    infinite: false,
+    centerPadding: '20px',
+    arrows: true,
+    slidesToShow: 6,
+    swipeToSlide: true,
+    speed: 500,
+    slidesToScroll: 1,
+    responsive: [
+      {
+        breakpoint: 1024,
+        settings: {
+          slidesToShow: 4,
+          slidesToScroll: 3,
+        },
+      },
+      {
+        breakpoint: 600,
+        settings: {
+          slidesToShow: 4,
+          slidesToScroll: 1,
+          arrows: false,
+          dots: true,
+        },
+      },
+      {
+        breakpoint: 480,
+        settings: {
+          slidesToShow: 3,
+          slidesToScroll: 1,
+          arrows: false,
+          dots: true,
+        },
+      },
+    ],
+  }
+
   return (
     <>
       {isCartLoading && (
@@ -409,7 +457,7 @@ export default function Cart() {
                         </div>
                       ) : (
                         <div className="h-24 w-24 flex relative mr-4">
-                          <Image
+                          <img
                             src={
                               lineItem?.variant?.product?.assets?.length
                                 ? `${webAddress}/storage/${lineItem?.variant?.product?.assets[0]?.location}/${lineItem?.variant?.product?.assets[0]?.filename}`
@@ -570,6 +618,30 @@ export default function Cart() {
                 ))}
             </div>
           </div>
+          <div className="md:p-10 p-5 md:rounded-2xl bg-white md:my-3">
+            <div className="text-lg font-bold">
+              {tr('recomended_to_your_order')}
+            </div>
+            <div className="mt-5">
+              <Slider {...settings}>
+                <div className="border border-gray-300 rounded-2xl px-5 py-2 text-center m-2">
+                  <img
+                    src={'/no_photo.svg'}
+                    className="rounded-full w-max mb-5"
+                  />
+                  <div className="text-lg md:px-7 leading-5 font-bold mb-3">
+                    Крылышки в соусе
+                  </div>
+                  <div className="text-sm text-gray-300 mb-4">
+                    Просто объедение!
+                  </div>
+                  <div className="rounded-full bg-yellow text-white font-normal py-1">
+                    25 000 сум
+                  </div>
+                </div>
+              </Slider>
+            </div>
+          </div>
           <div className="md:p-10 p-5 md:rounded-2xl bg-white">
             <div className="border-b items-center justify-between pb-10">
               {/* <div className="md:w-72">
@@ -620,6 +692,21 @@ export default function Cart() {
           </div>
         </>
       )}
+      <style global jsx>{`
+        .slick-prev:before,
+        .slick-next:before {
+          color: #faaf04;
+        }
+        .slick-prev:before {
+          font-size: 33px;
+          margin-left: -48px;
+        }
+
+        .slick-next:before {
+          font-size: 33px;
+          margin-left: 24px;
+        }
+      `}</style>
     </>
   )
 }
