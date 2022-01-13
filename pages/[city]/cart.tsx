@@ -276,7 +276,7 @@ export default function Cart() {
               id: selectedProdId,
               quantity: 1,
               modifiers: null,
-              additionalSale: true
+              additionalSale: true,
             },
           ],
         },
@@ -333,6 +333,7 @@ export default function Cart() {
     }
 
     await mutate(basketResult, false)
+    fetchRecomendedItems()
   }
 
   const goToCheckout = (e: any) => {
