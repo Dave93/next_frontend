@@ -714,7 +714,7 @@ export default function Cart() {
               <div className="mt-5">
                 <Slider {...settings}>
                   {recomendedItems.map((item: any) => (
-                    <div className="border border-gray-300 rounded-2xl px-5 py-2 text-center h-full flex flex-col">
+                    <div className="border border-gray-300 rounded-2xl md:px-5 px-1 py-2 text-center h-full flex flex-col">
                       <div className="flex-grow flex items-center flex-col justify-center">
                         {item.image ? (
                           <img
