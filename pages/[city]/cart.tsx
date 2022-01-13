@@ -140,7 +140,7 @@ export default function Cart() {
       configData = configData.toString('ascii')
       configData = JSON.parse(configData)
       setConfigData(configData)
-    } catch (e) {}
+    } catch (e) { }
   }
 
   const setCredentials = async () => {
@@ -380,7 +380,7 @@ export default function Cart() {
 
   useEffect(() => {
     fetchConfig()
-    // fetchRecomendedItems()
+    fetchRecomendedItems()
     return
   }, [])
 
@@ -417,14 +417,14 @@ export default function Cart() {
       {
         breakpoint: 1024,
         settings: {
-          slidesToShow: 4,
+          slidesToShow: 3,
           slidesToScroll: 3,
         },
       },
       {
         breakpoint: 600,
         settings: {
-          slidesToShow: 4,
+          slidesToShow: 3,
           slidesToScroll: 1,
           arrows: false,
           dots: true,
@@ -470,7 +470,7 @@ export default function Cart() {
       )}
       {isEmpty && (
         <div className="flex flex-col items-center mt-2 text-center text-gray-400 text-sm pb-4">
-          <Image src="/cart_empty.png" width={130} height={119} />
+          <img src="/cart_empty.png" width={130} height={119} />
           <div className="w-6/12">{tr('basket_empty')}</div>
           <button
             className="bg-yellow text-white p-3 mt-4 rounded-full"
@@ -508,8 +508,8 @@ export default function Cart() {
                   >
                     <div className="md:flex items-center text-center uppercase">
                       {lineItem.child &&
-                      lineItem.child.length &&
-                      lineItem.child[0].variant?.product?.id !=
+                        lineItem.child.length &&
+                        lineItem.child[0].variant?.product?.id !=
                         lineItem?.variant?.product?.box_id ? (
                         <div className="h-28 w-28 flex relative">
                           <div className="w-12 relative overflow-hidden">
@@ -561,25 +561,24 @@ export default function Cart() {
                       <div className="md:ml-7 ml-1 space-y-2 md:w-72 md:text-left">
                         <div className="text-xl font-bold">
                           {lineItem.child && lineItem.child.length > 1
-                            ? `${
-                                lineItem?.variant?.product?.attribute_data
-                                  ?.name[channelName][locale || 'ru']
-                              } + ${lineItem?.child
-                                .filter(
-                                  (v: any) =>
-                                    lineItem?.variant?.product?.box_id !=
-                                    v?.variant?.product?.id
-                                )
-                                .map(
-                                  (v: any) =>
-                                    v?.variant?.product?.attribute_data?.name[
-                                      channelName
-                                    ][locale || 'ru']
-                                )
-                                .join(' + ')}`
+                            ? `${lineItem?.variant?.product?.attribute_data
+                              ?.name[channelName][locale || 'ru']
+                            } + ${lineItem?.child
+                              .filter(
+                                (v: any) =>
+                                  lineItem?.variant?.product?.box_id !=
+                                  v?.variant?.product?.id
+                              )
+                              .map(
+                                (v: any) =>
+                                  v?.variant?.product?.attribute_data?.name[
+                                  channelName
+                                  ][locale || 'ru']
+                              )
+                              .join(' + ')}`
                             : lineItem?.variant?.product?.attribute_data?.name[
-                                channelName
-                              ][locale || 'ru']}{' '}
+                            channelName
+                            ][locale || 'ru']}{' '}
                           {lineItem.bonus_id && (
                             <span className="text-yellow">({tr('bonus')})</span>
                           )}
@@ -628,23 +627,23 @@ export default function Cart() {
                       <div className="text-xl">
                         {lineItem.child && lineItem.child.length
                           ? currency(
-                              (+lineItem.total + +lineItem.child[0].total) *
-                                lineItem.quantity,
-                              {
-                                pattern: '# !',
-                                separator: ' ',
-                                decimal: '.',
-                                symbol: `${locale == 'uz' ? "so'm" : 'сум'}`,
-                                precision: 0,
-                              }
-                            ).format()
-                          : currency(lineItem.total * lineItem.quantity, {
+                            (+lineItem.total + +lineItem.child[0].total) *
+                            lineItem.quantity,
+                            {
                               pattern: '# !',
                               separator: ' ',
                               decimal: '.',
                               symbol: `${locale == 'uz' ? "so'm" : 'сум'}`,
                               precision: 0,
-                            }).format()}
+                            }
+                          ).format()
+                          : currency(lineItem.total * lineItem.quantity, {
+                            pattern: '# !',
+                            separator: ' ',
+                            decimal: '.',
+                            symbol: `${locale == 'uz' ? "so'm" : 'сум'}`,
+                            precision: 0,
+                          }).format()}
                       </div>
                       {!readonlyItems.includes(lineItem.id) && (
                         <>
@@ -665,23 +664,23 @@ export default function Cart() {
                       <div className="text-xl mb-2">
                         {lineItem.child && lineItem.child.length
                           ? currency(
-                              (+lineItem.total + +lineItem.child[0].total) *
-                                lineItem.quantity,
-                              {
-                                pattern: '# !',
-                                separator: ' ',
-                                decimal: '.',
-                                symbol: `${locale == 'uz' ? "so'm" : 'сум'}`,
-                                precision: 0,
-                              }
-                            ).format()
-                          : currency(lineItem.total * lineItem.quantity, {
+                            (+lineItem.total + +lineItem.child[0].total) *
+                            lineItem.quantity,
+                            {
                               pattern: '# !',
                               separator: ' ',
                               decimal: '.',
                               symbol: `${locale == 'uz' ? "so'm" : 'сум'}`,
                               precision: 0,
-                            }).format()}
+                            }
+                          ).format()
+                          : currency(lineItem.total * lineItem.quantity, {
+                            pattern: '# !',
+                            separator: ' ',
+                            decimal: '.',
+                            symbol: `${locale == 'uz' ? "so'm" : 'сум'}`,
+                            precision: 0,
+                          }).format()}
                       </div>
                       {!readonlyItems.includes(lineItem.id) && (
                         <div className="w-20 h-6 bg-yellow rounded-full flex items-center text-white ml-auto">
@@ -715,16 +714,16 @@ export default function Cart() {
               <div className="mt-5">
                 <Slider {...settings}>
                   {recomendedItems.map((item: any) => (
-                    <div className="border border-gray-300 rounded-2xl px-5 py-2 text-center h-full mx-2 flex flex-col">
+                    <div className="border border-gray-300 rounded-2xl px-5 py-2 text-center h-full flex flex-col">
                       <div className="flex-grow flex items-center flex-col justify-center">
                         {item.image ? (
                           <img
                             src={item.image}
-                            width={250}
-                            height={250}
+                            width="130"
+                            height="130"
                             alt={
                               item?.attribute_data?.name[channelName][
-                                locale || 'ru'
+                              locale || 'ru'
                               ]
                             }
                             className="transform motion-safe:group-hover:scale-105 transition duration-500"
@@ -732,20 +731,20 @@ export default function Cart() {
                         ) : (
                           <img
                             src="/no_photo.svg"
-                            width={250}
-                            height={250}
+                            width="130"
+                            height="130"
                             alt={
                               item?.attribute_data?.name[channelName][
-                                locale || 'ru'
+                              locale || 'ru'
                               ]
                             }
                             className="rounded-full transform motion-safe:group-hover:scale-105 transition duration-500"
                           />
                         )}
-                        <div className="text-lg md:px-7 leading-5 font-bold mb-3">
+                        <div className="text-lg leading-5 font-bold mb-3 md:h-12 h-16">
                           {
                             item?.attribute_data?.name[channelName][
-                              locale || 'ru'
+                            locale || 'ru'
                             ]
                           }
                         </div>
@@ -847,6 +846,14 @@ export default function Cart() {
         }
         .slick-track .slick-slide > div {
           height: 100%;
+        }
+        /* the slides */
+        .slick-slide {
+            margin: 0 5px;
+        }
+        /* the parent */
+        .slick-list {
+            margin: 0 -10px;
         }
       `}</style>
     </>
