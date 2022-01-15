@@ -204,7 +204,6 @@ const Orders: FC<OrdersProps> = ({ channelName }: { channelName: any }) => {
       additional_phone: '',
     },
   })
-  console.log(getValues())
   const {
     register: passwordFormRegister,
     handleSubmit: handlePasswordSubmit,
@@ -270,6 +269,7 @@ const Orders: FC<OrdersProps> = ({ channelName }: { channelName: any }) => {
   const [activePoint, setActivePoint] = useState(
     (locationData ? locationData.terminal_id : null) as number | null
   )
+  const [cutlery, setCutlery] = useState('Y')
   const [isPhoneConfirmOpen, setIsPhoneConfirmOpen] = useState(false)
   const [otpCode, setOtpCode] = useState('')
   const [otpShowCode, setOtpShowCode] = useState(0)
@@ -304,6 +304,7 @@ const Orders: FC<OrdersProps> = ({ channelName }: { channelName: any }) => {
   )
 
   const [configData, setConfigData] = useState({} as any)
+
   const fetchConfig = async () => {
     let configData
     if (!sessionStorage.getItem('configData')) {
@@ -506,6 +507,10 @@ const Orders: FC<OrdersProps> = ({ channelName }: { channelName: any }) => {
       terminal_id: terminalData.terminal_id,
       terminalData: terminalData.terminalData,
     })
+  }
+
+  const cutleryHandler = (e: any) => {
+    setCutlery(e.target.value)
   }
 
   const mapState = useMemo<MapState>(() => {
@@ -882,6 +887,7 @@ const Orders: FC<OrdersProps> = ({ channelName }: { channelName: any }) => {
             sms_sub: sms,
             email_sub: newsletter,
             sourceType,
+            need_napkins: cutlery == 'Y',
           },
           code: otpCode,
           basket_id: cartId,
@@ -2142,20 +2148,45 @@ const Orders: FC<OrdersProps> = ({ channelName }: { channelName: any }) => {
             </div>
           ))}
         {!isEmpty && (
-          <div className="flex justify-between items-center mt-8">
-            <div>
-              <div className="font-bold text-xl mb-2">
-                {tr('basket_order_price')}
+          <div>
+            <div className="flex justify-between items-center mt-8">
+              <div>
+                <div className="font-bold text-xl mb-2">
+                  {tr('basket_order_price')}
+                </div>
+              </div>
+              <div className="text-2xl font-bold">
+                {currency(totalPrice, {
+                  pattern: '# !',
+                  separator: ' ',
+                  decimal: '.',
+                  symbol: `${locale == 'uz' ? "so'm" : 'сум'}`,
+                  precision: 0,
+                }).format()}
               </div>
             </div>
-            <div className="text-2xl font-bold">
-              {currency(totalPrice, {
-                pattern: '# !',
-                separator: ' ',
-                decimal: '.',
-                symbol: `${locale == 'uz' ? "so'm" : 'сум'}`,
-                precision: 0,
-              }).format()}
+            <div className="flex items-center mt-8">
+              <div className="font-bold">{tr('cutlery_and_napkins')}</div>
+              <div className="font-bold mx-2">{tr('no')}</div>
+              <input
+                type="radio"
+                value={'N'}
+                checked={cutlery === 'N'}
+                className={` ${
+                  cutlery ? 'text-yellow' : 'bg-gray-200'
+                } form-checkbox h-5 w-5  rounded-md  border border-gray-300`}
+                onChange={cutleryHandler}
+              />
+              <div className="font-bold mx-2">{tr('yes')}</div>
+              <input
+                type="radio"
+                value={'Y'}
+                checked={cutlery === 'Y'}
+                className={` ${
+                  cutlery ? 'text-yellow' : 'bg-gray-200'
+                } form-checkbox h-5 w-5  rounded-md  border border-gray-300`}
+                onChange={cutleryHandler}
+              />
             </div>
           </div>
         )}
