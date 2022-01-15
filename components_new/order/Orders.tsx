@@ -2165,27 +2165,33 @@ const Orders: FC<OrdersProps> = ({ channelName }: { channelName: any }) => {
                 }).format()}
               </div>
             </div>
-            <div className="flex items-center mt-8">
+            <div className="flex items-center mt-8 text-2xl">
               <div className="font-bold">{tr('cutlery_and_napkins')}</div>
-              <div className="font-bold mx-2">{tr('no')}</div>
+              <label htmlFor="N" className="ml-12">
+                <div className="font-bold mx-2">{tr('no')}</div>
+              </label>
               <input
                 type="radio"
                 value={'N'}
                 checked={cutlery === 'N'}
                 className={` ${
                   cutlery ? 'text-yellow' : 'bg-gray-200'
-                } form-checkbox h-5 w-5  rounded-md  border border-gray-300`}
+                } border-2 border-yellow form-checkbox rounded-md text-yellow outline-none focus:outline-none active:outline-none focus:border-yellow`}
                 onChange={cutleryHandler}
+                id="N"
               />
-              <div className="font-bold mx-2">{tr('yes')}</div>
+              <label htmlFor="Y">
+                <div className="font-bold mx-2">{tr('yes')}</div>
+              </label>
               <input
                 type="radio"
                 value={'Y'}
                 checked={cutlery === 'Y'}
                 className={` ${
                   cutlery ? 'text-yellow' : 'bg-gray-200'
-                } form-checkbox h-5 w-5  rounded-md  border border-gray-300`}
+                } border-2 border-yellow form-checkbox rounded-md text-yellow outline-none focus:outline-none active:outline-none focus:border-yellow`}
                 onChange={cutleryHandler}
+                id="Y"
               />
             </div>
           </div>
