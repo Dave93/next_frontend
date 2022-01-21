@@ -104,7 +104,7 @@ const Orders: FC<OrdersProps> = ({ channelName }: { channelName: any }) => {
   const deliveryTimeOptions = [] as SelectItem[]
 
   let startTime = DateTime.now()
-  startTime = startTime.plus({ minutes: 40 })
+  startTime = startTime.plus({ minutes: 80 })
   startTime = startTime.set({
     minute: Math.ceil(startTime.minute / 10) * 10,
   })
