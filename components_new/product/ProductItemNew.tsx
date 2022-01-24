@@ -714,7 +714,7 @@ const ProductItemNew: FC<ProductItem> = ({ product, channelName }) => {
                             </span>
                           </div>
                         </div>
-                        <div className="h-[calc(85vh-40px)] overflow-y-auto mt-6 overflow-hidden">
+                        <div className="h-[calc(85vh-34px)] overflow-y-auto mt-6 overflow-hidden">
                           <div className="h-[35vh] mx-auto bg-cover flex relative mt-10">
                             {store.image ? (
                               <img
@@ -850,7 +850,7 @@ const ProductItemNew: FC<ProductItem> = ({ product, channelName }) => {
                             </div>
                           )}
                         </div>
-                        <div className="w-full fixed bottom-0 bg-white -ml-4 px-3 py-5 items-center flex mt-3">
+                        <div className="bg-white flex items-center px-3 py-5 w-full">
                           <button
                             className="bg-yellow flex items-center justify-around focus:outline-none font-bold outline-none py-2 rounded-full text-center text-white w-full"
                             onClick={addToBasket}
