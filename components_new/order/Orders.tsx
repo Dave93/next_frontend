@@ -1274,7 +1274,7 @@ const Orders: FC<OrdersProps> = ({ channelName }: { channelName: any }) => {
                       onLoad={(ymaps: any) => loadPolygonsToMap(ymaps)}
                       instanceRef={(ref) => (map.current = ref)}
                       width="100%"
-                      height="530px"
+                      height={`${window.innerWidth < 768 ? '200px' : '530px'}`}
                       onClick={clickOnMap}
                       modules={[
                         'control.ZoomControl',

@@ -714,7 +714,7 @@ const ProductItemNew: FC<ProductItem> = ({ product, channelName }) => {
                             </span>
                           </div>
                         </div>
-                        <div className="h-[calc(85vh-24px)] overflow-y-auto mt-6 overflow-hidden">
+                        <div className="h-[calc(85vh-40px)] overflow-y-auto mt-6 overflow-hidden">
                           <div className="h-[35vh] mx-auto bg-cover flex relative mt-10">
                             {store.image ? (
                               <img

@@ -14,7 +14,6 @@ import { ManagedUIContext } from '@components/ui/context'
 import { ToastContainer } from 'react-toastify'
 import { pwaTrackingListeners } from '../scripts/pwaEventlisteners'
 import FacebookPixel from '@components/common/FacebookPixel'
-import { YMInitializer } from 'react-yandex-metrika'
 
 const isBrowser = typeof window !== 'undefined'
 
