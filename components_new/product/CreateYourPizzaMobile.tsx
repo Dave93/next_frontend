@@ -773,7 +773,7 @@ const CreateYourPizza: FC<CreatePizzaProps> = ({ sec, channelName }) => {
                         ))}
                       </div>
                     </div>
-                    <div className="flex justify-around h-[calc(100vh-260px)] overflow-hidden overflow-y-auto">
+                    <div className="flex justify-around h-[calc(100vh-310px)] overflow-hidden overflow-y-auto">
                       <div className="text-center">
                         {readyProductList &&
                           readyProductList.map((item: any) => (
