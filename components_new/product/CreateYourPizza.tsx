@@ -18,6 +18,7 @@ import axios from 'axios'
 import Cookies from 'js-cookie'
 import { useCart } from '@framework/cart'
 import useTranslation from 'next-translate/useTranslation'
+import { useUI } from '@components/ui/context'
 
 type CreatePizzaProps = {
   sec: any
@@ -39,6 +40,7 @@ const CreateYourPizza: FC<CreatePizzaProps> = ({
   const { locale } = router
   let [isOpen, setIsOpen] = useState(false)
   let completeButtonRef = useRef(null)
+  const { stopProducts } = useUI()
   const { mutate } = useCart()
   let [active, setActive] = useState(true)
   const [isLoadingBasket, setIsLoadingBasket] = useState(false)
@@ -258,17 +260,25 @@ const CreateYourPizza: FC<CreatePizzaProps> = ({
     return Object.values(names)
   }, [sec, locale])
 
-  const readyProductList = useMemo(() => {
+  const readyProductList: any[] = useMemo(() => {
     return sec.items.map((item: any) => {
       let res = item
+
+      res.isInStop = false
       item.variants.map((vars: any) => {
         if (locale == 'uz') {
           if (vars?.custom_name_uz == activeCustomName) {
             res.price = vars.price
+            if (stopProducts.includes(vars.product_id)) {
+              res.isInStop = true
+            }
           }
         } else {
           if (vars?.custom_name == activeCustomName) {
             res.price = vars.price
+            if (stopProducts.includes(vars.product_id)) {
+              res.isInStop = true
+            }
           }
         }
       })
@@ -559,8 +569,11 @@ const CreateYourPizza: FC<CreatePizzaProps> = ({
                               rightSelectedProduct.id == item.id
                                 ? 'opacity-25'
                                 : 'cursor-pointer hover:border-yellow'
-                            }  `}
+                            }  ${item.isInStop ? 'opacity-25' : ''}`}
                           onClick={() => {
+                            if (item.isInStop) {
+                              return
+                            }
                             if (
                               rightSelectedProduct &&
                               rightSelectedProduct.id == item.id
@@ -853,8 +866,12 @@ const CreateYourPizza: FC<CreatePizzaProps> = ({
                                 ? 'opacity-25'
                                 : 'cursor-pointer hover:border-yellow'
                             }
+                              ${item.isInStop ? 'opacity-25' : ''}
                             `}
                           onClick={() => {
+                            if (item.isInStop) {
+                              return
+                            }
                             if (
                               leftSelectedProduct &&
                               leftSelectedProduct.id == item.id
