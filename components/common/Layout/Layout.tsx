@@ -197,6 +197,32 @@ const Layout: FC<Props> = ({
                     <h3 className="md:block mt-7 text-xl hidden">
                       {tr('footer_pizza_unites')}
                     </h3>
+                    <div className="flex md:absolute ">
+                      <a
+                        href="https://play.google.com/store/apps/details?id=havoqand.chopar"
+                        className="flex"
+                        target={'_blank'}
+                      >
+                        <div className=" bg-gray-700 flex items-center mt-11 p-2 rounded-lg">
+                          <img src="/google-play.png" alt="" className="w-5" />
+                          <div className="text-white ml-2">
+                            <div className="text-sm">Google Play</div>
+                          </div>
+                        </div>
+                      </a>
+                      <a
+                        href="https://apps.apple.com/uz/app/chopar-pizza/id1597897308"
+                        target={'_blank'}
+                      >
+                        <div className=" bg-gray-700 flex items-center ml-2 mt-11 p-2 px-2 rounded-lg">
+                          <img src="/apple.png" alt="" />
+                          <div className="text-white ml-2">
+                            <div className="text-[8px]">Available on the</div>
+                            <div className="text-sm leading-3">App Store</div>
+                          </div>
+                        </div>
+                      </a>
+                    </div>
                   </div>
                   <div className="flex-grow border-b border-blue md:border-0 mt-5 md:mt-0 pb-5 md:pb-0">
                     <div className="md:flex justify-center">
