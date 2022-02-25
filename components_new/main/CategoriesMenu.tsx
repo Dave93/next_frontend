@@ -62,6 +62,7 @@ const CategoriesMenu: FC<{ categories: any[]; channelName: string }> = ({
                   to={`productSection_${item.id}`}
                   spy={true}
                   smooth={true}
+                  hashSpy
                   activeClass="text-yellow"
                   offset={-100}
                 >
