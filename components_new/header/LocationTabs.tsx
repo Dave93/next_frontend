@@ -831,21 +831,21 @@ const LocationTabs: FC = () => {
     reset(newFields)
   }
 
-    const deleteAddress = async (addressId: number) => {
-      await setCredentials()
-      const otpToken = Cookies.get('opt_token')
-      const response = await axios.delete(
-        `${webAddress}/api/address/${addressId}`,
-        {
-          headers: {
-            Authorization: `Bearer ${otpToken}`,
-          },
-        }
-      )
-      if (response.status === 200) {
-        loadAddresses()
+  const deleteAddress = async (addressId: number) => {
+    await setCredentials()
+    const otpToken = Cookies.get('opt_token')
+    const response = await axios.delete(
+      `${webAddress}/api/address/${addressId}`,
+      {
+        headers: {
+          Authorization: `Bearer ${otpToken}`,
+        },
       }
+    )
+    if (response.status === 200) {
+      loadAddresses()
     }
+  }
 
   return (
     <>
