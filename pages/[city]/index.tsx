@@ -19,6 +19,7 @@ import dynamic from 'next/dynamic'
 import { NextSeo } from 'next-seo'
 import useTranslation from 'next-translate/useTranslation'
 import { useUI } from '@components/ui/context'
+import cookies from 'next-cookies'
 import axios from 'axios'
 import getConfig from 'next/config'
 
@@ -45,8 +46,10 @@ export async function getServerSideProps({
   locale,
   locales,
   query,
+  ...context
 }: GetServerSidePropsContext) {
-  const config = { locale, locales, queryParams: query }
+  const c = cookies(context)
+  const config = { locale, locales, queryParams: query, city: c.city_slug }
   const productsPromise = commerce.getAllProducts({
     variables: { first: 6 },
     config,
