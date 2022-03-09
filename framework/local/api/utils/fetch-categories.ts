@@ -1,7 +1,6 @@
 import { CommerceAPIConfig } from '@commerce/api'
 
 const getCategories = async ({ fetch, queryParams }: CommerceAPIConfig) => {
-  console.log(queryParams)
   const { data } = await fetch(
     ``,
     {
