@@ -115,11 +115,14 @@ const Orders: FC<OrdersListProps> = ({ orders }) => {
                               order.door_code
                             : ''}
                         </div>
-                        <div>
-                          {tr('prod-count', {
-                            count: order?.basket?.lines.length,
-                          })}
-                        </div>
+                        {order?.basket?.lines && (
+                          <div>
+                            {tr('prod-count', {
+                              count: order?.basket?.lines.length,
+                            })}
+                          </div>
+                        )}
+
                         <div>
                           {currency(order?.order_total / 100, {
                             pattern: '# !',
@@ -135,103 +138,103 @@ const Orders: FC<OrdersListProps> = ({ orders }) => {
                       {tr(`order_status_${order?.status}`)}
                     </div>
                   </div>
-                  {order?.basket?.lines.map((pizza: any) => (
-                    <Disclosure.Panel
-                      className="flex items-center justify-between border-b mt-4 pb-4"
-                      key={pizza.id}
-                    >
-                      <div className="flex items-center">
-                        {pizza.child &&
-                        pizza.child.length &&
-                        pizza.child[0].variant?.product?.id !=
-                          pizza?.variant?.product?.box_id ? (
-                          <div className="h-24 w-24 flex relative">
-                            <div className="w-12 relative overflow-hidden">
-                              <div>
-                                <Image
-                                  src={
-                                    pizza?.variant?.product?.assets?.length
-                                      ? `${webAddress}/storage/${pizza?.variant?.product?.assets[0]?.location}/${pizza?.variant?.product?.assets[0]?.filename}`
-                                      : '/no_photo.svg'
-                                  }
-                                  width="95"
-                                  height="95"
-                                  layout="fixed"
-                                  className="absolute rounded-full"
-                                />
+                  {order?.basket?.lines &&
+                    order?.basket?.lines.map((pizza: any) => (
+                      <Disclosure.Panel
+                        className="flex items-center justify-between border-b mt-4 pb-4"
+                        key={pizza.id}
+                      >
+                        <div className="flex items-center">
+                          {pizza.child &&
+                          pizza.child.length &&
+                          pizza.child[0].variant?.product?.id !=
+                            pizza?.variant?.product?.box_id ? (
+                            <div className="h-24 w-24 flex relative">
+                              <div className="w-12 relative overflow-hidden">
+                                <div>
+                                  <Image
+                                    src={
+                                      pizza?.variant?.product?.assets?.length
+                                        ? `${webAddress}/storage/${pizza?.variant?.product?.assets[0]?.location}/${pizza?.variant?.product?.assets[0]?.filename}`
+                                        : '/no_photo.svg'
+                                    }
+                                    width="95"
+                                    height="95"
+                                    layout="fixed"
+                                    className="absolute rounded-full"
+                                  />
+                                </div>
+                              </div>
+                              <div className="w-12 relative overflow-hidden">
+                                <div className="absolute right-0">
+                                  <Image
+                                    src={
+                                      pizza?.child[0].variant?.product?.assets
+                                        ?.length
+                                        ? `${webAddress}/storage/${pizza?.child[0].variant?.product?.assets[0]?.location}/${pizza?.child[0].variant?.product?.assets[0]?.filename}`
+                                        : '/no_photo.svg'
+                                    }
+                                    width="95"
+                                    height="95"
+                                    layout="fixed"
+                                    className="rounded-full"
+                                  />
+                                </div>
                               </div>
                             </div>
-                            <div className="w-12 relative overflow-hidden">
-                              <div className="absolute right-0">
-                                <Image
-                                  src={
-                                    pizza?.child[0].variant?.product?.assets
-                                      ?.length
-                                      ? `${webAddress}/storage/${pizza?.child[0].variant?.product?.assets[0]?.location}/${pizza?.child[0].variant?.product?.assets[0]?.filename}`
-                                      : '/no_photo.svg'
-                                  }
-                                  width="95"
-                                  height="95"
-                                  layout="fixed"
-                                  className="rounded-full"
-                                />
-                              </div>
+                          ) : (
+                            <div>
+                              <Image
+                                src={
+                                  pizza?.variant?.product?.assets?.length
+                                    ? `${webAddress}/storage/${pizza?.variant?.product?.assets[0]?.location}/${pizza?.variant?.product?.assets[0]?.filename}`
+                                    : '/no_photo.svg'
+                                }
+                                width={95}
+                                height={95}
+                                className="rounded-full w-24"
+                              />
                             </div>
-                          </div>
-                        ) : (
-                          <div>
-                            <Image
-                              src={
-                                pizza?.variant?.product?.assets?.length
-                                  ? `${webAddress}/storage/${pizza?.variant?.product?.assets[0]?.location}/${pizza?.variant?.product?.assets[0]?.filename}`
-                                  : '/no_photo.svg'
-                              }
-                              width={95}
-                              height={95}
-                              className="rounded-full w-24"
-                            />
-                          </div>
-                        )}
-                        <div className="ml-5">
-                          <div className="text-xl font-bold">
-                            {pizza.child && pizza.child.length > 1
-                              ? `${
-                                  pizza?.variant?.product?.attribute_data?.name[
+                          )}
+                          <div className="ml-5">
+                            <div className="text-xl font-bold">
+                              {pizza.child && pizza.child.length > 1
+                                ? `${
+                                    pizza?.variant?.product?.attribute_data
+                                      ?.name[channelName][locale || 'ru']
+                                  } + ${
+                                    pizza?.child[0].variant?.product
+                                      ?.attribute_data?.name[channelName][
+                                      locale || 'ru'
+                                    ]
+                                  }`
+                                : pizza?.variant?.product?.attribute_data?.name[
                                     channelName
-                                  ][locale || 'ru']
-                                } + ${
-                                  pizza?.child[0].variant?.product
-                                    ?.attribute_data?.name[channelName][
-                                    locale || 'ru'
-                                  ]
-                                }`
-                              : pizza?.variant?.product?.attribute_data?.name[
-                                  channelName
-                                ][locale || 'ru']}
+                                  ][locale || 'ru']}
+                            </div>
                           </div>
                         </div>
-                      </div>
-                      <div>
-                        {pizza.child && pizza.child.length
-                          ? (pizza.total > 0 ? pizza.quantity + ' X ' : '') +
-                            currency(+pizza.total + +pizza.child[0].total, {
-                              pattern: '# !',
-                              separator: ' ',
-                              decimal: '.',
-                              symbol: 'сум',
-                              precision: 0,
-                            }).format()
-                          : (pizza.total > 0 ? pizza.quantity + ' X ' : '') +
-                             currency(pizza.total * pizza.quantity, {
-                              pattern: '# !',
-                              separator: ' ',
-                              decimal: '.',
-                              symbol: 'сум',
-                              precision: 0,
-                            }).format()}
-                      </div>
-                    </Disclosure.Panel>
-                  ))}
+                        <div>
+                          {pizza.child && pizza.child.length
+                            ? (pizza.total > 0 ? pizza.quantity + ' X ' : '') +
+                              currency(+pizza.total + +pizza.child[0].total, {
+                                pattern: '# !',
+                                separator: ' ',
+                                decimal: '.',
+                                symbol: 'сум',
+                                precision: 0,
+                              }).format()
+                            : (pizza.total > 0 ? pizza.quantity + ' X ' : '') +
+                              currency(pizza.total * pizza.quantity, {
+                                pattern: '# !',
+                                separator: ' ',
+                                decimal: '.',
+                                symbol: 'сум',
+                                precision: 0,
+                              }).format()}
+                        </div>
+                      </Disclosure.Panel>
+                    ))}
                   {open && (
                     <>
                       <div className="flex items-center justify-between border-b pt-7 pb-7">
