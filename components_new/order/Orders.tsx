@@ -927,7 +927,7 @@ const Orders: FC<OrdersProps> = ({ channelName }: { channelName: any }) => {
           sum: data.order?.order_total / 100,
         })
         ;(window.b24order = window.b24order || []).push({
-          id: orderHashids.decode(data.order.id),
+          id: orderHashids.decode(data.order.id)[0],
           sum: data.order?.order_total / 100,
         })
       }, 500)
