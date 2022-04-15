@@ -1,4 +1,5 @@
 import Document, { Head, Html, Main, NextScript } from 'next/document'
+import Script from 'next/script'
 
 class MyDocument extends Document {
   render() {
@@ -14,7 +15,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe>`,
           ></noscript>
           <Main />
           <NextScript />
-          <script
+          <Script
             dangerouslySetInnerHTML={{
               __html: `
                         (function(w,d,u){
@@ -23,7 +24,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe>`,
                         })(window,document,'https://crm.choparpizza.uz/upload/crm/site_button/loader_2_6cilqh.js');
               `,
             }}
-          ></script>
+          />
         </body>
       </Html>
     )
