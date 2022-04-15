@@ -46,6 +46,7 @@ import { City } from '@commerce/types/cities'
 import { chunk, sortBy } from 'lodash'
 import getAddressList from '@lib/load_addreses'
 import { Address } from '@commerce/types/address'
+import Hashids from 'hashids'
 
 const { publicRuntimeConfig } = getConfig()
 let webAddress = publicRuntimeConfig.apiUrl
@@ -908,6 +909,15 @@ const Orders: FC<OrdersProps> = ({ channelName }: { channelName: any }) => {
         totalPrice: 0,
       }
       await mutate(basketData, false)
+      const orderHashids = new Hashids(
+        'order',
+        15,
+        'abcdefghijklmnopqrstuvwxyz1234567890'
+      )
+      ;(window.b24order = window.b24order || []).push({
+        id: orderHashids.decode(data.order.id),
+        sum: data.order?.order_total / 100,
+      })
       router.push(`/${activeCity.slug}/order/${data.order.id}`)
     } catch (e: any) {
       toast.error(e.response.data.error.message, {
