@@ -920,11 +920,13 @@ const Orders: FC<OrdersProps> = ({ channelName }: { channelName: any }) => {
         15,
         'abcdefghijklmnopqrstuvwxyz1234567890'
       )
-      ;(window.b24order = window.b24order || []).push({
-        id: orderHashids.decode(data.order.id),
-        sum: data.order?.order_total / 100,
-      })
       router.push(`/${activeCity.slug}/order/${data.order.id}`)
+      setTimeout(() => {
+        ;(window.b24order = window.b24order || []).push({
+          id: orderHashids.decode(data.order.id),
+          sum: data.order?.order_total / 100,
+        })
+      }, 500)
     } catch (e: any) {
       toast.error(e.response.data.error.message, {
         position: toast.POSITION.BOTTOM_RIGHT,
