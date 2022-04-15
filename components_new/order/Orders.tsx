@@ -52,6 +52,12 @@ const { publicRuntimeConfig } = getConfig()
 let webAddress = publicRuntimeConfig.apiUrl
 axios.defaults.withCredentials = true
 
+declare global {
+  interface Window {
+    b24order: any // 👈️ turn off type checking
+  }
+}
+
 type FormData = {
   name: string
   address: string | null | undefined
