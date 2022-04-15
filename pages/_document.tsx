@@ -16,6 +16,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe>`,
           <Main />
           <NextScript />
           <Script
+            strategy="afterInteractive"
             dangerouslySetInnerHTML={{
               __html: `
                         (function(w,d,u){
