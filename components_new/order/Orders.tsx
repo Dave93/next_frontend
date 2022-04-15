@@ -922,6 +922,10 @@ const Orders: FC<OrdersProps> = ({ channelName }: { channelName: any }) => {
       )
       router.push(`/${activeCity.slug}/order/${data.order.id}`)
       setTimeout(() => {
+        console.log({
+          id: orderHashids.decode(data.order.id),
+          sum: data.order?.order_total / 100,
+        })
         ;(window.b24order = window.b24order || []).push({
           id: orderHashids.decode(data.order.id),
           sum: data.order?.order_total / 100,
