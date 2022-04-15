@@ -17,12 +17,10 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe>`,
           <script
             dangerouslySetInnerHTML={{
               __html: `
-                <script>
                         (function(w,d,u){
                                 var s=d.createElement('script');s.async=true;s.src=u+'?'+(Date.now()/60000|0);
                                 var h=d.getElementsByTagName('script')[0];h.parentNode.insertBefore(s,h);
                         })(window,document,'https://crm.choparpizza.uz/upload/crm/site_button/loader_2_6cilqh.js');
-                </script>
               `,
             }}
           ></script>
