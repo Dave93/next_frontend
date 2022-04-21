@@ -51,9 +51,11 @@ const SmallCartMobile: FC = () => {
   if (typeof window !== undefined) {
     cartId = localStorage.getItem('basketId')
   }
+  const { locationData } = useUI()
 
   const { data, isLoading, isEmpty, mutate } = useCart({
     cartId,
+    locationData,
   })
 
   let [isShowPrivacy, setIsShowPrivacy] = useState(false)

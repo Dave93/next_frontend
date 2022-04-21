@@ -96,6 +96,7 @@ const Cart: FC<CartProps> = ({ channelName }: { channelName: any }) => {
         subtotalPrice: basket.data.sub_total,
         totalPrice: basket.data.total,
         discountTotal: basket.data.discount_total,
+        discountValue: basket.data.discount_value,
       }
 
       await mutate(basketResult, false)
@@ -134,6 +135,7 @@ const Cart: FC<CartProps> = ({ channelName }: { channelName: any }) => {
         subtotalPrice: basket.data.sub_total,
         totalPrice: basket.data.total,
         discountTotal: basket.data.discount_total,
+        discountValue: basket.data.discount_value,
       }
 
       await mutate(basketResult, false)
@@ -169,6 +171,7 @@ const Cart: FC<CartProps> = ({ channelName }: { channelName: any }) => {
         subtotalPrice: basket.data.sub_total,
         totalPrice: basket.data.total,
         discountTotal: basket.data.discount_total,
+        discountValue: basket.data.discount_value,
       }
 
       await mutate(basketResult, false)
