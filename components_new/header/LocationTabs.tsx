@@ -46,6 +46,7 @@ import Cookies from 'js-cookie'
 import getAddressList from '@lib/load_addreses'
 import { Address } from '@commerce/types/address'
 import { XIcon } from '@heroicons/react/outline'
+import useCart from '@framework/cart/use-cart'
 
 const { publicRuntimeConfig } = getConfig()
 
@@ -72,6 +73,15 @@ const LocationTabs: FC = () => {
     addressList,
     selectAddress,
   } = useUI()
+
+  let cartId: string | null = null
+  if (typeof window !== 'undefined') {
+    cartId = localStorage.getItem('basketId')
+  }
+  const { mutate } = useCart({
+    cartId,
+    locationData,
+  })
   const [tabIndex, setTabIndex] = useState(
     locationData?.deliveryType || 'deliver'
   )
@@ -663,6 +673,23 @@ const LocationTabs: FC = () => {
         setAddressId(addressData.data.id)
       }
     }
+
+    let { data: basket } = await axios.get(
+      `${webAddress}/api/baskets/${cartId}`
+    )
+    const basketResult = {
+      id: basket.data.id,
+      createdAt: '',
+      currency: { code: basket.data.currency },
+      taxesIncluded: basket.data.tax_total,
+      lineItems: basket.data.lines,
+      lineItemsSubtotalPrice: basket.data.sub_total,
+      subtotalPrice: basket.data.sub_total,
+      totalPrice: basket.data.total,
+      discountTotal: basket.data.discount_total,
+    }
+
+    await mutate(basketResult, false)
   }
 
   const loadPolygonsToMap = (ymaps: any) => {
@@ -749,7 +776,22 @@ const LocationTabs: FC = () => {
     } else {
       setStopProducts(terminalStock.data)
     }
+    let { data: basket } = await axios.get(
+      `${webAddress}/api/baskets/${cartId}?delivery_type=pickup`
+    )
+    const basketResult = {
+      id: basket.data.id,
+      createdAt: '',
+      currency: { code: basket.data.currency },
+      taxesIncluded: basket.data.tax_total,
+      lineItems: basket.data.lines,
+      lineItemsSubtotalPrice: basket.data.sub_total,
+      subtotalPrice: basket.data.sub_total,
+      totalPrice: basket.data.total,
+      discountTotal: basket.data.discount_total,
+    }
 
+    await mutate(basketResult, false)
     setLocationTabsClosable(false)
     closeLocationTabs()
   }
@@ -821,6 +863,21 @@ const LocationTabs: FC = () => {
     return null
   }, [cities, activeCity])
 
+  const discountValue = useMemo(() => {
+    let res = 0
+
+    if (configData.discount_end_date) {
+      if (DateTime.now().toFormat('E') != configData.discount_disable_day) {
+        if (DateTime.now() <= DateTime.fromSQL(configData.discount_end_date)) {
+          if (configData.discount_value) {
+            res = configData.discount_value
+          }
+        }
+      }
+    }
+    return res
+  }, [configData])
+
   const addresClear = watch('address')
 
   const resetField = (fieldName: string) => {
@@ -864,7 +921,12 @@ const LocationTabs: FC = () => {
           } flex-1 font-bold py-3 text-[18px] rounded-full outline-none focus:outline-none`}
           onClick={() => changeTabIndex('pickup')}
         >
-          {tr('pickup')}
+          {tr('pickup')}{' '}
+          {discountValue > 0 && (
+            <span className="ml-2 text-red-700 text-2xl">
+              -{discountValue}%
+            </span>
+          )}
         </button>
       </div>
       {tabIndex == 'deliver' && (

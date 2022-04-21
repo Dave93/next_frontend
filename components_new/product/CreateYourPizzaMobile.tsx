@@ -18,6 +18,8 @@ import axios from 'axios'
 import Cookies from 'js-cookie'
 import { useCart } from '@framework/cart'
 import useTranslation from 'next-translate/useTranslation'
+import { useUI } from '@components/ui/context'
+import { DateTime } from 'luxon'
 
 type CreatePizzaProps = {
   sec: any
@@ -34,6 +36,7 @@ const CreateYourPizza: FC<CreatePizzaProps> = ({ sec, channelName }) => {
   const { locale } = router
   let [isOpen, setIsOpen] = useState(false)
   let completeButtonRef = useRef(null)
+  const { stopProducts, locationData } = useUI()
   const { mutate } = useCart()
   let [active, setActive] = useState(true)
   const [isLoadingBasket, setIsLoadingBasket] = useState(false)
@@ -42,6 +45,25 @@ const CreateYourPizza: FC<CreatePizzaProps> = ({ sec, channelName }) => {
   const [leftSelectedProduct, setLeftSelectedProduct] = useState(null as any)
   const [rightSelectedProduct, setRightSelectedProduct] = useState(null as any)
   const [isSecondPage, setIsSecondPage] = useState(false)
+  const [configData, setConfigData] = useState({} as any)
+
+  const fetchConfig = async () => {
+    let configData
+    if (!sessionStorage.getItem('configData')) {
+      let { data } = await axios.get(`${webAddress}/api/configs/public`)
+      configData = data.data
+      sessionStorage.setItem('configData', data.data)
+    } else {
+      configData = sessionStorage.getItem('configData')
+    }
+
+    try {
+      configData = Buffer.from(configData, 'base64')
+      configData = configData.toString('ascii')
+      configData = JSON.parse(configData)
+      setConfigData(configData)
+    } catch (e) {}
+  }
   function closeModal() {
     setIsOpen(false)
   }
@@ -202,8 +224,12 @@ const CreateYourPizza: FC<CreatePizzaProps> = ({ sec, channelName }) => {
         totalPrice: basketData.data.total,
       }
     } else {
+      let additionalQuery = ''
+      if (locationData && locationData.deliveryType == 'pickup') {
+        additionalQuery = `?delivery_type=pickup`
+      }
       const { data: basketData } = await axios.post(
-        `${webAddress}/api/baskets`,
+        `${webAddress}/api/baskets${additionalQuery}`,
         {
           variants: [
             {
@@ -279,9 +305,31 @@ const CreateYourPizza: FC<CreatePizzaProps> = ({ sec, channelName }) => {
           }
         }
       })
+      res.beforePrice = 0
+
+      if (
+        configData.discount_end_date &&
+        locationData.deliveryType == 'pickup' &&
+        locationData.terminal_id &&
+        configData.discount_catalog_sections
+          .split(',')
+          .map((i: string) => +i)
+          .includes(res.category_id)
+      ) {
+        if (DateTime.now().toFormat('E') != configData.discount_disable_day) {
+          if (
+            DateTime.now() <= DateTime.fromSQL(configData.discount_end_date)
+          ) {
+            if (configData.discount_value) {
+              res.beforePrice = res.price
+              res.price = res.price * ((100 - configData.discount_value) / 100)
+            }
+          }
+        }
+      }
       return res
     })
-  }, [sec, activeCustomName])
+  }, [sec, activeCustomName, locationData, configData])
 
   const modifiers = useMemo(() => {
     if (!leftSelectedProduct || !rightSelectedProduct || !activeCustomName) {
@@ -461,6 +509,7 @@ const CreateYourPizza: FC<CreatePizzaProps> = ({ sec, channelName }) => {
     }
   }
   useEffect(() => {
+    fetchConfig()
     setActiveCustomName(customNames[0])
   }, [customNames])
 
@@ -818,14 +867,31 @@ const CreateYourPizza: FC<CreatePizzaProps> = ({ sec, channelName }) => {
                                   ]
                                 }
                               </div>
-                              <div className="text-gray-400">
-                                {currency(item.price, {
-                                  pattern: '# !',
-                                  separator: ' ',
-                                  decimal: '.',
-                                  symbol: `${locale == 'uz' ? "so'm" : 'сум'}`,
-                                  precision: 0,
-                                }).format()}
+                              <div className="text-gray-400 flex flex-col">
+                                {item.beforePrice > 0 && (
+                                  <span className="line-through text-sm">
+                                    {currency(item.beforePrice, {
+                                      pattern: '# !',
+                                      separator: ' ',
+                                      decimal: '.',
+                                      symbol: `${
+                                        locale == 'uz' ? "so'm" : 'сум'
+                                      }`,
+                                      precision: 0,
+                                    }).format()}
+                                  </span>
+                                )}
+                                <span>
+                                  {currency(item.price, {
+                                    pattern: '# !',
+                                    separator: ' ',
+                                    decimal: '.',
+                                    symbol: `${
+                                      locale == 'uz' ? "so'm" : 'сум'
+                                    }`,
+                                    precision: 0,
+                                  }).format()}
+                                </span>
                               </div>
                             </div>
                           ))}
@@ -875,14 +941,31 @@ const CreateYourPizza: FC<CreatePizzaProps> = ({ sec, channelName }) => {
                                   ]
                                 }
                               </div>
-                              <div className="text-gray-400">
-                                {currency(item.price, {
-                                  pattern: '# !',
-                                  separator: ' ',
-                                  decimal: '.',
-                                  symbol: `${locale == 'uz' ? "so'm" : 'сум'}`,
-                                  precision: 0,
-                                }).format()}
+                              <div className="text-gray-400 flex flex-col">
+                                {item.beforePrice > 0 && (
+                                  <span className="line-through text-sm">
+                                    {currency(item.beforePrice, {
+                                      pattern: '# !',
+                                      separator: ' ',
+                                      decimal: '.',
+                                      symbol: `${
+                                        locale == 'uz' ? "so'm" : 'сум'
+                                      }`,
+                                      precision: 0,
+                                    }).format()}
+                                  </span>
+                                )}
+                                <span>
+                                  {currency(item.price, {
+                                    pattern: '# !',
+                                    separator: ' ',
+                                    decimal: '.',
+                                    symbol: `${
+                                      locale == 'uz' ? "so'm" : 'сум'
+                                    }`,
+                                    precision: 0,
+                                  }).format()}
+                                </span>
                               </div>
                             </div>
                           ))}

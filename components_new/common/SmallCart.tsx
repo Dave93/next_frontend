@@ -29,12 +29,12 @@ const SmallCart: FC<SmallCartProps> = ({ channelName }) => {
   if (typeof window !== 'undefined') {
     cartId = localStorage.getItem('basketId')
   }
+  const { locationData, user, activeCity, openSignInModal } = useUI()
 
   const { data, isLoading, isEmpty, mutate } = useCart({
     cartId,
+    locationData,
   })
-
-  const { user, openSignInModal, activeCity } = useUI()
 
   const [isCartLoading, setIsCartLoading] = useState(false)
 
@@ -99,8 +99,12 @@ const SmallCart: FC<SmallCartProps> = ({ channelName }) => {
       `${webAddress}/api/basket-lines/${hashids.encode(lineId)}`
     )
     if (cartId) {
+      let additionalQuery = ''
+      if (locationData && locationData.deliveryType == 'pickup') {
+        additionalQuery = `?delivery_type=pickup`
+      }
       let { data: basket } = await axios.get(
-        `${webAddress}/api/baskets/${cartId}`
+        `${webAddress}/api/baskets/${cartId}${additionalQuery}`
       )
       const basketResult = {
         id: basket.data.id,
@@ -111,6 +115,7 @@ const SmallCart: FC<SmallCartProps> = ({ channelName }) => {
         lineItemsSubtotalPrice: basket.data.sub_total,
         subtotalPrice: basket.data.sub_total,
         totalPrice: basket.data.total,
+        discountTotal: basket.data.discount_total,
       }
 
       await mutate(basketResult, false)
@@ -132,8 +137,12 @@ const SmallCart: FC<SmallCartProps> = ({ channelName }) => {
     )
 
     if (cartId) {
+      let additionalQuery = ''
+      if (locationData && locationData.deliveryType == 'pickup') {
+        additionalQuery = `?delivery_type=pickup`
+      }
       let { data: basket } = await axios.get(
-        `${webAddress}/api/baskets/${cartId}`
+        `${webAddress}/api/baskets/${cartId}${additionalQuery}`
       )
       const basketResult = {
         id: basket.data.id,
@@ -144,6 +153,7 @@ const SmallCart: FC<SmallCartProps> = ({ channelName }) => {
         lineItemsSubtotalPrice: basket.data.sub_total,
         subtotalPrice: basket.data.sub_total,
         totalPrice: basket.data.total,
+        discountTotal: basket.data.discount_total,
       }
 
       await mutate(basketResult, false)
@@ -162,8 +172,12 @@ const SmallCart: FC<SmallCartProps> = ({ channelName }) => {
     )
 
     if (cartId) {
+      let additionalQuery = ''
+      if (locationData && locationData.deliveryType == 'pickup') {
+        additionalQuery = `?delivery_type=pickup`
+      }
       let { data: basket } = await axios.get(
-        `${webAddress}/api/baskets/${cartId}`
+        `${webAddress}/api/baskets/${cartId}${additionalQuery}`
       )
       const basketResult = {
         id: basket.data.id,
@@ -174,6 +188,7 @@ const SmallCart: FC<SmallCartProps> = ({ channelName }) => {
         lineItemsSubtotalPrice: basket.data.sub_total,
         subtotalPrice: basket.data.sub_total,
         totalPrice: basket.data.total,
+        discountTotal: basket.data.discount_total,
       }
 
       await mutate(basketResult, false)
@@ -237,7 +252,10 @@ const SmallCart: FC<SmallCartProps> = ({ channelName }) => {
   useEffect(() => {
     fetchConfig()
     return
-  }, [])
+  }, [locationData])
+
+  console.log(data)
+
   return (
     <div className="mt-2 rounded-[15px] bg-white ">
       <div className="border border-yellow px-5 py-7 rounded-[15px] relative">
@@ -285,7 +303,7 @@ const SmallCart: FC<SmallCartProps> = ({ channelName }) => {
           </div>
         )}
         {!isEmpty && (
-          <SimpleBar style={{ maxHeight: 300, paddingLeft: 30  }}>
+          <SimpleBar style={{ maxHeight: 300, paddingLeft: 30 }}>
             <div className="grid grid-cols-1 divide-y border-b mb-3 overflow-y-auto">
               {data &&
                 data?.lineItems.map((lineItem: any) => (
@@ -404,11 +422,11 @@ const SmallCart: FC<SmallCartProps> = ({ channelName }) => {
                           </div>
                         </div>
                       )}
-                      <div className="text-right flex-grow text-sm">
-                        {lineItem.child && lineItem.child.length
-                          ? currency(
-                              (+lineItem.total + +lineItem.child[0].total) *
-                                lineItem.quantity,
+                      <div className="text-right flex-grow">
+                        {lineItem.discount_value && (
+                          <span className="text-xs line-through">
+                            {currency(
+                              lineItem.total + lineItem.discount_value,
                               {
                                 pattern: '# !',
                                 separator: ' ',
@@ -416,14 +434,18 @@ const SmallCart: FC<SmallCartProps> = ({ channelName }) => {
                                 symbol: `${locale == 'uz' ? "so'm" : 'сум'}`,
                                 precision: 0,
                               }
-                            ).format()
-                          : currency(lineItem.total * lineItem.quantity, {
-                              pattern: '# !',
-                              separator: ' ',
-                              decimal: '.',
-                              symbol: `${locale == 'uz' ? "so'm" : 'сум'}`,
-                              precision: 0,
-                            }).format()}
+                            ).format()}
+                          </span>
+                        )}
+                        <div className=" text-sm">
+                          {currency(lineItem.total, {
+                            pattern: '# !',
+                            separator: ' ',
+                            decimal: '.',
+                            symbol: `${locale == 'uz' ? "so'm" : 'сум'}`,
+                            precision: 0,
+                          }).format()}
+                        </div>
                       </div>
                     </div>
                   </div>
@@ -436,14 +458,27 @@ const SmallCart: FC<SmallCartProps> = ({ channelName }) => {
             <div className="text-sm text-gray-500">
               {tr('basket_order_price')}
             </div>
-            <div className="text-[18px] font-bold">
-              {currency(data.totalPrice, {
-                pattern: '# !',
-                separator: ' ',
-                decimal: '.',
-                symbol: `${locale == 'uz' ? "so'm" : 'сум'}`,
-                precision: 0,
-              }).format()}
+            <div>
+              {data.discountTotal > 0 && (
+                <span className="text-xs line-through font-bold text-gray-500">
+                  {currency(data.discountTotal, {
+                    pattern: '# !',
+                    separator: ' ',
+                    decimal: '.',
+                    symbol: `${locale == 'uz' ? "so'm" : 'сум'}`,
+                    precision: 0,
+                  }).format()}
+                </span>
+              )}
+              <div className="text-[18px] font-bold">
+                {currency(data.totalPrice, {
+                  pattern: '# !',
+                  separator: ' ',
+                  decimal: '.',
+                  symbol: `${locale == 'uz' ? "so'm" : 'сум'}`,
+                  precision: 0,
+                }).format()}
+              </div>
             </div>
           </div>
         )}

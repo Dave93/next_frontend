@@ -165,6 +165,7 @@ const Orders: FC<OrdersProps> = ({ channelName }: { channelName: any }) => {
   const objects = useRef<any>(null)
   const { data, isLoading, isEmpty, mutate } = useCart({
     cartId,
+    locationData,
   })
   let currentAddress = ''
   if (activeCity.active) {
@@ -913,6 +914,7 @@ const Orders: FC<OrdersProps> = ({ channelName }: { channelName: any }) => {
         lineItemsSubtotalPrice: '',
         subtotalPrice: 0,
         totalPrice: 0,
+        discountTotal: 0,
       }
       await mutate(basketData, false)
       const orderHashids = new Hashids(

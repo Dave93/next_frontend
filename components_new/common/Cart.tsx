@@ -11,6 +11,7 @@ import { useRouter } from 'next/router'
 import useTranslation from 'next-translate/useTranslation'
 import Hashids from 'hashids'
 import SimpleBar from 'simplebar-react'
+import { useUI } from '@components/ui/context'
 
 const { publicRuntimeConfig } = getConfig()
 let webAddress = publicRuntimeConfig.apiUrl
@@ -27,8 +28,10 @@ const Cart: FC<CartProps> = ({ channelName }: { channelName: any }) => {
     cartId = localStorage.getItem('basketId')
   }
 
+  const { locationData } = useUI()
   const { data, isLoading, isEmpty, mutate } = useCart({
     cartId,
+    locationData,
   })
 
   const [isCartLoading, setIsCartLoading] = useState(false)
@@ -76,8 +79,12 @@ const Cart: FC<CartProps> = ({ channelName }: { channelName: any }) => {
       `${webAddress}/api/basket-lines/${hashids.encode(lineId)}`
     )
     if (cartId) {
+      let additionalQuery = ''
+      if (locationData && locationData.deliveryType == 'pickup') {
+        additionalQuery = `?delivery_type=pickup`
+      }
       let { data: basket } = await axios.get(
-        `${webAddress}/api/baskets/${cartId}`
+        `${webAddress}/api/baskets/${cartId}${additionalQuery}`
       )
       const basketResult = {
         id: basket.data.id,
@@ -88,6 +95,7 @@ const Cart: FC<CartProps> = ({ channelName }: { channelName: any }) => {
         lineItemsSubtotalPrice: basket.data.sub_total,
         subtotalPrice: basket.data.sub_total,
         totalPrice: basket.data.total,
+        discountTotal: basket.data.discount_total,
       }
 
       await mutate(basketResult, false)
@@ -109,8 +117,12 @@ const Cart: FC<CartProps> = ({ channelName }: { channelName: any }) => {
     )
 
     if (cartId) {
+      let additionalQuery = ''
+      if (locationData && locationData.deliveryType == 'pickup') {
+        additionalQuery = `?delivery_type=pickup`
+      }
       let { data: basket } = await axios.get(
-        `${webAddress}/api/baskets/${cartId}`
+        `${webAddress}/api/baskets/${cartId}${additionalQuery}`
       )
       const basketResult = {
         id: basket.data.id,
@@ -121,6 +133,7 @@ const Cart: FC<CartProps> = ({ channelName }: { channelName: any }) => {
         lineItemsSubtotalPrice: basket.data.sub_total,
         subtotalPrice: basket.data.sub_total,
         totalPrice: basket.data.total,
+        discountTotal: basket.data.discount_total,
       }
 
       await mutate(basketResult, false)
@@ -139,8 +152,12 @@ const Cart: FC<CartProps> = ({ channelName }: { channelName: any }) => {
     )
 
     if (cartId) {
+      let additionalQuery = ''
+      if (locationData && locationData.deliveryType == 'pickup') {
+        additionalQuery = `?delivery_type=pickup`
+      }
       let { data: basket } = await axios.get(
-        `${webAddress}/api/baskets/${cartId}`
+        `${webAddress}/api/baskets/${cartId}${additionalQuery}`
       )
       const basketResult = {
         id: basket.data.id,
@@ -151,6 +168,7 @@ const Cart: FC<CartProps> = ({ channelName }: { channelName: any }) => {
         lineItemsSubtotalPrice: basket.data.sub_total,
         subtotalPrice: basket.data.sub_total,
         totalPrice: basket.data.total,
+        discountTotal: basket.data.discount_total,
       }
 
       await mutate(basketResult, false)

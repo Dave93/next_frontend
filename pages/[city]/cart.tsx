@@ -84,7 +84,7 @@ export default function Cart() {
     setChannelName(channelData.name)
   }
 
-  const { activeCity } = useUI()
+  const { activeCity, locationData } = useUI()
   useEffect(() => {
     getChannel()
   }, [])
@@ -97,6 +97,7 @@ export default function Cart() {
 
   const { data, isLoading, isEmpty, mutate } = useCart({
     cartId,
+    locationData,
   })
 
   const [isCartLoading, setIsCartLoading] = useState(false)
@@ -140,7 +141,7 @@ export default function Cart() {
       configData = configData.toString('ascii')
       configData = JSON.parse(configData)
       setConfigData(configData)
-    } catch (e) { }
+    } catch (e) {}
   }
 
   const setCredentials = async () => {
@@ -174,8 +175,12 @@ export default function Cart() {
       `${webAddress}/api/basket-lines/${hashids.encode(lineId)}`
     )
     if (cartId) {
+      let additionalQuery = ''
+      if (locationData && locationData.deliveryType == 'pickup') {
+        additionalQuery = `?delivery_type=pickup`
+      }
       let { data: basket } = await axios.get(
-        `${webAddress}/api/baskets/${cartId}`
+        `${webAddress}/api/baskets/${cartId}${additionalQuery}`
       )
       const basketResult = {
         id: basket.data.id,
@@ -186,6 +191,7 @@ export default function Cart() {
         lineItemsSubtotalPrice: basket.data.sub_total,
         subtotalPrice: basket.data.sub_total,
         totalPrice: basket.data.total,
+        discountTotal: basket.data.discount_total,
       }
 
       await mutate(basketResult, false)
@@ -237,8 +243,12 @@ export default function Cart() {
     )
 
     if (cartId) {
+      let additionalQuery = ''
+      if (locationData && locationData.deliveryType == 'pickup') {
+        additionalQuery = `?delivery_type=pickup`
+      }
       let { data: basket } = await axios.get(
-        `${webAddress}/api/baskets/${cartId}`
+        `${webAddress}/api/baskets/${cartId}${additionalQuery}`
       )
       const basketResult = {
         id: basket.data.id,
@@ -249,6 +259,7 @@ export default function Cart() {
         lineItemsSubtotalPrice: basket.data.sub_total,
         subtotalPrice: basket.data.sub_total,
         totalPrice: basket.data.total,
+        discountTotal: basket.data.discount_total,
       }
 
       await mutate(basketResult, false)
@@ -267,8 +278,12 @@ export default function Cart() {
     let basketResult = {}
 
     if (basketId) {
+      let additionalQuery = ''
+      if (locationData && locationData.deliveryType == 'pickup') {
+        additionalQuery = `?delivery_type=pickup`
+      }
       const { data: basketData } = await axios.post(
-        `${webAddress}/api/baskets-lines`,
+        `${webAddress}/api/baskets-lines${additionalQuery}`,
         {
           basket_id: basketId,
           variants: [
@@ -297,10 +312,15 @@ export default function Cart() {
         lineItemsSubtotalPrice: basketData.data.sub_total,
         subtotalPrice: basketData.data.sub_total,
         totalPrice: basketData.data.total,
+        discountTotal: basketData.data.discount_total,
       }
     } else {
+      let additionalQuery = ''
+      if (locationData && locationData.deliveryType == 'pickup') {
+        additionalQuery = `?delivery_type=pickup`
+      }
       const { data: basketData } = await axios.post(
-        `${webAddress}/api/baskets`,
+        `${webAddress}/api/baskets${additionalQuery}`,
         {
           variants: [
             {
@@ -329,6 +349,7 @@ export default function Cart() {
         lineItemsSubtotalPrice: basketData.data.sub_total,
         subtotalPrice: basketData.data.sub_total,
         totalPrice: basketData.data.total,
+        discountTotal: basketData.data.discount_total,
       }
     }
 
@@ -508,8 +529,8 @@ export default function Cart() {
                   >
                     <div className="md:flex items-center text-center uppercase">
                       {lineItem.child &&
-                        lineItem.child.length &&
-                        lineItem.child[0].variant?.product?.id !=
+                      lineItem.child.length &&
+                      lineItem.child[0].variant?.product?.id !=
                         lineItem?.variant?.product?.box_id ? (
                         <div className="h-28 w-28 flex relative">
                           <div className="w-12 relative overflow-hidden">
@@ -561,24 +582,25 @@ export default function Cart() {
                       <div className="md:ml-7 ml-1 space-y-2 md:w-72 md:text-left">
                         <div className="text-xl font-bold">
                           {lineItem.child && lineItem.child.length > 1
-                            ? `${lineItem?.variant?.product?.attribute_data
-                              ?.name[channelName][locale || 'ru']
-                            } + ${lineItem?.child
-                              .filter(
-                                (v: any) =>
-                                  lineItem?.variant?.product?.box_id !=
-                                  v?.variant?.product?.id
-                              )
-                              .map(
-                                (v: any) =>
-                                  v?.variant?.product?.attribute_data?.name[
-                                  channelName
-                                  ][locale || 'ru']
-                              )
-                              .join(' + ')}`
+                            ? `${
+                                lineItem?.variant?.product?.attribute_data
+                                  ?.name[channelName][locale || 'ru']
+                              } + ${lineItem?.child
+                                .filter(
+                                  (v: any) =>
+                                    lineItem?.variant?.product?.box_id !=
+                                    v?.variant?.product?.id
+                                )
+                                .map(
+                                  (v: any) =>
+                                    v?.variant?.product?.attribute_data?.name[
+                                      channelName
+                                    ][locale || 'ru']
+                                )
+                                .join(' + ')}`
                             : lineItem?.variant?.product?.attribute_data?.name[
-                            channelName
-                            ][locale || 'ru']}{' '}
+                                channelName
+                              ][locale || 'ru']}{' '}
                           {lineItem.bonus_id && (
                             <span className="text-yellow">({tr('bonus')})</span>
                           )}
@@ -627,23 +649,23 @@ export default function Cart() {
                       <div className="text-xl">
                         {lineItem.child && lineItem.child.length
                           ? currency(
-                            (+lineItem.total + +lineItem.child[0].total) *
-                            lineItem.quantity,
-                            {
+                              (+lineItem.total + +lineItem.child[0].total) *
+                                lineItem.quantity,
+                              {
+                                pattern: '# !',
+                                separator: ' ',
+                                decimal: '.',
+                                symbol: `${locale == 'uz' ? "so'm" : 'сум'}`,
+                                precision: 0,
+                              }
+                            ).format()
+                          : currency(lineItem.total * lineItem.quantity, {
                               pattern: '# !',
                               separator: ' ',
                               decimal: '.',
                               symbol: `${locale == 'uz' ? "so'm" : 'сум'}`,
                               precision: 0,
-                            }
-                          ).format()
-                          : currency(lineItem.total * lineItem.quantity, {
-                            pattern: '# !',
-                            separator: ' ',
-                            decimal: '.',
-                            symbol: `${locale == 'uz' ? "so'm" : 'сум'}`,
-                            precision: 0,
-                          }).format()}
+                            }).format()}
                       </div>
                       {!readonlyItems.includes(lineItem.id) && (
                         <>
@@ -664,23 +686,23 @@ export default function Cart() {
                       <div className="text-xl mb-2">
                         {lineItem.child && lineItem.child.length
                           ? currency(
-                            (+lineItem.total + +lineItem.child[0].total) *
-                            lineItem.quantity,
-                            {
+                              (+lineItem.total + +lineItem.child[0].total) *
+                                lineItem.quantity,
+                              {
+                                pattern: '# !',
+                                separator: ' ',
+                                decimal: '.',
+                                symbol: `${locale == 'uz' ? "so'm" : 'сум'}`,
+                                precision: 0,
+                              }
+                            ).format()
+                          : currency(lineItem.total * lineItem.quantity, {
                               pattern: '# !',
                               separator: ' ',
                               decimal: '.',
                               symbol: `${locale == 'uz' ? "so'm" : 'сум'}`,
                               precision: 0,
-                            }
-                          ).format()
-                          : currency(lineItem.total * lineItem.quantity, {
-                            pattern: '# !',
-                            separator: ' ',
-                            decimal: '.',
-                            symbol: `${locale == 'uz' ? "so'm" : 'сум'}`,
-                            precision: 0,
-                          }).format()}
+                            }).format()}
                       </div>
                       {!readonlyItems.includes(lineItem.id) && (
                         <div className="w-20 h-6 bg-yellow rounded-full flex items-center text-white ml-auto">
@@ -723,7 +745,7 @@ export default function Cart() {
                             height="130"
                             alt={
                               item?.attribute_data?.name[channelName][
-                              locale || 'ru'
+                                locale || 'ru'
                               ]
                             }
                             className="transform motion-safe:group-hover:scale-105 transition duration-500"
@@ -735,7 +757,7 @@ export default function Cart() {
                             height="130"
                             alt={
                               item?.attribute_data?.name[channelName][
-                              locale || 'ru'
+                                locale || 'ru'
                               ]
                             }
                             className="rounded-full transform motion-safe:group-hover:scale-105 transition duration-500"
@@ -744,7 +766,7 @@ export default function Cart() {
                         <div className="text-lg leading-5 font-bold mb-3 md:h-12 h-16">
                           {
                             item?.attribute_data?.name[channelName][
-                            locale || 'ru'
+                              locale || 'ru'
                             ]
                           }
                         </div>
@@ -849,11 +871,11 @@ export default function Cart() {
         }
         /* the slides */
         .slick-slide {
-            margin: 0 5px;
+          margin: 0 5px;
         }
         /* the parent */
         .slick-list {
-            margin: 0 -10px;
+          margin: 0 -10px;
         }
       `}</style>
     </>
