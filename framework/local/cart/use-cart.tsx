@@ -31,6 +31,7 @@ export const handler: SWRHook<any> = {
           subtotalPrice: data.sub_total,
           totalPrice: data.total,
           discountTotal: data.discount_total,
+          discountValue: data.discount_value,
         }
       } else {
         return {
@@ -43,6 +44,7 @@ export const handler: SWRHook<any> = {
           subtotalPrice: 0,
           totalPrice: 0,
           discountTotal: 0,
+          discountValue: 0,
         }
       }
     } else {
@@ -56,6 +58,7 @@ export const handler: SWRHook<any> = {
         subtotalPrice: 0,
         totalPrice: 0,
         discountTotal: 0,
+        discountValue: 0,
       }
     }
   },

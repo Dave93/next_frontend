@@ -116,6 +116,7 @@ const SmallCart: FC<SmallCartProps> = ({ channelName }) => {
         subtotalPrice: basket.data.sub_total,
         totalPrice: basket.data.total,
         discountTotal: basket.data.discount_total,
+        discountValue: basket.data.discount_value,
       }
 
       await mutate(basketResult, false)
@@ -154,6 +155,7 @@ const SmallCart: FC<SmallCartProps> = ({ channelName }) => {
         subtotalPrice: basket.data.sub_total,
         totalPrice: basket.data.total,
         discountTotal: basket.data.discount_total,
+        discountValue: basket.data.discount_value,
       }
 
       await mutate(basketResult, false)
@@ -189,6 +191,7 @@ const SmallCart: FC<SmallCartProps> = ({ channelName }) => {
         subtotalPrice: basket.data.sub_total,
         totalPrice: basket.data.total,
         discountTotal: basket.data.discount_total,
+        discountValue: basket.data.discount_value,
       }
 
       await mutate(basketResult, false)
@@ -425,26 +428,28 @@ const SmallCart: FC<SmallCartProps> = ({ channelName }) => {
                       <div className="text-right flex-grow">
                         {lineItem.discount_value && (
                           <span className="text-xs line-through">
-                            {currency(
-                              lineItem.total + lineItem.discount_value,
-                              {
-                                pattern: '# !',
-                                separator: ' ',
-                                decimal: '.',
-                                symbol: `${locale == 'uz' ? "so'm" : 'сум'}`,
-                                precision: 0,
-                              }
-                            ).format()}
+                            {currency(lineItem.total, {
+                              pattern: '# !',
+                              separator: ' ',
+                              decimal: '.',
+                              symbol: `${locale == 'uz' ? "so'm" : 'сум'}`,
+                              precision: 0,
+                            }).format()}
                           </span>
                         )}
                         <div className=" text-sm">
-                          {currency(lineItem.total, {
-                            pattern: '# !',
-                            separator: ' ',
-                            decimal: '.',
-                            symbol: `${locale == 'uz' ? "so'm" : 'сум'}`,
-                            precision: 0,
-                          }).format()}
+                          {currency(
+                            lineItem.discount_value > 0
+                              ? lineItem.total - lineItem.discount_value
+                              : lineItem.total,
+                            {
+                              pattern: '# !',
+                              separator: ' ',
+                              decimal: '.',
+                              symbol: `${locale == 'uz' ? "so'm" : 'сум'}`,
+                              precision: 0,
+                            }
+                          ).format()}
                         </div>
                       </div>
                     </div>
@@ -459,7 +464,7 @@ const SmallCart: FC<SmallCartProps> = ({ channelName }) => {
               {tr('basket_order_price')}
             </div>
             <div>
-              {data.discountTotal > 0 && (
+              {data.discountValue > 0 && (
                 <span className="text-xs line-through font-bold text-gray-500">
                   {currency(data.discountTotal, {
                     pattern: '# !',

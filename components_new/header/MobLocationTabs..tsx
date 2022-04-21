@@ -686,6 +686,7 @@ const MobLocationTabs: FC = () => {
       subtotalPrice: basket.data.sub_total,
       totalPrice: basket.data.total,
       discountTotal: basket.data.discount_total,
+      discountValue: basket.data.discount_value,
     }
 
     await mutate(basketResult, false)
@@ -727,6 +728,7 @@ const MobLocationTabs: FC = () => {
       subtotalPrice: basket.data.sub_total,
       totalPrice: basket.data.total,
       discountTotal: basket.data.discount_total,
+      discountValue: basket.data.discount_value,
     }
 
     await mutate(basketResult, false)

@@ -192,6 +192,7 @@ export default function Cart() {
         subtotalPrice: basket.data.sub_total,
         totalPrice: basket.data.total,
         discountTotal: basket.data.discount_total,
+        discountValue: basket.data.discount_value,
       }
 
       await mutate(basketResult, false)
@@ -260,6 +261,7 @@ export default function Cart() {
         subtotalPrice: basket.data.sub_total,
         totalPrice: basket.data.total,
         discountTotal: basket.data.discount_total,
+        discountValue: basket.data.discount_value,
       }
 
       await mutate(basketResult, false)
@@ -313,6 +315,7 @@ export default function Cart() {
         subtotalPrice: basketData.data.sub_total,
         totalPrice: basketData.data.total,
         discountTotal: basketData.data.discount_total,
+        discountValue: basketData.data.discount_value,
       }
     } else {
       let additionalQuery = ''
@@ -350,6 +353,7 @@ export default function Cart() {
         subtotalPrice: basketData.data.sub_total,
         totalPrice: basketData.data.total,
         discountTotal: basketData.data.discount_total,
+        discountValue: basketData.data.discount_value,
       }
     }
 

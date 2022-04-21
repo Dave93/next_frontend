@@ -320,6 +320,8 @@ const ProductItemNew: FC<ProductItem> = ({ product, channelName }) => {
         lineItemsSubtotalPrice: basketData.data.sub_total,
         subtotalPrice: basketData.data.sub_total,
         totalPrice: basketData.data.total,
+        discountTotal: basketData.data.discount_total,
+        discountValue: basketData.data.discount_value,
       }
     }
 

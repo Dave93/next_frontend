@@ -915,6 +915,7 @@ const Orders: FC<OrdersProps> = ({ channelName }: { channelName: any }) => {
         subtotalPrice: 0,
         totalPrice: 0,
         discountTotal: 0,
+        discountValue: 0,
       }
       await mutate(basketData, false)
       const orderHashids = new Hashids(

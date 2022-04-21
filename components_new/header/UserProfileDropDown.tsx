@@ -49,6 +49,7 @@ const UserProfileDropDown: FC<UserProfileDropdownProps> = ({
       subtotalPrice: 0,
       totalPrice: 0,
       discountTotal: 0,
+      discountValue: 0,
     }
     await mutate(basketData, false)
     setUserData(null)
