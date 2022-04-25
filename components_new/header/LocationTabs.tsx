@@ -674,23 +674,26 @@ const LocationTabs: FC = () => {
       }
     }
 
-    let { data: basket } = await axios.get(
-      `${webAddress}/api/baskets/${cartId}`
-    )
-    const basketResult = {
-      id: basket.data.id,
-      createdAt: '',
-      currency: { code: basket.data.currency },
-      taxesIncluded: basket.data.tax_total,
-      lineItems: basket.data.lines,
-      lineItemsSubtotalPrice: basket.data.sub_total,
-      subtotalPrice: basket.data.sub_total,
-      totalPrice: basket.data.total,
-      discountTotal: basket.data.discount_total,
-      discountValue: basket.data.discount_value,
-    }
+    if (cartId) {
+      let { data: basket } = await axios.get(
+        `${webAddress}/api/baskets/${cartId}`
+      )
+      const basketResult = {
+        id: basket.data.id,
+        createdAt: '',
+        currency: { code: basket.data.currency },
+        taxesIncluded: basket.data.tax_total,
+        lineItems: basket.data.lines,
+        lineItemsSubtotalPrice: basket.data.sub_total,
+        subtotalPrice: basket.data.sub_total,
+        totalPrice: basket.data.total,
+        discountTotal: basket.data.discount_total,
+        discountValue: basket.data.discount_value,
+      }
 
-    await mutate(basketResult, false)
+      await mutate(basketResult, false)
+
+    }
   }
 
   const loadPolygonsToMap = (ymaps: any) => {
@@ -777,23 +780,25 @@ const LocationTabs: FC = () => {
     } else {
       setStopProducts(terminalStock.data)
     }
-    let { data: basket } = await axios.get(
-      `${webAddress}/api/baskets/${cartId}?delivery_type=pickup`
-    )
-    const basketResult = {
-      id: basket.data.id,
-      createdAt: '',
-      currency: { code: basket.data.currency },
-      taxesIncluded: basket.data.tax_total,
-      lineItems: basket.data.lines,
-      lineItemsSubtotalPrice: basket.data.sub_total,
-      subtotalPrice: basket.data.sub_total,
-      totalPrice: basket.data.total,
-      discountTotal: basket.data.discount_total,
-      discountValue: basket.data.discount_value,
-    }
+    if (cartId) {
+      let { data: basket } = await axios.get(
+        `${webAddress}/api/baskets/${cartId}?delivery_type=pickup`
+      )
+      const basketResult = {
+        id: basket.data.id,
+        createdAt: '',
+        currency: { code: basket.data.currency },
+        taxesIncluded: basket.data.tax_total,
+        lineItems: basket.data.lines,
+        lineItemsSubtotalPrice: basket.data.sub_total,
+        subtotalPrice: basket.data.sub_total,
+        totalPrice: basket.data.total,
+        discountTotal: basket.data.discount_total,
+        discountValue: basket.data.discount_value,
+      }
 
-    await mutate(basketResult, false)
+      await mutate(basketResult, false)
+    }
     setLocationTabsClosable(false)
     closeLocationTabs()
   }
