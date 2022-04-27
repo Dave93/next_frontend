@@ -653,8 +653,7 @@ export default function Cart() {
                       <div className="text-xl">
                         {lineItem.child && lineItem.child.length
                           ? currency(
-                              (+lineItem.total + +lineItem.child[0].total) *
-                                lineItem.quantity,
+                              +lineItem.total + +lineItem.child[0].total,
                               {
                                 pattern: '# !',
                                 separator: ' ',
@@ -690,8 +689,7 @@ export default function Cart() {
                       <div className="text-xl mb-2">
                         {lineItem.child && lineItem.child.length
                           ? currency(
-                              (+lineItem.total + +lineItem.child[0].total) *
-                                lineItem.quantity,
+                              +lineItem.total + +lineItem.child[0].total,
                               {
                                 pattern: '# !',
                                 separator: ' ',
