@@ -1087,10 +1087,7 @@ const Orders: FC<OrdersProps> = ({ channelName }: { channelName: any }) => {
     if (!isEmpty) {
       data.lineItems.map((lineItem: any) => {
         if (!stopProducts.includes(lineItem.variant.product_id)) {
-          total +=
-            lineItem.child && lineItem.child.length
-              ? (+lineItem.total + +lineItem.child[0].total) * lineItem.quantity
-              : lineItem.total * lineItem.quantity
+          total += lineItem.total * lineItem.quantity
         }
       })
     }
@@ -2118,23 +2115,14 @@ const Orders: FC<OrdersProps> = ({ channelName }: { channelName: any }) => {
                   isProductInStop.includes(lineItem.id) ? 'opacity-25' : ''
                 } md:text-xl text-base`}
               >
-                {lineItem.child && lineItem.child.length
-                  ? (lineItem.total > 0 ? lineItem.quantity + ' X ' : '') +
-                    currency(+lineItem.total + +lineItem.child[0].total, {
-                      pattern: '# !',
-                      separator: ' ',
-                      decimal: '.',
-                      symbol: `${locale == 'uz' ? "so'm" : 'сум'}`,
-                      precision: 0,
-                    }).format()
-                  : (lineItem.total > 0 ? lineItem.quantity + ' X ' : '') +
-                    currency(lineItem.total * lineItem.quantity, {
-                      pattern: '# !',
-                      separator: ' ',
-                      decimal: '.',
-                      symbol: `${locale == 'uz' ? "so'm" : 'сум'}`,
-                      precision: 0,
-                    }).format()}
+                {(lineItem.total > 0 ? lineItem.quantity + ' X ' : '') +
+                  currency(lineItem.total * lineItem.quantity, {
+                    pattern: '# !',
+                    separator: ' ',
+                    decimal: '.',
+                    symbol: `${locale == 'uz' ? "so'm" : 'сум'}`,
+                    precision: 0,
+                  }).format()}
               </div>
             </div>
           ))}
