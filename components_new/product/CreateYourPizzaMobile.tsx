@@ -310,6 +310,7 @@ const CreateYourPizza: FC<CreatePizzaProps> = ({ sec, channelName }) => {
       res.beforePrice = 0
 
       if (
+        locationData &&
         configData.discount_end_date &&
         locationData.deliveryType == 'pickup' &&
         locationData.terminal_id &&
