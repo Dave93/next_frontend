@@ -651,24 +651,13 @@ export default function Cart() {
                         </div>
                       )}
                       <div className="text-xl">
-                        {lineItem.child && lineItem.child.length
-                          ? currency(
-                              +lineItem.total + +lineItem.child[0].total,
-                              {
-                                pattern: '# !',
-                                separator: ' ',
-                                decimal: '.',
-                                symbol: `${locale == 'uz' ? "so'm" : 'сум'}`,
-                                precision: 0,
-                              }
-                            ).format()
-                          : currency(lineItem.total * lineItem.quantity, {
-                              pattern: '# !',
-                              separator: ' ',
-                              decimal: '.',
-                              symbol: `${locale == 'uz' ? "so'm" : 'сум'}`,
-                              precision: 0,
-                            }).format()}
+                        {currency(lineItem.total * lineItem.quantity, {
+                          pattern: '# !',
+                          separator: ' ',
+                          decimal: '.',
+                          symbol: `${locale == 'uz' ? "so'm" : 'сум'}`,
+                          precision: 0,
+                        }).format()}
                       </div>
                       {!readonlyItems.includes(lineItem.id) && (
                         <>
@@ -687,24 +676,13 @@ export default function Cart() {
                         />
                       )}
                       <div className="text-xl mb-2">
-                        {lineItem.child && lineItem.child.length
-                          ? currency(
-                              +lineItem.total + +lineItem.child[0].total,
-                              {
-                                pattern: '# !',
-                                separator: ' ',
-                                decimal: '.',
-                                symbol: `${locale == 'uz' ? "so'm" : 'сум'}`,
-                                precision: 0,
-                              }
-                            ).format()
-                          : currency(lineItem.total * lineItem.quantity, {
-                              pattern: '# !',
-                              separator: ' ',
-                              decimal: '.',
-                              symbol: `${locale == 'uz' ? "so'm" : 'сум'}`,
-                              precision: 0,
-                            }).format()}
+                        {currency(lineItem.total * lineItem.quantity, {
+                          pattern: '# !',
+                          separator: ' ',
+                          decimal: '.',
+                          symbol: `${locale == 'uz' ? "so'm" : 'сум'}`,
+                          precision: 0,
+                        }).format()}
                       </div>
                       {!readonlyItems.includes(lineItem.id) && (
                         <div className="w-20 h-6 bg-yellow rounded-full flex items-center text-white ml-auto">
