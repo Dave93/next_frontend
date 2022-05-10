@@ -45,7 +45,7 @@ import { DateTime } from 'luxon'
 import Cookies from 'js-cookie'
 import getAddressList from '@lib/load_addreses'
 import { Address } from '@commerce/types/address'
-import { XIcon } from '@heroicons/react/outline'
+import { XIcon, PlusIcon, BookmarkIcon } from '@heroicons/react/outline'
 import useCart from '@framework/cart/use-cart'
 
 const { publicRuntimeConfig } = getConfig()
@@ -654,23 +654,25 @@ const LocationTabs: FC = () => {
           }
         )
       } else {
-        await setCredentials()
-        const { data: addressData } = await axios.post(
-          `${webAddress}/api/address/new`,
-          {
-            ...data,
-            lat: locationData.location[0],
-            lon: locationData.location[1],
-            addressId: undefined,
-          },
-          {
-            headers: {
-              Authorization: `Bearer ${otpToken}`,
+        if (locationData.location[0] && locationData.location[1]) {
+          await setCredentials()
+          const { data: addressData } = await axios.post(
+            `${webAddress}/api/address/new`,
+            {
+              ...data,
+              lat: locationData.location[0],
+              lon: locationData.location[1],
+              addressId: undefined,
             },
-          }
-        )
+            {
+              headers: {
+                Authorization: `Bearer ${otpToken}`,
+              },
+            }
+          )
 
-        setAddressId(addressData.data.id)
+          setAddressId(addressData.data.id)
+        }
       }
     }
 
@@ -692,7 +694,6 @@ const LocationTabs: FC = () => {
       }
 
       await mutate(basketResult, false)
-
     }
   }
 
@@ -911,6 +912,29 @@ const LocationTabs: FC = () => {
     }
   }
 
+  const addNewAddress = async () => {
+    const newFields: any = {
+      ...getValues(),
+    }
+    newFields['address'] = null
+    newFields['flat'] = null
+    newFields['house'] = null
+    newFields['entrance'] = null
+    newFields['door_code'] = null
+    newFields['label'] = null
+    newFields['addressId'] = null
+    setAddressId(null)
+    selectAddress({
+      locationData: {
+        location: [],
+        terminal_id: undefined,
+        terminalData: undefined,
+      },
+      addressId: null,
+    })
+    reset(newFields)
+  }
+
   return (
     <>
       <div className="bg-gray-100 flex rounded-full w-full">
@@ -990,7 +1014,7 @@ const LocationTabs: FC = () => {
                   apikey: yandexGeoKey,
                 }}
               >
-                <div>
+                <div className="relative">
                   <Map
                     state={mapState}
                     onLoad={(ymaps: any) => loadPolygonsToMap(ymaps)}
@@ -1005,6 +1029,10 @@ const LocationTabs: FC = () => {
                       'geoQuery',
                     ]}
                   >
+                    <span className="flex absolute h-3 w-3 left-1 top-1 z-10">
+                      <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-yellow opacity-75"></span>
+                      <span className="relative inline-flex rounded-full h-3 w-3 bg-yellow"></span>
+                    </span>
                     {selectedCoordinates.map((item: any, index: number) => (
                       <Placemark
                         modules={['geoObject.addon.balloon']}
@@ -1034,23 +1062,48 @@ const LocationTabs: FC = () => {
                 {tr('profile_address')}
               </div>
               <div className="mt-2">
-                <div className="grid grid-cols-3 gap-1 md:gap-2 md:grid-cols-4 max-h-28 overflow-y-auto">
+                <div className="grid md:grid-cols-2 grid-cols-1 gap-1">
+                  <div
+                    className="w-max flex items-center cursor-pointer rounded-full bg-gray-100 px-4 py-2"
+                    onClick={() => addNewAddress()}
+                  >
+                    <PlusIcon className="h-5 text-gray-400 w-5  hover:text-yellow-light mr-2" />
+                    <div className=" ">{tr('add_new_address')}</div>
+                  </div>
                   {addressList.map((item: Address) => (
                     <div
                       key={item.id}
-                      className={`px-2 py-1 truncate rounded-full cursor-pointer relative pr-7 ${
+                      className={`px-4 py-1 rounded-full cursor-pointer relative pr-6 capitalize flex items-center ${
                         addressId == item.id
                           ? 'bg-primary text-white'
                           : 'bg-gray-100'
                       }`}
                       onClick={() => selectAddressLocal(item)}
                     >
-                      {item.label ? item.label : item.address}
+                      <div className="">
+                        <BookmarkIcon
+                          className={`h-5  w-5  hover:text-yellow-light mr-2 ${
+                            addressId == item.id
+                              ? ' text-white'
+                              : 'text-gray-400'
+                          }`}
+                        />
+                      </div>
+                      <div className="">
+                        <div>{item.label ? item.label : item.address}</div>
+                        <div
+                          className={`text-sm  ${
+                            addressId == item.id ? ' text-white' : ''
+                          }`}
+                        >
+                          {item.label && item.address}
+                        </div>
+                      </div>
                       <button
                         className="absolute focus:outline-none inset-y-0 outline-none right-2 text-gray-400"
                         onClick={() => deleteAddress(item.id)}
                       >
-                        <XIcon className="cursor-pointer h-5 text-gray-400 w-5  hover:text-yellow-light" />
+                        <XIcon className="cursor-pointer h-5 text-gray-400 w-5" />
                       </button>
                     </div>
                   ))}

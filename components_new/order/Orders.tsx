@@ -1337,7 +1337,7 @@ const Orders: FC<OrdersProps> = ({ channelName }: { channelName: any }) => {
                   {tr('profile_address')}
                 </div>
                 <div className="mt-2">
-                  <div className="grid grid-cols-3 gap-1 md:gap-2 md:grid-cols-4 max-h-28 overflow-y-auto">
+                  <div className="grid grid-cols-1 gap-1 md:gap-2 md:grid-cols-2 max-h-28 overflow-y-auto">
                     {addressList.map((item: Address) => (
                       <div
                         key={item.id}
