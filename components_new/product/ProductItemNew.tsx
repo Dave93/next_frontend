@@ -413,6 +413,7 @@ const ProductItemNew: FC<ProductItem> = ({ product, channelName }) => {
     }
 
     if (
+      locationData &&
       configData.discount_end_date &&
       locationData.deliveryType == 'pickup' &&
       locationData.terminal_id &&
@@ -465,6 +466,7 @@ const ProductItemNew: FC<ProductItem> = ({ product, channelName }) => {
       if (activeValue) price += parseInt(activeValue.price, 0)
     }
     if (
+      locationData &&
       configData.discount_end_date &&
       locationData.deliveryType == 'pickup' &&
       locationData.terminal_id &&
@@ -495,6 +497,7 @@ const ProductItemNew: FC<ProductItem> = ({ product, channelName }) => {
     }
 
     if (
+      locationData &&
       configData.discount_end_date &&
       locationData.deliveryType == 'pickup' &&
       locationData.terminal_id &&
