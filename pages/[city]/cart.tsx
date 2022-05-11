@@ -676,7 +676,7 @@ export default function Cart() {
                         />
                       )}
                       <div className="text-xl mb-2">
-                        {currency(lineItem.total * lineItem.quantity, {
+                        {currency(lineItem.total, {
                           pattern: '# !',
                           separator: ' ',
                           decimal: '.',
