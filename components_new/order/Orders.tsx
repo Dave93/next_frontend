@@ -1,4 +1,4 @@
-import { XIcon } from '@heroicons/react/outline'
+import { XIcon, PlusIcon, BookmarkIcon } from '@heroicons/react/outline'
 import { useForm, Controller } from 'react-hook-form'
 import useTranslation from 'next-translate/useTranslation'
 import { useUI } from '@components/ui/context'
@@ -1101,6 +1101,29 @@ const Orders: FC<OrdersProps> = ({ channelName }: { channelName: any }) => {
     )
   }
 
+  const addNewAddress = async () => {
+    const newFields: any = {
+      ...getValues(),
+    }
+    newFields['address'] = null
+    newFields['flat'] = null
+    newFields['house'] = null
+    newFields['entrance'] = null
+    newFields['door_code'] = null
+    newFields['label'] = null
+    newFields['addressId'] = null
+    setAddressId(null)
+    selectAddress({
+      locationData: {
+        location: [],
+        terminal_id: undefined,
+        terminalData: undefined,
+      },
+      addressId: null,
+    })
+    reset(newFields)
+  }
+
   return (
     <div className="mx-5 md:mx-0 pt-1 md:pt-0 pb-1">
       {/* Contacts */}
@@ -1285,7 +1308,7 @@ const Orders: FC<OrdersProps> = ({ channelName }: { channelName: any }) => {
                     apikey: yandexGeoKey,
                   }}
                 >
-                  <div>
+                  <div className="relative">
                     <Map
                       state={mapState}
                       onLoad={(ymaps: any) => loadPolygonsToMap(ymaps)}
@@ -1300,6 +1323,10 @@ const Orders: FC<OrdersProps> = ({ channelName }: { channelName: any }) => {
                         'geoQuery',
                       ]}
                     >
+                      <span className="flex absolute h-3 w-3 left-1 top-1 z-10">
+                        <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-yellow opacity-75"></span>
+                        <span className="relative inline-flex rounded-full h-3 w-3 bg-yellow"></span>
+                      </span>
                       {selectedCoordinates.map((item: any, index: number) => (
                         <Placemark
                           modules={['geoObject.addon.balloon']}
@@ -1329,23 +1356,48 @@ const Orders: FC<OrdersProps> = ({ channelName }: { channelName: any }) => {
                   {tr('profile_address')}
                 </div>
                 <div className="mt-2">
-                  <div className="grid grid-cols-1 gap-1 md:gap-2 md:grid-cols-2 max-h-28 overflow-y-auto">
+                  <div className="grid md:grid-cols-2 grid-cols-1 gap-1">
+                    <div
+                      className="w-max flex items-center cursor-pointer rounded-full bg-gray-100 px-4 py-2"
+                      onClick={() => addNewAddress()}
+                    >
+                      <PlusIcon className="h-5 text-gray-400 w-5  hover:text-yellow-light mr-2" />
+                      <div className=" ">{tr('add_new_address')}</div>
+                    </div>
                     {addressList.map((item: Address) => (
                       <div
                         key={item.id}
-                        className={`px-2 py-1 truncate rounded-full cursor-pointer relative pr-7 ${
+                        className={`px-4 py-1 rounded-full cursor-pointer relative pr-6 capitalize flex items-center ${
                           addressId == item.id
                             ? 'bg-primary text-white'
                             : 'bg-gray-100'
                         }`}
                         onClick={() => selectAddressLocal(item)}
                       >
-                        {item.label ? item.label : item.address}
+                        <div className="">
+                          <BookmarkIcon
+                            className={`h-5  w-5  hover:text-yellow-light mr-2 ${
+                              addressId == item.id
+                                ? ' text-white'
+                                : 'text-gray-400'
+                            }`}
+                          />
+                        </div>
+                        <div className="">
+                          <div>{item.label ? item.label : item.address}</div>
+                          <div
+                            className={`text-sm  ${
+                              addressId == item.id ? ' text-white' : ''
+                            }`}
+                          >
+                            {item.label && item.address}
+                          </div>
+                        </div>
                         <button
                           className="absolute focus:outline-none inset-y-0 outline-none right-2 text-gray-400"
                           onClick={() => deleteAddress(item.id)}
                         >
-                          <XIcon className="cursor-pointer h-5 text-gray-400 w-5  hover:text-yellow-light" />
+                          <XIcon className="cursor-pointer h-5 text-gray-400 w-5" />
                         </button>
                       </div>
                     ))}
@@ -1534,7 +1586,7 @@ const Orders: FC<OrdersProps> = ({ channelName }: { channelName: any }) => {
                 {locationData?.terminalData && (
                   <div className="md:mt-3 flex space-x-2 items-center">
                     <LocationMarkerIcon className="w-5 h-5" />
-                    <div className="font-bold">
+                    <div className="font-bold mt-2">
                       {tr('nearest_filial', {
                         filialName: locationData?.terminalData.name,
                       })}
