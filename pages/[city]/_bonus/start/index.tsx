@@ -55,7 +55,6 @@ export async function getServerSideProps({
       },
     })
 
-    console.log(data)
     isBonusListSuccess = data.success
     if (!data.success) {
       errorMessage = data.message

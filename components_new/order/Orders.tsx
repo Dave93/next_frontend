@@ -925,10 +925,6 @@ const Orders: FC<OrdersProps> = ({ channelName }: { channelName: any }) => {
       )
       router.push(`/${activeCity.slug}/order/${data.order.id}`)
       setTimeout(() => {
-        console.log({
-          id: orderHashids.decode(data.order.id),
-          sum: data.order?.order_total / 100,
-        })
         ;(window.b24order = window.b24order || []).push({
           id: orderHashids.decode(data.order.id)[0],
           sum: data.order?.order_total / 100,
@@ -1087,11 +1083,10 @@ const Orders: FC<OrdersProps> = ({ channelName }: { channelName: any }) => {
     if (!isEmpty) {
       data.lineItems.map((lineItem: any) => {
         if (!stopProducts.includes(lineItem.variant.product_id)) {
-          total += lineItem.total * lineItem.quantity
+          total += lineItem.total
         }
       })
     }
-    console.log(total)
     return total
   }, [stopProducts, data])
 
@@ -2116,7 +2111,7 @@ const Orders: FC<OrdersProps> = ({ channelName }: { channelName: any }) => {
                 } md:text-xl text-base`}
               >
                 {(lineItem.total > 0 ? lineItem.quantity + ' X ' : '') +
-                  currency(lineItem.total * lineItem.quantity, {
+                  currency(lineItem.total, {
                     pattern: '# !',
                     separator: ' ',
                     decimal: '.',

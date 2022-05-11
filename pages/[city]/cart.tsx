@@ -651,7 +651,7 @@ export default function Cart() {
                         </div>
                       )}
                       <div className="text-xl">
-                        {currency(lineItem.total * lineItem.quantity, {
+                        {currency(lineItem.total, {
                           pattern: '# !',
                           separator: ' ',
                           decimal: '.',
@@ -787,6 +787,7 @@ export default function Cart() {
                   </button>
                 </form>
               </div> */}
+
               <div className="flex font-bold items-center justify-between mt-10 md:justify-end">
                 <div className="text-lg text-gray-400">
                   {tr('basket_order_price')}

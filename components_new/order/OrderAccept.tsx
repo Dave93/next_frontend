@@ -112,7 +112,6 @@ const OrderAccept: FC<OrderDetailProps> = ({ order, orderStatuses }) => {
 
   return (
     <div>
-      {console.log(order)}
       <div className="md:p-10 p-5 rounded-2xl text-xl mt-5 bg-white">
         <div className=" flex justify-between items-center">
           <div>
@@ -276,17 +275,15 @@ const OrderAccept: FC<OrderDetailProps> = ({ order, orderStatuses }) => {
             <div>
               {pizza.child && pizza.child.length
                 ? (pizza.total > 0 ? pizza.quantity + ' X ' : '') +
-                  currency(
-                    (+pizza.total + +pizza.child[0].total),
-                    {
-                      pattern: '# !',
-                      separator: ' ',
-                      decimal: '.',
-                      symbol: 'сум',
-                      precision: 0,
-                    }
-                  ).format()
-                : (pizza.total > 0 ? pizza.quantity + ' X ' : '') + currency(pizza.total * pizza.quantity, {
+                  currency(+pizza.total + +pizza.child[0].total, {
+                    pattern: '# !',
+                    separator: ' ',
+                    decimal: '.',
+                    symbol: 'сум',
+                    precision: 0,
+                  }).format()
+                : (pizza.total > 0 ? pizza.quantity + ' X ' : '') +
+                  currency(pizza.total * pizza.quantity, {
                     pattern: '# !',
                     separator: ' ',
                     decimal: '.',
