@@ -257,8 +257,6 @@ const SmallCart: FC<SmallCartProps> = ({ channelName }) => {
     return
   }, [locationData])
 
-  console.log(data)
-
   return (
     <div className="mt-2 rounded-[15px] bg-white ">
       <div className="border border-yellow px-5 py-7 rounded-[15px] relative">

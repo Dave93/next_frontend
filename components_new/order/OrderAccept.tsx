@@ -363,7 +363,7 @@ const OrderAccept: FC<OrderDetailProps> = ({ order, orderStatuses }) => {
           </button> */}
           <button
             className="text-xl text-white bg-yellow flex h-12 items-center justify-evenly rounded-full md:w-80 w-full"
-            onClick={() => router.push(`/${activeCity}`)}
+            onClick={() => router.push(`/${activeCity.slug}`)}
           >
             <div>{tr('to_main')}</div>
             <img src="/right.png" />
