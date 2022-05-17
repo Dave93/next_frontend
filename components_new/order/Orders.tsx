@@ -162,6 +162,7 @@ const Orders: FC<OrdersProps> = ({ channelName }: { channelName: any }) => {
   const downshiftControl = useRef<any>(null)
   const map = useRef<any>(null)
   const [ymaps, setYmaps] = useState<any>(null)
+  const [cutlery, setCutlery] = useState('Y')
   const objects = useRef<any>(null)
   const { data, isLoading, isEmpty, mutate } = useCart({
     cartId,
@@ -748,6 +749,10 @@ const Orders: FC<OrdersProps> = ({ channelName }: { channelName: any }) => {
   const prepareOrder = async () => {
     setIsSavingOrder(true)
     await setCredentials()
+    let sourceType = 'web'
+    if (window.innerWidth < 768) {
+      sourceType = 'mobile_web'
+    }
     try {
       const { data } = await axios.post(`${webAddress}/api/orders/prepare`, {
         formData: {
@@ -756,6 +761,8 @@ const Orders: FC<OrdersProps> = ({ channelName }: { channelName: any }) => {
           pay_type: payType,
           sms_sub: sms,
           email_sub: newsletter,
+          sourceType,
+          need_napkins: cutlery == 'Y',
         },
         basket_id: cartId,
       })
@@ -782,6 +789,10 @@ const Orders: FC<OrdersProps> = ({ channelName }: { channelName: any }) => {
       })
       setIsSavingOrder(false)
     }
+  }
+
+  const cutleryHandler = (e: any) => {
+    setCutlery(e.target.value)
   }
 
   const loadPolygonsToMap = (ymaps: any) => {
@@ -887,6 +898,7 @@ const Orders: FC<OrdersProps> = ({ channelName }: { channelName: any }) => {
             sms_sub: sms,
             email_sub: newsletter,
             sourceType,
+            need_napkins: cutlery == 'Y',
           },
           code: otpCode,
           basket_id: cartId,
@@ -2191,6 +2203,36 @@ const Orders: FC<OrdersProps> = ({ channelName }: { channelName: any }) => {
             </div>
           </div>
         )}
+        <div className="flex items-center border-b py-2 text-2xl">
+          <div className="font-bold">{tr('cutlery_and_napkins')}</div>
+          <label htmlFor="N" className="ml-12">
+            <div className="font-bold mx-2">{tr('no')}</div>
+          </label>
+          <input
+            type="radio"
+            value={'N'}
+            checked={cutlery === 'N'}
+            className={` ${
+              cutlery ? 'text-primary' : 'bg-gray-200'
+            } border-2 border-primary form-checkbox rounded-md text-primary outline-none focus:outline-none active:outline-none focus:border-primary`}
+            onChange={cutleryHandler}
+            id="N"
+          />
+
+          <label htmlFor="Y">
+            <div className="font-bold mx-2">{tr('yes')}</div>
+          </label>
+          <input
+            type="radio"
+            value={'Y'}
+            checked={cutlery === 'Y'}
+            className={` ${
+              cutlery ? 'text-primary' : 'bg-gray-200'
+            } border-2 border-primary form-checkbox rounded-md text-primary outline-none focus:outline-none active:outline-none focus:border-primary`}
+            onChange={cutleryHandler}
+            id="Y"
+          />
+        </div>
       </div>
       <div className="w-full bg-white mb-5 rounded-2xl p-10">
         <div className="md:flex">
