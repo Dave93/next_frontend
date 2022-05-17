@@ -2185,24 +2185,6 @@ const Orders: FC<OrdersProps> = ({ channelName }: { channelName: any }) => {
               </div>
             </div>
           ))}
-        {!isEmpty && (
-          <div className="flex justify-between items-center mt-8">
-            <div>
-              <div className="font-bold text-xl mb-2">
-                {tr('basket_order_price')}
-              </div>
-            </div>
-            <div className="text-2xl font-bold">
-              {currency(totalPrice, {
-                pattern: '# !',
-                separator: ' ',
-                decimal: '.',
-                symbol: `${locale == 'uz' ? "so'm" : 'сум'}`,
-                precision: 0,
-              }).format()}
-            </div>
-          </div>
-        )}
         <div className="flex items-center border-b py-2 text-2xl">
           <div className="font-bold">{tr('cutlery_and_napkins')}</div>
           <label htmlFor="N" className="ml-12">
@@ -2233,6 +2215,24 @@ const Orders: FC<OrdersProps> = ({ channelName }: { channelName: any }) => {
             id="Y"
           />
         </div>
+        {!isEmpty && (
+          <div className="flex justify-between items-center mt-8">
+            <div>
+              <div className="font-bold text-xl mb-2">
+                {tr('basket_order_price')}
+              </div>
+            </div>
+            <div className="text-2xl font-bold">
+              {currency(totalPrice, {
+                pattern: '# !',
+                separator: ' ',
+                decimal: '.',
+                symbol: `${locale == 'uz' ? "so'm" : 'сум'}`,
+                precision: 0,
+              }).format()}
+            </div>
+          </div>
+        )}
       </div>
       <div className="w-full bg-white mb-5 rounded-2xl p-10">
         <div className="md:flex">
