@@ -1420,7 +1420,7 @@ const Orders: FC<OrdersProps> = ({ channelName }: { channelName: any }) => {
             <div className="mt-3">
               <form onSubmit={handleSubmit(onSubmit)}>
                 <div className="font-bold text-lg">{tr('address')}</div>
-                <div className="mt-3 space-y-6">
+                <div className="mt-3 space-y-2">
                   <div className="md:flex justify-between md:w-full space-y-2 md:space-y-0 md:space-x-2 space-x-0">
                     <Downshift
                       onChange={(selection) => setSelectedAddress(selection)}
@@ -1534,14 +1534,14 @@ const Orders: FC<OrdersProps> = ({ channelName }: { channelName: any }) => {
                         className="bg-gray-100 px-8 py-3 rounded-full w-full outline-none focus:outline-none"
                       />
                     </div>
-                    <div className="flex">
-                      <input
-                        type="text"
-                        {...register('label')}
-                        placeholder={tr('address_label')}
-                        className="bg-gray-100 px-8 py-3 rounded-full w-full outline-none focus:outline-none"
-                      />
-                    </div>
+                  </div>
+                  <div className="flex">
+                    <input
+                      type="text"
+                      {...register('label')}
+                      placeholder={tr('address_label')}
+                      className="bg-gray-100 px-8 py-3 rounded-full w-full outline-none focus:outline-none"
+                    />
                   </div>
                 </div>
                 <div className="md:mt-5 flex items-end">
