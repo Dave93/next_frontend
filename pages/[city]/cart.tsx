@@ -398,8 +398,6 @@ export default function Cart() {
       data.lineItems.map((item: any) => {
         productIds.push(item.variant.product_id.toString())
       })
-      console.log(productIds)
-      console.log(data)
       setIsLoadingBiRecommendations(true)
       let queryString = objectToQueryString({
         productIds,
@@ -413,7 +411,6 @@ export default function Cart() {
       if (recommendations.relatedItems) {
         setBiRecommendations(recommendations)
       }
-      console.log(recommendations)
     }
     // setBiRecommendations(recommendations)
   }
