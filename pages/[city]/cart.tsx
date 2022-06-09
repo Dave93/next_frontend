@@ -76,6 +76,12 @@ axios.defaults.withCredentials = true
 export default function Cart() {
   const [channelName, setChannelName] = useState('chopar')
   const [recomendedItems, setRecomendedItems] = useState([])
+  const [biRecommendations, setBiRecommendations] = useState({
+    relatedItems: [],
+    topItems: [],
+  })
+  const [isLoadingBiRecommendations, setIsLoadingBiRecommendations] =
+    useState(false)
   const [defaultIndex, setDefaultIndex] = useState(1)
   const sliderRef = createRef<Flicking>()
 
@@ -361,6 +367,57 @@ export default function Cart() {
     fetchRecomendedItems()
   }
 
+  const objectToQueryString = (initialObj: Object) => {
+    const reducer =
+      (obj: any, parentPrefix = null) =>
+      (prev: any, key: any) => {
+        const val = obj[key]
+        key = encodeURIComponent(key)
+        const prefix = parentPrefix ? `${parentPrefix}[${key}]` : key
+
+        if (val == null || typeof val === 'function') {
+          prev.push(`${prefix}=`)
+          return prev
+        }
+
+        if (['number', 'boolean', 'string'].includes(typeof val)) {
+          prev.push(`${prefix}=${encodeURIComponent(val)}`)
+          return prev
+        }
+
+        prev.push(Object.keys(val).reduce(reducer(val, prefix), []).join('&'))
+        return prev
+      }
+
+    return Object.keys(initialObj).reduce(reducer(initialObj), []).join('&')
+  }
+
+  const loadBiRecommendations = async () => {
+    if (!isEmpty) {
+      let productIds: string[] = []
+      data.lineItems.map((item: any) => {
+        productIds.push(item.variant.product_id.toString())
+      })
+      console.log(productIds)
+      console.log(data)
+      setIsLoadingBiRecommendations(true)
+      let queryString = objectToQueryString({
+        productIds,
+      })
+      const {
+        data: { data: recommendations },
+      } = await axios.get(
+        `${webAddress}/api/baskets/bi_related/?${queryString}`
+      )
+      setIsLoadingBiRecommendations(false)
+      if (recommendations.relatedItems) {
+        setBiRecommendations(recommendations)
+      }
+      console.log(recommendations)
+    }
+    // setBiRecommendations(recommendations)
+  }
+
   const goToCheckout = (e: any) => {
     e.preventDefault()
     router.push(`/${activeCity.slug}/order/`)
@@ -406,6 +463,7 @@ export default function Cart() {
   useEffect(() => {
     fetchConfig()
     fetchRecomendedItems()
+    loadBiRecommendations()
     return
   }, [])
 
@@ -715,14 +773,76 @@ export default function Cart() {
                   .reverse()}
             </div>
           </div>
-          {recomendedItems.length > 0 && (
+          {biRecommendations.relatedItems.length > 0 && (
             <div className="md:p-10 p-5 md:rounded-2xl bg-white md:my-3">
               <div className="text-lg font-bold">
-                {tr('recomended_to_your_order')}
+                {tr('related_to_your_products')}
               </div>
               <div className="mt-5">
                 <Slider {...settings}>
-                  {recomendedItems.map((item: any) => (
+                  {biRecommendations.relatedItems.map((item: any) => (
+                    <div className="border border-gray-300 rounded-2xl md:px-5 px-1 py-2 text-center h-full flex flex-col">
+                      <div className="flex-grow flex items-center flex-col justify-center">
+                        {item.image ? (
+                          <img
+                            src={item.image}
+                            width="130"
+                            height="130"
+                            alt={
+                              item?.attribute_data?.name[channelName][
+                                locale || 'ru'
+                              ]
+                            }
+                            className="transform motion-safe:group-hover:scale-105 transition duration-500"
+                          />
+                        ) : (
+                          <img
+                            src="/no_photo.svg"
+                            width="130"
+                            height="130"
+                            alt={
+                              item?.attribute_data?.name[channelName][
+                                locale || 'ru'
+                              ]
+                            }
+                            className="rounded-full transform motion-safe:group-hover:scale-105 transition duration-500"
+                          />
+                        )}
+                        <div className="text-lg leading-5 font-bold mb-3 md:h-12 h-16">
+                          {
+                            item?.attribute_data?.name[channelName][
+                              locale || 'ru'
+                            ]
+                          }
+                        </div>
+                      </div>
+                      {/* <div className="text-sm text-gray-300 mb-4">
+                        Просто объедение!
+                      </div> */}
+                      <div
+                        className="rounded-full bg-yellow text-white font-normal cursor-pointer py-1"
+                        onClick={() => addToBasket(item.id)}
+                      >
+                        {currency(parseInt(item.price, 0) || 0, {
+                          pattern: '# !',
+                          separator: ' ',
+                          decimal: '.',
+                          symbol: `${locale == 'uz' ? "so'm" : 'сум'}`,
+                          precision: 0,
+                        }).format()}
+                      </div>
+                    </div>
+                  ))}
+                </Slider>
+              </div>
+            </div>
+          )}
+          {biRecommendations.topItems.length > 0 && (
+            <div className="md:p-10 p-5 md:rounded-2xl bg-white md:my-3">
+              <div className="text-lg font-bold">{tr('top_products')}</div>
+              <div className="mt-5">
+                <Slider {...settings}>
+                  {biRecommendations.topItems.map((item: any) => (
                     <div className="border border-gray-300 rounded-2xl md:px-5 px-1 py-2 text-center h-full flex flex-col">
                       <div className="flex-grow flex items-center flex-col justify-center">
                         {item.image ? (
