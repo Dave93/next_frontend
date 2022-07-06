@@ -443,7 +443,7 @@ const ProductItemNew: FC<ProductItem> = ({ product, channelName }) => {
     <>
       {isChoosingModifier ? (
         <div
-          className="gap-4 grid grid-cols-2 items-center bg-white justify-between relative md:flex md:flex-col px-6 py-4 rounded-[15px] shadow-lg"
+          className="items-center bg-white justify-between relative flex flex-col px-6 py-4 rounded-[15px] shadow-lg"
           id={`prod-${store.id}`}
         >
           {isLoadingBasket && (
@@ -479,52 +479,45 @@ const ProductItemNew: FC<ProductItem> = ({ product, channelName }) => {
           <div className="border-b border-yellow pb-3 text-center text-xl w-full">
             {tr('add')}
           </div>
-          <div className="max-h-96 overflow-y-auto">
-            <div className="flex-grow gap-3 grid grid-cols-2">
-              {modifiers &&
-                modifiers.map((mod: any) => (
-                  <div
-                    key={mod.id}
-                    className={`border ${
-                      activeModifiers.includes(mod.id)
-                        ? 'border-yellow'
-                        : 'border-gray-300'
-                    } flex flex-col justify-between overflow-hidden rounded-[15px] cursor-pointer`}
-                    onClick={() => addModifier(mod.id)}
-                  >
-                    <div className="flex-grow pt-2 px-2">
-                      {mod.assets.length ? (
-                        <img
-                          src={
-                            mod.assets[0].local
-                              ? mod.assets[0].local
-                              : `${webAddress}/storage/${mod.assets[0]?.location}/${mod.assets[0]?.filename}`
-                          }
-                          width={100}
-                          height={100}
-                          alt={mod.name}
-                          className="mx-auto"
-                        />
-                      ) : (
-                        <img
-                          src="/no_photo.svg"
-                          width={100}
-                          height={100}
-                          alt={mod.name}
-                          className="rounded-full mx-auto"
-                        />
-                      )}
-                    </div>
-                    <div className="text-center text-base w-20 m-auto">
-                      {locale == 'uz' ? mod.name_uz : mod.name}
-                    </div>
-                    <div
-                      className={`${
-                        activeModifiers.includes(mod.id)
-                          ? 'bg-yellow'
-                          : 'bg-gray-300'
-                      } font-bold py-2 text-center text-white text-xs`}
-                    >
+          <div className="max-h-96 overflow-y-auto py-5 space-y-2 w-full">
+            {modifiers &&
+              modifiers.map((mod: any) => (
+                <div
+                  key={mod.id}
+                  className={`border ${
+                    activeModifiers.includes(mod.id)
+                      ? 'border-yellow border-2 shadow-md'
+                      : 'border-gray-300'
+                  } flex items-center justify-between overflow-hidden rounded-[15px] cursor-pointer`}
+                  onClick={() => addModifier(mod.id)}
+                >
+                  <div className="px-2">
+                    {mod.assets.length ? (
+                      <img
+                        src={
+                          mod.assets[0].local
+                            ? mod.assets[0].local
+                            : `${webAddress}/storage/${mod.assets[0]?.location}/${mod.assets[0]?.filename}`
+                        }
+                        width={50}
+                        height={50}
+                        alt={mod.name}
+                        className="mx-auto"
+                      />
+                    ) : (
+                      <img
+                        src="/no_photo.svg"
+                        width={50}
+                        height={50}
+                        alt={mod.name}
+                        className="rounded-full mx-auto"
+                      />
+                    )}
+                  </div>
+                  <div className="text-center text-base m-auto">
+                    <div>{locale == 'uz' ? mod.name_uz : mod.name}</div>
+
+                    <div className={`font-bold text-center text-sm`}>
                       {currency(mod.price, {
                         pattern: '# !',
                         separator: ' ',
@@ -534,8 +527,8 @@ const ProductItemNew: FC<ProductItem> = ({ product, channelName }) => {
                       }).format()}
                     </div>
                   </div>
-                ))}
-            </div>
+                </div>
+              ))}
           </div>
           <div className="mx-auto">
             <button
