@@ -80,6 +80,7 @@
     "react-merge-refs": "^1.1.0",
     "react-otp-input": "^2.3.1",
     "react-phone-number-input": "^3.1.27",
+    "react-query": "^3.39.1",
     "react-scroll": "^1.8.2",
     "react-select": "^4.3.1",
     "react-toastify": "^7.0.4",
