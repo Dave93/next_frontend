@@ -14,6 +14,8 @@ import { ManagedUIContext } from '@components/ui/context'
 import { ToastContainer } from 'react-toastify'
 import { pwaTrackingListeners } from '../scripts/pwaEventlisteners'
 import FacebookPixel from '@components/common/FacebookPixel'
+import { QueryClient, QueryClientProvider } from 'react-query'
+import { YMInitializer } from 'react-yandex-metrika'
 
 const isBrowser = typeof window !== 'undefined'
 
@@ -21,6 +23,7 @@ if (isBrowser) {
   pwaTrackingListeners()
 }
 
+const queryClient = new QueryClient()
 const Noop: FC = ({ children }) => <>{children}</>
 
 export default function MyApp({ Component, pageProps }: AppProps) {
@@ -35,9 +38,11 @@ export default function MyApp({ Component, pageProps }: AppProps) {
       <Head />
       <FacebookPixel />
       <ManagedUIContext pageProps={pageProps}>
-        <Layout pageProps={pageProps}>
-          <Component {...pageProps} />
-        </Layout>
+        <QueryClientProvider client={queryClient}>
+          <Layout pageProps={pageProps}>
+            <Component {...pageProps} />
+          </Layout>
+        </QueryClientProvider>
       </ManagedUIContext>
       <ToastContainer />
       {/* <YMInitializer
