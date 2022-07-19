@@ -174,6 +174,12 @@ export default function Home({
   const readyProducts = useMemo(() => {
     return products
       .map((prod: any) => {
+        let existingCategory = categories.find((cat: any) => cat.id === prod.id)
+
+        if (!existingCategory) {
+          return null
+        }
+
         if (prod.half_mode) {
           return null
         }
