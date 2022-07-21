@@ -7,6 +7,8 @@ import '@assets/simplebar.css'
 import 'react-toastify/dist/ReactToastify.css'
 import '@egjs/flicking-plugins/dist/arrow.css'
 
+import '@components_new/header/DatePicker.css'
+
 import { FC, useEffect } from 'react'
 import type { AppProps } from 'next/app'
 import { Head } from '@components/common'

@@ -7,6 +7,7 @@ import OtpInput from 'react-otp-input'
 import axios from 'axios'
 import Cookies from 'js-cookie'
 import { useUI } from '@components/ui/context'
+import DatePicker from 'react-date-picker/dist/entry.nostyle'
 
 import styles from './SignInButton.module.css'
 import UserProfileDropDown from './UserProfileDropDown'
@@ -292,9 +293,9 @@ const SignInButton: FC = () => {
                   leaveFrom="opacity-100 scale-100"
                   leaveTo="opacity-0 scale-95"
                 >
-                  <div className="align-middle inline-block overflow-hidden w-full z-[200]">
+                  <div className="align-middle inline-block w-full z-[200]">
                     <div className="md:inline-flex my-8 items-start">
-                      <div className="align-middle bg-white inline-block overflow-hidden md:px-40 px-6 py-10 rounded-2xl shadow-xl text-center transform transition-all max-w-2xl">
+                      <div className="align-middle bg-white inline-block md:px-40 px-6 py-10 rounded-2xl shadow-xl text-center transform transition-all max-w-2xl">
                         <Dialog.Title as="h3" className="leading-6 text-3xl">
                           {tr('auth')}
                         </Dialog.Title>
@@ -428,28 +429,95 @@ const SignInButton: FC = () => {
                               </div>
 
                               {showUserName && (
-                                <div className="mt-10">
-                                  <label className="text-sm text-gray-400 mb-2 block">
-                                    {tr('your_name')}
-                                  </label>
-                                  <div className="relative">
-                                    <input
-                                      type="text"
-                                      {...register('name')}
-                                      className="border border-yellow focus:outline-none outline-none px-6 py-3 rounded-full text-sm w-full"
-                                    />
-                                    {authName && (
-                                      <button
-                                        className="absolute focus:outline-none inset-y-0 outline-none right-4 text-gray-400"
-                                        onClick={() => {
-                                          resetField('name')
-                                        }}
-                                      >
-                                        <XIcon className="cursor-pointer h-5 text-gray-400 w-5" />
-                                      </button>
-                                    )}
+                                <>
+                                  <div className="mt-5">
+                                    <label className="text-sm text-gray-400 mb-2 block">
+                                      {tr('your_name')}
+                                    </label>
+                                    <div className="relative">
+                                      <input
+                                        type="text"
+                                        {...register('name')}
+                                        className="border border-yellow focus:outline-none outline-none px-6 py-3 rounded-full text-sm w-full"
+                                      />
+                                      {authName && (
+                                        <button
+                                          className="absolute focus:outline-none inset-y-0 outline-none right-4 text-gray-400"
+                                          onClick={() => {
+                                            resetField('name')
+                                          }}
+                                        >
+                                          <XIcon className="cursor-pointer h-5 text-gray-400 w-5" />
+                                        </button>
+                                      )}
+                                    </div>
                                   </div>
-                                </div>
+                                  <div className="mt-5">
+                                    <label className="text-sm text-gray-400 mb-2 block">
+                                      {tr('personal_birth')}
+                                    </label>
+                                    <div className="relative">
+                                      <div className="border border-yellow focus:outline-none outline-none px-2 py-3 rounded-full text-sm w-full">
+                                        <Controller
+                                          render={({
+                                            field: { onChange, value },
+                                          }) => (
+                                            <DatePicker
+                                              value={value}
+                                              format="dd.MM.yyyy"
+                                              onChange={onChange}
+                                              calendarIcon={null}
+                                              className="w-full"
+                                            />
+                                          )}
+                                          rules={{
+                                            required: true,
+                                          }}
+                                          key="birth"
+                                          name="birth"
+                                          control={control}
+                                        />
+                                      </div>
+                                    </div>
+                                  </div>
+                                  <div className="mt-5">
+                                    <div className="relative">
+                                      <div className="flex">
+                                        <div className="flex items-center mb-4">
+                                          <input
+                                            id="male_gender"
+                                            type="radio"
+                                            value="1"
+                                            className="w-4 h-4 border-gray-300 focus:ring-2 focus:ring-blue-300 dark:focus:ring-blue-600 dark:focus:bg-blue-600 dark:bg-gray-700 dark:border-gray-600"
+                                            {...register('gender')}
+                                          />
+                                          <label
+                                            htmlFor="male_gender"
+                                            className="block ml-2 text-sm font-medium text-gray-900 dark:text-gray-300"
+                                          >
+                                            {tr('male_gender')}
+                                          </label>
+                                        </div>
+
+                                        <div className="flex items-center mb-4">
+                                          <input
+                                            id="female_gender"
+                                            type="radio"
+                                            value="0"
+                                            className="w-4 h-4 border-gray-300 focus:ring-2 focus:ring-blue-300 dark:focus:ring-blue-600 dark:focus:bg-blue-600 dark:bg-gray-700 dark:border-gray-600"
+                                            {...register('gender')}
+                                          />
+                                          <label
+                                            htmlFor="female_gender"
+                                            className="block ml-2 text-sm font-medium text-gray-900 dark:text-gray-300"
+                                          >
+                                            {tr('female_gender')}
+                                          </label>
+                                        </div>
+                                      </div>
+                                    </div>
+                                  </div>
+                                </>
                               )}
                               <div className="mt-10">
                                 <button

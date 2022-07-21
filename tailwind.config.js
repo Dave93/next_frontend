@@ -12,6 +12,7 @@ module.exports = {
       './components/**/*.{js,ts,jsx,tsx}',
       './components_new/**/*.{js,ts,jsx,tsx}',
       './pages/**/*.{js,ts,jsx,tsx}',
+      'node_modules/flowbite-react/**/*.{js,jsx,ts,tsx}',
     ],
     options: {
       safelist: {
@@ -61,5 +62,5 @@ module.exports = {
   variants: {
     extend: {},
   },
-  plugins: [require('@tailwindcss/custom-forms')],
+  plugins: [require('@tailwindcss/custom-forms'), require('flowbite/plugin')],
 }
