@@ -482,7 +482,7 @@ const SignInButton: FC = () => {
                                   </div>
                                   <div className="mt-5">
                                     <div className="relative">
-                                      <div className="flex">
+                                      <div className="flex justify-between">
                                         <div className="flex items-center mb-4">
                                           <input
                                             id="male_gender"
