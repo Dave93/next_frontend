@@ -2112,7 +2112,7 @@ const Orders: FC<OrdersProps> = ({ channelName }: { channelName: any }) => {
               <div
                 className={`${
                   isProductInStop.includes(lineItem.id) ? 'opacity-25' : ''
-                }font-bold md:text-xl text-base ml-4`}
+                }font-bold md:text-xl text-base space-y-2 text-center`}
               >
                 {lineItem.child && lineItem.child.length > 1 ? (
                   `${
@@ -2156,7 +2156,7 @@ const Orders: FC<OrdersProps> = ({ channelName }: { channelName: any }) => {
                     .filter((mod: any) => mod.price > 0)
                     .map((mod: any) => (
                       <div
-                        className="placeholder-blackbg-yellow rounded-full px-2 py-1 ml-2 text-xs text-white"
+                        className="bg-yellow rounded-full px-2 py-1  text-xs text-white"
                         key={mod.id}
                       >
                         {locale == 'uz' ? mod.name_uz : mod.name}
