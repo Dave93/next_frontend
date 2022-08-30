@@ -39,7 +39,7 @@ export type Product = {
   name: string
   sizeDesc?: string
   categoryName: string
-  categoryId: string
+  category_id: number
   description: string
   descriptionHtml?: string
   // sku?: string

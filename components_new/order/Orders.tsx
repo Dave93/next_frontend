@@ -1,4 +1,4 @@
-import { XIcon } from '@heroicons/react/outline'
+import { XIcon, PlusIcon, BookmarkIcon } from '@heroicons/react/outline'
 import { useForm, Controller } from 'react-hook-form'
 import useTranslation from 'next-translate/useTranslation'
 import { useUI } from '@components/ui/context'
@@ -46,10 +46,17 @@ import { City } from '@commerce/types/cities'
 import { chunk, sortBy } from 'lodash'
 import getAddressList from '@lib/load_addreses'
 import { Address } from '@commerce/types/address'
+import Hashids from 'hashids'
 
 const { publicRuntimeConfig } = getConfig()
 let webAddress = publicRuntimeConfig.apiUrl
 axios.defaults.withCredentials = true
+
+declare global {
+  interface Window {
+    b24order: any // 👈️ turn off type checking
+  }
+}
 
 type FormData = {
   name: string
@@ -104,7 +111,7 @@ const Orders: FC<OrdersProps> = ({ channelName }: { channelName: any }) => {
   const deliveryTimeOptions = [] as SelectItem[]
 
   let startTime = DateTime.now()
-  startTime = startTime.plus({ minutes: 40 })
+  startTime = startTime.plus({ minutes: 80 })
   startTime = startTime.set({
     minute: Math.ceil(startTime.minute / 10) * 10,
   })
@@ -155,9 +162,11 @@ const Orders: FC<OrdersProps> = ({ channelName }: { channelName: any }) => {
   const downshiftControl = useRef<any>(null)
   const map = useRef<any>(null)
   const [ymaps, setYmaps] = useState<any>(null)
+  const [cutlery, setCutlery] = useState('Y')
   const objects = useRef<any>(null)
   const { data, isLoading, isEmpty, mutate } = useCart({
     cartId,
+    locationData,
   })
   let currentAddress = ''
   if (activeCity.active) {
@@ -740,6 +749,10 @@ const Orders: FC<OrdersProps> = ({ channelName }: { channelName: any }) => {
   const prepareOrder = async () => {
     setIsSavingOrder(true)
     await setCredentials()
+    let sourceType = 'web'
+    if (window.innerWidth < 768) {
+      sourceType = 'mobile_web'
+    }
     try {
       const { data } = await axios.post(`${webAddress}/api/orders/prepare`, {
         formData: {
@@ -748,6 +761,8 @@ const Orders: FC<OrdersProps> = ({ channelName }: { channelName: any }) => {
           pay_type: payType,
           sms_sub: sms,
           email_sub: newsletter,
+          sourceType,
+          need_napkins: cutlery == 'Y',
         },
         basket_id: cartId,
       })
@@ -774,6 +789,10 @@ const Orders: FC<OrdersProps> = ({ channelName }: { channelName: any }) => {
       })
       setIsSavingOrder(false)
     }
+  }
+
+  const cutleryHandler = (e: any) => {
+    setCutlery(e.target.value)
   }
 
   const loadPolygonsToMap = (ymaps: any) => {
@@ -879,6 +898,7 @@ const Orders: FC<OrdersProps> = ({ channelName }: { channelName: any }) => {
             sms_sub: sms,
             email_sub: newsletter,
             sourceType,
+            need_napkins: cutlery == 'Y',
           },
           code: otpCode,
           basket_id: cartId,
@@ -906,9 +926,22 @@ const Orders: FC<OrdersProps> = ({ channelName }: { channelName: any }) => {
         lineItemsSubtotalPrice: '',
         subtotalPrice: 0,
         totalPrice: 0,
+        discountTotal: 0,
+        discountValue: 0,
       }
       await mutate(basketData, false)
+      const orderHashids = new Hashids(
+        'order',
+        15,
+        'abcdefghijklmnopqrstuvwxyz1234567890'
+      )
       router.push(`/${activeCity.slug}/order/${data.order.id}`)
+      setTimeout(() => {
+        ;(window.b24order = window.b24order || []).push({
+          id: orderHashids.decode(data.order.id)[0],
+          sum: data.order?.order_total / 100,
+        })
+      }, 500)
     } catch (e: any) {
       toast.error(e.response.data.error.message, {
         position: toast.POSITION.BOTTOM_RIGHT,
@@ -1062,14 +1095,10 @@ const Orders: FC<OrdersProps> = ({ channelName }: { channelName: any }) => {
     if (!isEmpty) {
       data.lineItems.map((lineItem: any) => {
         if (!stopProducts.includes(lineItem.variant.product_id)) {
-          total +=
-            lineItem.child && lineItem.child.length
-              ? (+lineItem.total + +lineItem.child[0].total) * lineItem.quantity
-              : lineItem.total * lineItem.quantity
+          total += lineItem.total
         }
       })
     }
-    console.log(total)
     return total
   }, [stopProducts, data])
 
@@ -1082,6 +1111,29 @@ const Orders: FC<OrdersProps> = ({ channelName }: { channelName: any }) => {
         </div>
       </div>
     )
+  }
+
+  const addNewAddress = async () => {
+    const newFields: any = {
+      ...getValues(),
+    }
+    newFields['address'] = null
+    newFields['flat'] = null
+    newFields['house'] = null
+    newFields['entrance'] = null
+    newFields['door_code'] = null
+    newFields['label'] = null
+    newFields['addressId'] = null
+    setAddressId(null)
+    selectAddress({
+      locationData: {
+        location: [],
+        terminal_id: undefined,
+        terminalData: undefined,
+      },
+      addressId: null,
+    })
+    reset(newFields)
   }
 
   return (
@@ -1268,13 +1320,13 @@ const Orders: FC<OrdersProps> = ({ channelName }: { channelName: any }) => {
                     apikey: yandexGeoKey,
                   }}
                 >
-                  <div>
+                  <div className="relative">
                     <Map
                       state={mapState}
                       onLoad={(ymaps: any) => loadPolygonsToMap(ymaps)}
                       instanceRef={(ref) => (map.current = ref)}
                       width="100%"
-                      height="530px"
+                      height={`${window.innerWidth < 768 ? '200px' : '530px'}`}
                       onClick={clickOnMap}
                       modules={[
                         'control.ZoomControl',
@@ -1283,6 +1335,10 @@ const Orders: FC<OrdersProps> = ({ channelName }: { channelName: any }) => {
                         'geoQuery',
                       ]}
                     >
+                      <span className="flex absolute h-3 w-3 left-1 top-1 z-10">
+                        <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-yellow opacity-75"></span>
+                        <span className="relative inline-flex rounded-full h-3 w-3 bg-yellow"></span>
+                      </span>
                       {selectedCoordinates.map((item: any, index: number) => (
                         <Placemark
                           modules={['geoObject.addon.balloon']}
@@ -1312,23 +1368,48 @@ const Orders: FC<OrdersProps> = ({ channelName }: { channelName: any }) => {
                   {tr('profile_address')}
                 </div>
                 <div className="mt-2">
-                  <div className="grid grid-cols-3 gap-1 md:gap-2 md:grid-cols-4 max-h-28 overflow-y-auto">
+                  <div className="grid md:grid-cols-2 grid-cols-1 gap-1">
+                    <div
+                      className="w-max flex items-center cursor-pointer rounded-full bg-gray-100 px-4 py-2"
+                      onClick={() => addNewAddress()}
+                    >
+                      <PlusIcon className="h-5 text-gray-400 w-5  hover:text-yellow-light mr-2" />
+                      <div className=" ">{tr('add_new_address')}</div>
+                    </div>
                     {addressList.map((item: Address) => (
                       <div
                         key={item.id}
-                        className={`px-2 py-1 truncate rounded-full cursor-pointer relative pr-7 ${
+                        className={`px-4 py-1 rounded-full cursor-pointer relative pr-6 capitalize flex items-center ${
                           addressId == item.id
                             ? 'bg-primary text-white'
                             : 'bg-gray-100'
                         }`}
                         onClick={() => selectAddressLocal(item)}
                       >
-                        {item.label ? item.label : item.address}
+                        <div className="">
+                          <BookmarkIcon
+                            className={`h-5  w-5  hover:text-yellow-light mr-2 ${
+                              addressId == item.id
+                                ? ' text-white'
+                                : 'text-gray-400'
+                            }`}
+                          />
+                        </div>
+                        <div className="">
+                          <div>{item.label ? item.label : item.address}</div>
+                          <div
+                            className={`text-sm  ${
+                              addressId == item.id ? ' text-white' : ''
+                            }`}
+                          >
+                            {item.label && item.address}
+                          </div>
+                        </div>
                         <button
                           className="absolute focus:outline-none inset-y-0 outline-none right-2 text-gray-400"
                           onClick={() => deleteAddress(item.id)}
                         >
-                          <XIcon className="cursor-pointer h-5 text-gray-400 w-5  hover:text-yellow-light" />
+                          <XIcon className="cursor-pointer h-5 text-gray-400 w-5" />
                         </button>
                       </div>
                     ))}
@@ -1339,7 +1420,7 @@ const Orders: FC<OrdersProps> = ({ channelName }: { channelName: any }) => {
             <div className="mt-3">
               <form onSubmit={handleSubmit(onSubmit)}>
                 <div className="font-bold text-lg">{tr('address')}</div>
-                <div className="mt-3 space-y-6">
+                <div className="mt-3 space-y-2">
                   <div className="md:flex justify-between md:w-full space-y-2 md:space-y-0 md:space-x-2 space-x-0">
                     <Downshift
                       onChange={(selection) => setSelectedAddress(selection)}
@@ -1453,14 +1534,14 @@ const Orders: FC<OrdersProps> = ({ channelName }: { channelName: any }) => {
                         className="bg-gray-100 px-8 py-3 rounded-full w-full outline-none focus:outline-none"
                       />
                     </div>
-                    <div className="flex">
-                      <input
-                        type="text"
-                        {...register('label')}
-                        placeholder={tr('address_label')}
-                        className="bg-gray-100 px-8 py-3 rounded-full w-full outline-none focus:outline-none"
-                      />
-                    </div>
+                  </div>
+                  <div className="flex">
+                    <input
+                      type="text"
+                      {...register('label')}
+                      placeholder={tr('address_label')}
+                      className="bg-gray-100 px-8 py-3 rounded-full w-full outline-none focus:outline-none"
+                    />
                   </div>
                 </div>
                 <div className="md:mt-5 flex items-end">
@@ -1517,7 +1598,7 @@ const Orders: FC<OrdersProps> = ({ channelName }: { channelName: any }) => {
                 {locationData?.terminalData && (
                   <div className="md:mt-3 flex space-x-2 items-center">
                     <LocationMarkerIcon className="w-5 h-5" />
-                    <div className="font-bold">
+                    <div className="font-bold mt-2">
                       {tr('nearest_filial', {
                         filialName: locationData?.terminalData.name,
                       })}
@@ -2093,26 +2174,47 @@ const Orders: FC<OrdersProps> = ({ channelName }: { channelName: any }) => {
                   isProductInStop.includes(lineItem.id) ? 'opacity-25' : ''
                 } md:text-xl text-base`}
               >
-                {lineItem.child && lineItem.child.length
-                  ? (lineItem.total > 0 ? lineItem.quantity + ' X ' : '') +
-                    currency(+lineItem.total + +lineItem.child[0].total, {
-                      pattern: '# !',
-                      separator: ' ',
-                      decimal: '.',
-                      symbol: `${locale == 'uz' ? "so'm" : 'сум'}`,
-                      precision: 0,
-                    }).format()
-                  : (lineItem.total > 0 ? lineItem.quantity + ' X ' : '') +
-                    currency(lineItem.total * lineItem.quantity, {
-                      pattern: '# !',
-                      separator: ' ',
-                      decimal: '.',
-                      symbol: `${locale == 'uz' ? "so'm" : 'сум'}`,
-                      precision: 0,
-                    }).format()}
+                {(lineItem.total > 0 ? lineItem.quantity + ' X ' : '') +
+                  currency(lineItem.total, {
+                    pattern: '# !',
+                    separator: ' ',
+                    decimal: '.',
+                    symbol: `${locale == 'uz' ? "so'm" : 'сум'}`,
+                    precision: 0,
+                  }).format()}
               </div>
             </div>
           ))}
+        <div className="flex items-center border-b py-2 text-2xl">
+          <div className="font-bold">{tr('cutlery_and_napkins')}</div>
+          <label htmlFor="N" className="ml-12">
+            <div className="font-bold mx-2">{tr('no')}</div>
+          </label>
+          <input
+            type="radio"
+            value={'N'}
+            checked={cutlery === 'N'}
+            className={` ${
+              cutlery ? 'text-primary' : 'bg-gray-200'
+            } border-2 border-primary form-checkbox rounded-md text-primary outline-none focus:outline-none active:outline-none focus:border-primary`}
+            onChange={cutleryHandler}
+            id="N"
+          />
+
+          <label htmlFor="Y">
+            <div className="font-bold mx-2">{tr('yes')}</div>
+          </label>
+          <input
+            type="radio"
+            value={'Y'}
+            checked={cutlery === 'Y'}
+            className={` ${
+              cutlery ? 'text-primary' : 'bg-gray-200'
+            } border-2 border-primary form-checkbox rounded-md text-primary outline-none focus:outline-none active:outline-none focus:border-primary`}
+            onChange={cutleryHandler}
+            id="Y"
+          />
+        </div>
         {!isEmpty && (
           <div className="flex justify-between items-center mt-8">
             <div>

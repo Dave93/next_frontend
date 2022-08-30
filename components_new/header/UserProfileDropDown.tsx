@@ -17,15 +17,16 @@ const UserProfileDropDown: FC<UserProfileDropdownProps> = ({
   const { t: tr } = useTranslation('common')
   const router = useRouter()
   const { locale, pathname } = router
+  const { user, setUserData, activeCity, locationData } = useUI()
   let cartId: string | null = null
   if (typeof window !== 'undefined') {
     cartId = localStorage.getItem('basketId')
   }
   const { mutate } = useCart({
     cartId,
+    locationData,
   })
 
-  const { user, setUserData, activeCity } = useUI()
   let items = menuItems.map((item) => {
     return {
       ...item,
@@ -47,6 +48,8 @@ const UserProfileDropDown: FC<UserProfileDropdownProps> = ({
       lineItemsSubtotalPrice: '',
       subtotalPrice: 0,
       totalPrice: 0,
+      discountTotal: 0,
+      discountValue: 0,
     }
     await mutate(basketData, false)
     setUserData(null)

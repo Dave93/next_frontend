@@ -41,7 +41,8 @@ import { DateTime } from 'luxon'
 import Cookies from 'js-cookie'
 import getAddressList from '@lib/load_addreses'
 import { Address } from '@commerce/types/address'
-import { XIcon } from '@heroicons/react/outline'
+import { XIcon, PlusIcon, BookmarkIcon } from '@heroicons/react/outline'
+import useCart from '@framework/cart/use-cart'
 
 const { publicRuntimeConfig } = getConfig()
 
@@ -70,6 +71,15 @@ const MobLocationTabs: FC = () => {
     addressList,
     selectAddress,
   } = useUI()
+
+  let cartId: string | null = null
+  if (typeof window !== 'undefined') {
+    cartId = localStorage.getItem('basketId')
+  }
+  const { mutate } = useCart({
+    cartId,
+    locationData,
+  })
   const [tabIndex, setTabIndex] = useState(
     locationData?.deliveryType || 'deliver'
   )
@@ -644,24 +654,45 @@ const MobLocationTabs: FC = () => {
           }
         )
       } else {
-        await setCredentials()
-        const { data: addressData } = await axios.post(
-          `${webAddress}/api/address/new`,
-          {
-            ...data,
-            lat: locationData.location[0],
-            lon: locationData.location[1],
-            addressId: undefined,
-          },
-          {
-            headers: {
-              Authorization: `Bearer ${otpToken}`,
+        if (locationData.location[0] && locationData.location[1]) {
+          await setCredentials()
+          const { data: addressData } = await axios.post(
+            `${webAddress}/api/address/new`,
+            {
+              ...data,
+              lat: locationData.location[0],
+              lon: locationData.location[1],
+              addressId: undefined,
             },
-          }
-        )
+            {
+              headers: {
+                Authorization: `Bearer ${otpToken}`,
+              },
+            }
+          )
 
-        setAddressId(addressData.data.id)
+          setAddressId(addressData.data.id)
+        }
       }
+    }
+    if (cartId) {
+      let { data: basket } = await axios.get(
+        `${webAddress}/api/baskets/${cartId}?delivery_type=pickup`
+      )
+      const basketResult = {
+        id: basket.data.id,
+        createdAt: '',
+        currency: { code: basket.data.currency },
+        taxesIncluded: basket.data.tax_total,
+        lineItems: basket.data.lines,
+        lineItemsSubtotalPrice: basket.data.sub_total,
+        subtotalPrice: basket.data.sub_total,
+        totalPrice: basket.data.total,
+        discountTotal: basket.data.discount_total,
+        discountValue: basket.data.discount_value,
+      }
+
+      await mutate(basketResult, false)
     }
   }
 
@@ -688,6 +719,25 @@ const MobLocationTabs: FC = () => {
       setStopProducts(terminalStock.data)
     }
 
+    if (cartId) {
+      let { data: basket } = await axios.get(
+        `${webAddress}/api/baskets/${cartId}?delivery_type=pickup`
+      )
+      const basketResult = {
+        id: basket.data.id,
+        createdAt: '',
+        currency: { code: basket.data.currency },
+        taxesIncluded: basket.data.tax_total,
+        lineItems: basket.data.lines,
+        lineItemsSubtotalPrice: basket.data.sub_total,
+        subtotalPrice: basket.data.sub_total,
+        totalPrice: basket.data.total,
+        discountTotal: basket.data.discount_total,
+        discountValue: basket.data.discount_value,
+      }
+
+      await mutate(basketResult, false)
+    }
     setLocationTabsClosable(false)
     closeMobileLocationTabs()
   }
@@ -818,6 +868,20 @@ const MobLocationTabs: FC = () => {
     if (cities) return cities[0]
     return null
   }, [cities, activeCity])
+  const discountValue = useMemo(() => {
+    let res = 0
+
+    if (configData.discount_end_date) {
+      if (DateTime.now().toFormat('E') != configData.discount_disable_day) {
+        if (DateTime.now() <= DateTime.fromSQL(configData.discount_end_date)) {
+          if (configData.discount_value) {
+            res = configData.discount_value
+          }
+        }
+      }
+    }
+    return res
+  }, [configData])
 
   const addresClear = watch('address')
 
@@ -843,6 +907,29 @@ const MobLocationTabs: FC = () => {
     if (response.status === 200) {
       loadAddresses()
     }
+  }
+
+  const addNewAddress = async () => {
+    const newFields: any = {
+      ...getValues(),
+    }
+    newFields['address'] = null
+    newFields['flat'] = null
+    newFields['house'] = null
+    newFields['entrance'] = null
+    newFields['door_code'] = null
+    newFields['label'] = null
+    newFields['addressId'] = null
+    setAddressId(null)
+    selectAddress({
+      locationData: {
+        location: [],
+        terminal_id: undefined,
+        terminalData: undefined,
+      },
+      addressId: null,
+    })
+    reset(newFields)
   }
 
   return (
@@ -878,7 +965,12 @@ const MobLocationTabs: FC = () => {
           } flex-1 font-bold  text-[16px] rounded-full outline-none focus:outline-none  h-11`}
           onClick={() => changeTabIndex('pickup')}
         >
-          {tr('pickup')}
+          {tr('pickup')}{' '}
+          {discountValue > 0 && (
+            <span className="ml-2 text-red-700 text-2xl">
+              -{discountValue}%
+            </span>
+          )}
         </button>
       </div>
       {tabIndex == 'deliver' && (
@@ -935,7 +1027,7 @@ const MobLocationTabs: FC = () => {
                   apikey: yandexGeoKey,
                 }}
               >
-                <div>
+                <div className="relative">
                   <Map
                     state={mapState}
                     onLoad={(ymaps: any) => loadPolygonsToMap(ymaps)}
@@ -950,6 +1042,10 @@ const MobLocationTabs: FC = () => {
                       'geoQuery',
                     ]}
                   >
+                    <span className="flex absolute h-3 w-3 left-1 top-1 z-10">
+                      <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-yellow opacity-75"></span>
+                      <span className="relative inline-flex rounded-full h-3 w-3 bg-yellow"></span>
+                    </span>
                     {selectedCoordinates.map((item: any, index: number) => (
                       <Placemark
                         modules={['geoObject.addon.balloon']}
@@ -979,18 +1075,43 @@ const MobLocationTabs: FC = () => {
                 {tr('profile_address')}
               </div>
               <div className="mt-2">
-                <div className="grid grid-cols-3 gap-1">
+                <div className="grid grid-cols-1 gap-1">
+                  <div
+                    className="w-max flex items-center cursor-pointer rounded-full bg-gray-100 px-4 py-2"
+                    onClick={() => addNewAddress()}
+                  >
+                    <PlusIcon className="h-5 text-gray-400 w-5  hover:text-yellow-light mr-2" />
+                    <div className=" ">{tr('add_new_address')}</div>
+                  </div>
                   {addressList.map((item: Address) => (
                     <div
                       key={item.id}
-                      className={`px-2 py-1 truncate rounded-full cursor-pointer relative pr-6 ${
+                      className={`px-4 py-1 rounded-full cursor-pointer relative pr-6 capitalize flex items-center ${
                         addressId == item.id
                           ? 'bg-primary text-white'
                           : 'bg-gray-100'
                       }`}
                       onClick={() => selectAddressLocal(item)}
                     >
-                      {item.label ? item.label : item.address}
+                      <div className="">
+                        <BookmarkIcon
+                          className={`h-5  w-5  hover:text-yellow-light mr-2 ${
+                            addressId == item.id
+                              ? ' text-white'
+                              : 'text-gray-400'
+                          }`}
+                        />
+                      </div>
+                      <div className="">
+                        <div>{item.label ? item.label : item.address}</div>
+                        <div
+                          className={`text-sm  ${
+                            addressId == item.id ? ' text-white' : ''
+                          }`}
+                        >
+                          {item.label && item.address}
+                        </div>
+                      </div>
                       <button
                         className="absolute focus:outline-none inset-y-0 outline-none right-2 text-gray-400"
                         onClick={() => deleteAddress(item.id)}

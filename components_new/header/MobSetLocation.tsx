@@ -31,7 +31,9 @@ const SetLocation: FC = () => {
           <Image src="/assets/location.png" width="14" height="16" />
         </div>
         {locationData && locationData.address
-          ? locationData.address
+          ? locationData.label
+            ? locationData.label
+            : locationData.address
           : tr('chooseLocation')}
       </button>
     </>
