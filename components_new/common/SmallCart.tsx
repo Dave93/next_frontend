@@ -407,7 +407,7 @@ const SmallCart: FC<SmallCartProps> = ({ channelName }) => {
                       </div>
                       <div className="flex items-center">
                         {!readonlyItems.includes(lineItem.id) && (
-                          <div className="ml-10">
+                          <div className="">
                             <div className="w-20 h-6 ml-1 bg-yellow rounded-full flex items-center text-white">
                               <div className="w-6 h-6 items-center flex justify-around">
                                 <MinusIcon

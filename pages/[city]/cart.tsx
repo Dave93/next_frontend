@@ -561,7 +561,7 @@ export default function Cart() {
         </div>
       )}
       {!isEmpty && (
-        <div className="md:flex justify-between">
+        <div className="md:flex justify-between gap-4">
           <div className="md:w-9/12">
             <div className="md:p-10 p-5 md:rounded-2xl text-xl bg-white md:mb-3">
               <div className="flex justify-between items-center">
@@ -644,7 +644,7 @@ export default function Cart() {
                               />
                             </div>
                           )}
-                          <div className="md:ml-7 ml-1 space-y-2 md:w-72 md:text-left">
+                          <div className="ml-1 space-y-2 md:text-left">
                             <div className="text-xl font-bold">
                               {lineItem.child && lineItem.child.length > 1
                                 ? `${
@@ -677,7 +677,7 @@ export default function Cart() {
                             </div>
                           </div>
                           {lineItem.modifiers && (
-                            <div className="md:flex">
+                            <div className="">
                               {lineItem.modifiers
                                 .filter((mod: any) => mod.price > 0)
                                 .map((mod: any) => (
@@ -778,7 +778,7 @@ export default function Cart() {
                 <div className="mt-5">
                   <Slider {...settings}>
                     {biRecommendations.relatedItems.map((item: any) => (
-                      <div className="border border-gray-300 rounded-2xl md:px-5 px-1 py-2 text-center h-full flex flex-col">
+                      <div className="border border-gray-300 rounded-2xl md:px-5 px-1 py-2 text-center flex flex-col">
                         <div className="flex-grow flex items-center flex-col justify-center">
                           {item.image ? (
                             <img
@@ -790,7 +790,7 @@ export default function Cart() {
                                   locale || 'ru'
                                 ]
                               }
-                              className="transform motion-safe:group-hover:scale-105 transition duration-500"
+                              className="transform motion-safe:group-hover:scale-105 transition duration-500 h-20"
                             />
                           ) : (
                             <img
@@ -840,7 +840,7 @@ export default function Cart() {
                 <div className="mt-5">
                   <Slider {...settings}>
                     {biRecommendations.topItems.map((item: any) => (
-                      <div className="border border-gray-300 rounded-2xl md:px-5 px-1 py-2 text-center h-full flex flex-col">
+                      <div className="border border-gray-300 rounded-2xl md:px-5 px-1 py-2 text-center flex flex-col">
                         <div className="flex-grow flex items-center flex-col justify-center">
                           {item.image ? (
                             <img
@@ -852,7 +852,7 @@ export default function Cart() {
                                   locale || 'ru'
                                 ]
                               }
-                              className="transform motion-safe:group-hover:scale-105 transition duration-500"
+                              className="transform motion-safe:group-hover:scale-105 transition duration-500 h-20"
                             />
                           ) : (
                             <img
@@ -898,7 +898,7 @@ export default function Cart() {
             )}
           </div>
           <div className="">
-            <div className="p-3 md:rounded-2xl bg-white sticky top-5">
+            <div className="py-9 px-3 md:rounded-2xl bg-white sticky top-5">
               <div className="border-b items-center justify-between pb-2">
                 {/* <div className="md:w-72">
                 <form onSubmit={handleSubmit(onSubmit)} className="relative">
@@ -918,7 +918,7 @@ export default function Cart() {
                   <div className="text-lg text-gray-400">
                     {tr('basket_order_price')}
                   </div>
-                  <div className="ml-7 text-3xl">
+                  <div className="ml-7 text-2xl">
                     {currency(data.totalPrice, {
                       pattern: '# !',
                       separator: ' ',
@@ -929,7 +929,13 @@ export default function Cart() {
                   </div>
                 </div>
               </div>
-              <div className="justify-between mt-8 space-y-2 ">
+              <div className="justify-between mt-4 space-y-4 ">
+                <button
+                  className={`md:text-xl text-white bg-yellow flex h-8 items-center justify-evenly rounded-full  w-full`}
+                  onClick={goToCheckout}
+                >
+                  {tr('checkout')} <img src="/right.png" />
+                </button>
                 <button
                   className="md:text-xl text-gray-400 bg-gray-100 flex h-8 items-center rounded-full justify-evenly w-full"
                   onClick={(e) => {
@@ -938,12 +944,6 @@ export default function Cart() {
                   }}
                 >
                   <img src="/left.png" /> {tr('back_to_menu')}
-                </button>
-                <button
-                  className={`md:text-xl text-white bg-yellow flex h-8 items-center justify-evenly rounded-full  w-full`}
-                  onClick={goToCheckout}
-                >
-                  {tr('checkout')} <img src="/right.png" />
                 </button>
               </div>
             </div>
