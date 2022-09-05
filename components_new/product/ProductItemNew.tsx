@@ -832,7 +832,7 @@ const ProductItemNew: FC<ProductItem> = ({ product, channelName }) => {
                       leaveFrom="opacity-100 translate-y-0 sm:scale-100"
                       leaveTo="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
                     >
-                      <div className="bg-white p-4 text-left transform h-screen w-full overflow-hidden fixed top-0">
+                      <div className="bg-white p-4 text-left transform w-full">
                         <div className="flex fixed w-full max-h-10 -ml-4 -mt-4 bg-white pt-8 pl-4 top-0 flex-col">
                           <div className="flex w-full items-center">
                             <span onClick={closeModal} className="flex">
@@ -844,8 +844,8 @@ const ProductItemNew: FC<ProductItem> = ({ product, channelName }) => {
                             </span>
                           </div>
                         </div>
-                        <div className="h-[calc(85vh-34px)] overflow-y-auto mt-6 overflow-hidden">
-                          <div className="h-[35vh] mx-auto bg-cover flex relative mt-10">
+                        <div className=" overflow-y-auto mt-6 overflow-hidden">
+                          <div className=" mx-auto bg-cover flex relative mt-10">
                             {store.image ? (
                               <img
                                 src={store.image}
@@ -980,7 +980,7 @@ const ProductItemNew: FC<ProductItem> = ({ product, channelName }) => {
                             </div>
                           )}
                         </div>
-                        <div className="bg-white flex items-center px-3 py-5 w-full">
+                        <div className="bg-white flex items-center px-3 py-5 w-full sticky bottom-0">
                           <button
                             className="bg-yellow flex items-center justify-around focus:outline-none font-bold outline-none py-2 rounded-full text-center text-white w-full"
                             onClick={addToBasket}
