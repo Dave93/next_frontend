@@ -7,7 +7,7 @@ import { DateTime } from 'luxon'
 import axios from 'axios'
 import Cookies from 'js-cookie'
 import getConfig from 'next/config'
-import { toast } from 'react-toastify'
+import { ToastContainer, toast } from 'react-toastify'
 
 const { publicRuntimeConfig } = getConfig()
 let webAddress = publicRuntimeConfig.apiUrl
@@ -106,6 +106,10 @@ const PersonalData: FC = () => {
           withCredentials: true,
         }
       )
+      toast.success(tr('saved'), {
+        position: toast.POSITION.BOTTOM_RIGHT,
+        hideProgressBar: true,
+      })
       setUserData({
         user: {
           ...user?.user,
@@ -236,6 +240,8 @@ const PersonalData: FC = () => {
           </button>
         </div>
       </form>
+
+      <ToastContainer />
     </div>
   )
 }

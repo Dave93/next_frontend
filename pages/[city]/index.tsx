@@ -14,11 +14,13 @@ import ProductListSectionTitle from '@components_new/product/ProductListSectionT
 import ProductItemNew from '@components_new/product/ProductItemNew'
 import CategoriesMenu from '@components_new/main/CategoriesMenu'
 import MobSetLocation from '@components_new/header/MobSetLocation'
+import ThreePizza from '@components_new/main/ThreePizza'
 import defaultChannel from '@lib/defaultChannel'
 import dynamic from 'next/dynamic'
 import { NextSeo } from 'next-seo'
 import useTranslation from 'next-translate/useTranslation'
 import { useUI } from '@components/ui/context'
+import cookies from 'next-cookies'
 import axios from 'axios'
 import getConfig from 'next/config'
 
@@ -28,6 +30,11 @@ let webAddress = publicRuntimeConfig.apiUrl
 
 const HalfPizzaNoSSR = dynamic(
   () => import('@components_new/product/CreateYourPizzaCommon'),
+  { ssr: false }
+)
+
+const ThreePizzaNoSSR = dynamic(
+  () => import('@components_new/main/ThreePizza'),
   { ssr: false }
 )
 
@@ -45,8 +52,10 @@ export async function getServerSideProps({
   locale,
   locales,
   query,
+  ...context
 }: GetServerSidePropsContext) {
-  const config = { locale, locales, queryParams: query }
+  const c = cookies(context)
+  const config = { locale, locales, queryParams: query, city: c.city_slug }
   const productsPromise = commerce.getAllProducts({
     variables: { first: 6 },
     config,
@@ -174,6 +183,12 @@ export default function Home({
   const readyProducts = useMemo(() => {
     return products
       .map((prod: any) => {
+        let existingCategory = categories.find((cat: any) => cat.id === prod.id)
+
+        if (!existingCategory) {
+          return null
+        }
+
         if (prod.half_mode) {
           return null
         }
@@ -258,6 +273,7 @@ export default function Home({
         <h1 className="py-1 md:text-4xl text-2xl w-max my-10 m-auto">
           {tr('pizza_for_family_' + activeCity.slug)}
         </h1>
+
         <div className="grid lg:grid-cols-4 grid-cols-1 md:grid-cols-2 gap-10 mt-10">
           <div className="col-span-3 md:hidden">
             {halfModeProds.map((sec: any) => (
@@ -280,6 +296,7 @@ export default function Home({
                 </div>
               ) : (
                 <div key={sec.id} id={`productSection_${sec.id}`}>
+                  <ThreePizzaNoSSR sec={sec} channelName={channelName} />
                   <ProductListSectionTitle
                     title={
                       sec?.attribute_data?.name[channelName][locale || 'ru']

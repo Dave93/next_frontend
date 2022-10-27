@@ -18,6 +18,8 @@ import axios from 'axios'
 import Cookies from 'js-cookie'
 import { useCart } from '@framework/cart'
 import useTranslation from 'next-translate/useTranslation'
+import { useUI } from '@components/ui/context'
+import { DateTime } from 'luxon'
 
 type CreatePizzaProps = {
   sec: any
@@ -39,6 +41,7 @@ const CreateYourPizza: FC<CreatePizzaProps> = ({
   const { locale } = router
   let [isOpen, setIsOpen] = useState(false)
   let completeButtonRef = useRef(null)
+  const { stopProducts, locationData } = useUI()
   const { mutate } = useCart()
   let [active, setActive] = useState(true)
   const [isLoadingBasket, setIsLoadingBasket] = useState(false)
@@ -46,6 +49,25 @@ const CreateYourPizza: FC<CreatePizzaProps> = ({
   const [activeCustomName, setActiveCustomName] = useState('')
   const [leftSelectedProduct, setLeftSelectedProduct] = useState(null as any)
   const [rightSelectedProduct, setRightSelectedProduct] = useState(null as any)
+  const [configData, setConfigData] = useState({} as any)
+
+  const fetchConfig = async () => {
+    let configData
+    if (!sessionStorage.getItem('configData')) {
+      let { data } = await axios.get(`${webAddress}/api/configs/public`)
+      configData = data.data
+      sessionStorage.setItem('configData', data.data)
+    } else {
+      configData = sessionStorage.getItem('configData')
+    }
+
+    try {
+      configData = Buffer.from(configData, 'base64')
+      configData = configData.toString('ascii')
+      configData = JSON.parse(configData)
+      setConfigData(configData)
+    } catch (e) {}
+  }
   function closeModal() {
     setIsOpen(false)
   }
@@ -195,8 +217,12 @@ const CreateYourPizza: FC<CreatePizzaProps> = ({
         totalPrice: basketData.data.total,
       }
     } else {
+      let additionalQuery = ''
+      if (locationData && locationData.deliveryType == 'pickup') {
+        additionalQuery = `?delivery_type=pickup`
+      }
       const { data: basketData } = await axios.post(
-        `${webAddress}/api/baskets`,
+        `${webAddress}/api/baskets${additionalQuery}`,
         {
           variants: [
             {
@@ -244,6 +270,84 @@ const CreateYourPizza: FC<CreatePizzaProps> = ({
     closeModal()
   }
 
+  const addModifier = (id: number) => {
+    let modifierProduct: any = null
+    let activeVariant: any = null
+
+    leftSelectedProduct.variants.map((vars: any) => {
+      if (locale == 'uz') {
+        if (vars?.custom_name_uz == activeCustomName) {
+          activeVariant = vars
+        }
+      } else {
+        if (vars?.custom_name == activeCustomName) {
+          activeVariant = vars
+        }
+      }
+    })
+    if (activeVariant.modifierProduct) {
+      modifierProduct = activeVariant.modifierProduct
+    }
+    let zeroModifier = modifiers.find((mod: any) => mod.price == 0)
+    if (activeModifiers.includes(id)) {
+      let currentModifier: any = modifiers.find((mod: any) => mod.id == id)
+      if (!currentModifier) return
+      if (currentModifier.price == 0) return
+      let resultModifiers = [
+        ...activeModifiers.filter((modId) => modId != id),
+      ].filter((id) => id)
+      if (!resultModifiers.length) {
+        resultModifiers.push(zeroModifier.id)
+      }
+      setActiveModifeirs(resultModifiers)
+    } else {
+      let currentModifier: any = modifiers.find((mod: any) => mod.id == id)
+      if (currentModifier.price == 0) {
+        setActiveModifeirs([id])
+      } else {
+        let selectedModifiers = [
+          ...activeModifiers.filter(
+            (modId: number) => modId != zeroModifier.id
+          ),
+          id,
+        ]
+
+        if (modifierProduct) {
+          let sausage = modifiers.find(
+            (mod: any) => mod.id == modifierProduct.id
+          )
+          if (
+            selectedModifiers.includes(modifierProduct.id) &&
+            sausage.price < currentModifier.price
+          ) {
+            selectedModifiers = [
+              ...selectedModifiers.filter((modId: any) => modId != sausage.id),
+            ]
+          } else if (currentModifier.id == sausage.id) {
+            let richerModifier = modifiers
+              .filter((mod: any) => mod.price > sausage.price)
+              .map((mod: any) => mod.id)
+            selectedModifiers = [
+              ...selectedModifiers.filter(
+                (modId: any) => !richerModifier.includes(modId)
+              ),
+              id,
+            ]
+          }
+        }
+        setActiveModifeirs(selectedModifiers)
+      }
+    }
+  }
+
+  const setSelectedProduct = (item: any, side: string = 'left') => {
+    if (side == 'left') {
+      setLeftSelectedProduct(item)
+    } else {
+      setRightSelectedProduct(item)
+    }
+  }
+
   const customNames: string[] = useMemo(() => {
     const names: any = {}
     sec.items.map((item: any) => {
@@ -258,23 +362,56 @@ const CreateYourPizza: FC<CreatePizzaProps> = ({
     return Object.values(names)
   }, [sec, locale])
 
-  const readyProductList = useMemo(() => {
+  const readyProductList: any[] = useMemo(() => {
     return sec.items.map((item: any) => {
       let res = item
+
+      res.isInStop = false
       item.variants.map((vars: any) => {
         if (locale == 'uz') {
           if (vars?.custom_name_uz == activeCustomName) {
             res.price = vars.price
+            if (stopProducts.includes(vars.product_id)) {
+              res.isInStop = true
+            }
           }
         } else {
           if (vars?.custom_name == activeCustomName) {
             res.price = vars.price
+            if (stopProducts.includes(vars.product_id)) {
+              res.isInStop = true
+            }
           }
         }
       })
+
+      res.beforePrice = 0
+
+      if (
+        locationData &&
+        configData.discount_end_date &&
+        locationData.deliveryType == 'pickup' &&
+        locationData.terminal_id &&
+        configData.discount_catalog_sections
+          .split(',')
+          .map((i: string) => +i)
+          .includes(res.category_id)
+      ) {
+        if (DateTime.now().toFormat('E') != configData.discount_disable_day) {
+          if (
+            DateTime.now() <= DateTime.fromSQL(configData.discount_end_date)
+          ) {
+            if (configData.discount_value) {
+              res.beforePrice = res.price
+              res.price = res.price * ((100 - configData.discount_value) / 100)
+            }
+          }
+        }
+      }
+
       return res
     })
-  }, [sec, activeCustomName])
+  }, [sec, activeCustomName, locationData, configData])
 
   const modifiers = useMemo(() => {
     if (!leftSelectedProduct || !rightSelectedProduct || !activeCustomName) {
@@ -384,85 +521,8 @@ const CreateYourPizza: FC<CreatePizzaProps> = ({
     activeModifiers,
   ])
 
-  const addModifier = (id: number) => {
-    let modifierProduct: any = null
-    let activeVariant: any = null
-
-    leftSelectedProduct.variants.map((vars: any) => {
-      if (locale == 'uz') {
-        if (vars?.custom_name_uz == activeCustomName) {
-          activeVariant = vars
-        }
-      } else {
-        if (vars?.custom_name == activeCustomName) {
-          activeVariant = vars
-        }
-      }
-    })
-    if (activeVariant.modifierProduct) {
-      modifierProduct = activeVariant.modifierProduct
-    }
-    let zeroModifier = modifiers.find((mod: any) => mod.price == 0)
-    if (activeModifiers.includes(id)) {
-      let currentModifier: any = modifiers.find((mod: any) => mod.id == id)
-      if (!currentModifier) return
-      if (currentModifier.price == 0) return
-      let resultModifiers = [
-        ...activeModifiers.filter((modId) => modId != id),
-      ].filter((id) => id)
-      if (!resultModifiers.length) {
-        resultModifiers.push(zeroModifier.id)
-      }
-      setActiveModifeirs(resultModifiers)
-    } else {
-      let currentModifier: any = modifiers.find((mod: any) => mod.id == id)
-      if (currentModifier.price == 0) {
-        setActiveModifeirs([id])
-      } else {
-        let selectedModifiers = [
-          ...activeModifiers.filter(
-            (modId: number) => modId != zeroModifier.id
-          ),
-          id,
-        ]
-
-        if (modifierProduct) {
-          let sausage = modifiers.find(
-            (mod: any) => mod.id == modifierProduct.id
-          )
-          if (
-            selectedModifiers.includes(modifierProduct.id) &&
-            sausage.price < currentModifier.price
-          ) {
-            selectedModifiers = [
-              ...selectedModifiers.filter((modId: any) => modId != sausage.id),
-            ]
-          } else if (currentModifier.id == sausage.id) {
-            let richerModifier = modifiers
-              .filter((mod: any) => mod.price > sausage.price)
-              .map((mod: any) => mod.id)
-            selectedModifiers = [
-              ...selectedModifiers.filter(
-                (modId: any) => !richerModifier.includes(modId)
-              ),
-              id,
-            ]
-          }
-        }
-        setActiveModifeirs(selectedModifiers)
-      }
-    }
-  }
-
-  const setSelectedProduct = (item: any, side: string = 'left') => {
-    if (side == 'left') {
-      setLeftSelectedProduct(item)
-    } else {
-      setRightSelectedProduct(item)
-    }
-  }
-
   useEffect(() => {
+    fetchConfig()
     setActiveCustomName(customNames[0])
   }, [customNames])
 
@@ -559,8 +619,11 @@ const CreateYourPizza: FC<CreatePizzaProps> = ({
                               rightSelectedProduct.id == item.id
                                 ? 'opacity-25'
                                 : 'cursor-pointer hover:border-yellow'
-                            }  `}
+                            }  ${item.isInStop ? 'opacity-25' : ''}`}
                           onClick={() => {
+                            if (item.isInStop) {
+                              return
+                            }
                             if (
                               rightSelectedProduct &&
                               rightSelectedProduct.id == item.id
@@ -583,14 +646,27 @@ const CreateYourPizza: FC<CreatePizzaProps> = ({
                               ]
                             }
                           </div>
-                          <div className="text-gray-400">
-                            {currency(item.price, {
-                              pattern: '# !',
-                              separator: ' ',
-                              decimal: '.',
-                              symbol: `${locale == 'uz' ? "so'm" : 'сум'}`,
-                              precision: 0,
-                            }).format()}
+                          <div className="text-gray-400 flex flex-col">
+                            {item.beforePrice > 0 && (
+                              <span className="line-through text-sm">
+                                {currency(item.beforePrice, {
+                                  pattern: '# !',
+                                  separator: ' ',
+                                  decimal: '.',
+                                  symbol: `${locale == 'uz' ? "so'm" : 'сум'}`,
+                                  precision: 0,
+                                }).format()}
+                              </span>
+                            )}
+                            <span>
+                              {currency(item.price, {
+                                pattern: '# !',
+                                separator: ' ',
+                                decimal: '.',
+                                symbol: `${locale == 'uz' ? "so'm" : 'сум'}`,
+                                precision: 0,
+                              }).format()}
+                            </span>
                           </div>
                         </div>
                       ))}
@@ -853,8 +929,12 @@ const CreateYourPizza: FC<CreatePizzaProps> = ({
                                 ? 'opacity-25'
                                 : 'cursor-pointer hover:border-yellow'
                             }
+                              ${item.isInStop ? 'opacity-25' : ''}
                             `}
                           onClick={() => {
+                            if (item.isInStop) {
+                              return
+                            }
                             if (
                               leftSelectedProduct &&
                               leftSelectedProduct.id == item.id
@@ -877,14 +957,27 @@ const CreateYourPizza: FC<CreatePizzaProps> = ({
                               ]
                             }
                           </div>
-                          <div className="text-gray-400">
-                            {currency(item.price, {
-                              pattern: '# !',
-                              separator: ' ',
-                              decimal: '.',
-                              symbol: `${locale == 'uz' ? "so'm" : 'сум'}`,
-                              precision: 0,
-                            }).format()}
+                          <div className="text-gray-400 flex flex-col">
+                            {item.beforePrice > 0 && (
+                              <span className="line-through text-sm">
+                                {currency(item.beforePrice, {
+                                  pattern: '# !',
+                                  separator: ' ',
+                                  decimal: '.',
+                                  symbol: `${locale == 'uz' ? "so'm" : 'сум'}`,
+                                  precision: 0,
+                                }).format()}
+                              </span>
+                            )}
+                            <span>
+                              {currency(item.price, {
+                                pattern: '# !',
+                                separator: ' ',
+                                decimal: '.',
+                                symbol: `${locale == 'uz' ? "so'm" : 'сум'}`,
+                                precision: 0,
+                              }).format()}
+                            </span>
                           </div>
                         </div>
                       ))}

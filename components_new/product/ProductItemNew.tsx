@@ -6,6 +6,7 @@ import React, {
   FC,
   useMemo,
   useRef,
+  useEffect,
 } from 'react'
 import Image from 'next/image'
 import ProductOptionSelector from './ProductOptionSelector'
@@ -25,6 +26,7 @@ import { useCart } from '@framework/cart'
 import { XIcon } from '@heroicons/react/solid'
 import styles from './ProductItemNew.module.css'
 import { useUI } from '@components/ui/context'
+import { DateTime } from 'luxon'
 // import SessionContext from 'react-storefront/session/SessionContext'
 
 type ProductItem = {
@@ -40,16 +42,35 @@ const ProductItemNew: FC<ProductItem> = ({ product, channelName }) => {
   const { t: tr } = useTranslation('common')
   const [store, updateStore] = useState(product)
   const [isLoadingBasket, setIsLoadingBasket] = useState(false)
-  const { stopProducts } = useUI()
+  const { stopProducts, locationData } = useUI()
   const { mutate } = useCart()
 
   const [addToCartInProgress, setAddToCartInProgress] = useState(false)
   const [isChoosingModifier, setIsChoosingModifier] = useState(false)
   const [activeModifiers, setActiveModifiers] = useState([] as number[])
+  const [configData, setConfigData] = useState({} as any)
   let [isOpen, setIsOpen] = useState(false)
   let completeButtonRef = useRef(null)
   const router = useRouter()
   const { locale } = router
+
+  const fetchConfig = async () => {
+    let configData
+    if (!sessionStorage.getItem('configData')) {
+      let { data } = await axios.get(`${webAddress}/api/configs/public`)
+      configData = data.data
+      sessionStorage.setItem('configData', data.data)
+    } else {
+      configData = sessionStorage.getItem('configData')
+    }
+
+    try {
+      configData = Buffer.from(configData, 'base64')
+      configData = configData.toString('ascii')
+      configData = JSON.parse(configData)
+      setConfigData(configData)
+    } catch (e) {}
+  }
 
   function closeModal() {
     setIsOpen(false)
@@ -231,8 +252,12 @@ const ProductItemNew: FC<ProductItem> = ({ product, channelName }) => {
     let basketResult = {}
 
     if (basketId) {
+      let additionalQuery = ''
+      if (locationData && locationData.deliveryType == 'pickup') {
+        additionalQuery = `?delivery_type=pickup`
+      }
       const { data: basketData } = await axios.post(
-        `${webAddress}/api/baskets-lines`,
+        `${webAddress}/api/baskets-lines${additionalQuery}`,
         {
           basket_id: basketId,
           variants: [
@@ -262,8 +287,12 @@ const ProductItemNew: FC<ProductItem> = ({ product, channelName }) => {
         totalPrice: basketData.data.total,
       }
     } else {
+      let additionalQuery = ''
+      if (locationData && locationData.deliveryType == 'pickup') {
+        additionalQuery = `?delivery_type=pickup`
+      }
       const { data: basketData } = await axios.post(
-        `${webAddress}/api/baskets`,
+        `${webAddress}/api/baskets${additionalQuery}`,
         {
           variants: [
             {
@@ -291,6 +320,8 @@ const ProductItemNew: FC<ProductItem> = ({ product, channelName }) => {
         lineItemsSubtotalPrice: basketData.data.sub_total,
         subtotalPrice: basketData.data.sub_total,
         totalPrice: basketData.data.total,
+        discountTotal: basketData.data.discount_total,
+        discountValue: basketData.data.discount_value,
       }
     }
 
@@ -310,6 +341,10 @@ const ProductItemNew: FC<ProductItem> = ({ product, channelName }) => {
     setActiveModifiers([freeModifier.id])
     addToBasket([freeModifier.id])
   }
+
+  useEffect(() => {
+    fetchConfig()
+  }, [])
 
   const modifiers = useMemo(() => {
     let modifier = null
@@ -377,8 +412,34 @@ const ProductItemNew: FC<ProductItem> = ({ product, channelName }) => {
       })
     }
 
+    if (
+      locationData &&
+      configData.discount_end_date &&
+      locationData.deliveryType == 'pickup' &&
+      locationData.terminal_id &&
+      configData.discount_catalog_sections
+        .split(',')
+        .map((i: string) => +i)
+        .includes(store.category_id)
+    ) {
+      if (DateTime.now().toFormat('E') != configData.discount_disable_day) {
+        if (DateTime.now() <= DateTime.fromSQL(configData.discount_end_date)) {
+          if (configData.discount_value) {
+            price = price * ((100 - configData.discount_value) / 100)
+          }
+        }
+      }
+    }
+
     return price
-  }, [store.price, store.variants, modifiers, activeModifiers])
+  }, [
+    store.price,
+    store.variants,
+    modifiers,
+    activeModifiers,
+    locationData,
+    configData,
+  ])
 
   const isProductInStop = useMemo(() => {
     if (store.variants && store.variants.length) {
@@ -404,9 +465,57 @@ const ProductItemNew: FC<ProductItem> = ({ product, channelName }) => {
       )
       if (activeValue) price += parseInt(activeValue.price, 0)
     }
+    if (
+      locationData &&
+      configData.discount_end_date &&
+      locationData.deliveryType == 'pickup' &&
+      locationData.terminal_id &&
+      configData.discount_catalog_sections
+        .split(',')
+        .map((i: string) => +i)
+        .includes(store.category_id)
+    ) {
+      if (DateTime.now().toFormat('E') != configData.discount_disable_day) {
+        if (DateTime.now() <= DateTime.fromSQL(configData.discount_end_date)) {
+          if (configData.discount_value) {
+            price = price * ((100 - configData.discount_value) / 100)
+          }
+        }
+      }
+    }
 
     return price
-  }, [store.price, store.variants])
+  }, [store.price, store.variants, locationData, configData])
+
+  const prodDiscountPriceDesktop = useMemo(() => {
+    let price: number = parseInt(store.price, 0) || 0
+    if (store.variants && store.variants.length > 0) {
+      const activeValue: any = store.variants.find(
+        (item) => item.active == true
+      )
+      if (activeValue) price += parseInt(activeValue.price, 0)
+    }
+
+    if (
+      locationData &&
+      configData.discount_end_date &&
+      locationData.deliveryType == 'pickup' &&
+      locationData.terminal_id &&
+      configData.discount_catalog_sections
+        .split(',')
+        .map((i: string) => +i)
+        .includes(store.category_id)
+    ) {
+      if (DateTime.now().toFormat('E') != configData.discount_disable_day) {
+        if (DateTime.now() <= DateTime.fromSQL(configData.discount_end_date)) {
+          if (configData.discount_value) {
+            return price * (configData.discount_value / 100)
+          }
+        }
+      }
+    }
+    return 0
+  }, [store.price, store.variants, locationData, configData])
 
   const prodPriceMobile = useMemo(() => {
     let price: number = parseInt(store.price, 0) || 0
@@ -443,7 +552,7 @@ const ProductItemNew: FC<ProductItem> = ({ product, channelName }) => {
     <>
       {isChoosingModifier ? (
         <div
-          className="gap-4 grid grid-cols-2 items-center bg-white justify-between relative md:flex md:flex-col px-6 py-4 rounded-[15px] shadow-lg"
+          className="items-center bg-white justify-between relative flex flex-col px-6 py-4 rounded-[15px] shadow-lg"
           id={`prod-${store.id}`}
         >
           {isLoadingBasket && (
@@ -479,52 +588,45 @@ const ProductItemNew: FC<ProductItem> = ({ product, channelName }) => {
           <div className="border-b border-yellow pb-3 text-center text-xl w-full">
             {tr('add')}
           </div>
-          <div className="max-h-96 overflow-y-auto">
-            <div className="flex-grow gap-3 grid grid-cols-2">
-              {modifiers &&
-                modifiers.map((mod: any) => (
-                  <div
-                    key={mod.id}
-                    className={`border ${
-                      activeModifiers.includes(mod.id)
-                        ? 'border-yellow'
-                        : 'border-gray-300'
-                    } flex flex-col justify-between overflow-hidden rounded-[15px] cursor-pointer`}
-                    onClick={() => addModifier(mod.id)}
-                  >
-                    <div className="flex-grow pt-2 px-2">
-                      {mod.assets.length ? (
-                        <img
-                          src={
-                            mod.assets[0].local
-                              ? mod.assets[0].local
-                              : `${webAddress}/storage/${mod.assets[0]?.location}/${mod.assets[0]?.filename}`
-                          }
-                          width={100}
-                          height={100}
-                          alt={mod.name}
-                          className="mx-auto"
-                        />
-                      ) : (
-                        <img
-                          src="/no_photo.svg"
-                          width={100}
-                          height={100}
-                          alt={mod.name}
-                          className="rounded-full mx-auto"
-                        />
-                      )}
-                    </div>
-                    <div className="text-center text-base w-20 m-auto">
-                      {locale == 'uz' ? mod.name_uz : mod.name}
-                    </div>
-                    <div
-                      className={`${
-                        activeModifiers.includes(mod.id)
-                          ? 'bg-yellow'
-                          : 'bg-gray-300'
-                      } font-bold py-2 text-center text-white text-xs`}
-                    >
+          <div className="max-h-96 overflow-y-auto py-5 space-y-2 w-full">
+            {modifiers &&
+              modifiers.map((mod: any) => (
+                <div
+                  key={mod.id}
+                  className={`border ${
+                    activeModifiers.includes(mod.id)
+                      ? 'border-yellow border-2 shadow-md'
+                      : 'border-gray-300'
+                  } flex items-center justify-between overflow-hidden rounded-[15px] cursor-pointer`}
+                  onClick={() => addModifier(mod.id)}
+                >
+                  <div className="px-2">
+                    {mod.assets.length ? (
+                      <img
+                        src={
+                          mod.assets[0].local
+                            ? mod.assets[0].local
+                            : `${webAddress}/storage/${mod.assets[0]?.location}/${mod.assets[0]?.filename}`
+                        }
+                        width={50}
+                        height={50}
+                        alt={mod.name}
+                        className="mx-auto"
+                      />
+                    ) : (
+                      <img
+                        src="/no_photo.svg"
+                        width={50}
+                        height={50}
+                        alt={mod.name}
+                        className="rounded-full mx-auto"
+                      />
+                    )}
+                  </div>
+                  <div className="text-center text-base m-auto">
+                    <div>{locale == 'uz' ? mod.name_uz : mod.name}</div>
+
+                    <div className={`font-bold text-center text-sm`}>
                       {currency(mod.price, {
                         pattern: '# !',
                         separator: ' ',
@@ -534,8 +636,8 @@ const ProductItemNew: FC<ProductItem> = ({ product, channelName }) => {
                       }).format()}
                     </div>
                   </div>
-                ))}
-            </div>
+                </div>
+              ))}
           </div>
           <div className="mx-auto">
             <button
@@ -643,27 +745,55 @@ const ProductItemNew: FC<ProductItem> = ({ product, channelName }) => {
                   tr('main_to_basket')
                 )}
               </button>
-              <span className="md:text-xl md:bg-white hidden md:block md:w-auto rounded-full text-sm text-center md:px-0 md:py-0 md:text-black">
-                {currency(prodPriceDesktop, {
-                  pattern: '# !',
-                  separator: ' ',
-                  decimal: '.',
-                  symbol: `${locale == 'uz' ? "so'm" : 'сум'}`,
-                  precision: 0,
-                }).format()}
-              </span>
+              <div className="hidden md:block">
+                {prodDiscountPriceDesktop > 0 && (
+                  <span className="md:text-sm md:bg-white hidden md:block md:w-auto rounded-full text-xs text-left line-through md:px-0 md:py-0 md:text-gray-500">
+                    {currency(prodPriceDesktop + prodDiscountPriceDesktop, {
+                      pattern: '# !',
+                      separator: ' ',
+                      decimal: '.',
+                      symbol: `${locale == 'uz' ? "so'm" : 'сум'}`,
+                      precision: 0,
+                    }).format()}
+                  </span>
+                )}
+                <span className="md:text-xl md:bg-white hidden md:block md:w-auto rounded-full text-sm text-center md:px-0 md:py-0 md:text-black">
+                  {currency(prodPriceDesktop, {
+                    pattern: '# !',
+                    separator: ' ',
+                    decimal: '.',
+                    symbol: `${locale == 'uz' ? "so'm" : 'сум'}`,
+                    precision: 0,
+                  }).format()}
+                </span>
+              </div>
               <button
-                className="md:text-xl md:hidden bg-yellow md:bg-white w-28 md:w-auto rounded-full px-2 py-2 text-sm text-center md:px-0 md:py-0 text-white md:text-black"
+                className="md:text-xl md:hidden bg-yellow flex flex-col items-center md:bg-white w-28 md:w-auto rounded-full px-2 py-2 text-sm text-center md:px-0 md:py-0 text-white md:text-black"
                 onClick={openModal}
               >
-                {locale == 'uz' ? '' : <span>от </span>}
-                {currency(prodPriceMobile, {
-                  pattern: '# !',
-                  separator: ' ',
-                  decimal: '.',
-                  symbol: `${locale == 'uz' ? "so'm" : 'сум'}`,
-                  precision: 0,
-                }).format()}
+                <span>
+                  {prodDiscountPriceDesktop > 0 && (
+                    <span className="md:text-sm md:bg-white md:w-auto rounded-full text-xs text-left line-through md:px-0 md:py-0 md:text-gray-500">
+                      {currency(prodPriceDesktop + prodDiscountPriceDesktop, {
+                        pattern: '# !',
+                        separator: ' ',
+                        decimal: '.',
+                        symbol: `${locale == 'uz' ? "so'm" : 'сум'}`,
+                        precision: 0,
+                      }).format()}
+                    </span>
+                  )}
+                </span>
+                <span>
+                  {locale == 'uz' ? '' : <span>от </span>}
+                  {currency(prodPriceDesktop, {
+                    pattern: '# !',
+                    separator: ' ',
+                    decimal: '.',
+                    symbol: `${locale == 'uz' ? "so'm" : 'сум'}`,
+                    precision: 0,
+                  }).format()}
+                </span>
               </button>
               <Transition.Root show={isOpen} as={Fragment}>
                 <Dialog
@@ -702,7 +832,7 @@ const ProductItemNew: FC<ProductItem> = ({ product, channelName }) => {
                       leaveFrom="opacity-100 translate-y-0 sm:scale-100"
                       leaveTo="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
                     >
-                      <div className="bg-white p-4 text-left transform h-screen w-full overflow-hidden fixed top-0">
+                      <div className="bg-white p-4 text-left transform w-full">
                         <div className="flex fixed w-full max-h-10 -ml-4 -mt-4 bg-white pt-8 pl-4 top-0 flex-col">
                           <div className="flex w-full items-center">
                             <span onClick={closeModal} className="flex">
@@ -714,8 +844,8 @@ const ProductItemNew: FC<ProductItem> = ({ product, channelName }) => {
                             </span>
                           </div>
                         </div>
-                        <div className="h-[calc(85vh-24px)] overflow-y-auto mt-6 overflow-hidden">
-                          <div className="h-[35vh] mx-auto bg-cover flex relative mt-10">
+                        <div className=" overflow-y-auto mt-6 overflow-hidden">
+                          <div className=" mx-auto bg-cover flex relative mt-10">
                             {store.image ? (
                               <img
                                 src={store.image}
@@ -850,7 +980,7 @@ const ProductItemNew: FC<ProductItem> = ({ product, channelName }) => {
                             </div>
                           )}
                         </div>
-                        <div className="w-full fixed bottom-0 bg-white -ml-4 px-3 py-5 items-center flex mt-3">
+                        <div className="bg-white flex items-center px-3 py-5 w-full sticky bottom-0">
                           <button
                             className="bg-yellow flex items-center justify-around focus:outline-none font-bold outline-none py-2 rounded-full text-center text-white w-full"
                             onClick={addToBasket}
