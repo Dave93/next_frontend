@@ -273,7 +273,11 @@ export default function Home({
         <h1 className="py-1 md:text-4xl text-2xl w-max my-10 m-auto">
           {tr('pizza_for_family_' + activeCity.slug)}
         </h1>
-
+        <div className="grid grid-cols-3 gap-4">
+          {readyProducts.map((sec) => (
+            <ThreePizzaNoSSR sec={sec} channelName={channelName} />
+          ))}
+        </div>
         <div className="grid lg:grid-cols-4 grid-cols-1 md:grid-cols-2 gap-10 mt-10">
           <div className="col-span-3 md:hidden">
             {halfModeProds.map((sec: any) => (
@@ -296,7 +300,6 @@ export default function Home({
                 </div>
               ) : (
                 <div key={sec.id} id={`productSection_${sec.id}`}>
-                  <ThreePizzaNoSSR sec={sec} channelName={channelName} />
                   <ProductListSectionTitle
                     title={
                       sec?.attribute_data?.name[channelName][locale || 'ru']
