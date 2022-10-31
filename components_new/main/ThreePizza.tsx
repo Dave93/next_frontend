@@ -235,29 +235,31 @@ const ThreePizza: FC<ThreePizzaProps> = ({ sec, channelName }) => {
                 <div className="grid md:grid-cols-3 gap-10 container">
                   {readyProductList.map((item: any) => (
                     <div
-                      className={`hover:shadow-lg rounded-3xl flex flex-col items-center justify-center border hover:border-yellow p-4 cursor-pointer relative ${
+                      className={`hover:shadow-lg rounded-3xl flex md:flex-col items-center justify-center border hover:border-yellow p-4 cursor-pointer relative gap-1 ${
                         selected.includes(item.id) ? 'border-yellow' : ''
                       }`}
                       key={item.id}
                       onClick={() => selectProduct(item.id)}
                     >
-                      <div className="">
-                        {selected.includes(item.id) && (
-                          <div className="absolute right-4">
-                            <CheckIcon className=" text-yellow border border-yellow rounded-full w-10" />
-                          </div>
-                        )}
-                        <Image src={item.image} width="200" height="200" />
-                      </div>
-                      <div key={item.id} className="text-xl">
-                        {
-                          item?.attribute_data?.name[channelName][
-                            locale || 'ru'
-                          ]
-                        }
+                      <div className="text-center">
+                        <div className="">
+                          {selected.includes(item.id) && (
+                            <div className="absolute right-4">
+                              <CheckIcon className=" text-yellow border border-yellow rounded-full w-10" />
+                            </div>
+                          )}
+                          <Image src={item.image} width="200" height="200" />
+                        </div>
+                        <div key={item.id} className="text-xl">
+                          {
+                            item?.attribute_data?.name[channelName][
+                              locale || 'ru'
+                            ]
+                          }
+                        </div>
                       </div>
                       <div
-                        className="mt-1 flex-grow text-center"
+                        className="mt-1 flex-grow text-center w-1/2 md:w-full"
                         dangerouslySetInnerHTML={{
                           __html: item?.attribute_data?.description
                             ? item?.attribute_data?.description[channelName][
