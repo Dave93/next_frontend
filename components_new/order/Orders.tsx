@@ -2215,36 +2215,6 @@ const Orders: FC<OrdersProps> = ({ channelName }: { channelName: any }) => {
               </div>
             </div>
           ))}
-        <div className="flex items-center border-b py-2 text-2xl">
-          <div className="font-bold">{tr('cutlery_and_napkins')}</div>
-          <label htmlFor="N" className="ml-12">
-            <div className="font-bold mx-2">{tr('no')}</div>
-          </label>
-          <input
-            type="radio"
-            value={'N'}
-            checked={cutlery === 'N'}
-            className={` ${
-              cutlery ? 'text-primary' : 'bg-gray-200'
-            } border-2 border-primary form-checkbox rounded-md text-primary outline-none focus:outline-none active:outline-none focus:border-primary`}
-            onChange={cutleryHandler}
-            id="N"
-          />
-
-          <label htmlFor="Y">
-            <div className="font-bold mx-2">{tr('yes')}</div>
-          </label>
-          <input
-            type="radio"
-            value={'Y'}
-            checked={cutlery === 'Y'}
-            className={` ${
-              cutlery ? 'text-primary' : 'bg-gray-200'
-            } border-2 border-primary form-checkbox rounded-md text-primary outline-none focus:outline-none active:outline-none focus:border-primary`}
-            onChange={cutleryHandler}
-            id="Y"
-          />
-        </div>
         {!isEmpty && (
           <div>
             <div className="flex justify-between items-center mt-8">
