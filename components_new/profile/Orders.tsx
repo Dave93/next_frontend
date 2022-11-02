@@ -181,39 +181,82 @@ const Orders: FC = () => {
                           pizza.child.length &&
                           pizza.child[0].variant?.product?.id !=
                             pizza?.variant?.product?.box_id ? (
-                            <div className="h-24 w-24 flex relative">
-                              <div className="w-12 relative overflow-hidden">
-                                <div>
-                                  <Image
-                                    src={
-                                      pizza?.variant?.product?.assets?.length
-                                        ? `${webAddress}/storage/${pizza?.variant?.product?.assets[0]?.location}/${pizza?.variant?.product?.assets[0]?.filename}`
-                                        : '/no_photo.svg'
-                                    }
-                                    width="95"
-                                    height="95"
-                                    layout="fixed"
-                                    className="absolute rounded-full"
-                                  />
+                            pizza.child.length > 1 ? (
+                              <div className="h-14 w-40 flex relative">
+                                <div className="w-5 absolute left-0">
+                                  <div>
+                                    <Image
+                                      src={
+                                        pizza?.variant?.product?.assets?.length
+                                          ? `${webAddress}/storage/${pizza?.variant?.product?.assets[0]?.location}/${pizza?.variant?.product?.assets[0]?.filename}`
+                                          : '/no_photo.svg'
+                                      }
+                                      width="40"
+                                      height="40"
+                                      layout="fixed"
+                                      className="rounded-full"
+                                    />
+                                  </div>
+                                </div>
+                                {pizza.child.map(
+                                  (child: any, index: number) => (
+                                    <div
+                                      key={`three_child_${index}`}
+                                      className="w-5 absolute"
+                                      style={{
+                                        left: index == 0 ? '0.5rem' : '1.5rem',
+                                      }}
+                                    >
+                                      <Image
+                                        src={
+                                          child.variant?.product?.assets?.length
+                                            ? `${webAddress}/storage/${child.variant?.product?.assets[0]?.location}/${child.variant?.product?.assets[0]?.filename}`
+                                            : '/no_photo.svg'
+                                        }
+                                        width="40"
+                                        height="40"
+                                        layout="fixed"
+                                        className="rounded-full"
+                                      />
+                                    </div>
+                                  )
+                                )}
+                              </div>
+                            ) : (
+                              <div className="h-28 w-28 flex relative">
+                                <div className="w-12 relative overflow-hidden">
+                                  <div>
+                                    <Image
+                                      src={
+                                        pizza?.variant?.product?.assets?.length
+                                          ? `${webAddress}/storage/${pizza?.variant?.product?.assets[0]?.location}/${pizza?.variant?.product?.assets[0]?.filename}`
+                                          : '/no_photo.svg'
+                                      }
+                                      width="40"
+                                      height="40"
+                                      layout="fixed"
+                                      className="absolute rounded-full"
+                                    />
+                                  </div>
+                                </div>
+                                <div className="w-12 relative overflow-hidden">
+                                  <div className="absolute right-0">
+                                    <Image
+                                      src={
+                                        pizza?.child[0].variant?.product?.assets
+                                          ?.length
+                                          ? `${webAddress}/storage/${pizza?.child[0].variant?.product?.assets[0]?.location}/${pizza?.child[0].variant?.product?.assets[0]?.filename}`
+                                          : '/no_photo.svg'
+                                      }
+                                      width="40"
+                                      height="40"
+                                      layout="fixed"
+                                      className="rounded-full"
+                                    />
+                                  </div>
                                 </div>
                               </div>
-                              <div className="w-12 relative overflow-hidden">
-                                <div className="absolute right-0">
-                                  <Image
-                                    src={
-                                      pizza?.child[0].variant?.product?.assets
-                                        ?.length
-                                        ? `${webAddress}/storage/${pizza?.child[0].variant?.product?.assets[0]?.location}/${pizza?.child[0].variant?.product?.assets[0]?.filename}`
-                                        : '/no_photo.svg'
-                                    }
-                                    width="95"
-                                    height="95"
-                                    layout="fixed"
-                                    className="rounded-full"
-                                  />
-                                </div>
-                              </div>
-                            </div>
+                            )
                           ) : (
                             <div>
                               <Image
@@ -234,28 +277,42 @@ const Orders: FC = () => {
                                 ? `${
                                     pizza?.variant?.product?.attribute_data
                                       ?.name[channelName][locale || 'ru']
-                                  } + ${
-                                    pizza?.child[0].variant?.product
-                                      ?.attribute_data?.name[channelName][
-                                      locale || 'ru'
-                                    ]
-                                  }`
+                                  } + ${pizza?.child
+                                    .filter(
+                                      (v: any) =>
+                                        pizza?.variant?.product?.box_id !=
+                                        v?.variant?.product?.id
+                                    )
+                                    .map(
+                                      (v: any) =>
+                                        v?.variant?.product?.attribute_data
+                                          ?.name[channelName][locale || 'ru']
+                                    )
+                                    .join(' + ')}`
                                 : pizza?.variant?.product?.attribute_data?.name[
                                     channelName
-                                  ][locale || 'ru']}
+                                  ][locale || 'ru']}{' '}
                             </div>
                           </div>
                         </div>
                         <div>
                           {pizza.child && pizza.child.length
                             ? (pizza.total > 0 ? pizza.quantity + ' X ' : '') +
-                              currency(+pizza.total + +pizza.child[0].total, {
-                                pattern: '# !',
-                                separator: ' ',
-                                decimal: '.',
-                                symbol: 'сум',
-                                precision: 0,
-                              }).format()
+                              currency(
+                                +pizza.total +
+                                  +pizza.child.reduce(
+                                    (previousValue: any, currentValue: any) =>
+                                      +previousValue + +currentValue.total,
+                                    0
+                                  ),
+                                {
+                                  pattern: '# !',
+                                  separator: ' ',
+                                  decimal: '.',
+                                  symbol: 'сум',
+                                  precision: 0,
+                                }
+                              ).format()
                             : (pizza.total > 0 ? pizza.quantity + ' X ' : '') +
                               currency(pizza.total * pizza.quantity, {
                                 pattern: '# !',
