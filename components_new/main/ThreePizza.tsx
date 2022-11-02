@@ -215,6 +215,7 @@ const ThreePizza: FC<ThreePizzaProps> = ({ sec, channelName }) => {
     }
 
     await mutate(basketResult, false)
+    setIsOpen(false)
     setIsLoadingBasket(false)
   }
 
