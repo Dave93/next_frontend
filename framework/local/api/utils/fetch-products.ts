@@ -7,8 +7,8 @@ const getProducts = async ({ fetch, queryParams }: CommerceAPIConfig) => {
       variables: {
         apiUrl: `products/public?perSection=1${
           queryParams && queryParams.city
-            ? '?city_slug=' + queryParams.city
-            : '?city_slug=tashkent'
+            ? '&city_slug=' + queryParams.city
+            : '&city_slug=tashkent'
         }`,
       },
     },
@@ -16,7 +16,6 @@ const getProducts = async ({ fetch, queryParams }: CommerceAPIConfig) => {
       method: 'GET',
     }
   )
-
   return data
 }
 export default getProducts

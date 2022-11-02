@@ -136,9 +136,6 @@ const ThreePizza: FC<ThreePizzaProps> = ({ sec, channelName }) => {
   }
 
   const addToBasket = async () => {
-    console.log(selected)
-    console.log(sec.items)
-    return
     setIsLoadingBasket(true)
     await setCredentials()
 

@@ -61,9 +61,7 @@ export async function getServerSideProps({
     } else {
       bonusList = data.data
     }
-  } catch (e) {
-    console.log('error', e)
-  }
+  } catch (e) {}
 
   const {
     categories,

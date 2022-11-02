@@ -9,10 +9,10 @@ import { useForm } from 'react-hook-form'
 const CartLeftSide = () => {
   const { session, actions } = useContext(SessionContext)
   const items = get(session, 'cart.items')
-  console.log(items)
+  // console.log(items)
 
   const { register, handleSubmit } = useForm()
-  const onSubmit = data => console.log(JSON.stringify(data))
+  const onSubmit = (data) => console.log(JSON.stringify(data))
 
   return (
     <div className="mt-2">
@@ -21,7 +21,9 @@ const CartLeftSide = () => {
           <div>
             <span className="font-bold mr-1 text-xl">Корзина</span>
             {items.length > 0 && (
-              <span className="font-bold text-[18px] text-yellow">({items.length})</span>
+              <span className="font-bold text-[18px] text-yellow">
+                ({items.length})
+              </span>
             )}
           </div>
           <div>
