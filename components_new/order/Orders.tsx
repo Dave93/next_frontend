@@ -278,7 +278,7 @@ const Orders: FC<OrdersProps> = ({ channelName }: { channelName: any }) => {
   const [activePoint, setActivePoint] = useState(
     (locationData ? locationData.terminal_id : null) as number | null
   )
-  const [cutlery, setCutlery] = useState('Y')
+
   const [isPhoneConfirmOpen, setIsPhoneConfirmOpen] = useState(false)
   const [otpCode, setOtpCode] = useState('')
   const [otpShowCode, setOtpShowCode] = useState(0)
@@ -797,10 +797,6 @@ const Orders: FC<OrdersProps> = ({ channelName }: { channelName: any }) => {
       })
       setIsSavingOrder(false)
     }
-  }
-
-  const cutleryHandler = (e: any) => {
-    setCutlery(e.target.value)
   }
 
   const loadPolygonsToMap = (ymaps: any) => {
