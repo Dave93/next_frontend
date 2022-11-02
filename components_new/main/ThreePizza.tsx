@@ -33,8 +33,6 @@ const ThreePizza: FC<ThreePizzaProps> = ({ sec, channelName }) => {
   const [isLoadingBasket, setIsLoadingBasket] = useState(false)
   const { mutate } = useCart()
 
-  console.log(selected)
-
   const fetchConfig = async () => {
     let configData
     if (!sessionStorage.getItem('configData')) {
@@ -138,6 +136,9 @@ const ThreePizza: FC<ThreePizzaProps> = ({ sec, channelName }) => {
   }
 
   const addToBasket = async () => {
+    console.log(selected)
+    console.log(sec.items)
+    return
     setIsLoadingBasket(true)
     await setCredentials()
 
@@ -151,7 +152,14 @@ const ThreePizza: FC<ThreePizzaProps> = ({ sec, channelName }) => {
         `${webAddress}/api/baskets-lines`,
         {
           basket_id: basketId,
-          variants: [{}],
+          variants: [
+            {
+              id: selected[0],
+              quantity: 1,
+              modifiers: null,
+              three: [selected[1], selected[2]],
+            },
+          ],
         },
         {
           headers: {
@@ -161,6 +169,42 @@ const ThreePizza: FC<ThreePizzaProps> = ({ sec, channelName }) => {
           withCredentials: true,
         }
       )
+      basketResult = {
+        id: basketData.data.id,
+        createdAt: '',
+        currency: { code: basketData.data.currency },
+        taxesIncluded: basketData.data.tax_total,
+        lineItems: basketData.data.lines,
+        lineItemsSubtotalPrice: basketData.data.sub_total,
+        subtotalPrice: basketData.data.sub_total,
+        totalPrice: basketData.data.total,
+      }
+    } else {
+      let additionalQuery = ''
+      if (locationData && locationData.deliveryType == 'pickup') {
+        additionalQuery = `?delivery_type=pickup`
+      }
+      const { data: basketData } = await axios.post(
+        `${webAddress}/api/baskets${additionalQuery}`,
+        {
+          variants: [
+            {
+              id: selected[0],
+              quantity: 1,
+              modifiers: null,
+              three: [selected[1], selected[2]],
+            },
+          ],
+        },
+        {
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${otpToken}`,
+          },
+          withCredentials: true,
+        }
+      )
+      localStorage.setItem('basketId', basketData.data.encoded_id)
       basketResult = {
         id: basketData.data.id,
         createdAt: '',
@@ -182,10 +226,13 @@ const ThreePizza: FC<ThreePizzaProps> = ({ sec, channelName }) => {
   }, [customNames])
 
   return (
-    <div className="container mx-auto">
+    <div>
       <div className="cursor-pointer" onClick={() => setIsOpen(true)}>
-        <div className="border-primary border-2 rounded-2xl p-3">
-          three pizza modal
+        <div className="relative md:block hidden h-[250px]">
+          <img src="/three_sale/desktop.webp" />
+        </div>
+        <div className="relative md:hidden block h-[200px]">
+          <img src="/three_sale/mobile.webp" className="mx-auto" />
         </div>
       </div>
       <Transition show={isOpen} as={Fragment}>
@@ -232,7 +279,7 @@ const ThreePizza: FC<ThreePizzaProps> = ({ sec, channelName }) => {
                 >
                   <XIcon className="cursor-pointer h-7 text-white w-7" />
                 </button>
-                <div className="grid md:grid-cols-3 gap-10 container">
+                <div className="grid md:grid-cols-3 grid-cols-2 gap-10 container">
                   {readyProductList.map((item: any) => (
                     <div
                       className={`hover:shadow-lg rounded-3xl flex md:flex-col items-center justify-center border hover:border-yellow p-4 cursor-pointer relative gap-1 ${
@@ -245,7 +292,7 @@ const ThreePizza: FC<ThreePizzaProps> = ({ sec, channelName }) => {
                         <div className="">
                           {selected.includes(item.id) && (
                             <div className="absolute right-4">
-                              <CheckIcon className=" text-yellow border border-yellow rounded-full w-10" />
+                              <CheckIcon className=" text-yellow border border-yellow rounded-full w-6 md:w-10" />
                             </div>
                           )}
                           <Image src={item.image} width="200" height="200" />
@@ -258,21 +305,11 @@ const ThreePizza: FC<ThreePizzaProps> = ({ sec, channelName }) => {
                           }
                         </div>
                       </div>
-                      <div
-                        className="mt-1 flex-grow text-center w-1/2 md:w-full"
-                        dangerouslySetInnerHTML={{
-                          __html: item?.attribute_data?.description
-                            ? item?.attribute_data?.description[channelName][
-                                locale || 'ru'
-                              ]
-                            : '',
-                        }}
-                      ></div>
                     </div>
                   ))}
                 </div>
                 <button
-                  className="bg-yellow w-full rounded-3xl px-10 py-2 text-white mt-7 flex items-center justify-around"
+                  className="bg-yellow rounded-3xl px-10 py-2 text-white mt-7 flex items-center justify-around sticky bottom-3 shadow-lg mx-auto"
                   ref={completeButtonRef}
                   onClick={addToBasket}
                 >

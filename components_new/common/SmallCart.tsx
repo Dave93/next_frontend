@@ -319,39 +319,82 @@ const SmallCart: FC<SmallCartProps> = ({ channelName }) => {
                         lineItem.child.length &&
                         lineItem.child[0].variant?.product?.id !=
                           lineItem?.variant?.product?.box_id ? (
-                          <div className="h-11 w-11 flex relative">
-                            <div className="w-5 relative overflow-hidden">
-                              <div>
-                                <Image
-                                  src={
-                                    lineItem?.variant?.product?.assets?.length
-                                      ? `${webAddress}/storage/${lineItem?.variant?.product?.assets[0]?.location}/${lineItem?.variant?.product?.assets[0]?.filename}`
-                                      : '/no_photo.svg'
-                                  }
-                                  width="40"
-                                  height="40"
-                                  layout="fixed"
-                                  className="absolute rounded-full"
-                                />
+                          lineItem.child.length > 1 ? (
+                            <div className="h-14 w-40 flex relative">
+                              <div className="w-5 absolute left-0">
+                                <div>
+                                  <Image
+                                    src={
+                                      lineItem?.variant?.product?.assets?.length
+                                        ? `${webAddress}/storage/${lineItem?.variant?.product?.assets[0]?.location}/${lineItem?.variant?.product?.assets[0]?.filename}`
+                                        : '/no_photo.svg'
+                                    }
+                                    width="40"
+                                    height="40"
+                                    layout="fixed"
+                                    className="rounded-full"
+                                  />
+                                </div>
+                              </div>
+                              {lineItem.child.map(
+                                (child: any, index: number) => (
+                                  <div
+                                    key={`three_child_${index}`}
+                                    className="w-5 absolute"
+                                    style={{
+                                      left: index == 0 ? '0.5rem' : '1.5rem',
+                                    }}
+                                  >
+                                    <Image
+                                      src={
+                                        child.variant?.product?.assets?.length
+                                          ? `${webAddress}/storage/${child.variant?.product?.assets[0]?.location}/${child.variant?.product?.assets[0]?.filename}`
+                                          : '/no_photo.svg'
+                                      }
+                                      width="40"
+                                      height="40"
+                                      layout="fixed"
+                                      className="rounded-full"
+                                    />
+                                  </div>
+                                )
+                              )}
+                            </div>
+                          ) : (
+                            <div className="h-11 w-11 flex relative">
+                              <div className="w-5 relative overflow-hidden">
+                                <div>
+                                  <Image
+                                    src={
+                                      lineItem?.variant?.product?.assets?.length
+                                        ? `${webAddress}/storage/${lineItem?.variant?.product?.assets[0]?.location}/${lineItem?.variant?.product?.assets[0]?.filename}`
+                                        : '/no_photo.svg'
+                                    }
+                                    width="40"
+                                    height="40"
+                                    layout="fixed"
+                                    className="absolute rounded-full"
+                                  />
+                                </div>
+                              </div>
+                              <div className="w-5 relative overflow-hidden">
+                                <div className="absolute right-0">
+                                  <Image
+                                    src={
+                                      lineItem?.child[0].variant?.product
+                                        ?.assets?.length
+                                        ? `${webAddress}/storage/${lineItem?.child[0].variant?.product?.assets[0]?.location}/${lineItem?.child[0].variant?.product?.assets[0]?.filename}`
+                                        : '/no_photo.svg'
+                                    }
+                                    width="40"
+                                    height="40"
+                                    layout="fixed"
+                                    className="rounded-full"
+                                  />
+                                </div>
                               </div>
                             </div>
-                            <div className="w-5 relative overflow-hidden">
-                              <div className="absolute right-0">
-                                <Image
-                                  src={
-                                    lineItem?.child[0].variant?.product?.assets
-                                      ?.length
-                                      ? `${webAddress}/storage/${lineItem?.child[0].variant?.product?.assets[0]?.location}/${lineItem?.child[0].variant?.product?.assets[0]?.filename}`
-                                      : '/no_photo.svg'
-                                  }
-                                  width="40"
-                                  height="40"
-                                  layout="fixed"
-                                  className="rounded-full"
-                                />
-                              </div>
-                            </div>
-                          </div>
+                          )
                         ) : (
                           <div>
                             <Image
