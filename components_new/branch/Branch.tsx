@@ -37,7 +37,7 @@ const Branch: FC = () => {
   useEffect(() => {
     fetchBranches()
   }, [activeCity])
-  console.log('branches', branches)
+  // console.log('branches', branches)
   return (
     <div className="flex md:flex-row flex-col justify-between pt-10 gap-10">
       <div className="md:flex-[4] md:mb-0 mb-10">
