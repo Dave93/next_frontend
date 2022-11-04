@@ -136,6 +136,9 @@ const ThreePizza: FC<ThreePizzaProps> = ({ sec, channelName }) => {
   }
 
   const addToBasket = async () => {
+    if (selected.length < 3) {
+      return
+    }
     setIsLoadingBasket(true)
     await setCredentials()
 
@@ -289,7 +292,7 @@ const ThreePizza: FC<ThreePizzaProps> = ({ sec, channelName }) => {
                       <div className="text-center">
                         <div className="">
                           {selected.includes(item.id) && (
-                            <div className="absolute right-4">
+                            <div className="absolute right-4 top-2">
                               <CheckIcon className=" text-yellow border border-yellow rounded-full w-6 md:w-10" />
                             </div>
                           )}
