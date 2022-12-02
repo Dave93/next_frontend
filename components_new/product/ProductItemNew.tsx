@@ -362,7 +362,7 @@ const ProductItemNew: FC<ProductItem> = ({ product, channelName }) => {
             modifier.push({
               id: activeValue.modifierProduct.id,
               name: 'Сосисочный борт',
-              name_uz: 'Sosiskali tomoni',
+              name_uz: "Sosiskali bo'rt",
               price: +activeValue.modifierProduct.price - +activeValue.price,
               assets: [
                 {

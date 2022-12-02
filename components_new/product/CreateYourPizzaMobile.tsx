@@ -385,7 +385,7 @@ const CreateYourPizza: FC<CreatePizzaProps> = ({ sec, channelName }) => {
         leftModifiers.push({
           id: activeVariant.modifierProduct.id,
           name: 'Сосисочный борт',
-          name_uz: 'Sosiskali tomoni',
+          name_uz: "Sosiskali bo'rt",
           price:
             +activeVariant.modifierProduct.price -
             +activeVariant.price +
