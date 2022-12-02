@@ -131,7 +131,6 @@ const Contacts: FC = () => {
       </div>
       <div className="md:grid grid-cols-2 gap-24 mb-16">
         <div>
-          <div className="mb-3">ООО «Havoqand People»</div>
           <div className="w-60">
             <div className="flex justify-between">
               <div>{tr('toshkent')}:</div>{' '}
