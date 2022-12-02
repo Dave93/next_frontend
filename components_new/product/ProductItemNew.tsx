@@ -684,7 +684,7 @@ const ProductItemNew: FC<ProductItem> = ({ product, channelName }) => {
               <div className="mt-2 text-gray-700 text-xs">{store.sizeDesc}</div>
             )}
             <div
-              className="mt-1 md:text-xs flex-grow"
+              className="mt-1 flex-grow"
               dangerouslySetInnerHTML={{
                 __html: store?.attribute_data?.description
                   ? store?.attribute_data?.description[channelName][
