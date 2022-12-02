@@ -230,10 +230,19 @@ const ThreePizza: FC<ThreePizzaProps> = ({ sec, channelName }) => {
     <div>
       <div className="cursor-pointer" onClick={() => setIsOpen(true)}>
         <div className="relative md:block hidden h-[250px]">
-          <img src="/three_sale/desktop.webp" />
+          <img
+            src={`/three_sale/${
+              locale == 'uz' ? 'desktop_uz.webp' : 'desktop.webp'
+            }`}
+          />
         </div>
         <div className="relative md:hidden block h-[200px]">
-          <img src="/three_sale/mobile.webp" className="mx-auto" />
+          <img
+            src={`/three_sale/${
+              locale == 'uz' ? 'mobile_uz.webp' : 'mobile.webp'
+            }`}
+            className="mx-auto"
+          />
         </div>
       </div>
       <Transition show={isOpen} as={Fragment}>
