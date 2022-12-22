@@ -371,7 +371,7 @@ export default function Home({
           </div>
           <div
             className={`sticky ${
-              isStickySmall ? 'top-11' : 'top-16'
+              isStickySmall ? 'top-16' : 'top-16'
             } max-h-screen hidden md:block`}
           >
             {halfModeProds.map((sec: any) => (
