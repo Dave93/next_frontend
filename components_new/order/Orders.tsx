@@ -1298,14 +1298,14 @@ const Orders: FC<OrdersProps> = ({ channelName }: { channelName: any }) => {
         </div>
         {tabIndex == 'deliver' && (
           <div className="bg-white p-10 rounded-2xl">
-            <div className="flex justify-between">
+            <div className="flex justify-between items-center">
               <div className="text-gray-400 font-bold text-lg">
                 {tr('chooseLocation')}
               </div>
               <div>
                 <Menu as="div" className="relative inline-block text-left">
                   <div>
-                    <Menu.Button className="focus:outline-none font-medium inline-flex justify-center px-4 py-2 text-secondary text-sm w-full">
+                    <Menu.Button className="focus:outline-none font-medium inline-flex justify-center py-2 text-secondary text-lg w-full items-center">
                       {locale == 'uz' ? chosenCity?.name_uz : chosenCity?.name}
                       <ChevronDownIcon
                         className="w-5 h-5 ml-2 -mr-1 text-violet-200 hover:text-violet-100"
@@ -1356,7 +1356,7 @@ const Orders: FC<OrdersProps> = ({ channelName }: { channelName: any }) => {
                       onLoad={(ymaps: any) => loadPolygonsToMap(ymaps)}
                       instanceRef={(ref) => (map.current = ref)}
                       width="100%"
-                      height={`${window.innerWidth < 768 ? '200px' : '530px'}`}
+                      height={`${window.innerWidth < 768 ? '100px' : '530px'}`}
                       onClick={clickOnMap}
                       modules={[
                         'control.ZoomControl',
@@ -1367,7 +1367,6 @@ const Orders: FC<OrdersProps> = ({ channelName }: { channelName: any }) => {
                     >
                       <span className="flex absolute h-3 w-3 left-1 top-1 z-10">
                         <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-yellow opacity-75"></span>
-                        <span className="relative inline-flex rounded-full h-3 w-3 bg-yellow"></span>
                       </span>
                       {selectedCoordinates.map((item: any, index: number) => (
                         <Placemark

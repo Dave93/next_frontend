@@ -962,14 +962,14 @@ const LocationTabs: FC = () => {
       </div>
       {tabIndex == 'deliver' && (
         <div className="mt-2">
-          <div className="flex justify-between">
+          <div className="flex justify-between items-center">
             <div className="text-gray-400 font-bold text-[18px]">
               {tr('chooseLocation')}
             </div>
             <div>
               <Menu as="div" className="relative inline-block text-left">
                 <div>
-                  <Menu.Button className="focus:outline-none font-medium inline-flex justify-center px-4 py-2 text-secondary text-sm w-full">
+                  <Menu.Button className="focus:outline-none font-medium inline-flex justify-center py-2 text-secondary items-center text-lg w-full">
                     {locale == 'uz' ? chosenCity?.name_uz : chosenCity?.name}
                     <ChevronDownIcon
                       className="w-5 h-5 ml-2 -mr-1 text-violet-200 hover:text-violet-100"
