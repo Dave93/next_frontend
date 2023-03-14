@@ -341,6 +341,9 @@ const SignInButton: FC = () => {
                                   </button>
                                 )}
                               </div>
+                              <div className="text-primary mt-3">
+                                {tr('callUsIfSmsNotReceived')}
+                              </div>
                               <div className="mt-10">
                                 <button
                                   className={`py-3 px-20 text-white font-bold text-xl text-center rounded-full w-full outline-none focus:outline-none ${
@@ -519,6 +522,9 @@ const SignInButton: FC = () => {
                                   </div>
                                 </>
                               )}
+                              <div className="text-primary mt-3">
+                                {tr('callUsIfSmsNotReceived')}
+                              </div>
                               <div className="mt-10">
                                 <button
                                   className={`py-3 md:px-20 text-white font-bold text-xl text-center rounded-full w-full outline-none focus:outline-none ${
