@@ -22,6 +22,7 @@ import { Dialog, Transition } from '@headlessui/react'
 import OtpInput from 'react-otp-input'
 import Input from 'react-phone-number-input/input'
 import styles from './SmallCartMobile.module.css'
+import { useGoogleReCaptcha } from 'react-google-recaptcha-v3'
 
 const { publicRuntimeConfig } = getConfig()
 let webAddress = publicRuntimeConfig.apiUrl
@@ -44,6 +45,7 @@ const errors: Errors = {
 let otpTimerRef: NodeJS.Timeout
 
 const SmallCartMobile: FC = () => {
+  const { executeRecaptcha } = useGoogleReCaptcha()
   const { t: tr } = useTranslation('common')
 
   const router = useRouter()
@@ -123,61 +125,70 @@ const SmallCartMobile: FC = () => {
   } = useForm<AnyObject>({
     mode: 'onChange',
   })
-  const onSubmit: SubmitHandler<AnyObject> = async (data) => {
-    setSubmitError('')
-    const csrfReq = await axios(`${publicRuntimeConfig.apiUrl}/api/keldi`, {
-      method: 'GET',
-      headers: {
-        'Content-Type': 'application/json',
-        crossDomain: true,
-      },
-      withCredentials: true,
-    })
-    let { data: res } = csrfReq
-    const csrf = Buffer.from(res.result, 'base64').toString('ascii')
+  const onSubmit = useCallback(
+    async (data) => {
+      if (!executeRecaptcha) {
+        return
+      }
 
-    Cookies.set('X-XSRF-TOKEN', csrf)
-    axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest'
-    axios.defaults.headers.common['X-CSRF-TOKEN'] = csrf
-    axios.defaults.headers.common['XCSRF-TOKEN'] = csrf
-    let ress = await axios.post(
-      `${publicRuntimeConfig.apiUrl}/api/send_otp`,
-      data,
-      {
+      const captcha = await executeRecaptcha('signIn')
+      setSubmitError('')
+      const csrfReq = await axios(`${publicRuntimeConfig.apiUrl}/api/keldi`, {
+        method: 'GET',
         headers: {
           'Content-Type': 'application/json',
+          crossDomain: true,
         },
         withCredentials: true,
-      }
-    )
+      })
+      let { data: res } = csrfReq
+      const csrf = Buffer.from(res.result, 'base64').toString('ascii')
 
-    let {
-      data: { error: otpError, data: result, success },
-    }: {
-      data: {
-        error: string
-        data: AnyObject
-        success: any
-      }
-    } = ress
+      Cookies.set('X-XSRF-TOKEN', csrf)
+      axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest'
+      axios.defaults.headers.common['X-CSRF-TOKEN'] = csrf
+      axios.defaults.headers.common['XCSRF-TOKEN'] = csrf
+      let ress = await axios.post(
+        `${publicRuntimeConfig.apiUrl}/api/send_otp`,
+        data,
+        {
+          headers: {
+            'Content-Type': 'application/json',
+            wtf: captcha,
+          },
+          withCredentials: true,
+        }
+      )
 
-    if (otpError) {
-      setSubmitError(errors[otpError])
-      if (otpError == 'name_field_is_required') {
-        setShowUserName(true)
+      let {
+        data: { error: otpError, data: result, success },
+      }: {
+        data: {
+          error: string
+          data: AnyObject
+          success: any
+        }
+      } = ress
+
+      if (otpError) {
+        setSubmitError(errors[otpError])
+        if (otpError == 'name_field_is_required') {
+          setShowUserName(true)
+        }
+      } else if (success) {
+        success = Buffer.from(success, 'base64')
+        success = success.toString()
+        success = JSON.parse(success)
+        Cookies.set('opt_token', success.user_token)
+        localStorage.setItem('opt_token', success.user_token)
+        otpTime.current = result?.time_to_answer
+        setOtpShowCode(otpTime.current)
+        startTimeout()
+        setIsShowPasswordForm(true)
       }
-    } else if (success) {
-      success = Buffer.from(success, 'base64')
-      success = success.toString()
-      success = JSON.parse(success)
-      Cookies.set('opt_token', success.user_token)
-      localStorage.setItem('opt_token', success.user_token)
-      otpTime.current = result?.time_to_answer
-      setOtpShowCode(otpTime.current)
-      startTimeout()
-      setIsShowPasswordForm(true)
-    }
-  }
+    },
+    [executeRecaptcha]
+  )
 
   const submitPasswordForm: SubmitHandler<AnyObject> = async (data) => {
     setSubmitError('')
