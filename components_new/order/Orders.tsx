@@ -892,6 +892,29 @@ const Orders: FC<OrdersProps> = ({ channelName }: { channelName: any }) => {
       sourceType = 'mobile_web'
     }
     try {
+      const { address } = await getValues()
+
+      const failedAddresses = [
+        'Узбекистан, Ташкент,',
+        "O'zbekiston, Toshkent,",
+        'Узбекистан, Ташкент',
+        'Узбекистан',
+        'Узбекистан,',
+      ]
+
+      if (failedAddresses.includes(address!)) {
+        const erText =
+          locale == 'ru'
+            ? 'Введите правильный адрес'
+            : "Adresni to'g'ri kiriting"
+        toast.error(erText, {
+          position: toast.POSITION.BOTTOM_RIGHT,
+          hideProgressBar: true,
+        })
+        setIsSavingOrder(false)
+        return
+      }
+
       const { data } = await axios.post(
         `${webAddress}/api/orders`,
         {
