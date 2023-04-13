@@ -902,7 +902,7 @@ const Orders: FC<OrdersProps> = ({ channelName }: { channelName: any }) => {
         'Узбекистан,',
       ]
 
-      if (failedAddresses.includes(address!)) {
+      if (address && failedAddresses.includes(address)) {
         const erText =
           locale == 'ru'
             ? 'Введите правильный адрес'
