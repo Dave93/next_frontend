@@ -147,6 +147,12 @@ const OrderTracking: FC<OrderTrackingDetailProps> = ({ orderId }) => {
                     <strong className="font-bold">{tr('error_label')}: </strong>
                     <span className="block sm:inline">{tr(data.message)}</span>
                   </div>
+                  <div
+                    className="text-sm md:rounded-lg rounded-full py-2 px-7 mt-5 text-white bg-green-500 cursor-pointer"
+                    onClick={() => setShouldFetch(true)}
+                  >
+                    {tr('refresh')}
+                  </div>
                 </div>
               )}
             </>
@@ -225,7 +231,7 @@ const OrderTracking: FC<OrderTrackingDetailProps> = ({ orderId }) => {
                   </div>
                 </YMaps>
                 {data?.courier && (
-                  <div className="bg-white border-2 border-red-500 text-gray-700 px-4 py-3 shadow-lg rounded-md absolute bottom-4 right-4">
+                  <div className="bg-white border-2 border-yellow text-gray-700 px-4 py-3 shadow-lg rounded-md absolute bottom-4 right-4">
                     <h3 className="text-xl font-medium mb-2 text-center uppercase">
                       Курьер
                     </h3>
