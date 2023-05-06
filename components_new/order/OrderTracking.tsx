@@ -45,7 +45,7 @@ const OrderTracking: FC<OrderTrackingDetailProps> = ({ orderId }) => {
     'track_order',
     async () => {
       const { data } = await axios.get(
-        `${webAddress}/api/orders/track/?id=${orderId}`,
+        `${webAddress}/api/orders/track/?id=${orderId}&new=true`,
         {
           headers: {
             Authorization: `Bearer ${Cookies.get('opt_token')}`,
@@ -63,6 +63,7 @@ const OrderTracking: FC<OrderTrackingDetailProps> = ({ orderId }) => {
 
   const [mapCenter, setMapCenter] = useState([] as number[])
   const [placeMarks, setPlaceMarks] = useState([] as any[])
+  const [coords, setCoords] = useState([] as any[])
   const [points, setPoints] = useState<any | null>(null)
 
   const mapState = useMemo<MapState>(() => {
@@ -89,9 +90,10 @@ const OrderTracking: FC<OrderTrackingDetailProps> = ({ orderId }) => {
         {
           // random key
           key: Math.ceil(Math.random() * 100004),
-          location: [...Object.values(data?.data).map((i: any) => +i)],
+          location: [...Object.values(data?.data[0]).map((i: any) => +i)],
         },
       ])
+      setCoords(data?.data || [])
       setPoints({
         ...data,
       })
@@ -180,6 +182,29 @@ const OrderTracking: FC<OrderTrackingDetailProps> = ({ orderId }) => {
                       ]}
                       instanceRef={(ref) => (map.current = ref)}
                       onLoad={(ymaps) => {
+                        setTimeout(() => {
+                          if (coords?.length > 0) {
+                            var mapPoints: any[] = coords.map((point) => [
+                              point.latitude,
+                              point.longitude,
+                            ])
+                            var polyline = new ymaps.Polyline(
+                              mapPoints,
+                              {
+                                // hintContent: status_name,
+                              },
+                              {
+                                // draggable: true,
+                                strokeColor: '#5b6ffa',
+                                strokeWidth: 5,
+                                // Первой цифрой задаем длину штриха. Второй — длину разрыва.
+                                // strokeStyle: "1 5",
+                              }
+                            )
+                            // Добавляем линию на карту.
+                            map.current.geoObjects.add(polyline)
+                          }
+                        }, 300)
                         var placemark = new ymaps.Placemark(
                           [
                             points?.from_location.lat,
