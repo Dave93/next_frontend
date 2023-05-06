@@ -8,6 +8,7 @@ import getConfig from 'next/config'
 import { ParsedUrlQuery } from 'querystring'
 import OrderTracking from '@components_new/order/OrderTracking'
 import useTranslation from 'next-translate/useTranslation'
+import { useUI } from '@components/ui/context'
 
 interface IParams extends ParsedUrlQuery {
   id: string
@@ -93,10 +94,28 @@ export default function OrderId({
   orderStatuses: any
 }) {
   const { t: tr } = useTranslation('common')
+  const { user, activeCity, openSignInModal } = useUI()
   return (
     <div>
       {orderData && orderData.id && <OrderTracking orderId={orderData.id} />}
-      {!orderData.id && (
+      {!user && (
+        <div className="text-center mt-10">
+          <div
+            className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 mb-4 rounded relative"
+            role="alert"
+          >
+            <strong className="font-bold">{tr('error_label')}: </strong>
+            <span className="block sm:inline">{tr('user_not_signed')}</span>
+          </div>
+          <button
+            className="text-xl text-white bg-yellow rounded-2xl mt-10 md:w-max m-auto py-3 px-16 cursor-pointer text-center mx-5 md:mx-auto"
+            onClick={() => openSignInModal()}
+          >
+            <div>{tr('signIn')}</div>
+          </button>
+        </div>
+      )}
+      {user && !orderData.id && (
         <div className="text-center mt-10">
           <h1 className="text-3xl font-bold">{tr('order_not_found')}</h1>
         </div>
