@@ -82,6 +82,7 @@
     "react-facebook-pixel": "^1.0.4",
     "react-fast-marquee": "^1.1.4",
     "react-flags-select": "^2.1.2",
+    "react-google-recaptcha-v3": "^1.10.1",
     "react-hook-form": "^7.8.8",
     "react-hook-form-mui": "^5.1.0",
     "react-merge-refs": "^1.1.0",

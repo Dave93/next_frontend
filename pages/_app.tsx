@@ -17,6 +17,7 @@ import { ToastContainer } from 'react-toastify'
 import { pwaTrackingListeners } from '../scripts/pwaEventlisteners'
 import FacebookPixel from '@components/common/FacebookPixel'
 import { QueryClient, QueryClientProvider } from 'react-query'
+import { GoogleReCaptchaProvider } from 'react-google-recaptcha-v3'
 import { YMInitializer } from 'react-yandex-metrika'
 
 const isBrowser = typeof window !== 'undefined'
@@ -37,17 +38,21 @@ export default function MyApp({ Component, pageProps }: AppProps) {
 
   return (
     <>
-      <Head />
-      <FacebookPixel />
-      <ManagedUIContext pageProps={pageProps}>
-        <QueryClientProvider client={queryClient}>
-          <Layout pageProps={pageProps}>
-            <Component {...pageProps} />
-          </Layout>
-        </QueryClientProvider>
-      </ManagedUIContext>
-      <ToastContainer />
-      {/* <YMInitializer
+      <GoogleReCaptchaProvider
+        reCaptchaKey="6LfDMQElAAAAAL0Nbu6ypK_-chUW81SXBIQgeuoe"
+        language="RU"
+      >
+        <Head />
+        <FacebookPixel />
+        <ManagedUIContext pageProps={pageProps}>
+          <QueryClientProvider client={queryClient}>
+            <Layout pageProps={pageProps}>
+              <Component {...pageProps} />
+            </Layout>
+          </QueryClientProvider>
+        </ManagedUIContext>
+        <ToastContainer />
+        {/* <YMInitializer
         accounts={[86632071]}
         options={{
           webvisor: true,
@@ -57,6 +62,7 @@ export default function MyApp({ Component, pageProps }: AppProps) {
         }}
         version="2"
       /> */}
+      </GoogleReCaptchaProvider>
     </>
   )
 }
