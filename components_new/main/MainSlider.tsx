@@ -32,7 +32,7 @@ const MainSlider: FC = () => {
     )
     // sliderRef.current?.moveTo(0)
     sliderRef.current?.destroy()
-    setDefaultIndex(1)
+    setDefaultIndex(0)
     setSliders(data.data)
     setTimeout(() => {
       sliderRef.current?.init()
