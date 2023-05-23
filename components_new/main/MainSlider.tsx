@@ -14,7 +14,7 @@ const MainSlider: FC = () => {
   let router = useRouter()
 
   const [sliders, setSliders] = useState([])
-  const [defaultIndex, setDefaultIndex] = useState(1)
+  const [defaultIndex, setDefaultIndex] = useState(0)
 
   const { locale } = router
 
