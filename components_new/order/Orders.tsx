@@ -892,6 +892,29 @@ const Orders: FC<OrdersProps> = ({ channelName }: { channelName: any }) => {
       sourceType = 'mobile_web'
     }
     try {
+      const { address } = await getValues()
+
+      const failedAddresses = [
+        'Узбекистан, Ташкент,',
+        "O'zbekiston, Toshkent,",
+        'Узбекистан, Ташкент',
+        'Узбекистан',
+        'Узбекистан,',
+      ]
+
+      if (address && failedAddresses.includes(address)) {
+        const erText =
+          locale == 'ru'
+            ? 'Введите правильный адрес'
+            : "Adresni to'g'ri kiriting"
+        toast.error(erText, {
+          position: toast.POSITION.BOTTOM_RIGHT,
+          hideProgressBar: true,
+        })
+        setIsSavingOrder(false)
+        return
+      }
+
       const { data } = await axios.post(
         `${webAddress}/api/orders`,
         {
@@ -1879,7 +1902,7 @@ const Orders: FC<OrdersProps> = ({ channelName }: { channelName: any }) => {
           >
             {tr('in_cash')}
           </button>
-          <button
+          {/* <button
             className={`${
               openTab !== 2
                 ? 'text-gray-400 bg-gray-100'
@@ -1888,7 +1911,7 @@ const Orders: FC<OrdersProps> = ({ channelName }: { channelName: any }) => {
             onClick={() => setOpenTab(2)}
           >
             {tr('payment_type_card')}
-          </button>
+          </button> */}
           <button
             className={`${
               openTab !== 3
@@ -1910,9 +1933,9 @@ const Orders: FC<OrdersProps> = ({ channelName }: { channelName: any }) => {
             placeholder={tr('change')}
           />
         </div>
-        <div className={openTab === 2 ? 'block' : 'hidden'} id="link2">
-          <div className="grid grid-cols-2 w-60 pt-8 items-center">
-            <label
+        {/* <div className={openTab === 2 ? 'block' : 'hidden'} id="link2"> */}
+        {/* <div className="grid grid-cols-2 w-60 pt-8 items-center"> */}
+        {/* <label
               className={`flex justify-around items-center w-24 h-24 p-3 rounded-2xl ${
                 payType == 'uzcard' ? 'border-yellow' : 'border-gray-200'
               } border cursor-pointer`}
@@ -1924,9 +1947,9 @@ const Orders: FC<OrdersProps> = ({ channelName }: { channelName: any }) => {
                 checked={payType === 'uzcard'}
                 onChange={onValueChange}
                 className="hidden"
-              />
-            </label>
-            {/* <label
+              /> */}
+        {/* </label> */}
+        {/* <label
               className={`flex justify-around items-center w-24 h-24 p-3 rounded-2xl ${
                 payType == 'visa' ? 'border-yellow' : 'border-gray-200'
               } border cursor-pointer`}
@@ -1940,7 +1963,7 @@ const Orders: FC<OrdersProps> = ({ channelName }: { channelName: any }) => {
                 className="hidden"
               />
             </label> */}
-            {/* <label
+        {/* <label
               className={`flex justify-around items-center w-24 h-24 p-3 rounded-2xl ${
                 payType == 'humo' ? 'border-yellow' : 'border-gray-200'
               } border cursor-pointer`}
@@ -1954,7 +1977,7 @@ const Orders: FC<OrdersProps> = ({ channelName }: { channelName: any }) => {
                 className="hidden"
               />
             </label> */}
-            {/* <label
+        {/* <label
               className={`flex justify-around items-center w-24 h-24 p-3 rounded-2xl ${
                 payType == 'mastercard' ? 'border-yellow' : 'border-gray-200'
               } border cursor-pointer`}
@@ -1968,8 +1991,8 @@ const Orders: FC<OrdersProps> = ({ channelName }: { channelName: any }) => {
                 className="hidden"
               />
             </label> */}
-          </div>
-          {/* <div className="md:w-[460px] pt-10">
+        {/* </div> */}
+        {/* <div className="md:w-[460px] pt-10">
             <div className="flex justify-between">
               <input
                 type="text"
@@ -1999,7 +2022,7 @@ const Orders: FC<OrdersProps> = ({ channelName }: { channelName: any }) => {
               />
             </div>
           </div> */}
-        </div>
+        {/* </div> */}
         <div className={openTab === 3 ? 'block' : 'hidden'} id="link3">
           <div className="pt-8 items-center flex gap-1">
             {locationData?.terminal_id &&
