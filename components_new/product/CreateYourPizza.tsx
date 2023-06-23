@@ -124,16 +124,20 @@ const CreateYourPizza: FC<CreatePizzaProps> = ({
     let leftProduct = leftSelectedProduct.variants.find((v: any) => {
       if (locale == 'uz') {
         return v?.custom_name_uz == activeCustomName
-      } else {
+      } else if (locale == 'ru') {
         return v?.custom_name == activeCustomName
+      } else if (locale == 'en') {
+        return v?.custom_name_en == activeCustomName
       }
     })
 
     let rightProduct = rightSelectedProduct.variants.find((v: any) => {
       if (locale == 'uz') {
         return v?.custom_name_uz == activeCustomName
-      } else {
+      } else if (locale == 'ru') {
         return v?.custom_name == activeCustomName
+      } else if (locale == 'en') {
+        return v?.custom_name_en == activeCustomName
       }
     })
 
@@ -279,8 +283,12 @@ const CreateYourPizza: FC<CreatePizzaProps> = ({
         if (vars?.custom_name_uz == activeCustomName) {
           activeVariant = vars
         }
-      } else {
+      } else if (locale == 'ru') {
         if (vars?.custom_name == activeCustomName) {
+          activeVariant = vars
+        }
+      } else if (locale == 'en') {
+        if (vars?.custom_name_en == activeCustomName) {
           activeVariant = vars
         }
       }
@@ -354,8 +362,10 @@ const CreateYourPizza: FC<CreatePizzaProps> = ({
       item.variants.map((vars: any) => {
         if (locale == 'uz') {
           names[vars?.custom_name_uz] = vars?.custom_name_uz
-        } else {
+        } else if (locale == 'ru') {
           names[vars?.custom_name] = vars?.custom_name
+        } else if (locale == 'en') {
+          names[vars?.custom_name_en] = vars?.custom_name_en
         }
       })
     })
@@ -375,8 +385,15 @@ const CreateYourPizza: FC<CreatePizzaProps> = ({
               res.isInStop = true
             }
           }
-        } else {
+        } else if (locale == 'ru') {
           if (vars?.custom_name == activeCustomName) {
+            res.price = vars.price
+            if (stopProducts.includes(vars.product_id)) {
+              res.isInStop = true
+            }
+          }
+        } else if (locale == 'en') {
+          if (vars?.custom_name_en == activeCustomName) {
             res.price = vars.price
             if (stopProducts.includes(vars.product_id)) {
               res.isInStop = true
@@ -424,8 +441,12 @@ const CreateYourPizza: FC<CreatePizzaProps> = ({
         if (vars?.custom_name_uz == activeCustomName) {
           leftModifiers = vars.modifiers
         }
-      } else {
+      } else if (locale == 'ru') {
         if (vars?.custom_name == activeCustomName) {
+          leftModifiers = vars.modifiers
+        }
+      } else if (locale == 'en') {
+        if (vars?.custom_name_en == activeCustomName) {
           leftModifiers = vars.modifiers
         }
       }
@@ -437,8 +458,12 @@ const CreateYourPizza: FC<CreatePizzaProps> = ({
         if (vars?.custom_name_uz == activeCustomName) {
           activeVariant = vars
         }
-      } else {
+      } else if (locale == 'ru') {
         if (vars?.custom_name == activeCustomName) {
+          activeVariant = vars
+        }
+      } else if (locale == 'en') {
+        if (vars?.custom_name_en == activeCustomName) {
           activeVariant = vars
         }
       }
@@ -449,8 +474,12 @@ const CreateYourPizza: FC<CreatePizzaProps> = ({
         if (vars?.custom_name_uz == activeCustomName) {
           rightActiveVariant = vars
         }
-      } else {
+      } else if (locale == 'ru') {
         if (vars?.custom_name == activeCustomName) {
+          rightActiveVariant = vars
+        }
+      } else if (locale == 'en') {
+        if (vars?.custom_name_en == activeCustomName) {
           rightActiveVariant = vars
         }
       }
@@ -465,6 +494,7 @@ const CreateYourPizza: FC<CreatePizzaProps> = ({
           id: activeVariant.modifierProduct.id,
           name: 'Сосисочный борт',
           name_uz: "Sosiskali bo'rt",
+          name_en: 'Sausage border',
           price:
             +activeVariant.modifierProduct.price -
             +activeVariant.price +
@@ -840,7 +870,9 @@ const CreateYourPizza: FC<CreatePizzaProps> = ({
                                 )}
                               </div>
                               <div className="px-2 text-center text-xs pb-1">
-                                {locale == 'uz' ? mod.name_uz : mod.name}
+                                {locale == 'uz' ? mod.name_uz : ''}
+                                {locale == 'ru' ? mod.name_ru : ''}
+                                {locale == 'en' ? mod.name_en : ''}
                               </div>
                               <div
                                 className={`${
@@ -974,7 +1006,9 @@ const CreateYourPizza: FC<CreatePizzaProps> = ({
                                 pattern: '# !',
                                 separator: ' ',
                                 decimal: '.',
-                                symbol: `${locale == 'uz' ? "so'm" : 'сум'}`,
+                                symbol: `${locale == 'uz' ? "so'm" : ''}
+                                      ${locale == 'ru' ? 'сум' : ''}
+                                      ${locale == 'en' ? 'sum' : ''}`,
                                 precision: 0,
                               }).format()}
                             </span>

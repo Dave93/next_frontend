@@ -36,7 +36,7 @@ const ChooseCityDropDown: FC = () => {
       {({ open }) => (
         <>
           <div>
-            <Menu.Button className="bg-white focus:outline-none font-medium inline-flex justify-center outline-none py-2 text-secondary text-sm w-full">
+            <Menu.Button className="bg-white focus:outline-none font-medium inline-flex justify-center outline-none text-secondary text-2xl w-full">
               {locale == 'uz' ? chosenCity?.name_uz : chosenCity?.name}
             </Menu.Button>
           </div>
@@ -57,7 +57,7 @@ const ChooseCityDropDown: FC = () => {
             >
               <Menu.Item>
                 {({ active }) => (
-                  <span className="text-secondary block px-4 py-2 text-sm">
+                  <span className="text-secondary block px-4 py-2">
                     {tr('your_city')}
                   </span>
                 )}
@@ -66,7 +66,7 @@ const ChooseCityDropDown: FC = () => {
                 <Menu.Item key={item.id}>
                   <span
                     onClick={() => changeCity(item)}
-                    className={`block px-4 py-2 text-sm cursor-pointer ${
+                    className={`block px-4 py-2 cursor-pointer ${
                       chosenCity.id == item.id
                         ? 'bg-secondary text-white'
                         : 'text-secondary'
