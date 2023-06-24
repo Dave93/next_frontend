@@ -970,7 +970,13 @@ const LocationTabs: FC = () => {
               <Menu as="div" className="relative inline-block text-left">
                 <div>
                   <Menu.Button className="focus:outline-none font-medium inline-flex justify-center py-2 text-secondary items-center text-lg w-full">
-                    {locale == 'uz' ? chosenCity?.name_uz : chosenCity?.name}
+                    {locale == 'uz'
+                      ? chosenCity?.name_uz
+                      : '' || locale == 'ru'
+                      ? chosenCity?.name
+                      : '' || locale == 'en'
+                      ? chosenCity?.name_en
+                      : '' || ''}
                     <ChevronDownIcon
                       className="w-5 h-5 ml-2 -mr-1 text-violet-200 hover:text-violet-100"
                       aria-hidden="true"
@@ -997,7 +1003,13 @@ const LocationTabs: FC = () => {
                               : 'text-secondary'
                           }`}
                         >
-                          {locale == 'uz' ? city.name_uz : city.name}
+                          {locale == 'uz'
+                            ? city.name_uz
+                            : '' || locale == 'ru'
+                            ? city.name
+                            : '' || locale == 'en'
+                            ? city.name_en
+                            : '' || ''}
                         </span>
                       </Menu.Item>
                     ))}

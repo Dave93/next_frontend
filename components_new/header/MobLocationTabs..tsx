@@ -128,8 +128,10 @@ const MobLocationTabs: FC = () => {
   if (activeCity.active) {
     if (locale == 'ru') {
       currentAddress = 'Узбекистан, ' + activeCity.name + ','
-    } else {
+    } else if (locale == 'uz') {
       currentAddress = "O'zbekiston, " + activeCity.name_uz + ','
+    } else if (locale == 'en') {
+      currentAddress = 'Uzbekistan, ' + activeCity.name_en + ','
     }
   }
 
@@ -282,10 +284,15 @@ const MobLocationTabs: FC = () => {
       downshiftControl?.current?.reset({
         inputValue: "O'zbekiston, " + city.name_uz + ',',
       })
-    } else {
+    } else if (locale == 'ru') {
       setValue('address', 'Узбекистан, ' + city.name)
       downshiftControl?.current?.reset({
         inputValue: 'Узбекистан, ' + city.name + ',',
+      })
+    } else if (locale == 'en') {
+      setValue('address', 'Uzbekistan, ' + city.name_en)
+      downshiftControl?.current?.reset({
+        inputValue: 'Uzbekistan, ' + city.name_en + ',',
       })
     }
     let link = pathname
@@ -983,7 +990,13 @@ const MobLocationTabs: FC = () => {
               <Menu as="div" className="relative inline-block text-left">
                 <div>
                   <Menu.Button className="focus:outline-none font-medium inline-flex justify-center py-2 text-secondary items-center text-lg w-full">
-                    {locale == 'uz' ? chosenCity?.name_uz : chosenCity?.name}
+                    {locale == 'uz'
+                      ? chosenCity?.name_uz
+                      : '' || locale == 'ru'
+                      ? chosenCity?.name
+                      : '' || locale == 'en'
+                      ? chosenCity?.name_en
+                      : '' || ''}
                     <ChevronDownIcon
                       className="w-5 h-5 ml-2 -mr-1 text-violet-200 hover:text-violet-100"
                       aria-hidden="true"

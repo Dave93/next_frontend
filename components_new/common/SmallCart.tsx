@@ -477,7 +477,14 @@ const SmallCart: FC<SmallCartProps> = ({ channelName }) => {
                                 pattern: '# !',
                                 separator: ' ',
                                 decimal: '.',
-                                symbol: `${locale == 'uz' ? "so'm" : 'сум'}`,
+                                symbol:
+                                  locale === 'uz'
+                                    ? "so'm"
+                                    : '' || locale === 'ru'
+                                    ? 'сум'
+                                    : '' || locale === 'en'
+                                    ? 'sum'
+                                    : '',
                                 precision: 0,
                               }).format()}
                             </span>
@@ -491,7 +498,14 @@ const SmallCart: FC<SmallCartProps> = ({ channelName }) => {
                                 pattern: '# !',
                                 separator: ' ',
                                 decimal: '.',
-                                symbol: `${locale == 'uz' ? "so'm" : 'сум'}`,
+                                symbol:
+                                  locale === 'uz'
+                                    ? "so'm"
+                                    : '' || locale === 'ru'
+                                    ? 'сум'
+                                    : '' || locale === 'en'
+                                    ? 'sum'
+                                    : '',
                                 precision: 0,
                               }
                             ).format()}
@@ -516,7 +530,14 @@ const SmallCart: FC<SmallCartProps> = ({ channelName }) => {
                     pattern: '# !',
                     separator: ' ',
                     decimal: '.',
-                    symbol: `${locale == 'uz' ? "so'm" : 'сум'}`,
+                    symbol:
+                      locale === 'uz'
+                        ? "so'm"
+                        : '' || locale === 'ru'
+                        ? 'сум'
+                        : '' || locale === 'en'
+                        ? 'sum'
+                        : '',
                     precision: 0,
                   }).format()}
                 </span>
@@ -526,7 +547,14 @@ const SmallCart: FC<SmallCartProps> = ({ channelName }) => {
                   pattern: '# !',
                   separator: ' ',
                   decimal: '.',
-                  symbol: `${locale == 'uz' ? "so'm" : 'сум'}`,
+                  symbol:
+                    locale === 'uz'
+                      ? "so'm"
+                      : '' || locale === 'ru'
+                      ? 'сум'
+                      : '' || locale === 'en'
+                      ? 'sum'
+                      : '',
                   precision: 0,
                 }).format()}
               </div>

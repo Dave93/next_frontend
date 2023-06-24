@@ -39,11 +39,9 @@ const ChooseCityDropDown: FC = () => {
               <div className="flex items-center">
                 <Image src="/assets/location.png" width="14" height="16" />
                 <div className="ml-3 text-xl">
-                  {chosenCity?.name
-                    ? locale == 'uz'
-                      ? chosenCity?.name_uz
-                      : chosenCity?.name
-                    : 'Ваш город'}
+                  {locale == 'uz' ? chosenCity?.name_uz : ''}
+                  {locale == 'ru' ? chosenCity?.name : ''}
+                  {locale == 'en' ? chosenCity?.name_en : ''}
                 </div>
               </div>
             </Menu.Button>
@@ -69,7 +67,9 @@ const ChooseCityDropDown: FC = () => {
                     onClick={() => changeCity(item)}
                     className={`block px-4 py-2 cursor-pointer text-xl ml-12`}
                   >
-                    {locale == 'ru' ? item.name : item.name_uz}
+                    {locale == 'ru' ? item.name : ''}
+                    {locale == 'uz' ? item.name_uz : ''}
+                    {locale == 'en' ? item.name_en : ''}
                   </span>
                 </Menu.Item>
               ))}

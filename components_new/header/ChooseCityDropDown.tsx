@@ -37,7 +37,9 @@ const ChooseCityDropDown: FC = () => {
         <>
           <div>
             <Menu.Button className="bg-white focus:outline-none font-medium inline-flex justify-center outline-none text-secondary text-2xl w-full">
-              {locale == 'uz' ? chosenCity?.name_uz : chosenCity?.name}
+              {locale == 'uz' ? chosenCity?.name_uz : ''}
+              {locale == 'ru' ? chosenCity?.name : ''}
+              {locale == 'en' ? chosenCity?.name_en : ''}
             </Menu.Button>
           </div>
 
@@ -72,7 +74,9 @@ const ChooseCityDropDown: FC = () => {
                         : 'text-secondary'
                     }`}
                   >
-                    {locale == 'uz' ? item.name_uz : item.name}
+                    {locale == 'uz' ? item.name_uz : ''}
+                    {locale == 'ru' ? item.name : ''}
+                    {locale == 'en' ? item.name_en : ''}
                   </span>
                 </Menu.Item>
               ))}
