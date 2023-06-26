@@ -40,7 +40,15 @@ const NewsItem: FC<NewListProps> = ({ newsItems }) => {
                           src={item.asset[0].link}
                           width="400"
                           height="400"
-                          alt={locale == 'ru' ? item.name : item.name_uz}
+                          alt={
+                            locale == 'ru'
+                              ? item.name
+                              : locale == 'uz'
+                              ? item.name_uz
+                              : locale == 'en'
+                              ? item.name_en
+                              : ''
+                          }
                         />
                       </a>
                     </Link>
@@ -51,7 +59,15 @@ const NewsItem: FC<NewListProps> = ({ newsItems }) => {
                           src="/no_photo.svg"
                           width="400"
                           height="400"
-                          alt={locale == 'ru' ? item.name : item.name_uz}
+                          alt={
+                            locale == 'ru'
+                              ? item.name
+                              : locale == 'uz'
+                              ? item.name_uz
+                              : locale == 'en'
+                              ? item.name_en
+                              : ''
+                          }
                         />
                       </a>
                     </Link>
@@ -71,7 +87,13 @@ const NewsItem: FC<NewListProps> = ({ newsItems }) => {
                 <div className="md:flex md:flex-col justify-between p-5 flex-grow">
                   <div className="md:text-lg mb-3">
                     <Link href={href} prefetch={false}>
-                      {locale == 'ru' ? item.name : item.name_uz}
+                      {locale == 'ru'
+                        ? item.name
+                        : locale == 'uz'
+                        ? item.name_uz
+                        : locale == 'en'
+                        ? item.name_en
+                        : ''}
                     </Link>
                   </div>
                   <Link href={href} prefetch={false}>

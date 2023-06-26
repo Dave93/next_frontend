@@ -730,7 +730,13 @@ export default function Cart() {
                                     className="bg-yellow rounded-full px-2 py-1 md:ml-2 text-xs text-white my-2"
                                     key={mod.id}
                                   >
-                                    {locale == 'uz' ? mod.name_uz : mod.name}
+                                    {locale == 'uz'
+                                      ? mod.name_uz
+                                      : locale == 'ru'
+                                      ? mod.name_ru
+                                      : locale == 'en'
+                                      ? mod.name_en
+                                      : ''}
                                   </div>
                                 ))}
                             </div>
@@ -761,7 +767,15 @@ export default function Cart() {
                               pattern: '# !',
                               separator: ' ',
                               decimal: '.',
-                              symbol: `${locale == 'uz' ? "so'm" : 'сум'}`,
+                              symbol: `${
+                                locale == 'uz'
+                                  ? "so'm"
+                                  : '' || locale == 'ru'
+                                  ? 'сум'
+                                  : '' || locale == 'en'
+                                  ? 'sum'
+                                  : ''
+                              }`,
                               precision: 0,
                             }).format()}
                           </div>
@@ -786,7 +800,15 @@ export default function Cart() {
                               pattern: '# !',
                               separator: ' ',
                               decimal: '.',
-                              symbol: `${locale == 'uz' ? "so'm" : 'сум'}`,
+                              symbol: `${
+                                locale == 'uz'
+                                  ? "so'm"
+                                  : '' || locale == 'ru'
+                                  ? 'сум'
+                                  : '' || locale == 'en'
+                                  ? 'sum'
+                                  : ''
+                              }`,
                               precision: 0,
                             }).format()}
                           </div>
@@ -869,7 +891,15 @@ export default function Cart() {
                             pattern: '# !',
                             separator: ' ',
                             decimal: '.',
-                            symbol: `${locale == 'uz' ? "so'm" : 'сум'}`,
+                            symbol: `${
+                              locale == 'uz'
+                                ? "so'm"
+                                : '' || locale == 'ru'
+                                ? 'сум'
+                                : '' || locale == 'en'
+                                ? 'sum'
+                                : ''
+                            }`,
                             precision: 0,
                           }).format()}
                         </div>
@@ -931,7 +961,15 @@ export default function Cart() {
                             pattern: '# !',
                             separator: ' ',
                             decimal: '.',
-                            symbol: `${locale == 'uz' ? "so'm" : 'сум'}`,
+                            symbol: `${
+                              locale == 'uz'
+                                ? "so'm"
+                                : '' || locale == 'ru'
+                                ? 'сум'
+                                : '' || locale == 'en'
+                                ? 'sum'
+                                : ''
+                            }`,
                             precision: 0,
                           }).format()}
                         </div>
@@ -968,7 +1006,15 @@ export default function Cart() {
                       pattern: '# !',
                       separator: ' ',
                       decimal: '.',
-                      symbol: `${locale == 'uz' ? "so'm" : 'сум'}`,
+                      symbol: `${
+                        locale == 'uz'
+                          ? "so'm"
+                          : '' || locale == 'ru'
+                          ? 'сум'
+                          : '' || locale == 'en'
+                          ? 'sum'
+                          : ''
+                      }`,
                       precision: 0,
                     }).format()}
                   </div>

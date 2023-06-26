@@ -3,6 +3,7 @@ export type City = {
   xml_id: string
   name: string
   name_uz: string
+  name_en: string
   map_zoom: string
   lat: number
   lon: number
