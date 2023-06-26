@@ -732,11 +732,11 @@ export default function Cart() {
                                   >
                                     {locale == 'uz'
                                       ? mod.name_uz
-                                      : '' || locale == 'ru'
-                                      ? mod.name
-                                      : '' || locale == 'en'
+                                      : locale == 'ru'
+                                      ? mod.name_ru
+                                      : locale == 'en'
                                       ? mod.name_en
-                                      : ''}{' '}
+                                      : ''}
                                   </div>
                                 ))}
                             </div>

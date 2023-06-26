@@ -96,7 +96,13 @@ export default function DevPage({ cities }: { cities: any }) {
                       onClick={() => changeCity(item)}
                       className={`block px-4 py-2 cursor-pointer text-3xl text-secondary hover:text-white hover:bg-secondary`}
                     >
-                      {locale == 'uz' ? item.name_uz : item.name}
+                      {locale == 'uz'
+                        ? item.name_uz
+                        : locale == 'ru'
+                        ? item.name
+                        : locale == 'en'
+                        ? item.name_en
+                        : ''}
                     </span>
                   </Menu.Item>
                 ))}

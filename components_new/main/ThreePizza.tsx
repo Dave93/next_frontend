@@ -57,8 +57,10 @@ const ThreePizza: FC<ThreePizzaProps> = ({ sec, channelName }) => {
       item.variants.map((vars: any) => {
         if (locale == 'uz') {
           names[vars?.custom_name_uz] = vars?.custom_name_uz
-        } else {
+        } else if (locale == 'ru') {
           names[vars?.custom_name] = vars?.custom_name
+        } else if (locale == 'en') {
+          names[vars?.custom_name_en] = vars?.custom_name_en
         }
       })
     })

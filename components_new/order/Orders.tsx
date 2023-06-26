@@ -173,8 +173,10 @@ const Orders: FC<OrdersProps> = ({ channelName }: { channelName: any }) => {
   if (activeCity.active) {
     if (locale == 'ru') {
       currentAddress = 'Узбекистан, ' + activeCity.name + ','
-    } else {
+    } else if (locale == 'uz') {
       currentAddress = "O'zbekiston, " + activeCity.name_uz + ','
+    } else if (locale == 'en') {
+      currentAddress = 'Uzbekistan, ' + activeCity.name_en + ','
     }
   }
   const {
@@ -401,10 +403,15 @@ const Orders: FC<OrdersProps> = ({ channelName }: { channelName: any }) => {
       downshiftControl?.current?.reset({
         inputValue: "O'zbekiston, " + city.name_uz + ',',
       })
-    } else {
+    } else if (locale == 'ru') {
       setValue('address', 'Узбекистан, ' + city.name)
       downshiftControl?.current?.reset({
         inputValue: 'Узбекистан, ' + city.name + ',',
+      })
+    } else if (locale == 'en') {
+      setValue('address', 'Uzbekistan, ' + city.name_en)
+      downshiftControl?.current?.reset({
+        inputValue: 'Uzbekistan, ' + city.name_en + ',',
       })
     }
     setActiveCity(city)
@@ -1335,7 +1342,13 @@ const Orders: FC<OrdersProps> = ({ channelName }: { channelName: any }) => {
                 <Menu as="div" className="relative inline-block text-left">
                   <div>
                     <Menu.Button className="focus:outline-none font-medium inline-flex justify-center py-2 text-secondary text-lg w-full items-center">
-                      {locale == 'uz' ? chosenCity?.name_uz : chosenCity?.name}
+                      {locale == 'uz'
+                        ? chosenCity?.name_uz
+                        : locale == 'ru'
+                        ? chosenCity?.name
+                        : locale == 'en'
+                        ? chosenCity?.name_en
+                        : ''}
                       <ChevronDownIcon
                         className="w-5 h-5 ml-2 -mr-1 text-violet-200 hover:text-violet-100"
                         aria-hidden="true"
@@ -1362,7 +1375,13 @@ const Orders: FC<OrdersProps> = ({ channelName }: { channelName: any }) => {
                                 : 'text-secondary'
                             }`}
                           >
-                            {locale == 'uz' ? city.name_uz : city.name}
+                            {locale == 'uz'
+                              ? city.name_uz
+                              : locale == 'ru'
+                              ? city.name
+                              : locale == 'en'
+                              ? city.name_en
+                              : ''}
                           </span>
                         </Menu.Item>
                       ))}
@@ -1789,13 +1808,25 @@ const Orders: FC<OrdersProps> = ({ channelName }: { channelName: any }) => {
                       {point.desc && (
                         <div className="text-gray-400 text-sm">
                           {tr('address')}:{' '}
-                          {locale == 'ru' ? point.desc : point.desc_uz}
+                          {locale == 'ru'
+                            ? point.desc
+                            : locale == 'uz'
+                            ? point.desc_uz
+                            : locale == 'en'
+                            ? point.desc_en
+                            : ''}
                         </div>
                       )}
                       {point.near && (
                         <div className="text-gray-400 text-sm">
                           {tr('nearLabel')}:{' '}
-                          {locale == 'ru' ? point.near : point.near_uz}
+                          {locale == 'ru'
+                            ? point.near
+                            : locale == 'uz'
+                            ? point.near_uz
+                            : locale == 'en'
+                            ? point.near_en
+                            : ''}
                         </div>
                       )}
                       <div className="font-bold text-gray-700">

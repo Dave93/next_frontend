@@ -1023,7 +1023,13 @@ const MobLocationTabs: FC = () => {
                               : 'text-secondary'
                           }`}
                         >
-                          {locale == 'uz' ? city.name_uz : city.name}
+                          {locale == 'uz'
+                            ? city.name_uz
+                            : locale == 'ru'
+                            ? city.name
+                            : locale == 'en'
+                            ? city.name_en
+                            : ''}
                         </span>
                       </Menu.Item>
                     ))}
@@ -1471,18 +1477,36 @@ const MobLocationTabs: FC = () => {
                   </div>
                   <div>
                     <div className="font-bold">
-                      {locale == 'uz' ? point.name_uz : point.name}
+                      {locale == 'uz'
+                        ? point.name_uz
+                        : locale == 'ru'
+                        ? point.name
+                        : locale == 'en'
+                        ? point.name_en
+                        : ''}
                     </div>
                     {point.desc && (
                       <div className="text-gray-400 text-sm">
                         {tr('address')}:{' '}
-                        {locale == 'ru' ? point.desc : point.desc_uz}
+                        {locale == 'ru'
+                          ? point.desc
+                          : locale == 'uz'
+                          ? point.desc_uz
+                          : locale == 'en'
+                          ? point.desc_en
+                          : ''}
                       </div>
                     )}
                     {point.near && (
                       <div className="text-gray-400 text-sm">
                         {tr('nearLabel')}:{' '}
-                        {locale == 'ru' ? point.near : point.near_uz}
+                        {locale == 'ru'
+                          ? point.near
+                          : locale == 'uz'
+                          ? point.near_uz
+                          : locale == 'en'
+                          ? point.near_en
+                          : ''}
                       </div>
                     )}
                     <div className="font-bold text-gray-700">
