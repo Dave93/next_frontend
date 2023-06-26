@@ -2248,7 +2248,13 @@ const Orders: FC<OrdersProps> = ({ channelName }: { channelName: any }) => {
                         className="bg-yellow rounded-full px-2 py-1  text-xs text-white"
                         key={mod.id}
                       >
-                        {locale == 'uz' ? mod.name_uz : mod.name}
+                        {locale == 'uz'
+                          ? mod.name_uz
+                          : locale == 'ru'
+                          ? mod.name
+                          : locale == 'en'
+                          ? mod.name_en
+                          : ''}
                       </div>
                     ))}
               </div>
@@ -2268,7 +2274,15 @@ const Orders: FC<OrdersProps> = ({ channelName }: { channelName: any }) => {
                     pattern: '# !',
                     separator: ' ',
                     decimal: '.',
-                    symbol: `${locale == 'uz' ? "so'm" : 'сум'}`,
+                    symbol: `${
+                      locale == 'uz'
+                        ? "so'm"
+                        : locale == 'ru'
+                        ? 'сум'
+                        : locale == 'en'
+                        ? 'sum'
+                        : ''
+                    }`,
                     precision: 0,
                   }).format()}
               </div>
@@ -2287,7 +2301,15 @@ const Orders: FC<OrdersProps> = ({ channelName }: { channelName: any }) => {
                   pattern: '# !',
                   separator: ' ',
                   decimal: '.',
-                  symbol: `${locale == 'uz' ? "so'm" : 'сум'}`,
+                  symbol: `${
+                    locale == 'uz'
+                      ? "so'm"
+                      : locale == 'ru'
+                      ? 'сум'
+                      : locale == 'en'
+                      ? 'sum'
+                      : ''
+                  }`,
                   precision: 0,
                 }).format()}
               </div>
@@ -2512,19 +2534,34 @@ const Orders: FC<OrdersProps> = ({ channelName }: { channelName: any }) => {
                       $
                       {locale == 'uz'
                         ? 'Buyurtmani tasdiqlash'
-                        : 'Подтверждение заказа'}
+                        : locale == 'ru'
+                        ? 'Подтвердить заказ'
+                        : locale == 'en'
+                        ? 'Confirm order'
+                        : ''}
                     </Dialog.Title>
                     <Dialog.Description>
                       $
                       {locale == 'uz'
                         ? 'SMS-dan kodni kiriting'
-                        : 'Укажите код из смс'}
+                        : locale == 'ru'
+                        ? 'Введите код из смс'
+                        : locale == 'en'
+                        ? 'Enter the code from the SMS'
+                        : ''}
                     </Dialog.Description>
                     <div>
                       <form onSubmit={handlePasswordSubmit(saveOrder)}>
                         <div className="mt-10">
                           <label className="text-sm text-gray-400 mb-2 block">
-                            ${locale == 'uz' ? 'SMS-dan kod' : 'Код из смс'}
+                            $
+                            {locale == 'uz'
+                              ? 'SMS-dan kod'
+                              : locale == 'ru'
+                              ? 'Код из смс'
+                              : locale == 'en'
+                              ? 'Code from SMS'
+                              : ''}
                           </label>
                           <OtpInput
                             value={otpCode}
@@ -2546,7 +2583,11 @@ const Orders: FC<OrdersProps> = ({ channelName }: { channelName: any }) => {
                               $
                               {locale == 'uz'
                                 ? 'Kodni qayta olish'
-                                : 'Получить код заново'}
+                                : locale == 'ru'
+                                ? 'Получить код'
+                                : locale == 'en'
+                                ? 'Get code'
+                                : ''}
                             </button>
                           )}
                         </div>
@@ -2581,8 +2622,12 @@ const Orders: FC<OrdersProps> = ({ channelName }: { channelName: any }) => {
                               </svg>
                             ) : locale == 'uz' ? (
                               'Tasdiqlash'
-                            ) : (
+                            ) : locale == 'ru' ? (
                               'Подтвердить'
+                            ) : locale == 'en' ? (
+                              'Confirm'
+                            ) : (
+                              ''
                             )}
                           </button>
                         </div>

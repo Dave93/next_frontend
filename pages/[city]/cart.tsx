@@ -581,7 +581,7 @@ export default function Cart() {
                   className="text-gray-400 text-sm flex cursor-pointer"
                   onClick={clearBasket}
                 >
-                  Очистить всё <TrashIcon className=" w-5 h-5 ml-1" />
+                  {tr('clear_all')} <TrashIcon className=" w-5 h-5 ml-1" />
                 </div>
               </div>
               <div className="mt-10 space-y-3">
