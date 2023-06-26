@@ -77,9 +77,23 @@ const Branch: FC = () => {
                 }}
               >
                 <div className="text-xl font-bold">
-                  {locale == 'uz' ? branch.name_uz : branch.name}
+                  {locale == 'uz'
+                    ? branch.name_uz
+                    : '' || locale == 'ru'
+                    ? branch.name_ru
+                    : '' || locale == 'en'
+                    ? branch.name_en
+                    : ''}
                 </div>
-                <div>{locale == 'uz' ? branch.desc_uz : branch.desc}</div>
+                <div>
+                  {locale == 'uz'
+                    ? branch.desc_uz
+                    : '' || locale == 'ru'
+                    ? branch.desc
+                    : '' || locale == 'en'
+                    ? branch.desc_en
+                    : ''}
+                </div>
               </div>
             ))}
           </div>

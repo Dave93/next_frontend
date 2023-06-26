@@ -345,7 +345,14 @@ const Cart: FC<CartProps> = ({ channelName }: { channelName: any }) => {
                                 pattern: '# !',
                                 separator: ' ',
                                 decimal: '.',
-                                symbol: 'сум',
+                                symbol:
+                                  locale === 'uz'
+                                    ? "so'm"
+                                    : '' || locale === 'ru'
+                                    ? 'сум'
+                                    : '' || locale === 'en'
+                                    ? 'sum'
+                                    : '',
                                 precision: 0,
                               }
                             ).format()
@@ -353,7 +360,14 @@ const Cart: FC<CartProps> = ({ channelName }: { channelName: any }) => {
                               pattern: '# !',
                               separator: ' ',
                               decimal: '.',
-                              symbol: 'сум',
+                              symbol:
+                                locale === 'uz'
+                                  ? "so'm"
+                                  : '' || locale === 'ru'
+                                  ? 'сум'
+                                  : '' || locale === 'en'
+                                  ? 'sum'
+                                  : '',
                               precision: 0,
                             }).format()}
                       </div>
@@ -373,7 +387,14 @@ const Cart: FC<CartProps> = ({ channelName }: { channelName: any }) => {
                 pattern: '# !',
                 separator: ' ',
                 decimal: '.',
-                symbol: 'сум',
+                symbol:
+                  locale === 'uz'
+                    ? "so'm"
+                    : '' || locale === 'ru'
+                    ? 'сум'
+                    : '' || locale === 'en'
+                    ? 'sum'
+                    : '',
                 precision: 0,
               }).format()}
             </div>

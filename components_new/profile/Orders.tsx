@@ -373,7 +373,11 @@ const Orders: FC = () => {
                           <div>
                             {locale == 'uz'
                               ? order?.terminalData.name_uz
-                              : order?.terminalData.name}
+                              : locale == 'ru'
+                              ? order?.terminalData.name
+                              : locale == 'en'
+                              ? order?.terminalData.name_en
+                              : ''}
                           </div>
                         </div>
                         <div className="flex items-center justify-between border-b pt-7 pb-7">

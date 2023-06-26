@@ -1,5 +1,5 @@
 import { FC, memo } from 'react'
-import { Ru, Uz } from 'react-flags-select'
+import { Ru, Uz, Us } from 'react-flags-select'
 import { useRouter } from 'next/router'
 import { useUI } from '@components/ui/context'
 
@@ -16,9 +16,9 @@ const LanguageDropDown: FC = () => {
     })
   }
   return (
-    <>
+    <div className="flex gap-2">
       <a
-        className="bg-white rounded-2xl focus:outline-none font-medium inline-flex justify-center outline-none items-center text-secondary text-sm no-underline w-16 h-7 mr-3"
+        className="bg-white rounded-2xl focus:outline-none font-medium inline-flex justify-center outline-none items-center text-secondary text-sm no-underline w-16 h-7"
         href={`/${locale}${pathname}`}
         onClick={(e) => changeLang(e, 'ru')}
       >
@@ -33,7 +33,15 @@ const LanguageDropDown: FC = () => {
         <Uz className="w-5" />
         <span className="ml-1.5">Uz</span>
       </a>
-    </>
+      <a
+        className="bg-white rounded-2xl focus:outline-none font-medium inline-flex justify-center outline-none items-center text-secondary text-sm no-underline w-16 h-7"
+        href={`/${locale}${pathname}`}
+        onClick={(e) => changeLang(e, 'en')}
+      >
+        <Us className="w-5" />
+        <span className="ml-1.5">En</span>
+      </a>
+    </div>
   )
 }
 
