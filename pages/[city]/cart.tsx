@@ -479,7 +479,13 @@ export default function Cart() {
       <div className="bg-white flex py-20 text-xl text-yellow font-bold px-10">
         <div>
           {tr('isNotWorkTime')}{' '}
-          {locale == 'uz' ? configData.workTimeUz : configData.workTimeRu}
+          {locale == 'uz'
+            ? configData.workTimeUz
+            : locale == 'ru '
+            ? configData.workTimeRu
+            : locale == 'en'
+            ? configData.workTimeEn
+            : ''}
         </div>
       </div>
     )
