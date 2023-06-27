@@ -479,7 +479,13 @@ export default function Cart() {
       <div className="bg-white flex py-20 text-xl text-yellow font-bold px-10">
         <div>
           {tr('isNotWorkTime')}{' '}
-          {locale == 'uz' ? configData.workTimeUz : configData.workTimeRu}
+          {locale == 'uz'
+            ? configData.workTimeUz
+            : locale == 'ru '
+            ? configData.workTimeRu
+            : locale == 'en'
+            ? configData.workTimeEn
+            : ''}
         </div>
       </div>
     )
@@ -581,7 +587,7 @@ export default function Cart() {
                   className="text-gray-400 text-sm flex cursor-pointer"
                   onClick={clearBasket}
                 >
-                  Очистить всё <TrashIcon className=" w-5 h-5 ml-1" />
+                  {tr('clear_all')} <TrashIcon className=" w-5 h-5 ml-1" />
                 </div>
               </div>
               <div className="mt-10 space-y-3">

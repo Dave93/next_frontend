@@ -321,7 +321,11 @@ const Layout: FC<Props> = ({
                       {tr('work_time')} <br />{' '}
                       {locale == 'uz'
                         ? configData.workTimeUz
-                        : configData.workTimeRu}
+                        : locale == 'ru '
+                        ? configData.workTimeRu
+                        : locale == 'en'
+                        ? configData.workTimeEn
+                        : ''}
                     </div>
                     <div className="mt-4  border-b border-blue md:border-0 pb-5 md:pb-0">
                       <span>{tr('follow_us')}</span>

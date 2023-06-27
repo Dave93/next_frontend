@@ -156,7 +156,13 @@ const Contacts: FC = () => {
           <div className="mt-3">
             {tr('work_time')}
             {': '}
-            {locale == 'uz' ? configData.workTimeUz : configData.workTimeRu}
+            {locale == 'uz'
+              ? configData.workTimeUz
+              : locale == 'ru '
+              ? configData.workTimeRu
+              : locale == 'en'
+              ? configData.workTimeEn
+              : ''}
           </div>
         </div>
       </div>

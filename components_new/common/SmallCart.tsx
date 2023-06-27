@@ -213,7 +213,13 @@ const SmallCart: FC<SmallCartProps> = ({ channelName }) => {
     if (!isWorkTime) {
       toast.warn(
         `${tr('isNotWorkTime')} ${
-          locale == 'uz' ? configData.workTimeUz : configData.workTimeRu
+          locale == 'uz'
+            ? configData.workTimeUz
+            : locale == 'ru '
+            ? configData.workTimeRu
+            : locale == 'en'
+            ? configData.workTimeEn
+            : ''
         }`,
         {
           position: toast.POSITION.BOTTOM_RIGHT,
