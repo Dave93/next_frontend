@@ -6,15 +6,12 @@ import { useUI } from '@components/ui/context'
 
 const HeaderMenu: FC<HeaderMenuItems> = ({ menuItems }) => {
   const { locale } = useRouter()
-  console.log(locale)
   const { activeCity } = useUI()
   return (
     <ul className="flex justify-between text-lg">
       {menuItems.length &&
         menuItems.map((item) => {
-          console.log(item)
           const keyTyped = `name_${locale}` as keyof typeof item
-          console.log(keyTyped)
           let href = `${item.href}`
 
           if (href.indexOf('http') < 0) {
