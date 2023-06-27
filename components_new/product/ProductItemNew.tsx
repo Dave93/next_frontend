@@ -80,10 +80,6 @@ const ProductItemNew: FC<ProductItem> = ({ product, channelName }) => {
     if (isProductInStop) {
       return
     }
-    if (modifiers && modifiers.length) {
-      let freeModifier = modifiers.find((mod: any) => mod.price == 0)
-      setActiveModifiers([freeModifier.id])
-    }
     setIsOpen(true)
   }
 
@@ -123,45 +119,33 @@ const ProductItemNew: FC<ProductItem> = ({ product, channelName }) => {
       let resultModifiers = [
         ...activeModifiers.filter((id) => modId != id),
       ].filter((id) => id)
-      if (!resultModifiers.length) {
-        resultModifiers.push(zeroModifier.id)
-      }
       setActiveModifiers(resultModifiers)
     } else {
       let currentModifier: any = modifiers.find((mod: any) => mod.id == modId)
-      if (currentModifier.price == 0) {
-        setActiveModifiers([modId])
-      } else {
-        let selectedModifiers = [
-          ...activeModifiers.filter((id: number) => id != zeroModifier.id),
-          modId,
-        ]
+      let selectedModifiers = [...activeModifiers, modId]
 
-        if (modifierProduct) {
-          let sausage = modifiers.find(
-            (mod: any) => mod.id == modifierProduct.id
-          )
-          if (
-            selectedModifiers.includes(modifierProduct.id) &&
-            sausage.price < currentModifier.price
-          ) {
-            selectedModifiers = [
-              ...selectedModifiers.filter((modId: any) => modId != sausage.id),
-            ]
-          } else if (currentModifier.id == sausage.id) {
-            let richerModifier = modifiers
-              .filter((mod: any) => mod.price > sausage.price)
-              .map((mod: any) => mod.id)
-            selectedModifiers = [
-              ...selectedModifiers.filter(
-                (modId: any) => !richerModifier.includes(modId)
-              ),
-              modId,
-            ]
-          }
+      if (modifierProduct) {
+        let sausage = modifiers.find((mod: any) => mod.id == modifierProduct.id)
+        if (
+          selectedModifiers.includes(modifierProduct.id) &&
+          sausage.price < currentModifier.price
+        ) {
+          selectedModifiers = [
+            ...selectedModifiers.filter((modId: any) => modId != sausage.id),
+          ]
+        } else if (currentModifier.id == sausage.id) {
+          let richerModifier = modifiers
+            .filter((mod: any) => mod.price > sausage.price)
+            .map((mod: any) => mod.id)
+          selectedModifiers = [
+            ...selectedModifiers.filter(
+              (modId: any) => !richerModifier.includes(modId)
+            ),
+            modId,
+          ]
         }
-        setActiveModifiers(selectedModifiers)
       }
+      setActiveModifiers(selectedModifiers)
     }
   }
 
@@ -227,14 +211,6 @@ const ProductItemNew: FC<ProductItem> = ({ product, channelName }) => {
               currentProductModifiersPrices.includes(mod.price)
             )
             .map((m: any) => ({ id: m.id }))
-
-          if (selectedModifiers.length == 0) {
-            selectedModifiers = [
-              {
-                id: modifierProduct.modifiers.find((m: any) => m.price == 0).id,
-              },
-            ]
-          }
         }
       }
     } else {
@@ -334,12 +310,6 @@ const ProductItemNew: FC<ProductItem> = ({ product, channelName }) => {
     if (window.innerWidth < 768) {
       closeModal()
     }
-  }
-
-  const discardModifier = async () => {
-    let freeModifier = modifiers.find((mod: any) => mod.price == 0)
-    setActiveModifiers([freeModifier.id])
-    addToBasket([freeModifier.id])
   }
 
   useEffect(() => {
@@ -541,8 +511,6 @@ const ProductItemNew: FC<ProductItem> = ({ product, channelName }) => {
       if (isProductInStop) {
         return // if the product is in stop, do not add to basket
       }
-      let freeModifier = modifiers.find((mod: any) => mod.price == 0)
-      setActiveModifiers([freeModifier.id])
       setIsChoosingModifier(true)
     } else {
       addToBasket()
@@ -703,32 +671,27 @@ const ProductItemNew: FC<ProductItem> = ({ product, channelName }) => {
             <div className="hidden md:block">
               {store.variants && store.variants.length > 0 && (
                 <div className="flex mt-5 space-x-1 -mx-2">
-                  {store.variants.map(
-                    (v) => (
-                      console.log(v),
-                      (
-                        <div
-                          className={`w-full text-center cursor-pointer rounded-2xl outline-none ${
-                            v.active
-                              ? 'bg-yellow text-white'
-                              : 'bg-gray-200 text-gray-400'
-                          }`}
-                          onClick={() => updateOptionSelection(v.id)}
-                          key={v.id}
-                        >
-                          <button className="outline-none focus:outline-none text-xs py-2">
-                            {locale == 'ru'
-                              ? v?.custom_name
-                              : locale == 'uz'
-                              ? v?.custom_name_uz
-                              : locale == 'en'
-                              ? v?.custom_name_en
-                              : ''}
-                          </button>
-                        </div>
-                      )
-                    )
-                  )}
+                  {store.variants.map((v) => (
+                    <div
+                      className={`w-full text-center cursor-pointer rounded-2xl outline-none ${
+                        v.active
+                          ? 'bg-yellow text-white'
+                          : 'bg-gray-200 text-gray-400'
+                      }`}
+                      onClick={() => updateOptionSelection(v.id)}
+                      key={v.id}
+                    >
+                      <button className="outline-none focus:outline-none text-xs py-2">
+                        {locale == 'ru'
+                          ? v?.custom_name
+                          : locale == 'uz'
+                          ? v?.custom_name_uz
+                          : locale == 'en'
+                          ? v?.custom_name_en
+                          : ''}
+                      </button>
+                    </div>
+                  ))}
                 </div>
               )}
             </div>
@@ -943,9 +906,8 @@ const ProductItemNew: FC<ProductItem> = ({ product, channelName }) => {
                                     <div
                                       key={mod.id}
                                       className={`border ${
-                                        (activeModifiers.length &&
-                                          activeModifiers.includes(mod.id)) ||
-                                        (!activeModifiers.length && index == 0)
+                                        activeModifiers.length &&
+                                        activeModifiers.includes(mod.id)
                                           ? 'border-yellow'
                                           : 'border-gray-300'
                                       } flex flex-col justify-between overflow-hidden rounded-[15px] cursor-pointer w-24`}
