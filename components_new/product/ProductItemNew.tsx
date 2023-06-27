@@ -703,23 +703,32 @@ const ProductItemNew: FC<ProductItem> = ({ product, channelName }) => {
             <div className="hidden md:block">
               {store.variants && store.variants.length > 0 && (
                 <div className="flex mt-5 space-x-1 -mx-2">
-                  {store.variants.map((v) => (
-                    <div
-                      className={`w-full text-center cursor-pointer rounded-2xl outline-none ${
-                        v.active
-                          ? 'bg-yellow text-white'
-                          : 'bg-gray-200 text-gray-400'
-                      }`}
-                      onClick={() => updateOptionSelection(v.id)}
-                      key={v.id}
-                    >
-                      <button className="outline-none focus:outline-none text-xs py-2">
-                        {locale == 'ru' ? v?.custom_name : ''}
-                        {locale == 'en' ? v?.custom_name_en : ''}
-                        {locale == 'uz' ? v?.custom_name_uz : ''}
-                      </button>
-                    </div>
-                  ))}
+                  {store.variants.map(
+                    (v) => (
+                      console.log(v),
+                      (
+                        <div
+                          className={`w-full text-center cursor-pointer rounded-2xl outline-none ${
+                            v.active
+                              ? 'bg-yellow text-white'
+                              : 'bg-gray-200 text-gray-400'
+                          }`}
+                          onClick={() => updateOptionSelection(v.id)}
+                          key={v.id}
+                        >
+                          <button className="outline-none focus:outline-none text-xs py-2">
+                            {locale == 'ru'
+                              ? v?.custom_name
+                              : locale == 'uz'
+                              ? v?.custom_name_uz
+                              : locale == 'en'
+                              ? v?.custom_name_en
+                              : ''}
+                          </button>
+                        </div>
+                      )
+                    )
+                  )}
                 </div>
               )}
             </div>
