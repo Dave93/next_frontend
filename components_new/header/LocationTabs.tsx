@@ -1456,11 +1456,11 @@ const LocationTabs: FC = () => {
                   <div>
                     <div className="font-bold">
                       {locale === 'uz'
-                        ? chosenCity?.name_uz
+                        ? point?.name_uz
                         : locale === 'ru'
-                        ? chosenCity?.name
+                        ? point?.name
                         : locale === 'en'
-                        ? chosenCity?.name_en
+                        ? point?.name_en
                         : ''}
                     </div>
                     {point.desc && (
