@@ -80,7 +80,7 @@ const Branch: FC = () => {
                   {locale == 'uz'
                     ? branch.name_uz
                     : '' || locale == 'ru'
-                    ? branch.name_ru
+                    ? branch.name
                     : '' || locale == 'en'
                     ? branch.name_en
                     : ''}
