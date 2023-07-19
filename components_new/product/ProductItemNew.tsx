@@ -629,6 +629,8 @@ const ProductItemNew: FC<ProductItem> = ({ product, channelName }) => {
             isProductInStop ? 'opacity-25' : ''
           } gap-4 grid grid-cols-2 py-4 px-2 md:py-3 md:px-3 overflow-hidden bg-white rounded-[15px] hover:shadow-xl shadow-sm group items-center justify-between md:flex md:flex-col`}
           id={`prod-${store.id}`}
+          itemScope
+          itemType="https://schema.org/Product"
         >
           <div>
             <div className="text-center">
@@ -639,6 +641,7 @@ const ProductItemNew: FC<ProductItem> = ({ product, channelName }) => {
                   height={250}
                   alt={store?.attribute_data?.name[channelName][locale || 'ru']}
                   className="transform motion-safe:group-hover:scale-105 transition duration-500"
+                  itemProp="image"
                 />
               ) : (
                 <img
@@ -652,7 +655,7 @@ const ProductItemNew: FC<ProductItem> = ({ product, channelName }) => {
             </div>
           </div>
           <div className="flex flex-col flex-grow w-full">
-            <div className="font-serif mt-4 text-xl uppercase">
+            <div className="font-serif mt-4 text-xl uppercase" itemProp="name">
               {store?.attribute_data?.name[channelName][locale || 'ru']}
             </div>
             {store.sizeDesc && (
@@ -667,6 +670,7 @@ const ProductItemNew: FC<ProductItem> = ({ product, channelName }) => {
                     ]
                   : '',
               }}
+              itemProp="description"
             ></div>
             <div className="hidden md:block">
               {store.variants && store.variants.length > 0 && (
@@ -726,9 +730,17 @@ const ProductItemNew: FC<ProductItem> = ({ product, channelName }) => {
                   tr('main_to_basket')
                 )}
               </button>
-              <div className="hidden md:block">
+              <div
+                className="hidden md:block"
+                itemProp="offers"
+                itemScope
+                itemType="https://schema.org/Offer"
+              >
                 {prodDiscountPriceDesktop > 0 && (
-                  <span className="md:text-sm md:bg-white hidden md:block md:w-auto rounded-full text-xs text-left line-through md:px-0 md:py-0 md:text-gray-500">
+                  <span
+                    className="md:text-sm md:bg-white hidden md:block md:w-auto rounded-full text-xs text-left line-through md:px-0 md:py-0 md:text-gray-500"
+                    itemProp="price"
+                  >
                     {currency(prodPriceDesktop + prodDiscountPriceDesktop, {
                       pattern: '# !',
                       separator: ' ',
