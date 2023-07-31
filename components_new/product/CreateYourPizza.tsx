@@ -113,10 +113,6 @@ const CreateYourPizza: FC<CreatePizzaProps> = ({
     let modifierProduct: any = null
     let selectedModifiers: any[] = [...activeModifiers]
     let allModifiers = [...modifiers]
-    let freeModifiers = allModifiers.find((mod: any) => mod.price == 0)
-    if (selectedModifiers.length == 0) {
-      selectedModifiers.push(freeModifiers.id)
-    }
     selectedModifiers = allModifiers
       .filter((m: any) => selectedModifiers.includes(m.id))
       .map((m: any) => ({ id: m.id }))
@@ -192,12 +188,7 @@ const CreateYourPizza: FC<CreatePizzaProps> = ({
               child: {
                 id: rightProduct.id,
                 quantity: 1,
-                modifiers: [
-                  {
-                    id: rightProduct.modifiers.find((m: any) => m.price == 0)
-                      .id,
-                  },
-                ],
+                modifiers: [],
               },
             },
           ],
@@ -236,12 +227,7 @@ const CreateYourPizza: FC<CreatePizzaProps> = ({
               child: {
                 id: rightProduct.id,
                 quantity: 1,
-                modifiers: [
-                  {
-                    id: rightProduct.modifiers.find((m: any) => m.price == 0)
-                      .id,
-                  },
-                ],
+                modifiers: [],
               },
             },
           ],
