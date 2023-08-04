@@ -116,10 +116,6 @@ const CreateYourPizza: FC<CreatePizzaProps> = ({ sec, channelName }) => {
     let modifierProduct: any = null
     let selectedModifiers: any[] = [...activeModifiers]
     let allModifiers = [...modifiers]
-    let freeModifiers = allModifiers.find((mod: any) => mod.price == 0)
-    if (selectedModifiers.length == 0) {
-      selectedModifiers.push(freeModifiers.id)
-    }
 
     selectedModifiers = allModifiers
       .filter((m: any) => selectedModifiers.includes(m.id))
@@ -172,11 +168,7 @@ const CreateYourPizza: FC<CreatePizzaProps> = ({ sec, channelName }) => {
             )
             .map((m: any) => ({ id: m.id }))
         } else {
-          selectedModifiers = [
-            {
-              id: leftProduct.modifiers.find((m: any) => m.price == 0).id,
-            },
-          ]
+          selectedModifiers = []
         }
       }
     }
@@ -199,12 +191,7 @@ const CreateYourPizza: FC<CreatePizzaProps> = ({ sec, channelName }) => {
               child: {
                 id: rightProduct.id,
                 quantity: 1,
-                modifiers: [
-                  {
-                    id: rightProduct.modifiers.find((m: any) => m.price == 0)
-                      .id,
-                  },
-                ],
+                modifiers: [],
               },
             },
           ],
@@ -243,12 +230,7 @@ const CreateYourPizza: FC<CreatePizzaProps> = ({ sec, channelName }) => {
               child: {
                 id: rightProduct.id,
                 quantity: 1,
-                modifiers: [
-                  {
-                    id: rightProduct.modifiers.find((m: any) => m.price == 0)
-                      .id,
-                  },
-                ],
+                modifiers: [],
               },
             },
           ],
@@ -482,7 +464,6 @@ const CreateYourPizza: FC<CreatePizzaProps> = ({ sec, channelName }) => {
     if (activeVariant.modifierProduct) {
       modifierProduct = activeVariant.modifierProduct
     }
-    let zeroModifier = modifiers.find((mod: any) => mod.price == 0)
     if (activeModifiers.includes(id)) {
       let currentModifier: any = modifiers.find((mod: any) => mod.id == id)
       if (!currentModifier) return
@@ -490,21 +471,13 @@ const CreateYourPizza: FC<CreatePizzaProps> = ({ sec, channelName }) => {
       let resultModifiers = [
         ...activeModifiers.filter((modId) => modId != id),
       ].filter((id) => id)
-      if (!resultModifiers.length) {
-        resultModifiers.push(zeroModifier.id)
-      }
       setActiveModifeirs(resultModifiers)
     } else {
       let currentModifier: any = modifiers.find((mod: any) => mod.id == id)
       if (currentModifier.price == 0) {
         setActiveModifeirs([id])
       } else {
-        let selectedModifiers = [
-          ...activeModifiers.filter(
-            (modId: number) => modId != zeroModifier.id
-          ),
-          id,
-        ]
+        let selectedModifiers = [...activeModifiers, id]
 
         if (modifierProduct) {
           let sausage = modifiers.find(
