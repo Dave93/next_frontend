@@ -72,7 +72,6 @@ interface SocIconsProps {
 const socIcons: SocIconsProps = {
   fb: faFacebook,
   inst: faInstagram,
-  tg: faTelegram,
 }
 
 const Layout: FC<Props> = ({
@@ -223,6 +222,17 @@ const Layout: FC<Props> = ({
                           />
                         </div>
                       </a>
+                      <div className="bg-black rounded-md w-48 mt-1 h-14 flex items-center justify-evenly">
+                        <a href="https://telegram.me/Chopar_bot">
+                          <div>
+                            <FontAwesomeIcon
+                              icon={faTelegram}
+                              className="w-9"
+                            />
+                          </div>
+                        </a>
+                        <div className="text-3xl">Telegram</div>
+                      </div>
                     </div>
                   </div>
                   <div className="flex-grow border-b border-blue md:border-0 mt-5 md:mt-0 pb-5 md:pb-0">
