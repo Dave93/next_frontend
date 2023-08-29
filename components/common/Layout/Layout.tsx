@@ -178,7 +178,7 @@ const Layout: FC<Props> = ({
                         height={68}
                       />
                     </div>
-                    <div className="md:hidden border-b border-blue md:border-0 pb-5">
+                    {/* <div className="md:hidden border-b border-blue md:border-0 pb-5">
                       <div>{tr('delivery_phone')}</div>
                       <div className="text-[30px] font-bold">
                         {currentCity?.phone && (
@@ -193,7 +193,7 @@ const Layout: FC<Props> = ({
                           </a>
                         )}
                       </div>
-                    </div>
+                    </div> */}
                     <h3 className="md:block mt-7 text-xl hidden">
                       {tr('footer_pizza_unites')}
                     </h3>
@@ -301,7 +301,7 @@ const Layout: FC<Props> = ({
                     </div>
                   </div>
                   <div className="md:text-right text-sm leading-7 mt-5 md:mt-0">
-                    <div className="hidden md:block">
+                    {/* <div className="hidden md:block">
                       <div>{tr('delivery_phone')}</div>
                       <div className="text-[30px] font-bold">
                         {currentCity?.phone && (
@@ -316,7 +316,7 @@ const Layout: FC<Props> = ({
                           </a>
                         )}
                       </div>
-                    </div>
+                    </div> */}
                     <div className=" border-b border-blue md:border-0 pb-5 md:pb-0">
                       {tr('work_time')} <br />{' '}
                       {locale == 'uz'
