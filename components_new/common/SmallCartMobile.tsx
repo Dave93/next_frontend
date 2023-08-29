@@ -23,6 +23,8 @@ import OtpInput from 'react-otp-input'
 import Input from 'react-phone-number-input/input'
 import styles from './SmallCartMobile.module.css'
 import { useGoogleReCaptcha } from 'react-google-recaptcha-v3'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faCartPlus } from '@fortawesome/free-solid-svg-icons'
 
 const { publicRuntimeConfig } = getConfig()
 let webAddress = publicRuntimeConfig.apiUrl
@@ -278,7 +280,7 @@ const SmallCartMobile: FC = () => {
         onClick={goToCheckout}
       >
         <div className="flex">
-          <Image src="/mobile_cart.svg" width="20" height="20" />
+          <FontAwesomeIcon icon={faCartPlus} className="w-6 text-white" />
         </div>
         <div className="text-xl pl-2 text-white">
           {data && data.lineItems ? data.lineItems.length : 0}
