@@ -133,24 +133,7 @@ const Contacts: FC = () => {
         <div>
           <div className="w-60">
             <div className="flex justify-between">
-              <div>{tr('toshkent')}:</div>{' '}
               <a href="tel:+998712051111">+998 (71) 205-11-11</a>
-            </div>
-            <div className="flex justify-between">
-              <div>{tr('andijon')}:</div>
-              <a href="tel:+998979996060">+998 (97) 999-60-60</a>
-            </div>
-            <div className="flex justify-between">
-              <div>{tr('fargona')}:</div>
-              <a href="tel:+998999884242">+998 (99) 988-42-42</a>
-            </div>
-            <div className="flex justify-between">
-              <div>{tr('samarqand')}:</div>{' '}
-              <a href="tel:+998975773030">+998 (97) 577-30-30</a>
-            </div>
-            <div className="flex justify-between">
-              <div>{tr('qoqon')}:</div>{' '}
-              <a href="tel:+998907034040">+998 (90) 703-40-40</a>
             </div>
           </div>
           <div className="mt-3">
@@ -158,11 +141,19 @@ const Contacts: FC = () => {
             {': '}
             {locale == 'uz'
               ? configData.workTimeUz
-              : locale == 'ru '
+              : locale == 'ru'
               ? configData.workTimeRu
               : locale == 'en'
               ? configData.workTimeEn
               : ''}
+            <div className="mt-2 text-white">
+              <a
+                href="https://t.me/Chopar_jbot"
+                className="bg-yellow rounded-full p-2"
+              >
+                {tr('get_a_job')}
+              </a>
+            </div>
           </div>
         </div>
       </div>
@@ -199,7 +190,7 @@ const Contacts: FC = () => {
               <label className="text-sm text-gray-400">
                 {tr('phone_number')}
               </label>
-              <div className="md:flex items-center justify-end">
+              <div className="flex items-center justify-end">
                 <Controller
                   render={({ field: { onChange, value } }) => (
                     <Input
