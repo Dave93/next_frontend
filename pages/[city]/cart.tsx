@@ -646,7 +646,7 @@ export default function Cart() {
                                 )}
                               </div>
                             ) : (
-                              <div className="h-28 w-28 flex relative">
+                              <div className="flex relative">
                                 <div className="w-12 relative overflow-hidden">
                                   <div>
                                     <Image
@@ -656,8 +656,8 @@ export default function Cart() {
                                           ? `${webAddress}/storage/${lineItem?.variant?.product?.assets[0]?.location}/${lineItem?.variant?.product?.assets[0]?.filename}`
                                           : '/no_photo.svg'
                                       }
-                                      width="40"
-                                      height="40"
+                                      width="100"
+                                      height="100"
                                       layout="fixed"
                                       className="absolute rounded-full"
                                     />
@@ -672,8 +672,8 @@ export default function Cart() {
                                           ? `${webAddress}/storage/${lineItem?.child[0].variant?.product?.assets[0]?.location}/${lineItem?.child[0].variant?.product?.assets[0]?.filename}`
                                           : '/no_photo.svg'
                                       }
-                                      width="40"
-                                      height="40"
+                                      width="100"
+                                      height="100"
                                       layout="fixed"
                                       className="rounded-full"
                                     />
@@ -682,7 +682,7 @@ export default function Cart() {
                               </div>
                             )
                           ) : (
-                            <div className="h-24 w-24 flex relative mr-4">
+                            <div className="w-28 flex relative mr-4">
                               <img
                                 src={
                                   lineItem?.variant?.product?.assets?.length
@@ -697,7 +697,7 @@ export default function Cart() {
                           )}
                           <div className="ml-1 space-y-2 md:text-left">
                             <div className="text-xl font-bold">
-                              {lineItem.child && lineItem.child.length > 1
+                              {lineItem.child && lineItem.child.length == 1
                                 ? `${
                                     lineItem?.variant?.product?.attribute_data
                                       ?.name[channelName][locale || 'ru']
@@ -727,26 +727,25 @@ export default function Cart() {
                               )}
                             </div>
                           </div>
-                          {lineItem.modifiers && (
-                            <div className="">
-                              {lineItem.modifiers
+                          <div className="space-y-1">
+                            {lineItem.modifiers &&
+                              lineItem.modifiers
                                 .filter((mod: any) => mod.price > 0)
                                 .map((mod: any) => (
                                   <div
-                                    className="bg-yellow rounded-full px-2 py-1 md:ml-2 text-xs text-white my-2"
+                                    className="bg-yellow rounded-full px-2 py-1  text-xs text-white"
                                     key={mod.id}
                                   >
                                     {locale == 'uz'
                                       ? mod.name_uz
                                       : locale == 'ru'
-                                      ? mod.name_ru
+                                      ? mod.name
                                       : locale == 'en'
                                       ? mod.name_en
                                       : ''}
                                   </div>
                                 ))}
-                            </div>
-                          )}
+                          </div>
                         </div>
                         <div className="md:flex md:space-x-10 items-center hidden">
                           {!readonlyItems.includes(lineItem.id) && (
