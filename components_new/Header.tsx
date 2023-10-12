@@ -155,7 +155,7 @@ const Header: FC<{
               <SignInButton setMobMenuOpen={setMobMenuOpen} />
               <MobHeaderMenu menuItems={menu} setMobMenuOpen={setMobMenuOpen} />
             </div>
-            <div className="ml-9 text-white pt-8">
+            <div className="text-white pt-8">
               {chosenCity?.phone && (
                 <>
                   <div className="text-xs mb-1">{tr('delivery_phone')}</div>
@@ -168,9 +168,24 @@ const Header: FC<{
                   </div>
                 </>
               )}
-              <a className="flex mb-5" href="#">
-                <Image src="/assets/appstore.png" width="151" height="49" />
-              </a>
+              <div className="flex items-center justify-between mb-5">
+                <a className="flex" href="#">
+                  <Image src="/assets/appstore.png" width="151" height="49" />
+                </a>
+                <a
+                  href="https://play.google.com/store/apps/details?id=havoqand.chopar"
+                  className=""
+                  target={'_blank'}
+                >
+                  <div className="">
+                    <img
+                      src="/googleReady.svg"
+                      alt="Get it on Google Play"
+                      className="w-40"
+                    />
+                  </div>
+                </a>
+              </div>
               <MobLanguageDropDown />
             </div>
           </div>
