@@ -13,7 +13,7 @@ const CategoriesMenu: FC<{ categories: any[]; channelName: string }> = ({
   const [fixed, changeState] = useState(false)
 
   const categoriesFixing = () => {
-    window.pageYOffset > 600 ? changeState(true) : changeState(false)
+    window.pageYOffset > 450 ? changeState(true) : changeState(false)
   }
 
   useEffect(() => {
