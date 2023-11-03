@@ -169,6 +169,7 @@ const Orders: FC<OrdersProps> = ({ channelName }: { channelName: any }) => {
     cartId,
     locationData,
   })
+  const [deposit, setDeposit] = useState(0)
   let currentAddress = ''
   if (activeCity.active) {
     if (locale == 'ru') {
@@ -365,8 +366,27 @@ const Orders: FC<OrdersProps> = ({ channelName }: { channelName: any }) => {
     }
   }
 
+  const checkDeposit = async () => {
+    await setCredentials()
+    const otpToken = Cookies.get('opt_token')
+    let { data } = await axios.get(
+      `${webAddress}/api/organizations/check_deposit`,
+      {
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${otpToken}`,
+        },
+        withCredentials: true,
+      }
+    )
+    if (data.success) {
+      setDeposit(data.data)
+    }
+  }
+
   useEffect(() => {
     stopList()
+    checkDeposit()
     fetchConfig()
     loadAddresses()
     if (locationData && locationData.deliveryType == 'pickup') {
@@ -546,6 +566,10 @@ const Orders: FC<OrdersProps> = ({ channelName }: { channelName: any }) => {
   // pay
   const [openTab, setOpenTab] = useState(1)
   const [payType, setPayType] = useState('')
+
+  const setDepositPay = () => {
+    if (deposit >= totalPrice) setPayType('deposit')
+  }
 
   const onValueChange = (e: any) => {
     setPayType(e.target.value)
@@ -2092,6 +2116,32 @@ const Orders: FC<OrdersProps> = ({ channelName }: { channelName: any }) => {
                     />
                   </label>
                 ))}
+            {deposit > 0 && (
+              <div
+                className="bg-gray-100 flex items-center md:w-48 rounded-2xl p-4 cursor-pointer relative"
+                onClick={(e) =>
+                  deposit < totalPrice ? e.preventDefault() : setDepositPay()
+                }
+              >
+                {deposit < totalPrice && (
+                  <div className="absolute top-0 text-center left-0 right-0 text-primary w-full h-full bg-gray-500 bg-opacity-30 rounded-2xl flex items-start pt-1 text-xs justify-around font-bold">
+                    <div>{tr('insufficient_funds')}</div>
+                  </div>
+                )}
+                <div className="flex items-center">
+                  <input
+                    type="checkbox"
+                    className={`text-green-500 form-checkbox rounded-md w-5 h-5 mr-4`}
+                    defaultChecked={payType == 'deposit'}
+                    checked={payType == 'deposit'}
+                  />
+                  <div className="flex flex-col">
+                    <div>{tr('deposit_label')}</div>
+                    <div>{Intl.NumberFormat('ru').format(deposit)}</div>
+                  </div>
+                </div>
+              </div>
+            )}
           </div>
         </div>
 
