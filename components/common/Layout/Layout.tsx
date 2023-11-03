@@ -72,7 +72,6 @@ interface SocIconsProps {
 const socIcons: SocIconsProps = {
   fb: faFacebook,
   inst: faInstagram,
-  tg: faTelegram,
 }
 
 const Layout: FC<Props> = ({
@@ -178,7 +177,7 @@ const Layout: FC<Props> = ({
                         height={68}
                       />
                     </div>
-                    <div className="md:hidden border-b border-blue md:border-0 pb-5">
+                    {/* <div className="md:hidden border-b border-blue md:border-0 pb-5">
                       <div>{tr('delivery_phone')}</div>
                       <div className="text-[30px] font-bold">
                         {currentCity?.phone && (
@@ -193,7 +192,7 @@ const Layout: FC<Props> = ({
                           </a>
                         )}
                       </div>
-                    </div>
+                    </div> */}
                     <h3 className="md:block mt-7 text-xl hidden">
                       {tr('footer_pizza_unites')}
                     </h3>
@@ -221,6 +220,17 @@ const Layout: FC<Props> = ({
                             alt="Available on the App Store"
                             className="w-48"
                           />
+                        </div>
+                      </a>
+                      <a href="https://telegram.me/Chopar_bot">
+                        <div className="bg-black rounded-md w-48 mt-1 h-14 flex items-center justify-evenly">
+                          <div>
+                            <FontAwesomeIcon
+                              icon={faTelegram}
+                              className="w-9"
+                            />
+                          </div>
+                          <div className="text-3xl">Telegram</div>
                         </div>
                       </a>
                     </div>
@@ -301,7 +311,7 @@ const Layout: FC<Props> = ({
                     </div>
                   </div>
                   <div className="md:text-right text-sm leading-7 mt-5 md:mt-0">
-                    <div className="hidden md:block">
+                    {/* <div className="hidden md:block">
                       <div>{tr('delivery_phone')}</div>
                       <div className="text-[30px] font-bold">
                         {currentCity?.phone && (
@@ -316,7 +326,7 @@ const Layout: FC<Props> = ({
                           </a>
                         )}
                       </div>
-                    </div>
+                    </div> */}
                     <div className=" border-b border-blue md:border-0 pb-5 md:pb-0">
                       {tr('work_time')} <br />{' '}
                       {locale == 'uz'

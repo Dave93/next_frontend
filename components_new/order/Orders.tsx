@@ -2259,7 +2259,7 @@ const Orders: FC<OrdersProps> = ({ channelName }: { channelName: any }) => {
                   isProductInStop.includes(lineItem.id) ? 'opacity-25' : ''
                 }font-bold md:text-xl text-base space-y-2 text-center`}
               >
-                {lineItem.child && lineItem.child.length > 1 ? (
+                {lineItem.child && lineItem.child.length == 1 ? (
                   `${
                     lineItem?.variant?.product?.attribute_data?.name[
                       channelName
