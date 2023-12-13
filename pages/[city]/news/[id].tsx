@@ -111,7 +111,12 @@ export default function NewsId({
                       : item.icon
                   }`}
                 />
-                <Link href={href} locale={locale} prefetch={false}>
+                <Link
+                  href={href}
+                  locale={locale}
+                  prefetch={false}
+                  legacyBehavior
+                >
                   <a
                     className={`${
                       pathname.indexOf(item.href) >= 0
@@ -132,6 +137,7 @@ export default function NewsId({
               <Link
                 href={`${'/' + activeCity.slug + '/news/' + newsItem.id}`}
                 prefetch={false}
+                legacyBehavior
               >
                 <a>
                   <Image
@@ -146,6 +152,7 @@ export default function NewsId({
               <Link
                 href={`${'/' + activeCity.slug + '/news/' + newsItem.id}`}
                 prefetch={false}
+                legacyBehavior
               >
                 <a>
                   <Image
@@ -186,6 +193,7 @@ export default function NewsId({
                       <Link
                         href={`${'/' + activeCity.slug + '/news/' + item.id}`}
                         prefetch={false}
+                        legacyBehavior
                       >
                         <a>
                           <Image
@@ -200,6 +208,7 @@ export default function NewsId({
                       <Link
                         href={`${'/' + activeCity.slug + '/news/' + item.id}`}
                         prefetch={false}
+                        legacyBehavior
                       >
                         <a>
                           <Image
@@ -227,6 +236,7 @@ export default function NewsId({
                       <Link
                         href={`${'/' + activeCity.slug + '/news/' + item.id}`}
                         prefetch={false}
+                        legacyBehavior
                       >
                         {locale == 'ru' ? item.name : item.name_uz}
                       </Link>
@@ -234,6 +244,7 @@ export default function NewsId({
                     <Link
                       href={`${'/' + activeCity.slug + '/news/' + item.id}`}
                       prefetch={false}
+                      legacyBehavior
                     >
                       <a className="text-xs text-gray-400 hover:underline">
                         {tr('more')}

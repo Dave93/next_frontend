@@ -88,7 +88,7 @@ const CartItem = ({
               width={150}
               height={150}
               src={item.variant.image!.url}
-              alt={item.variant.image!.altText}
+              alt={item.variant.image!.altText ?? ''}
               unoptimized
             />
           </Link>

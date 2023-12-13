@@ -32,16 +32,20 @@ const CategoriesMenu: FC<{ categories: any[]; channelName: string }> = ({
     >
       <div className="container flex items-center m-auto overflow-x-scroll sm:overflow-x-hidden md:overflow-x-visible">
         {fixed && (
-          <Link to="header" spy={true} smooth={true}>
-            <span className="md:flex mr-16 cursor-pointer hidden">
-              <Image
-                src="/assets/categories_logo.png"
-                width="44"
-                height="44"
-                unoptimized={true}
-              />
-            </span>
-          </Link>
+          <>
+            {/* @ts-ignore */}
+            <Link to="header" spy={true} smooth={true}>
+              <span className="md:flex mr-16 cursor-pointer hidden">
+                <Image
+                  src="/assets/categories_logo.png"
+                  width="44"
+                  height="44"
+                  unoptimized={true}
+                  alt="categories_logo"
+                />
+              </span>
+            </Link>
+          </>
         )}
         <div
           className={`${
@@ -58,6 +62,7 @@ const CategoriesMenu: FC<{ categories: any[]; channelName: string }> = ({
                 } font-serif text-base text-center  cursor-pointer uppercase min-w-max px-4`}
                 key={item.id}
               >
+                {/* @ts-ignore */}
                 <Link
                   to={`productSection_${item.id}`}
                   spy={true}

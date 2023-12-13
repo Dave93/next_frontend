@@ -952,7 +952,7 @@ const MobLocationTabs: FC = () => {
             }}
             className="flex"
           >
-            <Image src="/assets/back.png" width="24" height="24" />
+            <Image src="/assets/back.png" width="24" height="24" alt="" />
           </span>
         )}
         <div className="text-lg flex-grow text-center">Адрес</div>

@@ -37,7 +37,12 @@ const ChooseCityDropDown: FC = () => {
           <div className={`${open ? 'hidden' : ''}`}>
             <Menu.Button className="focus:outline-none font-medium justify-center outline-none px-4 py-2 text-white text-sm w-full">
               <div className="flex items-center">
-                <Image src="/assets/location.png" width="14" height="16" />
+                <Image
+                  src="/assets/location.png"
+                  width="14"
+                  height="16"
+                  alt=""
+                />
                 <div className="ml-3 text-xl">
                   {locale == 'uz'
                     ? chosenCity?.name_uz

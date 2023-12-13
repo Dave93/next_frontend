@@ -52,6 +52,7 @@ export type Product = {
   modifiers?: any[]
   price: string
   options?: ProductOption[]
+  threesome: number
 }
 
 export type SearchProductsBody = {

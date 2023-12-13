@@ -224,12 +224,12 @@ const Cart: FC<CartProps> = ({ channelName }: { channelName: any }) => {
             )}
           </div>
           <div className="flex items-center">
-            <Image src="/small_cart_icon.png" width={34} height={34} />
+            <Image src="/small_cart_icon.png" width={34} height={34} alt="" />
           </div>
         </div>
         {isEmpty && (
           <div className="flex flex-col items-center mt-2 text-center text-gray-400 text-sm">
-            <Image src="/cart_empty.png" width={130} height={119} />
+            <Image src="/cart_empty.png" width={130} height={119} alt="" />
             <div className="w-6/12">{tr('basket_empty')}</div>
           </div>
         )}
@@ -257,6 +257,7 @@ const Cart: FC<CartProps> = ({ channelName }: { channelName: any }) => {
                                 height="40"
                                 layout="fixed"
                                 className="absolute rounded-full"
+                                alt=""
                               />
                             </div>
                           </div>
@@ -273,6 +274,7 @@ const Cart: FC<CartProps> = ({ channelName }: { channelName: any }) => {
                                 height="40"
                                 layout="fixed"
                                 className="rounded-full"
+                                alt=""
                               />
                             </div>
                           </div>
@@ -288,6 +290,7 @@ const Cart: FC<CartProps> = ({ channelName }: { channelName: any }) => {
                             width={40}
                             height={40}
                             className="rounded-full"
+                            alt=""
                           />
                         </div>
                       )}
@@ -420,7 +423,7 @@ const Cart: FC<CartProps> = ({ channelName }: { channelName: any }) => {
             className="bg-gray-100 focus:outline-none outline-none px-5 py-2 rounded-full text-xs w-full"
           />
           <button className="absolute focus:outline-none outline-none right-1 top-0.5">
-            <Image src="/discount_arrow.png" width={28} height={28} />
+            <Image src="/discount_arrow.png" width={28} height={28} alt="" />
           </button>
         </form>
       </div>

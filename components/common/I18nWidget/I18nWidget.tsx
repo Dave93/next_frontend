@@ -79,7 +79,7 @@ const I18nWidget: FC = () => {
               <ul>
                 {options.map((locale) => (
                   <li key={locale}>
-                    <Link href={currentPath} locale={locale}>
+                    <Link href={currentPath} locale={locale} legacyBehavior>
                       <a
                         className={cn(s.item)}
                         onClick={() => setDisplay(false)}

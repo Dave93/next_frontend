@@ -106,6 +106,7 @@ const Orders: FC = () => {
                               '/order/' +
                               hashids.encode(order.id)
                             }`}
+                            legacyBehavior
                           >
                             <a>
                               {tr('order')} № {order.id}
@@ -195,6 +196,7 @@ const Orders: FC = () => {
                                       height="40"
                                       layout="fixed"
                                       className="rounded-full"
+                                      alt="no_photo"
                                     />
                                   </div>
                                 </div>
@@ -217,6 +219,7 @@ const Orders: FC = () => {
                                         height="40"
                                         layout="fixed"
                                         className="rounded-full"
+                                        alt="no_photo"
                                       />
                                     </div>
                                   )
@@ -236,6 +239,7 @@ const Orders: FC = () => {
                                       height="40"
                                       layout="fixed"
                                       className="absolute rounded-full"
+                                      alt="no_photo"
                                     />
                                   </div>
                                 </div>
@@ -252,6 +256,7 @@ const Orders: FC = () => {
                                       height="40"
                                       layout="fixed"
                                       className="rounded-full"
+                                      alt="no_photo"
                                     />
                                   </div>
                                 </div>
@@ -268,6 +273,7 @@ const Orders: FC = () => {
                                 width={95}
                                 height={95}
                                 className="rounded-full w-24"
+                                alt="no_photo"
                               />
                             </div>
                           )}

@@ -2217,6 +2217,7 @@ const Orders: FC<OrdersProps> = ({ channelName }: { channelName: any }) => {
                         height="40"
                         layout="fixed"
                         className="absolute rounded-full"
+                        alt=""
                       />
                     </div>
                   </div>
@@ -2232,6 +2233,7 @@ const Orders: FC<OrdersProps> = ({ channelName }: { channelName: any }) => {
                         height="40"
                         layout="fixed"
                         className="rounded-full"
+                        alt=""
                       />
                     </div>
                   </div>
@@ -2251,6 +2253,7 @@ const Orders: FC<OrdersProps> = ({ channelName }: { channelName: any }) => {
                     width={40}
                     height={40}
                     className="rounded-full"
+                    alt=""
                   />
                 </div>
               )}

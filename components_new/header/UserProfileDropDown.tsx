@@ -96,7 +96,12 @@ const UserProfileDropDown: FC<UserProfileDropdownProps> = ({
                         {item.name}
                       </span>
                     ) : (
-                      <Link href={href} locale={locale} prefetch={false}>
+                      <Link
+                        href={href}
+                        locale={locale}
+                        prefetch={false}
+                        legacyBehavior
+                      >
                         <a
                           className="block px-4 py-2 text-sm cursor-pointer text-secondary hover:text-white hover:bg-secondary"
                           onClick={() => setMobMenuOpen(false)}

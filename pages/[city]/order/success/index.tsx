@@ -83,7 +83,7 @@ export default function Order({ orderData }: { orderData: any }) {
           </div>
           <div>
             Отслеживать заказ можете в{' '}
-            <Link href="/profile/orders" prefetch={false}>
+            <Link href="/profile/orders" prefetch={false} legacyBehavior>
               <a className="text-yellow font-bold">профиле</a>
             </Link>
             .

@@ -82,9 +82,18 @@ const Header: FC<{
         <div className="container mx-auto">
           <div className="flex justify-between items-center">
             <div className="w-32 md:w-48 ml-4 md:ml-0">
-              <Link href={`/${chosenCity.slug}`} prefetch={false}>
+              <Link
+                href={`/${chosenCity.slug}`}
+                prefetch={false}
+                legacyBehavior
+              >
                 <a className="flex">
-                  <Image src="/assets/main_logo.svg" width="188" height="68" />
+                  <Image
+                    src="/assets/main_logo.svg"
+                    width="188"
+                    height="68"
+                    alt="main_logo"
+                  />
                 </a>
               </Link>
             </div>
@@ -106,9 +115,7 @@ const Header: FC<{
                   <div className="md:flex hidden">
                     <HeaderPhone />
                     <ChooseCityDropDown />
-                    <div className="mx-2">
-                      <SignInButton />
-                    </div>
+                    <div className="mx-2">{/* <SignInButton /> */}</div>
                   </div>
                   <div className="hidden md:flex">
                     <MenuIcon
@@ -131,12 +138,17 @@ const Header: FC<{
           <div className="w-screen h-screen fixed bg-secondary z-40 top-0 overflow-y-auto p-4 pt-12">
             <div className="flex justify-between items-center border-b pb-2 border-blue">
               <div className="w-32 md:w-48 md:ml-0">
-                <Link href={`/${chosenCity.slug}`} prefetch={false}>
+                <Link
+                  href={`/${chosenCity.slug}`}
+                  prefetch={false}
+                  legacyBehavior
+                >
                   <a className="flex">
                     <Image
                       src="/assets/footer_logo.svg"
                       width="188"
                       height="68"
+                      alt="footer_logo"
                     />
                   </a>
                 </Link>
@@ -152,7 +164,7 @@ const Header: FC<{
               <MobChooseCityDropDown />
             </div>
             <div className="border-b border-blue py-8">
-              <SignInButton setMobMenuOpen={setMobMenuOpen} />
+              {/* <SignInButton setMobMenuOpen={setMobMenuOpen} /> */}
               <MobHeaderMenu menuItems={menu} setMobMenuOpen={setMobMenuOpen} />
             </div>
             <div className="text-white pt-8">
@@ -170,7 +182,12 @@ const Header: FC<{
               )}
               <div className="flex items-center justify-between mb-5">
                 <a className="flex" href="#">
-                  <Image src="/assets/appstore.png" width="151" height="49" />
+                  <Image
+                    src="/assets/appstore.png"
+                    width="151"
+                    height="49"
+                    alt="appstore"
+                  />
                 </a>
                 <a
                   href="https://play.google.com/store/apps/details?id=havoqand.chopar"

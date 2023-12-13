@@ -35,6 +35,7 @@ const About: FC = () => {
           layout="responsive"
           width={1160}
           height={534}
+          alt="aboutPageBanner"
         />
       </div>
       <div className="md:grid md:grid-cols-3 mb-6">

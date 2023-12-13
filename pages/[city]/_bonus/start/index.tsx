@@ -222,8 +222,13 @@ export default function Dev({
       }}
     >
       <div className="flex justify-between items-center">
-        <Link href={`/${chosenCity.slug}`} prefetch={false}>
-          <Image src="/assets/footer_logo.svg" width={200} height={72} />
+        <Link href={`/${chosenCity.slug}`} prefetch={false} legacyBehavior>
+          <Image
+            src="/assets/footer_logo.svg"
+            width={200}
+            height={72}
+            alt="footer_logo"
+          />
         </Link>
         <div className="w-44 h-10 bg-blue rounded-full flex justify-between">
           <a

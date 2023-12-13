@@ -82,7 +82,7 @@ export default function News({ news }: { news: any }) {
                   pathname.indexOf(item.href) >= 0 ? item.activeIcon : item.icon
                 }`}
               />
-              <Link href={href} locale={locale} prefetch={false}>
+              <Link href={href} locale={locale} prefetch={false} legacyBehavior>
                 <a
                   className={`${
                     pathname.indexOf(item.href) >= 0

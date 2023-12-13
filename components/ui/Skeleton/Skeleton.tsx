@@ -4,6 +4,7 @@ import px from '@lib/to-pixels'
 import s from './Skeleton.module.css'
 
 interface SkeletonProps {
+  children?: React.ReactNode
   show?: boolean
   block?: boolean
   className?: string

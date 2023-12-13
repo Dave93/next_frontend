@@ -28,7 +28,7 @@ const SetLocation: FC = () => {
         }}
       >
         <div className="flex items-center mr-3">
-          <Image src="/assets/location.png" width="14" height="16" />
+          <Image src="/assets/location.png" width="14" height="16" alt="" />
         </div>
         {locationData && locationData.address
           ? locationData.label

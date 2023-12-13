@@ -216,6 +216,7 @@ const OrderAccept: FC<OrderDetailProps> = ({ order, orderStatuses }) => {
                           height="40"
                           layout="fixed"
                           className="rounded-full"
+                          alt=""
                         />
                       </div>
                     </div>
@@ -237,6 +238,7 @@ const OrderAccept: FC<OrderDetailProps> = ({ order, orderStatuses }) => {
                           height="40"
                           layout="fixed"
                           className="rounded-full"
+                          alt=""
                         />
                       </div>
                     ))}
@@ -255,6 +257,7 @@ const OrderAccept: FC<OrderDetailProps> = ({ order, orderStatuses }) => {
                           height="40"
                           layout="fixed"
                           className="absolute rounded-full"
+                          alt=""
                         />
                       </div>
                     </div>
@@ -270,6 +273,7 @@ const OrderAccept: FC<OrderDetailProps> = ({ order, orderStatuses }) => {
                           height="40"
                           layout="fixed"
                           className="rounded-full"
+                          alt=""
                         />
                       </div>
                     </div>
@@ -286,6 +290,7 @@ const OrderAccept: FC<OrderDetailProps> = ({ order, orderStatuses }) => {
                     width={95}
                     height={95}
                     className="rounded-full w-24"
+                    alt=""
                   />
                 </div>
               )}

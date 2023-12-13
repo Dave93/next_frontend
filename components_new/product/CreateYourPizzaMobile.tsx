@@ -516,7 +516,7 @@ const CreateYourPizza: FC<CreatePizzaProps> = ({ sec, channelName }) => {
       <div className="gap-4 grid grid-cols-2 py-4 md:py-0 items-center justify-between md:flex md:flex-col">
         <div className="text-center">
           <div>
-            <Image src="/createYourPizza.png" width="250" height="250" />
+            <Image src="/createYourPizza.png" width="250" height="250" alt="" />
           </div>
         </div>
         <div>
@@ -583,6 +583,7 @@ const CreateYourPizza: FC<CreatePizzaProps> = ({ sec, channelName }) => {
                             src="/assets/back.png"
                             width="24"
                             height="24"
+                            alt=""
                           />
                         </span>
                       </div>
@@ -601,6 +602,7 @@ const CreateYourPizza: FC<CreatePizzaProps> = ({ sec, channelName }) => {
                                 height="320"
                                 layout="fixed"
                                 className="absolute"
+                                alt=""
                               />
                             </div>
                           )}
@@ -613,6 +615,7 @@ const CreateYourPizza: FC<CreatePizzaProps> = ({ sec, channelName }) => {
                                 width="320"
                                 height="320"
                                 layout="fixed"
+                                alt=""
                               />
                             </div>
                           )}
@@ -800,6 +803,7 @@ const CreateYourPizza: FC<CreatePizzaProps> = ({ sec, channelName }) => {
                             src="/assets/back.png"
                             width="24"
                             height="24"
+                            alt=""
                           />
                         </span>
                         <div className="text-lg flex-grow text-center -ml-10">
@@ -860,6 +864,7 @@ const CreateYourPizza: FC<CreatePizzaProps> = ({ sec, channelName }) => {
                                 src={item.image}
                                 width="110"
                                 height="110"
+                                alt=""
                               />
                               <div className="uppercase">
                                 {
@@ -934,6 +939,7 @@ const CreateYourPizza: FC<CreatePizzaProps> = ({ sec, channelName }) => {
                                 src={item.image}
                                 width="110"
                                 height="110"
+                                alt=""
                               />
                               <div className="uppercase">
                                 {
