@@ -290,8 +290,6 @@ export default function Home({
 
     return res
   }, [products])
-  console.log('products', products)
-  console.log('threeCategories', threeCategories)
   return (
     <>
       <NextSeo
