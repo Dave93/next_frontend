@@ -10,9 +10,10 @@ import getConfig from 'next/config'
 import Image from 'next/image'
 import Cookies from 'js-cookie'
 import { useCart } from '@framework/cart'
+import { Product } from '@commerce/types/product'
 
 type ThreePizzaProps = {
-  sec: any
+  items: Product[]
   channelName: string
   isSmall?: boolean
 }
@@ -20,7 +21,7 @@ const { publicRuntimeConfig } = getConfig()
 let webAddress = publicRuntimeConfig.apiUrl
 axios.defaults.withCredentials = true
 
-const ThreePizza: FC<ThreePizzaProps> = ({ sec, channelName }) => {
+const ThreePizza: FC<ThreePizzaProps> = ({ items, channelName }) => {
   let [isOpen, setIsOpen] = useState(false)
   let completeButtonRef = useRef(null)
   const { t: tr } = useTranslation('common')
@@ -50,56 +51,6 @@ const ThreePizza: FC<ThreePizzaProps> = ({ sec, channelName }) => {
       setConfigData(configData)
     } catch (e) {}
   }
-
-  const customNames: string[] = useMemo(() => {
-    const names: any = {}
-    sec.items.map((item: any) => {
-      item.variants.map((vars: any) => {
-        if (locale == 'uz') {
-          names[vars?.custom_name_uz] = vars?.custom_name_uz
-        } else if (locale == 'ru') {
-          names[vars?.custom_name] = vars?.custom_name
-        } else if (locale == 'en') {
-          names[vars?.custom_name_en] = vars?.custom_name_en
-        }
-      })
-    })
-    return Object.values(names)
-  }, [sec, locale])
-
-  const readyProductList: any[] = useMemo(() => {
-    return sec.items.map((item: any) => {
-      let res = item
-
-      res.isInStop = false
-
-      res.beforePrice = 0
-
-      if (
-        locationData &&
-        configData.discount_end_date &&
-        locationData.deliveryType == 'pickup' &&
-        locationData.terminal_id &&
-        configData.discount_catalog_sections
-          .split(',')
-          .map((i: string) => +i)
-          .includes(res.category_id)
-      ) {
-        if (DateTime.now().toFormat('E') != configData.discount_disable_day) {
-          if (
-            DateTime.now() <= DateTime.fromSQL(configData.discount_end_date)
-          ) {
-            if (configData.discount_value) {
-              res.beforePrice = res.price
-              res.price = res.price * ((100 - configData.discount_value) / 100)
-            }
-          }
-        }
-      }
-
-      return res
-    })
-  }, [sec, activeCustomName, locationData, configData])
 
   const selectProduct = (id: number) => {
     if (selected.includes(id)) {
@@ -224,23 +175,19 @@ const ThreePizza: FC<ThreePizzaProps> = ({ sec, channelName }) => {
     setIsLoadingBasket(false)
   }
 
-  useEffect(() => {
-    fetchConfig()
-  }, [customNames])
-
   return (
     <div>
       <div className="cursor-pointer" onClick={() => setIsOpen(true)}>
         <div className="relative md:block hidden h-[250px]">
           <img
-            src={`/three_sale/${
+            src={`/three_sale_new/${
               locale == 'uz' ? 'desktop_uz.webp' : 'desktop.webp'
             }`}
           />
         </div>
         <div className="relative md:hidden block h-[200px]">
           <img
-            src={`/three_sale/${
+            src={`/three_sale_new/${
               locale == 'uz' ? 'mobile_uz.webp' : 'mobile.webp'
             }`}
             className="mx-auto"
@@ -291,8 +238,8 @@ const ThreePizza: FC<ThreePizzaProps> = ({ sec, channelName }) => {
                 >
                   <XIcon className="cursor-pointer h-7 text-white w-7" />
                 </button>
-                <div className="grid md:grid-cols-3 grid-cols-2 gap-10 container">
-                  {readyProductList.map((item: any) => (
+                <div className="grid md:grid-cols-4 grid-cols-2 gap-10 container">
+                  {items.map((item: any) => (
                     <div
                       className={`hover:shadow-lg rounded-3xl flex md:flex-col items-center justify-center border hover:border-yellow p-4 cursor-pointer relative gap-1 ${
                         selected.includes(item.id) ? 'border-yellow' : ''
@@ -300,16 +247,25 @@ const ThreePizza: FC<ThreePizzaProps> = ({ sec, channelName }) => {
                       key={item.id}
                       onClick={() => selectProduct(item.id)}
                     >
-                      <div className="text-center">
-                        <div className="">
+                      <div className="flex flex-col items-center space-y-2">
+                        <div>
                           {selected.includes(item.id) && (
                             <div className="absolute right-4 top-2">
                               <CheckIcon className=" text-yellow border border-yellow rounded-full w-6 md:w-10" />
                             </div>
                           )}
-                          <Image src={item.image} width="200" height="200" />
+                          <Image
+                            src={item.image}
+                            width="200"
+                            height="200"
+                            alt={
+                              item?.attribute_data?.name[channelName][
+                                locale || 'ru'
+                              ]
+                            }
+                          />
                         </div>
-                        <div key={item.id} className="text-xl">
+                        <div key={item.id} className="text-xl text-center">
                           {
                             item?.attribute_data?.name[channelName][
                               locale || 'ru'

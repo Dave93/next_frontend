@@ -111,7 +111,12 @@ export default function SaleId({
                       : item.icon
                   }`}
                 />
-                <Link href={href} locale={locale} prefetch={false}>
+                <Link
+                  href={href}
+                  locale={locale}
+                  prefetch={false}
+                  legacyBehavior
+                >
                   <a
                     className={`${
                       pathname.indexOf(item.href) >= 0
@@ -132,6 +137,7 @@ export default function SaleId({
               <Link
                 href={`${'/' + activeCity.slug + '/sale/' + SaleItem.id}`}
                 prefetch={false}
+                legacyBehavior
               >
                 <a>
                   <Image
@@ -146,6 +152,7 @@ export default function SaleId({
               <Link
                 href={`${'/' + activeCity.slug + '/sale/' + SaleItem.id}`}
                 prefetch={false}
+                legacyBehavior
               >
                 <a>
                   <Image
@@ -181,6 +188,7 @@ export default function SaleId({
                       <Link
                         href={`${'/' + activeCity.slug + '/sale/' + item.id}`}
                         prefetch={false}
+                        legacyBehavior
                       >
                         <a>
                           <Image
@@ -195,6 +203,7 @@ export default function SaleId({
                       <Link
                         href={`${'/' + activeCity.slug + '/sale/' + item.id}`}
                         prefetch={false}
+                        legacyBehavior
                       >
                         <a>
                           <Image
@@ -229,6 +238,7 @@ export default function SaleId({
                     <Link
                       href={`${'/' + activeCity.slug + '/sale/' + item.id}`}
                       prefetch={false}
+                      legacyBehavior
                     >
                       <a className="text-xs text-gray-400 hover:underline">
                         {tr('more')}

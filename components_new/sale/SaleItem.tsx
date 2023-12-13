@@ -31,6 +31,7 @@ const SaleItem: FC<SaleListProps> = ({ SaleItems }) => {
               <Link
                 href={`${'/' + activeCity.slug + '/sale/' + item.id}`}
                 prefetch={false}
+                legacyBehavior
               >
                 <a>
                   <Image
@@ -45,6 +46,7 @@ const SaleItem: FC<SaleListProps> = ({ SaleItems }) => {
               <Link
                 href={`${'/' + activeCity.slug + '/sale/' + item.id}`}
                 prefetch={false}
+                legacyBehavior
               >
                 <a>
                   <Image
@@ -73,6 +75,7 @@ const SaleItem: FC<SaleListProps> = ({ SaleItems }) => {
               <Link
                 href={`${'/' + activeCity.slug + '/sale/' + item.id}`}
                 prefetch={false}
+                legacyBehavior
               >
                 {item.name}
               </Link>
@@ -80,6 +83,7 @@ const SaleItem: FC<SaleListProps> = ({ SaleItems }) => {
             <Link
               href={`${'/' + activeCity.slug + '/sale/' + item.id}`}
               prefetch={false}
+              legacyBehavior
             >
               <a className="text-xs text-gray-400 hover:underline">
                 {tr('more')}

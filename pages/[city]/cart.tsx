@@ -618,6 +618,7 @@ export default function Cart() {
                                       height="40"
                                       layout="fixed"
                                       className="rounded-full"
+                                      alt=""
                                     />
                                   </div>
                                 </div>
@@ -640,6 +641,7 @@ export default function Cart() {
                                         height="40"
                                         layout="fixed"
                                         className="rounded-full"
+                                        alt=""
                                       />
                                     </div>
                                   )
@@ -660,6 +662,7 @@ export default function Cart() {
                                       height="100"
                                       layout="fixed"
                                       className="absolute rounded-full"
+                                      alt=""
                                     />
                                   </div>
                                 </div>
@@ -676,6 +679,7 @@ export default function Cart() {
                                       height="100"
                                       layout="fixed"
                                       className="rounded-full"
+                                      alt=""
                                     />
                                   </div>
                                 </div>
@@ -848,6 +852,7 @@ export default function Cart() {
                   {tr('related_to_your_products')}
                 </div>
                 <div className="mt-5">
+                  {/* @ts-ignore */}
                   <Slider {...settings}>
                     {biRecommendations.relatedItems.map((item: any) => (
                       <div className="border border-gray-300 rounded-2xl md:px-5 px-1 py-2 text-center flex flex-col">
@@ -918,6 +923,7 @@ export default function Cart() {
               <div className="md:p-10 p-5 md:rounded-2xl bg-white md:my-3">
                 <div className="text-lg font-bold">{tr('top_products')}</div>
                 <div className="mt-5">
+                  {/* @ts-ignore */}
                   <Slider {...settings}>
                     {biRecommendations.topItems.map((item: any) => (
                       <div className="border border-gray-300 rounded-2xl md:px-5 px-1 py-2 text-center flex flex-col">

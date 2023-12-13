@@ -41,6 +41,7 @@ const Fran: FC = () => {
               width="360"
               height="254"
               className="rounded-2xl mb-2"
+              alt=""
             />
             <div className="text-2xl font-bold mt-7 mb-5">Большой ресторан</div>
             <div className="md:md:text-xl md:w-80 mb-5 md:mb-0">
@@ -66,6 +67,7 @@ const Fran: FC = () => {
               width="360"
               height="254"
               className="rounded-2xl"
+              alt=""
             />
             <div className="text-2xl font-bold mt-7 mb-5">Средний ресторан</div>
             <div className="md:text-xl md:w-80 mb-5 md:mb-0">
@@ -88,6 +90,7 @@ const Fran: FC = () => {
               width="360"
               height="254"
               className="rounded-2xl"
+              alt=""
             />
             <div className="text-2xl font-bold mt-7 mb-5">
               Маленький ресторан
@@ -127,6 +130,7 @@ const Fran: FC = () => {
             width="1160"
             height="571"
             className="rounded-2xl"
+            alt=""
           />
         </div>
       </div>
@@ -141,6 +145,7 @@ const Fran: FC = () => {
               width="360"
               height="254"
               className="rounded-2xl mb-2"
+              alt=""
             />
             <div className="text-2xl font-bold mt-7 mb-5">
               Всегда свежее тесто
@@ -159,6 +164,7 @@ const Fran: FC = () => {
               width="360"
               height="254"
               className="rounded-2xl mb-2"
+              alt=""
             />
             <div className="text-2xl font-bold mt-7 mb-5">
               Уникальный томатный соус
@@ -177,6 +183,7 @@ const Fran: FC = () => {
               width="360"
               height="254"
               className="rounded-2xl mb-2"
+              alt=""
             />
             <div className="text-2xl font-bold mt-7 mb-5">
               100% натуральный сыр Моцарелла
@@ -207,7 +214,7 @@ const Fran: FC = () => {
         <div className="md:gap-8 md:grid grid-cols-4">
           <div className="flex">
             <div className="w-full">
-              <Image src="/35sm.png" width="160" height="160" />
+              <Image src="/35sm.png" width="160" height="160" alt="" />
             </div>
             <div className="ml-5 md:text-xl w-48">
               <div className="text-4xl text-yellow">35 см</div>
@@ -216,7 +223,7 @@ const Fran: FC = () => {
           </div>
           <div className="flex">
             <div className="w-full">
-              <Image src="/32sm.png" width="160" height="160" />
+              <Image src="/32sm.png" width="160" height="160" alt="" />
             </div>
             <div className="ml-5 md:text-xl w-48">
               <div className="text-4xl text-yellow">32 см</div>
@@ -225,7 +232,7 @@ const Fran: FC = () => {
           </div>
           <div className="flex">
             <div className="w-full">
-              <Image src="/25sm.png" width="160" height="160" />
+              <Image src="/25sm.png" width="160" height="160" alt="" />
             </div>
             <div className="ml-5 md:text-xl w-48">
               <div className="text-4xl text-yellow">25 см</div>
@@ -239,7 +246,7 @@ const Fran: FC = () => {
           Узнаваемый бренд
         </div>
         <div className="mb-10">
-          <Image src="/popularBrand.png" width="1160" height="571" />
+          <Image src="/popularBrand.png" width="1160" height="571" alt="" />
         </div>
         <div className="md:text-xl md:w-[960px]">
           Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas

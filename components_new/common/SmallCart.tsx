@@ -304,12 +304,12 @@ const SmallCart: FC<SmallCartProps> = ({ channelName }) => {
             )}
           </div>
           <div className="flex items-center">
-            <Image src="/small_cart_icon.png" width={34} height={34} />
+            <Image src="/small_cart_icon.png" width={34} height={34} alt="" />
           </div>
         </div>
         {isEmpty && (
           <div className="flex flex-col items-center mt-2 text-center text-gray-400 text-sm">
-            <Image src="/cart_empty.png" width={130} height={119} />
+            <Image src="/cart_empty.png" width={130} height={119} alt="" />
             <div className="w-6/12">{tr('basket_empty')}</div>
           </div>
         )}
@@ -339,6 +339,7 @@ const SmallCart: FC<SmallCartProps> = ({ channelName }) => {
                                     height="40"
                                     layout="fixed"
                                     className="rounded-full"
+                                    alt=""
                                   />
                                 </div>
                               </div>
@@ -361,6 +362,7 @@ const SmallCart: FC<SmallCartProps> = ({ channelName }) => {
                                       height="40"
                                       layout="fixed"
                                       className="rounded-full"
+                                      alt=""
                                     />
                                   </div>
                                 )
@@ -380,6 +382,7 @@ const SmallCart: FC<SmallCartProps> = ({ channelName }) => {
                                     height="40"
                                     layout="fixed"
                                     className="absolute rounded-full"
+                                    alt=""
                                   />
                                 </div>
                               </div>
@@ -396,6 +399,7 @@ const SmallCart: FC<SmallCartProps> = ({ channelName }) => {
                                     height="40"
                                     layout="fixed"
                                     className="rounded-full"
+                                    alt=""
                                   />
                                 </div>
                               </div>
@@ -412,6 +416,7 @@ const SmallCart: FC<SmallCartProps> = ({ channelName }) => {
                               width={40}
                               height={40}
                               className="rounded-full"
+                              alt=""
                             />
                           </div>
                         )}

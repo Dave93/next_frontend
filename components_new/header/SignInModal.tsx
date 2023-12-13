@@ -121,7 +121,7 @@ const SignInButton: FC = () => {
     mode: 'onChange',
   })
   const onSubmit = useCallback(
-    async (data) => {
+    async (data: any) => {
       if (!executeRecaptcha) {
         return
       }

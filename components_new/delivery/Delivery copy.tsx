@@ -7,7 +7,10 @@ const Delivery: FC = () => {
     <div className="mx-5 md:mx-0">
       <div className="mb-10">
         <div className="text-2xl md:text-3xl mb-1">
-          Доставка в Chopar Pizza ежедневно с 10:00 до 03:00{' '} <a href="tel:9989712051111" className="hover:text-blue">+998971 205 11 11</a>
+          Доставка в Chopar Pizza ежедневно с 10:00 до 03:00{' '}
+          <a href="tel:9989712051111" className="hover:text-blue">
+            +998971 205 11 11
+          </a>
         </div>
         <div className="border-b-2 w-24 border-yellow mb-10"></div>
         <Image
@@ -15,6 +18,7 @@ const Delivery: FC = () => {
           layout="responsive"
           width={1160}
           height={270}
+          alt=""
         />
       </div>
       <div className="mb-10">
@@ -70,6 +74,7 @@ const Delivery: FC = () => {
           layout="responsive"
           width={2132}
           height={1075}
+          alt=""
         />
         <div className="border border-yellow md:flex justify-between md:mt-2 mt-5 py-5 px-8 rounded-xl">
           <div className="md:flex mb-4 md:mb-0">

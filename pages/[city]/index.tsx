@@ -260,41 +260,38 @@ export default function Home({
   }, [products])
 
   const threeCategories = useMemo(() => {
-    return products
-      .map((prod: any) => {
-        if (!prod.three_sale) {
-          return null
-        }
-        if (prod.variants && prod.variants.length) {
-          prod.variants = prod.variants.map((v: any, index: number) => {
-            if (index === 1) {
-              v.active = true
-            } else {
-              v.active = false
-            }
+    let res = []
 
-            return v
-          })
-        } else if (prod.items && prod.items.length) {
-          prod.items = prod.items.map((item: any) => {
-            item.variants = item.variants.map((v: any, index: number) => {
-              if (index === 1) {
-                v.active = true
-              } else {
-                v.active = false
+    for (const prod of products) {
+      if (prod.items) {
+        for (const item of prod.items) {
+          if (item.variants && item.variants.length) {
+            for (const variant of item.variants) {
+              if (variant.threesome) {
+                res.push(variant)
               }
-
-              return v
-            })
-
-            return item
-          })
+            }
+          } else {
+            if (item.threesome) {
+              res.push(item)
+            }
+          }
         }
-        return prod
-      })
-      .filter((prod: any) => prod != null)
-  }, [products])
+      } else if (prod.variants && prod.variants.length) {
+        for (const variant of prod.variants) {
+          if (variant.threesome) {
+            res.push(variant)
+          }
+        }
+      } else if (prod.threesome) {
+        res.push(prod)
+      }
+    }
 
+    return res
+  }, [products])
+  console.log('products', products)
+  console.log('threeCategories', threeCategories)
   return (
     <>
       <NextSeo
@@ -314,7 +311,7 @@ export default function Home({
           {threeCategories.length > 0 && (
             <div className="col-span-3 md:hidden">
               <ThreePizzaNoSSR
-                sec={threeCategories[0]}
+                items={threeCategories}
                 channelName={channelName}
               />
             </div>
@@ -333,7 +330,7 @@ export default function Home({
             {threeCategories.length > 0 && (
               <div className="hidden md:block">
                 <ThreePizzaNoSSR
-                  sec={threeCategories[0]}
+                  items={threeCategories}
                   channelName={channelName}
                 />
               </div>

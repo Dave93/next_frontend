@@ -551,7 +551,7 @@ const CreateYourPizza: FC<CreatePizzaProps> = ({
             <div className="text-lg font-bold mb-2">
               {tr('create_your_own_pizza')}
             </div>
-            <Image src="/createYourPizza.png" width="150" height="150" />
+            <Image src="/createYourPizza.png" width="150" height="150" alt="" />
           </div>
           <div className={isSmall ? '' : 'mt-5'}>
             <button
@@ -643,7 +643,12 @@ const CreateYourPizza: FC<CreatePizzaProps> = ({
                                 <CheckIcon className=" h-4 text-yellow border border-yellow rounded-full w-4" />
                               </div>
                             )}
-                          <Image src={item.image} width="110" height="110" />
+                          <Image
+                            src={item.image}
+                            width="110"
+                            height="110"
+                            alt=""
+                          />
                           <div className="uppercase">
                             {
                               item?.attribute_data?.name[channelName][
@@ -694,6 +699,7 @@ const CreateYourPizza: FC<CreatePizzaProps> = ({
                               height="320"
                               layout="fixed"
                               className="absolute"
+                              alt=""
                             />
                           </div>
                         )}
@@ -706,6 +712,7 @@ const CreateYourPizza: FC<CreatePizzaProps> = ({
                               width="320"
                               height="320"
                               layout="fixed"
+                              alt=""
                             />
                           </div>
                         )}
@@ -757,6 +764,7 @@ const CreateYourPizza: FC<CreatePizzaProps> = ({
                                 src="/choose_split_lazy.png"
                                 height="70"
                                 width="70"
+                                alt=""
                               />
                             </div>
                             <div className="w-24 text-sm text-gray-400 text-left">
@@ -794,6 +802,7 @@ const CreateYourPizza: FC<CreatePizzaProps> = ({
                                 src="/choose_split_lazy.png"
                                 height="70"
                                 width="70"
+                                alt=""
                               />
                             </div>
                             <div className="w-24 text-sm text-gray-400 text-left">
@@ -956,7 +965,12 @@ const CreateYourPizza: FC<CreatePizzaProps> = ({
                                 <CheckIcon className=" h-4 text-yellow border border-yellow rounded-full w-4" />
                               </div>
                             )}
-                          <Image src={item.image} width="110" height="110" />
+                          <Image
+                            src={item.image}
+                            width="110"
+                            height="110"
+                            alt=""
+                          />
                           <div className="uppercase">
                             {
                               item?.attribute_data?.name[channelName][

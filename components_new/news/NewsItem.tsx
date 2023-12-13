@@ -34,7 +34,7 @@ const NewsItem: FC<NewListProps> = ({ newsItems }) => {
               >
                 <div className="relative">
                   {item.asset && item.asset.length ? (
-                    <Link href={href} prefetch={false}>
+                    <Link href={href} prefetch={false} legacyBehavior>
                       <a>
                         <Image
                           src={item.asset[0].link}
@@ -53,7 +53,7 @@ const NewsItem: FC<NewListProps> = ({ newsItems }) => {
                       </a>
                     </Link>
                   ) : (
-                    <Link href={href} prefetch={false}>
+                    <Link href={href} prefetch={false} legacyBehavior>
                       <a>
                         <Image
                           src="/no_photo.svg"
@@ -86,7 +86,7 @@ const NewsItem: FC<NewListProps> = ({ newsItems }) => {
                 </div>
                 <div className="md:flex md:flex-col justify-between p-5 flex-grow">
                   <div className="md:text-lg mb-3">
-                    <Link href={href} prefetch={false}>
+                    <Link href={href} prefetch={false} legacyBehavior>
                       {locale == 'ru'
                         ? item.name
                         : locale == 'uz'
@@ -96,7 +96,7 @@ const NewsItem: FC<NewListProps> = ({ newsItems }) => {
                         : ''}
                     </Link>
                   </div>
-                  <Link href={href} prefetch={false}>
+                  <Link href={href} prefetch={false} legacyBehavior>
                     <a className="text-xs text-gray-400 hover:underline">
                       {tr('more')}
                     </a>

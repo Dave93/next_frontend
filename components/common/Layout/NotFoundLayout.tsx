@@ -1,5 +1,5 @@
 import cn from 'classnames'
-import React, { FC, useEffect, useMemo, useState } from 'react'
+import React, { FC, ReactNode, useEffect, useMemo, useState } from 'react'
 import { useRouter } from 'next/router'
 import { CommerceProvider } from '@framework'
 import type { Page } from '@commerce/types/page'
@@ -31,6 +31,7 @@ import { parsePhoneNumber } from 'libphonenumber-js'
 const { publicRuntimeConfig } = getConfig()
 
 interface Props {
+  children: ReactNode
   pageProps: {
     pages?: Page[]
     categories: any[]

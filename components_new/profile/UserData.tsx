@@ -34,7 +34,9 @@ const UserData: FC = () => {
         <div className="text-3xl mb-1">
           {tr('profile_hello')}, {user?.user?.name}!
         </div>
-        <div className="md:text-xs md:w-80 text-gray-400">{tr('profile_desc')}</div>
+        <div className="md:text-xs md:w-80 text-gray-400">
+          {tr('profile_desc')}
+        </div>
       </div>
       <div className="flex items-end justify-between mt-5">
         {items.map((item, id) => {
@@ -57,7 +59,12 @@ const UserData: FC = () => {
                   {item.name}
                 </span>
               ) : (
-                <Link href={href} locale={locale} prefetch={false}>
+                <Link
+                  href={href}
+                  locale={locale}
+                  prefetch={false}
+                  legacyBehavior
+                >
                   <a
                     className={`${
                       pathname.indexOf(item.href) >= 0

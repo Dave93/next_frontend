@@ -18,17 +18,17 @@ const Navbar: FC<NavbarProps> = ({ links }) => (
     <Container>
       <div className={s.nav}>
         <div className="flex items-center flex-1">
-          <Link href="/">
+          <Link href="/" legacyBehavior>
             <a className={s.logo} aria-label="Logo">
               <Logo />
             </a>
           </Link>
           <nav className={s.navMenu}>
-            <Link href="/search">
+            <Link href="/search" legacyBehavior>
               <a className={s.link}>All</a>
             </Link>
             {links?.map((l) => (
-              <Link href={l.href} key={l.href}>
+              <Link href={l.href} key={l.href} legacyBehavior>
                 <a className={s.link}>{l.label}</a>
               </Link>
             ))}

@@ -28,7 +28,11 @@ const Grid: FC<GridProps> = ({
     },
     className
   )
-  return <div className={rootClassName}>{children}</div>
+  return (
+    <div className={rootClassName}>
+      <>{children}</>
+    </div>
+  )
 }
 
 export default Grid

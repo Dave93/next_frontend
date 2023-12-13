@@ -1,6 +1,6 @@
 import commerce from '@lib/api/commerce'
 import { GetServerSidePropsContext } from 'next'
-import Image from 'next/dist/client/image'
+import Image from 'next/image'
 import { Menu, Transition } from '@headlessui/react'
 import { Fragment, useEffect, useMemo } from 'react'
 import { useUI } from '@components/ui'
@@ -71,7 +71,12 @@ export default function DevPage({ cities }: { cities: any }) {
   return (
     <div className="bg-secondary md:w-full h-screen">
       <div className="m-auto w-max">
-        <Image src="/assets/footer_logo.svg " width={300} height={200} />
+        <Image
+          src="/assets/footer_logo.svg "
+          width={300}
+          height={200}
+          alt="footer"
+        />
       </div>
       <div className="m-auto w-max mb-8 text-white md:text-5xl text-3xl">
         {tr('choose_your_city')}

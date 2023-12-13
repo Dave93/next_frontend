@@ -2,6 +2,7 @@ import cn from 'classnames'
 import React, {
   FC,
   Fragment,
+  ReactNode,
   useEffect,
   useMemo,
   useRef,
@@ -20,7 +21,7 @@ import styles from './Layout.module.css'
 import Header from '@components_new/Header'
 import Image from 'next/image'
 import Link from 'next/link'
-import { Link as LinkScroll } from 'react-scroll'
+import * as Scroll from 'react-scroll'
 import { useUI } from '@components/ui'
 import {
   faFacebook,
@@ -44,6 +45,8 @@ import { XIcon } from '@heroicons/react/solid'
 import LocationTabs from '@components_new/header/LocationTabs'
 import MobLocationTabs from '@components_new/header/MobLocationTabs.'
 
+const LinkScroll = Scroll.Link
+
 const BonusModalNoSSR = dynamic(
   () => import('@components/common/Layout/BonusModal'),
   { ssr: false }
@@ -52,6 +55,7 @@ const BonusModalNoSSR = dynamic(
 const { publicRuntimeConfig } = getConfig()
 
 interface Props {
+  children: ReactNode
   pageProps: {
     pages?: Page[]
     categories: any[]
@@ -156,7 +160,12 @@ const Layout: FC<Props> = ({
           </main>
           <footer className="text-white md:flex flex-col flex">
             <div className="hidden md:flex justify-center">
-              <Image src="/assets/uzor.svg" width={1920} height={40} />
+              <Image
+                src="/assets/uzor.svg"
+                width={1920}
+                height={40}
+                alt="footer_bg"
+              />
             </div>
             <div className="md:hidden flex">
               <Image
@@ -164,6 +173,7 @@ const Layout: FC<Props> = ({
                 width={1000}
                 height={60}
                 className="object-cover"
+                alt="footer_bg_mb"
               />
             </div>
             <div className="bg-secondary w-full pt-5 pb-2 px-4 md:px-0">
@@ -175,6 +185,7 @@ const Layout: FC<Props> = ({
                         src="/assets/footer_logo.svg"
                         width={188}
                         height={68}
+                        alt="footer_logo"
                       />
                     </div>
                     {/* <div className="md:hidden border-b border-blue md:border-0 pb-5">
@@ -249,6 +260,7 @@ const Layout: FC<Props> = ({
                                 className={styles.footerMenuListItem}
                               >
                                 {pathname == '/[city]' ? (
+                                  // @ts-ignore
                                   <LinkScroll
                                     to={`productSection_${item.id}`}
                                     spy={true}
@@ -256,11 +268,13 @@ const Layout: FC<Props> = ({
                                     offset={-100}
                                     className="w-full cursor-pointer block"
                                   >
-                                    {
-                                      item?.attribute_data?.name['chopar'][
-                                        locale || 'ru'
-                                      ] // TODO: fix static value chopar
-                                    }
+                                    <>
+                                      {
+                                        item?.attribute_data?.name['chopar'][
+                                          locale || 'ru'
+                                        ] // TODO: fix static value chopar
+                                      }
+                                    </>
                                   </LinkScroll>
                                 ) : (
                                   <Link
@@ -298,7 +312,11 @@ const Layout: FC<Props> = ({
                                     key={item.href}
                                     className={styles.footerMenuListItem}
                                   >
-                                    <Link href={href} prefetch={false}>
+                                    <Link
+                                      href={href}
+                                      prefetch={false}
+                                      legacyBehavior
+                                    >
                                       <a>{item[keyTyped]}</a>
                                     </Link>
                                   </li>

@@ -74,14 +74,14 @@ const SignInButton: FC<SingInButtonProps> = ({ setMobMenuOpen }) => {
         </div>
       )}
       {!user && (
-        <>
+        <div>
           <button
             className="md:bg-gray-200 bg-yellow px-8 py-1 rounded-full text-secondary outline-none focus:outline-none mb-5 md:mb-0 ml-1 md:ml-0 font-bold md:font-normal"
             onClick={openModal}
           >
             {tr('signIn')}
           </button>
-        </>
+        </div>
       )}
     </>
   )

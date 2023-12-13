@@ -71,7 +71,7 @@ const DropdownMenu: FC<DropdownMenuProps> = ({ open = false }) => {
             {LINKS.map(({ name, href }) => (
               <li key={href}>
                 <div>
-                  <Link href={href}>
+                  <Link href={href} legacyBehavior>
                     <a
                       className={cn(s.link, {
                         [s.active]: pathname === href,
