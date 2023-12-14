@@ -115,7 +115,9 @@ const Header: FC<{
                   <div className="md:flex hidden">
                     <HeaderPhone />
                     <ChooseCityDropDown />
-                    <div className="mx-2">{/* <SignInButton /> */}</div>
+                    <div className="mx-2">
+                      <SignInButton />
+                    </div>
                   </div>
                   <div className="hidden md:flex">
                     <MenuIcon
@@ -164,7 +166,7 @@ const Header: FC<{
               <MobChooseCityDropDown />
             </div>
             <div className="border-b border-blue py-8">
-              {/* <SignInButton setMobMenuOpen={setMobMenuOpen} /> */}
+              <SignInButton setMobMenuOpen={setMobMenuOpen} />
               <MobHeaderMenu menuItems={menu} setMobMenuOpen={setMobMenuOpen} />
             </div>
             <div className="text-white pt-8">
