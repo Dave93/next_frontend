@@ -595,29 +595,26 @@ const CreateYourPizza: FC<CreatePizzaProps> = ({ sec, channelName }) => {
                       >
                         <div className="w-40 relative overflow-hidden">
                           {leftSelectedProduct && (
-                            <div>
                               <Image
                                 src={leftSelectedProduct.image}
                                 width="320"
                                 height="320"
                                 layout="fixed"
-                                className="absolute"
+                                className="absolute h-full max-w-2xl"
                                 alt=""
                               />
-                            </div>
                           )}
                         </div>
                         <div className="w-40 relative overflow-hidden">
                           {rightSelectedProduct && (
-                            <div className="absolute right-0">
                               <Image
                                 src={rightSelectedProduct.image}
                                 width="320"
                                 height="320"
                                 layout="fixed"
+                                className="absolute h-full max-w-2xl right-0"
                                 alt=""
                               />
-                            </div>
                           )}
                         </div>
                       </div>
