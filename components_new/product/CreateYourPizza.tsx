@@ -567,7 +567,7 @@ const CreateYourPizza: FC<CreatePizzaProps> = ({
         <Dialog
           initialFocus={completeButtonRef}
           as="div"
-          className="fixed inset-0 z-10 overflow-y-auto"
+          className="fixed inset-0 z-30 overflow-y-auto"
           open={isOpen}
           onClose={closeModal}
         >
@@ -692,29 +692,26 @@ const CreateYourPizza: FC<CreatePizzaProps> = ({
                     >
                       <div className="w-40 relative overflow-hidden">
                         {leftSelectedProduct && (
-                          <div>
-                            <Image
-                              src={leftSelectedProduct.image}
-                              width="320"
-                              height="320"
-                              layout="fixed"
-                              className="absolute"
-                              alt=""
-                            />
-                          </div>
+                          <Image
+                            src={leftSelectedProduct.image}
+                            width="320"
+                            height="320"
+                            layout="fixed"
+                            className="absolute h-full max-w-2xl"
+                            alt=""
+                          />
                         )}
                       </div>
                       <div className="w-40 relative overflow-hidden">
                         {rightSelectedProduct && (
-                          <div className="absolute right-0">
-                            <Image
-                              src={rightSelectedProduct.image}
-                              width="320"
-                              height="320"
-                              layout="fixed"
-                              alt=""
-                            />
-                          </div>
+                          <Image
+                            src={rightSelectedProduct.image}
+                            width="320"
+                            height="320"
+                            layout="fixed"
+                            className="absolute h-full max-w-2xl right-0"
+                            alt=""
+                          />
                         )}
                       </div>
                     </div>
@@ -734,7 +731,7 @@ const CreateYourPizza: FC<CreatePizzaProps> = ({
                       ))}
                     </div>
                     <div className="flex space-x-4 mt-5">
-                      <div className="border rounded-3xl w-6/12 p-3 h-28 items-center flex justify-around">
+                      <div className="border rounded-3xl w-6/12 p-3 items-center flex justify-around">
                         {leftSelectedProduct && (
                           <div className="text-left">
                             <div>
@@ -773,7 +770,7 @@ const CreateYourPizza: FC<CreatePizzaProps> = ({
                           </div>
                         )}
                       </div>
-                      <div className="border rounded-3xl w-6/12 p-3 h-28 items-center flex justify-around">
+                      <div className="border rounded-3xl w-6/12 p-3 items-center flex justify-around">
                         {rightSelectedProduct && (
                           <div className="text-left">
                             <div>
