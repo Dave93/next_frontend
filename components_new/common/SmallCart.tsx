@@ -371,7 +371,6 @@ const SmallCart: FC<SmallCartProps> = ({ channelName }) => {
                           ) : (
                             <div className="h-11 w-11 flex relative">
                               <div className="w-5 relative overflow-hidden">
-                                <div>
                                   <Image
                                     src={
                                       lineItem?.variant?.product?.assets?.length
@@ -381,13 +380,11 @@ const SmallCart: FC<SmallCartProps> = ({ channelName }) => {
                                     width="40"
                                     height="40"
                                     layout="fixed"
-                                    className="absolute rounded-full"
+                                    className="absolute h-full max-w-2xl"
                                     alt=""
                                   />
-                                </div>
                               </div>
                               <div className="w-5 relative overflow-hidden">
-                                <div className="absolute right-0">
                                   <Image
                                     src={
                                       lineItem?.child[0].variant?.product
@@ -398,10 +395,9 @@ const SmallCart: FC<SmallCartProps> = ({ channelName }) => {
                                     width="40"
                                     height="40"
                                     layout="fixed"
-                                    className="rounded-full"
+                                    className="absolute h-full max-w-2xl right-0" 
                                     alt=""
                                   />
-                                </div>
                               </div>
                             </div>
                           )

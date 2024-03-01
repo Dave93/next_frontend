@@ -1214,8 +1214,8 @@ const Orders: FC<OrdersProps> = ({ channelName }: { channelName: any }) => {
           <div className="text-lg mb-5 font-bold">
             {tr('order_your_contacts')}
           </div>
-          <form onSubmit={handleSubmit(onSubmit)} className="md:w-80">
-            <div className="mt-8">
+          <form onSubmit={handleSubmit(onSubmit)} className="grid gap-2 md:grid-cols-4">
+            <div className="col-span-2">
               <label className="text-sm text-gray-400 mb-2 block">
                 {tr('personal_data_name')}
               </label>
@@ -1240,7 +1240,7 @@ const Orders: FC<OrdersProps> = ({ channelName }: { channelName: any }) => {
                 </div>
               )}
             </div>
-            <div className="mt-8">
+            <div className="col-span-2">
               <label className="text-sm text-gray-400 mb-2 block">
                 {tr('personal_phone')}
               </label>
@@ -1289,7 +1289,7 @@ const Orders: FC<OrdersProps> = ({ channelName }: { channelName: any }) => {
                 </div>
               )}
             </div>
-            <div className="mt-8">
+            <div className="col-span-2">
               <label className="text-sm text-gray-400 mb-2 block">
                 {tr('personal_email')}
               </label>
@@ -1309,7 +1309,7 @@ const Orders: FC<OrdersProps> = ({ channelName }: { channelName: any }) => {
                 )}
               </div>
             </div>
-            <div className="mt-8">
+            <div className="col-span-2">
               <div className="text-sm text-gray-400 mb-2 block">
                 {tr('additional_phone')}
               </div>
@@ -1486,7 +1486,7 @@ const Orders: FC<OrdersProps> = ({ channelName }: { channelName: any }) => {
                     {addressList.map((item: Address) => (
                       <div
                         key={item.id}
-                        className={`px-4 py-1 rounded-full cursor-pointer relative pr-6 capitalize flex items-center ${
+                        className={`px-4 py-1 rounded-full cursor-pointer relative pr-6 capitalize flex items-center z-10 ${
                           addressId == item.id
                             ? 'bg-primary text-white'
                             : 'bg-gray-100'
@@ -1513,10 +1513,10 @@ const Orders: FC<OrdersProps> = ({ channelName }: { channelName: any }) => {
                           </div>
                         </div>
                         <button
-                          className="absolute focus:outline-none inset-y-0 outline-none right-2 text-gray-400"
+                          className="absolute focus:outline-none inset-y-0 outline-none right-2 text-gray-400 z-50 hover:text-primary"
                           onClick={() => deleteAddress(item.id)}
                         >
-                          <XIcon className="cursor-pointer h-5 text-gray-400 w-5" />
+                          <XIcon className="cursor-pointer h-5 text-gray-400 w-5 hover:text-white" />
                         </button>
                       </div>
                     ))}
@@ -2203,9 +2203,9 @@ const Orders: FC<OrdersProps> = ({ channelName }: { channelName: any }) => {
                 <div
                   className={`${
                     isProductInStop.includes(lineItem.id) ? 'opacity-25' : ''
-                  } h-11 w-11 flex relative`}
+                  } h-20 w-20 flex relative`}
                 >
-                  <div className="w-5 relative overflow-hidden">
+                  <div className="w-full relative overflow-hidden">
                     <div>
                       <Image
                         src={
@@ -2213,15 +2213,15 @@ const Orders: FC<OrdersProps> = ({ channelName }: { channelName: any }) => {
                             ? `${webAddress}/storage/${lineItem?.variant?.product?.assets[0]?.location}/${lineItem?.variant?.product?.assets[0]?.filename}`
                             : '/no_photo.svg'
                         }
-                        width="40"
-                        height="40"
+                        width="80"
+                        height="80"
                         layout="fixed"
-                        className="absolute rounded-full"
+                        className="absolute max-w-2xl"
                         alt=""
                       />
                     </div>
                   </div>
-                  <div className="w-5 relative overflow-hidden">
+                  <div className="w-full relative overflow-hidden">
                     <div className="absolute right-0">
                       <Image
                         src={
@@ -2229,10 +2229,10 @@ const Orders: FC<OrdersProps> = ({ channelName }: { channelName: any }) => {
                             ? `${webAddress}/storage/${lineItem?.child[0].variant?.product?.assets[0]?.location}/${lineItem?.child[0].variant?.product?.assets[0]?.filename}`
                             : '/no_photo.svg'
                         }
-                        width="40"
-                        height="40"
+                        width="80"
+                        height="80"
                         layout="fixed"
-                        className="rounded-full"
+                        className="absolute  max-w-2xl right-0" 
                         alt=""
                       />
                     </div>
@@ -2250,8 +2250,8 @@ const Orders: FC<OrdersProps> = ({ channelName }: { channelName: any }) => {
                         ? `${webAddress}/storage/${lineItem?.variant?.product?.assets[0]?.location}/${lineItem?.variant?.product?.assets[0]?.filename}`
                         : '/no_photo.svg'
                     }
-                    width={40}
-                    height={40}
+                    width={80}
+                    height={80}
                     className="rounded-full"
                     alt=""
                   />
@@ -2260,7 +2260,7 @@ const Orders: FC<OrdersProps> = ({ channelName }: { channelName: any }) => {
               <div
                 className={`${
                   isProductInStop.includes(lineItem.id) ? 'opacity-25' : ''
-                }font-bold md:text-xl text-base space-y-2 text-center`}
+                }font-bold md:text-xl text-base space-y-2 text-center  w-1/3`}
               >
                 {lineItem.child && lineItem.child.length == 1 ? (
                   `${
