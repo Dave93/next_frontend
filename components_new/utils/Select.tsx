@@ -40,11 +40,11 @@ const Select: FC<SelectProps> = ({
         className="pl-7 pr-5 py-3 flex justify-between md:w-44 bg-gray-100 text-gray-400 rounded-full items-center"
       >
         <span>{selectedItem?.label || placeholder}</span>
-        <ChevronDownIcon className="h-4 w-4" />
+        <ChevronDownIcon className="h-8 w-8" />
       </button>
       <ul
         {...getMenuProps()}
-        className="absolute bg-gray-100 md:w-44 shadow-md z-40 rounded-b-md overflow-hidden max-h-28 overflow-y-auto"
+        className="absolute bg-gray-100 md:w-44 w-full shadow-md z-40 rounded-b-md overflow-hidden max-h-28 overflow-y-auto"
       >
         {isOpen &&
           items.map((item, index) => (

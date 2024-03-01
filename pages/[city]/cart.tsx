@@ -474,6 +474,8 @@ export default function Cart() {
     return false
   }, [configData])
 
+  console.log(data)
+
   if (!isWorkTime) {
     return (
       <div className="bg-white flex py-20 text-xl text-yellow font-bold px-10">
@@ -648,45 +650,41 @@ export default function Cart() {
                                 )}
                               </div>
                             ) : (
-                              <div className="flex relative">
-                                <div className="w-12 relative overflow-hidden">
-                                  <div>
-                                    <Image
-                                      src={
-                                        lineItem?.variant?.product?.assets
-                                          ?.length
-                                          ? `${webAddress}/storage/${lineItem?.variant?.product?.assets[0]?.location}/${lineItem?.variant?.product?.assets[0]?.filename}`
-                                          : '/no_photo.svg'
-                                      }
-                                      width="100"
-                                      height="100"
-                                      layout="fixed"
-                                      className="absolute rounded-full"
-                                      alt=""
-                                    />
-                                  </div>
+                              <div className="h-28 w-28 flex relative">
+                                <div className="w-full relative overflow-hidden">
+                                  <Image
+                                    src={
+                                      lineItem?.variant?.product?.assets?.length
+                                        ? `${webAddress}/storage/${lineItem?.variant?.product?.assets[0]?.location}/${lineItem?.variant?.product?.assets[0]?.filename}`
+                                        : '/no_photo.svg'
+                                    }
+                                    width="100"
+                                    height="100"
+                                    layout="fixed"
+                                    className="absolute max-w-2xl"
+                                    alt=""
+                                  />
                                 </div>
-                                <div className="w-12 relative overflow-hidden">
-                                  <div className="absolute right-0">
-                                    <Image
-                                      src={
-                                        lineItem?.child[0].variant?.product
-                                          ?.assets?.length
-                                          ? `${webAddress}/storage/${lineItem?.child[0].variant?.product?.assets[0]?.location}/${lineItem?.child[0].variant?.product?.assets[0]?.filename}`
-                                          : '/no_photo.svg'
-                                      }
-                                      width="100"
-                                      height="100"
-                                      layout="fixed"
-                                      className="rounded-full"
-                                      alt=""
-                                    />
-                                  </div>
+
+                                <div className="w-full relative overflow-hidden">
+                                  <Image
+                                    src={
+                                      lineItem?.child[0].variant?.product
+                                        ?.assets?.length
+                                        ? `${webAddress}/storage/${lineItem?.child[0].variant?.product?.assets[0]?.location}/${lineItem?.child[0].variant?.product?.assets[0]?.filename}`
+                                        : '/no_photo.svg'
+                                    }
+                                    width="100"
+                                    height="100"
+                                    layout="fixed"
+                                    className="absolute  max-w-2xl right-0"
+                                    alt=""
+                                  />
                                 </div>
                               </div>
                             )
                           ) : (
-                            <div className="w-28 flex relative mr-4">
+                            <div className="w-28 flex relative">
                               <img
                                 src={
                                   lineItem?.variant?.product?.assets?.length
@@ -699,8 +697,8 @@ export default function Cart() {
                               />
                             </div>
                           )}
-                          <div className="ml-1 space-y-2 md:text-left">
-                            <div className="text-xl font-bold">
+                          <div className="ml-4 space-y-2 md:text-left">
+                            <div className="text-xl font-bold w-1/2">
                               {lineItem.child && lineItem.child.length == 1
                                 ? `${
                                     lineItem?.variant?.product?.attribute_data
