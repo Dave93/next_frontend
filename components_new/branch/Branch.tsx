@@ -7,6 +7,7 @@ import { useRouter } from 'next/router'
 import SimpleBar from 'simplebar-react'
 import { YMaps, Map, Placemark } from 'react-yandex-maps'
 import 'simplebar/dist/simplebar.min.css'
+import ChooseCityDropDown from '@components_new/header/ChooseCityDropDown'
 const { publicRuntimeConfig } = getConfig()
 let webAddress = publicRuntimeConfig.apiUrl
 
@@ -58,6 +59,7 @@ const Branch: FC = () => {
         </YMaps>
       </div>
       <div className="md:flex-[2] space-y-2 mb-4 md:mb-0">
+        <ChooseCityDropDown />
         <SimpleBar style={{ maxHeight: 500 }}>
           <div className="space-y-2 overflow-y-auto">
             {branches.map((branch: any) => (

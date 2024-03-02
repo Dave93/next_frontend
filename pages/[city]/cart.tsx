@@ -474,8 +474,6 @@ export default function Cart() {
     return false
   }, [configData])
 
-  console.log(data)
-
   if (!isWorkTime) {
     return (
       <div className="bg-white flex py-20 text-xl text-yellow font-bold px-10">
@@ -597,10 +595,10 @@ export default function Cart() {
                   data?.lineItems
                     .map((lineItem: any) => (
                       <div
-                        className="flex justify-between items-center border-b pb-3"
+                        className="md:flex justify-between items-center border-b pb-3"
                         key={lineItem.id}
                       >
-                        <div className="md:flex items-center text-center uppercase">
+                        <div className="md:flex items-center md:text-center uppercase">
                           {lineItem.child &&
                           lineItem.child.length &&
                           lineItem.child[0].variant?.product?.id !=
@@ -650,7 +648,7 @@ export default function Cart() {
                                 )}
                               </div>
                             ) : (
-                              <div className="h-28 w-28 flex relative">
+                              <div className="h-28 md:w-1/3 w-24 flex relative">
                                 <div className="w-full relative overflow-hidden">
                                   <Image
                                     src={
@@ -697,8 +695,8 @@ export default function Cart() {
                               />
                             </div>
                           )}
-                          <div className="ml-4 space-y-2 md:text-left">
-                            <div className="text-xl font-bold w-1/2">
+                          <div className="md:ml-4 space-y-2 md:text-left">
+                            <div className="text-xl font-bold md:w-full">
                               {lineItem.child && lineItem.child.length == 1
                                 ? `${
                                     lineItem?.variant?.product?.attribute_data
@@ -798,7 +796,7 @@ export default function Cart() {
                         <div className="md:space-x-10 items-center md:hidden">
                           {!readonlyItems.includes(lineItem.id) && (
                             <XIcon
-                              className="cursor-pointer h-4 text-black w-4 ml-auto"
+                              className="cursor-pointer h-8 text-black w-8 ml-auto"
                               onClick={() => destroyLine(lineItem.id)}
                             />
                           )}
