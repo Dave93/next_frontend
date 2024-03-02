@@ -18,8 +18,6 @@ const ChooseCityDropDown: FC = () => {
     return null
   }, [cities, activeCity])
 
-  console.log(cities)
-
   const changeCity = (city: City) => {
     let link = pathname
     Object.keys(query).map((k: string) => {
