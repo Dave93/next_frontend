@@ -676,24 +676,33 @@ const ProductItemNew: FC<ProductItem> = ({ product, channelName }) => {
               {store.variants && store.variants.length > 0 && (
                 <div className="flex mt-5 space-x-1 -mx-2">
                   {store.variants.map((v) => (
-                    <div
-                      className={`w-full text-center cursor-pointer rounded-2xl outline-none ${
-                        v.active
-                          ? 'bg-yellow text-white'
-                          : 'bg-gray-200 text-gray-400'
-                      }`}
-                      onClick={() => updateOptionSelection(v.id)}
-                      key={v.id}
-                    >
-                      <button className="outline-none focus:outline-none text-xs py-2">
-                        {locale == 'ru'
-                          ? v?.custom_name
-                          : locale == 'uz'
-                          ? v?.custom_name_uz
-                          : locale == 'en'
-                          ? v?.custom_name_en
-                          : ''}
-                      </button>
+                    <div className="w-full" key={v.id}>
+                      <div
+                        className={`w-full text-center cursor-pointer rounded-2xl outline-none ${
+                          v.active
+                            ? 'bg-yellow text-white'
+                            : 'bg-gray-200 text-gray-400'
+                        }`}
+                        onClick={() => updateOptionSelection(v.id)}
+                      >
+                        <button className="outline-none focus:outline-none text-xs py-2">
+                          {locale == 'ru'
+                            ? v?.custom_name
+                            : locale == 'uz'
+                            ? v?.custom_name_uz
+                            : locale == 'en'
+                            ? v?.custom_name_en
+                            : ''}
+                        </button>
+                      </div>
+
+                      <div
+                        className={` flex flex-col items-center w-full ${
+                          v.active ? 'text-yellow' : ''
+                        }`}
+                      >
+                        {(locale == 'ru' ? 'гр ' : 'gr ') + v.weight}
+                      </div>
                     </div>
                   ))}
                 </div>
@@ -889,20 +898,29 @@ const ProductItemNew: FC<ProductItem> = ({ product, channelName }) => {
                           {store.variants && store.variants.length > 0 && (
                             <div className="flex mt-5 space-x-1">
                               {store.variants.map((v) => (
-                                <div
-                                  className={`w-full text-center cursor-pointer rounded-2xl outline-none ${
-                                    v.active
-                                      ? 'bg-yellow text-white shadow-xl'
-                                      : 'bg-gray-200 text-gray-600'
-                                  }`}
-                                  onClick={() => updateOptionSelection(v.id)}
-                                  key={v.id}
-                                >
-                                  <button className="outline-none focus:outline-none text-xs py-2">
-                                    {locale == 'ru'
-                                      ? v?.custom_name
-                                      : v?.custom_name_uz}
-                                  </button>
+                                <div className="w-full" key={v.id}>
+                                  <div
+                                    className={`w-full text-center cursor-pointer rounded-2xl outline-none ${
+                                      v.active
+                                        ? 'bg-yellow text-white shadow-xl'
+                                        : 'bg-gray-200 text-gray-600'
+                                    }`}
+                                    onClick={() => updateOptionSelection(v.id)}
+                                  >
+                                    <button className="outline-none focus:outline-none text-xs py-2">
+                                      {locale == 'ru'
+                                        ? v?.custom_name
+                                        : v?.custom_name_uz}
+                                    </button>
+                                  </div>
+                                  <div
+                                    className={` flex flex-col items-center w-full ${
+                                      v.active ? 'text-yellow' : ''
+                                    }`}
+                                  >
+                                    {(locale == 'ru' ? 'гр ' : 'gr ') +
+                                      v.weight}
+                                  </div>
                                 </div>
                               ))}
                             </div>
