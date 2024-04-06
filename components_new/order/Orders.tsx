@@ -568,10 +568,9 @@ const Orders: FC<OrdersProps> = ({ channelName }: { channelName: any }) => {
   const [payType, setPayType] = useState('')
 
   const setDepositPay = () => {
-    // console.log(deposit)
-    // console.log(totalPrice)
     if (deposit >= totalPrice) {
       setValue('pay_type', 'deposit')
+      console.log(deposit)
       setPayType('deposit')
     }
   }
