@@ -568,7 +568,12 @@ const Orders: FC<OrdersProps> = ({ channelName }: { channelName: any }) => {
   const [payType, setPayType] = useState('')
 
   const setDepositPay = () => {
-    if (deposit >= totalPrice) setPayType('deposit')
+    // console.log(deposit)
+    // console.log(totalPrice)
+    if (deposit >= totalPrice) {
+      setValue('pay_type', 'deposit')
+      setPayType('deposit')
+    }
   }
 
   const onValueChange = (e: any) => {
@@ -1214,7 +1219,10 @@ const Orders: FC<OrdersProps> = ({ channelName }: { channelName: any }) => {
           <div className="text-lg mb-5 font-bold">
             {tr('order_your_contacts')}
           </div>
-          <form onSubmit={handleSubmit(onSubmit)} className="grid gap-2 md:grid-cols-4">
+          <form
+            onSubmit={handleSubmit(onSubmit)}
+            className="grid gap-2 md:grid-cols-4"
+          >
             <div className="col-span-2">
               <label className="text-sm text-gray-400 mb-2 block">
                 {tr('personal_data_name')}
@@ -2232,7 +2240,7 @@ const Orders: FC<OrdersProps> = ({ channelName }: { channelName: any }) => {
                         width="80"
                         height="80"
                         layout="fixed"
-                        className="absolute  max-w-2xl right-0" 
+                        className="absolute  max-w-2xl right-0"
                         alt=""
                       />
                     </div>
