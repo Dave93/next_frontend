@@ -75,7 +75,7 @@ type FormData = {
   cvv_code: string
   delivery_day: string
   delivery_time: string
-  pay_type: string
+  pay_type: string | null | undefined
   delivery_schedule: string
   label?: string
   addressId: number | null
@@ -96,11 +96,11 @@ interface Errors {
   [key: string]: string
 }
 
-const errors: Errors = {
-  name_field_is_required:
-    'Мы Вас не нашли в нашей системе. Просьба указать своё имя.',
-  opt_code_is_incorrect: 'Введённый код неверный или срок кода истёк',
-}
+// const errors: Errors = {
+//   name_field_is_required:
+//     'Мы Вас не нашли в нашей системе. Просьба указать своё имя.',
+//   opt_code_is_incorrect: 'Введённый код неверный или срок кода истёк',
+// }
 
 let otpTimerRef: NodeJS.Timeout
 
@@ -189,7 +189,7 @@ const Orders: FC<OrdersProps> = ({ channelName }: { channelName: any }) => {
     setValue,
     getValues,
     control,
-    formState: { errors },
+    formState: { errors, isValid },
   } = useForm<FormData>({
     mode: 'onChange',
     defaultValues: {
@@ -569,8 +569,9 @@ const Orders: FC<OrdersProps> = ({ channelName }: { channelName: any }) => {
 
   const setDepositPay = () => {
     if (deposit >= totalPrice) {
-      setValue('pay_type', 'deposit')
-      console.log(deposit)
+      // setValue('pay_type', 'deposit', { shouldValidate: true })
+      // console.log(deposit)
+      // trigger('pay_type')
       setPayType('deposit')
     }
   }
@@ -922,6 +923,13 @@ const Orders: FC<OrdersProps> = ({ channelName }: { channelName: any }) => {
     await setCredentials()
     const otpToken = Cookies.get('opt_token')
 
+    // if (!payType) {
+    //   toast.error(tr('payment_system_not_selected'), {
+    //     position: toast.POSITION.BOTTOM_RIGHT,
+    //     hideProgressBar: true,
+    //   })
+    //   return
+    // }
     let sourceType = 'web'
     if (window.innerWidth < 768) {
       sourceType = 'mobile_web'
@@ -2141,6 +2149,14 @@ const Orders: FC<OrdersProps> = ({ channelName }: { channelName: any }) => {
                     className={`text-green-500 form-checkbox rounded-md w-5 h-5 mr-4`}
                     defaultChecked={payType == 'deposit'}
                     checked={payType == 'deposit'}
+                  />
+                  <input
+                    type="radio"
+                    {...register('pay_type', { required: openTab === 3 })}
+                    defaultValue="deposit"
+                    checked={payType === 'deposit'}
+                    onChange={onValueChange}
+                    className="hidden"
                   />
                   <div className="flex flex-col">
                     <div>{tr('deposit_label')}</div>
