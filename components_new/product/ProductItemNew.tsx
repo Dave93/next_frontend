@@ -696,13 +696,13 @@ const ProductItemNew: FC<ProductItem> = ({ product, channelName }) => {
                         </button>
                       </div>
 
-                      <div
+                      {/* <div
                         className={` flex flex-col items-center w-full ${
                           v.active ? 'text-yellow' : ''
                         }`}
                       >
                         {(locale == 'ru' ? 'гр ' : 'gr ') + v.weight}
-                      </div>
+                      </div> */}
                     </div>
                   ))}
                 </div>
