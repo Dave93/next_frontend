@@ -886,7 +886,7 @@ const ProductItemNew: FC<ProductItem> = ({ product, channelName }) => {
                             }
                           </div>
                           <div
-                            className="mt-1 text-xs flex-grow"
+                            className="mt-1 text-base flex-grow"
                             dangerouslySetInnerHTML={{
                               __html: store?.attribute_data?.description
                                 ? store?.attribute_data?.description[
@@ -931,7 +931,7 @@ const ProductItemNew: FC<ProductItem> = ({ product, channelName }) => {
                                 <span>{tr("add_to_pizza")}</span>
                               </div>
                               <div className="overflow-x-scroll">
-                                <div className="-mr-20 flex space-x-2">
+                                <div className="-mr-20 flex space-x-2 pb-2">
                                   {modifiers.map((mod: any, index: number) => (
                                     <div
                                       key={mod.id}
