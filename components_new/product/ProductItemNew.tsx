@@ -913,14 +913,14 @@ const ProductItemNew: FC<ProductItem> = ({ product, channelName }) => {
                                         : v?.custom_name_uz}
                                     </button>
                                   </div>
-                                  <div
+                                  {/* <div
                                     className={` flex flex-col items-center w-full ${
                                       v.active ? 'text-yellow' : ''
                                     }`}
                                   >
                                     {(locale == 'ru' ? 'гр ' : 'gr ') +
                                       v.weight}
-                                  </div>
+                                  </div> */}
                                 </div>
                               ))}
                             </div>
@@ -928,7 +928,7 @@ const ProductItemNew: FC<ProductItem> = ({ product, channelName }) => {
                           {modifiers && (
                             <div className="pb-10">
                               <div className="my-2">
-                                <span>Добавить в пиццу</span>
+                                <span>{tr("add_to_pizza")}</span>
                               </div>
                               <div className="overflow-x-scroll">
                                 <div className="-mr-20 flex space-x-2">
@@ -973,10 +973,8 @@ const ProductItemNew: FC<ProductItem> = ({ product, channelName }) => {
                                       </div>
                                       <div
                                         className={`${
-                                          (activeModifiers.length &&
-                                            activeModifiers.includes(mod.id)) ||
-                                          (!activeModifiers.length &&
-                                            index == 0)
+                                          activeModifiers.length &&
+                                        activeModifiers.includes(mod.id)
                                             ? 'bg-yellow'
                                             : 'bg-gray-300'
                                         } font-bold px-2 py-2 text-center text-white text-xs`}
