@@ -345,11 +345,11 @@ const Layout: FC<Props> = ({
                         )}
                       </div>
                     </div> */}
-                    <div className=" border-b border-blue md:border-0 pb-5 md:pb-0">
+                    <div className="border-b border-blue md:border-0 pb-5 md:pb-0">
                       {tr('work_time')} <br />{' '}
                       {locale == 'uz'
                         ? configData.workTimeUz
-                        : locale == 'ru '
+                        : locale == 'ru'
                         ? configData.workTimeRu
                         : locale == 'en'
                         ? configData.workTimeEn
