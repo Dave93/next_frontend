@@ -473,8 +473,8 @@ const CreateYourPizza: FC<CreatePizzaProps> = ({
           price:
             +activeVariant.modifierProduct.price -
             +activeVariant.price +
-            (+rightActiveVariant.modifierProduct.price -
-              +rightActiveVariant.price),
+            (+rightActiveVariant?.modifierProduct.price -
+              +rightActiveVariant?.price),
           assets: [
             {
               local: '/sausage_modifier.png',
