@@ -632,27 +632,25 @@ const ProductItemNew: FC<ProductItem> = ({ product, channelName }) => {
           itemScope
           itemType="https://schema.org/Product"
         >
-          <div>
-            <div className="text-center">
-              {store.image ? (
-                <img
-                  src={store.image}
-                  width={250}
-                  height={250}
-                  alt={store?.attribute_data?.name[channelName][locale || 'ru']}
-                  className="transform motion-safe:group-hover:scale-105 transition duration-500"
-                  itemProp="image"
-                />
-              ) : (
-                <img
-                  src="/no_photo.svg"
-                  width={250}
-                  height={250}
-                  alt={store?.attribute_data?.name[channelName][locale || 'ru']}
-                  className="rounded-full transform motion-safe:group-hover:scale-105 transition duration-500"
-                />
-              )}
-            </div>
+          <div className="text-center">
+            {store.image ? (
+              <img
+                src={store.image}
+                width={250}
+                height={250}
+                alt={store?.attribute_data?.name[channelName][locale || 'ru']}
+                className="transform motion-safe:group-hover:scale-105 transition duration-500 object-cover"
+                itemProp="image"
+              />
+            ) : (
+              <img
+                src="/no_photo.svg"
+                width={250}
+                height={250}
+                alt={store?.attribute_data?.name[channelName][locale || 'ru']}
+                className="rounded-full transform motion-safe:group-hover:scale-105 transition duration-500"
+              />
+            )}
           </div>
           <div className="flex flex-col flex-grow w-full">
             <div className="font-serif mt-4 text-xl uppercase" itemProp="name">
@@ -928,7 +926,7 @@ const ProductItemNew: FC<ProductItem> = ({ product, channelName }) => {
                           {modifiers && (
                             <div className="pb-10">
                               <div className="my-2">
-                                <span>{tr("add_to_pizza")}</span>
+                                <span>{tr('add_to_pizza')}</span>
                               </div>
                               <div className="overflow-x-scroll">
                                 <div className="-mr-20 flex space-x-2 pb-2">
@@ -974,7 +972,7 @@ const ProductItemNew: FC<ProductItem> = ({ product, channelName }) => {
                                       <div
                                         className={`${
                                           activeModifiers.length &&
-                                        activeModifiers.includes(mod.id)
+                                          activeModifiers.includes(mod.id)
                                             ? 'bg-yellow'
                                             : 'bg-gray-300'
                                         } font-bold px-2 py-2 text-center text-white text-xs`}
