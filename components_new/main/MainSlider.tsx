@@ -67,7 +67,7 @@ const MainSlider: FC = () => {
                         <>
                           <img
                             src={item.asset[0].link}
-                            width={1160}
+                            width={1600}
                             height={320}
                             data-href={item.link}
                             className="hidden md:flex "
@@ -92,7 +92,7 @@ const MainSlider: FC = () => {
                         <div className="hidden md:flex">
                           <img
                             src={item.asset[0].link}
-                            width={1160}
+                            width={1600}
                             height={320}
                           />
                         </div>
