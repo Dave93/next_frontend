@@ -47,6 +47,7 @@ import { chunk, sortBy } from 'lodash'
 import getAddressList from '@lib/load_addreses'
 import { Address } from '@commerce/types/address'
 import Hashids from 'hashids'
+import { isValidPhoneNumber } from 'react-phone-number-input'
 
 const { publicRuntimeConfig } = getConfig()
 let webAddress = publicRuntimeConfig.apiUrl
@@ -1277,7 +1278,10 @@ const Orders: FC<OrdersProps> = ({ channelName }: { channelName: any }) => {
                       withCountryCallingCode
                       value={value}
                       className="focus:outline-none outline-none px-6 py-3 rounded-full text-sm w-full bg-gray-100 text-gray-400"
-                      onChange={(e: any) => onChange(e)}
+                      onChange={(e: any) => {
+                        let isPhoneValid = isValidPhoneNumber(e, 'UZ')
+                        if (isPhoneValid) onChange(e)
+                      }}
                     />
                   )}
                   rules={{
@@ -1335,9 +1339,10 @@ const Orders: FC<OrdersProps> = ({ channelName }: { channelName: any }) => {
                   international
                   withCountryCallingCode
                   value={additionalPhone}
-                  className="focus:outline-none outline-none px-6 py-3 rounded-full text-sm w-full bg-gray-100 text-gray-400 "
+                  className="focus:outline-none outline-none px-6 py-3 rounded-full text-sm w-full bg-gray-100 text-gray-400"
                   onChange={(e: any) => {
-                    setValue('additional_phone', e)
+                    let isPhoneValid = isValidPhoneNumber(e, 'UZ')
+                    if (isPhoneValid) setValue('additional_phone', e)
                   }}
                 />
                 {additionalPhone && (
