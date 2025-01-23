@@ -339,7 +339,9 @@ const Orders: FC<OrdersProps> = ({ channelName }: { channelName: any }) => {
 
   useEffect(() => {
     console.log('selectedDate', selectedDate)
-    setTimeOptions(generateTimeOptions(selectedDate))
+    const timeOptionsLocal = generateTimeOptions(selectedDate)
+    console.log('timeOptionsLocal', timeOptionsLocal)
+    setTimeOptions(timeOptionsLocal)
   }, [selectedDate])
 
   const [tabIndex, setTabIndex] = useState(
