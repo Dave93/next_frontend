@@ -293,12 +293,12 @@ const Orders: FC<OrdersProps> = ({ channelName }: { channelName: any }) => {
 
   const generateTimeOptions = (selectedDate: DateTime) => {
     const timeOptions = [] as SelectItem[]
-    let startTime = DateTime.now()
+    let startTime = selectedDate
 
     // If selected date is today, start from current time + 80 minutes
-    // Otherwise start from restaurant opening time
+    // Otherwise start from restaurant opening time (11:00)
     if (selectedDate.hasSame(DateTime.now(), 'day')) {
-      startTime = startTime.plus({ minutes: 80 })
+      startTime = DateTime.now().plus({ minutes: 80 })
     } else {
       startTime = selectedDate.set({ hour: 11, minute: 0 }) // Restaurant opens at 11:00
     }
@@ -311,7 +311,7 @@ const Orders: FC<OrdersProps> = ({ channelName }: { channelName: any }) => {
     let endTime = selectedDate.plus({ days: 1 }).set({ hour: 3, minute: 0 })
 
     // Don't show past times
-    if (startTime > endTime || (selectedDate < DateTime.now().startOf('day'))) {
+    if (selectedDate < DateTime.now().startOf('day')) {
       return [] // Return empty options for past dates
     }
 
