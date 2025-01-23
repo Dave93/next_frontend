@@ -1992,7 +1992,8 @@ const Orders: FC<OrdersProps> = ({ channelName }: { channelName: any }) => {
                   items={dateOptions}
                   placeholder={tr('select_date')}
                   onChange={(e: any) => {
-                    onChange(e)
+                    onChange(e);
+                    console.log('e', e)
                     const selectedDateTime = DateTime.fromFormat(e.value, 'yyyy-MM-dd')
                     setSelectedDate(selectedDateTime)
                   }}
