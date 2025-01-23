@@ -1994,7 +1994,7 @@ const Orders: FC<OrdersProps> = ({ channelName }: { channelName: any }) => {
                   onChange={(e: any) => {
                     onChange(e);
                     console.log('e', e)
-                    const selectedDateTime = DateTime.fromFormat(e.value, 'yyyy-MM-dd')
+                    const selectedDateTime = DateTime.fromFormat(e, 'yyyy-MM-dd')
                     setSelectedDate(selectedDateTime)
                   }}
                 />
