@@ -336,6 +336,7 @@ const Orders: FC<OrdersProps> = ({ channelName }: { channelName: any }) => {
   }
 
   useEffect(() => {
+    console.log('selectedDate', selectedDate)
     setTimeOptions(generateTimeOptions(selectedDate))
   }, [selectedDate])
 
