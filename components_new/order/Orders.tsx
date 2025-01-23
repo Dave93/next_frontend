@@ -263,16 +263,82 @@ const Orders: FC<OrdersProps> = ({ channelName }: { channelName: any }) => {
     reset(newFields)
   }
   //Orders
-  const dayOptions = [
-    {
-      value: 'today',
-      label: tr('today'),
-    },
-    {
-      value: 'tomorrow',
-      label: tr('tomorrow'),
-    },
-  ]
+  const generateDateOptions = () => {
+    const dateOptions = [] as SelectItem[]
+    let currentDate = DateTime.now()
+
+    // Generate options for next 7 days
+    for (let i = 0; i < 7; i++) {
+      const date = currentDate.plus({ days: i })
+      const formattedDate = date.toFormat('dd.MM.yyyy')
+      const label = i === 0
+        ? `${tr('today')} (${formattedDate})`
+        : i === 1
+          ? `${tr('tomorrow')} (${formattedDate})`
+          : formattedDate
+
+      dateOptions.push({
+        value: date.toISO(),
+        label: label
+      })
+    }
+
+    return dateOptions
+  }
+
+  const dateOptions = useMemo(() => generateDateOptions(), [locale])
+
+  const [selectedDate, setSelectedDate] = useState(DateTime.now())
+  const [timeOptions, setTimeOptions] = useState<SelectItem[]>([])
+
+  const generateTimeOptions = (selectedDate: DateTime) => {
+    const timeOptions = [] as SelectItem[]
+    let startTime = DateTime.now()
+
+    // If selected date is today, start from current time + 80 minutes
+    // Otherwise start from restaurant opening time
+    if (selectedDate.hasSame(DateTime.now(), 'day')) {
+      startTime = startTime.plus({ minutes: 80 })
+    } else {
+      startTime = selectedDate.set({ hour: 11, minute: 0 }) // Restaurant opens at 11:00
+    }
+
+    startTime = startTime.set({
+      minute: Math.ceil(startTime.minute / 10) * 10,
+    })
+
+    // Generate time slots until 3 AM next day
+    let endTime = selectedDate.plus({ days: 1 }).set({ hour: 3, minute: 0 })
+
+    // Don't show past times
+    if (startTime > endTime || (selectedDate < DateTime.now().startOf('day'))) {
+      return [] // Return empty options for past dates
+    }
+
+    while (startTime < endTime) {
+      let slotEnd = startTime.plus({ minutes: 20 })
+
+      let val = `${zeroPad(startTime.hour, 2)}:${zeroPad(startTime.minute, 2)}`
+      val += ` - ${zeroPad(slotEnd.hour, 2)}:${zeroPad(slotEnd.minute, 2)}`
+
+      timeOptions.push({
+        value: val,
+        label: val,
+      })
+
+      startTime = startTime.plus({ minutes: 40 })
+      startTime = startTime.set({
+        minute: Math.ceil(startTime.minute / 10) * 10,
+      })
+    }
+
+    return timeOptions
+  }
+
+  useEffect(() => {
+    setTimeOptions(generateTimeOptions(selectedDate))
+  }, [selectedDate])
+
   const [tabIndex, setTabIndex] = useState(
     locationData?.deliveryType || 'deliver'
   )
@@ -1358,8 +1424,8 @@ const Orders: FC<OrdersProps> = ({ channelName }: { channelName: any }) => {
           <div className="bg-gray-100 flex  w-full rounded-full">
             <button
               className={`${tabIndex == 'deliver'
-                  ? 'bg-yellow text-white'
-                  : ' text-gray-400'
+                ? 'bg-yellow text-white'
+                : ' text-gray-400'
                 } flex-1 font-bold py-3 text-[18px] rounded-full outline-none focus:outline-none`}
               onClick={() => changeTabIndex('deliver')}
             >
@@ -1412,8 +1478,8 @@ const Orders: FC<OrdersProps> = ({ channelName }: { channelName: any }) => {
                           <span
                             onClick={() => setActive(city)}
                             className={`block px-4 py-2 text-sm cursor-pointer ${city.id == chosenCity.id
-                                ? 'bg-secondary text-white'
-                                : 'text-secondary'
+                              ? 'bg-secondary text-white'
+                              : 'text-secondary'
                               }`}
                           >
                             {locale == 'uz'
@@ -1498,16 +1564,16 @@ const Orders: FC<OrdersProps> = ({ channelName }: { channelName: any }) => {
                       <div
                         key={item.id}
                         className={`px-4 py-1 rounded-full cursor-pointer relative pr-6 capitalize flex items-center z-10 ${addressId == item.id
-                            ? 'bg-primary text-white'
-                            : 'bg-gray-100'
+                          ? 'bg-primary text-white'
+                          : 'bg-gray-100'
                           }`}
                         onClick={() => selectAddressLocal(item)}
                       >
                         <div className="">
                           <BookmarkIcon
                             className={`h-5  w-5  hover:text-yellow-light mr-2 ${addressId == item.id
-                                ? ' text-white'
-                                : 'text-gray-400'
+                              ? ' text-white'
+                              : 'text-gray-400'
                               }`}
                           />
                         </div>
@@ -1600,15 +1666,15 @@ const Orders: FC<OrdersProps> = ({ channelName }: { channelName: any }) => {
                                         index,
                                         item,
                                         className: `py-2 px-4 flex items-center ${highlightedIndex == index
-                                            ? 'bg-gray-100'
-                                            : 'bg-white'
+                                          ? 'bg-gray-100'
+                                          : 'bg-white'
                                           }`,
                                       })}
                                     >
                                       <CheckIcon
                                         className={`w-5 text-yellow font-bold mr-2 ${highlightedIndex == index
-                                            ? ''
-                                            : 'invisible'
+                                          ? ''
+                                          : 'invisible'
                                           }`}
                                       />
                                       <div>
@@ -1815,21 +1881,21 @@ const Orders: FC<OrdersProps> = ({ channelName }: { channelName: any }) => {
                   <div
                     key={point.id}
                     className={`border flex items-start p-3 rounded-[15px] cursor-pointer ${activePoint && activePoint == point.id
-                        ? 'border-yellow'
-                        : 'border-gray-400'
+                      ? 'border-yellow'
+                      : 'border-gray-400'
                       } ${!point.isWorking ? 'opacity-30' : ''}`}
                     onClick={() => choosePickupPoint(point)}
                   >
                     <div
                       className={`border mr-4 mt-1 rounded-full ${activePoint && activePoint == point.id
-                          ? 'border-yellow'
-                          : 'border-gray-400'
+                        ? 'border-yellow'
+                        : 'border-gray-400'
                         }`}
                     >
                       <div
                         className={`h-3 m-1 rounded-full w-3 ${activePoint && activePoint == point.id
-                            ? 'bg-yellow'
-                            : 'bg-gray-400'
+                          ? 'bg-yellow'
+                          : 'bg-gray-400'
                           }`}
                       ></div>
                     </div>
@@ -1896,8 +1962,8 @@ const Orders: FC<OrdersProps> = ({ channelName }: { channelName: any }) => {
         <div className="flex  md:block space-x-5">
           <button
             className={`${deliveryActive == 'now'
-                ? 'bg-yellow text-white'
-                : 'text-gray-400 bg-gray-100'
+              ? 'bg-yellow text-white'
+              : 'text-gray-400 bg-gray-100'
               } flex-1 font-bold  rounded-full outline-none focus:outline-none  h-11 md:w-44`}
             onClick={() => setDeliverySchedule('now')}
           >
@@ -1905,8 +1971,8 @@ const Orders: FC<OrdersProps> = ({ channelName }: { channelName: any }) => {
           </button>
           <button
             className={`${deliveryActive == 'later'
-                ? 'bg-yellow text-white'
-                : 'text-gray-400 bg-gray-100'
+              ? 'bg-yellow text-white'
+              : 'text-gray-400 bg-gray-100'
               } flex-1 font-bold  rounded-full outline-none focus:outline-none  h-11 md:w-44 md:ml-5`}
             onClick={() => setDeliverySchedule('later')}
           >
@@ -1914,13 +1980,16 @@ const Orders: FC<OrdersProps> = ({ channelName }: { channelName: any }) => {
           </button>
         </div>
         {deliveryActive == 'later' && (
-          <div className="mt-8 flex">
-            {/* <Controller
+          <div className="mt-8 flex space-x-4">
+            <Controller
               render={({ field: { onChange } }) => (
                 <Select
-                  items={dayOptions}
-                  placeholder={tr('today')}
-                  onChange={(e: any) => onChange(e)}
+                  items={dateOptions}
+                  placeholder={tr('select_date')}
+                  onChange={(e: any) => {
+                    onChange(e)
+                    setSelectedDate(DateTime.fromISO(e.value))
+                  }}
                 />
               )}
               rules={{
@@ -1929,11 +1998,11 @@ const Orders: FC<OrdersProps> = ({ channelName }: { channelName: any }) => {
               key="delivery_day"
               name="delivery_day"
               control={control}
-            /> */}
+            />
             <Controller
               render={({ field: { onChange } }) => (
                 <Select
-                  items={deliveryTimeOptions}
+                  items={timeOptions}
                   placeholder={tr('time')}
                   onChange={(e: any) => onChange(e)}
                 />
@@ -1961,8 +2030,8 @@ const Orders: FC<OrdersProps> = ({ channelName }: { channelName: any }) => {
         <div className="flex md:block">
           <button
             className={`${openTab !== 1
-                ? 'text-gray-400 bg-gray-100'
-                : 'bg-yellow text-white'
+              ? 'text-gray-400 bg-gray-100'
+              : 'bg-yellow text-white'
               } flex-1 font-bold  rounded-full outline-none focus:outline-none  h-11 md:w-44`}
             onClick={() => setOpenTab(1)}
           >
@@ -1980,8 +2049,8 @@ const Orders: FC<OrdersProps> = ({ channelName }: { channelName: any }) => {
           </button> */}
           <button
             className={`${openTab !== 3
-                ? 'text-gray-400 bg-gray-100'
-                : 'bg-yellow text-white'
+              ? 'text-gray-400 bg-gray-100'
+              : 'bg-yellow text-white'
               } flex-1 font-bold  rounded-full outline-none focus:outline-none  h-11 md:w-44 ml-5`}
             onClick={() => setOpenTab(3)}
           >
@@ -2333,12 +2402,12 @@ const Orders: FC<OrdersProps> = ({ channelName }: { channelName: any }) => {
                     separator: ' ',
                     decimal: '.',
                     symbol: `${locale == 'uz'
-                        ? "so'm"
-                        : locale == 'ru'
-                          ? 'сум'
-                          : locale == 'en'
-                            ? 'sum'
-                            : ''
+                      ? "so'm"
+                      : locale == 'ru'
+                        ? 'сум'
+                        : locale == 'en'
+                          ? 'sum'
+                          : ''
                       }`,
                     precision: 0,
                   }).format()}
@@ -2359,12 +2428,12 @@ const Orders: FC<OrdersProps> = ({ channelName }: { channelName: any }) => {
                   separator: ' ',
                   decimal: '.',
                   symbol: `${locale == 'uz'
-                      ? "so'm"
-                      : locale == 'ru'
-                        ? 'сум'
-                        : locale == 'en'
-                          ? 'sum'
-                          : ''
+                    ? "so'm"
+                    : locale == 'ru'
+                      ? 'сум'
+                      : locale == 'en'
+                        ? 'sum'
+                        : ''
                     }`,
                   precision: 0,
                 }).format()}
