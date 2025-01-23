@@ -47,7 +47,6 @@ import { chunk, sortBy } from 'lodash'
 import getAddressList from '@lib/load_addreses'
 import { Address } from '@commerce/types/address'
 import Hashids from 'hashids'
-import { isValidPhoneNumber } from 'react-phone-number-input'
 
 const { publicRuntimeConfig } = getConfig()
 let webAddress = publicRuntimeConfig.apiUrl
@@ -264,31 +263,16 @@ const Orders: FC<OrdersProps> = ({ channelName }: { channelName: any }) => {
     reset(newFields)
   }
   //Orders
-  const generateDateOptions = () => {
-    const dateOptions = [] as SelectItem[]
-    let currentDate = DateTime.now()
-
-    // Generate options for next 7 days
-    for (let i = 0; i < 7; i++) {
-      const date = currentDate.plus({ days: i })
-      const formattedDate = date.toFormat('dd.MM.yyyy')
-      const label = i === 0
-        ? `${tr('today')} (${formattedDate})`
-        : i === 1
-          ? `${tr('tomorrow')} (${formattedDate})`
-          : formattedDate
-
-      dateOptions.push({
-        value: date.toISO(),
-        label: label
-      })
-    }
-
-    return dateOptions
-  }
-
-  const dateOptions = useMemo(() => generateDateOptions(), [locale]) // Add locale dependency if tr() uses it
-
+  const dayOptions = [
+    {
+      value: 'today',
+      label: tr('today'),
+    },
+    {
+      value: 'tomorrow',
+      label: tr('tomorrow'),
+    },
+  ]
   const [tabIndex, setTabIndex] = useState(
     locationData?.deliveryType || 'deliver'
   )
@@ -1233,58 +1217,6 @@ const Orders: FC<OrdersProps> = ({ channelName }: { channelName: any }) => {
     reset(newFields)
   }
 
-  const generateTimeOptions = (selectedDate: DateTime) => {
-    const timeOptions = [] as SelectItem[]
-    let startTime = DateTime.now()
-
-    // If selected date is today, start from current time + 80 minutes
-    // Otherwise start from restaurant opening time
-    if (selectedDate.hasSame(DateTime.now(), 'day')) {
-      startTime = startTime.plus({ minutes: 80 })
-    } else {
-      startTime = selectedDate.set({ hour: 11, minute: 0 }) // Restaurant opens at 11:00
-    }
-
-    startTime = startTime.set({
-      minute: Math.ceil(startTime.minute / 10) * 10,
-    })
-
-    // Generate time slots until 3 AM next day
-    let endTime = selectedDate.plus({ days: 1 }).set({ hour: 3, minute: 0 })
-
-    // Don't show past times
-    if (startTime > endTime || (selectedDate < DateTime.now().startOf('day'))) {
-      return [] // Return empty options for past dates
-    }
-
-    while (startTime < endTime) {
-      let slotEnd = startTime.plus({ minutes: 20 })
-
-      let val = `${zeroPad(startTime.hour, 2)}:${zeroPad(startTime.minute, 2)}`
-      val += ` - ${zeroPad(slotEnd.hour, 2)}:${zeroPad(slotEnd.minute, 2)}`
-
-      timeOptions.push({
-        value: val,
-        label: val,
-      })
-
-      startTime = startTime.plus({ minutes: 40 })
-      startTime = startTime.set({
-        minute: Math.ceil(startTime.minute / 10) * 10,
-      })
-    }
-
-    return timeOptions
-  }
-
-  const [selectedDate, setSelectedDate] = useState(DateTime.now())
-  const [timeOptions, setTimeOptions] = useState(generateTimeOptions(selectedDate))
-
-  // Update time options when date changes
-  useEffect(() => {
-    setTimeOptions(generateTimeOptions(selectedDate))
-  }, [selectedDate])
-
   return (
     <div className="mx-5 md:mx-0 pt-1 md:pt-0 pb-1">
       {/* Contacts */}
@@ -1344,10 +1276,7 @@ const Orders: FC<OrdersProps> = ({ channelName }: { channelName: any }) => {
                       withCountryCallingCode
                       value={value}
                       className="focus:outline-none outline-none px-6 py-3 rounded-full text-sm w-full bg-gray-100 text-gray-400"
-                      onChange={(e: any) => {
-                        let isPhoneValid = isValidPhoneNumber(e, 'UZ')
-                        if (isPhoneValid) onChange(e)
-                      }}
+                      onChange={(e: any) => onChange(e)}
                     />
                   )}
                   rules={{
@@ -1405,10 +1334,9 @@ const Orders: FC<OrdersProps> = ({ channelName }: { channelName: any }) => {
                   international
                   withCountryCallingCode
                   value={additionalPhone}
-                  className="focus:outline-none outline-none px-6 py-3 rounded-full text-sm w-full bg-gray-100 text-gray-400"
+                  className="focus:outline-none outline-none px-6 py-3 rounded-full text-sm w-full bg-gray-100 text-gray-400 "
                   onChange={(e: any) => {
-                    let isPhoneValid = isValidPhoneNumber(e, 'UZ')
-                    if (isPhoneValid) setValue('additional_phone', e)
+                    setValue('additional_phone', e)
                   }}
                 />
                 {additionalPhone && (
@@ -1986,16 +1914,13 @@ const Orders: FC<OrdersProps> = ({ channelName }: { channelName: any }) => {
           </button>
         </div>
         {deliveryActive == 'later' && (
-          <div className="mt-8 flex space-x-4">
-            <Controller
+          <div className="mt-8 flex">
+            {/* <Controller
               render={({ field: { onChange } }) => (
                 <Select
-                  items={dateOptions}
-                  placeholder={tr('select_date')}
-                  onChange={(e: any) => {
-                    onChange(e)
-                    setSelectedDate(DateTime.fromISO(e.value))
-                  }}
+                  items={dayOptions}
+                  placeholder={tr('today')}
+                  onChange={(e: any) => onChange(e)}
                 />
               )}
               rules={{
@@ -2004,11 +1929,11 @@ const Orders: FC<OrdersProps> = ({ channelName }: { channelName: any }) => {
               key="delivery_day"
               name="delivery_day"
               control={control}
-            />
+            /> */}
             <Controller
               render={({ field: { onChange } }) => (
                 <Select
-                  items={timeOptions}
+                  items={deliveryTimeOptions}
                   placeholder={tr('time')}
                   onChange={(e: any) => onChange(e)}
                 />
