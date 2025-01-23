@@ -389,8 +389,8 @@ const CreateYourPizza: FC<CreatePizzaProps> = ({ sec, channelName }) => {
           price:
             +activeVariant.modifierProduct.price -
             +activeVariant.price +
-            (+rightActiveVariant.modifierProduct.price -
-              +rightActiveVariant.price),
+            (+rightActiveVariant?.modifierProduct.price -
+              +rightActiveVariant?.price),
           assets: [
             {
               local: '/sausage_modifier.png',
@@ -595,26 +595,26 @@ const CreateYourPizza: FC<CreatePizzaProps> = ({ sec, channelName }) => {
                       >
                         <div className="w-40 relative overflow-hidden">
                           {leftSelectedProduct && (
-                              <Image
-                                src={leftSelectedProduct.image}
-                                width="320"
-                                height="320"
-                                layout="fixed"
-                                className="absolute h-full max-w-2xl"
-                                alt=""
-                              />
+                            <Image
+                              src={leftSelectedProduct.image}
+                              width="320"
+                              height="320"
+                              layout="fixed"
+                              className="absolute h-full max-w-2xl"
+                              alt=""
+                            />
                           )}
                         </div>
                         <div className="w-40 relative overflow-hidden">
                           {rightSelectedProduct && (
-                              <Image
-                                src={rightSelectedProduct.image}
-                                width="320"
-                                height="320"
-                                layout="fixed"
-                                className="absolute h-full max-w-2xl right-0"
-                                alt=""
-                              />
+                            <Image
+                              src={rightSelectedProduct.image}
+                              width="320"
+                              height="320"
+                              layout="fixed"
+                              className="absolute h-full max-w-2xl right-0"
+                              alt=""
+                            />
                           )}
                         </div>
                       </div>

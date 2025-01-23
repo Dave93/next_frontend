@@ -632,27 +632,25 @@ const ProductItemNew: FC<ProductItem> = ({ product, channelName }) => {
           itemScope
           itemType="https://schema.org/Product"
         >
-          <div>
-            <div className="text-center">
-              {store.image ? (
-                <img
-                  src={store.image}
-                  width={250}
-                  height={250}
-                  alt={store?.attribute_data?.name[channelName][locale || 'ru']}
-                  className="transform motion-safe:group-hover:scale-105 transition duration-500"
-                  itemProp="image"
-                />
-              ) : (
-                <img
-                  src="/no_photo.svg"
-                  width={250}
-                  height={250}
-                  alt={store?.attribute_data?.name[channelName][locale || 'ru']}
-                  className="rounded-full transform motion-safe:group-hover:scale-105 transition duration-500"
-                />
-              )}
-            </div>
+          <div className="text-center">
+            {store.image ? (
+              <img
+                src={store.image}
+                width={250}
+                height={250}
+                alt={store?.attribute_data?.name[channelName][locale || 'ru']}
+                className="transform motion-safe:group-hover:scale-105 transition duration-500 object-cover"
+                itemProp="image"
+              />
+            ) : (
+              <img
+                src="/no_photo.svg"
+                width={250}
+                height={250}
+                alt={store?.attribute_data?.name[channelName][locale || 'ru']}
+                className="rounded-full transform motion-safe:group-hover:scale-105 transition duration-500"
+              />
+            )}
           </div>
           <div className="flex flex-col flex-grow w-full">
             <div className="font-serif mt-4 text-xl uppercase" itemProp="name">
@@ -696,13 +694,13 @@ const ProductItemNew: FC<ProductItem> = ({ product, channelName }) => {
                         </button>
                       </div>
 
-                      <div
+                      {/* <div
                         className={` flex flex-col items-center w-full ${
                           v.active ? 'text-yellow' : ''
                         }`}
                       >
                         {(locale == 'ru' ? 'гр ' : 'gr ') + v.weight}
-                      </div>
+                      </div> */}
                     </div>
                   ))}
                 </div>
@@ -886,7 +884,7 @@ const ProductItemNew: FC<ProductItem> = ({ product, channelName }) => {
                             }
                           </div>
                           <div
-                            className="mt-1 text-xs flex-grow"
+                            className="mt-1 text-base flex-grow"
                             dangerouslySetInnerHTML={{
                               __html: store?.attribute_data?.description
                                 ? store?.attribute_data?.description[
@@ -913,14 +911,14 @@ const ProductItemNew: FC<ProductItem> = ({ product, channelName }) => {
                                         : v?.custom_name_uz}
                                     </button>
                                   </div>
-                                  <div
+                                  {/* <div
                                     className={` flex flex-col items-center w-full ${
                                       v.active ? 'text-yellow' : ''
                                     }`}
                                   >
                                     {(locale == 'ru' ? 'гр ' : 'gr ') +
                                       v.weight}
-                                  </div>
+                                  </div> */}
                                 </div>
                               ))}
                             </div>
@@ -928,10 +926,10 @@ const ProductItemNew: FC<ProductItem> = ({ product, channelName }) => {
                           {modifiers && (
                             <div className="pb-10">
                               <div className="my-2">
-                                <span>Добавить в пиццу</span>
+                                <span>{tr('add_to_pizza')}</span>
                               </div>
                               <div className="overflow-x-scroll">
-                                <div className="-mr-20 flex space-x-2">
+                                <div className="-mr-20 flex space-x-2 pb-2">
                                   {modifiers.map((mod: any, index: number) => (
                                     <div
                                       key={mod.id}
@@ -973,10 +971,8 @@ const ProductItemNew: FC<ProductItem> = ({ product, channelName }) => {
                                       </div>
                                       <div
                                         className={`${
-                                          (activeModifiers.length &&
-                                            activeModifiers.includes(mod.id)) ||
-                                          (!activeModifiers.length &&
-                                            index == 0)
+                                          activeModifiers.length &&
+                                          activeModifiers.includes(mod.id)
                                             ? 'bg-yellow'
                                             : 'bg-gray-300'
                                         } font-bold px-2 py-2 text-center text-white text-xs`}

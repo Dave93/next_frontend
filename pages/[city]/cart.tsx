@@ -598,7 +598,7 @@ export default function Cart() {
                         className="md:flex justify-between items-center border-b pb-3"
                         key={lineItem.id}
                       >
-                        <div className="md:flex items-center md:text-center uppercase">
+                        <div className="md:flex items-center md:text-center uppercase gap-1">
                           {lineItem.child &&
                           lineItem.child.length &&
                           lineItem.child[0].variant?.product?.id !=
@@ -659,7 +659,7 @@ export default function Cart() {
                                     width="100"
                                     height="100"
                                     layout="fixed"
-                                    className="absolute max-w-2xl"
+                                    className="absolute max-w-max"
                                     alt=""
                                   />
                                 </div>
@@ -675,7 +675,7 @@ export default function Cart() {
                                     width="100"
                                     height="100"
                                     layout="fixed"
-                                    className="absolute  max-w-2xl right-0"
+                                    className="absolute  max-w-max right-0"
                                     alt=""
                                   />
                                 </div>

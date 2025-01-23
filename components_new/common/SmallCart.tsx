@@ -320,7 +320,7 @@ const SmallCart: FC<SmallCartProps> = ({ channelName }) => {
                 data?.lineItems
                   .map((lineItem: any) => (
                     <div key={lineItem.id} className="py-3">
-                      <div className="flex mb-2">
+                      <div className="grid grid-cols-3 items-center place-items-center">
                         {lineItem.child &&
                         lineItem.child.length &&
                         lineItem.child[0].variant?.product?.id !=
@@ -369,59 +369,59 @@ const SmallCart: FC<SmallCartProps> = ({ channelName }) => {
                               )}
                             </div>
                           ) : (
-                            <div className="h-11 w-11 flex relative">
-                              <div className="w-5 relative overflow-hidden">
-                                  <Image
-                                    src={
-                                      lineItem?.variant?.product?.assets?.length
-                                        ? `${webAddress}/storage/${lineItem?.variant?.product?.assets[0]?.location}/${lineItem?.variant?.product?.assets[0]?.filename}`
-                                        : '/no_photo.svg'
-                                    }
-                                    width="40"
-                                    height="40"
-                                    layout="fixed"
-                                    className="absolute h-full max-w-2xl"
-                                    alt=""
-                                  />
+                            <div className="h-16 w-16 flex relative">
+                              <div className="w-10 relative overflow-hidden">
+                                <Image
+                                  src={
+                                    lineItem?.variant?.product?.assets?.length
+                                      ? `${webAddress}/storage/${lineItem?.variant?.product?.assets[0]?.location}/${lineItem?.variant?.product?.assets[0]?.filename}`
+                                      : '/no_photo.svg'
+                                  }
+                                  width="60"
+                                  height="60"
+                                  layout="fixed"
+                                  className="absolute h-full max-w-2xl"
+                                  alt=""
+                                />
                               </div>
-                              <div className="w-5 relative overflow-hidden">
-                                  <Image
-                                    src={
-                                      lineItem?.child[0].variant?.product
-                                        ?.assets?.length
-                                        ? `${webAddress}/storage/${lineItem?.child[0].variant?.product?.assets[0]?.location}/${lineItem?.child[0].variant?.product?.assets[0]?.filename}`
-                                        : '/no_photo.svg'
-                                    }
-                                    width="40"
-                                    height="40"
-                                    layout="fixed"
-                                    className="absolute h-full max-w-2xl right-0" 
-                                    alt=""
-                                  />
+                              <div className="w-10 relative overflow-hidden">
+                                <Image
+                                  src={
+                                    lineItem?.child[0].variant?.product?.assets
+                                      ?.length
+                                      ? `${webAddress}/storage/${lineItem?.child[0].variant?.product?.assets[0]?.location}/${lineItem?.child[0].variant?.product?.assets[0]?.filename}`
+                                      : '/no_photo.svg'
+                                  }
+                                  width="60"
+                                  height="60"
+                                  layout="fixed"
+                                  className="absolute h-full max-w-2xl right-0"
+                                  alt=""
+                                />
                               </div>
                             </div>
                           )
                         ) : (
-                          <div>
+                          <div className="">
                             <Image
                               src={
                                 lineItem?.variant?.product?.assets?.length
                                   ? `${webAddress}/storage/${lineItem?.variant?.product?.assets[0]?.location}/${lineItem?.variant?.product?.assets[0]?.filename}`
                                   : '/no_photo.svg'
                               }
-                              width={40}
-                              height={40}
+                              width={60}
+                              height={60}
                               className="rounded-full"
                               alt=""
                             />
                           </div>
                         )}
-                        <div className="font-bold text-sm flex-grow mx-1 uppercase">
+                        <div className="font-bold text-xs">
                           {lineItem.child || lineItem.child.length > 1
                             ? `${
                                 lineItem?.variant?.product?.attribute_data
                                   ?.name[channelName][locale || 'ru']
-                              } + ${lineItem?.child
+                              }  ${lineItem?.child
                                 .filter(
                                   (v: any) =>
                                     lineItem?.variant?.product?.box_id !=
@@ -432,11 +432,11 @@ const SmallCart: FC<SmallCartProps> = ({ channelName }) => {
                                     v?.variant?.product?.attribute_data?.name[
                                       channelName
                                     ][locale || 'ru']
-                                )
-                                .join(' + ')}`
+                                )} `
                             : lineItem?.variant?.product?.attribute_data?.name[
                                 channelName
-                              ][locale || 'ru']}{' '}
+                              ][locale || 'ru']}
+                          {'  '}
                           {lineItem.bonus_id && (
                             <span className="text-yellow">({tr('bonus')})</span>
                           )}
@@ -455,10 +455,10 @@ const SmallCart: FC<SmallCartProps> = ({ channelName }) => {
                           </div>
                         )}
                       </div>
-                      <div className="flex items-center">
+                      <div className="flex items-center mt-2">
                         {!readonlyItems.includes(lineItem.id) && (
                           <div className="">
-                            <div className="w-20 h-6 ml-1 bg-yellow rounded-full flex items-center text-white">
+                            <div className="h-6 ml-1 bg-yellow rounded-full flex items-center text-white">
                               <div className="w-6 h-6 items-center flex justify-around">
                                 <MinusIcon
                                   className="cursor-pointer w-5 h-5"

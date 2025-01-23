@@ -4,19 +4,13 @@ import React, {
   Fragment,
   ReactNode,
   useEffect,
-  useMemo,
   useRef,
   useState,
 } from 'react'
 import { useRouter } from 'next/router'
 import { CommerceProvider } from '@framework'
 import type { Page } from '@commerce/types/page'
-import type {
-  APILinkItem,
-  LinkItem,
-  LinkLabel,
-} from '@commerce/types/headerMenu'
-import { useAcceptCookies } from '@lib/hooks/useAcceptCookies'
+import type { APILinkItem } from '@commerce/types/headerMenu'
 import styles from './Layout.module.css'
 import Header from '@components_new/Header'
 import Image from 'next/image'
@@ -35,10 +29,7 @@ import useTranslation from 'next-translate/useTranslation'
 import getConfig from 'next/config'
 import axios from 'axios'
 import { City } from '@commerce/types/cities'
-import { parsePhoneNumber } from 'libphonenumber-js'
 import { Dialog, Transition } from '@headlessui/react'
-import Cookies from 'js-cookie'
-import CityModal from './CityModal'
 import dynamic from 'next/dynamic'
 import SignInModal from '@components_new/header/SignInModal'
 import { XIcon } from '@heroicons/react/solid'
@@ -46,11 +37,6 @@ import LocationTabs from '@components_new/header/LocationTabs'
 import MobLocationTabs from '@components_new/header/MobLocationTabs.'
 
 const LinkScroll = Scroll.Link
-
-const BonusModalNoSSR = dynamic(
-  () => import('@components/common/Layout/BonusModal'),
-  { ssr: false }
-)
 
 const { publicRuntimeConfig } = getConfig()
 
@@ -88,18 +74,15 @@ const Layout: FC<Props> = ({
     cities = [],
     currentCity,
     cleanBackground = false,
-    ...pageProps
   },
 }) => {
-  const { locale = 'ru', pathname, query } = useRouter()
+  const { locale = 'ru', pathname } = useRouter()
   const { t: tr } = useTranslation('common')
 
   const [configData, setConfigData] = useState({} as any)
 
   const {
     setCitiesData,
-    activeCity,
-    setActiveCity,
     showLocationTabs,
     locationTabsClosable,
     closeLocationTabs,
@@ -345,11 +328,11 @@ const Layout: FC<Props> = ({
                         )}
                       </div>
                     </div> */}
-                    <div className=" border-b border-blue md:border-0 pb-5 md:pb-0">
+                    <div className="border-b border-blue md:border-0 pb-5 md:pb-0">
                       {tr('work_time')} <br />{' '}
                       {locale == 'uz'
                         ? configData.workTimeUz
-                        : locale == 'ru '
+                        : locale == 'ru'
                         ? configData.workTimeRu
                         : locale == 'en'
                         ? configData.workTimeEn

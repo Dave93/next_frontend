@@ -58,7 +58,7 @@ const Branch: FC = () => {
           </Map>
         </YMaps>
       </div>
-      <div className="md:flex-[2] space-y-2 mb-4 md:mb-0">
+      <div className="md:flex-[2] space-y-2 mb-4 md:mb-0 px-4">
         <ChooseCityDropDown />
         <SimpleBar style={{ maxHeight: 500 }}>
           <div className="space-y-2 overflow-y-auto">
