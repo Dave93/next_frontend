@@ -338,9 +338,7 @@ const Orders: FC<OrdersProps> = ({ channelName }: { channelName: any }) => {
   }
 
   useEffect(() => {
-    console.log('selectedDate', selectedDate)
     const timeOptionsLocal = generateTimeOptions(selectedDate)
-    console.log('timeOptionsLocal', timeOptionsLocal)
     setTimeOptions(timeOptionsLocal)
   }, [selectedDate])
 
@@ -1993,7 +1991,6 @@ const Orders: FC<OrdersProps> = ({ channelName }: { channelName: any }) => {
                   placeholder={tr('select_date')}
                   onChange={(e: any) => {
                     onChange(e);
-                    console.log('e', e)
                     const selectedDateTime = DateTime.fromFormat(e, 'yyyy-MM-dd')
                     setSelectedDate(selectedDateTime)
                   }}
