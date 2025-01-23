@@ -278,7 +278,7 @@ const Orders: FC<OrdersProps> = ({ channelName }: { channelName: any }) => {
           : formattedDate
 
       dateOptions.push({
-        value: date.toISO(),
+        value: date.toFormat('yyyy-MM-dd'),
         label: label
       })
     }
@@ -1993,7 +1993,7 @@ const Orders: FC<OrdersProps> = ({ channelName }: { channelName: any }) => {
                   placeholder={tr('select_date')}
                   onChange={(e: any) => {
                     onChange(e)
-                    const selectedDateTime = DateTime.fromISO(e.value)
+                    const selectedDateTime = DateTime.fromFormat(e.value, 'yyyy-MM-dd')
                     setSelectedDate(selectedDateTime)
                   }}
                 />
