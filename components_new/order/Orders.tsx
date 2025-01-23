@@ -293,33 +293,35 @@ const Orders: FC<OrdersProps> = ({ channelName }: { channelName: any }) => {
 
   const generateTimeOptions = (selectedDate: DateTime) => {
     const timeOptions = [] as SelectItem[]
-    let startTime = selectedDate
-
-    // If selected date is today, start from current time + 80 minutes
-    // Otherwise start from restaurant opening time (11:00)
-    if (selectedDate.hasSame(DateTime.now(), 'day')) {
-      startTime = DateTime.now().plus({ minutes: 80 })
-    } else {
-      startTime = selectedDate.set({ hour: 11, minute: 0 }) // Restaurant opens at 11:00
-    }
-
-    startTime = startTime.set({
-      minute: Math.ceil(startTime.minute / 10) * 10,
-    })
-
-    // Generate time slots until 3 AM next day
-    let endTime = selectedDate.plus({ days: 1 }).set({ hour: 3, minute: 0 })
 
     // Don't show past times
     if (selectedDate < DateTime.now().startOf('day')) {
       return [] // Return empty options for past dates
     }
 
-    while (startTime < endTime) {
-      let slotEnd = startTime.plus({ minutes: 20 })
+    let startTime: DateTime
+    const now = DateTime.now()
 
-      let val = `${zeroPad(startTime.hour, 2)}:${zeroPad(startTime.minute, 2)}`
-      val += ` - ${zeroPad(slotEnd.hour, 2)}:${zeroPad(slotEnd.minute, 2)}`
+    // If selected date is today, start from current time + 80 minutes
+    // Otherwise start from restaurant opening time (11:00)
+    if (selectedDate.hasSame(now, 'day')) {
+      startTime = now.plus({ minutes: 80 })
+    } else {
+      startTime = selectedDate.set({ hour: 11, minute: 0 }) // Restaurant opens at 11:00
+    }
+
+    // Round up to nearest 10 minutes
+    startTime = startTime.set({
+      minute: Math.ceil(startTime.minute / 10) * 10,
+    })
+
+    // Generate time slots until 3 AM next day
+    const endTime = selectedDate.plus({ days: 1 }).set({ hour: 3, minute: 0 })
+
+    while (startTime < endTime) {
+      const slotEnd = startTime.plus({ minutes: 20 })
+
+      const val = `${zeroPad(startTime.hour, 2)}:${zeroPad(startTime.minute, 2)} - ${zeroPad(slotEnd.hour, 2)}:${zeroPad(slotEnd.minute, 2)}`
 
       timeOptions.push({
         value: val,
@@ -1989,7 +1991,8 @@ const Orders: FC<OrdersProps> = ({ channelName }: { channelName: any }) => {
                   placeholder={tr('select_date')}
                   onChange={(e: any) => {
                     onChange(e)
-                    setSelectedDate(DateTime.fromISO(e.value))
+                    const selectedDateTime = DateTime.fromISO(e.value)
+                    setSelectedDate(selectedDateTime)
                   }}
                 />
               )}
