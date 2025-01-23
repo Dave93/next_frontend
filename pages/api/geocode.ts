@@ -1,5 +1,4 @@
 import axios from 'axios'
-import { withSentry } from '@sentry/nextjs'
 
 const handler = async function handler(req: any, res: any) {
   const {
@@ -17,7 +16,7 @@ const handler = async function handler(req: any, res: any) {
     configData = Buffer.from(configData.data, 'base64')
     configData = configData.toString('ascii')
     configData = JSON.parse(configData)
-  } catch (e) {}
+  } catch (e) { }
 
   let yandexKey = configData.yandexGeoKey
   yandexKey = yandexKey.split(',')
@@ -28,8 +27,7 @@ const handler = async function handler(req: any, res: any) {
   const { data: getCodeData } = await axios.get(
     `https://geocode-maps.yandex.ru/1.x/?apikey=${yandexKey}&geocode=${encodeURI(
       text
-    )}&bbox=${boundsArray[0]},${boundsArray[1]}~${boundsArray[2]},${
-      boundsArray[3]
+    )}&bbox=${boundsArray[0]},${boundsArray[1]}~${boundsArray[2]},${boundsArray[3]
     }&format=json`
   )
 
@@ -60,4 +58,4 @@ const handler = async function handler(req: any, res: any) {
   res.status(200).json(result)
 }
 
-export default withSentry(handler)
+export default handler
