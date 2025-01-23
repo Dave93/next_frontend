@@ -14,7 +14,6 @@ const isSaleor = provider === 'saleor'
 const isSwell = provider === 'swell'
 const isVendure = provider === 'vendure'
 const withPWA = require('next-pwa')
-const { withSentryConfig } = require('@sentry/nextjs')
 
 const moduleExports = nextTranslate(
   withCommerceConfig({
