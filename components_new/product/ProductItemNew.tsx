@@ -69,7 +69,7 @@ const ProductItemNew: FC<ProductItem> = ({ product, channelName }) => {
       configData = configData.toString('ascii')
       configData = JSON.parse(configData)
       setConfigData(configData)
-    } catch (e) {}
+    } catch (e) { }
   }
 
   function closeModal() {
@@ -562,11 +562,10 @@ const ProductItemNew: FC<ProductItem> = ({ product, channelName }) => {
               modifiers.map((mod: any) => (
                 <div
                   key={mod.id}
-                  className={`border ${
-                    activeModifiers.includes(mod.id)
+                  className={`border ${activeModifiers.includes(mod.id)
                       ? 'border-yellow border-2 shadow-md'
                       : 'border-gray-300'
-                  } flex items-center justify-between overflow-hidden rounded-[15px] cursor-pointer`}
+                    } flex items-center justify-between overflow-hidden rounded-[15px] cursor-pointer`}
                   onClick={() => addModifier(mod.id)}
                 >
                   <div className="px-2">
@@ -604,9 +603,8 @@ const ProductItemNew: FC<ProductItem> = ({ product, channelName }) => {
                         pattern: '# !',
                         separator: ' ',
                         decimal: '.',
-                        symbol: `${locale == 'uz' ? "so'm" : ''} ${
-                          locale == 'ru' ? 'сум' : ''
-                        } ${locale == 'en' ? 'sum' : ''}`,
+                        symbol: `${locale == 'uz' ? "so'm" : ''} ${locale == 'ru' ? 'сум' : ''
+                          } ${locale == 'en' ? 'sum' : ''}`,
                         precision: 0,
                       }).format()}
                     </div>
@@ -625,9 +623,8 @@ const ProductItemNew: FC<ProductItem> = ({ product, channelName }) => {
         </div>
       ) : (
         <div
-          className={`${styles.gridItemOutline} ${
-            isProductInStop ? 'opacity-25' : ''
-          } gap-4 grid grid-cols-2 py-4 px-2 md:py-3 md:px-3 overflow-hidden bg-white rounded-[15px] hover:shadow-xl shadow-sm group items-center justify-between md:flex md:flex-col`}
+          className={`${styles.gridItemOutline} ${isProductInStop ? 'opacity-25' : ''
+            } gap-4 grid grid-cols-2 py-4 px-2 md:py-3 md:px-3 overflow-hidden bg-white rounded-[15px] hover:shadow-xl shadow-sm group items-center justify-between md:flex md:flex-col`}
           id={`prod-${store.id}`}
           itemScope
           itemType="https://schema.org/Product"
@@ -664,8 +661,8 @@ const ProductItemNew: FC<ProductItem> = ({ product, channelName }) => {
               dangerouslySetInnerHTML={{
                 __html: store?.attribute_data?.description
                   ? store?.attribute_data?.description[channelName][
-                      locale || 'ru'
-                    ]
+                  locale || 'ru'
+                  ]
                   : '',
               }}
               itemProp="description"
@@ -676,21 +673,20 @@ const ProductItemNew: FC<ProductItem> = ({ product, channelName }) => {
                   {store.variants.map((v) => (
                     <div className="w-full" key={v.id}>
                       <div
-                        className={`w-full text-center cursor-pointer rounded-2xl outline-none ${
-                          v.active
+                        className={`w-full text-center cursor-pointer rounded-2xl outline-none ${v.active
                             ? 'bg-yellow text-white'
                             : 'bg-gray-200 text-gray-400'
-                        }`}
+                          }`}
                         onClick={() => updateOptionSelection(v.id)}
                       >
                         <button className="outline-none focus:outline-none text-xs py-2">
                           {locale == 'ru'
                             ? v?.custom_name
                             : locale == 'uz'
-                            ? v?.custom_name_uz
-                            : locale == 'en'
-                            ? v?.custom_name_en
-                            : ''}
+                              ? v?.custom_name_uz
+                              : locale == 'en'
+                                ? v?.custom_name_en
+                                : ''}
                         </button>
                       </div>
 
@@ -752,9 +748,8 @@ const ProductItemNew: FC<ProductItem> = ({ product, channelName }) => {
                       pattern: '# !',
                       separator: ' ',
                       decimal: '.',
-                      symbol: `${locale == 'uz' ? "so'm" : ''} ${
-                        locale == 'ru' ? 'сум' : ''
-                      } ${locale == 'en' ? 'sum' : ''}`,
+                      symbol: `${locale == 'uz' ? "so'm" : ''} ${locale == 'ru' ? 'сум' : ''
+                        } ${locale == 'en' ? 'sum' : ''}`,
                       precision: 0,
                     }).format()}
                   </span>
@@ -764,9 +759,8 @@ const ProductItemNew: FC<ProductItem> = ({ product, channelName }) => {
                     pattern: '# !',
                     separator: ' ',
                     decimal: '.',
-                    symbol: `${locale == 'uz' ? "so'm" : ''} ${
-                      locale == 'ru' ? 'сум' : ''
-                    } ${locale == 'en' ? 'sum' : ''}`,
+                    symbol: `${locale == 'uz' ? "so'm" : ''} ${locale == 'ru' ? 'сум' : ''
+                      } ${locale == 'en' ? 'sum' : ''}`,
                     precision: 0,
                   }).format()}
                 </span>
@@ -782,9 +776,8 @@ const ProductItemNew: FC<ProductItem> = ({ product, channelName }) => {
                         pattern: '# !',
                         separator: ' ',
                         decimal: '.',
-                        symbol: `${locale == 'uz' ? "so'm" : ''} ${
-                          locale == 'ru' ? 'сум' : ''
-                        } ${locale == 'en' ? 'sum' : ''}`,
+                        symbol: `${locale == 'uz' ? "so'm" : ''} ${locale == 'ru' ? 'сум' : ''
+                          } ${locale == 'en' ? 'sum' : ''}`,
                         precision: 0,
                       }).format()}
                     </span>
@@ -796,9 +789,8 @@ const ProductItemNew: FC<ProductItem> = ({ product, channelName }) => {
                     pattern: '# !',
                     separator: ' ',
                     decimal: '.',
-                    symbol: `${locale == 'uz' ? "so'm" : ''} ${
-                      locale == 'ru' ? 'сум' : ''
-                    } ${locale == 'en' ? 'sum' : ''}`,
+                    symbol: `${locale == 'uz' ? "so'm" : ''} ${locale == 'ru' ? 'сум' : ''
+                      } ${locale == 'en' ? 'sum' : ''}`,
                     precision: 0,
                   }).format()}
                 </span>
@@ -859,7 +851,7 @@ const ProductItemNew: FC<ProductItem> = ({ product, channelName }) => {
                                 src={store.image}
                                 alt={
                                   store?.attribute_data?.name[channelName][
-                                    locale || 'ru'
+                                  locale || 'ru'
                                   ]
                                 }
                                 className="mx-auto"
@@ -869,7 +861,7 @@ const ProductItemNew: FC<ProductItem> = ({ product, channelName }) => {
                                 src="/no_photo.svg"
                                 alt={
                                   store?.attribute_data?.name[channelName][
-                                    locale || 'ru'
+                                  locale || 'ru'
                                   ]
                                 }
                                 className="rounded-full mx-auto"
@@ -879,7 +871,7 @@ const ProductItemNew: FC<ProductItem> = ({ product, channelName }) => {
                           <div className="font-black mt-4 text-xl">
                             {
                               store?.attribute_data?.name[channelName][
-                                locale || 'ru'
+                              locale || 'ru'
                               ]
                             }
                           </div>
@@ -888,8 +880,8 @@ const ProductItemNew: FC<ProductItem> = ({ product, channelName }) => {
                             dangerouslySetInnerHTML={{
                               __html: store?.attribute_data?.description
                                 ? store?.attribute_data?.description[
-                                    channelName
-                                  ][locale || 'ru']
+                                channelName
+                                ][locale || 'ru']
                                 : '',
                             }}
                           ></div>
@@ -898,11 +890,10 @@ const ProductItemNew: FC<ProductItem> = ({ product, channelName }) => {
                               {store.variants.map((v) => (
                                 <div className="w-full" key={v.id}>
                                   <div
-                                    className={`w-full text-center cursor-pointer rounded-2xl outline-none ${
-                                      v.active
+                                    className={`w-full text-center cursor-pointer rounded-2xl outline-none ${v.active
                                         ? 'bg-yellow text-white shadow-xl'
                                         : 'bg-gray-200 text-gray-600'
-                                    }`}
+                                      }`}
                                     onClick={() => updateOptionSelection(v.id)}
                                   >
                                     <button className="outline-none focus:outline-none text-xs py-2">
@@ -933,12 +924,11 @@ const ProductItemNew: FC<ProductItem> = ({ product, channelName }) => {
                                   {modifiers.map((mod: any, index: number) => (
                                     <div
                                       key={mod.id}
-                                      className={`border ${
-                                        activeModifiers.length &&
-                                        activeModifiers.includes(mod.id)
+                                      className={`border ${activeModifiers.length &&
+                                          activeModifiers.includes(mod.id)
                                           ? 'border-yellow'
                                           : 'border-gray-300'
-                                      } flex flex-col justify-between overflow-hidden rounded-[15px] cursor-pointer w-24`}
+                                        } flex flex-col justify-between overflow-hidden rounded-[15px] cursor-pointer w-24`}
                                       onClick={() => addModifier(mod.id)}
                                     >
                                       <div className="flex-grow pt-2 px-2">
@@ -970,22 +960,19 @@ const ProductItemNew: FC<ProductItem> = ({ product, channelName }) => {
                                           : mod.name}
                                       </div>
                                       <div
-                                        className={`${
-                                          activeModifiers.length &&
-                                          activeModifiers.includes(mod.id)
+                                        className={`${activeModifiers.length &&
+                                            activeModifiers.includes(mod.id)
                                             ? 'bg-yellow'
                                             : 'bg-gray-300'
-                                        } font-bold px-2 py-2 text-center text-white text-xs`}
+                                          } font-bold px-2 py-2 text-center text-white text-xs`}
                                       >
                                         {currency(mod.price, {
                                           pattern: '# !',
                                           separator: ' ',
                                           decimal: '.',
-                                          symbol: `${
-                                            locale == 'uz' ? "so'm" : ''
-                                          } ${locale == 'ru' ? 'сум' : ''} ${
-                                            locale == 'en' ? 'sum' : ''
-                                          }`,
+                                          symbol: `${locale == 'uz' ? "so'm" : ''
+                                            } ${locale == 'ru' ? 'сум' : ''} ${locale == 'en' ? 'sum' : ''
+                                            }`,
                                           precision: 0,
                                         }).format()}
                                       </div>
@@ -1029,9 +1016,8 @@ const ProductItemNew: FC<ProductItem> = ({ product, channelName }) => {
                                   pattern: '# !',
                                   separator: ' ',
                                   decimal: '.',
-                                  symbol: `${locale == 'uz' ? "so'm" : ''} ${
-                                    locale == 'ru' ? 'сум' : ''
-                                  } ${locale == 'en' ? 'sum' : ''}`,
+                                  symbol: `${locale == 'uz' ? "so'm" : ''} ${locale == 'ru' ? 'сум' : ''
+                                    } ${locale == 'en' ? 'sum' : ''}`,
                                   precision: 0,
                                 }).format()}
                               </span>

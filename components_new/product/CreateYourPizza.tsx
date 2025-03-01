@@ -66,7 +66,7 @@ const CreateYourPizza: FC<CreatePizzaProps> = ({
       configData = configData.toString('ascii')
       configData = JSON.parse(configData)
       setConfigData(configData)
-    } catch (e) {}
+    } catch (e) { }
   }
   function closeModal() {
     setIsOpen(false)
@@ -473,7 +473,7 @@ const CreateYourPizza: FC<CreatePizzaProps> = ({
           price:
             +activeVariant.modifierProduct.price -
             +activeVariant.price +
-            (+rightActiveVariant?.modifierProduct.price -
+            (+rightActiveVariant?.modifierProduct?.price -
               +rightActiveVariant?.price),
           assets: [
             {
@@ -542,9 +542,8 @@ const CreateYourPizza: FC<CreatePizzaProps> = ({
         <img
           src="/bayram.webp"
           alt=""
-          className={`${
-            isSmall ? 'absolute' : 'hidden'
-          } -right-12 w-1/3 -bottom-8`}
+          className={`${isSmall ? 'absolute' : 'hidden'
+            } -right-12 w-1/3 -bottom-8`}
         />
         <div className="text-center z-10">
           <div className={isSmall ? 'hidden' : ''}>
@@ -613,17 +612,15 @@ const CreateYourPizza: FC<CreatePizzaProps> = ({
                       readyProductList.map((item: any) => (
                         <div
                           key={item.id}
-                          className={`rounded-3xl bg-white relative p-2 shadow-xl border ${
-                            leftSelectedProduct &&
+                          className={`rounded-3xl bg-white relative p-2 shadow-xl border ${leftSelectedProduct &&
                             leftSelectedProduct.id == item.id
-                              ? 'border-yellow'
-                              : 'border-transparent'
-                          }
-                            ${
-                              rightSelectedProduct &&
+                            ? 'border-yellow'
+                            : 'border-transparent'
+                            }
+                            ${rightSelectedProduct &&
                               rightSelectedProduct.id == item.id
-                                ? 'opacity-25'
-                                : 'cursor-pointer hover:border-yellow'
+                              ? 'opacity-25'
+                              : 'cursor-pointer hover:border-yellow'
                             }  ${item.isInStop ? 'opacity-25' : ''}`}
                           onClick={() => {
                             if (item.isInStop) {
@@ -652,7 +649,7 @@ const CreateYourPizza: FC<CreatePizzaProps> = ({
                           <div className="uppercase">
                             {
                               item?.attribute_data?.name[channelName][
-                                locale || 'ru'
+                              locale || 'ru'
                               ]
                             }
                           </div>
@@ -719,11 +716,10 @@ const CreateYourPizza: FC<CreatePizzaProps> = ({
                       {customNames.map((name: string) => (
                         <button
                           key={name}
-                          className={`${
-                            name == activeCustomName
-                              ? 'bg-yellow text-white'
-                              : 'bg-gray-200 text-gray-400'
-                          } rounded-3xl  px-5 py-2`}
+                          className={`${name == activeCustomName
+                            ? 'bg-yellow text-white'
+                            : 'bg-gray-200 text-gray-400'
+                            } rounded-3xl  px-5 py-2`}
                           onClick={() => changeCustomName(name)}
                         >
                           {name}
@@ -737,7 +733,7 @@ const CreateYourPizza: FC<CreatePizzaProps> = ({
                             <div>
                               {
                                 leftSelectedProduct?.attribute_data?.name[
-                                  channelName
+                                channelName
                                 ][locale || 'ru']
                               }
                             </div>
@@ -747,7 +743,7 @@ const CreateYourPizza: FC<CreatePizzaProps> = ({
                                 __html: leftSelectedProduct?.attribute_data
                                   ?.description
                                   ? leftSelectedProduct?.attribute_data
-                                      ?.description[channelName][locale || 'ru']
+                                    ?.description[channelName][locale || 'ru']
                                   : '',
                               }}
                             ></div>
@@ -776,7 +772,7 @@ const CreateYourPizza: FC<CreatePizzaProps> = ({
                             <div>
                               {
                                 rightSelectedProduct?.attribute_data?.name[
-                                  channelName
+                                channelName
                                 ][locale || 'ru']
                               }
                             </div>
@@ -786,7 +782,7 @@ const CreateYourPizza: FC<CreatePizzaProps> = ({
                                 __html: rightSelectedProduct?.attribute_data
                                   ?.description
                                   ? rightSelectedProduct?.attribute_data
-                                      ?.description[channelName][locale || 'ru']
+                                    ?.description[channelName][locale || 'ru']
                                   : '',
                               }}
                             ></div>
@@ -820,12 +816,11 @@ const CreateYourPizza: FC<CreatePizzaProps> = ({
                           {modifiers.map((mod: any) => (
                             <div
                               key={mod.id}
-                              className={`border ${
-                                activeModifiers.includes(mod.id) ||
+                              className={`border ${activeModifiers.includes(mod.id) ||
                                 (!activeModifiers.length && mod.price == 0)
-                                  ? 'border-yellow'
-                                  : 'border-gray-300'
-                              } flex w-24 flex-col justify-between overflow-hidden rounded-[15px] cursor-pointer`}
+                                ? 'border-yellow'
+                                : 'border-gray-300'
+                                } flex w-24 flex-col justify-between overflow-hidden rounded-[15px] cursor-pointer`}
                               onClick={() => addModifier(mod.id)}
                             >
                               <div className="flex-grow pt-2 px-2">
@@ -856,12 +851,11 @@ const CreateYourPizza: FC<CreatePizzaProps> = ({
                                 {locale == 'en' ? mod.name_en : ''}
                               </div>
                               <div
-                                className={`${
-                                  activeModifiers.includes(mod.id) ||
+                                className={`${activeModifiers.includes(mod.id) ||
                                   (!activeModifiers.length && mod.price == 0)
-                                    ? 'bg-yellow'
-                                    : 'bg-gray-300'
-                                } font-bold px-4 py-2 text-center text-white text-xs`}
+                                  ? 'bg-yellow'
+                                  : 'bg-gray-300'
+                                  } font-bold px-4 py-2 text-center text-white text-xs`}
                               >
                                 {currency(mod.price, {
                                   pattern: '# !',
@@ -930,17 +924,15 @@ const CreateYourPizza: FC<CreatePizzaProps> = ({
                       readyProductList.map((item: any) => (
                         <div
                           key={item.id}
-                          className={`rounded-3xl bg-white p-2 shadow-xl border relative  ${
-                            rightSelectedProduct &&
+                          className={`rounded-3xl bg-white p-2 shadow-xl border relative  ${rightSelectedProduct &&
                             rightSelectedProduct.id == item.id
-                              ? 'border-yellow'
-                              : 'border-transparent'
-                          }
-                            ${
-                              leftSelectedProduct &&
+                            ? 'border-yellow'
+                            : 'border-transparent'
+                            }
+                            ${leftSelectedProduct &&
                               leftSelectedProduct.id == item.id
-                                ? 'opacity-25'
-                                : 'cursor-pointer hover:border-yellow'
+                              ? 'opacity-25'
+                              : 'cursor-pointer hover:border-yellow'
                             }
                               ${item.isInStop ? 'opacity-25' : ''}
                             `}
@@ -971,7 +963,7 @@ const CreateYourPizza: FC<CreatePizzaProps> = ({
                           <div className="uppercase">
                             {
                               item?.attribute_data?.name[channelName][
-                                locale || 'ru'
+                              locale || 'ru'
                               ]
                             }
                           </div>
