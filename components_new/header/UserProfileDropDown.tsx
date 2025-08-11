@@ -1,4 +1,5 @@
 import { Fragment, FC, memo, ReactEventHandler } from 'react'
+import React from 'react'
 import { Menu, Transition } from '@headlessui/react'
 import menuItems from '@commerce/data/profileMenu'
 import useTranslation from 'next-translate/useTranslation'
@@ -18,10 +19,12 @@ const UserProfileDropDown: FC<UserProfileDropdownProps> = ({
   const router = useRouter()
   const { locale, pathname } = router
   const { user, setUserData, activeCity, locationData } = useUI()
-  let cartId: string | null = null
-  if (typeof window !== 'undefined') {
-    cartId = localStorage.getItem('basketId')
-  }
+  const [cartId, setCartId] = React.useState<string | null>(null)
+  
+  React.useEffect(() => {
+    setCartId(localStorage.getItem('basketId'))
+  }, [])
+  
   const { mutate } = useCart({
     cartId,
     locationData,
@@ -76,7 +79,6 @@ const UserProfileDropDown: FC<UserProfileDropdownProps> = ({
             leaveTo="transform opacity-0 scale-95"
           >
             <Menu.Items
-              static
               className="absolute bg-white divide-gray-100 divide-y focus:outline-none mt-2 origin-top-right right-0 ring-1 ring-black ring-opacity-5 overflow-hidden rounded-2xl shadow-lg z-20"
             >
               {items.map((item) => {

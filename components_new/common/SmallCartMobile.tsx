@@ -371,11 +371,10 @@ const SmallCartMobile: FC = () => {
                           </div>
                           <div className="mt-10">
                             <button
-                              className={`py-3 px-20 text-white font-bold text-xl text-center rounded-full w-full outline-none focus:outline-none ${
-                                otpCode.length >= 4
+                              className={`py-3 px-20 text-white font-bold text-xl text-center rounded-full w-full outline-none focus:outline-none ${otpCode.length >= 4
                                   ? 'bg-yellow'
                                   : 'bg-gray-400'
-                              }`}
+                                }`}
                               disabled={otpCode.length < 4}
                               ref={authButtonRef}
                             >
@@ -480,9 +479,8 @@ const SmallCartMobile: FC = () => {
                           )}
                           <div className="mt-10">
                             <button
-                              className={`py-3 md:px-20 text-white font-bold text-xl text-center rounded-full w-full outline-none focus:outline-none ${
-                                formState.isValid ? 'bg-yellow' : 'bg-gray-400'
-                              }`}
+                              className={`py-3 md:px-20 text-white font-bold text-xl text-center rounded-full w-full outline-none focus:outline-none ${formState.isValid ? 'bg-yellow' : 'bg-gray-400'
+                                }`}
                               disabled={!formState.isValid}
                               ref={authButtonRef}
                             >

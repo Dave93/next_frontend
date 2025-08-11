@@ -104,10 +104,10 @@ export default function DevPage({ cities }: { cities: any }) {
                       {locale == 'uz'
                         ? item.name_uz
                         : locale == 'ru'
-                        ? item.name
-                        : locale == 'en'
-                        ? item.name_en
-                        : ''}
+                          ? item.name
+                          : locale == 'en'
+                            ? item.name_en
+                            : ''}
                     </span>
                   </Menu.Item>
                 ))}

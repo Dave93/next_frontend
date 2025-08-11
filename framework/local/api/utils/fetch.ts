@@ -1,3 +1,2 @@
-import zeitFetch from '@vercel/fetch'
-
-export default zeitFetch()
+// Use global fetch instead of @vercel/fetch to avoid type conflicts
+export default fetch

@@ -23,7 +23,7 @@ try {
   activeCityData = Buffer.from(activeCityData, 'base64')
   activeCityData = activeCityData.toString()
   activeCityData = JSON.parse(activeCityData)
-} catch (e) {}
+} catch (e) { }
 
 activeCity = activeCityData
 
@@ -38,23 +38,7 @@ if (typeof window !== 'undefined') {
   }
 }
 
-if (typeof window !== 'undefined') {
-  userData = localStorage.getItem('mijoz')
-  try {
-    userData = Buffer.from(userData, 'base64')
-    userData = userData.toString()
-    userData = JSON.parse(userData)
-  } catch (e) {}
-
-  locationData = Cookies.get('yetkazish') ?? locationData
-  try {
-    if (locationData) {
-      let locData: any = Buffer.from(locationData, 'base64')
-      locData = locData.toString()
-      locationData = JSON.parse(locData)
-    }
-  } catch (e) {}
-}
+// Client-side data will be loaded in useEffect to avoid hydration mismatch
 
 interface AnyObject {
   [key: string]: any
@@ -109,7 +93,7 @@ const initialState = {
   modalView: 'LOGIN_VIEW',
   sidebarView: 'CART_VIEW',
   userAvatar: '',
-  user: userData,
+  user: null, // Initialize as null to match server-side
   locationData,
   cities: null,
   activeCity: activeCity,
@@ -124,89 +108,89 @@ const initialState = {
 
 type Action =
   | {
-      type: 'OPEN_SIDEBAR'
-    }
+    type: 'OPEN_SIDEBAR'
+  }
   | {
-      type: 'CLOSE_SIDEBAR'
-    }
+    type: 'CLOSE_SIDEBAR'
+  }
   | {
-      type: 'OPEN_DROPDOWN'
-    }
+    type: 'OPEN_DROPDOWN'
+  }
   | {
-      type: 'CLOSE_DROPDOWN'
-    }
+    type: 'CLOSE_DROPDOWN'
+  }
   | {
-      type: 'OPEN_MODAL'
-    }
+    type: 'OPEN_MODAL'
+  }
   | {
-      type: 'CLOSE_MODAL'
-    }
+    type: 'CLOSE_MODAL'
+  }
   | {
-      type: 'SET_MODAL_VIEW'
-      view: MODAL_VIEWS
-    }
+    type: 'SET_MODAL_VIEW'
+    view: MODAL_VIEWS
+  }
   | {
-      type: 'SET_SIDEBAR_VIEW'
-      view: SIDEBAR_VIEWS
-    }
+    type: 'SET_SIDEBAR_VIEW'
+    view: SIDEBAR_VIEWS
+  }
   | {
-      type: 'SET_USER_AVATAR'
-      value: string
-    }
+    type: 'SET_USER_AVATAR'
+    value: string
+  }
   | {
-      type: 'SET_USER_DATA'
-      value: UserData
-    }
+    type: 'SET_USER_DATA'
+    value: UserData
+  }
   | {
-      type: 'SET_LOCATION_DATA'
-      value: LocationData
-    }
+    type: 'SET_LOCATION_DATA'
+    value: LocationData
+  }
   | {
-      type: 'SET_CITIES_DATA'
-      value: City[]
-    }
+    type: 'SET_CITIES_DATA'
+    value: City[]
+  }
   | {
-      type: 'SET_ACTIVE_CITY'
-      value: City
-    }
+    type: 'SET_ACTIVE_CITY'
+    value: City
+  }
   | {
-      type: 'SHOW_SIGNIN_MODAL'
-    }
+    type: 'SHOW_SIGNIN_MODAL'
+  }
   | {
-      type: 'CLOSE_SIGNIN_MODAL'
-    }
+    type: 'CLOSE_SIGNIN_MODAL'
+  }
   | {
-      type: 'SHOW_LOCATION_TABS'
-    }
+    type: 'SHOW_LOCATION_TABS'
+  }
   | {
-      type: 'CLOSE_LOCATION_TABS'
-    }
+    type: 'CLOSE_LOCATION_TABS'
+  }
   | {
-      type: 'SHOW_MOBILE_LOCATION_TABS'
-    }
+    type: 'SHOW_MOBILE_LOCATION_TABS'
+  }
   | {
-      type: 'CLOSE_MOBILE_LOCATION_TABS'
-    }
+    type: 'CLOSE_MOBILE_LOCATION_TABS'
+  }
   | {
-      type: 'SET_LOCATION_TABS_CLOSABLE'
-      value: boolean
-    }
+    type: 'SET_LOCATION_TABS_CLOSABLE'
+    value: boolean
+  }
   | {
-      type: 'SET_STOP_PRODUCTS'
-      value: number[]
-    }
+    type: 'SET_STOP_PRODUCTS'
+    value: number[]
+  }
   | {
-      type: 'SET_ADDRESS_ID'
-      value: number
-    }
+    type: 'SET_ADDRESS_ID'
+    value: number
+  }
   | {
-      type: 'SET_ADDRESS_LIST'
-      value: Address[]
-    }
+    type: 'SET_ADDRESS_LIST'
+    value: Address[]
+  }
   | {
-      type: 'SELECT_ADDRESS'
-      value: AnyObject
-    }
+    type: 'SELECT_ADDRESS'
+    value: AnyObject
+  }
 
 type MODAL_VIEWS =
   | 'SIGNUP_VIEW'
@@ -283,7 +267,7 @@ function uiReducer(state: State, action: Action) {
         let userNewData = JSON.stringify(action.value)
         userNewData = Buffer.from(userNewData).toString('base64')
         localStorage.setItem('mijoz', userNewData)
-      } catch (e) {}
+      } catch (e) { }
       if (action.value == null) {
         localStorage.removeItem('mijoz')
         localStorage.removeItem('opt_token')
@@ -304,7 +288,7 @@ function uiReducer(state: State, action: Action) {
           expires: inFifteenMinutes,
         })
         // sessionStorage.setItem('yetkazish', locationNewData)
-      } catch (e) {}
+      } catch (e) { }
       return {
         ...state,
         locationData: action.value,
@@ -326,7 +310,7 @@ function uiReducer(state: State, action: Action) {
         Cookies.set('city_slug', action.value.slug, {
           expires: inFifteenMinutes,
         })
-      } catch (e) {}
+      } catch (e) { }
       return {
         ...state,
         activeCity: action.value,
@@ -412,6 +396,28 @@ export const UIProvider: FC<UIProviderProps> = (props) => {
     initialState.activeCity = props.pageProps.currentCity
   }
   const [state, dispatch] = React.useReducer(uiReducer, initialState)
+  
+  // Load client-side data after mount to avoid hydration mismatch
+  React.useEffect(() => {
+    let userData = localStorage.getItem('mijoz')
+    try {
+      if (userData) {
+        userData = Buffer.from(userData, 'base64').toString()
+        const parsedUserData = JSON.parse(userData)
+        dispatch({ type: 'SET_USER_DATA', value: parsedUserData })
+      }
+    } catch (e) { }
+
+    let locationData = Cookies.get('yetkazish')
+    try {
+      if (locationData) {
+        let locData: any = Buffer.from(locationData, 'base64')
+        locData = locData.toString()
+        const parsedLocationData = JSON.parse(locData)
+        dispatch({ type: 'SET_LOCATION_DATA', value: parsedLocationData })
+      }
+    } catch (e) { }
+  }, [])
 
   const openSidebar = useCallback(
     () => dispatch({ type: 'OPEN_SIDEBAR' }),

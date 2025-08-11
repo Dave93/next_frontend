@@ -68,11 +68,10 @@ const ChooseCityDropDown: FC = () => {
                 <Menu.Item key={item.id}>
                   <span
                     onClick={() => changeCity(item)}
-                    className={`block px-4 py-2 cursor-pointer ${
-                      chosenCity.id == item.id
+                    className={`block px-4 py-2 cursor-pointer ${chosenCity.id == item.id
                         ? 'bg-secondary text-white'
                         : 'text-secondary'
-                    }`}
+                      }`}
                   >
                     {locale == 'uz' ? item.name_uz : ''}
                     {locale == 'ru' ? item.name : ''}

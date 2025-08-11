@@ -44,10 +44,10 @@ const NewsItem: FC<NewListProps> = ({ newsItems }) => {
                             locale == 'ru'
                               ? item.name
                               : locale == 'uz'
-                              ? item.name_uz
-                              : locale == 'en'
-                              ? item.name_en
-                              : ''
+                                ? item.name_uz
+                                : locale == 'en'
+                                  ? item.name_en
+                                  : ''
                           }
                         />
                       </a>
@@ -63,10 +63,10 @@ const NewsItem: FC<NewListProps> = ({ newsItems }) => {
                             locale == 'ru'
                               ? item.name
                               : locale == 'uz'
-                              ? item.name_uz
-                              : locale == 'en'
-                              ? item.name_en
-                              : ''
+                                ? item.name_uz
+                                : locale == 'en'
+                                  ? item.name_en
+                                  : ''
                           }
                         />
                       </a>
@@ -90,10 +90,10 @@ const NewsItem: FC<NewListProps> = ({ newsItems }) => {
                       {locale == 'ru'
                         ? item.name
                         : locale == 'uz'
-                        ? item.name_uz
-                        : locale == 'en'
-                        ? item.name_en
-                        : ''}
+                          ? item.name_uz
+                          : locale == 'en'
+                            ? item.name_en
+                            : ''}
                     </Link>
                   </div>
                   <Link href={href} prefetch={false} legacyBehavior>

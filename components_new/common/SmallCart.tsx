@@ -65,7 +65,7 @@ const SmallCart: FC<SmallCartProps> = ({ channelName }) => {
       configData = configData.toString('ascii')
       configData = JSON.parse(configData)
       setConfigData(configData)
-    } catch (e) {}
+    } catch (e) { }
   }
 
   const setCredentials = async () => {
@@ -212,14 +212,13 @@ const SmallCart: FC<SmallCartProps> = ({ channelName }) => {
     e.preventDefault()
     if (!isWorkTime) {
       toast.warn(
-        `${tr('isNotWorkTime')} ${
-          locale == 'uz'
-            ? configData.workTimeUz
-            : locale == 'ru '
+        `${tr('isNotWorkTime')} ${locale == 'uz'
+          ? configData.workTimeUz
+          : locale == 'ru '
             ? configData.workTimeRu
             : locale == 'en'
-            ? configData.workTimeEn
-            : ''
+              ? configData.workTimeEn
+              : ''
         }`,
         {
           position: toast.POSITION.BOTTOM_RIGHT,
@@ -322,8 +321,8 @@ const SmallCart: FC<SmallCartProps> = ({ channelName }) => {
                     <div key={lineItem.id} className="py-3">
                       <div className="grid grid-cols-3 items-center place-items-center">
                         {lineItem.child &&
-                        lineItem.child.length &&
-                        lineItem.child[0].variant?.product?.id !=
+                          lineItem.child.length &&
+                          lineItem.child[0].variant?.product?.id !=
                           lineItem?.variant?.product?.box_id ? (
                           lineItem.child.length > 1 ? (
                             <div className="h-14 w-40 flex relative">
@@ -418,24 +417,23 @@ const SmallCart: FC<SmallCartProps> = ({ channelName }) => {
                         )}
                         <div className="font-bold text-xs">
                           {lineItem.child || lineItem.child.length > 1
-                            ? `${
-                                lineItem?.variant?.product?.attribute_data
-                                  ?.name[channelName][locale || 'ru']
-                              }  ${lineItem?.child
-                                .filter(
-                                  (v: any) =>
-                                    lineItem?.variant?.product?.box_id !=
-                                    v?.variant?.product?.id
-                                )
-                                .map(
-                                  (v: any) =>
-                                    v?.variant?.product?.attribute_data?.name[
-                                      channelName
-                                    ][locale || 'ru']
-                                )} `
+                            ? `${lineItem?.variant?.product?.attribute_data
+                              ?.name[channelName][locale || 'ru']
+                            }  ${lineItem?.child
+                              .filter(
+                                (v: any) =>
+                                  lineItem?.variant?.product?.box_id !=
+                                  v?.variant?.product?.id
+                              )
+                              .map(
+                                (v: any) =>
+                                  v?.variant?.product?.attribute_data?.name[
+                                  channelName
+                                  ][locale || 'ru']
+                              )} `
                             : lineItem?.variant?.product?.attribute_data?.name[
-                                channelName
-                              ][locale || 'ru']}
+                            channelName
+                            ][locale || 'ru']}
                           {'  '}
                           {lineItem.bonus_id && (
                             <span className="text-yellow">({tr('bonus')})</span>
@@ -487,11 +485,11 @@ const SmallCart: FC<SmallCartProps> = ({ channelName }) => {
                                 symbol:
                                   locale === 'uz'
                                     ? "so'm"
-                                    : '' || locale === 'ru'
-                                    ? 'сум'
-                                    : '' || locale === 'en'
-                                    ? 'sum'
-                                    : '',
+                                    : locale === 'ru'
+                                      ? 'сум'
+                                      : locale === 'en'
+                                        ? 'sum'
+                                        : 'сум',
                                 precision: 0,
                               }).format()}
                             </span>
@@ -508,11 +506,11 @@ const SmallCart: FC<SmallCartProps> = ({ channelName }) => {
                                 symbol:
                                   locale === 'uz'
                                     ? "so'm"
-                                    : '' || locale === 'ru'
-                                    ? 'сум'
-                                    : '' || locale === 'en'
-                                    ? 'sum'
-                                    : '',
+                                    : locale === 'ru'
+                                      ? 'сум'
+                                      : locale === 'en'
+                                        ? 'sum'
+                                        : 'сум',
                                 precision: 0,
                               }
                             ).format()}
@@ -540,11 +538,11 @@ const SmallCart: FC<SmallCartProps> = ({ channelName }) => {
                     symbol:
                       locale === 'uz'
                         ? "so'm"
-                        : '' || locale === 'ru'
-                        ? 'сум'
-                        : '' || locale === 'en'
-                        ? 'sum'
-                        : '',
+                        : locale === 'ru'
+                          ? 'сум'
+                          : locale === 'en'
+                            ? 'sum'
+                            : 'сум',
                     precision: 0,
                   }).format()}
                 </span>
@@ -557,11 +555,11 @@ const SmallCart: FC<SmallCartProps> = ({ channelName }) => {
                   symbol:
                     locale === 'uz'
                       ? "so'm"
-                      : '' || locale === 'ru'
-                      ? 'сум'
-                      : '' || locale === 'en'
-                      ? 'sum'
-                      : '',
+                      : locale === 'ru'
+                        ? 'сум'
+                        : locale === 'en'
+                          ? 'sum'
+                          : 'сум',
                   precision: 0,
                 }).format()}
               </div>

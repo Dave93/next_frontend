@@ -380,8 +380,9 @@ const Orders: FC<OrdersProps> = ({ channelName }: { channelName: any }) => {
       : [activeCity?.lat, activeCity?.lon]) as number[]
   )
   const [mapZoom, setMapZoom] = useState(
-    ((locationData?.location && locationData.location.length ? 17 : 10) ||
-      activeCity?.map_zoom) as number
+    (locationData?.location && locationData.location.length 
+      ? 17 
+      : activeCity?.map_zoom || 10) as number
   )
 
   const [configData, setConfigData] = useState({} as any)
@@ -1018,9 +1019,9 @@ const Orders: FC<OrdersProps> = ({ channelName }: { channelName: any }) => {
           const erText =
             locale == 'ru'
               ? 'Введите правильный адрес'
-              : '' || locale == 'uz'
+              : locale == 'uz'
                 ? "To'g'ri manzilni kiriting"
-                : '' || locale == 'en'
+                : locale == 'en'
                   ? 'Enter the correct address'
                   : ''
           toast.error(erText, {

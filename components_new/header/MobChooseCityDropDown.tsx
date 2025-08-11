@@ -47,10 +47,10 @@ const ChooseCityDropDown: FC = () => {
                   {locale == 'uz'
                     ? chosenCity?.name_uz
                     : locale == 'ru'
-                    ? chosenCity?.name
-                    : locale == 'en'
-                    ? chosenCity?.name_en
-                    : ''}
+                      ? chosenCity?.name
+                      : locale == 'en'
+                        ? chosenCity?.name_en
+                        : ''}
                 </div>
               </div>
             </Menu.Button>
@@ -79,10 +79,10 @@ const ChooseCityDropDown: FC = () => {
                     {locale == 'ru'
                       ? item.name
                       : locale == 'uz'
-                      ? item.name_uz
-                      : locale == 'en'
-                      ? item.name_en
-                      : ''}
+                        ? item.name_uz
+                        : locale == 'en'
+                          ? item.name_en
+                          : ''}
                   </span>
                 </Menu.Item>
               ))}

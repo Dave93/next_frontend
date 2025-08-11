@@ -65,7 +65,7 @@ const Header: FC<{
       configData = configData.toString()
       configData = JSON.parse(configData)
       setConfigData(configData)
-    } catch (e) {}
+    } catch (e) { }
   }
 
   useEffect(() => {
@@ -148,9 +148,10 @@ const Header: FC<{
                   <a className="flex">
                     <Image
                       src="/assets/footer_logo.svg"
-                      width="188"
-                      height="68"
+                      width={188}
+                      height={68}
                       alt="footer_logo"
+                      style={{ width: 'auto', height: 'auto' }}
                     />
                   </a>
                 </Link>

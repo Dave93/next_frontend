@@ -105,11 +105,10 @@ export default function SaleId({
             return (
               <div key={id} className="flex items-center ml-10">
                 <img
-                  src={`${
-                    pathname.indexOf(item.href) >= 0
+                  src={`${pathname.indexOf(item.href) >= 0
                       ? item.activeIcon
                       : item.icon
-                  }`}
+                    }`}
                 />
                 <Link
                   href={href}
@@ -118,11 +117,10 @@ export default function SaleId({
                   legacyBehavior
                 >
                   <a
-                    className={`${
-                      pathname.indexOf(item.href) >= 0
+                    className={`${pathname.indexOf(item.href) >= 0
                         ? 'text-yellow'
                         : 'text-gray-400'
-                    } ml-1 text-sm`}
+                      } ml-1 text-sm`}
                   >
                     {item.name}
                   </a>

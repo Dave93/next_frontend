@@ -62,6 +62,7 @@ interface SocIconsProps {
 const socIcons: SocIconsProps = {
   fb: faFacebook,
   inst: faInstagram,
+  tg: faTelegram,
 }
 
 const Layout: FC<Props> = ({
@@ -148,6 +149,7 @@ const Layout: FC<Props> = ({
                 width={1920}
                 height={40}
                 alt="footer_bg"
+                priority
               />
             </div>
             <div className="md:hidden flex">
@@ -349,10 +351,12 @@ const Layout: FC<Props> = ({
                                 className="no-underline text-white"
                                 href={soc.link}
                               >
-                                <FontAwesomeIcon
-                                  icon={socIcons[soc.code]}
-                                  className="w-10 h-10"
-                                />
+                                {socIcons[soc.code] && (
+                                  <FontAwesomeIcon
+                                    icon={socIcons[soc.code]}
+                                    className="w-10 h-10"
+                                  />
+                                )}
                               </a>
                             </li>
                           )

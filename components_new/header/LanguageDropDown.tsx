@@ -61,9 +61,8 @@ const LanguageDropDown: FC = () => {
             <Menu.Item>
               {({ active }) => (
                 <a
-                  className={`${
-                    active ? 'text-primary' : 'text-gray-900'
-                  } group flex rounded-md items-center w-full px-2 py-2 text-lg`}
+                  className={`${active ? 'text-primary' : 'text-gray-900'
+                    } group flex rounded-md items-center w-full px-2 py-2 text-lg`}
                   href={`/${locale}${pathname}`}
                   onClick={(e) => changeLang(e, 'uz')}
                 >
@@ -74,9 +73,8 @@ const LanguageDropDown: FC = () => {
             <Menu.Item>
               {({ active }) => (
                 <a
-                  className={`${
-                    active ? 'text-primary' : 'text-gray-900'
-                  } group flex rounded-md items-center w-full px-2 py-2 text-lg`}
+                  className={`${active ? 'text-primary' : 'text-gray-900'
+                    } group flex rounded-md items-center w-full px-2 py-2 text-lg`}
                   href={`/${locale}${pathname}`}
                   onClick={(e) => changeLang(e, 'ru')}
                 >
@@ -87,9 +85,8 @@ const LanguageDropDown: FC = () => {
             <Menu.Item>
               {({ active }) => (
                 <a
-                  className={`${
-                    active ? 'text-primary' : 'text-gray-900'
-                  } group flex rounded-md items-center w-full px-2 py-2 text-lg`}
+                  className={`${active ? 'text-primary' : 'text-gray-900'
+                    } group flex rounded-md items-center w-full px-2 py-2 text-lg`}
                   href={`/${locale}${pathname}`}
                   onClick={(e) => changeLang(e, 'en')}
                 >

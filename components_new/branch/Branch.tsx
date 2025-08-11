@@ -20,7 +20,7 @@ const Branch: FC = () => {
 
   const mapState = React.useMemo(() => {
     return {
-      center: activeBranch
+      center: activeBranch?.location
         ? [activeBranch.location.lat, activeBranch.location.lon]
         : [activeCity.lat, activeCity.lon],
       zoom: activeBranch ? 17 : zoom,
@@ -44,17 +44,19 @@ const Branch: FC = () => {
       <div className="md:flex-[4] md:mb-0 mb-10">
         <YMaps>
           <Map state={mapState} width={'100%'} height={500}>
-            {branches.map((branch: any) => (
-              <Placemark
-                key={branch.id}
-                geometry={[branch.location.lat, branch.location.lon]}
-                options={{
-                  iconLayout: 'default#image',
-                  iconImageHref: '/map_placemark.png',
-                  iconImageSize: [50, 55],
-                }}
-              />
-            ))}
+            {branches.map((branch: any) => 
+              branch.location ? (
+                <Placemark
+                  key={branch.id}
+                  geometry={[branch.location.lat, branch.location.lon]}
+                  options={{
+                    iconLayout: 'default#image',
+                    iconImageHref: '/map_placemark.png',
+                    iconImageSize: [50, 55],
+                  }}
+                />
+              ) : null
+            )}
           </Map>
         </YMaps>
       </div>
@@ -64,11 +66,10 @@ const Branch: FC = () => {
           <div className="space-y-2 overflow-y-auto">
             {branches.map((branch: any) => (
               <div
-                className={`border-1 border rounded-md p-4 cursor-pointer ${
-                  activeBranch != null && activeBranch.id == branch.id
+                className={`border-1 border rounded-md p-4 cursor-pointer ${activeBranch != null && activeBranch.id == branch.id
                     ? 'bg-primary text-white'
                     : 'hover:bg-primary hover:text-white'
-                }`}
+                  }`}
                 key={branch.id}
                 onClick={() => {
                   if (activeBranch != null && activeBranch.id == branch.id) {
@@ -81,20 +82,20 @@ const Branch: FC = () => {
                 <div className="text-xl font-bold">
                   {locale == 'uz'
                     ? branch.name_uz
-                    : '' || locale == 'ru'
-                    ? branch.name
-                    : '' || locale == 'en'
-                    ? branch.name_en
-                    : ''}
+                    : locale == 'ru'
+                      ? branch.name
+                      : locale == 'en'
+                        ? branch.name_en
+                        : branch.name}
                 </div>
                 <div>
                   {locale == 'uz'
                     ? branch.desc_uz
-                    : '' || locale == 'ru'
-                    ? branch.desc
-                    : '' || locale == 'en'
-                    ? branch.desc_en
-                    : ''}
+                    : locale == 'ru'
+                      ? branch.desc
+                      : locale == 'en'
+                        ? branch.desc_en
+                        : branch.desc}
                 </div>
               </div>
             ))}

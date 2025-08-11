@@ -1,4 +1,4 @@
-import type { Response } from '@vercel/fetch'
+// Use global Response type
 
 export class CommerceAPIError extends Error {
   status: number

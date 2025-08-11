@@ -1,4 +1,4 @@
-import React, { Fragment, useState, memo, useRef, FC, useMemo } from 'react'
+import React, { Fragment, useState, memo, useRef, FC, useMemo, useEffect } from 'react'
 import { Dialog, Transition } from '@headlessui/react'
 import useTranslation from 'next-translate/useTranslation'
 import { XIcon } from '@heroicons/react/outline'
@@ -48,6 +48,7 @@ const SignInButton: FC<SingInButtonProps> = ({ setMobMenuOpen }) => {
   const [isShowPasswordForm, setIsShowPasswordForm] = useState(false)
   const [otpShowCode, setOtpShowCode] = useState(0)
   const [showUserName, setShowUserName] = useState(false)
+  const [isClient, setIsClient] = useState(false)
 
   const {
     user,
@@ -56,6 +57,10 @@ const SignInButton: FC<SingInButtonProps> = ({ setMobMenuOpen }) => {
     openSignInModal,
     closeSignInModal,
   } = useUI()
+  
+  useEffect(() => {
+    setIsClient(true)
+  }, [])
 
   const otpTime = useRef(0)
 
@@ -66,6 +71,20 @@ const SignInButton: FC<SingInButtonProps> = ({ setMobMenuOpen }) => {
     openSignInModal()
   }
 
+  // Only render user-specific content after client-side hydration
+  if (!isClient) {
+    return (
+      <div>
+        <button
+          className="md:bg-gray-200 bg-yellow px-8 py-1 rounded-full text-secondary outline-none focus:outline-none mb-5 md:mb-0 ml-1 md:ml-0 font-bold md:font-normal"
+          onClick={openModal}
+        >
+          {tr('signIn')}
+        </button>
+      </div>
+    )
+  }
+  
   return (
     <>
       {user && (

@@ -83,17 +83,15 @@ export default function Sale({ sale }: { sale: any }) {
           return (
             <div key={id} className="flex items-center md:ml-10 ">
               <img
-                src={`${
-                  pathname.indexOf(item.href) >= 0 ? item.activeIcon : item.icon
-                }`}
+                src={`${pathname.indexOf(item.href) >= 0 ? item.activeIcon : item.icon
+                  }`}
               />
               <Link href={href} locale={locale} prefetch={false} legacyBehavior>
                 <a
-                  className={`${
-                    pathname.indexOf(item.href) >= 0
+                  className={`${pathname.indexOf(item.href) >= 0
                       ? 'text-yellow'
                       : 'text-gray-400'
-                  } ml-1 text-sm`}
+                    } ml-1 text-sm`}
                 >
                   {item.name}
                 </a>

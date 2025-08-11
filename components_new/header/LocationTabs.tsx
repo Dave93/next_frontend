@@ -116,8 +116,9 @@ const LocationTabs: FC = () => {
       : [activeCity?.lat, activeCity?.lon]) as number[]
   )
   const [mapZoom, setMapZoom] = useState(
-    ((locationData?.location && locationData.location.length ? 17 : 10) ||
-      activeCity?.map_zoom) as number
+    (locationData?.location && locationData.location.length 
+      ? 17 
+      : activeCity?.map_zoom || 10) as number
   )
 
   const [activePoint, setActivePoint] = useState(
@@ -979,11 +980,11 @@ const LocationTabs: FC = () => {
                   <Menu.Button className="focus:outline-none font-medium inline-flex justify-center py-2 text-secondary items-center text-lg w-full">
                     {locale == 'uz'
                       ? chosenCity?.name_uz
-                      : '' || locale == 'ru'
+                      : locale == 'ru'
                       ? chosenCity?.name
-                      : '' || locale == 'en'
+                      : locale == 'en'
                       ? chosenCity?.name_en
-                      : '' || ''}
+                      : chosenCity?.name}
                     <ChevronDownIcon
                       className="w-5 h-5 ml-2 -mr-1 text-violet-200 hover:text-violet-100"
                       aria-hidden="true"
@@ -1012,11 +1013,11 @@ const LocationTabs: FC = () => {
                         >
                           {locale == 'uz'
                             ? city.name_uz
-                            : '' || locale == 'ru'
+                            : locale == 'ru'
                             ? city.name
-                            : '' || locale == 'en'
+                            : locale == 'en'
                             ? city.name_en
-                            : '' || ''}
+                            : chosenCity?.name}
                         </span>
                       </Menu.Item>
                     ))}
