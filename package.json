@@ -2,7 +2,7 @@
   "name": "nextjs-commerce",
   "version": "1.0.0",
   "scripts": {
-    "dev": "cross-env NODE_OPTIONS='--inspect' next dev",
+    "dev": "cross-env NODE_OPTIONS='--inspect' PORT=5656 next dev",
     "build": "next build",
     "start": "next start",
     "analyze": "cross-env BUNDLE_ANALYZE=both yarn build",
