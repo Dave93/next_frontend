@@ -77,6 +77,9 @@ interface TrackingData {
   delivery_time?: string
   order_items?: any[]
   statuses?: OrderStatus[]
+  order_number?: string
+  estimated_delivery?: string
+  total_amount?: number
 }
 
 // Component to handle map bounds
@@ -90,20 +93,25 @@ function MapBounds({ from, to }: { from?: any; to?: any }) {
 
           useEffect(() => {
             if (typeof window !== 'undefined' && L) {
-              if (from && to) {
-                const bounds = L.latLngBounds([
-                  [from.lat, from.lon],
-                  [to.lat, to.lon],
-                ])
-                map.fitBounds(bounds, {
-                  padding: [50, 450],
-                  maxZoom: 15,
-                })
-              } else if (from) {
-                map.setView([from.lat, from.lon], 15)
-              } else if (to) {
-                map.setView([to.lat, to.lon], 15)
-              }
+              // Trigger resize to fix tile loading
+              setTimeout(() => {
+                map.invalidateSize()
+
+                if (from && to) {
+                  const bounds = L.latLngBounds([
+                    [from.lat, from.lon],
+                    [to.lat, to.lon],
+                  ])
+                  map.fitBounds(bounds, {
+                    padding: [50, 450],
+                    maxZoom: 15,
+                  })
+                } else if (from) {
+                  map.setView([from.lat, from.lon], 15)
+                } else if (to) {
+                  map.setView([to.lat, to.lon], 15)
+                }
+              }, 100)
             }
           }, [from, to, map])
 
@@ -176,6 +184,7 @@ export default function TrackClient({ orderId }: { orderId: string }) {
     }
 
     if (data?.success === true) {
+      console.log('Tracking data received:', data)
       setTrackingInfo(data)
 
       // Set courier location if available
@@ -199,19 +208,19 @@ export default function TrackClient({ orderId }: { orderId: string }) {
   const fromIcon =
     typeof window !== 'undefined' && L
       ? L.divIcon({
-          html: '<div style="background: linear-gradient(135deg, #e91e63 0%, #d81b60 100%); color: white; width: 36px; height: 36px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: bold; box-shadow: 0 3px 10px rgba(233, 30, 99, 0.4); border: 2px solid white;">A</div>',
-          iconSize: [36, 36],
-          className: 'custom-div-icon',
-        })
+        html: '<div style="background: linear-gradient(135deg, #e91e63 0%, #d81b60 100%); color: white; width: 36px; height: 36px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: bold; box-shadow: 0 3px 10px rgba(233, 30, 99, 0.4); border: 2px solid white;">A</div>',
+        iconSize: [36, 36],
+        className: 'custom-div-icon',
+      })
       : null
 
   const toIcon =
     typeof window !== 'undefined' && L
       ? L.divIcon({
-          html: '<div style="background: linear-gradient(135deg, #4caf50 0%, #45a049 100%); color: white; width: 36px; height: 36px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: bold; box-shadow: 0 3px 10px rgba(76, 175, 80, 0.4); border: 2px solid white;">B</div>',
-          iconSize: [36, 36],
-          className: 'custom-div-icon',
-        })
+        html: '<div style="background: linear-gradient(135deg, #4caf50 0%, #45a049 100%); color: white; width: 36px; height: 36px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: bold; box-shadow: 0 3px 10px rgba(76, 175, 80, 0.4); border: 2px solid white;">B</div>',
+        iconSize: [36, 36],
+        className: 'custom-div-icon',
+      })
       : null
 
   // Select courier icon based on drive_type
@@ -302,15 +311,34 @@ export default function TrackClient({ orderId }: { orderId: string }) {
 
   const courierIcon = getCourierIcon()
 
+  // Format delivery status text
+  const getStatusText = (status?: string) => {
+    const statusMap: { [key: string]: string } = {
+      'pending': tr('status_pending') || 'Ожидает подтверждения',
+      'confirmed': tr('status_confirmed') || 'Подтвержден',
+      'preparing': tr('status_preparing') || 'Готовится',
+      'ready': tr('status_ready') || 'Готов к доставке',
+      'on_the_way': tr('status_on_the_way') || 'В пути',
+      'delivered': tr('status_delivered') || 'Доставлен',
+      'cancelled': tr('status_cancelled') || 'Отменен'
+    }
+    return statusMap[status || ''] || status || tr('status_unknown') || 'Неизвестен'
+  }
+
   // Create route polyline - removed as per requirement
 
   if (isLoading) {
     return (
       <div className={styles.loadingContainer}>
         <div className={styles.loader}>
-          <TruckIcon className="w-12 h-12 text-blue-500 animate-pulse" />
-          <p className="mt-4 text-gray-600">
-            {tr('loading_tracking_info') || 'Загрузка информации о доставке...'}
+          <div className={styles.loaderIcon}>
+            <TruckIcon className="w-16 h-16 text-pink-600 animate-pulse" />
+          </div>
+          <h2 className={styles.loaderTitle}>
+            {tr('loading_tracking_info') || 'Загрузка информации о доставке'}
+          </h2>
+          <p className={styles.loaderSubtitle}>
+            {tr('please_wait') || 'Пожалуйста, подождите...'}
           </p>
         </div>
       </div>
@@ -320,17 +348,21 @@ export default function TrackClient({ orderId }: { orderId: string }) {
   if (isError || data?.success === false) {
     return (
       <div className={styles.errorContainer}>
-        <ExclamationCircleIcon className="w-16 h-16 text-yellow-500 mb-4" />
-        <h2 className="text-2xl font-semibold text-gray-800 mb-2">
-          {tr('order_not_found') || 'Заказ не найден'}
-        </h2>
-        <p className="text-gray-600 mb-4">{tr('order_not_found_message')}</p>
-        <button
-          onClick={() => refetch()}
-          className="px-6 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-colors"
-        >
-          {tr('retry') || 'Повторить'}
-        </button>
+        <div className={styles.errorContent}>
+          <ExclamationCircleIcon className={styles.errorIcon} />
+          <h2 className={styles.errorTitle}>
+            {tr('order_not_found') || 'Заказ не найден'}
+          </h2>
+          <p className={styles.errorMessage}>
+            {tr('order_not_found_message') || 'Проверьте номер заказа и попробуйте снова'}
+          </p>
+          <button
+            onClick={() => refetch()}
+            className={styles.retryButton}
+          >
+            {tr('retry') || 'Повторить'}
+          </button>
+        </div>
       </div>
     )
   }
@@ -339,12 +371,17 @@ export default function TrackClient({ orderId }: { orderId: string }) {
     <div className={styles.container}>
       {/* Map takes full screen */}
       <div className={styles.mapSection}>
-        {typeof window !== 'undefined' && (
+        {typeof window !== 'undefined' && mapCenter && (
           <MapContainer
             center={mapCenter}
             zoom={13}
             style={{ width: '100%', height: '100%' }}
             zoomControl={true}
+            whenCreated={(map: any) => {
+              setTimeout(() => {
+                map.invalidateSize()
+              }, 100)
+            }}
           >
             <TileLayer
               attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
@@ -391,6 +428,33 @@ export default function TrackClient({ orderId }: { orderId: string }) {
 
       {/* Sidebar overlay */}
       <div className={styles.sidebar}>
+        {/* Order Status Card */}
+        {trackingInfo?.order_status && (
+          <div className={styles.statusCard}>
+            <div className={styles.statusHeader}>
+              <h2 className={styles.statusTitle}>
+                {tr('order_status') || 'Статус заказа'}
+              </h2>
+              {trackingInfo?.order_number && (
+                <span className={styles.orderNumber}>#{trackingInfo.order_number}</span>
+              )}
+            </div>
+            <div className={styles.statusBody}>
+              <div className={styles.currentStatus}>
+                <span className={styles.statusBadge}>
+                  {getStatusText(trackingInfo.order_status)}
+                </span>
+              </div>
+              {trackingInfo?.estimated_delivery && (
+                <div className={styles.estimatedTime}>
+                  <TruckIcon className="w-4 h-4" />
+                  <span>{tr('estimated_delivery') || 'Ожидаемая доставка'}: {trackingInfo.estimated_delivery}</span>
+                </div>
+              )}
+            </div>
+          </div>
+        )}
+        {/* Courier Card */}
         {trackingInfo?.courier && (
           <div className={styles.courierCard}>
             <div className={styles.courierHeader}>

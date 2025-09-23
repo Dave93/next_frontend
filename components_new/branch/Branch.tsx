@@ -16,6 +16,7 @@ const Branch: FC = () => {
   const { activeCity } = useUI()
   const [zoom, setZoom] = React.useState(11)
   const [branches, setBranches] = React.useState([])
+  console.log('branches', branches)
   const [activeBranch, setActiveBranch] = React.useState<any>(null)
 
   const mapState = React.useMemo(() => {
@@ -33,6 +34,7 @@ const Branch: FC = () => {
     )
 
     setBranches(data.data)
+    console.log('data', data)
   }
 
   useEffect(() => {
@@ -44,7 +46,7 @@ const Branch: FC = () => {
       <div className="md:flex-[4] md:mb-0 mb-10">
         <YMaps>
           <Map state={mapState} width={'100%'} height={500}>
-            {branches.map((branch: any) => 
+            {branches.map((branch: any) =>
               branch.location ? (
                 <Placemark
                   key={branch.id}
@@ -67,8 +69,8 @@ const Branch: FC = () => {
             {branches.map((branch: any) => (
               <div
                 className={`border-1 border rounded-md p-4 cursor-pointer ${activeBranch != null && activeBranch.id == branch.id
-                    ? 'bg-primary text-white'
-                    : 'hover:bg-primary hover:text-white'
+                  ? 'bg-primary text-white'
+                  : 'hover:bg-primary hover:text-white'
                   }`}
                 key={branch.id}
                 onClick={() => {
