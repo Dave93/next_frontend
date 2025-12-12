@@ -7,8 +7,8 @@ module.exports = {
       args: 'run start',
       watch: false,
       env: {
-        PORT: 3000,
-        NODE_ENV: 'development',
+        PORT: process.env.NODE_PORT,
+        NODE_ENV: 'production',
       },
       env_production: {
         PORT: process.env.NODE_PORT,
