@@ -3,7 +3,8 @@ module.exports = {
   apps: [
     {
       name: process.env.PM2_APP_NAME,
-      script: './server.js',
+      script: 'bun',
+      args: 'run start',
       watch: false,
       env: {
         PORT: 3000,
