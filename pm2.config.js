@@ -3,7 +3,7 @@ module.exports = {
   apps: [
     {
       name: process.env.PM2_APP_NAME,
-      script: 'bun',
+      script: '/root/.bun/bin/bun',
       args: './server.js',
       watch: false,
       env: {
