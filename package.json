@@ -129,6 +129,7 @@
     "@types/lodash.random": "^3.2.6",
     "@types/lodash.throttle": "^4.1.6",
     "@types/luxon": "^2.0.3",
+    "@types/minimatch": "5",
     "@types/node": "^15.12.4",
     "@types/react": "^18.2.43",
     "@types/react-autosuggest": "^10.1.5",
