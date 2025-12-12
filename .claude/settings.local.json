@@ -9,7 +9,14 @@
       "Bash(ls:*)",
       "Bash(git add:*)",
       "Bash(git commit:*)",
-      "Bash(git push:*)"
+      "Bash(git push:*)",
+      "Bash(sshpass -p 'qQ8WGUD6BQt9uziN' ssh -o StrictHostKeyChecking=no root@choparpizza.uz \"cd /home/davr/chopar/next_frontend && git pull\")",
+      "Bash(sshpass -p 'qQ8WGUD6BQt9uziN' ssh -o StrictHostKeyChecking=no root@choparpizza.uz \"cd /home/davr/chopar/next_frontend && git status\")",
+      "Bash(sshpass -p 'qQ8WGUD6BQt9uziN' ssh -o StrictHostKeyChecking=no root@choparpizza.uz \"cd /home/davr/chopar/next_frontend && git merge --abort && git reset --hard origin/main && git pull\")",
+      "Bash(sshpass -p 'qQ8WGUD6BQt9uziN' ssh -o StrictHostKeyChecking=no root@choparpizza.uz \"cd /home/davr/chopar/next_frontend && git checkout --theirs . && git add . && git merge --abort 2>/dev/null; git fetch origin && git reset --hard origin/main\")",
+      "Bash(sshpass -p 'qQ8WGUD6BQt9uziN' ssh -o StrictHostKeyChecking=no root@choparpizza.uz \"cd /home/davr/chopar/next_frontend && rm -rf node_modules .next && bun i\")",
+      "Bash(sshpass:*)",
+      "Bash(curl:*)"
     ],
     "deny": []
   }

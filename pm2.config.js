@@ -4,7 +4,7 @@ module.exports = {
     {
       name: process.env.PM2_APP_NAME,
       script: 'bun',
-      args: 'run start',
+      args: './server.js',
       watch: false,
       env: {
         PORT: process.env.NODE_PORT,
