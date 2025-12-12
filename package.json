@@ -4,7 +4,7 @@
   "scripts": {
     "dev": "cross-env NODE_OPTIONS='--inspect' PORT=5656 next dev",
     "build": "next build",
-    "start": "next start",
+    "start": "next start -p 5656",
     "analyze": "cross-env BUNDLE_ANALYZE=both yarn build",
     "prettier-fix": "prettier --write .",
     "find:unused": "npx next-unused",
@@ -67,7 +67,7 @@
     "lodash.throttle": "^4.1.1",
     "lucide-react": "^0.544.0",
     "luxon": "^2.0.2",
-    "next": "13.5.6",
+    "next": "14.2.35",
     "next-cookies": "^2.0.3",
     "next-pwa": "5.2.24",
     "next-seo": "^4.26.0",
@@ -199,6 +199,7 @@
   "trustedDependencies": [
     "@parcel/watcher",
     "core-js",
-    "preact"
+    "preact",
+    "sharp"
   ]
 }
