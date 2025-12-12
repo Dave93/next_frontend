@@ -4,7 +4,7 @@ const {
   withCommerceConfig,
   getProviderName,
 } = require('./framework/commerce/config')
-const nextTranslate = require('next-translate')
+const nextTranslate = require('next-translate-plugin')
 // require('dotenv').config()
 
 const provider = commerce.provider || getProviderName()
