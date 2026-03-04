@@ -85,12 +85,12 @@ const UserProfileDropDown: FC<UserProfileDropdownProps> = ({
                 let href = `${item.href}`
 
                 if (href.indexOf('http') < 0) {
-                  href = `/${activeCity.slug}${item.href}`
+                  href = `/${activeCity?.slug}${item.href}`
                 }
 
                 return (
                   <Menu.Item key={item.href}>
-                    {href == `/${activeCity.slug}/profile/logout` ? (
+                    {href == `/${activeCity?.slug}/profile/logout` ? (
                       <span
                         className="block px-4 py-2 text-sm cursor-pointer text-secondary hover:text-white hover:bg-secondary"
                         onClick={logout}

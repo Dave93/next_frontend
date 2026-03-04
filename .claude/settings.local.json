@@ -16,7 +16,8 @@
       "Bash(sshpass -p 'qQ8WGUD6BQt9uziN' ssh -o StrictHostKeyChecking=no root@choparpizza.uz \"cd /home/davr/chopar/next_frontend && git checkout --theirs . && git add . && git merge --abort 2>/dev/null; git fetch origin && git reset --hard origin/main\")",
       "Bash(sshpass -p 'qQ8WGUD6BQt9uziN' ssh -o StrictHostKeyChecking=no root@choparpizza.uz \"cd /home/davr/chopar/next_frontend && rm -rf node_modules .next && bun i\")",
       "Bash(sshpass:*)",
-      "Bash(curl:*)"
+      "Bash(curl:*)",
+      "Bash(xargs grep:*)"
     ],
     "deny": []
   }

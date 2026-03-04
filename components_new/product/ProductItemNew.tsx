@@ -9,6 +9,7 @@ import React, {
   useEffect,
 } from 'react'
 import Image from 'next/image'
+import Link from 'next/link'
 import ProductOptionSelector from './ProductOptionSelector'
 import currency from 'currency.js'
 import { Dialog, Transition } from '@headlessui/react'
@@ -624,10 +625,11 @@ const ProductItemNew: FC<ProductItem> = ({ product, channelName }) => {
       ) : (
         <div
           className={`${styles.gridItemOutline} ${isProductInStop ? 'opacity-25' : ''
-            } gap-4 grid grid-cols-2 py-4 px-2 md:py-3 md:px-3 overflow-hidden bg-white rounded-[15px] hover:shadow-xl shadow-sm group items-center justify-between md:flex md:flex-col`}
+            } gap-4 grid grid-cols-2 py-4 px-2 md:py-3 md:px-3 overflow-hidden bg-white rounded-[15px] hover:shadow-xl shadow-sm group items-center justify-between md:flex md:flex-col cursor-pointer`}
           id={`prod-${store.id}`}
           itemScope
           itemType="https://schema.org/Product"
+          onClick={() => router.push(`/product/${store.id}`)}
         >
           <div className="text-center">
             {store.image ? (
@@ -677,7 +679,7 @@ const ProductItemNew: FC<ProductItem> = ({ product, channelName }) => {
                             ? 'bg-yellow text-white'
                             : 'bg-gray-200 text-gray-400'
                           }`}
-                        onClick={() => updateOptionSelection(v.id)}
+                        onClick={(e) => { e.stopPropagation(); updateOptionSelection(v.id) }}
                       >
                         <button className="outline-none focus:outline-none text-xs py-2">
                           {locale == 'ru'
@@ -705,7 +707,7 @@ const ProductItemNew: FC<ProductItem> = ({ product, channelName }) => {
             <div className="md:mt-10 mt-2 flex justify-between items-center text-sm">
               <button
                 className="bg-yellow focus:outline-none md:w-32 md:justify-around font-bold outline-none py-2 rounded-full text-white uppercase md:inline-flex items-center hidden"
-                onClick={handleSubmit}
+                onClick={(e) => { e.stopPropagation(); handleSubmit(e) }}
                 disabled={isLoadingBasket}
               >
                 {isLoadingBasket ? (
@@ -767,7 +769,7 @@ const ProductItemNew: FC<ProductItem> = ({ product, channelName }) => {
               </div>
               <button
                 className="md:text-xl md:hidden bg-yellow flex flex-col items-center md:bg-white w-28 md:w-auto rounded-full px-2 py-2 text-sm text-center md:px-0 md:py-0 text-white md:text-black"
-                onClick={openModal}
+                onClick={(e) => { e.stopPropagation(); openModal() }}
               >
                 <span>
                   {prodDiscountPriceDesktop > 0 && (
@@ -894,7 +896,7 @@ const ProductItemNew: FC<ProductItem> = ({ product, channelName }) => {
                                         ? 'bg-yellow text-white shadow-xl'
                                         : 'bg-gray-200 text-gray-600'
                                       }`}
-                                    onClick={() => updateOptionSelection(v.id)}
+                                    onClick={(e) => { e.stopPropagation(); updateOptionSelection(v.id) }}
                                   >
                                     <button className="outline-none focus:outline-none text-xs py-2">
                                       {locale == 'ru'

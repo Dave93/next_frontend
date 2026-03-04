@@ -83,7 +83,7 @@ const Header: FC<{
           <div className="flex justify-between items-center">
             <div className="w-32 md:w-48 ml-4 md:ml-0">
               <Link
-                href={`/${chosenCity.slug}`}
+                href={`/${chosenCity?.slug || ''}`}
                 prefetch={false}
                 legacyBehavior
               >
