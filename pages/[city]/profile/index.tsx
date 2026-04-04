@@ -5,6 +5,7 @@ import { Layout } from '@components/common'
 import React from 'react'
 import UserData from '@components_new/profile/UserData'
 import Bonuses from '@components_new/profile/Bonuses'
+import MobileProfileMenu from '@components_new/mobile/MobileProfileMenu'
 
 export async function getServerSideProps({
   preview,
@@ -58,8 +59,12 @@ export default function Profile() {
   const { data } = useCustomer()
   return (
     <>
-      <UserData />
-      {/* <Bonuses /> */}
+      {/* Desktop profile */}
+      <div className="hidden md:block">
+        <UserData />
+      </div>
+      {/* Mobile profile menu */}
+      <MobileProfileMenu />
     </>
   )
 }
