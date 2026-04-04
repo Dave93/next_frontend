@@ -1,5 +1,11 @@
 import { Fragment, FC, memo } from 'react'
-import { Menu, MenuButton, MenuItem, MenuItems, Transition } from '@headlessui/react'
+import {
+  Menu,
+  MenuButton,
+  MenuItem,
+  MenuItems,
+  Transition,
+} from '@headlessui/react'
 import { Ru, Uz, Us } from 'react-flags-select'
 import { useRouter } from 'next/router'
 import { useUI } from '@components/ui/context'
@@ -48,7 +54,6 @@ const LanguageDropDown: FC = () => {
         </MenuButton>
       </div>
       <Transition
-       
         enter="transition ease-out duration-200"
         enterFrom="opacity-0 translate-y-1"
         enterTo="opacity-100 translate-y-0"
@@ -61,8 +66,9 @@ const LanguageDropDown: FC = () => {
             <MenuItem>
               {({ active }) => (
                 <a
-                  className={`${active ? 'text-primary' : 'text-gray-900'
-                    } group flex rounded-md items-center w-full px-2 py-2 text-lg`}
+                  className={`${
+                    active ? 'text-primary' : 'text-gray-900'
+                  } group flex rounded-md items-center w-full px-2 py-2 text-lg`}
                   href={`/${locale}${pathname}`}
                   onClick={(e) => changeLang(e, 'uz')}
                 >
@@ -73,8 +79,9 @@ const LanguageDropDown: FC = () => {
             <MenuItem>
               {({ active }) => (
                 <a
-                  className={`${active ? 'text-primary' : 'text-gray-900'
-                    } group flex rounded-md items-center w-full px-2 py-2 text-lg`}
+                  className={`${
+                    active ? 'text-primary' : 'text-gray-900'
+                  } group flex rounded-md items-center w-full px-2 py-2 text-lg`}
                   href={`/${locale}${pathname}`}
                   onClick={(e) => changeLang(e, 'ru')}
                 >
@@ -85,8 +92,9 @@ const LanguageDropDown: FC = () => {
             <MenuItem>
               {({ active }) => (
                 <a
-                  className={`${active ? 'text-primary' : 'text-gray-900'
-                    } group flex rounded-md items-center w-full px-2 py-2 text-lg`}
+                  className={`${
+                    active ? 'text-primary' : 'text-gray-900'
+                  } group flex rounded-md items-center w-full px-2 py-2 text-lg`}
                   href={`/${locale}${pathname}`}
                   onClick={(e) => changeLang(e, 'en')}
                 >

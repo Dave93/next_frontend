@@ -112,8 +112,9 @@ export default function Dev() {
 
         <div className="w-44 h-10 bg-blue rounded-full flex justify-between">
           <a
-            className={`${locale == 'ru' ? 'bg-white text-secondary ' : 'text-white'
-              } font-medium inline-flex items-center px-4 mx-1 my-1 rounded-full w-20`}
+            className={`${
+              locale == 'ru' ? 'bg-white text-secondary ' : 'text-white'
+            } font-medium inline-flex items-center px-4 mx-1 my-1 rounded-full w-20`}
             href={`/${locale}${pathname}`}
             onClick={(e) => changeLang(e, 'ru')}
           >
@@ -121,8 +122,9 @@ export default function Dev() {
             <span className="ml-1.5">{localeLabel.ru}</span>
           </a>
           <a
-            className={`${locale == 'uz' ? 'bg-white text-secondary ' : 'text-white'
-              } font-medium inline-flex items-center px-4 mx-1 my-1 rounded-full w-20`}
+            className={`${
+              locale == 'uz' ? 'bg-white text-secondary ' : 'text-white'
+            } font-medium inline-flex items-center px-4 mx-1 my-1 rounded-full w-20`}
             href={`/${locale}${pathname}`}
             onClick={(e) => changeLang(e, 'uz')}
           >

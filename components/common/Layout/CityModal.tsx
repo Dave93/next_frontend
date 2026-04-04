@@ -1,6 +1,15 @@
 import { City } from '@commerce/types/cities'
 import { useUI } from '@components/ui/context'
-import { Dialog, DialogBackdrop, DialogTitle, Menu, MenuItem, MenuItems, Transition, TransitionChild } from '@headlessui/react'
+import {
+  Dialog,
+  DialogBackdrop,
+  DialogTitle,
+  Menu,
+  MenuItem,
+  MenuItems,
+  Transition,
+  TransitionChild,
+} from '@headlessui/react'
 import Cookies from 'js-cookie'
 import useTranslation from 'next-translate/useTranslation'
 import router, { useRouter } from 'next/router'
@@ -63,7 +72,6 @@ const CityModal: FC<Props> = ({ cities }) => {
         >
           <div className="min-h-screen px-4 text-center">
             <TransitionChild
-             
               enter="ease-out duration-300"
               enterFrom="opacity-0"
               enterTo="opacity-100"
@@ -75,7 +83,6 @@ const CityModal: FC<Props> = ({ cities }) => {
             </TransitionChild>
 
             <TransitionChild
-             
               enter="ease-out duration-300"
               enterFrom="opacity-0 scale-95"
               enterTo="opacity-100 scale-100"
@@ -98,7 +105,6 @@ const CityModal: FC<Props> = ({ cities }) => {
                     <>
                       <Transition
                         show={true}
-                       
                         enter="transition ease-out duration-100"
                         enterFrom="transform opacity-0 scale-95"
                         enterTo="transform opacity-100 scale-100"
@@ -106,7 +112,7 @@ const CityModal: FC<Props> = ({ cities }) => {
                         leaveFrom="transform opacity-100 scale-100"
                         leaveTo="transform opacity-0 scale-95"
                       >
-                        <MenuItems >
+                        <MenuItems>
                           {cities?.map((item: City) => (
                             <MenuItem key={item.id}>
                               <span
@@ -138,7 +144,6 @@ const CityModal: FC<Props> = ({ cities }) => {
         >
           <div className="min-h-screen px-4 text-center">
             <TransitionChild
-             
               enter="ease-out duration-300"
               enterFrom="opacity-0"
               enterTo="opacity-100"
@@ -150,7 +155,6 @@ const CityModal: FC<Props> = ({ cities }) => {
             </TransitionChild>
 
             <TransitionChild
-             
               enter="ease-out duration-300"
               enterFrom="opacity-0 scale-95"
               enterTo="opacity-100 scale-100"

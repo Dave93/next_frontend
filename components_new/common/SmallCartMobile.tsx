@@ -17,7 +17,13 @@ import Cookies from 'js-cookie'
 import { useRouter } from 'next/router'
 import useTranslation from 'next-translate/useTranslation'
 import { useUI } from '@components/ui/context'
-import { Dialog, DialogBackdrop, DialogTitle, Transition, TransitionChild } from '@headlessui/react'
+import {
+  Dialog,
+  DialogBackdrop,
+  DialogTitle,
+  Transition,
+  TransitionChild,
+} from '@headlessui/react'
 import OtpInput from 'react-otp-input'
 import Input from 'react-phone-number-input/input'
 import styles from './SmallCartMobile.module.css'
@@ -133,14 +139,17 @@ const SmallCartMobile: FC = () => {
 
       const captcha = await executeRecaptcha('signIn')
       setSubmitError('')
-      const csrfReq = await axios(`${process.env.NEXT_PUBLIC_API_URL}/api/keldi`, {
-        method: 'GET',
-        headers: {
-          'Content-Type': 'application/json',
-          crossDomain: true,
-        },
-        withCredentials: true,
-      })
+      const csrfReq = await axios(
+        `${process.env.NEXT_PUBLIC_API_URL}/api/keldi`,
+        {
+          method: 'GET',
+          headers: {
+            'Content-Type': 'application/json',
+            crossDomain: true,
+          },
+          withCredentials: true,
+        }
+      )
       let { data: res } = csrfReq
       const csrf = Buffer.from(res.result, 'base64').toString('ascii')
 
@@ -294,7 +303,6 @@ const SmallCartMobile: FC = () => {
         >
           <div className="min-h-screen px-4 text-center">
             <TransitionChild
-             
               enter="ease-out duration-300"
               enterFrom="opacity-0"
               enterTo="opacity-100"
@@ -313,7 +321,6 @@ const SmallCartMobile: FC = () => {
               &#8203;
             </span>
             <TransitionChild
-             
               enter="ease-out duration-300"
               enterFrom="opacity-0 scale-95"
               enterTo="opacity-100 scale-100"
@@ -351,7 +358,12 @@ const SmallCartMobile: FC = () => {
                               onChange={handleOtpChange}
                               numInputs={4}
                               inputType="number"
-                              containerStyle={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '0.375rem', justifyContent: 'center' }}
+                              containerStyle={{
+                                display: 'grid',
+                                gridTemplateColumns: 'repeat(4, 1fr)',
+                                gap: '0.375rem',
+                                justifyContent: 'center',
+                              }}
                               renderInput={(props) => (
                                 <input
                                   {...props}
@@ -374,10 +386,11 @@ const SmallCartMobile: FC = () => {
                           </div>
                           <div className="mt-10">
                             <button
-                              className={`py-3 px-20 text-white font-bold text-xl text-center rounded-full w-full outline-none focus:outline-none ${otpCode.length >= 4
+                              className={`py-3 px-20 text-white font-bold text-xl text-center rounded-full w-full outline-none focus:outline-none ${
+                                otpCode.length >= 4
                                   ? 'bg-yellow'
                                   : 'bg-gray-400'
-                                }`}
+                              }`}
                               disabled={otpCode.length < 4}
                               ref={authButtonRef}
                             >
@@ -482,8 +495,9 @@ const SmallCartMobile: FC = () => {
                           )}
                           <div className="mt-10">
                             <button
-                              className={`py-3 md:px-20 text-white font-bold text-xl text-center rounded-full w-full outline-none focus:outline-none ${formState.isValid ? 'bg-yellow' : 'bg-gray-400'
-                                }`}
+                              className={`py-3 md:px-20 text-white font-bold text-xl text-center rounded-full w-full outline-none focus:outline-none ${
+                                formState.isValid ? 'bg-yellow' : 'bg-gray-400'
+                              }`}
                               disabled={!formState.isValid}
                               ref={authButtonRef}
                             >
@@ -549,7 +563,6 @@ const SmallCartMobile: FC = () => {
         >
           <div className="min-h-screen px-4 text-center">
             <TransitionChild
-             
               enter="ease-out duration-300"
               enterFrom="opacity-0"
               enterTo="opacity-100"
@@ -568,7 +581,6 @@ const SmallCartMobile: FC = () => {
               &#8203;
             </span>
             <TransitionChild
-             
               enter="ease-out duration-300"
               enterFrom="opacity-0 scale-95"
               enterTo="opacity-100 scale-100"

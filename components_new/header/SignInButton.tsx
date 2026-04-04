@@ -1,4 +1,12 @@
-import React, { Fragment, useState, memo, useRef, FC, useMemo, useEffect } from 'react'
+import React, {
+  Fragment,
+  useState,
+  memo,
+  useRef,
+  FC,
+  useMemo,
+  useEffect,
+} from 'react'
 import { Dialog, Transition } from '@headlessui/react'
 import useTranslation from 'next-translate/useTranslation'
 import { XIcon } from '@heroicons/react/outline'
@@ -54,7 +62,7 @@ const SignInButton: FC<SingInButtonProps> = ({ setMobMenuOpen }) => {
     openSignInModal,
     closeSignInModal,
   } = useUI()
-  
+
   useEffect(() => {
     setIsClient(true)
   }, [])
@@ -81,7 +89,7 @@ const SignInButton: FC<SingInButtonProps> = ({ setMobMenuOpen }) => {
       </div>
     )
   }
-  
+
   return (
     <>
       {user && (

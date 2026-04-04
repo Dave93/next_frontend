@@ -63,7 +63,7 @@ const Header: FC<{
       configData = configData.toString()
       configData = JSON.parse(configData)
       setConfigData(configData)
-    } catch (e) { }
+    } catch (e) {}
   }
 
   useEffect(() => {

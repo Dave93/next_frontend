@@ -1,5 +1,5 @@
 export type News = {
-  id: number;
+  id: number
   picture: string
   name: string
   desc: string

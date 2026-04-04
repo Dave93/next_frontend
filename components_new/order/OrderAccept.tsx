@@ -104,7 +104,8 @@ const OrderAccept: FC<OrderDetailProps> = ({ order, orderStatuses }) => {
   )
 
   // Check if order can be tracked
-  const canTrackOrder = order?.delivery_type === 'deliver' &&
+  const canTrackOrder =
+    order?.delivery_type === 'deliver' &&
     order?.track_id &&
     (order?.status === 'cooked' || order?.status === 'delivering')
 
@@ -185,9 +186,9 @@ const OrderAccept: FC<OrderDetailProps> = ({ order, orderStatuses }) => {
             : ''}
           {order.door_code
             ? ', ' +
-            tr('code_on_doors').toLocaleLowerCase() +
-            ': ' +
-            order.door_code
+              tr('code_on_doors').toLocaleLowerCase() +
+              ': ' +
+              order.door_code
             : ''}
         </div>
         <div>
@@ -220,8 +221,8 @@ const OrderAccept: FC<OrderDetailProps> = ({ order, orderStatuses }) => {
           >
             <div className="flex items-center">
               {pizza.child &&
-                pizza.child.length &&
-                pizza.child[0].variant?.product?.id !=
+              pizza.child.length &&
+              pizza.child[0].variant?.product?.id !=
                 pizza?.variant?.product?.box_id ? (
                 pizza.child.length > 1 ? (
                   <div className="h-14 w-40 flex relative">
@@ -318,25 +319,26 @@ const OrderAccept: FC<OrderDetailProps> = ({ order, orderStatuses }) => {
               <div className="ml-5">
                 <div className="text-xl font-bold">
                   {pizza.child && pizza.child.length > 1
-                    ? `${pizza?.variant?.product?.attribute_data?.name[
-                    channelName
-                    ][locale || 'ru']
-                    } + ${pizza?.child
-                      .filter(
-                        (v: any) =>
-                          pizza?.variant?.product?.box_id !=
-                          v?.variant?.product?.id
-                      )
-                      .map(
-                        (v: any) =>
-                          v?.variant?.product?.attribute_data?.name[
+                    ? `${
+                        pizza?.variant?.product?.attribute_data?.name[
                           channelName
-                          ][locale || 'ru']
-                      )
-                      .join(' + ')}`
+                        ][locale || 'ru']
+                      } + ${pizza?.child
+                        .filter(
+                          (v: any) =>
+                            pizza?.variant?.product?.box_id !=
+                            v?.variant?.product?.id
+                        )
+                        .map(
+                          (v: any) =>
+                            v?.variant?.product?.attribute_data?.name[
+                              channelName
+                            ][locale || 'ru']
+                        )
+                        .join(' + ')}`
                     : pizza?.variant?.product?.attribute_data?.name[
-                    channelName
-                    ][locale || 'ru']}{' '}
+                        channelName
+                      ][locale || 'ru']}{' '}
                   {pizza.bonus_id && (
                     <span className="text-yellow">({tr('bonus')})</span>
                   )}
@@ -349,29 +351,29 @@ const OrderAccept: FC<OrderDetailProps> = ({ order, orderStatuses }) => {
             <div>
               {pizza.child && pizza.child.length
                 ? (pizza.total > 0 ? pizza.quantity + ' X ' : '') +
-                currency(
-                  +pizza.total +
-                  +pizza.child.reduce(
-                    (previousValue: any, currentValue: any) =>
-                      +previousValue + +currentValue.total,
-                    0
-                  ),
-                  {
+                  currency(
+                    +pizza.total +
+                      +pizza.child.reduce(
+                        (previousValue: any, currentValue: any) =>
+                          +previousValue + +currentValue.total,
+                        0
+                      ),
+                    {
+                      pattern: '# !',
+                      separator: ' ',
+                      decimal: '.',
+                      symbol: 'сум',
+                      precision: 0,
+                    }
+                  ).format()
+                : (pizza.total > 0 ? pizza.quantity + ' X ' : '') +
+                  currency(pizza.total * pizza.quantity, {
                     pattern: '# !',
                     separator: ' ',
                     decimal: '.',
                     symbol: 'сум',
                     precision: 0,
-                  }
-                ).format()
-                : (pizza.total > 0 ? pizza.quantity + ' X ' : '') +
-                currency(pizza.total * pizza.quantity, {
-                  pattern: '# !',
-                  separator: ' ',
-                  decimal: '.',
-                  symbol: 'сум',
-                  precision: 0,
-                }).format()}
+                  }).format()}
             </div>
           </div>
         ))}

@@ -1,5 +1,11 @@
 import { Fragment, useState, FC, memo, useMemo } from 'react'
-import { Menu, MenuButton, MenuItem, MenuItems, Transition } from '@headlessui/react'
+import {
+  Menu,
+  MenuButton,
+  MenuItem,
+  MenuItems,
+  Transition,
+} from '@headlessui/react'
 import { useUI } from '@components/ui'
 import { City } from '@commerce/types/cities'
 import router, { useRouter } from 'next/router'
@@ -45,7 +51,6 @@ const ChooseCityDropDown: FC = () => {
 
           <Transition
             show={open}
-           
             enter="transition ease-out duration-100"
             enterFrom="transform opacity-0 scale-95"
             enterTo="transform opacity-100 scale-100"
@@ -53,9 +58,7 @@ const ChooseCityDropDown: FC = () => {
             leaveFrom="transform opacity-100 scale-100"
             leaveTo="transform opacity-0 scale-95"
           >
-            <MenuItems
-              className="absolute bg-white divide-gray-100 divide-y focus:outline-none mt-2 origin-top-right right-0 ring-1 ring-black ring-opacity-5 rounded-2xl shadow-lg top-0 z-20"
-            >
+            <MenuItems className="absolute bg-white divide-gray-100 divide-y focus:outline-none mt-2 origin-top-right right-0 ring-1 ring-black ring-opacity-5 rounded-2xl shadow-lg top-0 z-20">
               <MenuItem>
                 {({ active }) => (
                   <span className="text-secondary block px-4 py-2">
@@ -67,10 +70,11 @@ const ChooseCityDropDown: FC = () => {
                 <MenuItem key={item.id}>
                   <span
                     onClick={() => changeCity(item)}
-                    className={`block px-4 py-2 cursor-pointer ${chosenCity.id == item.id
+                    className={`block px-4 py-2 cursor-pointer ${
+                      chosenCity.id == item.id
                         ? 'bg-secondary text-white'
                         : 'text-secondary'
-                      }`}
+                    }`}
                   >
                     {locale == 'uz' ? item.name_uz : ''}
                     {locale == 'ru' ? item.name : ''}

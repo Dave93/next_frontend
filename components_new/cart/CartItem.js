@@ -10,7 +10,7 @@ import Image from 'react-storefront/Image'
 import SessionContext from 'react-storefront/session/SessionContext'
 import RemoveDialog from './RemoveDialog'
 
-const styles = theme => ({
+const styles = (theme) => ({
   root: {
     flex: 1,
     padding: theme.spacing(2, 5, 2, 2),
@@ -44,15 +44,27 @@ export default function CartItem({ product, updateQuantity, remove }) {
       <Paper className={classes.root} elevation={3}>
         <Hbox alignItems="flex-start">
           <div className={classes.thumb}>
-            <Image src={product.thumbnail.src} fill aspectRatio={1} quality={50} />
+            <Image
+              src={product.thumbnail.src}
+              fill
+              aspectRatio={1}
+              quality={50}
+            />
           </div>
           <div className={classes.info}>
-            <Link as={product.url} href="/p/[productId]" prefetch="visible" pageData={{ product }}>
+            <Link
+              as={product.url}
+              href="/p/[productId]"
+              prefetch="visible"
+              pageData={{ product }}
+            >
               <a>
                 <Typography variant="subtitle1">{product.name}</Typography>
               </a>
             </Link>
-            <Typography className={classes.price}>{product.priceText}</Typography>
+            <Typography className={classes.price}>
+              {product.priceText}
+            </Typography>
             {product.size && product.size.selected && (
               <Hbox>
                 <Typography className={classes.label}>Size:</Typography>
@@ -63,7 +75,7 @@ export default function CartItem({ product, updateQuantity, remove }) {
               <Typography>Quantity:</Typography>
               <QuantitySelector
                 value={product.quantity}
-                onChange={quantity => updateQuantity(product, quantity)}
+                onChange={(quantity) => updateQuantity(product, quantity)}
               />
             </Row>
           </div>

@@ -8,7 +8,13 @@ import { useUI } from '@components/ui/context'
 import Link from '@components/ui/Link'
 import { motion } from 'framer-motion'
 import { shuffle as lodashShuffle } from 'lodash'
-import { Dialog, DialogBackdrop, DialogTitle, Transition, TransitionChild } from '@headlessui/react'
+import {
+  Dialog,
+  DialogBackdrop,
+  DialogTitle,
+  Transition,
+  TransitionChild,
+} from '@headlessui/react'
 import axios from 'axios'
 import cookies from 'next-cookies'
 import useTranslation from 'next-translate/useTranslation'
@@ -59,7 +65,7 @@ export async function getServerSideProps({
     } else {
       bonusList = data.data
     }
-  } catch (e) { }
+  } catch (e) {}
 
   const {
     categories,
@@ -150,7 +156,8 @@ export default function Dev({
 
     let basketId = localStorage.getItem('basketId')
     const { data } = await axios.get(
-      `${webAddress}/api/bonus_prods/show${basketId ? '?basketId=' + basketId : ''
+      `${webAddress}/api/bonus_prods/show${
+        basketId ? '?basketId=' + basketId : ''
       }`,
       {
         headers: {
@@ -206,7 +213,7 @@ export default function Dev({
 
   useEffect(() => {
     getChannel()
-    return () => { }
+    return () => {}
   }, [])
 
   return (
@@ -229,8 +236,9 @@ export default function Dev({
         </Link>
         <div className="w-44 h-10 bg-blue rounded-full flex justify-between">
           <a
-            className={`${locale == 'ru' ? 'bg-white text-secondary ' : 'text-white'
-              } font-medium inline-flex items-center px-4 mx-1 my-1 rounded-full w-20`}
+            className={`${
+              locale == 'ru' ? 'bg-white text-secondary ' : 'text-white'
+            } font-medium inline-flex items-center px-4 mx-1 my-1 rounded-full w-20`}
             href={`/${locale}${pathname}`}
             onClick={(e) => changeLang(e, 'ru')}
           >
@@ -238,8 +246,9 @@ export default function Dev({
             <span className="ml-1.5">{localeLabel.ru}</span>
           </a>
           <a
-            className={`${locale == 'uz' ? 'bg-white text-secondary ' : 'text-white'
-              } font-medium inline-flex items-center px-4 mx-1 my-1 rounded-full w-20`}
+            className={`${
+              locale == 'uz' ? 'bg-white text-secondary ' : 'text-white'
+            } font-medium inline-flex items-center px-4 mx-1 my-1 rounded-full w-20`}
             href={`/${locale}${pathname}`}
             onClick={(e) => changeLang(e, 'uz')}
           >
@@ -296,11 +305,10 @@ export default function Dev({
             <Dialog
               as="div"
               className="fixed inset-0 z-10 overflow-y-auto"
-              onClose={() => { }}
+              onClose={() => {}}
             >
               <div className="min-h-screen px-4 text-center">
                 <TransitionChild
-                 
                   enter="ease-out duration-300"
                   enterFrom="opacity-0"
                   enterTo="opacity-100"
@@ -325,7 +333,7 @@ export default function Dev({
                   >
                     {
                       chosenCard?.attribute_data?.name[channelName][
-                      locale || 'ru'
+                        locale || 'ru'
                       ]
                     }
                   </DialogTitle>

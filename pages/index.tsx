@@ -86,7 +86,6 @@ export default function DevPage({ cities }: { cities: any }) {
           <>
             <Transition
               show={true}
-             
               enter="transition ease-out duration-100"
               enterFrom="transform opacity-0 scale-95"
               enterTo="transform opacity-100 scale-100"
@@ -94,7 +93,7 @@ export default function DevPage({ cities }: { cities: any }) {
               leaveFrom="transform opacity-100 scale-100"
               leaveTo="transform opacity-0 scale-95"
             >
-              <MenuItems >
+              <MenuItems>
                 {cities?.map((item: City) => (
                   <MenuItem key={item.id}>
                     <span
@@ -104,10 +103,10 @@ export default function DevPage({ cities }: { cities: any }) {
                       {locale == 'uz'
                         ? item.name_uz
                         : locale == 'ru'
-                          ? item.name
-                          : locale == 'en'
-                            ? item.name_en
-                            : ''}
+                        ? item.name
+                        : locale == 'en'
+                        ? item.name_en
+                        : ''}
                     </span>
                   </MenuItem>
                 ))}

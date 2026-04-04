@@ -30,17 +30,17 @@ if (typeof window !== 'undefined') {
 
 // Create typed wrapper components for react-leaflet
 const MapContainer = dynamic(
-  () => import('react-leaflet').then(mod => mod.MapContainer as any),
+  () => import('react-leaflet').then((mod) => mod.MapContainer as any),
   { ssr: false }
 ) as any
 
 const TileLayer = dynamic(
-  () => import('react-leaflet').then(mod => mod.TileLayer as any),
+  () => import('react-leaflet').then((mod) => mod.TileLayer as any),
   { ssr: false }
 ) as any
 
 const Marker = dynamic(
-  () => import('react-leaflet').then(mod => mod.Marker as any),
+  () => import('react-leaflet').then((mod) => mod.Marker as any),
   { ssr: false }
 ) as any
 
@@ -204,19 +204,19 @@ export default function TrackClient({ orderId }: { orderId: string }) {
   const fromIcon =
     typeof window !== 'undefined' && L
       ? L.divIcon({
-        html: '<div style="background: linear-gradient(135deg, #e91e63 0%, #d81b60 100%); color: white; width: 36px; height: 36px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: bold; box-shadow: 0 3px 10px rgba(233, 30, 99, 0.4); border: 2px solid white;">A</div>',
-        iconSize: [36, 36],
-        className: 'custom-div-icon',
-      })
+          html: '<div style="background: linear-gradient(135deg, #e91e63 0%, #d81b60 100%); color: white; width: 36px; height: 36px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: bold; box-shadow: 0 3px 10px rgba(233, 30, 99, 0.4); border: 2px solid white;">A</div>',
+          iconSize: [36, 36],
+          className: 'custom-div-icon',
+        })
       : null
 
   const toIcon =
     typeof window !== 'undefined' && L
       ? L.divIcon({
-        html: '<div style="background: linear-gradient(135deg, #4caf50 0%, #45a049 100%); color: white; width: 36px; height: 36px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: bold; box-shadow: 0 3px 10px rgba(76, 175, 80, 0.4); border: 2px solid white;">B</div>',
-        iconSize: [36, 36],
-        className: 'custom-div-icon',
-      })
+          html: '<div style="background: linear-gradient(135deg, #4caf50 0%, #45a049 100%); color: white; width: 36px; height: 36px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: bold; box-shadow: 0 3px 10px rgba(76, 175, 80, 0.4); border: 2px solid white;">B</div>',
+          iconSize: [36, 36],
+          className: 'custom-div-icon',
+        })
       : null
 
   // Select courier icon based on drive_type
@@ -310,15 +310,17 @@ export default function TrackClient({ orderId }: { orderId: string }) {
   // Format delivery status text
   const getStatusText = (status?: string) => {
     const statusMap: { [key: string]: string } = {
-      'pending': tr('status_pending') || 'Ожидает подтверждения',
-      'confirmed': tr('status_confirmed') || 'Подтвержден',
-      'preparing': tr('status_preparing') || 'Готовится',
-      'ready': tr('status_ready') || 'Готов к доставке',
-      'on_the_way': tr('status_on_the_way') || 'В пути',
-      'delivered': tr('status_delivered') || 'Доставлен',
-      'cancelled': tr('status_cancelled') || 'Отменен'
+      pending: tr('status_pending') || 'Ожидает подтверждения',
+      confirmed: tr('status_confirmed') || 'Подтвержден',
+      preparing: tr('status_preparing') || 'Готовится',
+      ready: tr('status_ready') || 'Готов к доставке',
+      on_the_way: tr('status_on_the_way') || 'В пути',
+      delivered: tr('status_delivered') || 'Доставлен',
+      cancelled: tr('status_cancelled') || 'Отменен',
     }
-    return statusMap[status || ''] || status || tr('status_unknown') || 'Неизвестен'
+    return (
+      statusMap[status || ''] || status || tr('status_unknown') || 'Неизвестен'
+    )
   }
 
   // Create route polyline - removed as per requirement
@@ -350,12 +352,10 @@ export default function TrackClient({ orderId }: { orderId: string }) {
             {tr('order_not_found') || 'Заказ не найден'}
           </h2>
           <p className={styles.errorMessage}>
-            {tr('order_not_found_message') || 'Проверьте номер заказа и попробуйте снова'}
+            {tr('order_not_found_message') ||
+              'Проверьте номер заказа и попробуйте снова'}
           </p>
-          <button
-            onClick={() => refetch()}
-            className={styles.retryButton}
-          >
+          <button onClick={() => refetch()} className={styles.retryButton}>
             {tr('retry') || 'Повторить'}
           </button>
         </div>
@@ -432,7 +432,9 @@ export default function TrackClient({ orderId }: { orderId: string }) {
                 {tr('order_status') || 'Статус заказа'}
               </h2>
               {trackingInfo?.order_number && (
-                <span className={styles.orderNumber}>#{trackingInfo.order_number}</span>
+                <span className={styles.orderNumber}>
+                  #{trackingInfo.order_number}
+                </span>
               )}
             </div>
             <div className={styles.statusBody}>
@@ -444,7 +446,10 @@ export default function TrackClient({ orderId }: { orderId: string }) {
               {trackingInfo?.estimated_delivery && (
                 <div className={styles.estimatedTime}>
                   <TruckIcon className="w-4 h-4" />
-                  <span>{tr('estimated_delivery') || 'Ожидаемая доставка'}: {trackingInfo.estimated_delivery}</span>
+                  <span>
+                    {tr('estimated_delivery') || 'Ожидаемая доставка'}:{' '}
+                    {trackingInfo.estimated_delivery}
+                  </span>
                 </div>
               )}
             </div>

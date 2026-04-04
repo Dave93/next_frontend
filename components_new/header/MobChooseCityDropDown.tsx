@@ -1,5 +1,11 @@
 import React, { Fragment, FC, memo, useState, useMemo } from 'react'
-import { Menu, MenuButton, MenuItem, MenuItems, Transition } from '@headlessui/react'
+import {
+  Menu,
+  MenuButton,
+  MenuItem,
+  MenuItems,
+  Transition,
+} from '@headlessui/react'
 import Image from 'next/image'
 import { useUI } from '@components/ui'
 import { City } from '@commerce/types/cities'
@@ -47,10 +53,10 @@ const ChooseCityDropDown: FC = () => {
                   {locale == 'uz'
                     ? chosenCity?.name_uz
                     : locale == 'ru'
-                      ? chosenCity?.name
-                      : locale == 'en'
-                        ? chosenCity?.name_en
-                        : ''}
+                    ? chosenCity?.name
+                    : locale == 'en'
+                    ? chosenCity?.name_en
+                    : ''}
                 </div>
               </div>
             </MenuButton>
@@ -58,7 +64,6 @@ const ChooseCityDropDown: FC = () => {
 
           <Transition
             show={open}
-           
             enter="transition ease-out duration-100"
             enterFrom="transform opacity-0 scale-95"
             enterTo="transform opacity-100 scale-100"
@@ -66,9 +71,7 @@ const ChooseCityDropDown: FC = () => {
             leaveFrom="transform opacity-100 scale-100"
             leaveTo="transform opacity-0 scale-95"
           >
-            <MenuItems
-              className="text-white w-full h-full z-50 fixed bg-secondary"
-            >
+            <MenuItems className="text-white w-full h-full z-50 fixed bg-secondary">
               {cities.map((item: City) => (
                 <MenuItem key={item.id}>
                   <span
@@ -78,10 +81,10 @@ const ChooseCityDropDown: FC = () => {
                     {locale == 'ru'
                       ? item.name
                       : locale == 'uz'
-                        ? item.name_uz
-                        : locale == 'en'
-                          ? item.name_en
-                          : ''}
+                      ? item.name_uz
+                      : locale == 'en'
+                      ? item.name_en
+                      : ''}
                   </span>
                 </MenuItem>
               ))}

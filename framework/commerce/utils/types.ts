@@ -10,10 +10,9 @@ export type Override<T, K> = Omit<T, keyof K> & K
 /**
  * Returns the properties in T with the properties in type K changed from optional to required
  */
-export type PickRequired<T, K extends keyof T> = Omit<T, K> &
-  {
-    [P in K]-?: NonNullable<T[P]>
-  }
+export type PickRequired<T, K extends keyof T> = Omit<T, K> & {
+  [P in K]-?: NonNullable<T[P]>
+}
 
 /**
  * Core fetcher added by CommerceProvider

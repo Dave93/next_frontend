@@ -1,5 +1,10 @@
 import { FC, Fragment, useEffect, useMemo, useRef, useState } from 'react'
-import { Dialog, DialogBackdrop, Transition, TransitionChild } from '@headlessui/react'
+import {
+  Dialog,
+  DialogBackdrop,
+  Transition,
+  TransitionChild,
+} from '@headlessui/react'
 import { CheckIcon, XIcon } from '@heroicons/react/outline'
 import useTranslation from 'next-translate/useTranslation'
 import { useRouter } from 'next/router'
@@ -201,7 +206,6 @@ const ThreePizza: FC<ThreePizzaProps> = ({ items, channelName }) => {
         >
           <div className="flex items-end justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
             <TransitionChild
-             
               enter="ease-out duration-300"
               enterFrom="opacity-0"
               enterTo="opacity-100"
@@ -220,7 +224,6 @@ const ThreePizza: FC<ThreePizzaProps> = ({ items, channelName }) => {
               &#8203;
             </span>
             <TransitionChild
-             
               enter="ease-out duration-300"
               enterFrom="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
               enterTo="opacity-100 translate-y-0 sm:scale-100"

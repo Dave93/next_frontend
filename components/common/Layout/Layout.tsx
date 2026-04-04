@@ -28,7 +28,12 @@ import { SocialIcons } from '@commerce/types/socialIcons'
 import useTranslation from 'next-translate/useTranslation'
 import axios from 'axios'
 import { City } from '@commerce/types/cities'
-import { Dialog, DialogBackdrop, Transition, TransitionChild } from '@headlessui/react'
+import {
+  Dialog,
+  DialogBackdrop,
+  Transition,
+  TransitionChild,
+} from '@headlessui/react'
 import dynamic from 'next/dynamic'
 import SignInModal from '@components_new/header/SignInModal'
 import { XIcon } from '@heroicons/react/solid'
@@ -36,7 +41,6 @@ import LocationTabs from '@components_new/header/LocationTabs'
 import MobLocationTabs from '@components_new/header/MobLocationTabs.'
 
 const LinkScroll = Scroll.Link
-
 
 interface Props {
   children: ReactNode
@@ -401,7 +405,6 @@ const Layout: FC<Props> = ({
         >
           <div className="flex items-end justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
             <TransitionChild
-             
               enter="ease-out duration-300"
               enterFrom="opacity-0"
               enterTo="opacity-100"
@@ -420,7 +423,6 @@ const Layout: FC<Props> = ({
               &#8203;
             </span>
             <TransitionChild
-             
               enter="ease-out duration-300"
               enterFrom="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
               enterTo="opacity-100 translate-y-0 sm:scale-100"
@@ -460,7 +462,6 @@ const Layout: FC<Props> = ({
         >
           <div className="flex items-end justify-center min-h-screen  text-center sm:block sm:p-0">
             <TransitionChild
-             
               enter="ease-out duration-300"
               enterFrom="opacity-0"
               enterTo="opacity-100"
@@ -479,7 +480,6 @@ const Layout: FC<Props> = ({
               &#8203;
             </span>
             <TransitionChild
-             
               enter="ease-out duration-300"
               enterFrom="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
               enterTo="opacity-100 translate-y-0 sm:scale-100"

@@ -10,7 +10,16 @@ import React, {
   SetStateAction,
   useCallback,
 } from 'react'
-import { Disclosure, DisclosureButton, DisclosurePanel, Menu, MenuButton, MenuItem, MenuItems, Transition } from '@headlessui/react'
+import {
+  Disclosure,
+  DisclosureButton,
+  DisclosurePanel,
+  Menu,
+  MenuButton,
+  MenuItem,
+  MenuItems,
+  Transition,
+} from '@headlessui/react'
 import {
   CheckIcon,
   ChevronDownIcon,
@@ -42,7 +51,6 @@ import getAddressList from '@lib/load_addreses'
 import { Address } from '@commerce/types/address'
 import { XIcon, PlusIcon, BookmarkIcon } from '@heroicons/react/outline'
 import useCart from '@framework/cart/use-cart'
-
 
 let webAddress = process.env.NEXT_PUBLIC_API_URL
 interface AnyObject {
@@ -112,8 +120,8 @@ const MobLocationTabs: FC = () => {
       : [activeCity?.lat, activeCity?.lon]) as number[]
   )
   const [mapZoom, setMapZoom] = useState(
-    (locationData?.location && locationData.location.length 
-      ? 17 
+    (locationData?.location && locationData.location.length
+      ? 17
       : activeCity?.map_zoom || 10) as number
   )
 
@@ -1003,7 +1011,6 @@ const MobLocationTabs: FC = () => {
                   </MenuButton>
                 </div>
                 <Transition
-                 
                   enter="transition ease-out duration-100"
                   enterFrom="transform opacity-0 scale-95"
                   enterTo="transform opacity-100 scale-100"

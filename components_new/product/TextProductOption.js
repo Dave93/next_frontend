@@ -5,7 +5,7 @@ import clsx from 'clsx'
 import { Button } from '@material-ui/core'
 import { Skeleton } from '@material-ui/lab'
 
-export const styles = theme => ({
+export const styles = (theme) => ({
   /**
    * Styles applied to the root element.
    */
@@ -75,7 +75,10 @@ export default function TextProductOption({
       <button
         {...buttonProps}
         disabled={disabled}
-        className={`outline-none focus:outline-none text-xs py-2  ${clsx(className, classes.root)}`}
+        className={`outline-none focus:outline-none text-xs py-2  ${clsx(
+          className,
+          classes.root
+        )}`}
         variant={selected ? 'contained' : 'outlined'}
         color={selected ? 'primary' : 'default'}
         onClick={onClick}

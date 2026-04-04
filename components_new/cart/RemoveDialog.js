@@ -12,7 +12,9 @@ export default function RemoveDialog({ open, setOpen, name, action }) {
     <Dialog open={open} onClose={() => setOpen(false)} maxWidth="sm">
       <DialogTitle>{name}</DialogTitle>
       <DialogContent>
-        <DialogContentText>Are you sure that you want to remove selected item?</DialogContentText>
+        <DialogContentText>
+          Are you sure that you want to remove selected item?
+        </DialogContentText>
       </DialogContent>
       <DialogActions>
         <Button onClick={action}>Remove Item</Button>

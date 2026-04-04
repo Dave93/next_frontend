@@ -145,7 +145,7 @@ export default function Cart() {
       configData = configData.toString('ascii')
       configData = JSON.parse(configData)
       setConfigData(configData)
-    } catch (e) { }
+    } catch (e) {}
   }
 
   const setCredentials = async () => {
@@ -368,24 +368,24 @@ export default function Cart() {
   const objectToQueryString = (initialObj: Object) => {
     const reducer =
       (obj: any, parentPrefix = null) =>
-        (prev: any, key: any) => {
-          const val = obj[key]
-          key = encodeURIComponent(key)
-          const prefix = parentPrefix ? `${parentPrefix}[${key}]` : key
+      (prev: any, key: any) => {
+        const val = obj[key]
+        key = encodeURIComponent(key)
+        const prefix = parentPrefix ? `${parentPrefix}[${key}]` : key
 
-          if (val == null || typeof val === 'function') {
-            prev.push(`${prefix}=`)
-            return prev
-          }
-
-          if (['number', 'boolean', 'string'].includes(typeof val)) {
-            prev.push(`${prefix}=${encodeURIComponent(val)}`)
-            return prev
-          }
-
-          prev.push(Object.keys(val).reduce(reducer(val, prefix), []).join('&'))
+        if (val == null || typeof val === 'function') {
+          prev.push(`${prefix}=`)
           return prev
         }
+
+        if (['number', 'boolean', 'string'].includes(typeof val)) {
+          prev.push(`${prefix}=${encodeURIComponent(val)}`)
+          return prev
+        }
+
+        prev.push(Object.keys(val).reduce(reducer(val, prefix), []).join('&'))
+        return prev
+      }
 
     return Object.keys(initialObj).reduce(reducer(initialObj), []).join('&')
   }
@@ -480,10 +480,10 @@ export default function Cart() {
           {locale == 'uz'
             ? configData.workTimeUz
             : locale == 'ru '
-              ? configData.workTimeRu
-              : locale == 'en'
-                ? configData.workTimeEn
-                : ''}
+            ? configData.workTimeRu
+            : locale == 'en'
+            ? configData.workTimeEn
+            : ''}
         </div>
       </div>
     )
@@ -598,8 +598,8 @@ export default function Cart() {
                       >
                         <div className="md:flex items-center md:text-center uppercase gap-1">
                           {lineItem.child &&
-                            lineItem.child.length &&
-                            lineItem.child[0].variant?.product?.id !=
+                          lineItem.child.length &&
+                          lineItem.child[0].variant?.product?.id !=
                             lineItem?.variant?.product?.box_id ? (
                             lineItem.child.length > 1 ? (
                               <div className="h-14 w-40 flex relative">
@@ -696,22 +696,23 @@ export default function Cart() {
                           <div className="md:ml-4 space-y-2 md:text-left">
                             <div className="text-xl font-bold md:w-full">
                               {lineItem.child && lineItem.child.length == 1
-                                ? `${lineItem?.variant?.product?.attribute_data
-                                  ?.name[channelName][locale || 'ru']
-                                } + ${lineItem?.child
-                                  .filter(
-                                    (v: any) =>
-                                      lineItem?.variant?.product?.box_id !=
-                                      v?.variant?.product?.id
-                                  )
-                                  .map(
-                                    (v: any) =>
-                                      v?.variant?.product?.attribute_data
-                                        ?.name[channelName][locale || 'ru']
-                                  )
-                                  .join(' + ')}`
+                                ? `${
+                                    lineItem?.variant?.product?.attribute_data
+                                      ?.name[channelName][locale || 'ru']
+                                  } + ${lineItem?.child
+                                    .filter(
+                                      (v: any) =>
+                                        lineItem?.variant?.product?.box_id !=
+                                        v?.variant?.product?.id
+                                    )
+                                    .map(
+                                      (v: any) =>
+                                        v?.variant?.product?.attribute_data
+                                          ?.name[channelName][locale || 'ru']
+                                    )
+                                    .join(' + ')}`
                                 : lineItem?.variant?.product?.attribute_data
-                                  ?.name[channelName][locale || 'ru']}{' '}
+                                    ?.name[channelName][locale || 'ru']}{' '}
                               {lineItem.bonus_id && (
                                 <span className="text-yellow">
                                   ({tr('bonus')})
@@ -736,10 +737,10 @@ export default function Cart() {
                                     {locale == 'uz'
                                       ? mod.name_uz
                                       : locale == 'ru'
-                                        ? mod.name
-                                        : locale == 'en'
-                                          ? mod.name_en
-                                          : ''}
+                                      ? mod.name
+                                      : locale == 'en'
+                                      ? mod.name_en
+                                      : ''}
                                   </div>
                                 ))}
                           </div>
@@ -769,14 +770,15 @@ export default function Cart() {
                               pattern: '# !',
                               separator: ' ',
                               decimal: '.',
-                              symbol: `${locale == 'uz'
-                                ? "so'm"
-                                : locale == 'ru'
+                              symbol: `${
+                                locale == 'uz'
+                                  ? "so'm"
+                                  : locale == 'ru'
                                   ? 'сум'
                                   : locale == 'en'
-                                    ? 'sum'
-                                    : ''
-                                }`,
+                                  ? 'sum'
+                                  : ''
+                              }`,
                               precision: 0,
                             }).format()}
                           </div>
@@ -801,14 +803,15 @@ export default function Cart() {
                               pattern: '# !',
                               separator: ' ',
                               decimal: '.',
-                              symbol: `${locale == 'uz'
-                                ? "so'm"
-                                : locale == 'ru'
+                              symbol: `${
+                                locale == 'uz'
+                                  ? "so'm"
+                                  : locale == 'ru'
                                   ? 'сум'
                                   : locale == 'en'
-                                    ? 'sum'
-                                    : ''
-                                }`,
+                                  ? 'sum'
+                                  : ''
+                              }`,
                               precision: 0,
                             }).format()}
                           </div>
@@ -855,7 +858,7 @@ export default function Cart() {
                               height="130"
                               alt={
                                 item?.attribute_data?.name[channelName][
-                                locale || 'ru'
+                                  locale || 'ru'
                                 ]
                               }
                               className="transform motion-safe:group-hover:scale-105 transition duration-500 h-20"
@@ -867,7 +870,7 @@ export default function Cart() {
                               height="130"
                               alt={
                                 item?.attribute_data?.name[channelName][
-                                locale || 'ru'
+                                  locale || 'ru'
                                 ]
                               }
                               className="rounded-full transform motion-safe:group-hover:scale-105 transition duration-500"
@@ -876,7 +879,7 @@ export default function Cart() {
                           <div className="text-lg leading-5 font-bold mb-3 md:h-12 h-16">
                             {
                               item?.attribute_data?.name[channelName][
-                              locale || 'ru'
+                                locale || 'ru'
                               ]
                             }
                           </div>
@@ -892,14 +895,15 @@ export default function Cart() {
                             pattern: '# !',
                             separator: ' ',
                             decimal: '.',
-                            symbol: `${locale == 'uz'
-                              ? "so'm"
-                              : locale == 'ru'
+                            symbol: `${
+                              locale == 'uz'
+                                ? "so'm"
+                                : locale == 'ru'
                                 ? 'сум'
                                 : locale == 'en'
-                                  ? 'sum'
-                                  : ''
-                              }`,
+                                ? 'sum'
+                                : ''
+                            }`,
                             precision: 0,
                           }).format()}
                         </div>
@@ -925,7 +929,7 @@ export default function Cart() {
                               height="130"
                               alt={
                                 item?.attribute_data?.name[channelName][
-                                locale || 'ru'
+                                  locale || 'ru'
                                 ]
                               }
                               className="transform motion-safe:group-hover:scale-105 transition duration-500 h-20"
@@ -937,7 +941,7 @@ export default function Cart() {
                               height="130"
                               alt={
                                 item?.attribute_data?.name[channelName][
-                                locale || 'ru'
+                                  locale || 'ru'
                                 ]
                               }
                               className="rounded-full transform motion-safe:group-hover:scale-105 transition duration-500"
@@ -946,7 +950,7 @@ export default function Cart() {
                           <div className="text-lg leading-5 font-bold mb-3 md:h-12 h-16">
                             {
                               item?.attribute_data?.name[channelName][
-                              locale || 'ru'
+                                locale || 'ru'
                               ]
                             }
                           </div>
@@ -962,14 +966,15 @@ export default function Cart() {
                             pattern: '# !',
                             separator: ' ',
                             decimal: '.',
-                            symbol: `${locale == 'uz'
-                              ? "so'm"
-                              : locale == 'ru'
+                            symbol: `${
+                              locale == 'uz'
+                                ? "so'm"
+                                : locale == 'ru'
                                 ? 'сум'
                                 : locale == 'en'
-                                  ? 'sum'
-                                  : ''
-                              }`,
+                                ? 'sum'
+                                : ''
+                            }`,
                             precision: 0,
                           }).format()}
                         </div>
@@ -1006,14 +1011,15 @@ export default function Cart() {
                       pattern: '# !',
                       separator: ' ',
                       decimal: '.',
-                      symbol: `${locale == 'uz'
-                        ? "so'm"
-                        : locale == 'ru'
+                      symbol: `${
+                        locale == 'uz'
+                          ? "so'm"
+                          : locale == 'ru'
                           ? 'сум'
                           : locale == 'en'
-                            ? 'sum'
-                            : ''
-                        }`,
+                          ? 'sum'
+                          : ''
+                      }`,
                       precision: 0,
                     }).format()}
                   </div>
@@ -1081,4 +1087,3 @@ export default function Cart() {
 }
 
 Cart.Layout = Layout
-

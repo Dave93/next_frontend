@@ -9,7 +9,7 @@ function NavBar({ tabs }) {
   return (
     <div className="rounded-[10px] shadow-md">
       <div className="flex justify-center">
-        {tabs.map(cat => (
+        {tabs.map((cat) => (
           <Link
             href={cat.href}
             key={cat.as}

@@ -95,11 +95,12 @@ const Orders: FC = () => {
               <div className="flex items-start justify-between mb-4">
                 <div>
                   <Link
-                    href={`${'/' +
+                    href={`${
+                      '/' +
                       activeCity.slug +
                       '/order/' +
                       hashids.encode(order.id)
-                      }`}
+                    }`}
                     legacyBehavior
                   >
                     <a className="text-blue-600 font-semibold text-lg hover:text-blue-700 hover:underline">
@@ -110,18 +111,27 @@ const Orders: FC = () => {
                     {DateTime.fromISO(order?.created_at)
                       .setLocale('ru')
                       .setZone('Asia/Tashkent')
-                      .toLocaleString(DateTime.DATE_FULL)} в {DateTime.fromISO(order?.created_at)
-                        .setLocale('ru')
-                        .setZone('Asia/Tashkent')
-                        .toLocaleString(DateTime.TIME_SIMPLE)}
+                      .toLocaleString(DateTime.DATE_FULL)}{' '}
+                    в{' '}
+                    {DateTime.fromISO(order?.created_at)
+                      .setLocale('ru')
+                      .setZone('Asia/Tashkent')
+                      .toLocaleString(DateTime.TIME_SIMPLE)}
                   </div>
                 </div>
-                <div className={`px-3 py-1 rounded-full text-sm font-medium ${order?.status === 'delivered' ? 'bg-green-100 text-green-700' :
-                    order?.status === 'cancelled' ? 'bg-red-100 text-red-700' :
-                      order?.status === 'in_progress' ? 'bg-blue-100 text-blue-700' :
-                        order?.status === 'new' ? 'bg-yellow-100 text-yellow-700' :
-                          'bg-gray-100 text-gray-700'
-                  }`}>
+                <div
+                  className={`px-3 py-1 rounded-full text-sm font-medium ${
+                    order?.status === 'delivered'
+                      ? 'bg-green-100 text-green-700'
+                      : order?.status === 'cancelled'
+                      ? 'bg-red-100 text-red-700'
+                      : order?.status === 'in_progress'
+                      ? 'bg-blue-100 text-blue-700'
+                      : order?.status === 'new'
+                      ? 'bg-yellow-100 text-yellow-700'
+                      : 'bg-gray-100 text-gray-700'
+                  }`}
+                >
                   {tr(`order_status_${order?.status}`)}
                 </div>
               </div>
@@ -137,7 +147,9 @@ const Orders: FC = () => {
                 </div>
 
                 <div>
-                  <div className="text-gray-500 text-sm">Количество товаров</div>
+                  <div className="text-gray-500 text-sm">
+                    Количество товаров
+                  </div>
                   <div className="text-gray-900 font-medium mt-1">
                     {tr('prod-count', {
                       count: order?.basket?.lines?.length || 0,
@@ -163,33 +175,56 @@ const Orders: FC = () => {
                 <div className="flex items-center space-x-4">
                   {order?.terminalData && (
                     <div className="flex items-center text-sm text-gray-600">
-                      <svg className="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
+                      <svg
+                        className="w-4 h-4 mr-1"
+                        fill="none"
+                        stroke="currentColor"
+                        viewBox="0 0 24 24"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          strokeWidth={2}
+                          d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"
+                        />
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          strokeWidth={2}
+                          d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"
+                        />
                       </svg>
                       {locale == 'uz'
                         ? order?.terminalData.name_uz
                         : locale == 'ru'
-                          ? order?.terminalData.name
-                          : locale == 'en'
-                            ? order?.terminalData.name_en
-                            : order?.terminalData.name}
+                        ? order?.terminalData.name
+                        : locale == 'en'
+                        ? order?.terminalData.name_en
+                        : order?.terminalData.name}
                     </div>
                   )}
                 </div>
 
                 <Link
-                  href={`${'/' +
-                    activeCity.slug +
-                    '/order/' +
-                    hashids.encode(order.id)
-                    }`}
+                  href={`${
+                    '/' + activeCity.slug + '/order/' + hashids.encode(order.id)
+                  }`}
                   legacyBehavior
                 >
                   <a className="text-blue-600 text-sm font-medium hover:text-blue-700 flex items-center">
                     Подробнее
-                    <svg className="w-4 h-4 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                    <svg
+                      className="w-4 h-4 ml-1"
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth={2}
+                        d="M9 5l7 7-7 7"
+                      />
                     </svg>
                   </a>
                 </Link>

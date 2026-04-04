@@ -1,4 +1,10 @@
-import { Dialog, DialogBackdrop, DialogTitle, Transition, TransitionChild } from '@headlessui/react'
+import {
+  Dialog,
+  DialogBackdrop,
+  DialogTitle,
+  Transition,
+  TransitionChild,
+} from '@headlessui/react'
 import { Fragment, useState, memo, useRef } from 'react'
 import { XIcon } from '@heroicons/react/outline'
 import { useForm } from 'react-hook-form'
@@ -14,11 +20,11 @@ const AuthModal = ({ authOpen, onClose }) => {
   const { register, handleSubmit, reset, watch, formState } = useForm({
     mode: 'onChange',
   })
-  const onSubmit = data => console.log(JSON.stringify(data))
+  const onSubmit = (data) => console.log(JSON.stringify(data))
   const authName = watch('name')
   const authPhone = watch('phone')
 
-  const showPrivacy = e => {
+  const showPrivacy = (e) => {
     e.preventDefault()
     setIsOpen(false)
     setIsShowPrivacy(true)
@@ -43,7 +49,6 @@ const AuthModal = ({ authOpen, onClose }) => {
         >
           <div className="min-h-screen px-4 text-center">
             <TransitionChild
-             
               enter="ease-out duration-300"
               enterFrom="opacity-0"
               enterTo="opacity-100"
@@ -62,7 +67,6 @@ const AuthModal = ({ authOpen, onClose }) => {
               &#8203;
             </span>
             <TransitionChild
-             
               enter="ease-out duration-300"
               enterFrom="opacity-0 scale-95"
               enterTo="opacity-100 scale-100"
@@ -169,7 +173,6 @@ const AuthModal = ({ authOpen, onClose }) => {
         >
           <div className="min-h-screen px-4 text-center">
             <TransitionChild
-             
               enter="ease-out duration-300"
               enterFrom="opacity-0"
               enterTo="opacity-100"
@@ -188,7 +191,6 @@ const AuthModal = ({ authOpen, onClose }) => {
               &#8203;
             </span>
             <TransitionChild
-             
               enter="ease-out duration-300"
               enterFrom="opacity-0 scale-95"
               enterTo="opacity-100 scale-100"

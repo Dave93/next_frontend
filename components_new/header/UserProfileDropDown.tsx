@@ -1,6 +1,12 @@
 import { Fragment, FC, memo, ReactEventHandler } from 'react'
 import React from 'react'
-import { Menu, MenuButton, MenuItem, MenuItems, Transition } from '@headlessui/react'
+import {
+  Menu,
+  MenuButton,
+  MenuItem,
+  MenuItems,
+  Transition,
+} from '@headlessui/react'
 import menuItems from '@commerce/data/profileMenu'
 import useTranslation from 'next-translate/useTranslation'
 import { useUI } from '@components/ui/context'
@@ -20,11 +26,11 @@ const UserProfileDropDown: FC<UserProfileDropdownProps> = ({
   const { locale, pathname } = router
   const { user, setUserData, activeCity, locationData } = useUI()
   const [cartId, setCartId] = React.useState<string | null>(null)
-  
+
   React.useEffect(() => {
     setCartId(localStorage.getItem('basketId'))
   }, [])
-  
+
   const { mutate } = useCart({
     cartId,
     locationData,
@@ -70,7 +76,6 @@ const UserProfileDropDown: FC<UserProfileDropdownProps> = ({
 
           <Transition
             show={open}
-           
             enter="transition ease-out duration-100"
             enterFrom="transform opacity-0 scale-95"
             enterTo="transform opacity-100 scale-100"
@@ -78,9 +83,7 @@ const UserProfileDropDown: FC<UserProfileDropdownProps> = ({
             leaveFrom="transform opacity-100 scale-100"
             leaveTo="transform opacity-0 scale-95"
           >
-            <MenuItems
-              className="absolute bg-white divide-gray-100 divide-y focus:outline-none mt-2 origin-top-right right-0 ring-1 ring-black ring-opacity-5 overflow-hidden rounded-2xl shadow-lg z-20"
-            >
+            <MenuItems className="absolute bg-white divide-gray-100 divide-y focus:outline-none mt-2 origin-top-right right-0 ring-1 ring-black ring-opacity-5 overflow-hidden rounded-2xl shadow-lg z-20">
               {items.map((item) => {
                 let href = `${item.href}`
 

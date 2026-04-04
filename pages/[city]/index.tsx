@@ -23,7 +23,6 @@ import { useUI } from '@components/ui/context'
 import cookies from 'next-cookies'
 import axios from 'axios'
 
-
 let webAddress = process.env.NEXT_PUBLIC_API_URL
 
 const HalfPizzaNoSSR = dynamic(
@@ -367,8 +366,9 @@ export default function Home({
             )}
           </div>
           <div
-            className={`sticky ${isStickySmall ? 'top-16' : 'top-16'
-              } max-h-screen hidden md:block`}
+            className={`sticky ${
+              isStickySmall ? 'top-16' : 'top-16'
+            } max-h-screen hidden md:block`}
           >
             {halfModeProds.map((sec: any) => (
               <div

@@ -31,7 +31,12 @@ export async function getServerSideProps({
   ...context
 }: GetServerSidePropsContext) {
   const c = cookies(context)
-  const config = { locale, locales, queryParams: { ...query, city: c.city_slug }, city: c.city_slug }
+  const config = {
+    locale,
+    locales,
+    queryParams: { ...query, city: c.city_slug },
+    city: c.city_slug,
+  }
 
   const productsPromise = commerce.getAllProducts({
     variables: { first: 6 },
@@ -532,7 +537,11 @@ export default function ProductPage({
                   <span itemProp="price">{formatPrice(totalPrice)}</span>
                 </div>
                 {addedToCart ? (
-                  <Link href={`/${chosenCity?.slug || ''}/cart`} prefetch={false} legacyBehavior>
+                  <Link
+                    href={`/${chosenCity?.slug || ''}/cart`}
+                    prefetch={false}
+                    legacyBehavior
+                  >
                     <a className="bg-yellow focus:outline-none font-bold outline-none px-10 py-3 rounded-full text-white uppercase flex items-center justify-center min-w-[200px]">
                       {tr('basket')}
                     </a>
@@ -550,8 +559,19 @@ export default function ProductPage({
                         fill="none"
                         viewBox="0 0 24 24"
                       >
-                        <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
-                        <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z" />
+                        <circle
+                          className="opacity-25"
+                          cx="12"
+                          cy="12"
+                          r="10"
+                          stroke="currentColor"
+                          strokeWidth="4"
+                        />
+                        <path
+                          className="opacity-75"
+                          fill="currentColor"
+                          d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+                        />
                       </svg>
                     ) : (
                       tr('main_to_basket')

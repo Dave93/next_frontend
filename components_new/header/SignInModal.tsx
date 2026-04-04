@@ -7,7 +7,13 @@ import React, {
   useMemo,
   useCallback,
 } from 'react'
-import { Dialog, DialogBackdrop, DialogTitle, Transition, TransitionChild } from '@headlessui/react'
+import {
+  Dialog,
+  DialogBackdrop,
+  DialogTitle,
+  Transition,
+  TransitionChild,
+} from '@headlessui/react'
 import useTranslation from 'next-translate/useTranslation'
 import { XIcon } from '@heroicons/react/outline'
 import { useForm, Controller, SubmitHandler } from 'react-hook-form'
@@ -126,14 +132,17 @@ const SignInButton: FC = () => {
 
       const captcha = await executeRecaptcha('signIn')
       setSubmitError('')
-      const csrfReq = await axios(`${process.env.NEXT_PUBLIC_API_URL}/api/keldi`, {
-        method: 'GET',
-        headers: {
-          'Content-Type': 'application/json',
-          crossDomain: true,
-        },
-        withCredentials: true,
-      })
+      const csrfReq = await axios(
+        `${process.env.NEXT_PUBLIC_API_URL}/api/keldi`,
+        {
+          method: 'GET',
+          headers: {
+            'Content-Type': 'application/json',
+            crossDomain: true,
+          },
+          withCredentials: true,
+        }
+      )
       let { data: res } = csrfReq
       const csrf = Buffer.from(res.result, 'base64').toString('ascii')
 
@@ -283,7 +292,6 @@ const SignInButton: FC = () => {
             >
               <div className="min-h-screen px-4 text-center">
                 <TransitionChild
-                 
                   enter="ease-out duration-300"
                   enterFrom="opacity-0"
                   enterTo="opacity-100"
@@ -302,7 +310,6 @@ const SignInButton: FC = () => {
                   &#8203;
                 </span>
                 <TransitionChild
-                 
                   enter="ease-out duration-300"
                   enterFrom="opacity-0 scale-95"
                   enterTo="opacity-100 scale-100"
@@ -342,7 +349,12 @@ const SignInButton: FC = () => {
                                   onChange={handleOtpChange}
                                   numInputs={4}
                                   inputType="number"
-                                  containerStyle={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '0.375rem', justifyContent: 'center' }}
+                                  containerStyle={{
+                                    display: 'grid',
+                                    gridTemplateColumns: 'repeat(4, 1fr)',
+                                    gap: '0.375rem',
+                                    justifyContent: 'center',
+                                  }}
                                   renderInput={(props) => (
                                     <input
                                       {...props}
@@ -619,7 +631,6 @@ const SignInButton: FC = () => {
             >
               <div className="min-h-screen px-4 text-center">
                 <TransitionChild
-                 
                   enter="ease-out duration-300"
                   enterFrom="opacity-0"
                   enterTo="opacity-100"
@@ -638,7 +649,6 @@ const SignInButton: FC = () => {
                   &#8203;
                 </span>
                 <TransitionChild
-                 
                   enter="ease-out duration-300"
                   enterFrom="opacity-0 scale-95"
                   enterTo="opacity-100 scale-100"

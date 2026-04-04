@@ -21,7 +21,7 @@ function SearchDesktop() {
     <SearchForm>
       <SearchField
         ref={inputRef}
-        onChange={value => setQuery(value)}
+        onChange={(value) => setQuery(value)}
         value={query}
         onFocus={() => setPopoverOpen(true)}
         submitButtonVariant="none"

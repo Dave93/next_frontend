@@ -14,7 +14,7 @@ import Image from 'react-storefront/Image'
 import Link from 'react-storefront/link/Link'
 import { Hbox } from 'react-storefront/Box'
 
-const useStyles = makeStyles(theme => ({
+const useStyles = makeStyles((theme) => ({
   root: {},
   image: {
     height: 150,
@@ -81,8 +81,14 @@ export default function AddToCartConfirmation({
           <div className={classes.image}>
             <Image
               fill
-              src={get(color, 'media.thumbnail.src') || get(product, 'thumbnail.src')}
-              alt={get(color, 'media.thumbnail.alt') || get(product, 'thumbnail.alt')}
+              src={
+                get(color, 'media.thumbnail.src') ||
+                get(product, 'thumbnail.src')
+              }
+              alt={
+                get(color, 'media.thumbnail.alt') ||
+                get(product, 'thumbnail.alt')
+              }
             />
           </div>
           <div className={classes.info}>
@@ -96,7 +102,12 @@ export default function AddToCartConfirmation({
       </DialogContent>
       <DialogActions disableSpacing className={classes.actions}>
         <Link href="/cart">
-          <Button className={classes.viewCart} variant="contained" size="large" color="primary">
+          <Button
+            className={classes.viewCart}
+            variant="contained"
+            size="large"
+            color="primary"
+          >
             View Cart
           </Button>
         </Link>

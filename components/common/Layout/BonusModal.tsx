@@ -1,6 +1,11 @@
 import { City } from '@commerce/types/cities'
 import { useUI } from '@components/ui/context'
-import { Dialog, DialogBackdrop, Transition, TransitionChild } from '@headlessui/react'
+import {
+  Dialog,
+  DialogBackdrop,
+  Transition,
+  TransitionChild,
+} from '@headlessui/react'
 import axios from 'axios'
 import Cookies from 'js-cookie'
 import useTranslation from 'next-translate/useTranslation'
@@ -90,7 +95,6 @@ const BonusModal: FC = () => {
         >
           <div className="min-h-screen px-4 text-center">
             <TransitionChild
-             
               enter="ease-out duration-300"
               enterFrom="opacity-0"
               enterTo="opacity-100"
@@ -109,7 +113,6 @@ const BonusModal: FC = () => {
             </span>
 
             <TransitionChild
-             
               enter="ease-out duration-300"
               enterFrom="opacity-0 scale-95"
               enterTo="opacity-100 scale-100"

@@ -66,10 +66,11 @@ const Branch: FC = () => {
           <div className="space-y-2 overflow-y-auto">
             {branches.map((branch: any) => (
               <div
-                className={`border-1 border rounded-md p-4 cursor-pointer ${activeBranch != null && activeBranch.id == branch.id
-                  ? 'bg-primary text-white'
-                  : 'hover:bg-primary hover:text-white'
-                  }`}
+                className={`border-1 border rounded-md p-4 cursor-pointer ${
+                  activeBranch != null && activeBranch.id == branch.id
+                    ? 'bg-primary text-white'
+                    : 'hover:bg-primary hover:text-white'
+                }`}
                 key={branch.id}
                 onClick={() => {
                   if (activeBranch != null && activeBranch.id == branch.id) {
@@ -83,19 +84,19 @@ const Branch: FC = () => {
                   {locale == 'uz'
                     ? branch.name_uz
                     : locale == 'ru'
-                      ? branch.name
-                      : locale == 'en'
-                        ? branch.name_en
-                        : branch.name}
+                    ? branch.name
+                    : locale == 'en'
+                    ? branch.name_en
+                    : branch.name}
                 </div>
                 <div>
                   {locale == 'uz'
                     ? branch.desc_uz
                     : locale == 'ru'
-                      ? branch.desc
-                      : locale == 'en'
-                        ? branch.desc_en
-                        : branch.desc}
+                    ? branch.desc
+                    : locale == 'en'
+                    ? branch.desc_en
+                    : branch.desc}
                 </div>
               </div>
             ))}

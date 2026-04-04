@@ -12,7 +12,21 @@ import React, {
   useEffect,
   useCallback,
 } from 'react'
-import { Dialog, DialogBackdrop, DialogDescription, DialogTitle, Disclosure, DisclosureButton, DisclosurePanel, Menu, MenuButton, MenuItem, MenuItems, Transition, TransitionChild } from '@headlessui/react'
+import {
+  Dialog,
+  DialogBackdrop,
+  DialogDescription,
+  DialogTitle,
+  Disclosure,
+  DisclosureButton,
+  DisclosurePanel,
+  Menu,
+  MenuButton,
+  MenuItem,
+  MenuItems,
+  Transition,
+  TransitionChild,
+} from '@headlessui/react'
 import {
   CheckIcon,
   ChevronDownIcon,
@@ -269,15 +283,16 @@ const Orders: FC<OrdersProps> = ({ channelName }: { channelName: any }) => {
     for (let i = 0; i < 7; i++) {
       const date = currentDate.plus({ days: i })
       const formattedDate = date.toFormat('dd.MM.yyyy')
-      const label = i === 0
-        ? `${tr('today')} (${formattedDate})`
-        : i === 1
+      const label =
+        i === 0
+          ? `${tr('today')} (${formattedDate})`
+          : i === 1
           ? `${tr('tomorrow')} (${formattedDate})`
           : formattedDate
 
       dateOptions.push({
         value: date.toFormat('yyyy-MM-dd'),
-        label: label
+        label: label,
       })
     }
 
@@ -319,7 +334,10 @@ const Orders: FC<OrdersProps> = ({ channelName }: { channelName: any }) => {
     while (startTime < endTime) {
       const slotEnd = startTime.plus({ minutes: 20 })
 
-      const val = `${zeroPad(startTime.hour, 2)}:${zeroPad(startTime.minute, 2)} - ${zeroPad(slotEnd.hour, 2)}:${zeroPad(slotEnd.minute, 2)}`
+      const val = `${zeroPad(startTime.hour, 2)}:${zeroPad(
+        startTime.minute,
+        2
+      )} - ${zeroPad(slotEnd.hour, 2)}:${zeroPad(slotEnd.minute, 2)}`
 
       timeOptions.push({
         value: val,
@@ -358,14 +376,14 @@ const Orders: FC<OrdersProps> = ({ channelName }: { channelName: any }) => {
   const [selectedCoordinates, setSelectedCoordinates] = useState(
     locationData && locationData.location
       ? [
-        {
-          coordinates: {
-            lat: locationData.location[0],
-            long: locationData.location[1],
+          {
+            coordinates: {
+              lat: locationData.location[0],
+              long: locationData.location[1],
+            },
+            key: `${locationData.location[0]}${locationData.location[1]}`,
           },
-          key: `${locationData.location[0]}${locationData.location[1]}`,
-        },
-      ]
+        ]
       : ([] as any)
   )
 
@@ -378,8 +396,8 @@ const Orders: FC<OrdersProps> = ({ channelName }: { channelName: any }) => {
       : [activeCity?.lat, activeCity?.lon]) as number[]
   )
   const [mapZoom, setMapZoom] = useState(
-    (locationData?.location && locationData.location.length 
-      ? 17 
+    (locationData?.location && locationData.location.length
+      ? 17
       : activeCity?.map_zoom || 10) as number
   )
 
@@ -400,7 +418,7 @@ const Orders: FC<OrdersProps> = ({ channelName }: { channelName: any }) => {
       configData = configData.toString('ascii')
       configData = JSON.parse(configData)
       setConfigData(configData)
-    } catch (e) { }
+    } catch (e) {}
 
     let yandexGeoKey = configData.yandexGeoKey
     yandexGeoKey = yandexGeoKey.split(',')
@@ -472,7 +490,8 @@ const Orders: FC<OrdersProps> = ({ channelName }: { channelName: any }) => {
       return []
     }
     const { data: getCodeData } = await axios.get(
-      `/api/geocode?text=${encodeURI(event.target.value)}&bounds=${activeCity.bounds
+      `/api/geocode?text=${encodeURI(event.target.value)}&bounds=${
+        activeCity.bounds
       }`
     )
 
@@ -771,14 +790,14 @@ const Orders: FC<OrdersProps> = ({ channelName }: { channelName: any }) => {
       // if returnResult is true, return object else return setLocationData
       return returnResult
         ? {
-          terminal_id: undefined,
-          terminalData: undefined,
-        }
+            terminal_id: undefined,
+            terminalData: undefined,
+          }
         : setLocationData({
-          ...locationData,
-          terminal_id: undefined,
-          terminalData: undefined,
-        })
+            ...locationData,
+            terminal_id: undefined,
+            terminalData: undefined,
+          })
     }
 
     const { data: terminalsData } = await axios.get(
@@ -799,14 +818,14 @@ const Orders: FC<OrdersProps> = ({ channelName }: { channelName: any }) => {
       // if returnResult is true, return object else return setLocationData
       return returnResult
         ? {
-          terminal_id: undefined,
-          terminalData: undefined,
-        }
+            terminal_id: undefined,
+            terminalData: undefined,
+          }
         : setLocationData({
-          ...locationData,
-          terminal_id: undefined,
-          terminalData: undefined,
-        })
+            ...locationData,
+            terminal_id: undefined,
+            terminalData: undefined,
+          })
     } else {
       let currentTerminal = terminalsData.data.items[0]
       if (!currentTerminal.isWorking) {
@@ -816,14 +835,14 @@ const Orders: FC<OrdersProps> = ({ channelName }: { channelName: any }) => {
         })
         return returnResult
           ? {
-            terminal_id: undefined,
-            terminalData: undefined,
-          }
+              terminal_id: undefined,
+              terminalData: undefined,
+            }
           : setLocationData({
-            ...locationData,
-            terminal_id: undefined,
-            terminalData: undefined,
-          })
+              ...locationData,
+              terminal_id: undefined,
+              terminalData: undefined,
+            })
       }
     }
 
@@ -831,14 +850,14 @@ const Orders: FC<OrdersProps> = ({ channelName }: { channelName: any }) => {
       // if returnResult is true, return object else return setLocationData
       return returnResult
         ? {
-          terminal_id: terminalsData.data.items[0].id,
-          terminalData: terminalsData.data.items[0],
-        }
+            terminal_id: terminalsData.data.items[0].id,
+            terminalData: terminalsData.data.items[0],
+          }
         : setLocationData({
-          ...locationData,
-          terminal_id: terminalsData.data.items[0].id,
-          terminalData: terminalsData.data.items[0],
-        })
+            ...locationData,
+            terminal_id: terminalsData.data.items[0].id,
+            terminalData: terminalsData.data.items[0],
+          })
     }
   }
 
@@ -1018,10 +1037,10 @@ const Orders: FC<OrdersProps> = ({ channelName }: { channelName: any }) => {
             locale == 'ru'
               ? 'Введите правильный адрес'
               : locale == 'uz'
-                ? "To'g'ri manzilni kiriting"
-                : locale == 'en'
-                  ? 'Enter the correct address'
-                  : ''
+              ? "To'g'ri manzilni kiriting"
+              : locale == 'en'
+              ? 'Enter the correct address'
+              : ''
           toast.error(erText, {
             position: toast.POSITION.BOTTOM_RIGHT,
             hideProgressBar: true,
@@ -1080,7 +1099,7 @@ const Orders: FC<OrdersProps> = ({ channelName }: { channelName: any }) => {
       )
       router.push(`/${activeCity.slug}/order/${data.order.id}`)
       setTimeout(() => {
-        ; (window.b24order = window.b24order || []).push({
+        ;(window.b24order = window.b24order || []).push({
           id: orderHashids.decode(data.order.id)[0],
           sum: data.order?.order_total / 100,
         })
@@ -1253,10 +1272,10 @@ const Orders: FC<OrdersProps> = ({ channelName }: { channelName: any }) => {
           {locale == 'uz'
             ? configData.workTimeUz
             : locale == 'ru '
-              ? configData.workTimeRu
-              : locale == 'en'
-                ? configData.workTimeEn
-                : ''}
+            ? configData.workTimeRu
+            : locale == 'en'
+            ? configData.workTimeEn
+            : ''}
         </div>
       </div>
     )
@@ -1425,17 +1444,19 @@ const Orders: FC<OrdersProps> = ({ channelName }: { channelName: any }) => {
         <div className="bg-white flex rounded-2xl w-full items-center p-10 h-32 mb-5">
           <div className="bg-gray-100 flex  w-full rounded-full">
             <button
-              className={`${tabIndex == 'deliver'
-                ? 'bg-yellow text-white'
-                : ' text-gray-400'
-                } flex-1 font-bold py-3 text-[18px] rounded-full outline-none focus:outline-none`}
+              className={`${
+                tabIndex == 'deliver'
+                  ? 'bg-yellow text-white'
+                  : ' text-gray-400'
+              } flex-1 font-bold py-3 text-[18px] rounded-full outline-none focus:outline-none`}
               onClick={() => changeTabIndex('deliver')}
             >
               {tr('delivery')}
             </button>
             <button
-              className={`${tabIndex == 'pickup' ? 'bg-yellow text-white' : ' text-gray-400'
-                } flex-1 font-bold py-3 text-[18px] rounded-full outline-none focus:outline-none`}
+              className={`${
+                tabIndex == 'pickup' ? 'bg-yellow text-white' : ' text-gray-400'
+              } flex-1 font-bold py-3 text-[18px] rounded-full outline-none focus:outline-none`}
               onClick={() => changeTabIndex('pickup')}
             >
               {tr('pickup')}
@@ -1455,10 +1476,10 @@ const Orders: FC<OrdersProps> = ({ channelName }: { channelName: any }) => {
                       {locale == 'uz'
                         ? chosenCity?.name_uz
                         : locale == 'ru'
-                          ? chosenCity?.name
-                          : locale == 'en'
-                            ? chosenCity?.name_en
-                            : ''}
+                        ? chosenCity?.name
+                        : locale == 'en'
+                        ? chosenCity?.name_en
+                        : ''}
                       <ChevronDownIcon
                         className="w-5 h-5 ml-2 -mr-1 text-violet-200 hover:text-violet-100"
                         aria-hidden="true"
@@ -1466,7 +1487,6 @@ const Orders: FC<OrdersProps> = ({ channelName }: { channelName: any }) => {
                     </MenuButton>
                   </div>
                   <Transition
-                   
                     enter="transition ease-out duration-100"
                     enterFrom="transform opacity-0 scale-95"
                     enterTo="transform opacity-100 scale-100"
@@ -1479,18 +1499,19 @@ const Orders: FC<OrdersProps> = ({ channelName }: { channelName: any }) => {
                         <MenuItem key={city.id}>
                           <span
                             onClick={() => setActive(city)}
-                            className={`block px-4 py-2 text-sm cursor-pointer ${city.id == chosenCity.id
-                              ? 'bg-secondary text-white'
-                              : 'text-secondary'
-                              }`}
+                            className={`block px-4 py-2 text-sm cursor-pointer ${
+                              city.id == chosenCity.id
+                                ? 'bg-secondary text-white'
+                                : 'text-secondary'
+                            }`}
                           >
                             {locale == 'uz'
                               ? city.name_uz
                               : locale == 'ru'
-                                ? city.name
-                                : locale == 'en'
-                                  ? city.name_en
-                                  : ''}
+                              ? city.name
+                              : locale == 'en'
+                              ? city.name_en
+                              : ''}
                           </span>
                         </MenuItem>
                       ))}
@@ -1565,25 +1586,28 @@ const Orders: FC<OrdersProps> = ({ channelName }: { channelName: any }) => {
                     {addressList.map((item: Address) => (
                       <div
                         key={item.id}
-                        className={`px-4 py-1 rounded-full cursor-pointer relative pr-6 capitalize flex items-center z-10 ${addressId == item.id
-                          ? 'bg-primary text-white'
-                          : 'bg-gray-100'
-                          }`}
+                        className={`px-4 py-1 rounded-full cursor-pointer relative pr-6 capitalize flex items-center z-10 ${
+                          addressId == item.id
+                            ? 'bg-primary text-white'
+                            : 'bg-gray-100'
+                        }`}
                         onClick={() => selectAddressLocal(item)}
                       >
                         <div className="">
                           <BookmarkIcon
-                            className={`h-5  w-5  hover:text-yellow-light mr-2 ${addressId == item.id
-                              ? ' text-white'
-                              : 'text-gray-400'
-                              }`}
+                            className={`h-5  w-5  hover:text-yellow-light mr-2 ${
+                              addressId == item.id
+                                ? ' text-white'
+                                : 'text-gray-400'
+                            }`}
                           />
                         </div>
                         <div className="">
                           <div>{item.label ? item.label : item.address}</div>
                           <div
-                            className={`text-sm  ${addressId == item.id ? ' text-white' : ''
-                              }`}
+                            className={`text-sm  ${
+                              addressId == item.id ? ' text-white' : ''
+                            }`}
                           >
                             {item.label && item.address}
                           </div>
@@ -1661,33 +1685,35 @@ const Orders: FC<OrdersProps> = ({ channelName }: { channelName: any }) => {
                             >
                               {isOpen
                                 ? geoSuggestions.map(
-                                  (item: any, index: number) => (
-                                    <li
-                                      {...getItemProps({
-                                        key: index,
-                                        index,
-                                        item,
-                                        className: `py-2 px-4 flex items-center ${highlightedIndex == index
-                                          ? 'bg-gray-100'
-                                          : 'bg-white'
+                                    (item: any, index: number) => (
+                                      <li
+                                        {...getItemProps({
+                                          key: index,
+                                          index,
+                                          item,
+                                          className: `py-2 px-4 flex items-center ${
+                                            highlightedIndex == index
+                                              ? 'bg-gray-100'
+                                              : 'bg-white'
                                           }`,
-                                      })}
-                                    >
-                                      <CheckIcon
-                                        className={`w-5 text-yellow font-bold mr-2 ${highlightedIndex == index
-                                          ? ''
-                                          : 'invisible'
+                                        })}
+                                      >
+                                        <CheckIcon
+                                          className={`w-5 text-yellow font-bold mr-2 ${
+                                            highlightedIndex == index
+                                              ? ''
+                                              : 'invisible'
                                           }`}
-                                      />
-                                      <div>
-                                        <div>{item.title}</div>
-                                        <div className="text-sm">
-                                          {item.description}
+                                        />
+                                        <div>
+                                          <div>{item.title}</div>
+                                          <div className="text-sm">
+                                            {item.description}
+                                          </div>
                                         </div>
-                                      </div>
-                                    </li>
+                                      </li>
+                                    )
                                   )
-                                )
                                 : null}
                             </ul>
                           </div>
@@ -1736,8 +1762,9 @@ const Orders: FC<OrdersProps> = ({ channelName }: { channelName: any }) => {
                           Use the `open` render prop to rotate the icon when the panel is open
                         */}
                             <ChevronRightIcon
-                              className={`w-6 transform ${open ? 'rotate-90' : '-rotate-90'
-                                }`}
+                              className={`w-6 transform ${
+                                open ? 'rotate-90' : '-rotate-90'
+                              }`}
                             />
                           </DisclosureButton>
                           <Transition
@@ -1882,23 +1909,26 @@ const Orders: FC<OrdersProps> = ({ channelName }: { channelName: any }) => {
                 {pickupPoints.map((point) => (
                   <div
                     key={point.id}
-                    className={`border flex items-start p-3 rounded-[15px] cursor-pointer ${activePoint && activePoint == point.id
-                      ? 'border-yellow'
-                      : 'border-gray-400'
-                      } ${!point.isWorking ? 'opacity-30' : ''}`}
+                    className={`border flex items-start p-3 rounded-[15px] cursor-pointer ${
+                      activePoint && activePoint == point.id
+                        ? 'border-yellow'
+                        : 'border-gray-400'
+                    } ${!point.isWorking ? 'opacity-30' : ''}`}
                     onClick={() => choosePickupPoint(point)}
                   >
                     <div
-                      className={`border mr-4 mt-1 rounded-full ${activePoint && activePoint == point.id
-                        ? 'border-yellow'
-                        : 'border-gray-400'
-                        }`}
+                      className={`border mr-4 mt-1 rounded-full ${
+                        activePoint && activePoint == point.id
+                          ? 'border-yellow'
+                          : 'border-gray-400'
+                      }`}
                     >
                       <div
-                        className={`h-3 m-1 rounded-full w-3 ${activePoint && activePoint == point.id
-                          ? 'bg-yellow'
-                          : 'bg-gray-400'
-                          }`}
+                        className={`h-3 m-1 rounded-full w-3 ${
+                          activePoint && activePoint == point.id
+                            ? 'bg-yellow'
+                            : 'bg-gray-400'
+                        }`}
                       ></div>
                     </div>
                     <div>
@@ -1911,10 +1941,10 @@ const Orders: FC<OrdersProps> = ({ channelName }: { channelName: any }) => {
                           {locale == 'ru'
                             ? point.desc
                             : locale == 'uz'
-                              ? point.desc_uz
-                              : locale == 'en'
-                                ? point.desc_en
-                                : ''}
+                            ? point.desc_uz
+                            : locale == 'en'
+                            ? point.desc_en
+                            : ''}
                         </div>
                       )}
                       {point.near && (
@@ -1923,10 +1953,10 @@ const Orders: FC<OrdersProps> = ({ channelName }: { channelName: any }) => {
                           {locale == 'ru'
                             ? point.near
                             : locale == 'uz'
-                              ? point.near_uz
-                              : locale == 'en'
-                                ? point.near_en
-                                : ''}
+                            ? point.near_uz
+                            : locale == 'en'
+                            ? point.near_en
+                            : ''}
                         </div>
                       )}
                       <div className="font-bold text-gray-700">
@@ -1963,19 +1993,21 @@ const Orders: FC<OrdersProps> = ({ channelName }: { channelName: any }) => {
         </div>
         <div className="flex  md:block space-x-5">
           <button
-            className={`${deliveryActive == 'now'
-              ? 'bg-yellow text-white'
-              : 'text-gray-400 bg-gray-100'
-              } flex-1 font-bold  rounded-full outline-none focus:outline-none  h-11 md:w-44`}
+            className={`${
+              deliveryActive == 'now'
+                ? 'bg-yellow text-white'
+                : 'text-gray-400 bg-gray-100'
+            } flex-1 font-bold  rounded-full outline-none focus:outline-none  h-11 md:w-44`}
             onClick={() => setDeliverySchedule('now')}
           >
             {tr('hurry_up')}
           </button>
           <button
-            className={`${deliveryActive == 'later'
-              ? 'bg-yellow text-white'
-              : 'text-gray-400 bg-gray-100'
-              } flex-1 font-bold  rounded-full outline-none focus:outline-none  h-11 md:w-44 md:ml-5`}
+            className={`${
+              deliveryActive == 'later'
+                ? 'bg-yellow text-white'
+                : 'text-gray-400 bg-gray-100'
+            } flex-1 font-bold  rounded-full outline-none focus:outline-none  h-11 md:w-44 md:ml-5`}
             onClick={() => setDeliverySchedule('later')}
           >
             {tr('later')}
@@ -1989,8 +2021,11 @@ const Orders: FC<OrdersProps> = ({ channelName }: { channelName: any }) => {
                   items={dateOptions}
                   placeholder={tr('select_date')}
                   onChange={(e: any) => {
-                    onChange(e);
-                    const selectedDateTime = DateTime.fromFormat(e, 'yyyy-MM-dd')
+                    onChange(e)
+                    const selectedDateTime = DateTime.fromFormat(
+                      e,
+                      'yyyy-MM-dd'
+                    )
                     setSelectedDate(selectedDateTime)
                   }}
                 />
@@ -2032,10 +2067,11 @@ const Orders: FC<OrdersProps> = ({ channelName }: { channelName: any }) => {
         <div className="text-lg mb-5 font-bold">{tr('order_pay')}</div>
         <div className="flex md:block">
           <button
-            className={`${openTab !== 1
-              ? 'text-gray-400 bg-gray-100'
-              : 'bg-yellow text-white'
-              } flex-1 font-bold  rounded-full outline-none focus:outline-none  h-11 md:w-44`}
+            className={`${
+              openTab !== 1
+                ? 'text-gray-400 bg-gray-100'
+                : 'bg-yellow text-white'
+            } flex-1 font-bold  rounded-full outline-none focus:outline-none  h-11 md:w-44`}
             onClick={() => setOpenTab(1)}
           >
             {tr('in_cash')}
@@ -2051,10 +2087,11 @@ const Orders: FC<OrdersProps> = ({ channelName }: { channelName: any }) => {
             {tr('payment_type_card')}
           </button> */}
           <button
-            className={`${openTab !== 3
-              ? 'text-gray-400 bg-gray-100'
-              : 'bg-yellow text-white'
-              } flex-1 font-bold  rounded-full outline-none focus:outline-none  h-11 md:w-44 ml-5`}
+            className={`${
+              openTab !== 3
+                ? 'text-gray-400 bg-gray-100'
+                : 'bg-yellow text-white'
+            } flex-1 font-bold  rounded-full outline-none focus:outline-none  h-11 md:w-44 ml-5`}
             onClick={() => setOpenTab(3)}
           >
             {tr('online')}
@@ -2170,8 +2207,9 @@ const Orders: FC<OrdersProps> = ({ channelName }: { channelName: any }) => {
                 )
                 .map((payment: string) => (
                   <label
-                    className={`flex justify-around items-center w-24 h-24 p-3 rounded-2xl ${payType == payment ? 'border-yellow' : 'border-gray-200'
-                      } border cursor-pointer`}
+                    className={`flex justify-around items-center w-24 h-24 p-3 rounded-2xl ${
+                      payType == payment ? 'border-yellow' : 'border-gray-200'
+                    } border cursor-pointer`}
                     key={payment}
                   >
                     <img src={`/assets/${payment}.svg`} />
@@ -2231,8 +2269,9 @@ const Orders: FC<OrdersProps> = ({ channelName }: { channelName: any }) => {
                           Use the `open` render prop to rotate the icon when the panel is open
                         */}
                 <ChevronRightIcon
-                  className={`w-6 transform ${open ? 'rotate-90' : '-rotate-90'
-                    }`}
+                  className={`w-6 transform ${
+                    open ? 'rotate-90' : '-rotate-90'
+                  }`}
                 />
               </DisclosureButton>
               <Transition
@@ -2273,12 +2312,13 @@ const Orders: FC<OrdersProps> = ({ channelName }: { channelName: any }) => {
               key={lineItem.id}
             >
               {lineItem.child &&
-                lineItem.child.length &&
-                lineItem.child[0].variant?.product?.id !=
+              lineItem.child.length &&
+              lineItem.child[0].variant?.product?.id !=
                 lineItem?.variant?.product?.box_id ? (
                 <div
-                  className={`${isProductInStop.includes(lineItem.id) ? 'opacity-25' : ''
-                    } h-20 w-20 flex relative`}
+                  className={`${
+                    isProductInStop.includes(lineItem.id) ? 'opacity-25' : ''
+                  } h-20 w-20 flex relative`}
                 >
                   <div className="w-full relative overflow-hidden">
                     <div>
@@ -2315,8 +2355,9 @@ const Orders: FC<OrdersProps> = ({ channelName }: { channelName: any }) => {
                 </div>
               ) : (
                 <div
-                  className={`${isProductInStop.includes(lineItem.id) ? 'opacity-25' : ''
-                    } flex items-center`}
+                  className={`${
+                    isProductInStop.includes(lineItem.id) ? 'opacity-25' : ''
+                  } flex items-center`}
                 >
                   <Image
                     src={
@@ -2332,13 +2373,15 @@ const Orders: FC<OrdersProps> = ({ channelName }: { channelName: any }) => {
                 </div>
               )}
               <div
-                className={`${isProductInStop.includes(lineItem.id) ? 'opacity-25' : ''
-                  }font-bold md:text-xl text-base space-y-2 text-center  w-1/3`}
+                className={`${
+                  isProductInStop.includes(lineItem.id) ? 'opacity-25' : ''
+                }font-bold md:text-xl text-base space-y-2 text-center  w-1/3`}
               >
                 {lineItem.child && lineItem.child.length == 1 ? (
-                  `${lineItem?.variant?.product?.attribute_data?.name[
-                  channelName
-                  ][locale || 'ru']
+                  `${
+                    lineItem?.variant?.product?.attribute_data?.name[
+                      channelName
+                    ][locale || 'ru']
                   } + ${lineItem?.child
                     .filter(
                       (v: any) =>
@@ -2348,7 +2391,7 @@ const Orders: FC<OrdersProps> = ({ channelName }: { channelName: any }) => {
                     .map(
                       (v: any) =>
                         v?.variant?.product?.attribute_data?.name[channelName][
-                        locale || 'ru'
+                          locale || 'ru'
                         ]
                     )
                     .join(' + ')}`
@@ -2361,8 +2404,8 @@ const Orders: FC<OrdersProps> = ({ channelName }: { channelName: any }) => {
                     {isProductInStop.includes(lineItem.id)
                       ? tr('stop_product')
                       : lineItem?.variant?.product?.attribute_data?.name[
-                      channelName
-                      ][locale || 'ru']}
+                          channelName
+                        ][locale || 'ru']}
                   </div>
                 )}
                 {lineItem.bonus_id && (
@@ -2382,10 +2425,10 @@ const Orders: FC<OrdersProps> = ({ channelName }: { channelName: any }) => {
                         {locale == 'uz'
                           ? mod.name_uz
                           : locale == 'ru'
-                            ? mod.name
-                            : locale == 'en'
-                              ? mod.name_en
-                              : ''}
+                          ? mod.name
+                          : locale == 'en'
+                          ? mod.name_en
+                          : ''}
                       </div>
                     ))}
               </div>
@@ -2396,22 +2439,24 @@ const Orders: FC<OrdersProps> = ({ channelName }: { channelName: any }) => {
               )} */}
 
               <div
-                className={`${isProductInStop.includes(lineItem.id) ? 'opacity-25' : ''
-                  } md:text-xl text-base`}
+                className={`${
+                  isProductInStop.includes(lineItem.id) ? 'opacity-25' : ''
+                } md:text-xl text-base`}
               >
                 {(lineItem.total > 0 ? lineItem.quantity + ' X ' : '') +
                   currency(lineItem.total, {
                     pattern: '# !',
                     separator: ' ',
                     decimal: '.',
-                    symbol: `${locale == 'uz'
-                      ? "so'm"
-                      : locale == 'ru'
+                    symbol: `${
+                      locale == 'uz'
+                        ? "so'm"
+                        : locale == 'ru'
                         ? 'сум'
                         : locale == 'en'
-                          ? 'sum'
-                          : ''
-                      }`,
+                        ? 'sum'
+                        : ''
+                    }`,
                     precision: 0,
                   }).format()}
               </div>
@@ -2430,14 +2475,15 @@ const Orders: FC<OrdersProps> = ({ channelName }: { channelName: any }) => {
                   pattern: '# !',
                   separator: ' ',
                   decimal: '.',
-                  symbol: `${locale == 'uz'
-                    ? "so'm"
-                    : locale == 'ru'
+                  symbol: `${
+                    locale == 'uz'
+                      ? "so'm"
+                      : locale == 'ru'
                       ? 'сум'
                       : locale == 'en'
-                        ? 'sum'
-                        : ''
-                    }`,
+                      ? 'sum'
+                      : ''
+                  }`,
                   precision: 0,
                 }).format()}
               </div>
@@ -2451,8 +2497,9 @@ const Orders: FC<OrdersProps> = ({ channelName }: { channelName: any }) => {
                 type="radio"
                 value={'N'}
                 checked={cutlery === 'N'}
-                className={` ${cutlery ? 'text-yellow' : 'bg-gray-200'
-                  } border-2 border-yellow form-checkbox rounded-md text-yellow outline-none focus:outline-none active:outline-none focus:border-yellow`}
+                className={` ${
+                  cutlery ? 'text-yellow' : 'bg-gray-200'
+                } border-2 border-yellow form-checkbox rounded-md text-yellow outline-none focus:outline-none active:outline-none focus:border-yellow`}
                 onChange={cutleryHandler}
                 id="N"
               />
@@ -2463,8 +2510,9 @@ const Orders: FC<OrdersProps> = ({ channelName }: { channelName: any }) => {
                 type="radio"
                 value={'Y'}
                 checked={cutlery === 'Y'}
-                className={` ${cutlery ? 'text-yellow' : 'bg-gray-200'
-                  } border-2 border-yellow form-checkbox rounded-md text-yellow outline-none focus:outline-none active:outline-none focus:border-yellow`}
+                className={` ${
+                  cutlery ? 'text-yellow' : 'bg-gray-200'
+                } border-2 border-yellow form-checkbox rounded-md text-yellow outline-none focus:outline-none active:outline-none focus:border-yellow`}
                 onChange={cutleryHandler}
                 id="Y"
               />
@@ -2483,8 +2531,9 @@ const Orders: FC<OrdersProps> = ({ channelName }: { channelName: any }) => {
               <input
                 type="checkbox"
                 defaultValue="sms"
-                className={` ${sms ? 'text-yellow' : 'bg-gray-200'
-                  } form-checkbox h-5 w-5  rounded-md  mr-2`}
+                className={` ${
+                  sms ? 'text-yellow' : 'bg-gray-200'
+                } form-checkbox h-5 w-5  rounded-md  mr-2`}
                 onChange={smsValueChange}
               />
               <div>SMS</div>
@@ -2495,8 +2544,9 @@ const Orders: FC<OrdersProps> = ({ channelName }: { channelName: any }) => {
               <input
                 type="checkbox"
                 defaultValue="newsletter"
-                className={` ${newsletter ? 'text-yellow' : 'bg-gray-200'
-                  } form-checkbox h-5 w-5  rounded-md mr-2`}
+                className={` ${
+                  newsletter ? 'text-yellow' : 'bg-gray-200'
+                } form-checkbox h-5 w-5  rounded-md mr-2`}
                 onChange={newsletterValueChange}
               />
               <div>E-mail {tr('mailing')}</div>
@@ -2523,7 +2573,6 @@ const Orders: FC<OrdersProps> = ({ channelName }: { channelName: any }) => {
           >
             <div className="min-h-screen px-4 text-center">
               <TransitionChild
-               
                 enter="ease-out duration-300"
                 enterFrom="opacity-0"
                 enterTo="opacity-100"
@@ -2542,7 +2591,6 @@ const Orders: FC<OrdersProps> = ({ channelName }: { channelName: any }) => {
                 &#8203;
               </span>
               <TransitionChild
-               
                 enter="ease-out duration-300"
                 enterFrom="opacity-0 scale-95"
                 enterTo="opacity-100 scale-100"
@@ -2580,8 +2628,9 @@ const Orders: FC<OrdersProps> = ({ channelName }: { channelName: any }) => {
             <img src="/left.png" /> {tr('back_to_basket')}
           </button>
           <button
-            className={`md:text-xl text-white bg-yellow flex h-12 items-center justify-evenly rounded-full md:w-80 w-full ${!locationData?.terminal_id ? 'opacity-25 cursor-not-allowed' : ''
-              }`}
+            className={`md:text-xl text-white bg-yellow flex h-12 items-center justify-evenly rounded-full md:w-80 w-full ${
+              !locationData?.terminal_id ? 'opacity-25 cursor-not-allowed' : ''
+            }`}
             disabled={!locationData?.terminal_id || isSavingOrder}
             onClick={handleSubmit(saveOrder)}
           >
@@ -2618,12 +2667,11 @@ const Orders: FC<OrdersProps> = ({ channelName }: { channelName: any }) => {
         <Dialog
           as="div"
           className="fixed inset-0 z-50 overflow-y-auto"
-          onClose={() => { }}
+          onClose={() => {}}
           initialFocus={authButtonRef}
         >
           <div className="min-h-screen px-4 text-center">
             <TransitionChild
-             
               enter="ease-out duration-300"
               enterFrom="opacity-0"
               enterTo="opacity-100"
@@ -2642,7 +2690,6 @@ const Orders: FC<OrdersProps> = ({ channelName }: { channelName: any }) => {
               &#8203;
             </span>
             <TransitionChild
-             
               enter="ease-out duration-300"
               enterFrom="opacity-0 scale-95"
               enterTo="opacity-100 scale-100"
@@ -2658,20 +2705,20 @@ const Orders: FC<OrdersProps> = ({ channelName }: { channelName: any }) => {
                       {locale == 'uz'
                         ? 'Buyurtmani tasdiqlash'
                         : locale == 'ru'
-                          ? 'Подтвердить заказ'
-                          : locale == 'en'
-                            ? 'Confirm order'
-                            : ''}
+                        ? 'Подтвердить заказ'
+                        : locale == 'en'
+                        ? 'Confirm order'
+                        : ''}
                     </DialogTitle>
                     <DialogDescription>
                       $
                       {locale == 'uz'
                         ? 'SMS-dan kodni kiriting'
                         : locale == 'ru'
-                          ? 'Введите код из смс'
-                          : locale == 'en'
-                            ? 'Enter the code from the SMS'
-                            : ''}
+                        ? 'Введите код из смс'
+                        : locale == 'en'
+                        ? 'Enter the code from the SMS'
+                        : ''}
                     </DialogDescription>
                     <div>
                       <form onSubmit={handlePasswordSubmit(saveOrder)}>
@@ -2681,17 +2728,22 @@ const Orders: FC<OrdersProps> = ({ channelName }: { channelName: any }) => {
                             {locale == 'uz'
                               ? 'SMS-dan kod'
                               : locale == 'ru'
-                                ? 'Код из смс'
-                                : locale == 'en'
-                                  ? 'Code from SMS'
-                                  : ''}
+                              ? 'Код из смс'
+                              : locale == 'en'
+                              ? 'Code from SMS'
+                              : ''}
                           </label>
                           <OtpInput
                             value={otpCode}
                             onChange={handleOtpChange}
                             numInputs={4}
                             inputType="number"
-                            containerStyle={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '0.375rem', justifyContent: 'center' }}
+                            containerStyle={{
+                              display: 'grid',
+                              gridTemplateColumns: 'repeat(4, 1fr)',
+                              gap: '0.375rem',
+                              justifyContent: 'center',
+                            }}
                             renderInput={(props) => (
                               <input
                                 {...props}
@@ -2712,17 +2764,18 @@ const Orders: FC<OrdersProps> = ({ channelName }: { channelName: any }) => {
                               {locale == 'uz'
                                 ? 'Kodni qayta olish'
                                 : locale == 'ru'
-                                  ? 'Получить код'
-                                  : locale == 'en'
-                                    ? 'Get code'
-                                    : ''}
+                                ? 'Получить код'
+                                : locale == 'en'
+                                ? 'Get code'
+                                : ''}
                             </button>
                           )}
                         </div>
                         <div className="mt-10">
                           <button
-                            className={`py-3 px-20 text-white font-bold text-xl text-center rounded-full w-full outline-none focus:outline-none ${otpCode.length >= 4 ? 'bg-yellow' : 'bg-gray-400'
-                              }`}
+                            className={`py-3 px-20 text-white font-bold text-xl text-center rounded-full w-full outline-none focus:outline-none ${
+                              otpCode.length >= 4 ? 'bg-yellow' : 'bg-gray-400'
+                            }`}
                             disabled={otpCode.length < 4}
                             ref={authButtonRef}
                           >
