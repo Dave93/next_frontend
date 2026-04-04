@@ -21,12 +21,10 @@ import styles from './SignInButton.module.css'
 import UserProfileDropDown from './UserProfileDropDown'
 import Input from 'react-phone-number-input/input'
 import { useRouter } from 'next/router'
-import getConfig from 'next/config'
 import getAddressList from '@lib/load_addreses'
 import { useGoogleReCaptcha } from 'react-google-recaptcha-v3'
 
 axios.defaults.withCredentials = true
-const { publicRuntimeConfig } = getConfig()
 
 interface Errors {
   [key: string]: string
@@ -128,7 +126,7 @@ const SignInButton: FC = () => {
 
       const captcha = await executeRecaptcha('signIn')
       setSubmitError('')
-      const csrfReq = await axios(`${publicRuntimeConfig.apiUrl}/api/keldi`, {
+      const csrfReq = await axios(`${process.env.NEXT_PUBLIC_API_URL}/api/keldi`, {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',
@@ -150,7 +148,7 @@ const SignInButton: FC = () => {
       }
       data.source_type = sourceType
       let ress = await axios.post(
-        `${publicRuntimeConfig.apiUrl}/api/send_otp`,
+        `${process.env.NEXT_PUBLIC_API_URL}/api/send_otp`,
         data,
         {
           headers: {
@@ -195,7 +193,7 @@ const SignInButton: FC = () => {
     setSubmitError('')
     const otpToken = Cookies.get('opt_token')
     let ress = await axios.post(
-      `${publicRuntimeConfig.apiUrl}/api/auth_otp`,
+      `${process.env.NEXT_PUBLIC_API_URL}/api/auth_otp`,
       {
         phone: authPhone,
         code: otpCode,

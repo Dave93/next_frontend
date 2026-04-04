@@ -6,7 +6,6 @@ import axios from 'axios'
 import { ParsedUrlQuery } from 'querystring'
 
 
-import getConfig from 'next/config'
 import dynamic from 'next/dynamic'
 
 const TrackClient = dynamic(() => import('./index.client').then((mod) => mod.default), { ssr: false })
@@ -15,8 +14,7 @@ interface IParams extends ParsedUrlQuery {
     id: string
   }
   
-  const { publicRuntimeConfig } = getConfig()
-  let webAddress = publicRuntimeConfig.apiUrl
+  let webAddress = process.env.NEXT_PUBLIC_API_URL
   axios.defaults.withCredentials = true
 
 export async function getServerSideProps({

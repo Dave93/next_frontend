@@ -30,7 +30,6 @@ import {
 import Image from 'next/image'
 import { useCart } from '@framework/cart'
 import currency from 'currency.js'
-import getConfig from 'next/config'
 import axios from 'axios'
 import { debounce } from 'lodash'
 import Downshift from 'downshift'
@@ -48,8 +47,7 @@ import getAddressList from '@lib/load_addreses'
 import { Address } from '@commerce/types/address'
 import Hashids from 'hashids'
 
-const { publicRuntimeConfig } = getConfig()
-let webAddress = publicRuntimeConfig.apiUrl
+let webAddress = process.env.NEXT_PUBLIC_API_URL
 axios.defaults.withCredentials = true
 
 declare global {

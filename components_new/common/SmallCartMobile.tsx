@@ -14,7 +14,6 @@ import { XIcon, MinusIcon, PlusIcon } from '@heroicons/react/solid'
 import currency from 'currency.js'
 import axios from 'axios'
 import Cookies from 'js-cookie'
-import getConfig from 'next/config'
 import { useRouter } from 'next/router'
 import useTranslation from 'next-translate/useTranslation'
 import { useUI } from '@components/ui/context'
@@ -26,8 +25,7 @@ import { useGoogleReCaptcha } from 'react-google-recaptcha-v3'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faCartPlus } from '@fortawesome/free-solid-svg-icons'
 
-const { publicRuntimeConfig } = getConfig()
-let webAddress = publicRuntimeConfig.apiUrl
+let webAddress = process.env.NEXT_PUBLIC_API_URL
 axios.defaults.withCredentials = true
 
 interface Errors {
@@ -135,7 +133,7 @@ const SmallCartMobile: FC = () => {
 
       const captcha = await executeRecaptcha('signIn')
       setSubmitError('')
-      const csrfReq = await axios(`${publicRuntimeConfig.apiUrl}/api/keldi`, {
+      const csrfReq = await axios(`${process.env.NEXT_PUBLIC_API_URL}/api/keldi`, {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',
@@ -151,7 +149,7 @@ const SmallCartMobile: FC = () => {
       axios.defaults.headers.common['X-CSRF-TOKEN'] = csrf
       axios.defaults.headers.common['XCSRF-TOKEN'] = csrf
       let ress = await axios.post(
-        `${publicRuntimeConfig.apiUrl}/api/send_otp`,
+        `${process.env.NEXT_PUBLIC_API_URL}/api/send_otp`,
         data,
         {
           headers: {
@@ -196,7 +194,7 @@ const SmallCartMobile: FC = () => {
     setSubmitError('')
     const otpToken = Cookies.get('opt_token')
     let ress = await axios.post(
-      `${publicRuntimeConfig.apiUrl}/api/auth_otp`,
+      `${process.env.NEXT_PUBLIC_API_URL}/api/auth_otp`,
       {
         phone: authPhone,
         code: otpCode,

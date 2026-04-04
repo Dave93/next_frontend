@@ -6,7 +6,6 @@ import { useRouter } from 'next/router'
 import { useUI } from '@components/ui/context'
 import { DateTime } from 'luxon'
 import axios from 'axios'
-import getConfig from 'next/config'
 import Image from 'next/image'
 import Cookies from 'js-cookie'
 import { useCart } from '@framework/cart'
@@ -17,8 +16,7 @@ type ThreePizzaProps = {
   channelName: string
   isSmall?: boolean
 }
-const { publicRuntimeConfig } = getConfig()
-let webAddress = publicRuntimeConfig.apiUrl
+let webAddress = process.env.NEXT_PUBLIC_API_URL
 axios.defaults.withCredentials = true
 
 const ThreePizza: FC<ThreePizzaProps> = ({ items, channelName }) => {

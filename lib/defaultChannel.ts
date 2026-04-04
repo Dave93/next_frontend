@@ -1,8 +1,6 @@
 import axios from 'axios'
-import getConfig from 'next/config'
 
-const { publicRuntimeConfig } = getConfig()
-let webAddress = publicRuntimeConfig.apiUrl
+let webAddress = process.env.NEXT_PUBLIC_API_URL
 axios.defaults.withCredentials = true
 
 interface AnyObject {

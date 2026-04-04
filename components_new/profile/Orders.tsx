@@ -10,13 +10,11 @@ import { DateTime } from 'luxon'
 import currency from 'currency.js'
 import defaultChannel from '@lib/defaultChannel'
 import Image from 'next/image'
-import getConfig from 'next/config'
 import axios from 'axios'
 import Cookies from 'js-cookie'
 import { useInfiniteQuery } from '@tanstack/react-query'
 
-const { publicRuntimeConfig } = getConfig()
-let webAddress = publicRuntimeConfig.apiUrl
+let webAddress = process.env.NEXT_PUBLIC_API_URL
 
 const fetchOrders = async ({ pageParam = 1 }) => {
   const otpToken = Cookies.get('opt_token')

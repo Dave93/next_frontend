@@ -6,7 +6,6 @@ import { XIcon, MinusIcon, PlusIcon } from '@heroicons/react/solid'
 import currency from 'currency.js'
 import axios from 'axios'
 import Cookies from 'js-cookie'
-import getConfig from 'next/config'
 import { useRouter } from 'next/router'
 import useTranslation from 'next-translate/useTranslation'
 import Hashids from 'hashids'
@@ -15,8 +14,7 @@ import { toast } from 'react-toastify'
 import SimpleBar from 'simplebar-react'
 import 'simplebar/dist/simplebar.min.css'
 
-const { publicRuntimeConfig } = getConfig()
-let webAddress = publicRuntimeConfig.apiUrl
+let webAddress = process.env.NEXT_PUBLIC_API_URL
 axios.defaults.withCredentials = true
 
 type SmallCartProps = {

@@ -26,7 +26,6 @@ import {
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { SocialIcons } from '@commerce/types/socialIcons'
 import useTranslation from 'next-translate/useTranslation'
-import getConfig from 'next/config'
 import axios from 'axios'
 import { City } from '@commerce/types/cities'
 import { Dialog, DialogBackdrop, Transition, TransitionChild } from '@headlessui/react'
@@ -38,7 +37,6 @@ import MobLocationTabs from '@components_new/header/MobLocationTabs.'
 
 const LinkScroll = Scroll.Link
 
-const { publicRuntimeConfig } = getConfig()
 
 interface Props {
   children: ReactNode
@@ -98,7 +96,7 @@ const Layout: FC<Props> = ({
     let configData
     if (!sessionStorage.getItem('configData')) {
       let { data } = await axios.get(
-        `${publicRuntimeConfig.apiUrl}/api/configs/public`
+        `${process.env.NEXT_PUBLIC_API_URL}/api/configs/public`
       )
       configData = data.data
       sessionStorage.setItem('configData', data.data)

@@ -6,11 +6,9 @@ import { useUI } from '@components/ui/context'
 import { DateTime } from 'luxon'
 import axios from 'axios'
 import Cookies from 'js-cookie'
-import getConfig from 'next/config'
 import { ToastContainer, toast } from 'react-toastify'
 
-const { publicRuntimeConfig } = getConfig()
-let webAddress = publicRuntimeConfig.apiUrl
+let webAddress = process.env.NEXT_PUBLIC_API_URL
 axios.defaults.withCredentials = true
 const PersonalData: FC = () => {
   const { t: tr } = useTranslation('common')

@@ -4,15 +4,13 @@ import commerce from '@lib/api/commerce'
 import cookies from 'next-cookies'
 import axios from 'axios'
 import { GetServerSidePropsContext } from 'next'
-import getConfig from 'next/config'
 import { ParsedUrlQuery } from 'querystring'
 
 interface IParams extends ParsedUrlQuery {
   id: string
 }
 
-const { publicRuntimeConfig } = getConfig()
-let webAddress = publicRuntimeConfig.apiUrl
+let webAddress = process.env.NEXT_PUBLIC_API_URL
 axios.defaults.withCredentials = true
 
 export async function getServerSideProps({

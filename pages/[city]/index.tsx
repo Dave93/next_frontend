@@ -22,11 +22,9 @@ import useTranslation from 'next-translate/useTranslation'
 import { useUI } from '@components/ui/context'
 import cookies from 'next-cookies'
 import axios from 'axios'
-import getConfig from 'next/config'
 
-const { publicRuntimeConfig } = getConfig()
 
-let webAddress = publicRuntimeConfig.apiUrl
+let webAddress = process.env.NEXT_PUBLIC_API_URL
 
 const HalfPizzaNoSSR = dynamic(
   () => import('@components_new/product/CreateYourPizzaCommon'),

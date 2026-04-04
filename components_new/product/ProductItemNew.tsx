@@ -22,7 +22,6 @@ import { useRouter } from 'next/router'
 import useTranslation from 'next-translate/useTranslation'
 import axios from 'axios'
 import Cookies from 'js-cookie'
-import getConfig from 'next/config'
 import { useCart } from '@framework/cart'
 import { XIcon } from '@heroicons/react/solid'
 import styles from './ProductItemNew.module.css'
@@ -35,8 +34,7 @@ type ProductItem = {
   channelName: string
 }
 
-const { publicRuntimeConfig } = getConfig()
-let webAddress = publicRuntimeConfig.apiUrl
+let webAddress = process.env.NEXT_PUBLIC_API_URL
 axios.defaults.withCredentials = true
 
 const ProductItemNew: FC<ProductItem> = ({ product, channelName }) => {

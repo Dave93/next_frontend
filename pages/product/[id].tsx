@@ -11,7 +11,6 @@ import { Layout } from '@components/common'
 import useTranslation from 'next-translate/useTranslation'
 import axios from 'axios'
 import Cookies from 'js-cookie'
-import getConfig from 'next/config'
 import cookies from 'next-cookies'
 import currency from 'currency.js'
 import { useCart } from '@framework/cart'
@@ -20,8 +19,7 @@ import defaultChannel from '@lib/defaultChannel'
 import { NextSeo } from 'next-seo'
 import { DateTime } from 'luxon'
 
-const { publicRuntimeConfig } = getConfig()
-let webAddress = publicRuntimeConfig.apiUrl
+let webAddress = process.env.NEXT_PUBLIC_API_URL
 axios.defaults.withCredentials = true
 
 export async function getServerSideProps({

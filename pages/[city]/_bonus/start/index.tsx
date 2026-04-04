@@ -9,15 +9,13 @@ import Link from '@components/ui/Link'
 import { motion } from 'framer-motion'
 import { shuffle as lodashShuffle } from 'lodash'
 import { Dialog, DialogBackdrop, DialogTitle, Transition, TransitionChild } from '@headlessui/react'
-import getConfig from 'next/config'
 import axios from 'axios'
 import cookies from 'next-cookies'
 import useTranslation from 'next-translate/useTranslation'
 import defaultChannel from '@lib/defaultChannel'
 import Cookies from 'js-cookie'
 
-const { publicRuntimeConfig } = getConfig()
-let webAddress = publicRuntimeConfig.apiUrl
+let webAddress = process.env.NEXT_PUBLIC_API_URL
 axios.defaults.withCredentials = true
 
 export async function getServerSideProps({

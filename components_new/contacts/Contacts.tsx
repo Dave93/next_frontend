@@ -5,12 +5,10 @@ import { XIcon } from '@heroicons/react/outline'
 import Input from 'react-phone-number-input/input'
 import { useUI } from '@components/ui/context'
 import Cookies from 'js-cookie'
-import getConfig from 'next/config'
 import axios from 'axios'
 import { useRouter } from 'next/router'
 
-const { publicRuntimeConfig } = getConfig()
-let webAddress = publicRuntimeConfig.apiUrl
+let webAddress = process.env.NEXT_PUBLIC_API_URL
 axios.defaults.withCredentials = true
 
 const Contacts: FC = () => {
@@ -25,7 +23,7 @@ const Contacts: FC = () => {
     let configData
     if (!sessionStorage.getItem('configData')) {
       let { data } = await axios.get(
-        `${publicRuntimeConfig.apiUrl}/api/configs/public`
+        `${process.env.NEXT_PUBLIC_API_URL}/api/configs/public`
       )
       configData = data.data
       sessionStorage.setItem('configData', data.data)

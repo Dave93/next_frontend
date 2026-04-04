@@ -1,15 +1,13 @@
 import axios from 'axios'
 import React, { useEffect } from 'react'
 import { FC, memo } from 'react'
-import getConfig from 'next/config'
 import { useUI } from '@components/ui/context'
 import { useRouter } from 'next/router'
 import SimpleBar from 'simplebar-react'
 import { YMaps, Map, Placemark } from 'react-yandex-maps'
 import 'simplebar/dist/simplebar.min.css'
 import ChooseCityDropDown from '@components_new/header/ChooseCityDropDown'
-const { publicRuntimeConfig } = getConfig()
-let webAddress = publicRuntimeConfig.apiUrl
+let webAddress = process.env.NEXT_PUBLIC_API_URL
 
 const Branch: FC = () => {
   const { locale } = useRouter()

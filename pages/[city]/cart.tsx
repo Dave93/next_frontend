@@ -6,7 +6,6 @@ import Image from 'next/image'
 import { XIcon, MinusIcon, PlusIcon, TrashIcon } from '@heroicons/react/solid'
 import { useForm } from 'react-hook-form'
 import useTranslation from 'next-translate/useTranslation'
-import getConfig from 'next/config'
 import { useRouter } from 'next/router'
 import { createRef, useEffect, useMemo, useState } from 'react'
 import Hashids from 'hashids'
@@ -69,8 +68,7 @@ export async function getServerSideProps({
   }
 }
 
-const { publicRuntimeConfig } = getConfig()
-let webAddress = publicRuntimeConfig.apiUrl
+let webAddress = process.env.NEXT_PUBLIC_API_URL
 axios.defaults.withCredentials = true
 
 export default function Cart() {

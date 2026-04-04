@@ -17,8 +17,8 @@ const withPWA = require('next-pwa')
 
 const baseConfig = withCommerceConfig({
   commerce,
-  publicRuntimeConfig: {
-    apiUrl: process.env.API_URL,
+  env: {
+    NEXT_PUBLIC_API_URL: process.env.API_URL,
   },
   rewrites() {
     return [
@@ -42,11 +42,11 @@ const baseConfig = withCommerceConfig({
     ].filter(Boolean)
   },
   images: {
-    domains: [
-      'store.hq.fungeek.net',
-      'api.hq.fungeek.net',
-      'choparpizza.uz',
-      'api.choparpizza.uz',
+    remotePatterns: [
+      { protocol: 'https', hostname: 'store.hq.fungeek.net' },
+      { protocol: 'https', hostname: 'api.hq.fungeek.net' },
+      { protocol: 'https', hostname: 'choparpizza.uz' },
+      { protocol: 'https', hostname: 'api.choparpizza.uz' },
     ],
   },
 })

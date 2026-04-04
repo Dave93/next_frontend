@@ -21,14 +21,12 @@ import MobChooseCityDropDown from './header/MobChooseCityDropDown'
 import MobLanguageDropDown from './header/MobLanguageDropDown'
 import HeaderPhone from './header/HeaderPhone'
 import useTranslation from 'next-translate/useTranslation'
-import getConfig from 'next/config'
 import axios from 'axios'
 import { useUI } from '@components/ui/context'
 import parsePhoneNumber from 'libphonenumber-js'
 import { faTelegram } from '@fortawesome/free-brands-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { useRouter } from 'next/router'
-const { publicRuntimeConfig } = getConfig()
 
 const Header: FC<{
   menu: Array<APILinkItem>
@@ -52,7 +50,7 @@ const Header: FC<{
     let configData
     if (!sessionStorage.getItem('configData')) {
       let { data } = await axios.get(
-        `${publicRuntimeConfig.apiUrl}/api/configs/public`
+        `${process.env.NEXT_PUBLIC_API_URL}/api/configs/public`
       )
       configData = data.data
       sessionStorage.setItem('configData', data.data)

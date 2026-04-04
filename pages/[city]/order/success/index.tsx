@@ -3,11 +3,9 @@ import commerce from '@lib/api/commerce'
 import axios from 'axios'
 import { GetServerSidePropsContext } from 'next'
 import dynamic from 'next/dynamic'
-import getConfig from 'next/config'
 import Link from 'next/link'
 
-const { publicRuntimeConfig } = getConfig()
-let webAddress = publicRuntimeConfig.apiUrl
+let webAddress = process.env.NEXT_PUBLIC_API_URL
 axios.defaults.withCredentials = true
 
 export async function getServerSideProps({

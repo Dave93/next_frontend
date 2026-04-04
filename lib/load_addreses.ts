@@ -1,9 +1,7 @@
 import axios from 'axios'
 import Cookies from 'js-cookie'
-import getConfig from 'next/config'
 
-const { publicRuntimeConfig } = getConfig()
-let webAddress = publicRuntimeConfig.apiUrl
+let webAddress = process.env.NEXT_PUBLIC_API_URL
 axios.defaults.withCredentials = true
 
 const getAddressList = async () => {

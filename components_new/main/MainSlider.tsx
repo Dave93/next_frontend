@@ -6,9 +6,7 @@ import { useUI } from '@components/ui'
 import axios from 'axios'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
-import getConfig from 'next/config'
 
-const { publicRuntimeConfig } = getConfig()
 
 const MainSlider: FC = () => {
   let router = useRouter()
@@ -28,7 +26,7 @@ const MainSlider: FC = () => {
 
   const fetchSliders = async () => {
     const { data } = await axios.get(
-      `${publicRuntimeConfig.apiUrl}/api/sliders/public?locale=${locale}`
+      `${process.env.NEXT_PUBLIC_API_URL}/api/sliders/public?locale=${locale}`
     )
     // sliderRef.current?.moveTo(0)
     sliderRef.current?.destroy()

@@ -6,11 +6,9 @@ import Cookies from 'js-cookie'
 import useTranslation from 'next-translate/useTranslation'
 import router, { useRouter } from 'next/router'
 import React, { FC, Fragment, useEffect, useRef, useState } from 'react'
-import getConfig from 'next/config'
 import { XIcon } from '@heroicons/react/outline'
 
-const { publicRuntimeConfig } = getConfig()
-let webAddress = publicRuntimeConfig.apiUrl
+let webAddress = process.env.NEXT_PUBLIC_API_URL
 axios.defaults.withCredentials = true
 
 const BonusModal: FC = () => {

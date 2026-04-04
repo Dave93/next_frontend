@@ -3,7 +3,6 @@ import useTranslation from 'next-translate/useTranslation'
 import { useQuery } from '@tanstack/react-query'
 import axios from 'axios'
 import Cookies from 'js-cookie'
-import getConfig from 'next/config'
 import dynamic from 'next/dynamic'
 import {
   TruckIcon,
@@ -45,8 +44,7 @@ const Marker = dynamic(
   { ssr: false }
 ) as any
 
-const { publicRuntimeConfig } = getConfig()
-const webAddress = publicRuntimeConfig.apiUrl
+const webAddress = process.env.NEXT_PUBLIC_API_URL
 
 interface CourierInfo {
   first_name: string

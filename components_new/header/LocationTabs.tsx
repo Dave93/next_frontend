@@ -29,7 +29,6 @@ import {
   Polygon,
 } from 'react-yandex-maps'
 import { useForm, SubmitHandler } from 'react-hook-form'
-import getConfig from 'next/config'
 import axios from 'axios'
 import Downshift from 'downshift'
 import debounce from 'lodash.debounce'
@@ -46,9 +45,8 @@ import { Address } from '@commerce/types/address'
 import { XIcon, PlusIcon, BookmarkIcon } from '@heroicons/react/outline'
 import useCart from '@framework/cart/use-cart'
 
-const { publicRuntimeConfig } = getConfig()
 
-let webAddress = publicRuntimeConfig.apiUrl
+let webAddress = process.env.NEXT_PUBLIC_API_URL
 
 interface AnyObject {
   [key: string]: any

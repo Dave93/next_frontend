@@ -9,7 +9,6 @@ import Link from 'next/link'
 import { useForm } from 'react-hook-form'
 import currency from 'currency.js'
 import Image from 'next/image'
-import getConfig from 'next/config'
 import defaultChannel from '@lib/defaultChannel'
 import { DateTime } from 'luxon'
 import Cookies from 'js-cookie'
@@ -31,8 +30,7 @@ type OrderTrackingDetailProps = {
   orderId: any
 }
 
-const { publicRuntimeConfig } = getConfig()
-let webAddress = publicRuntimeConfig.apiUrl
+let webAddress = process.env.NEXT_PUBLIC_API_URL
 
 const OrderTracking: FC<OrderTrackingDetailProps> = ({ orderId }) => {
   const map = useRef<any>(null)

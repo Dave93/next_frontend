@@ -13,7 +13,6 @@ import { XIcon, CheckIcon } from '@heroicons/react/outline'
 import { useRouter } from 'next/router'
 import { divide, mixin } from 'lodash'
 import currency from 'currency.js'
-import getConfig from 'next/config'
 import axios from 'axios'
 import Cookies from 'js-cookie'
 import { useCart } from '@framework/cart'
@@ -27,8 +26,7 @@ type CreatePizzaProps = {
   isSmall?: boolean
 }
 
-const { publicRuntimeConfig } = getConfig()
-let webAddress = publicRuntimeConfig.apiUrl
+let webAddress = process.env.NEXT_PUBLIC_API_URL
 axios.defaults.withCredentials = true
 
 const CreateYourPizza: FC<CreatePizzaProps> = ({

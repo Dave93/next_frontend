@@ -11,10 +11,8 @@ import styles from './SignInButton.module.css'
 import UserProfileDropDown from './UserProfileDropDown'
 import Input from 'react-phone-number-input/input'
 import { useRouter } from 'next/router'
-import getConfig from 'next/config'
 
 axios.defaults.withCredentials = true
-const { publicRuntimeConfig } = getConfig()
 
 interface Errors {
   [key: string]: string

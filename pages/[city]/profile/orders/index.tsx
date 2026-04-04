@@ -6,10 +6,8 @@ import commerce from '@lib/api/commerce'
 import Orders from '@components_new/profile/Orders'
 import cookies from 'next-cookies'
 import axios from 'axios'
-import getConfig from 'next/config'
 
-const { publicRuntimeConfig } = getConfig()
-let webAddress = publicRuntimeConfig.apiUrl
+let webAddress = process.env.NEXT_PUBLIC_API_URL
 axios.defaults.withCredentials = true
 
 export async function getServerSideProps({
