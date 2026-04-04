@@ -39,6 +39,7 @@ import SignInModal from '@components_new/header/SignInModal'
 import { XIcon } from '@heroicons/react/solid'
 import LocationTabs from '@components_new/header/LocationTabs'
 import MobLocationTabs from '@components_new/header/MobLocationTabs.'
+import MobileLayout from '@components_new/mobile/MobileLayout'
 
 const LinkScroll = Scroll.Link
 
@@ -131,7 +132,12 @@ const Layout: FC<Props> = ({
   return (
     <CommerceProvider locale={locale}>
       <div className="font-sans">
-        <div className="md:flex md:flex-col h-screen">
+        {/* Mobile Layout */}
+        <div className="md:hidden">
+          <MobileLayout>{children}</MobileLayout>
+        </div>
+        {/* Desktop Layout */}
+        <div className="hidden md:flex md:flex-col h-screen">
           <Header menu={topMenu} />
           <main
             className={`${
