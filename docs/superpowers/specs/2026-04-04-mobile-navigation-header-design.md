@@ -7,6 +7,7 @@ Replace the hamburger menu with a bottom tab bar and two-row sticky header on mo
 ## Reference
 
 Expo app at `projects/LesChoparExpo/choparpizza-expo/` — specifically:
+
 - `components/ui/CustomTabBar.tsx` — bottom tab design
 - `components/screens/HomeScreen.tsx` — header with delivery/pickup toggle
 - `components/screens/ProfileScreen.tsx` — profile menu structure
@@ -58,18 +59,19 @@ Desktop components (`Header.tsx`, `HeaderMenu`, `ChooseCityDropDown`, `UserProfi
 
 **Tabs:**
 
-| Tab | Icon (outline/filled) | Route | Auth required? |
-|-----|----------------------|-------|----------------|
-| Home | home-outline / home | `/[city]` | No |
-| Orders | clipboard-outline / clipboard | `/[city]/myorders` | Yes — redirect to sign-in |
-| Cart | cart-outline / cart | `/[city]/cart` | No |
-| Profile | person-outline / person | `/[city]/profile` | Yes — show sign-in |
+| Tab     | Icon (outline/filled)         | Route              | Auth required?            |
+| ------- | ----------------------------- | ------------------ | ------------------------- |
+| Home    | home-outline / home           | `/[city]`          | No                        |
+| Orders  | clipboard-outline / clipboard | `/[city]/myorders` | Yes — redirect to sign-in |
+| Cart    | cart-outline / cart           | `/[city]/cart`     | No                        |
+| Profile | person-outline / person       | `/[city]/profile`  | Yes — show sign-in        |
 
 **Active state:** Icon and label colored `#F9B004`. Inactive: `rgba(0,0,0,0.4)`.
 
 **Cart badge:** Red circle (`bg-red-500`) with white text showing item count from `ManagedUIContext`. Positioned top-right of cart icon. Hidden when count is 0.
 
 **Active tab detection:** Based on `router.pathname` matching:
+
 - `/[city]` or `/` → Home
 - `/[city]/myorders` or `/[city]/order` → Orders
 - `/[city]/cart` → Cart
@@ -88,10 +90,12 @@ Desktop components (`Header.tsx`, `HeaderMenu`, `ChooseCityDropDown`, `UserProfi
 **Position:** `sticky top-0 z-30 bg-white`.
 
 **Row 1 — Logo + City:**
+
 - Left: Chopar logo (existing logo image or text, linked to home)
 - Right: City selector chip — rounded pill (`bg-gray-100 rounded-full px-3 py-1.5`), shows pin icon + city name + chevron-down. Tapping opens existing `CityModal` from Layout.
 
 **Row 2 — Delivery/Pickup Toggle:**
+
 - Two buttons, `flex gap-2`, full width
 - Active button: `bg-primary text-white rounded-xl py-2`
 - Inactive button: `bg-gray-100 text-gray-500 rounded-xl py-2`
@@ -108,6 +112,7 @@ Desktop components (`Header.tsx`, `HeaderMenu`, `ChooseCityDropDown`, `UserProfi
 ### MobileLayout
 
 **Structure:**
+
 ```
 MobileHeader (sticky top)
 <main className="pb-16">
@@ -125,6 +130,7 @@ MobileBottomNav (fixed bottom)
 **Location:** Rendered on the profile page (`pages/[city]/profile/index.tsx`) when on mobile.
 
 **Unauthenticated view:**
+
 - Sign-in prompt with button → opens `SignInModal`
 
 **Authenticated view — menu items:**
@@ -146,18 +152,19 @@ Each item is a row: icon (in rounded circle) + label + chevron-right.
 
 ## Removals
 
-| File | Action | Reason |
-|------|--------|--------|
-| `components_new/header/MobHeaderMenu.tsx` | Delete | Hamburger menu replaced by bottom nav + header |
-| `components_new/header/BurgerMenu.js` | Delete | Hamburger button no longer needed |
-| Hamburger logic in `Header.tsx` | Remove | `mobMenuOpen` state, fullscreen overlay, mobile menu rendering |
-| Floating cart button in `SmallCartMobile.tsx` | Remove | Replaced by Cart tab in bottom nav |
+| File                                          | Action | Reason                                                         |
+| --------------------------------------------- | ------ | -------------------------------------------------------------- |
+| `components_new/header/MobHeaderMenu.tsx`     | Delete | Hamburger menu replaced by bottom nav + header                 |
+| `components_new/header/BurgerMenu.js`         | Delete | Hamburger button no longer needed                              |
+| Hamburger logic in `Header.tsx`               | Remove | `mobMenuOpen` state, fullscreen overlay, mobile menu rendering |
+| Floating cart button in `SmallCartMobile.tsx` | Remove | Replaced by Cart tab in bottom nav                             |
 
 ---
 
 ## Colors
 
 From Expo app's Tailwind config, already matching the web project:
+
 - Primary: `#F9B004` (active tabs, active toggle)
 - Secondary: `#2F5E8E` (logo)
 - Inactive: `rgba(0,0,0,0.4)` (inactive tab icons)
@@ -170,12 +177,14 @@ From Expo app's Tailwind config, already matching the web project:
 ## Scope Boundaries
 
 **In scope (this spec):**
+
 - MobileLayout, MobileHeader, MobileBottomNav, MobileProfileMenu
 - Layout switching in Layout.tsx
 - Removal of hamburger menu and floating cart button
 - Profile page updates for mobile menu items
 
 **Out of scope (future specs):**
+
 - Home page content (banners, sticky categories, product grid) — Spec 2
 - Product cards and detail views — Spec 3
 - Cart page and checkout flow — Spec 4

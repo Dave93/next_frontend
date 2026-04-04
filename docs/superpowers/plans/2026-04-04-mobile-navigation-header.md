@@ -21,11 +21,13 @@ components_new/mobile/
 ```
 
 **Modified files:**
+
 - `components/common/Layout/Layout.tsx` — wrap desktop in `hidden md:block`, add MobileLayout in `md:hidden`
 - `pages/[city]/profile/index.tsx` — render MobileProfileMenu on mobile
 - `components_new/common/SmallCartMobile.tsx` — remove floating cart button
 
 **Deleted files:**
+
 - `components_new/header/MobHeaderMenu.tsx`
 - `components_new/header/BurgerMenu.js`
 
@@ -34,6 +36,7 @@ components_new/mobile/
 ### Task 1: Create MobileBottomNav component
 
 **Files:**
+
 - Create: `components_new/mobile/MobileBottomNav.tsx`
 
 - [ ] **Step 1: Create the component file**
@@ -176,6 +179,7 @@ git commit -m "feat: create MobileBottomNav component"
 ### Task 2: Create MobileHeader component
 
 **Files:**
+
 - Create: `components_new/mobile/MobileHeader.tsx`
 
 - [ ] **Step 1: Create the component file**
@@ -242,7 +246,10 @@ const MobileHeader: FC = () => {
           className="flex items-center gap-1 bg-gray-100 rounded-full px-3 py-1.5"
           onClick={openMobileLocationTabs}
         >
-          <LocationMarkerIcon className="w-3.5 h-3.5 text-yellow-500" style={{ color: '#F9B004' }} />
+          <LocationMarkerIcon
+            className="w-3.5 h-3.5 text-yellow-500"
+            style={{ color: '#F9B004' }}
+          />
           <span className="text-xs font-medium text-gray-700">{cityName}</span>
           <ChevronDownIcon className="w-3 h-3 text-gray-400" />
         </button>
@@ -303,6 +310,7 @@ git commit -m "feat: create MobileHeader component with city selector and delive
 ### Task 3: Create MobileLayout shell
 
 **Files:**
+
 - Create: `components_new/mobile/MobileLayout.tsx`
 
 - [ ] **Step 1: Create the component file**
@@ -341,6 +349,7 @@ git commit -m "feat: create MobileLayout shell component"
 ### Task 4: Integrate MobileLayout into Layout.tsx
 
 **Files:**
+
 - Modify: `components/common/Layout/Layout.tsx`
 
 This is the critical integration step. We wrap the existing desktop layout in `hidden md:block` and add MobileLayout in `md:hidden`.
@@ -437,6 +446,7 @@ bun dev
 ```
 
 Open browser, resize to mobile width (< 768px). Verify:
+
 - Two-row header visible (logo + city, delivery/pickup toggle)
 - Bottom tab bar visible (Home, Orders, Cart, Profile)
 - Desktop header and footer hidden
@@ -454,6 +464,7 @@ git commit -m "feat: integrate MobileLayout into Layout with CSS-based switching
 ### Task 5: Remove hamburger menu and floating cart button
 
 **Files:**
+
 - Delete: `components_new/header/MobHeaderMenu.tsx`
 - Delete: `components_new/header/BurgerMenu.js`
 - Modify: `components_new/Header.tsx` — remove mobile menu overlay (lines 137-210) and `mobMenuOpen` state
@@ -524,6 +535,7 @@ git commit -m "feat: remove hamburger menu and floating cart button, replaced by
 ### Task 6: Create MobileProfileMenu component
 
 **Files:**
+
 - Create: `components_new/mobile/MobileProfileMenu.tsx`
 - Modify: `pages/[city]/profile/index.tsx`
 
@@ -589,7 +601,9 @@ const MobileProfileMenu: FC = () => {
           {user?.user?.name || tr('profile')}
         </div>
         {user?.user_contact && (
-          <div className="text-sm text-gray-500 mt-0.5">{user.user_contact}</div>
+          <div className="text-sm text-gray-500 mt-0.5">
+            {user.user_contact}
+          </div>
         )}
       </div>
 
@@ -613,7 +627,9 @@ const MobileProfileMenu: FC = () => {
             <div className="w-9 h-9 rounded-full bg-gray-100 flex items-center justify-center">
               <GlobeAltIcon className="w-5 h-5 text-gray-600" />
             </div>
-            <span className="text-sm text-gray-800">{tr('language') || 'Language'}</span>
+            <span className="text-sm text-gray-800">
+              {tr('language') || 'Language'}
+            </span>
           </div>
           <div className="flex gap-2 ml-12">
             {['ru', 'uz', 'en'].map((lang) => (
@@ -624,7 +640,9 @@ const MobileProfileMenu: FC = () => {
                       ? 'bg-yellow-500 text-white'
                       : 'bg-gray-100 text-gray-600'
                   }`}
-                  style={locale === lang ? { backgroundColor: '#F9B004' } : undefined}
+                  style={
+                    locale === lang ? { backgroundColor: '#F9B004' } : undefined
+                  }
                 >
                   {lang.toUpperCase()}
                 </a>
@@ -655,7 +673,9 @@ const MobileProfileMenu: FC = () => {
             <div className="w-9 h-9 rounded-full bg-gray-100 flex items-center justify-center">
               <DeviceMobileIcon className="w-5 h-5 text-gray-600" />
             </div>
-            <span className="text-sm text-gray-800">{tr('download_app') || 'Download App'}</span>
+            <span className="text-sm text-gray-800">
+              {tr('download_app') || 'Download App'}
+            </span>
           </div>
           <div className="flex gap-3 ml-12">
             <a href="#" className="block">
@@ -680,7 +700,9 @@ const MobileProfileMenu: FC = () => {
           <div className="w-9 h-9 rounded-full bg-red-50 flex items-center justify-center">
             <LogoutIcon className="w-5 h-5 text-red-500" />
           </div>
-          <span className="text-sm text-red-500">{tr('logout') || 'Logout'}</span>
+          <span className="text-sm text-red-500">
+            {tr('logout') || 'Logout'}
+          </span>
         </button>
       </div>
     </div>
@@ -742,6 +764,7 @@ bun dev
 ```
 
 Open `/tashkent/profile` on mobile width. Verify:
+
 - Menu items display (Addresses, Orders, Language, Support, App, Logout)
 - Language switcher works
 - Links navigate correctly
@@ -758,6 +781,7 @@ git commit -m "feat: create MobileProfileMenu and integrate into profile page"
 ### Task 7: Final verification and cleanup
 
 **Files:**
+
 - Possibly modify: any files with remaining issues
 
 - [ ] **Step 1: Full production build**
@@ -775,6 +799,7 @@ bun dev
 ```
 
 Test on mobile width (< 768px):
+
 1. Home page: header with logo + city, delivery/pickup toggle, bottom nav visible
 2. Tap Orders tab → navigates to myorders
 3. Tap Cart tab → navigates to cart, badge shows count
