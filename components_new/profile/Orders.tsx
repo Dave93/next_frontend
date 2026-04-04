@@ -13,7 +13,7 @@ import Image from 'next/image'
 import getConfig from 'next/config'
 import axios from 'axios'
 import Cookies from 'js-cookie'
-import { useInfiniteQuery } from 'react-query'
+import { useInfiniteQuery } from '@tanstack/react-query'
 
 const { publicRuntimeConfig } = getConfig()
 let webAddress = publicRuntimeConfig.apiUrl
@@ -59,8 +59,11 @@ const Orders: FC = () => {
     hasNextPage,
     isFetching,
     isFetchingNextPage,
-  } = useInfiniteQuery(['orders'], fetchOrders, {
-    getNextPageParam: (lastPage, pages) => {
+  } = useInfiniteQuery({
+    queryKey: ['orders'],
+    queryFn: fetchOrders,
+    initialPageParam: 1,
+    getNextPageParam: (lastPage: any, pages: any) => {
       return lastPage.current_page == lastPage.last_page
         ? undefined
         : lastPage.current_page + 1

@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useMemo } from 'react'
 import useTranslation from 'next-translate/useTranslation'
-import { useQuery } from 'react-query'
+import { useQuery } from '@tanstack/react-query'
 import axios from 'axios'
 import Cookies from 'js-cookie'
 import getConfig from 'next/config'
@@ -133,9 +133,9 @@ export default function TrackClient({ orderId }: { orderId: string }) {
     [number, number] | null
   >(null)
   const { user, activeCity } = useUI()
-  const { data, isLoading, isError, refetch } = useQuery(
-    ['track_order', orderId],
-    async () => {
+  const { data, isLoading, isError, refetch } = useQuery({
+    queryKey: ['track_order', orderId],
+    queryFn: async () => {
       const { data } = await axios.get(`${webAddress}/api/track/${orderId}`, {
         headers: {
           Authorization: `Bearer ${Cookies.get('opt_token')}`,
@@ -143,12 +143,10 @@ export default function TrackClient({ orderId }: { orderId: string }) {
       })
       return data
     },
-    {
-      refetchInterval: shouldFetch ? 5000 : false,
-      refetchOnMount: true,
-      enabled: shouldFetch && !!orderId,
-    }
-  )
+    refetchInterval: shouldFetch ? 5000 : false,
+    refetchOnMount: true,
+    enabled: shouldFetch && !!orderId,
+  })
 
   // Default center (Bishkek)
   const defaultCenter: [number, number] = [activeCity?.lat, activeCity?.lon]

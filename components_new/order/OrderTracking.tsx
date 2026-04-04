@@ -15,7 +15,7 @@ import { DateTime } from 'luxon'
 import Cookies from 'js-cookie'
 import axios from 'axios'
 import { log } from 'console'
-import { useQuery } from 'react-query'
+import { useQuery } from '@tanstack/react-query'
 import {
   YMaps,
   Map,
@@ -41,9 +41,9 @@ const OrderTracking: FC<OrderTrackingDetailProps> = ({ orderId }) => {
   const router = useRouter()
 
   const [shouldFetch, setShouldFetch] = useState(true)
-  const { data, isLoading, isError } = useQuery(
-    'track_order',
-    async () => {
+  const { data, isLoading, isError } = useQuery({
+    queryKey: ['track_order'],
+    queryFn: async () => {
       const { data } = await axios.get(
         `${webAddress}/api/orders/track/?id=${orderId}&new=true`,
         {
@@ -54,12 +54,10 @@ const OrderTracking: FC<OrderTrackingDetailProps> = ({ orderId }) => {
       )
       return data
     },
-    {
-      refetchInterval: shouldFetch ? 5000 : false,
-      refetchOnMount: true,
-      enabled: shouldFetch,
-    }
-  )
+    refetchInterval: shouldFetch ? 5000 : false,
+    refetchOnMount: true,
+    enabled: shouldFetch,
+  })
 
   const [mapCenter, setMapCenter] = useState([] as number[])
   const [placeMarks, setPlaceMarks] = useState([] as any[])

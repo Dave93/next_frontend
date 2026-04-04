@@ -19,7 +19,7 @@ import { ManagedUIContext } from '@components/ui/context'
 import { ToastContainer } from 'react-toastify'
 import { pwaTrackingListeners } from '../scripts/pwaEventlisteners'
 import FacebookPixel from '@components/common/FacebookPixel'
-import { QueryClient, QueryClientProvider } from 'react-query'
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import { GoogleReCaptchaProvider } from 'react-google-recaptcha-v3'
 import { YMInitializer } from 'react-yandex-metrika'
 
