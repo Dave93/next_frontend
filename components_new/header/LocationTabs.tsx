@@ -29,8 +29,6 @@ import {
   Polygon,
 } from 'react-yandex-maps'
 import { useForm, SubmitHandler } from 'react-hook-form'
-import Autosuggest from 'react-autosuggest'
-import useSWR from 'swr'
 import getConfig from 'next/config'
 import axios from 'axios'
 import Downshift from 'downshift'
