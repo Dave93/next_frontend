@@ -2691,10 +2691,15 @@ const Orders: FC<OrdersProps> = ({ channelName }: { channelName: any }) => {
                           <OtpInput
                             value={otpCode}
                             onChange={handleOtpChange}
-                            inputStyle={`${styles.digitField} border border-yellow w-16 rounded-3xl h-12 outline-none focus:outline-none text-center`}
-                            isInputNum={true}
-                            containerStyle="grid grid-cols-4 gap-1.5 justify-center"
                             numInputs={4}
+                            inputType="number"
+                            containerStyle={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '0.375rem', justifyContent: 'center' }}
+                            renderInput={(props) => (
+                              <input
+                                {...props}
+                                className={`${styles.digitField} border border-yellow w-16 rounded-3xl h-12 outline-none focus:outline-none text-center`}
+                              />
+                            )}
                           />
                           {otpShowCode > 0 ? (
                             <div className="text-xs text-yellow mt-3">
