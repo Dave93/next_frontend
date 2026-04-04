@@ -1,4 +1,4 @@
-import type { ConfigInterface } from 'swr'
+import type { SWRConfiguration } from 'swr'
 import type { CommerceError } from './errors'
 import type { ResponseState } from './use-data'
 
@@ -139,8 +139,7 @@ export type MutationHookContext<H extends MutationSchemaBase> = {
     : (context: { input: H['fetcherInput'] }) => H['data'] | Promise<H['data']>
 }
 
-export type SwrOptions<Data, Input = null, Result = any> = ConfigInterface<
+export type SwrOptions<Data, Input = null, Result = any> = SWRConfiguration<
   Data,
-  CommerceError,
-  HookFetcher<Data, Input, Result>
+  CommerceError
 >

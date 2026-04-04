@@ -8,7 +8,6 @@ import type {
   SwrOptions,
   SWRHookSchemaBase,
 } from './types'
-import defineProperty from './define-property'
 import { CommerceError } from './errors'
 
 export type ResponseState<Result> = SWRResponse<Result, CommerceError> & {
@@ -27,17 +26,13 @@ export type UseData = <H extends SWRHookSchemaBase>(
 
 const useData: UseData = (options, input, fetcherFn, swrOptions) => {
   const hookInput = Array.isArray(input) ? input : Object.entries(input)
-  const fetcher = async (
-    url: string,
-    query?: string,
-    method?: string,
-    ...args: any[]
-  ) => {
+  const fetcher = async (key: any[]) => {
+    const [url, query, method, ...args] = key
     try {
       return await options.fetcher({
         options: { url, query, method },
         // Transform the input array into an object
-        input: args.reduce((obj, val, i) => {
+        input: args.reduce((obj: any, val: any, i: number) => {
           obj[hookInput[i][0]!] = val
           return obj
         }, {}),
@@ -60,17 +55,8 @@ const useData: UseData = (options, input, fetcherFn, swrOptions) => {
         : null
     },
     fetcher,
-    swrOptions
+    swrOptions as any
   )
-
-  if (!('isLoading' in response)) {
-    defineProperty(response, 'isLoading', {
-      get() {
-        return response.data === undefined
-      },
-      enumerable: true,
-    })
-  }
 
   return response as typeof response & { isLoading: boolean }
 }
