@@ -28,8 +28,6 @@ import OtpInput from 'react-otp-input'
 import Input from 'react-phone-number-input/input'
 import styles from './SmallCartMobile.module.css'
 import { useGoogleReCaptcha } from 'react-google-recaptcha-v3'
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faCartPlus } from '@fortawesome/free-solid-svg-icons'
 
 let webAddress = process.env.NEXT_PUBLIC_API_URL
 axios.defaults.withCredentials = true
@@ -271,29 +269,8 @@ const SmallCartMobile: FC = () => {
     newFields[fieldName] = null
     reset(newFields)
   }
-  const goToCheckout = (e: any) => {
-    e.preventDefault()
-    if (!user) {
-      openModal()
-    } else {
-      router.push(`/${activeCity.slug}/cart/`)
-    }
-  }
-
   return (
     <>
-      <button
-        className="md:hidden fixed outline-none focus:outline-none bottom-20 right-4 divide-x flex w-20 px-2 bg-red-700 h-12 items-center justify-around rounded-full"
-        onClick={goToCheckout}
-      >
-        <div className="flex">
-          <FontAwesomeIcon icon={faCartPlus} className="w-6 text-white" />
-        </div>
-        <div className="text-xl pl-2 text-white">
-          {data && data.lineItems ? data.lineItems.length : 0}
-        </div>
-      </button>
-
       <Transition appear show={showSignInModal}>
         <Dialog
           as="div"
