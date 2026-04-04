@@ -631,12 +631,52 @@ const ProductItemNew: FC<ProductItem> = ({ product, channelName }) => {
         <div
           className={`${styles.gridItemOutline} ${
             isProductInStop ? 'opacity-25' : ''
-          } gap-4 grid grid-cols-2 py-4 px-2 md:py-3 md:px-3 overflow-hidden bg-white rounded-[15px] hover:shadow-xl shadow-sm group items-center justify-between md:flex md:flex-col cursor-pointer`}
+          } overflow-hidden bg-white rounded-[20px] md:rounded-[15px] hover:shadow-xl shadow-sm group cursor-pointer md:py-3 md:px-3`}
           id={`prod-${store.id}`}
           itemScope
           itemType="https://schema.org/Product"
           onClick={() => router.push(`/product/${store.id}`)}
         >
+          {/* Mobile compact vertical card */}
+          <div className="md:hidden p-3">
+            <div className="text-center mb-2">
+              {store.image ? (
+                <img
+                  src={store.image}
+                  width={120}
+                  height={96}
+                  alt={store?.attribute_data?.name[channelName][locale || 'ru']}
+                  className="mx-auto object-contain"
+                  itemProp="image"
+                />
+              ) : (
+                <img
+                  src="/no_photo.svg"
+                  width={120}
+                  height={96}
+                  alt={store?.attribute_data?.name[channelName][locale || 'ru']}
+                  className="mx-auto"
+                />
+              )}
+            </div>
+            <div className="text-center text-sm font-semibold mb-2 truncate" itemProp="name">
+              {store?.attribute_data?.name[channelName][locale || 'ru']}
+            </div>
+            <div
+              className="w-full text-center py-2 rounded-full text-sm font-bold text-white"
+              style={{ backgroundColor: '#F9B004' }}
+            >
+              {currency(prodPriceDesktop, {
+                pattern: '# !',
+                separator: ' ',
+                decimal: '.',
+                symbol: `${locale == 'uz' ? "so'm" : ''} ${locale == 'ru' ? 'сум' : ''} ${locale == 'en' ? 'sum' : ''}`,
+                precision: 0,
+              }).format()}
+            </div>
+          </div>
+          {/* Desktop card */}
+          <div className="hidden md:block">
           <div className="text-center">
             {store.image ? (
               <img
@@ -675,7 +715,7 @@ const ProductItemNew: FC<ProductItem> = ({ product, channelName }) => {
               }}
               itemProp="description"
             ></div>
-            <div className="hidden md:block">
+            <div>
               {store.variants && store.variants.length > 0 && (
                 <div className="flex mt-5 space-x-1 -mx-2">
                   {store.variants.map((v) => (
@@ -714,9 +754,9 @@ const ProductItemNew: FC<ProductItem> = ({ product, channelName }) => {
                 </div>
               )}
             </div>
-            <div className="md:mt-10 mt-2 flex justify-between items-center text-sm">
+            <div className="mt-10 flex justify-between items-center text-sm">
               <button
-                className="bg-yellow focus:outline-none md:w-32 md:justify-around font-bold outline-none py-2 rounded-full text-white uppercase md:inline-flex items-center hidden"
+                className="bg-yellow focus:outline-none w-32 justify-around font-bold outline-none py-2 rounded-full text-white uppercase inline-flex items-center"
                 onClick={(e) => {
                   e.stopPropagation()
                   handleSubmit(e)
@@ -749,14 +789,13 @@ const ProductItemNew: FC<ProductItem> = ({ product, channelName }) => {
                 )}
               </button>
               <div
-                className="hidden md:block"
                 itemProp="offers"
                 itemScope
                 itemType="https://schema.org/Offer"
               >
                 {prodDiscountPriceDesktop > 0 && (
                   <span
-                    className="md:text-sm md:bg-white hidden md:block md:w-auto rounded-full text-xs text-left line-through md:px-0 md:py-0 md:text-gray-500"
+                    className="text-sm bg-white block w-auto rounded-full text-xs text-left line-through px-0 py-0 text-gray-500"
                     itemProp="price"
                   >
                     {currency(prodPriceDesktop + prodDiscountPriceDesktop, {
@@ -770,7 +809,7 @@ const ProductItemNew: FC<ProductItem> = ({ product, channelName }) => {
                     }).format()}
                   </span>
                 )}
-                <span className="md:text-xl md:bg-white hidden md:block md:w-auto rounded-full text-sm text-center md:px-0 md:py-0 md:text-black">
+                <span className="text-xl bg-white block w-auto rounded-full text-sm text-center px-0 py-0 text-black">
                   {currency(prodPriceDesktop, {
                     pattern: '# !',
                     separator: ' ',
@@ -782,41 +821,9 @@ const ProductItemNew: FC<ProductItem> = ({ product, channelName }) => {
                   }).format()}
                 </span>
               </div>
-              <button
-                className="md:text-xl md:hidden bg-yellow flex flex-col items-center md:bg-white w-28 md:w-auto rounded-full px-2 py-2 text-sm text-center md:px-0 md:py-0 text-white md:text-black"
-                onClick={(e) => {
-                  e.stopPropagation()
-                  openModal()
-                }}
-              >
-                <span>
-                  {prodDiscountPriceDesktop > 0 && (
-                    <span className="md:text-sm md:bg-white md:w-auto rounded-full text-xs text-left line-through md:px-0 md:py-0 md:text-gray-500">
-                      {currency(prodPriceDesktop + prodDiscountPriceDesktop, {
-                        pattern: '# !',
-                        separator: ' ',
-                        decimal: '.',
-                        symbol: `${locale == 'uz' ? "so'm" : ''} ${
-                          locale == 'ru' ? 'сум' : ''
-                        } ${locale == 'en' ? 'sum' : ''}`,
-                        precision: 0,
-                      }).format()}
-                    </span>
-                  )}
-                </span>
-                <span>
-                  {locale == 'uz' ? '' : <span>от </span>}
-                  {currency(prodPriceDesktop, {
-                    pattern: '# !',
-                    separator: ' ',
-                    decimal: '.',
-                    symbol: `${locale == 'uz' ? "so'm" : ''} ${
-                      locale == 'ru' ? 'сум' : ''
-                    } ${locale == 'en' ? 'sum' : ''}`,
-                    precision: 0,
-                  }).format()}
-                </span>
-              </button>
+            </div>
+          </div>
+          </div>
               <Transition show={isOpen}>
                 <Dialog
                   initialFocus={completeButtonRef}
@@ -1057,8 +1064,6 @@ const ProductItemNew: FC<ProductItem> = ({ product, channelName }) => {
                   </div>
                 </Dialog>
               </Transition>
-            </div>
-          </div>
         </div>
       )}
     </>

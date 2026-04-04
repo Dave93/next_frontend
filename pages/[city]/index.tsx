@@ -345,7 +345,7 @@ export default function Home({
                       sec?.attribute_data?.name[channelName][locale || 'ru']
                     }
                   />
-                  <div className="grid grid-cols-1 lg:grid-cols-3 md:grid-cols-2 md:gap-3 divide-y md:divide-y-0 px-4 md:px-0 space-y-3 md:space-y-0">
+                  <div className="grid grid-cols-2 lg:grid-cols-3 md:grid-cols-2 gap-2.5 md:gap-3 px-4 md:px-0">
                     {sec.items.map((prod: any) => (
                       <ProductItemNew
                         product={prod}
