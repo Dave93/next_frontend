@@ -1,6 +1,6 @@
 import { Fragment, FC, memo, ReactEventHandler } from 'react'
 import React from 'react'
-import { Menu, Transition } from '@headlessui/react'
+import { Menu, MenuButton, MenuItem, MenuItems, Transition } from '@headlessui/react'
 import menuItems from '@commerce/data/profileMenu'
 import useTranslation from 'next-translate/useTranslation'
 import { useUI } from '@components/ui/context'
@@ -63,14 +63,14 @@ const UserProfileDropDown: FC<UserProfileDropdownProps> = ({
       {({ open }) => (
         <>
           <div>
-            <Menu.Button className="bg-gray-200 px-8 py-1 rounded-full text-secondary outline-none focus:outline-none mb-5 md:mb-0">
+            <MenuButton className="bg-gray-200 px-8 py-1 rounded-full text-secondary outline-none focus:outline-none mb-5 md:mb-0">
               {user.user.name}
-            </Menu.Button>
+            </MenuButton>
           </div>
 
           <Transition
             show={open}
-            as={Fragment}
+           
             enter="transition ease-out duration-100"
             enterFrom="transform opacity-0 scale-95"
             enterTo="transform opacity-100 scale-100"
@@ -78,7 +78,7 @@ const UserProfileDropDown: FC<UserProfileDropdownProps> = ({
             leaveFrom="transform opacity-100 scale-100"
             leaveTo="transform opacity-0 scale-95"
           >
-            <Menu.Items
+            <MenuItems
               className="absolute bg-white divide-gray-100 divide-y focus:outline-none mt-2 origin-top-right right-0 ring-1 ring-black ring-opacity-5 overflow-hidden rounded-2xl shadow-lg z-20"
             >
               {items.map((item) => {
@@ -89,7 +89,7 @@ const UserProfileDropDown: FC<UserProfileDropdownProps> = ({
                 }
 
                 return (
-                  <Menu.Item key={item.href}>
+                  <MenuItem key={item.href}>
                     {href == `/${activeCity?.slug}/profile/logout` ? (
                       <span
                         className="block px-4 py-2 text-sm cursor-pointer text-secondary hover:text-white hover:bg-secondary"
@@ -112,10 +112,10 @@ const UserProfileDropDown: FC<UserProfileDropdownProps> = ({
                         </a>
                       </Link>
                     )}
-                  </Menu.Item>
+                  </MenuItem>
                 )
               })}
-            </Menu.Items>
+            </MenuItems>
           </Transition>
         </>
       )}

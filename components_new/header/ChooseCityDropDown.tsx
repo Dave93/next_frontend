@@ -1,5 +1,5 @@
 import { Fragment, useState, FC, memo, useMemo } from 'react'
-import { Menu, Transition } from '@headlessui/react'
+import { Menu, MenuButton, MenuItem, MenuItems, Transition } from '@headlessui/react'
 import { useUI } from '@components/ui'
 import { City } from '@commerce/types/cities'
 import router, { useRouter } from 'next/router'
@@ -36,16 +36,16 @@ const ChooseCityDropDown: FC = () => {
       {({ open }) => (
         <>
           <div>
-            <Menu.Button className="bg-white focus:outline-none font-medium inline-flex justify-center outline-none text-secondary text-2xl w-full">
+            <MenuButton className="bg-white focus:outline-none font-medium inline-flex justify-center outline-none text-secondary text-2xl w-full">
               {locale == 'uz' ? chosenCity?.name_uz : ''}
               {locale == 'ru' ? chosenCity?.name : ''}
               {locale == 'en' ? chosenCity?.name_en : ''}
-            </Menu.Button>
+            </MenuButton>
           </div>
 
           <Transition
             show={open}
-            as={Fragment}
+           
             enter="transition ease-out duration-100"
             enterFrom="transform opacity-0 scale-95"
             enterTo="transform opacity-100 scale-100"
@@ -53,19 +53,18 @@ const ChooseCityDropDown: FC = () => {
             leaveFrom="transform opacity-100 scale-100"
             leaveTo="transform opacity-0 scale-95"
           >
-            <Menu.Items
-              static
+            <MenuItems
               className="absolute bg-white divide-gray-100 divide-y focus:outline-none mt-2 origin-top-right right-0 ring-1 ring-black ring-opacity-5 rounded-2xl shadow-lg top-0 z-20"
             >
-              <Menu.Item>
+              <MenuItem>
                 {({ active }) => (
                   <span className="text-secondary block px-4 py-2">
                     {tr('your_city')}
                   </span>
                 )}
-              </Menu.Item>
+              </MenuItem>
               {cities?.map((item: City) => (
-                <Menu.Item key={item.id}>
+                <MenuItem key={item.id}>
                   <span
                     onClick={() => changeCity(item)}
                     className={`block px-4 py-2 cursor-pointer ${chosenCity.id == item.id
@@ -77,9 +76,9 @@ const ChooseCityDropDown: FC = () => {
                     {locale == 'ru' ? item.name : ''}
                     {locale == 'en' ? item.name_en : ''}
                   </span>
-                </Menu.Item>
+                </MenuItem>
               ))}
-            </Menu.Items>
+            </MenuItems>
           </Transition>
         </>
       )}

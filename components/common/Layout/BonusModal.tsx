@@ -1,6 +1,6 @@
 import { City } from '@commerce/types/cities'
 import { useUI } from '@components/ui/context'
-import { Dialog, Menu, Transition } from '@headlessui/react'
+import { Dialog, DialogBackdrop, Transition, TransitionChild } from '@headlessui/react'
 import axios from 'axios'
 import Cookies from 'js-cookie'
 import useTranslation from 'next-translate/useTranslation'
@@ -83,7 +83,7 @@ const BonusModal: FC = () => {
 
   return (
     <div>
-      <Transition appear show={isShowModal} as={Fragment}>
+      <Transition appear show={isShowModal}>
         <Dialog
           as="div"
           className="fixed inset-0 z-10 overflow-y-auto"
@@ -91,8 +91,8 @@ const BonusModal: FC = () => {
           initialFocus={cityListRef}
         >
           <div className="min-h-screen px-4 text-center">
-            <Transition.Child
-              as={Fragment}
+            <TransitionChild
+             
               enter="ease-out duration-300"
               enterFrom="opacity-0"
               enterTo="opacity-100"
@@ -100,8 +100,8 @@ const BonusModal: FC = () => {
               leaveFrom="opacity-100"
               leaveTo="opacity-0"
             >
-              <Dialog.Overlay className="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity" />
-            </Transition.Child>
+              <DialogBackdrop className="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity" />
+            </TransitionChild>
             {/* This element is to trick the browser into centering the modal contents. */}
             <span
               className="inline-block h-screen align-middle"
@@ -110,8 +110,8 @@ const BonusModal: FC = () => {
               &#8203;
             </span>
 
-            <Transition.Child
-              as={Fragment}
+            <TransitionChild
+             
               enter="ease-out duration-300"
               enterFrom="opacity-0 scale-95"
               enterTo="opacity-100 scale-100"
@@ -179,7 +179,7 @@ const BonusModal: FC = () => {
                   </button>
                 </div>
               </div>
-            </Transition.Child>
+            </TransitionChild>
           </div>
         </Dialog>
       </Transition>

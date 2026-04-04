@@ -1,7 +1,7 @@
 import commerce from '@lib/api/commerce'
 import { GetServerSidePropsContext } from 'next'
 import Image from 'next/image'
-import { Menu, Transition } from '@headlessui/react'
+import { Menu, MenuItem, MenuItems, Transition } from '@headlessui/react'
 import { Fragment, useEffect, useMemo } from 'react'
 import { useUI } from '@components/ui'
 import { City } from '@commerce/types/cities'
@@ -86,7 +86,7 @@ export default function DevPage({ cities }: { cities: any }) {
           <>
             <Transition
               show={true}
-              as={Fragment}
+             
               enter="transition ease-out duration-100"
               enterFrom="transform opacity-0 scale-95"
               enterTo="transform opacity-100 scale-100"
@@ -94,9 +94,9 @@ export default function DevPage({ cities }: { cities: any }) {
               leaveFrom="transform opacity-100 scale-100"
               leaveTo="transform opacity-0 scale-95"
             >
-              <Menu.Items static>
+              <MenuItems >
                 {cities?.map((item: City) => (
-                  <Menu.Item key={item.id}>
+                  <MenuItem key={item.id}>
                     <span
                       onClick={() => changeCity(item)}
                       className={`block px-4 py-2 cursor-pointer text-3xl text-secondary hover:text-white hover:bg-secondary`}
@@ -109,9 +109,9 @@ export default function DevPage({ cities }: { cities: any }) {
                             ? item.name_en
                             : ''}
                     </span>
-                  </Menu.Item>
+                  </MenuItem>
                 ))}
-              </Menu.Items>
+              </MenuItems>
             </Transition>
           </>
         </Menu>

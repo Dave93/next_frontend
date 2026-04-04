@@ -1,5 +1,5 @@
 import { Fragment, useState } from 'react'
-import { Menu, Transition } from '@headlessui/react'
+import { Menu, MenuButton, MenuItem, MenuItems, Transition } from '@headlessui/react'
 import { MenuIcon, XIcon } from '@heroicons/react/outline'
 function classNames(...classes) {
   return classes.filter(Boolean).join(' ')
@@ -41,18 +41,18 @@ export default function BurgerMenu() {
       {({ open }) => (
         <>
           <div>
-            <Menu.Button className="bg-white focus:outline-none font-medium inline-flex justify-center outline-none px-4 py-2 text-secondary text-sm w-full">
+            <MenuButton className="bg-white focus:outline-none font-medium inline-flex justify-center outline-none px-4 py-2 text-secondary text-sm w-full">
               {open ? (
                 <XIcon className="text-secondary h-5 w-5" />
               ) : (
                 <MenuIcon className="text-secondary h-5 w-5" />
               )}
-            </Menu.Button>
+            </MenuButton>
           </div>
 
           <Transition
             show={open}
-            as={Fragment}
+           
             enter="transition ease-out duration-100"
             enterFrom="transform opacity-0 scale-95"
             enterTo="transform opacity-100 scale-100"
@@ -60,17 +60,16 @@ export default function BurgerMenu() {
             leaveFrom="transform opacity-100 scale-100"
             leaveTo="transform opacity-0 scale-95"
           >
-            <Menu.Items
-              static
+            <MenuItems
               className="absolute flex bg-white divide-gray-100 divide-y focus:outline-none mt-2 origin-top-right right-0 ring-1 ring-black ring-opacity-5 rounded-2xl shadow-lg top-0 z-20"
             >
-              <Menu.Item>
+              <MenuItem>
                 {({ active }) => (
                   <span className="text-secondary block px-4 py-2 text-sm">Ваш город</span>
                 )}
-              </Menu.Item>
+              </MenuItem>
               {cities.map(item => (
-                <Menu.Item key={item.id}>
+                <MenuItem key={item.id}>
                   <span
                     onClick={() => setActive(item.id)}
                     className={`block px-4 py-2 text-sm cursor-pointer ${
@@ -79,9 +78,9 @@ export default function BurgerMenu() {
                   >
                     {item.label}
                   </span>
-                </Menu.Item>
+                </MenuItem>
               ))}
-            </Menu.Items>
+            </MenuItems>
           </Transition>
         </>
       )}

@@ -12,7 +12,7 @@ import React, {
   useEffect,
   useCallback,
 } from 'react'
-import { Menu, Transition, Disclosure, Dialog } from '@headlessui/react'
+import { Dialog, DialogBackdrop, DialogDescription, DialogTitle, Disclosure, DisclosureButton, DisclosurePanel, Menu, MenuButton, MenuItem, MenuItems, Transition, TransitionChild } from '@headlessui/react'
 import {
   CheckIcon,
   ChevronDownIcon,
@@ -1453,7 +1453,7 @@ const Orders: FC<OrdersProps> = ({ channelName }: { channelName: any }) => {
               <div>
                 <Menu as="div" className="relative inline-block text-left">
                   <div>
-                    <Menu.Button className="focus:outline-none font-medium inline-flex justify-center py-2 text-secondary text-lg w-full items-center">
+                    <MenuButton className="focus:outline-none font-medium inline-flex justify-center py-2 text-secondary text-lg w-full items-center">
                       {locale == 'uz'
                         ? chosenCity?.name_uz
                         : locale == 'ru'
@@ -1465,10 +1465,10 @@ const Orders: FC<OrdersProps> = ({ channelName }: { channelName: any }) => {
                         className="w-5 h-5 ml-2 -mr-1 text-violet-200 hover:text-violet-100"
                         aria-hidden="true"
                       />
-                    </Menu.Button>
+                    </MenuButton>
                   </div>
                   <Transition
-                    as={Fragment}
+                   
                     enter="transition ease-out duration-100"
                     enterFrom="transform opacity-0 scale-95"
                     enterTo="transform opacity-100 scale-100"
@@ -1476,9 +1476,9 @@ const Orders: FC<OrdersProps> = ({ channelName }: { channelName: any }) => {
                     leaveFrom="transform opacity-100 scale-100"
                     leaveTo="transform opacity-0 scale-95"
                   >
-                    <Menu.Items className="z-20 absolute right-0 w-56 mt-2 origin-top-right bg-white divide-y divide-gray-100 rounded-md shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
+                    <MenuItems className="z-20 absolute right-0 w-56 mt-2 origin-top-right bg-white divide-y divide-gray-100 rounded-md shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
                       {cities.map((city: City) => (
-                        <Menu.Item key={city.id}>
+                        <MenuItem key={city.id}>
                           <span
                             onClick={() => setActive(city)}
                             className={`block px-4 py-2 text-sm cursor-pointer ${city.id == chosenCity.id
@@ -1494,9 +1494,9 @@ const Orders: FC<OrdersProps> = ({ channelName }: { channelName: any }) => {
                                   ? city.name_en
                                   : ''}
                           </span>
-                        </Menu.Item>
+                        </MenuItem>
                       ))}
-                    </Menu.Items>
+                    </MenuItems>
                   </Transition>
                 </Menu>
               </div>
@@ -1732,7 +1732,7 @@ const Orders: FC<OrdersProps> = ({ channelName }: { channelName: any }) => {
                     <Disclosure defaultOpen={true}>
                       {({ open }) => (
                         <>
-                          <Disclosure.Button className="flex text-yellow outline-none focus:outline-none">
+                          <DisclosureButton className="flex text-yellow outline-none focus:outline-none">
                             <span>{tr('indicate_intercom_and_entrance')}</span>
                             {/*
                           Use the `open` render prop to rotate the icon when the panel is open
@@ -1741,7 +1741,7 @@ const Orders: FC<OrdersProps> = ({ channelName }: { channelName: any }) => {
                               className={`w-6 transform ${open ? 'rotate-90' : '-rotate-90'
                                 }`}
                             />
-                          </Disclosure.Button>
+                          </DisclosureButton>
                           <Transition
                             show={open}
                             enter="transition duration-300 ease-out"
@@ -1751,7 +1751,7 @@ const Orders: FC<OrdersProps> = ({ channelName }: { channelName: any }) => {
                             leaveFrom="transform scale-100 opacity-100"
                             leaveTo="transform scale-95 opacity-0"
                           >
-                            <Disclosure.Panel>
+                            <DisclosurePanel>
                               <div className="md:flex mt-3 space-y-2 md:space-y-0">
                                 <div>
                                   <input
@@ -1770,7 +1770,7 @@ const Orders: FC<OrdersProps> = ({ channelName }: { channelName: any }) => {
                                   />
                                 </div>
                               </div>
-                            </Disclosure.Panel>
+                            </DisclosurePanel>
                           </Transition>
                         </>
                       )}
@@ -2227,7 +2227,7 @@ const Orders: FC<OrdersProps> = ({ channelName }: { channelName: any }) => {
         <Disclosure defaultOpen={true}>
           {({ open }) => (
             <>
-              <Disclosure.Button className="flex text-yellow outline-none focus:outline-none mt-8">
+              <DisclosureButton className="flex text-yellow outline-none focus:outline-none mt-8">
                 <span>{tr('comment_on_the_order')}</span>
                 {/*
                           Use the `open` render prop to rotate the icon when the panel is open
@@ -2236,7 +2236,7 @@ const Orders: FC<OrdersProps> = ({ channelName }: { channelName: any }) => {
                   className={`w-6 transform ${open ? 'rotate-90' : '-rotate-90'
                     }`}
                 />
-              </Disclosure.Button>
+              </DisclosureButton>
               <Transition
                 show={open}
                 enter="transition duration-300 ease-out"
@@ -2246,7 +2246,7 @@ const Orders: FC<OrdersProps> = ({ channelName }: { channelName: any }) => {
                 leaveFrom="transform scale-100 opacity-100"
                 leaveTo="transform scale-95 opacity-0"
               >
-                <Disclosure.Panel>
+                <DisclosurePanel>
                   <div className="md:flex mt-3 md:w-96 h-28">
                     <div className="w-full">
                       <textarea
@@ -2258,7 +2258,7 @@ const Orders: FC<OrdersProps> = ({ channelName }: { channelName: any }) => {
                       ></textarea>
                     </div>
                   </div>
-                </Disclosure.Panel>
+                </DisclosurePanel>
               </Transition>
             </>
           )}
@@ -2516,7 +2516,7 @@ const Orders: FC<OrdersProps> = ({ channelName }: { channelName: any }) => {
             {tr('terms_of_use')}
           </a>
         </div>
-        <Transition appear show={isShowPrivacy} as={Fragment}>
+        <Transition appear show={isShowPrivacy}>
           <Dialog
             as="div"
             className="fixed inset-0 z-10 overflow-y-auto"
@@ -2524,8 +2524,8 @@ const Orders: FC<OrdersProps> = ({ channelName }: { channelName: any }) => {
             initialFocus={privacyButtonRef}
           >
             <div className="min-h-screen px-4 text-center">
-              <Transition.Child
-                as={Fragment}
+              <TransitionChild
+               
                 enter="ease-out duration-300"
                 enterFrom="opacity-0"
                 enterTo="opacity-100"
@@ -2533,8 +2533,8 @@ const Orders: FC<OrdersProps> = ({ channelName }: { channelName: any }) => {
                 leaveFrom="opacity-100"
                 leaveTo="opacity-0"
               >
-                <Dialog.Overlay className="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity" />
-              </Transition.Child>
+                <DialogBackdrop className="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity" />
+              </TransitionChild>
 
               {/* This element is to trick the browser into centering the modal contents. */}
               <span
@@ -2543,8 +2543,8 @@ const Orders: FC<OrdersProps> = ({ channelName }: { channelName: any }) => {
               >
                 &#8203;
               </span>
-              <Transition.Child
-                as={Fragment}
+              <TransitionChild
+               
                 enter="ease-out duration-300"
                 enterFrom="opacity-0 scale-95"
                 enterTo="opacity-100 scale-100"
@@ -2567,7 +2567,7 @@ const Orders: FC<OrdersProps> = ({ channelName }: { channelName: any }) => {
                     </button>
                   </div>
                 </div>
-              </Transition.Child>
+              </TransitionChild>
             </div>
           </Dialog>
         </Transition>
@@ -2616,7 +2616,7 @@ const Orders: FC<OrdersProps> = ({ channelName }: { channelName: any }) => {
           </button>
         </div>
       </div>
-      <Transition appear show={isPhoneConfirmOpen} as={Fragment}>
+      <Transition appear show={isPhoneConfirmOpen}>
         <Dialog
           as="div"
           className="fixed inset-0 z-50 overflow-y-auto"
@@ -2624,8 +2624,8 @@ const Orders: FC<OrdersProps> = ({ channelName }: { channelName: any }) => {
           initialFocus={authButtonRef}
         >
           <div className="min-h-screen px-4 text-center">
-            <Transition.Child
-              as={Fragment}
+            <TransitionChild
+             
               enter="ease-out duration-300"
               enterFrom="opacity-0"
               enterTo="opacity-100"
@@ -2633,8 +2633,8 @@ const Orders: FC<OrdersProps> = ({ channelName }: { channelName: any }) => {
               leaveFrom="opacity-100"
               leaveTo="opacity-0"
             >
-              <Dialog.Overlay className="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity" />
-            </Transition.Child>
+              <DialogBackdrop className="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity" />
+            </TransitionChild>
 
             {/* This element is to trick the browser into centering the modal contents. */}
             <span
@@ -2643,8 +2643,8 @@ const Orders: FC<OrdersProps> = ({ channelName }: { channelName: any }) => {
             >
               &#8203;
             </span>
-            <Transition.Child
-              as={Fragment}
+            <TransitionChild
+             
               enter="ease-out duration-300"
               enterFrom="opacity-0 scale-95"
               enterTo="opacity-100 scale-100"
@@ -2655,7 +2655,7 @@ const Orders: FC<OrdersProps> = ({ channelName }: { channelName: any }) => {
               <div className="align-middle inline-block overflow-hidden w-full">
                 <div className="md:inline-flex my-8 items-start">
                   <div className="align-middle bg-white inline-block overflow-hidden md:px-40 px-6 py-10 rounded-2xl shadow-xl text-center transform transition-all max-w-2xl">
-                    <Dialog.Title as="h3" className="leading-6 text-3xl">
+                    <DialogTitle as="h3" className="leading-6 text-3xl">
                       $
                       {locale == 'uz'
                         ? 'Buyurtmani tasdiqlash'
@@ -2664,8 +2664,8 @@ const Orders: FC<OrdersProps> = ({ channelName }: { channelName: any }) => {
                           : locale == 'en'
                             ? 'Confirm order'
                             : ''}
-                    </Dialog.Title>
-                    <Dialog.Description>
+                    </DialogTitle>
+                    <DialogDescription>
                       $
                       {locale == 'uz'
                         ? 'SMS-dan kodni kiriting'
@@ -2674,7 +2674,7 @@ const Orders: FC<OrdersProps> = ({ channelName }: { channelName: any }) => {
                           : locale == 'en'
                             ? 'Enter the code from the SMS'
                             : ''}
-                    </Dialog.Description>
+                    </DialogDescription>
                     <div>
                       <form onSubmit={handlePasswordSubmit(saveOrder)}>
                         <div className="mt-10">
@@ -2765,7 +2765,7 @@ const Orders: FC<OrdersProps> = ({ channelName }: { channelName: any }) => {
                   </div>
                 </div>
               </div>
-            </Transition.Child>
+            </TransitionChild>
           </div>
         </Dialog>
       </Transition>

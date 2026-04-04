@@ -8,7 +8,7 @@ import { useUI } from '@components/ui/context'
 import Link from '@components/ui/Link'
 import { motion } from 'framer-motion'
 import { shuffle as lodashShuffle } from 'lodash'
-import { Dialog, Transition } from '@headlessui/react'
+import { Dialog, DialogBackdrop, DialogTitle, Transition, TransitionChild } from '@headlessui/react'
 import getConfig from 'next/config'
 import axios from 'axios'
 import cookies from 'next-cookies'
@@ -294,15 +294,15 @@ export default function Dev({
               {tr('mix')}
             </div>
           )}
-          <Transition appear show={isOpenCard} as={Fragment}>
+          <Transition appear show={isOpenCard}>
             <Dialog
               as="div"
               className="fixed inset-0 z-10 overflow-y-auto"
               onClose={() => { }}
             >
               <div className="min-h-screen px-4 text-center">
-                <Transition.Child
-                  as={Fragment}
+                <TransitionChild
+                 
                   enter="ease-out duration-300"
                   enterFrom="opacity-0"
                   enterTo="opacity-100"
@@ -310,8 +310,8 @@ export default function Dev({
                   leaveFrom="opacity-100"
                   leaveTo="opacity-0"
                 >
-                  <Dialog.Overlay className="fixed inset-0" />
-                </Transition.Child>
+                  <DialogBackdrop className="fixed inset-0" />
+                </TransitionChild>
 
                 {/* This element is to trick the browser into centering the modal contents. */}
                 <span
@@ -321,7 +321,7 @@ export default function Dev({
                   &#8203;
                 </span>
                 <div className="align-middle bg-white inline-block overflow-hidden px-20 py-10 rounded-2xl shadow-xl text-center transform transition-all">
-                  <Dialog.Title
+                  <DialogTitle
                     as="h3"
                     className="leading-6 text-4xl text-secondary md:w-72 uppercase"
                   >
@@ -330,7 +330,7 @@ export default function Dev({
                       locale || 'ru'
                       ]
                     }
-                  </Dialog.Title>
+                  </DialogTitle>
                   <img className="m-auto w-48" src={chosenCard?.image} alt="" />
                   <div className="md:w-72 m-auto">
                     <span className="text-yellow">

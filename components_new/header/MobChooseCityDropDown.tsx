@@ -1,5 +1,5 @@
 import React, { Fragment, FC, memo, useState, useMemo } from 'react'
-import { Menu, Transition } from '@headlessui/react'
+import { Menu, MenuButton, MenuItem, MenuItems, Transition } from '@headlessui/react'
 import Image from 'next/image'
 import { useUI } from '@components/ui'
 import { City } from '@commerce/types/cities'
@@ -35,7 +35,7 @@ const ChooseCityDropDown: FC = () => {
       {({ open }) => (
         <>
           <div className={`${open ? 'hidden' : ''}`}>
-            <Menu.Button className="focus:outline-none font-medium justify-center outline-none px-4 py-2 text-white text-sm w-full">
+            <MenuButton className="focus:outline-none font-medium justify-center outline-none px-4 py-2 text-white text-sm w-full">
               <div className="flex items-center">
                 <Image
                   src="/assets/location.png"
@@ -53,12 +53,12 @@ const ChooseCityDropDown: FC = () => {
                         : ''}
                 </div>
               </div>
-            </Menu.Button>
+            </MenuButton>
           </div>
 
           <Transition
             show={open}
-            as={Fragment}
+           
             enter="transition ease-out duration-100"
             enterFrom="transform opacity-0 scale-95"
             enterTo="transform opacity-100 scale-100"
@@ -66,12 +66,11 @@ const ChooseCityDropDown: FC = () => {
             leaveFrom="transform opacity-100 scale-100"
             leaveTo="transform opacity-0 scale-95"
           >
-            <Menu.Items
-              static
+            <MenuItems
               className="text-white w-full h-full z-50 fixed bg-secondary"
             >
               {cities.map((item: City) => (
-                <Menu.Item key={item.id}>
+                <MenuItem key={item.id}>
                   <span
                     onClick={() => changeCity(item)}
                     className={`block px-4 py-2 cursor-pointer text-xl ml-12`}
@@ -84,9 +83,9 @@ const ChooseCityDropDown: FC = () => {
                           ? item.name_en
                           : ''}
                   </span>
-                </Menu.Item>
+                </MenuItem>
               ))}
-            </Menu.Items>
+            </MenuItems>
           </Transition>
         </>
       )}

@@ -7,7 +7,7 @@ import React, {
   useMemo,
   useCallback,
 } from 'react'
-import { Dialog, Transition } from '@headlessui/react'
+import { Dialog, DialogBackdrop, DialogTitle, Transition, TransitionChild } from '@headlessui/react'
 import useTranslation from 'next-translate/useTranslation'
 import { XIcon } from '@heroicons/react/outline'
 import { useForm, Controller, SubmitHandler } from 'react-hook-form'
@@ -276,7 +276,7 @@ const SignInButton: FC = () => {
     <>
       {!user && (
         <>
-          <Transition appear show={showSignInModal} as={Fragment}>
+          <Transition appear show={showSignInModal}>
             <Dialog
               as="div"
               className="fixed inset-0 z-[100] overflow-y-auto"
@@ -284,8 +284,8 @@ const SignInButton: FC = () => {
               initialFocus={authButtonRef}
             >
               <div className="min-h-screen px-4 text-center">
-                <Transition.Child
-                  as={Fragment}
+                <TransitionChild
+                 
                   enter="ease-out duration-300"
                   enterFrom="opacity-0"
                   enterTo="opacity-100"
@@ -293,8 +293,8 @@ const SignInButton: FC = () => {
                   leaveFrom="opacity-100"
                   leaveTo="opacity-0"
                 >
-                  <Dialog.Overlay className="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity" />
-                </Transition.Child>
+                  <DialogBackdrop className="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity" />
+                </TransitionChild>
 
                 {/* This element is to trick the browser into centering the modal contents. */}
                 <span
@@ -303,8 +303,8 @@ const SignInButton: FC = () => {
                 >
                   &#8203;
                 </span>
-                <Transition.Child
-                  as={Fragment}
+                <TransitionChild
+                 
                   enter="ease-out duration-300"
                   enterFrom="opacity-0 scale-95"
                   enterTo="opacity-100 scale-100"
@@ -315,9 +315,9 @@ const SignInButton: FC = () => {
                   <div className="align-middle inline-block w-full z-[200]">
                     <div className="md:inline-flex my-8 items-start">
                       <div className="align-middle bg-white inline-block md:px-40 px-6 py-10 rounded-2xl shadow-xl text-center transform transition-all max-w-2xl">
-                        <Dialog.Title as="h3" className="leading-6 text-3xl">
+                        <DialogTitle as="h3" className="leading-6 text-3xl">
                           {tr('auth')}
-                        </Dialog.Title>
+                        </DialogTitle>
                         {submitError && (
                           <div className="bg-red-200 p-5 font-bold text-red-600 my-6">
                             {submitError}
@@ -608,11 +608,11 @@ const SignInButton: FC = () => {
                       </button>
                     </div>
                   </div>
-                </Transition.Child>
+                </TransitionChild>
               </div>
             </Dialog>
           </Transition>
-          <Transition appear show={isShowPrivacy} as={Fragment}>
+          <Transition appear show={isShowPrivacy}>
             <Dialog
               as="div"
               className="fixed inset-0 z-[100] overflow-y-auto"
@@ -620,8 +620,8 @@ const SignInButton: FC = () => {
               initialFocus={privacyButtonRef}
             >
               <div className="min-h-screen px-4 text-center">
-                <Transition.Child
-                  as={Fragment}
+                <TransitionChild
+                 
                   enter="ease-out duration-300"
                   enterFrom="opacity-0"
                   enterTo="opacity-100"
@@ -629,8 +629,8 @@ const SignInButton: FC = () => {
                   leaveFrom="opacity-100"
                   leaveTo="opacity-0"
                 >
-                  <Dialog.Overlay className="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity" />
-                </Transition.Child>
+                  <DialogBackdrop className="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity" />
+                </TransitionChild>
 
                 {/* This element is to trick the browser into centering the modal contents. */}
                 <span
@@ -639,8 +639,8 @@ const SignInButton: FC = () => {
                 >
                   &#8203;
                 </span>
-                <Transition.Child
-                  as={Fragment}
+                <TransitionChild
+                 
                   enter="ease-out duration-300"
                   enterFrom="opacity-0 scale-95"
                   enterTo="opacity-100 scale-100"
@@ -652,12 +652,12 @@ const SignInButton: FC = () => {
                     <div className="inline-flex my-8 items-start">
                       <div className="align-middle bg-white inline-block max-w-4xl overflow-hidden p-10 rounded-2xl shadow-xl text-left transform transition-all w-full">
                         <div className="border-b mb-3 pb-3">
-                          <Dialog.Title
+                          <DialogTitle
                             as="h3"
                             className="leading-6 mb-2 text-2xl"
                           >
                             1. ПОЛЬЗОВАТЕЛЬСКОЕ СОГЛАШЕНИЕ (ОФЕРТА)
-                          </Dialog.Title>
+                          </DialogTitle>
                           <p>
                             The standard Lorem Ipsum passage, used since the
                             1500s "Lorem ipsum dolor sit amet, consectetur
@@ -672,12 +672,12 @@ const SignInButton: FC = () => {
                           </p>
                         </div>
                         <div className="border-b mb-3 pb-3">
-                          <Dialog.Title
+                          <DialogTitle
                             as="h3"
                             className="leading-6 mb-2 text-2xl"
                           >
                             2. Предмет Пользовательского соглашения
-                          </Dialog.Title>
+                          </DialogTitle>
                           <p>
                             "Sed ut perspiciatis unde omnis iste natus error sit
                             voluptatem accusantium doloremque laudantium, totam
@@ -700,12 +700,12 @@ const SignInButton: FC = () => {
                           </p>
                         </div>
                         <div className="border-b mb-3 pb-3">
-                          <Dialog.Title
+                          <DialogTitle
                             as="h3"
                             className="leading-6 mb-2 text-2xl"
                           >
                             3. Регистрация на Сайте и безопасность
-                          </Dialog.Title>
+                          </DialogTitle>
                           <p>
                             "But I must explain to you how all this mistaken
                             idea of denouncing pleasure and praising pain was
@@ -730,12 +730,12 @@ const SignInButton: FC = () => {
                           </p>
                         </div>
                         <div className="border-b mb-3 pb-3">
-                          <Dialog.Title
+                          <DialogTitle
                             as="h3"
                             className="leading-6 mb-2 text-2xl"
                           >
                             4. Интеллектуальная собственность и авторское право
-                          </Dialog.Title>
+                          </DialogTitle>
                           <p>
                             "At vero eos et accusamus et iusto odio dignissimos
                             ducimus qui blanditiis praesentium voluptatum
@@ -757,12 +757,12 @@ const SignInButton: FC = () => {
                           </p>
                         </div>
                         <div className="border-b mb-3 pb-3">
-                          <Dialog.Title
+                          <DialogTitle
                             as="h3"
                             className="leading-6 mb-2 text-2xl"
                           >
                             5. Права и обязанности Поверенного
-                          </Dialog.Title>
+                          </DialogTitle>
                           <p>
                             "On the other hand, we denounce with righteous
                             indignation and dislike men who are so beguiled and
@@ -787,12 +787,12 @@ const SignInButton: FC = () => {
                           </p>
                         </div>
                         <div className="border-b mb-3 pb-3">
-                          <Dialog.Title
+                          <DialogTitle
                             as="h3"
                             className="leading-6 mb-2 text-2xl"
                           >
                             6. Права и обязанности Пользователя
-                          </Dialog.Title>
+                          </DialogTitle>
                           <p>
                             "But I must explain to you how all this mistaken
                             idea of denouncing pleasure and praising pain was
@@ -826,7 +826,7 @@ const SignInButton: FC = () => {
                       </button>
                     </div>
                   </div>
-                </Transition.Child>
+                </TransitionChild>
               </div>
             </Dialog>
           </Transition>

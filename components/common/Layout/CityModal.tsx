@@ -1,6 +1,6 @@
 import { City } from '@commerce/types/cities'
 import { useUI } from '@components/ui/context'
-import { Dialog, Menu, Transition } from '@headlessui/react'
+import { Dialog, DialogBackdrop, DialogTitle, Menu, MenuItem, MenuItems, Transition, TransitionChild } from '@headlessui/react'
 import Cookies from 'js-cookie'
 import useTranslation from 'next-translate/useTranslation'
 import router, { useRouter } from 'next/router'
@@ -54,7 +54,7 @@ const CityModal: FC<Props> = ({ cities }) => {
 
   return (
     <div>
-      <Transition appear show={isShowCityList} as={Fragment}>
+      <Transition appear show={isShowCityList}>
         <Dialog
           as="div"
           className="fixed inset-0 z-10 overflow-y-auto"
@@ -62,8 +62,8 @@ const CityModal: FC<Props> = ({ cities }) => {
           initialFocus={cityListRef}
         >
           <div className="min-h-screen px-4 text-center">
-            <Transition.Child
-              as={Fragment}
+            <TransitionChild
+             
               enter="ease-out duration-300"
               enterFrom="opacity-0"
               enterTo="opacity-100"
@@ -71,11 +71,11 @@ const CityModal: FC<Props> = ({ cities }) => {
               leaveFrom="opacity-100"
               leaveTo="opacity-0"
             >
-              <Dialog.Overlay className="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity" />
-            </Transition.Child>
+              <DialogBackdrop className="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity" />
+            </TransitionChild>
 
-            <Transition.Child
-              as={Fragment}
+            <TransitionChild
+             
               enter="ease-out duration-300"
               enterFrom="opacity-0 scale-95"
               enterTo="opacity-100 scale-100"
@@ -84,12 +84,12 @@ const CityModal: FC<Props> = ({ cities }) => {
               leaveTo="opacity-0 scale-95"
             >
               <div className="inline-block w-full max-w-md p-6 my-8 overflow-hidden text-left align-middle transition-all transform bg-secondary shadow-xl rounded-2xl">
-                <Dialog.Title
+                <DialogTitle
                   as="h3"
                   className="text-2xl font-medium leading-6 text-white"
                 >
                   {tr('choose_your_city')}
-                </Dialog.Title>
+                </DialogTitle>
                 <div
                   className="m-auto md:w-96 bg-white rounded-2xl mt-4"
                   ref={cityListRef}
@@ -98,7 +98,7 @@ const CityModal: FC<Props> = ({ cities }) => {
                     <>
                       <Transition
                         show={true}
-                        as={Fragment}
+                       
                         enter="transition ease-out duration-100"
                         enterFrom="transform opacity-0 scale-95"
                         enterTo="transform opacity-100 scale-100"
@@ -106,9 +106,9 @@ const CityModal: FC<Props> = ({ cities }) => {
                         leaveFrom="transform opacity-100 scale-100"
                         leaveTo="transform opacity-0 scale-95"
                       >
-                        <Menu.Items static>
+                        <MenuItems >
                           {cities?.map((item: City) => (
-                            <Menu.Item key={item.id}>
+                            <MenuItem key={item.id}>
                               <span
                                 onClick={() => changeCity(item)}
                                 className={`block px-4 py-2 cursor-pointer text-xl text-secondary hover:text-white hover:bg-secondary`}
@@ -117,19 +117,19 @@ const CityModal: FC<Props> = ({ cities }) => {
                                 {locale == 'ru' ? item.name : ''}
                                 {locale == 'en' ? item.name_en : ''}
                               </span>
-                            </Menu.Item>
+                            </MenuItem>
                           ))}
-                        </Menu.Items>
+                        </MenuItems>
                       </Transition>
                     </>
                   </Menu>
                 </div>
               </div>
-            </Transition.Child>
+            </TransitionChild>
           </div>
         </Dialog>
       </Transition>
-      <Transition appear show={isShowCityPrompt} as={Fragment}>
+      <Transition appear show={isShowCityPrompt}>
         <Dialog
           as="div"
           className="fixed inset-0 z-10 overflow-y-auto"
@@ -137,8 +137,8 @@ const CityModal: FC<Props> = ({ cities }) => {
           initialFocus={cityPromptRef}
         >
           <div className="min-h-screen px-4 text-center">
-            <Transition.Child
-              as={Fragment}
+            <TransitionChild
+             
               enter="ease-out duration-300"
               enterFrom="opacity-0"
               enterTo="opacity-100"
@@ -146,11 +146,11 @@ const CityModal: FC<Props> = ({ cities }) => {
               leaveFrom="opacity-100"
               leaveTo="opacity-0"
             >
-              <Dialog.Overlay className="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity" />
-            </Transition.Child>
+              <DialogBackdrop className="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity" />
+            </TransitionChild>
 
-            <Transition.Child
-              as={Fragment}
+            <TransitionChild
+             
               enter="ease-out duration-300"
               enterFrom="opacity-0 scale-95"
               enterTo="opacity-100 scale-100"
@@ -159,14 +159,14 @@ const CityModal: FC<Props> = ({ cities }) => {
               leaveTo="opacity-0 scale-95"
             >
               <div className="inline-block w-full max-w-md p-6 my-8 overflow-hidden text-left align-middle transition-all transform bg-secondary shadow-xl rounded-2xl">
-                <Dialog.Title
+                <DialogTitle
                   as="h3"
                   className="text-2xl font-medium leading-6 text-white"
                 >
                   {tr('isThisYourCity', {
                     city: locale == 'uz' ? activeCity.name_uz : activeCity.name,
                   })}
-                </Dialog.Title>
+                </DialogTitle>
                 <div className="m-auto mt-4">
                   <div className="gap-3 grid grid-cols-2 w-full">
                     <button
@@ -185,7 +185,7 @@ const CityModal: FC<Props> = ({ cities }) => {
                   </div>
                 </div>
               </div>
-            </Transition.Child>
+            </TransitionChild>
           </div>
         </Dialog>
       </Transition>

@@ -10,7 +10,7 @@ import React, {
   useCallback,
   SetStateAction,
 } from 'react'
-import { Menu, Transition, Disclosure } from '@headlessui/react'
+import { Disclosure, DisclosureButton, DisclosurePanel, Menu, MenuButton, MenuItem, MenuItems, Transition } from '@headlessui/react'
 import {
   ChevronDownIcon,
   ChevronRightIcon,
@@ -975,7 +975,7 @@ const LocationTabs: FC = () => {
             <div>
               <Menu as="div" className="relative inline-block text-left">
                 <div>
-                  <Menu.Button className="focus:outline-none font-medium inline-flex justify-center py-2 text-secondary items-center text-lg w-full">
+                  <MenuButton className="focus:outline-none font-medium inline-flex justify-center py-2 text-secondary items-center text-lg w-full">
                     {locale == 'uz'
                       ? chosenCity?.name_uz
                       : locale == 'ru'
@@ -987,10 +987,10 @@ const LocationTabs: FC = () => {
                       className="w-5 h-5 ml-2 -mr-1 text-violet-200 hover:text-violet-100"
                       aria-hidden="true"
                     />
-                  </Menu.Button>
+                  </MenuButton>
                 </div>
                 <Transition
-                  as={Fragment}
+                 
                   enter="transition ease-out duration-100"
                   enterFrom="transform opacity-0 scale-95"
                   enterTo="transform opacity-100 scale-100"
@@ -998,9 +998,9 @@ const LocationTabs: FC = () => {
                   leaveFrom="transform opacity-100 scale-100"
                   leaveTo="transform opacity-0 scale-95"
                 >
-                  <Menu.Items className="z-20 absolute right-0 w-56 mt-2 origin-top-right bg-white divide-y divide-gray-100 rounded-md shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
+                  <MenuItems className="z-20 absolute right-0 w-56 mt-2 origin-top-right bg-white divide-y divide-gray-100 rounded-md shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
                     {cities.map((city: City) => (
-                      <Menu.Item key={city.id}>
+                      <MenuItem key={city.id}>
                         <span
                           onClick={() => setActive(city)}
                           className={`block px-4 py-2 text-sm cursor-pointer ${
@@ -1017,9 +1017,9 @@ const LocationTabs: FC = () => {
                             ? city.name_en
                             : chosenCity?.name}
                         </span>
-                      </Menu.Item>
+                      </MenuItem>
                     ))}
-                  </Menu.Items>
+                  </MenuItems>
                 </Transition>
               </Menu>
             </div>
@@ -1244,7 +1244,7 @@ const LocationTabs: FC = () => {
                   <Disclosure defaultOpen={true}>
                     {({ open }) => (
                       <>
-                        <Disclosure.Button className="flex text-yellow outline-none focus:outline-none">
+                        <DisclosureButton className="flex text-yellow outline-none focus:outline-none">
                           <span>{tr('indicate_intercom_and_entrance')}</span>
                           {/*
                           Use the `open` render prop to rotate the icon when the panel is open
@@ -1254,7 +1254,7 @@ const LocationTabs: FC = () => {
                               open ? 'rotate-90' : '-rotate-90'
                             }`}
                           />
-                        </Disclosure.Button>
+                        </DisclosureButton>
                         <Transition
                           show={open}
                           enter="transition duration-300 ease-out"
@@ -1264,7 +1264,7 @@ const LocationTabs: FC = () => {
                           leaveFrom="transform scale-100 opacity-100"
                           leaveTo="transform scale-95 opacity-0"
                         >
-                          <Disclosure.Panel>
+                          <DisclosurePanel>
                             <div className="flex mt-3">
                               <div>
                                 <input
@@ -1283,7 +1283,7 @@ const LocationTabs: FC = () => {
                                 />
                               </div>
                             </div>
-                          </Disclosure.Panel>
+                          </DisclosurePanel>
                         </Transition>
                       </>
                     )}

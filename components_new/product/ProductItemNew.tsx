@@ -12,7 +12,7 @@ import Image from 'next/image'
 import Link from 'next/link'
 import ProductOptionSelector from './ProductOptionSelector'
 import currency from 'currency.js'
-import { Dialog, Transition } from '@headlessui/react'
+import { Dialog, DialogBackdrop, Transition, TransitionChild } from '@headlessui/react'
 import {
   Product,
   ProductOptionValues,
@@ -797,17 +797,16 @@ const ProductItemNew: FC<ProductItem> = ({ product, channelName }) => {
                   }).format()}
                 </span>
               </button>
-              <Transition.Root show={isOpen} as={Fragment}>
+              <Transition show={isOpen}>
                 <Dialog
                   initialFocus={completeButtonRef}
                   as="div"
                   className="fixed inset-0 z-50 overflow-y-auto"
-                  open={isOpen}
                   onClose={closeModal}
                 >
                   <div className="flex items-end justify-center min-h-screen  text-center sm:block sm:p-0">
-                    <Transition.Child
-                      as={Fragment}
+                    <TransitionChild
+                     
                       enter="ease-out duration-300"
                       enterFrom="opacity-0"
                       enterTo="opacity-100"
@@ -815,8 +814,8 @@ const ProductItemNew: FC<ProductItem> = ({ product, channelName }) => {
                       leaveFrom="opacity-100"
                       leaveTo="opacity-0"
                     >
-                      <Dialog.Overlay className="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity" />
-                    </Transition.Child>
+                      <DialogBackdrop className="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity" />
+                    </TransitionChild>
 
                     {/* This element is to trick the browser into centering the modal contents. */}
                     <span
@@ -825,8 +824,8 @@ const ProductItemNew: FC<ProductItem> = ({ product, channelName }) => {
                     >
                       &#8203;
                     </span>
-                    <Transition.Child
-                      as={Fragment}
+                    <TransitionChild
+                     
                       enter="ease-out duration-300"
                       enterFrom="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
                       enterTo="opacity-100 translate-y-0 sm:scale-100"
@@ -1027,10 +1026,10 @@ const ProductItemNew: FC<ProductItem> = ({ product, channelName }) => {
                           </button>
                         </div>
                       </div>
-                    </Transition.Child>
+                    </TransitionChild>
                   </div>
                 </Dialog>
-              </Transition.Root>
+              </Transition>
             </div>
           </div>
         </div>
