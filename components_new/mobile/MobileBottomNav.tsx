@@ -30,7 +30,7 @@ const MobileBottomNav: FC = () => {
   const citySlug = (query.city as string) || activeCity?.slug || ''
 
   let cartId: string | null = null
-  if (typeof window !== undefined) {
+  if (typeof window !== 'undefined') {
     cartId = localStorage.getItem('basketId')
   }
 
@@ -90,8 +90,7 @@ const MobileBottomNav: FC = () => {
           const isActive = activeTab === tab.key
           const Icon = isActive ? tab.iconSolid : tab.iconOutline
           return (
-            <Link key={tab.key} href={tab.href} prefetch={false}>
-              <a className="flex flex-col items-center justify-center w-full h-full relative">
+            <Link key={tab.key} href={tab.href} prefetch={false} className="flex flex-col items-center justify-center w-full h-full relative">
                 <Icon
                   className={`w-6 h-6 ${
                     isActive ? 'text-yellow-500' : 'text-gray-400'
@@ -113,7 +112,6 @@ const MobileBottomNav: FC = () => {
                 >
                   {tab.label}
                 </span>
-              </a>
             </Link>
           )
         })}

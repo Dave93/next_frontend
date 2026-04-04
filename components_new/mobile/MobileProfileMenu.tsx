@@ -55,27 +55,23 @@ const MobileProfileMenu: FC = () => {
       </div>
 
       {/* My Addresses */}
-      <Link href={`/${citySlug}/profile/address`} prefetch={false}>
-        <a className="flex items-center gap-3 px-4 py-3">
-          <div className="w-9 h-9 rounded-full bg-gray-100 flex items-center justify-center flex-shrink-0">
-            <LocationMarkerIcon className="w-5 h-5 text-gray-500" />
-          </div>
-          <span className="flex-1 text-sm text-gray-800">Мои адреса</span>
-          <ChevronRightIcon className="w-5 h-5 text-gray-400" />
-        </a>
+      <Link href={`/${citySlug}/profile/address`} prefetch={false} className="flex items-center gap-3 px-4 py-3">
+        <div className="w-9 h-9 rounded-full bg-gray-100 flex items-center justify-center flex-shrink-0">
+          <LocationMarkerIcon className="w-5 h-5 text-gray-500" />
+        </div>
+        <span className="flex-1 text-sm text-gray-800">Мои адреса</span>
+        <ChevronRightIcon className="w-5 h-5 text-gray-400" />
       </Link>
 
       {/* My Orders */}
-      <Link href={`/${citySlug}/myorders`} prefetch={false}>
-        <a className="flex items-center gap-3 px-4 py-3">
-          <div className="w-9 h-9 rounded-full bg-gray-100 flex items-center justify-center flex-shrink-0">
-            <ClipboardListIcon className="w-5 h-5 text-gray-500" />
-          </div>
-          <span className="flex-1 text-sm text-gray-800">
-            {tr('profile_orders')}
-          </span>
-          <ChevronRightIcon className="w-5 h-5 text-gray-400" />
-        </a>
+      <Link href={`/${citySlug}/myorders`} prefetch={false} className="flex items-center gap-3 px-4 py-3">
+        <div className="w-9 h-9 rounded-full bg-gray-100 flex items-center justify-center flex-shrink-0">
+          <ClipboardListIcon className="w-5 h-5 text-gray-500" />
+        </div>
+        <span className="flex-1 text-sm text-gray-800">
+          {tr('profile_orders')}
+        </span>
+        <ChevronRightIcon className="w-5 h-5 text-gray-400" />
       </Link>
 
       {/* Language */}
@@ -92,17 +88,14 @@ const MobileProfileMenu: FC = () => {
                 href={asPath}
                 locale={lang.code}
                 prefetch={false}
+                className="px-3 py-1 rounded-full text-xs font-medium"
+                style={
+                  isActive
+                    ? { backgroundColor: '#F9B004', color: '#fff' }
+                    : { backgroundColor: '#F3F4F6', color: '#374151' }
+                }
               >
-                <a
-                  className="px-3 py-1 rounded-full text-xs font-medium"
-                  style={
-                    isActive
-                      ? { backgroundColor: '#F9B004', color: '#fff' }
-                      : { backgroundColor: '#F3F4F6', color: '#374151' }
-                  }
-                >
-                  {lang.label}
-                </a>
+                {lang.label}
               </Link>
             )
           })}
