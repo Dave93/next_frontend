@@ -7,115 +7,185 @@ interface MobileOrdersProps {
 
 const MobileOrders: FC<MobileOrdersProps> = ({ channelName }) => {
   return (
-    <div className="mobile-checkout">
-      <Orders channelName={channelName} />
+    <div className="mobile-checkout-wrap">
+      <Orders channelName={channelName} isMobile />
       <style jsx global>{`
-        /* Root container — remove side margins, add bottom padding */
-        .mobile-checkout > div {
+        /* ===== ROOT ===== */
+        .mobile-checkout-wrap .orders-root {
           margin-left: 0 !important;
           margin-right: 0 !important;
-          padding-bottom: 80px !important;
           padding-top: 0 !important;
+          padding-bottom: 140px !important;
         }
 
-        /* All white card sections — no border-radius, tight spacing */
-        .mobile-checkout > div > .rounded-2xl,
-        .mobile-checkout > div > .mb-5 > .rounded-2xl,
-        .mobile-checkout > div > div > .rounded-2xl {
+        /* ===== SECTIONS: full-width cards ===== */
+        .mobile-checkout-wrap .orders-root > div,
+        .mobile-checkout-wrap .orders-root > .mb-5 > div {
           border-radius: 0 !important;
         }
-        .mobile-checkout > div > .my-5,
-        .mobile-checkout > div > .mb-5 {
-          margin-top: 4px !important;
-          margin-bottom: 4px !important;
+        .mobile-checkout-wrap .orders-root > .my-5 {
+          margin-top: 2px !important;
+          margin-bottom: 2px !important;
+          border-radius: 0 !important;
+        }
+        .mobile-checkout-wrap .orders-root > .mb-5 {
+          margin-top: 2px !important;
+          margin-bottom: 2px !important;
         }
 
-        /* Reduce inner padding from p-10 (40px) to 16px */
-        .mobile-checkout .p-10 {
+        /* ===== PADDING: 40px → 16px ===== */
+        .mobile-checkout-wrap .p-10 {
           padding: 16px !important;
         }
 
-        /* Toggle section height */
-        .mobile-checkout .h-32 {
+        /* ===== SECTION TITLES ===== */
+        .mobile-checkout-wrap .orders-root .text-lg.font-bold {
+          font-size: 1rem;
+          margin-bottom: 12px !important;
+        }
+
+        /* ===== DELIVERY/PICKUP TOGGLE ===== */
+        .mobile-checkout-wrap .h-32 {
           height: auto !important;
           padding: 12px 16px !important;
         }
+        .mobile-checkout-wrap .h-32 button {
+          padding-top: 10px !important;
+          padding-bottom: 10px !important;
+          font-size: 15px !important;
+        }
 
-        /* Pickup terminals list — scrollable with max height */
-        .mobile-checkout .gap-5.grid {
-          max-height: 50vh;
+
+        /* ===== FORM INPUTS ===== */
+        .mobile-checkout-wrap input[type="text"],
+        .mobile-checkout-wrap input[type="tel"],
+        .mobile-checkout-wrap input[type="email"],
+        .mobile-checkout-wrap textarea {
+          font-size: 16px !important;
+          padding: 10px 16px !important;
+        }
+
+        /* ===== FORM GRID: stack on mobile ===== */
+        .mobile-checkout-wrap .grid.gap-2 {
+          grid-template-columns: 1fr !important;
+          gap: 8px !important;
+        }
+
+        /* ===== PICKUP TERMINALS: scrollable list ===== */
+        .mobile-checkout-wrap .gap-5.grid {
+          max-height: 45vh;
           overflow-y: auto;
           -webkit-overflow-scrolling: touch;
+          grid-template-columns: 1fr !important;
+          gap: 8px !important;
         }
-
-        /* Terminal cards — more compact */
-        .mobile-checkout .gap-5.grid > div {
+        .mobile-checkout-wrap .gap-5.grid > div {
           padding: 12px !important;
         }
-        .mobile-checkout .gap-5.grid .text-xl {
-          font-size: 0.875rem;
-          line-height: 1.25rem;
+        .mobile-checkout-wrap .gap-5.grid .text-xl {
+          font-size: 0.875rem !important;
+          line-height: 1.25rem !important;
         }
-        .mobile-checkout .gap-5.grid .text-gray-500 {
-          font-size: 0.75rem;
-        }
-
-        /* Reduce large text */
-        .mobile-checkout .text-2xl {
-          font-size: 1.125rem;
-          line-height: 1.5rem;
-        }
-        .mobile-checkout .text-lg {
-          font-size: 1rem;
+        .mobile-checkout-wrap .gap-5.grid .text-gray-500 {
+          font-size: 0.75rem !important;
         }
 
-        /* Order summary images — smaller */
-        .mobile-checkout [style*="width: 80px"] {
+        /* ===== ADDRESS FIELDS ROW ===== */
+        .mobile-checkout-wrap .md\\:flex.justify-between.md\\:w-full {
+          flex-direction: column !important;
+        }
+        .mobile-checkout-wrap .md\\:flex.justify-between.md\\:w-full > div {
+          width: 100% !important;
+        }
+
+        /* ===== SAVED ADDRESSES ===== */
+        .mobile-checkout-wrap .grid.grid-cols-1 {
+          gap: 6px !important;
+        }
+
+        /* ===== LARGE TEXT → smaller ===== */
+        .mobile-checkout-wrap .text-2xl {
+          font-size: 1.125rem !important;
+        }
+        .mobile-checkout-wrap .text-xl {
+          font-size: 1rem !important;
+        }
+
+        /* ===== DELIVERY TIME BUTTONS ===== */
+        .mobile-checkout-wrap .space-x-5 > button,
+        .mobile-checkout-wrap .space-x-5 > a {
+          font-size: 14px !important;
+        }
+
+        /* ===== PAYMENT SECTION ===== */
+        .mobile-checkout-wrap .relative .absolute.bg-gray-300 {
+          border-radius: 0 !important;
+        }
+
+        /* ===== ORDER SUMMARY ===== */
+        .mobile-checkout-wrap .border-b.py-2 img {
           width: 50px !important;
           height: 50px !important;
         }
+        .mobile-checkout-wrap .border-b.py-2 .text-base {
+          font-size: 0.8125rem !important;
+        }
 
-        /* Bottom buttons — fixed */
-        .mobile-checkout > div > .rounded-2xl:last-of-type .md\\:flex.justify-between.mt-8 {
-          position: fixed;
+        /* ===== MODIFIERS TAGS ===== */
+        .mobile-checkout-wrap .bg-yellow.rounded-full.px-2 {
+          font-size: 10px !important;
+          padding: 2px 8px !important;
+        }
+
+        /* ===== CUTLERY ===== */
+        .mobile-checkout-wrap .text-2xl.items-center {
+          font-size: 1rem !important;
+        }
+
+        /* ===== BOTTOM BUTTONS: fixed ===== */
+        .mobile-checkout-wrap .justify-between.mt-8.space-y-2 {
+          position: fixed !important;
           bottom: 56px;
           left: 0;
           right: 0;
           z-index: 25;
           background: white;
           border-top: 1px solid #f3f4f6;
-          padding: 12px 16px;
+          padding: 12px 16px !important;
           margin: 0 !important;
-          display: flex;
+          display: flex !important;
+          flex-direction: row !important;
           gap: 8px;
         }
-        .mobile-checkout > div > .rounded-2xl:last-of-type .md\\:flex.justify-between.mt-8 button {
-          font-size: 14px !important;
-          height: 44px !important;
-          padding-left: 16px !important;
-          padding-right: 16px !important;
+        /* Hide "back to basket" button */
+        .mobile-checkout-wrap .justify-between.mt-8.space-y-2 > button:first-child {
+          display: none !important;
         }
-
-        /* Map container height */
-        .mobile-checkout [class*="ymaps"] {
-          min-height: 180px !important;
-        }
-
-        /* Input fields — larger touch targets */
-        .mobile-checkout input[type="text"],
-        .mobile-checkout input[type="tel"],
-        .mobile-checkout input[type="email"],
-        .mobile-checkout select,
-        .mobile-checkout textarea {
+        /* Full-width checkout button */
+        .mobile-checkout-wrap .justify-between.mt-8.space-y-2 > button:last-child {
+          width: 100% !important;
+          height: 48px !important;
           font-size: 16px !important;
+          font-weight: 700 !important;
         }
 
-        /* Hide back-to-basket on mobile (use browser back) */
-        .mobile-checkout > div > .rounded-2xl:last-of-type .md\\:flex.justify-between.mt-8 button:first-child {
+        /* ===== PRIVACY TEXT ===== */
+        .mobile-checkout-wrap .text-gray-400.text-sm {
+          font-size: 0.75rem !important;
+        }
+
+        /* ===== CHECKBOX SECTION ===== */
+        .mobile-checkout-wrap .md\\:flex > .mr-5 {
+          margin-bottom: 8px;
+        }
+
+        /* ===== SCROLLBAR HIDE ===== */
+        .mobile-checkout-wrap .gap-5.grid::-webkit-scrollbar {
           display: none;
         }
-        .mobile-checkout > div > .rounded-2xl:last-of-type .md\\:flex.justify-between.mt-8 button:last-child {
-          width: 100% !important;
+        .mobile-checkout-wrap .gap-5.grid {
+          -ms-overflow-style: none;
+          scrollbar-width: none;
         }
       `}</style>
     </div>

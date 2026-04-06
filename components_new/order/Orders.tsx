@@ -118,9 +118,10 @@ let otpTimerRef: NodeJS.Timeout
 
 type OrdersProps = {
   channelName: any
+  isMobile?: boolean
 }
 
-const Orders: FC<OrdersProps> = ({ channelName }: { channelName: any }) => {
+const Orders: FC<OrdersProps> = ({ channelName, isMobile = false }) => {
   const deliveryTimeOptions = [] as SelectItem[]
 
   let startTime = DateTime.now()
@@ -373,6 +374,9 @@ const Orders: FC<OrdersProps> = ({ channelName }: { channelName: any }) => {
   const [activePoint, setActivePoint] = useState(
     (locationData ? locationData.terminal_id : null) as number | null
   )
+  const [mobileAddressCollapsed, setMobileAddressCollapsed] = useState(
+    !!(isMobile && locationData?.terminal_id)
+  )
 
   const [isPhoneConfirmOpen, setIsPhoneConfirmOpen] = useState(false)
   const [otpCode, setOtpCode] = useState('')
@@ -565,6 +569,7 @@ const Orders: FC<OrdersProps> = ({ channelName }: { channelName: any }) => {
       terminal_id: terminalData.terminal_id,
       terminalData: terminalData.terminalData,
     })
+    if (isMobile && terminalData.terminal_id) setMobileAddressCollapsed(true)
   }
   const changeCity = (city: City) => {
     let link = pathname
@@ -638,6 +643,7 @@ const Orders: FC<OrdersProps> = ({ channelName }: { channelName: any }) => {
       terminal_id: terminalData.terminal_id,
       terminalData: terminalData.terminalData,
     })
+    if (isMobile && terminalData.terminal_id) setMobileAddressCollapsed(true)
   }
 
   const cutleryHandler = (e: any) => {
@@ -786,6 +792,7 @@ const Orders: FC<OrdersProps> = ({ channelName }: { channelName: any }) => {
       terminal_id: point.id,
       terminalData,
     })
+    if (isMobile) setMobileAddressCollapsed(true)
   }
 
   const searchTerminal = async (
@@ -1203,6 +1210,7 @@ const Orders: FC<OrdersProps> = ({ channelName }: { channelName: any }) => {
           },
           addressId: address.id,
         })
+        if (isMobile && terminalData.terminal_id) setMobileAddressCollapsed(true)
       } else {
         selectAddress({
           locationData: {
@@ -1319,9 +1327,9 @@ const Orders: FC<OrdersProps> = ({ channelName }: { channelName: any }) => {
   }
 
   return (
-    <div className="mx-5 md:mx-0 pt-1 md:pt-0 pb-1">
-      {/* Contacts */}
-      <div className="w-full bg-white my-5 rounded-2xl">
+    <div className="orders-root mx-5 md:mx-0 pt-1 md:pt-0 pb-1">
+      {/* Contacts - hidden on mobile when logged in */}
+      <div className={`w-full bg-white my-5 rounded-2xl ${user ? 'hidden md:block' : ''}`}>
         <div className="p-10">
           <div className="text-lg mb-5 font-bold">
             {tr('order_your_contacts')}
@@ -1453,8 +1461,33 @@ const Orders: FC<OrdersProps> = ({ channelName }: { channelName: any }) => {
           </form>
         </div>
       </div>
-      {/* Orders */}
-      <div className="mb-5">
+      {/* Compact address bar (mobile only) */}
+      {isMobile && mobileAddressCollapsed && locationData?.terminal_id && (
+        <div className="bg-white px-4 py-3 flex items-center gap-3 border-b border-gray-100 mb-1">
+          <LocationMarkerIcon className="w-5 h-5 flex-shrink-0" style={{ color: '#F9B004' }} />
+          <div className="flex-1 min-w-0">
+            <div className="text-xs text-gray-400">
+              {tabIndex === 'deliver' ? tr('delivery') : tr('pickup')}
+            </div>
+            <div className="text-sm font-medium truncate">
+              {tabIndex === 'deliver'
+                ? locationData?.address || ''
+                : (locationData?.terminalData as any)?.[
+                    locale === 'uz' ? 'name_uz' : locale === 'en' ? 'name_en' : 'name'
+                  ] || ''}
+            </div>
+          </div>
+          <button
+            className="text-xs font-medium px-3 py-1.5 rounded-full border border-gray-200 flex-shrink-0"
+            style={{ color: '#F9B004' }}
+            onClick={() => setMobileAddressCollapsed(false)}
+          >
+            {locale === 'uz' ? "O'zgartirish" : locale === 'en' ? 'Change' : 'Изменить'}
+          </button>
+        </div>
+      )}
+      {/* Delivery/Pickup section */}
+      <div className={`mb-5 order-delivery-section ${mobileAddressCollapsed && isMobile ? 'hidden' : ''}`}>
         <div className="bg-white flex rounded-2xl w-full items-center p-10 h-32 mb-5">
           <div className="bg-gray-100 flex  w-full rounded-full">
             <button
@@ -1548,7 +1581,7 @@ const Orders: FC<OrdersProps> = ({ channelName }: { channelName: any }) => {
                       onLoad={(ymaps: any) => loadPolygonsToMap(ymaps)}
                       instanceRef={(ref) => (map.current = ref)}
                       width="100%"
-                      height={`${window.innerWidth < 768 ? '100px' : '530px'}`}
+                      height={`${window.innerWidth < 768 ? '250px' : '530px'}`}
                       onClick={clickOnMap}
                       modules={[
                         'control.ZoomControl',
@@ -2000,8 +2033,8 @@ const Orders: FC<OrdersProps> = ({ channelName }: { channelName: any }) => {
           </div>
         )}
       </div>
-      {/* time of delivery */}
-      <div className="w-full bg-white mb-5 rounded-2xl p-10">
+      {/* time of delivery - hide for pickup */}
+      <div className={`w-full bg-white mb-5 rounded-2xl p-10 order-delivery-time ${tabIndex === 'pickup' ? 'hidden' : ''}`}>
         <div className="text-lg mb-5 font-bold">
           {tr('order_time_of_delivery')}
         </div>
@@ -2671,7 +2704,19 @@ const Orders: FC<OrdersProps> = ({ channelName }: { channelName: any }) => {
               </svg>
             ) : (
               <>
-                {tr('checkout')} <img src="/right.png" />
+                {tr('checkout')}
+                {isMobile && totalPrice > 0 && (
+                  <span className="ml-1">
+                    · {currency(totalPrice, {
+                      pattern: '# !',
+                      separator: ' ',
+                      decimal: '.',
+                      symbol: `${locale == 'uz' ? "so'm" : locale == 'ru' ? 'сум' : 'sum'}`,
+                      precision: 0,
+                    }).format()}
+                  </span>
+                )}
+                {!isMobile && <img src="/right.png" />}
               </>
             )}
           </button>
