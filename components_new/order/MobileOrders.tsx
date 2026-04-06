@@ -15,7 +15,11 @@ const MobileOrders: FC<MobileOrdersProps> = ({ channelName }) => {
           margin-left: 0 !important;
           margin-right: 0 !important;
           padding-top: 0 !important;
-          padding-bottom: 140px !important;
+          padding-bottom: 0 !important;
+          background: transparent !important;
+        }
+        .mobile-checkout-wrap {
+          background: transparent !important;
         }
 
         /* ===== SECTIONS: full-width cards ===== */
@@ -177,6 +181,42 @@ const MobileOrders: FC<MobileOrdersProps> = ({ channelName }) => {
         /* ===== CHECKBOX SECTION ===== */
         .mobile-checkout-wrap .md\\:flex > .mr-5 {
           margin-bottom: 8px;
+        }
+
+        /* ===== COMMENT TEXTAREA: smaller ===== */
+        .mobile-checkout-wrap textarea {
+          min-height: 60px !important;
+          height: 60px !important;
+        }
+
+        /* ===== CUTLERY: compact ===== */
+        .mobile-checkout-wrap .flex.items-center.mt-8 {
+          margin-top: 12px !important;
+          font-size: 0.875rem !important;
+        }
+
+        /* ===== REMOVE GAPS between sections ===== */
+        .mobile-checkout-wrap .orders-root > .w-full {
+          margin-top: 0 !important;
+          margin-bottom: 0 !important;
+          border-bottom: 1px solid #f3f4f6;
+        }
+        .mobile-checkout-wrap .orders-root > .w-full:last-of-type {
+          border-bottom: none;
+        }
+
+        /* ===== CONFIRM SECTION: compact ===== */
+        .mobile-checkout-wrap .order-confirm-section {
+          padding: 8px 16px !important;
+          margin: 0 !important;
+        }
+        .mobile-checkout-wrap .order-confirm-section .border-b.pb-8 {
+          padding-bottom: 8px !important;
+          margin-top: 0 !important;
+        }
+        .mobile-checkout-wrap .order-confirm-section .mt-5 {
+          margin-top: 8px !important;
+          font-size: 0.7rem !important;
         }
 
         /* ===== SCROLLBAR HIDE ===== */

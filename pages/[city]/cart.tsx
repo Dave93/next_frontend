@@ -18,6 +18,12 @@ import Flicking, { ViewportSlot } from '@egjs/react-flicking'
 import Slider from 'react-slick'
 import 'slick-carousel/slick/slick.css'
 import 'slick-carousel/slick/slick-theme.css'
+import dynamic from 'next/dynamic'
+
+const MobileOrderWithNoSSR = dynamic(
+  () => import('@components_new/order/MobileOrders'),
+  { ssr: false }
+)
 
 export async function getServerSideProps({
   preview,
@@ -552,9 +558,10 @@ export default function Cart() {
           </button>
         </div>
       )}
-      {/* Mobile Cart */}
+      {/* Mobile: checkout + cart combined */}
       {!isEmpty && (
-        <div className="md:hidden pb-36">
+        <div className="md:hidden bg-white pb-28">
+          <MobileOrderWithNoSSR channelName={channelName} />
           {/* Header */}
           <div className="flex justify-between items-center px-4 py-3">
             <div className="text-lg font-bold">
@@ -730,6 +737,13 @@ export default function Cart() {
               </div>
             </div>
           )}
+          {/* Privacy notice at bottom */}
+          <div className="px-4 py-3 text-[11px] text-gray-400">
+            {tr('processing_of_your_personal_data')}{' '}
+            <a href="/privacy" className="text-yellow" target="_blank">
+              {tr('terms_of_use')}
+            </a>
+          </div>
         </div>
       )}
       {/* Desktop Cart */}
@@ -1168,36 +1182,6 @@ export default function Cart() {
               </div>
             </div>
           </div>
-        </div>
-      )}
-      {!isEmpty && (
-        <div className="md:hidden fixed bottom-14 left-0 right-0 z-30 bg-white border-t border-gray-100 px-4 py-3">
-          <div className="flex items-center justify-between mb-2">
-            <span className="text-sm text-gray-500">{tr('basket_order_price')}</span>
-            <span className="text-lg font-bold">
-              {currency(data?.totalPrice || 0, {
-                pattern: '# !',
-                separator: ' ',
-                decimal: '.',
-                symbol: `${
-                  locale == 'uz'
-                    ? "so'm"
-                    : locale == 'ru'
-                    ? 'сум'
-                    : locale == 'en'
-                    ? 'sum'
-                    : ''
-                }`,
-                precision: 0,
-              }).format()}
-            </span>
-          </div>
-          <button
-            className="text-base text-white bg-yellow flex h-12 items-center justify-center rounded-full w-full font-bold"
-            onClick={goToCheckout}
-          >
-            {tr('checkout')}
-          </button>
         </div>
       )}
       <style global jsx>{`

@@ -374,9 +374,6 @@ const Orders: FC<OrdersProps> = ({ channelName, isMobile = false }) => {
   const [activePoint, setActivePoint] = useState(
     (locationData ? locationData.terminal_id : null) as number | null
   )
-  const [mobileAddressCollapsed, setMobileAddressCollapsed] = useState(
-    !!(isMobile && locationData?.terminal_id)
-  )
 
   const [isPhoneConfirmOpen, setIsPhoneConfirmOpen] = useState(false)
   const [otpCode, setOtpCode] = useState('')
@@ -569,7 +566,6 @@ const Orders: FC<OrdersProps> = ({ channelName, isMobile = false }) => {
       terminal_id: terminalData.terminal_id,
       terminalData: terminalData.terminalData,
     })
-    if (isMobile && terminalData.terminal_id) setMobileAddressCollapsed(true)
   }
   const changeCity = (city: City) => {
     let link = pathname
@@ -643,7 +639,6 @@ const Orders: FC<OrdersProps> = ({ channelName, isMobile = false }) => {
       terminal_id: terminalData.terminal_id,
       terminalData: terminalData.terminalData,
     })
-    if (isMobile && terminalData.terminal_id) setMobileAddressCollapsed(true)
   }
 
   const cutleryHandler = (e: any) => {
@@ -792,7 +787,6 @@ const Orders: FC<OrdersProps> = ({ channelName, isMobile = false }) => {
       terminal_id: point.id,
       terminalData,
     })
-    if (isMobile) setMobileAddressCollapsed(true)
   }
 
   const searchTerminal = async (
@@ -1210,8 +1204,7 @@ const Orders: FC<OrdersProps> = ({ channelName, isMobile = false }) => {
           },
           addressId: address.id,
         })
-        if (isMobile && terminalData.terminal_id) setMobileAddressCollapsed(true)
-      } else {
+          } else {
         selectAddress({
           locationData: {
             ...address,
@@ -1462,8 +1455,8 @@ const Orders: FC<OrdersProps> = ({ channelName, isMobile = false }) => {
         </div>
       </div>
       {/* Compact address bar (mobile only) */}
-      {isMobile && mobileAddressCollapsed && locationData?.terminal_id && (
-        <div className="bg-white px-4 py-3 flex items-center gap-3 border-b border-gray-100 mb-1">
+      {isMobile && locationData?.terminal_id && (
+        <div className="bg-white px-4 py-3 flex items-center gap-3 mb-1 order-address-bar">
           <LocationMarkerIcon className="w-5 h-5 flex-shrink-0" style={{ color: '#F9B004' }} />
           <div className="flex-1 min-w-0">
             <div className="text-xs text-gray-400">
@@ -1477,17 +1470,10 @@ const Orders: FC<OrdersProps> = ({ channelName, isMobile = false }) => {
                   ] || ''}
             </div>
           </div>
-          <button
-            className="text-xs font-medium px-3 py-1.5 rounded-full border border-gray-200 flex-shrink-0"
-            style={{ color: '#F9B004' }}
-            onClick={() => setMobileAddressCollapsed(false)}
-          >
-            {locale === 'uz' ? "O'zgartirish" : locale === 'en' ? 'Change' : 'Изменить'}
-          </button>
         </div>
       )}
-      {/* Delivery/Pickup section */}
-      <div className={`mb-5 order-delivery-section ${mobileAddressCollapsed && isMobile ? 'hidden' : ''}`}>
+      {/* Delivery/Pickup section - hidden on mobile when address exists */}
+      <div className={`mb-5 order-delivery-section ${isMobile && locationData?.terminal_id ? 'hidden' : ''}`}>
         <div className="bg-white flex rounded-2xl w-full items-center p-10 h-32 mb-5">
           <div className="bg-gray-100 flex  w-full rounded-full">
             <button
@@ -2144,7 +2130,7 @@ const Orders: FC<OrdersProps> = ({ channelName, isMobile = false }) => {
             {tr('online')}
           </button>
         </div>
-        <div className={openTab === 1 ? 'block' : 'hidden'} id="link1">
+        <div className="hidden" id="link1">
           <input
             type="number"
             {...register('change')}
@@ -2349,7 +2335,7 @@ const Orders: FC<OrdersProps> = ({ channelName, isMobile = false }) => {
         </Disclosure>
       </div>
       {/* order list */}
-      <div className="w-full bg-white mb-5 rounded-2xl p-10">
+      <div className={`w-full bg-white mb-5 rounded-2xl p-10 order-summary-section ${isMobile ? 'hidden' : ''}`}>
         <div className="text-lg mb-5 font-bold">{tr('order_order_list')}</div>
         {!isEmpty &&
           data &&
@@ -2511,7 +2497,7 @@ const Orders: FC<OrdersProps> = ({ channelName, isMobile = false }) => {
           ))}
         {!isEmpty && (
           <div>
-            <div className="flex justify-between items-center mt-8">
+            <div className={`flex justify-between items-center mt-8 ${isMobile ? 'hidden' : ''}`}>
               <div>
                 <div className="font-bold text-xl mb-2">
                   {tr('basket_order_price')}
@@ -2567,8 +2553,38 @@ const Orders: FC<OrdersProps> = ({ channelName, isMobile = false }) => {
           </div>
         )}
       </div>
-      <div className="w-full bg-white mb-5 rounded-2xl p-10">
-        <div className="md:flex">
+      {/* Mobile cutlery */}
+      {isMobile && !isEmpty && (
+        <div className="bg-white px-4 py-3 flex items-center justify-between border-b border-gray-100">
+          <div className="text-sm font-medium">{tr('cutlery_and_napkins')}</div>
+          <div className="flex items-center gap-2">
+            <label htmlFor="mob_N" className="flex items-center gap-1 text-sm">
+              {tr('no')}
+              <input
+                type="radio"
+                value="N"
+                checked={cutlery === 'N'}
+                onChange={cutleryHandler}
+                id="mob_N"
+                className="border-2 border-yellow form-checkbox rounded-md text-yellow"
+              />
+            </label>
+            <label htmlFor="mob_Y" className="flex items-center gap-1 text-sm">
+              {tr('yes')}
+              <input
+                type="radio"
+                value="Y"
+                checked={cutlery === 'Y'}
+                onChange={cutleryHandler}
+                id="mob_Y"
+                className="border-2 border-yellow form-checkbox rounded-md text-yellow"
+              />
+            </label>
+          </div>
+        </div>
+      )}
+      <div className={`w-full bg-white mb-5 rounded-2xl p-10 order-confirm-section`}>
+        <div className={`${isMobile ? 'hidden' : 'md:flex'}`}>
           {!!user.user.sms_sub != true ||
             (!!user.user.email_sub != true && (
               <div className="mr-8 text-gray-400">{tr('agree_to_send')}</div>
@@ -2600,7 +2616,7 @@ const Orders: FC<OrdersProps> = ({ channelName, isMobile = false }) => {
             </label>
           )}
         </div>
-        <div className="mt-5 text-gray-400 text-sm md:flex border-b pb-8">
+        <div className={`mt-5 text-gray-400 text-sm md:flex border-b pb-8 ${isMobile ? 'hidden' : ''}`}>
           {tr('processing_of_your_personal_data')}
           <a
             href="/privacy"
