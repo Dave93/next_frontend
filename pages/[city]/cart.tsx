@@ -547,11 +547,11 @@ export default function Cart() {
         </div>
       )}
       {isEmpty && (
-        <div className="flex flex-col items-center mt-2 text-center text-gray-400 text-sm pb-4">
+        <div className="flex flex-col items-center justify-center text-center text-gray-400 text-sm min-h-[60vh]">
           <img src="/cart_empty.png" width={130} height={119} />
-          <div className="w-6/12">{tr('basket_empty')}</div>
+          <div className="w-6/12 mt-3">{tr('basket_empty')}</div>
           <button
-            className="bg-yellow text-white p-3 mt-4 rounded-full"
+            className="bg-yellow text-white p-3 mt-4 rounded-full hidden md:block"
             onClick={() => router.push(`/${activeCity.slug}`)}
           >
             {tr('back_to_menu')}

@@ -52,6 +52,13 @@ const MobileHeader: FC = () => {
     })
     router.push(link)
     setActiveCity(city)
+    setLocationData({
+      deliveryType: 'deliver',
+      location: [],
+      address: '',
+      terminal_id: undefined,
+      terminalData: undefined,
+    } as any)
     setShowCityList(false)
   }
 
@@ -72,7 +79,7 @@ const MobileHeader: FC = () => {
         <div className="relative">
           <button
             className="flex items-center gap-1 bg-gray-100 rounded-full px-3 py-1.5"
-            onClick={() => setShowCityList(!showCityList)}
+            onClick={() => pathname === '/[city]' && setShowCityList(!showCityList)}
           >
             <LocationMarkerIcon
               className="w-3.5 h-3.5"
@@ -81,7 +88,7 @@ const MobileHeader: FC = () => {
             <span className="text-xs font-medium text-gray-700">
               {cityName}
             </span>
-            <ChevronDownIcon className="w-3 h-3 text-gray-400" />
+            {pathname === '/[city]' && <ChevronDownIcon className="w-3 h-3 text-gray-400" />}
           </button>
           {showCityList && cities && (
             <>
