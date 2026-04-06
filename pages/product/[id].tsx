@@ -12,6 +12,7 @@ import useTranslation from 'next-translate/useTranslation'
 import axios from 'axios'
 import Cookies from 'js-cookie'
 import cookies from 'next-cookies'
+import Hashids from 'hashids'
 import currency from 'currency.js'
 import { useCart } from '@framework/cart'
 import { useUI } from '@components/ui/context'
@@ -97,7 +98,7 @@ export default function ProductPage({
   const router = useRouter()
   const { locale } = router
   const { t: tr } = useTranslation('common')
-  const { mutate } = useCart()
+  const { data: cartData, mutate } = useCart()
   const { stopProducts, locationData, activeCity, cities } = useUI()
   const chosenCity = activeCity || (cities && cities[0]) || null
 
@@ -107,6 +108,55 @@ export default function ProductPage({
   const [addedToCart, setAddedToCart] = useState(false)
   const [activeModifiers, setActiveModifiers] = useState([] as number[])
   const [configData, setConfigData] = useState({} as any)
+
+  const hashids = useMemo(
+    () => new Hashids('basket', 15, 'abcdefghijklmnopqrstuvwxyz1234567890'),
+    []
+  )
+
+  // Effective product ID: changes based on variant + modifierProduct selection
+  const effectiveProductId = useMemo(() => {
+    const activeVariant = store?.variants?.find((v: any) => v.active)
+    if (!activeVariant) return String(store?.id || '')
+    // If sausage board modifier is selected, the product ID becomes modifierProduct.id
+    if (
+      activeVariant.modifierProduct &&
+      activeModifiers.includes(activeVariant.modifierProduct.id)
+    ) {
+      return String(activeVariant.modifierProduct.id)
+    }
+    return String(activeVariant.id)
+  }, [store, activeModifiers])
+
+  const cartLineItem = useMemo(() => {
+    if (!cartData?.lineItems?.length || !effectiveProductId) return null
+    return cartData.lineItems.find((item: any) => {
+      return (
+        String(item.variant?.id) === effectiveProductId ||
+        String(item.variant?.product?.id) === effectiveProductId ||
+        String(item.variant?.product_id) === effectiveProductId
+      )
+    })
+  }, [cartData, effectiveProductId])
+
+  const cartQuantity = cartLineItem?.quantity || 0
+
+  const changeCartQuantity = async (delta: number) => {
+    if (!cartLineItem) return
+    setIsLoadingBasket(true)
+    const lineIdEncoded = hashids.encode(cartLineItem.id)
+    if (delta > 0) {
+      await axios.post(`${webAddress}/api/v1/basket-lines/${lineIdEncoded}/add`, { quantity: 1 })
+    } else {
+      if (cartLineItem.quantity <= 1) {
+        await axios.delete(`${webAddress}/api/baskets-lines/${lineIdEncoded}`)
+      } else {
+        await axios.put(`${webAddress}/api/v1/basket-lines/${lineIdEncoded}/remove`, { quantity: 1 })
+      }
+    }
+    await mutate()
+    setIsLoadingBasket(false)
+  }
 
   const getChannel = async () => {
     const channelData = await defaultChannel()
@@ -138,9 +188,14 @@ export default function ProductPage({
   useEffect(() => {
     if (product) {
       const p = { ...product }
+      const variantFromQuery = router.query.variant
       if (p.variants && p.variants.length) {
         p.variants = p.variants.map((v: any, index: number) => {
-          v.active = index === 1 || (p.variants.length === 1 && index === 0)
+          if (variantFromQuery) {
+            v.active = v.id == variantFromQuery
+          } else {
+            v.active = index === 1 || (p.variants.length === 1 && index === 0)
+          }
           return v
         })
       }
@@ -161,12 +216,50 @@ export default function ProductPage({
   }
 
   const addModifier = (modId: number) => {
+    let modifierProduct: any = null
+    if (store.variants && store.variants.length) {
+      const activeValue: any = store.variants.find(
+        (item: any) => item.active == true
+      )
+      if (activeValue?.modifierProduct) {
+        modifierProduct = activeValue.modifierProduct
+      }
+    }
     if (activeModifiers.includes(modId)) {
       let currentModifier: any = modifiers?.find((mod: any) => mod.id == modId)
-      if (!currentModifier || currentModifier.price == 0) return
-      setActiveModifiers(activeModifiers.filter((id) => id !== modId))
+      if (!currentModifier) return
+      if (currentModifier.price == 0) return
+      let resultModifiers = [
+        ...activeModifiers.filter((id) => modId != id),
+      ].filter((id) => id)
+      setActiveModifiers(resultModifiers)
     } else {
-      setActiveModifiers([...activeModifiers, modId])
+      let currentModifier: any = modifiers?.find((mod: any) => mod.id == modId)
+      let selectedModifiers = [...activeModifiers, modId]
+
+      if (modifierProduct) {
+        let sausage = modifiers?.find((mod: any) => mod.id == modifierProduct.id)
+        if (
+          sausage &&
+          selectedModifiers.includes(modifierProduct.id) &&
+          sausage.price < currentModifier.price
+        ) {
+          selectedModifiers = [
+            ...selectedModifiers.filter((id: any) => id != sausage.id),
+          ]
+        } else if (sausage && currentModifier.id == sausage.id) {
+          let richerModifier = (modifiers || [])
+            .filter((mod: any) => mod.price > sausage.price)
+            .map((mod: any) => mod.id)
+          selectedModifiers = [
+            ...selectedModifiers.filter(
+              (id: any) => !richerModifier.includes(id)
+            ),
+            modId,
+          ]
+        }
+      }
+      setActiveModifiers(selectedModifiers)
     }
   }
 
@@ -196,19 +289,43 @@ export default function ProductPage({
     await setCredentials()
 
     let selectedProdId = 0
+    let modifierProduct: any = null
     let selectedModifiers: any = null
 
     if (store.variants && store.variants.length) {
       let selectedVariant = store.variants.find((v: any) => v.active == true)
       selectedProdId = selectedVariant.id
+      if (selectedVariant.modifierProduct) {
+        modifierProduct = selectedVariant.modifierProduct
+      }
+
+      if (activeModifiers.length && modifierProduct && activeModifiers.includes(modifierProduct.id)) {
+        selectedProdId = modifierProduct.id
+        let currentProductModifiersPrices = [
+          ...(modifiers || [])
+            .filter(
+              (mod: any) =>
+                mod.id != modifierProduct.id && activeModifiers.includes(mod.id)
+            )
+            .map((mod: any) => mod.price),
+        ]
+        selectedModifiers = modifierProduct.modifiers
+          .filter((mod: any) =>
+            currentProductModifiersPrices.includes(mod.price)
+          )
+          .map((m: any) => ({ id: m.id }))
+      } else if (modifiers && activeModifiers.length) {
+        selectedModifiers = modifiers
+          .filter((m: any) => activeModifiers.includes(m.id))
+          .map((m: any) => ({ id: m.id }))
+      }
     } else {
       selectedProdId = +store.id
-    }
-
-    if (modifiers && activeModifiers.length) {
-      selectedModifiers = modifiers
-        .filter((m: any) => activeModifiers.includes(m.id))
-        .map((m: any) => ({ id: m.id }))
+      if (modifiers && activeModifiers.length) {
+        selectedModifiers = modifiers
+          .filter((m: any) => activeModifiers.includes(m.id))
+          .map((m: any) => ({ id: m.id }))
+      }
     }
 
     if (isProductInStop) {
@@ -292,9 +409,8 @@ export default function ProductPage({
       }
     }
 
-    await mutate(basketResult, false)
+    await mutate()
     setIsLoadingBasket(false)
-    setAddedToCart(true)
   }
 
   const modifiers = useMemo(() => {
@@ -305,6 +421,21 @@ export default function ProductPage({
       )
       if (activeValue && activeValue.modifiers) {
         modifier = [...activeValue.modifiers]
+        if (activeValue.modifierProduct) {
+          let isExist = modifier.find(
+            (mod: any) => mod.id == activeValue.modifierProduct.id
+          )
+          if (!isExist) {
+            modifier.push({
+              id: activeValue.modifierProduct.id,
+              name: 'Сосисочный борт',
+              name_uz: "Sosiskali bo'rt",
+              name_en: 'Sausage border',
+              price: +activeValue.modifierProduct.price - +activeValue.price,
+              assets: [{ local: '/sausage_modifier.png' }],
+            })
+          }
+        }
       }
     } else {
       if (store?.modifiers && store.modifiers.length) {
@@ -413,14 +544,14 @@ export default function ProductPage({
                 <img
                   src={store.image}
                   alt={productName}
-                  className="max-w-full h-auto object-cover"
+                  className="max-w-full h-auto object-cover max-h-[250px] md:max-h-[500px]"
                   itemProp="image"
                 />
               ) : (
                 <img
                   src="/no_photo.svg"
                   alt={productName}
-                  className="max-w-full h-auto rounded-full"
+                  className="max-w-full h-auto rounded-full max-h-[250px] md:max-h-[500px]"
                 />
               )}
             </div>
@@ -536,16 +667,31 @@ export default function ProductPage({
                 >
                   <span itemProp="price">{formatPrice(totalPrice)}</span>
                 </div>
-                {addedToCart ? (
-                  <Link
-                    href={`/${chosenCity?.slug || ''}/cart`}
-                    prefetch={false}
-                    legacyBehavior
+                {cartQuantity > 0 ? (
+                  <div
+                    className="flex items-center rounded-full py-1 px-1 min-w-[160px]"
+                    style={{ backgroundColor: '#F9B004' }}
                   >
-                    <a className="bg-yellow focus:outline-none font-bold outline-none px-10 py-3 rounded-full text-white uppercase flex items-center justify-center min-w-[200px]">
-                      {tr('basket')}
-                    </a>
-                  </Link>
+                    <button
+                      className="w-10 h-10 rounded-full bg-white flex items-center justify-center text-xl font-bold"
+                      style={{ color: '#F9B004' }}
+                      disabled={isLoadingBasket}
+                      onClick={() => changeCartQuantity(-1)}
+                    >
+                      −
+                    </button>
+                    <span className="flex-1 text-center text-white font-bold text-lg">
+                      {isLoadingBasket ? '...' : cartQuantity}
+                    </span>
+                    <button
+                      className="w-10 h-10 rounded-full bg-white flex items-center justify-center text-xl font-bold"
+                      style={{ color: '#F9B004' }}
+                      disabled={isLoadingBasket}
+                      onClick={() => changeCartQuantity(1)}
+                    >
+                      +
+                    </button>
+                  </div>
                 ) : (
                   <button
                     className="bg-yellow focus:outline-none font-bold outline-none px-10 py-3 rounded-full text-white uppercase flex items-center justify-center min-w-[200px]"

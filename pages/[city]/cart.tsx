@@ -94,17 +94,12 @@ export default function Cart() {
   }, [])
 
   const { t: tr } = useTranslation('common')
-  let cartId: string | null = null
-  if (typeof window !== 'undefined') {
-    cartId = localStorage.getItem('basketId')
-  }
+  const cartId = typeof window !== 'undefined' ? localStorage.getItem('basketId') : null
 
-  const { data, isLoading, isEmpty, mutate } = useCart({
-    cartId,
-    locationData,
-  })
+  const { data, isLoading, isEmpty, mutate } = useCart()
 
   const [isCartLoading, setIsCartLoading] = useState(false)
+  const [addingItemId, setAddingItemId] = useState<number | null>(null)
 
   const { register, handleSubmit } = useForm()
   const onSubmit = (data: Object) => console.log(JSON.stringify(data))
@@ -276,6 +271,7 @@ export default function Cart() {
   const addToBasket = async (selectedProdId: number) => {
     let modifierProduct: any = null
     let selectedModifiers: any = null
+    setAddingItemId(selectedProdId)
     await setCredentials()
 
     let basketId = localStorage.getItem('basketId')
@@ -361,8 +357,9 @@ export default function Cart() {
       }
     }
 
-    await mutate(basketResult, false)
+    await mutate()
     fetchRecomendedItems()
+    setAddingItemId(null)
   }
 
   const objectToQueryString = (initialObj: Object) => {
@@ -420,21 +417,12 @@ export default function Cart() {
 
   const clearBasket = async () => {
     if (cartId) {
-      const { data: basket } = await axios.get(
+      setIsCartLoading(true)
+      await axios.get(
         `${webAddress}/api/baskets/${cartId}/clear`
       )
-      const basketResult = {
-        id: basket.data.id,
-        createdAt: '',
-        currency: { code: basket.data.currency },
-        taxesIncluded: basket.data.tax_total,
-        lineItems: basket.data.lines,
-        lineItemsSubtotalPrice: basket.data.sub_total,
-        subtotalPrice: basket.data.sub_total,
-        totalPrice: basket.data.total,
-      }
-
-      await mutate(basketResult, false)
+      await mutate()
+      setIsCartLoading(false)
     }
   }
 
@@ -542,7 +530,7 @@ export default function Cart() {
               cy="12"
               r="10"
               stroke="currentColor"
-              stroke-width="4"
+              strokeWidth="4"
             ></circle>
             <path
               className="opacity-75"
@@ -564,10 +552,191 @@ export default function Cart() {
           </button>
         </div>
       )}
+      {/* Mobile Cart */}
       {!isEmpty && (
-        <div className="md:flex justify-between gap-4">
+        <div className="md:hidden pb-36">
+          {/* Header */}
+          <div className="flex justify-between items-center px-4 py-3">
+            <div className="text-lg font-bold">
+              {tr('basket')}{' '}
+              <span className="text-yellow">
+                ({data?.lineItems
+                  .map((item: any) => item.quantity)
+                  .reduce((a: number, b: number) => a + b, 0)})
+              </span>
+            </div>
+            <button
+              className="text-gray-400 text-xs flex items-center gap-1"
+              onClick={clearBasket}
+            >
+              {tr('clear_all')} <TrashIcon className="w-4 h-4" />
+            </button>
+          </div>
+          {/* Items */}
+          <div className="space-y-0">
+            {data?.lineItems
+              .map((lineItem: any) => (
+                <div key={lineItem.id} className="flex gap-3 px-4 py-3 border-b border-gray-100">
+                  <img
+                    src={
+                      lineItem?.variant?.product?.assets?.length
+                        ? `${webAddress}/storage/${lineItem?.variant?.product?.assets[0]?.location}/${lineItem?.variant?.product?.assets[0]?.filename}`
+                        : '/no_photo.svg'
+                    }
+                    className="w-16 h-16 object-contain rounded-xl flex-shrink-0"
+                  />
+                  <div className="flex-1 min-w-0">
+                    <div className="text-sm font-semibold uppercase leading-tight">
+                      {lineItem.child && lineItem.child.length == 1
+                        ? `${lineItem?.variant?.product?.attribute_data?.name[channelName][locale || 'ru']} + ${lineItem?.child
+                            .filter((v: any) => lineItem?.variant?.product?.box_id != v?.variant?.product?.id)
+                            .map((v: any) => v?.variant?.product?.attribute_data?.name[channelName][locale || 'ru'])
+                            .join(' + ')}`
+                        : lineItem?.variant?.product?.attribute_data?.name[channelName][locale || 'ru']}
+                    </div>
+                    {lineItem.modifiers?.filter((mod: any) => mod.price > 0).length > 0 && (
+                      <div className="flex flex-wrap gap-1 mt-1">
+                        {lineItem.modifiers.filter((mod: any) => mod.price > 0).map((mod: any) => (
+                          <span key={mod.id} className="text-[10px] text-gray-500">
+                            + {locale == 'uz' ? mod.name_uz : locale == 'en' ? mod.name_en : mod.name}
+                          </span>
+                        ))}
+                      </div>
+                    )}
+                    <div className="flex items-center justify-between mt-2">
+                      <div className="text-sm font-bold">
+                        {currency(lineItem.total, {
+                          pattern: '# !',
+                          separator: ' ',
+                          decimal: '.',
+                          symbol: `${locale == 'uz' ? "so'm" : locale == 'ru' ? 'сум' : 'sum'}`,
+                          precision: 0,
+                        }).format()}
+                      </div>
+                      <div className="flex items-center gap-2">
+                        {!readonlyItems.includes(lineItem.id) && (
+                          <div className="flex items-center bg-gray-100 rounded-full">
+                            <button
+                              className="w-8 h-8 flex items-center justify-center"
+                              onClick={() => decreaseQuantity(lineItem)}
+                            >
+                              <MinusIcon className="w-4 h-4 text-gray-600" />
+                            </button>
+                            <span className="text-sm font-bold min-w-[20px] text-center">
+                              {lineItem.quantity}
+                            </span>
+                            <button
+                              className="w-8 h-8 flex items-center justify-center"
+                              onClick={() => increaseQuantity(lineItem.id)}
+                            >
+                              <PlusIcon className="w-4 h-4 text-gray-600" />
+                            </button>
+                          </div>
+                        )}
+                        {!readonlyItems.includes(lineItem.id) && (
+                          <button onClick={() => destroyLine(lineItem.id)} className="p-1">
+                            <TrashIcon className="w-4 h-4 text-gray-300" />
+                          </button>
+                        )}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              ))
+              .reverse()}
+          </div>
+          {/* Recommendations */}
+          {biRecommendations.relatedItems.length > 0 && (
+            <div className="mt-6 px-4">
+              <div className="text-base font-bold mb-3">
+                {tr('related_to_your_products')}
+              </div>
+              <div className="flex gap-3 overflow-x-auto pb-3 -mx-4 px-4 scrollbar-hide">
+                {biRecommendations.relatedItems.map((item: any) => (
+                  <div key={item.id} className="flex-shrink-0 w-28 bg-white rounded-2xl p-2 border border-gray-100">
+                    <img
+                      src={item.image || '/no_photo.svg'}
+                      className="w-full h-16 object-contain mb-1"
+                      alt={item?.attribute_data?.name[channelName][locale || 'ru']}
+                    />
+                    <div className="text-[10px] font-semibold text-center leading-tight h-6 overflow-hidden uppercase">
+                      {item?.attribute_data?.name[channelName][locale || 'ru']}
+                    </div>
+                    <button
+                      className="w-full mt-1 bg-yellow text-white text-[10px] font-bold py-1.5 rounded-full flex items-center justify-center"
+                      onClick={() => addToBasket(item.id)}
+                      disabled={addingItemId === item.id}
+                    >
+                      {addingItemId === item.id ? (
+                        <svg className="animate-spin h-3 w-3 text-white" viewBox="0 0 24 24">
+                          <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" fill="none" />
+                          <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" />
+                        </svg>
+                      ) : (
+                        currency(parseInt(item.price, 0) || 0, {
+                          pattern: '# !',
+                          separator: ' ',
+                          decimal: '.',
+                          symbol: `${locale == 'uz' ? "so'm" : locale == 'ru' ? 'сум' : 'sum'}`,
+                          precision: 0,
+                        }).format()
+                      )}
+                    </button>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
+          {biRecommendations.topItems.length > 0 && (
+            <div className="mt-4 px-4">
+              <div className="text-base font-bold mb-3">
+                {tr('popular_products') === 'popular_products'
+                  ? locale == 'uz' ? 'Mashhur mahsulotlar' : locale == 'en' ? 'Popular products' : 'Популярные продукты'
+                  : tr('popular_products')}
+              </div>
+              <div className="flex gap-3 overflow-x-auto pb-3 -mx-4 px-4 scrollbar-hide">
+                {biRecommendations.topItems.map((item: any) => (
+                  <div key={item.id} className="flex-shrink-0 w-28 bg-white rounded-2xl p-2 border border-gray-100">
+                    <img
+                      src={item.image || '/no_photo.svg'}
+                      className="w-full h-16 object-contain mb-1"
+                      alt={item?.attribute_data?.name[channelName][locale || 'ru']}
+                    />
+                    <div className="text-[10px] font-semibold text-center leading-tight h-6 overflow-hidden uppercase">
+                      {item?.attribute_data?.name[channelName][locale || 'ru']}
+                    </div>
+                    <button
+                      className="w-full mt-1 bg-yellow text-white text-[10px] font-bold py-1.5 rounded-full flex items-center justify-center"
+                      onClick={() => addToBasket(item.id)}
+                      disabled={addingItemId === item.id}
+                    >
+                      {addingItemId === item.id ? (
+                        <svg className="animate-spin h-3 w-3 text-white" viewBox="0 0 24 24">
+                          <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" fill="none" />
+                          <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" />
+                        </svg>
+                      ) : (
+                        currency(parseInt(item.price, 0) || 0, {
+                          pattern: '# !',
+                          separator: ' ',
+                          decimal: '.',
+                          symbol: `${locale == 'uz' ? "so'm" : locale == 'ru' ? 'сум' : 'sum'}`,
+                          precision: 0,
+                        }).format()
+                      )}
+                    </button>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
+        </div>
+      )}
+      {/* Desktop Cart */}
+      {!isEmpty && (
+        <div className="hidden md:flex justify-between gap-4">
           <div className="md:w-9/12">
-            <div className="md:p-10 p-5 md:rounded-2xl text-xl bg-white md:mb-3">
+            <div className="md:p-10 p-4 md:rounded-2xl bg-white md:mb-3">
               <div className="flex justify-between items-center">
                 <div className="text-lg font-bold">
                   {tr('basket')}{' '}
@@ -593,10 +762,11 @@ export default function Cart() {
                   data?.lineItems
                     .map((lineItem: any) => (
                       <div
-                        className="md:flex justify-between items-center border-b pb-3"
+                        className="border-b pb-4 mb-1"
                         key={lineItem.id}
                       >
-                        <div className="md:flex items-center md:text-center uppercase gap-1">
+                        {/* Desktop layout */}
+                        <div className="hidden md:flex md:justify-between md:items-center">
                           {lineItem.child &&
                           lineItem.child.length &&
                           lineItem.child[0].variant?.product?.id !=
@@ -680,7 +850,7 @@ export default function Cart() {
                               </div>
                             )
                           ) : (
-                            <div className="w-28 flex relative">
+                            <div className="w-16 h-16 md:w-28 md:h-auto flex-shrink-0 relative">
                               <img
                                 src={
                                   lineItem?.variant?.product?.assets?.length
@@ -689,12 +859,12 @@ export default function Cart() {
                                 }
                                 width={100}
                                 height={100}
-                                className="rounded-full"
+                                className="rounded-full w-full h-full object-contain"
                               />
                             </div>
                           )}
-                          <div className="md:ml-4 space-y-2 md:text-left">
-                            <div className="text-xl font-bold md:w-full">
+                          <div className="flex-1 space-y-1 md:space-y-2 md:ml-4 md:text-left">
+                            <div className="text-sm md:text-xl font-bold md:w-full">
                               {lineItem.child && lineItem.child.length == 1
                                 ? `${
                                     lineItem?.variant?.product?.attribute_data
@@ -725,13 +895,13 @@ export default function Cart() {
                               )}
                             </div>
                           </div>
-                          <div className="space-y-1">
+                          <div className="flex flex-wrap gap-1">
                             {lineItem.modifiers &&
                               lineItem.modifiers
                                 .filter((mod: any) => mod.price > 0)
                                 .map((mod: any) => (
                                   <div
-                                    className="bg-yellow rounded-full px-2 py-1  text-xs text-white"
+                                    className="bg-yellow rounded-full px-2 py-0.5 text-[10px] md:text-xs md:py-1 text-white"
                                     key={mod.id}
                                   >
                                     {locale == 'uz'
@@ -745,7 +915,7 @@ export default function Cart() {
                                 ))}
                           </div>
                         </div>
-                        <div className="md:flex md:space-x-10 items-center hidden">
+                        <div className="flex md:space-x-10 items-center hidden md:flex">
                           {!readonlyItems.includes(lineItem.id) && (
                             <div className="w-20 h-6 ml-1 bg-yellow rounded-full flex items-center text-white">
                               <div className="w-6 h-6 items-center flex justify-around">
@@ -783,56 +953,10 @@ export default function Cart() {
                             }).format()}
                           </div>
                           {!readonlyItems.includes(lineItem.id) && (
-                            <>
-                              <XIcon
-                                className="cursor-pointer h-4 text-black w-4"
-                                onClick={() => destroyLine(lineItem.id)}
-                              />
-                            </>
-                          )}
-                        </div>
-                        <div className="md:space-x-10 items-center md:hidden">
-                          {!readonlyItems.includes(lineItem.id) && (
                             <XIcon
-                              className="cursor-pointer h-8 text-black w-8 ml-auto"
+                              className="cursor-pointer h-4 text-black w-4"
                               onClick={() => destroyLine(lineItem.id)}
                             />
-                          )}
-                          <div className="text-xl mb-2">
-                            {currency(lineItem.total, {
-                              pattern: '# !',
-                              separator: ' ',
-                              decimal: '.',
-                              symbol: `${
-                                locale == 'uz'
-                                  ? "so'm"
-                                  : locale == 'ru'
-                                  ? 'сум'
-                                  : locale == 'en'
-                                  ? 'sum'
-                                  : ''
-                              }`,
-                              precision: 0,
-                            }).format()}
-                          </div>
-                          {!readonlyItems.includes(lineItem.id) && (
-                            <div className="w-20 h-6 bg-yellow rounded-full flex items-center text-white ml-auto">
-                              <div className="w-6 h-6 items-center flex justify-around">
-                                <MinusIcon
-                                  className="cursor-pointer w-5 h-5"
-                                  onClick={() => decreaseQuantity(lineItem)}
-                                />
-                              </div>
-                              <div className="flex-grow text-center">
-                                {lineItem.quantity}
-                              </div>
-                              <div className="w-6 h-6 items-center flex justify-around">
-                                <PlusIcon
-                                  className="cursor-pointer w-5 h-5"
-                                  onClick={() => increaseQuantity(lineItem.id)}
-                                />
-                              </div>
-                            </div>
                           )}
                         </div>
                       </div>
@@ -985,8 +1109,8 @@ export default function Cart() {
               </div>
             )}
           </div>
-          <div className="">
-            <div className="py-9 px-3 md:rounded-2xl bg-white sticky top-5">
+          <div className="hidden md:block">
+            <div className="py-9 px-3 rounded-2xl bg-white sticky top-5">
               <div className="border-b items-center justify-between pb-2">
                 {/* <div className="md:w-72">
                 <form onSubmit={handleSubmit(onSubmit)} className="relative">
@@ -1025,15 +1149,15 @@ export default function Cart() {
                   </div>
                 </div>
               </div>
-              <div className="justify-between mt-4 space-y-4 ">
+              <div className="mt-4 space-y-4">
                 <button
-                  className={`md:text-xl text-white bg-yellow flex h-8 items-center justify-evenly rounded-full  w-full`}
+                  className="text-xl text-white bg-yellow flex h-8 items-center justify-evenly rounded-full w-full"
                   onClick={goToCheckout}
                 >
                   {tr('checkout')} <img src="/right.png" />
                 </button>
                 <button
-                  className="md:text-xl text-gray-400 bg-gray-100 flex h-8 items-center rounded-full justify-evenly w-full"
+                  className="text-xl text-gray-400 bg-gray-100 flex h-8 items-center rounded-full justify-evenly w-full"
                   onClick={(e) => {
                     e.preventDefault()
                     router.push(`/${activeCity.slug}`)
@@ -1044,6 +1168,36 @@ export default function Cart() {
               </div>
             </div>
           </div>
+        </div>
+      )}
+      {!isEmpty && (
+        <div className="md:hidden fixed bottom-14 left-0 right-0 z-30 bg-white border-t border-gray-100 px-4 py-3">
+          <div className="flex items-center justify-between mb-2">
+            <span className="text-sm text-gray-500">{tr('basket_order_price')}</span>
+            <span className="text-lg font-bold">
+              {currency(data?.totalPrice || 0, {
+                pattern: '# !',
+                separator: ' ',
+                decimal: '.',
+                symbol: `${
+                  locale == 'uz'
+                    ? "so'm"
+                    : locale == 'ru'
+                    ? 'сум'
+                    : locale == 'en'
+                    ? 'sum'
+                    : ''
+                }`,
+                precision: 0,
+              }).format()}
+            </span>
+          </div>
+          <button
+            className="text-base text-white bg-yellow flex h-12 items-center justify-center rounded-full w-full font-bold"
+            onClick={goToCheckout}
+          >
+            {tr('checkout')}
+          </button>
         </div>
       )}
       <style global jsx>{`

@@ -290,7 +290,7 @@ const SignInButton: FC = () => {
               onClose={closeModal}
               initialFocus={authButtonRef}
             >
-              <div className="min-h-screen px-4 text-center">
+              <div className="min-h-screen md:px-4 text-center">
                 <TransitionChild
                   enter="ease-out duration-300"
                   enterFrom="opacity-0"
@@ -299,28 +299,43 @@ const SignInButton: FC = () => {
                   leaveFrom="opacity-100"
                   leaveTo="opacity-0"
                 >
-                  <DialogBackdrop className="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity" />
+                  <DialogBackdrop className="fixed inset-0 bg-white md:bg-gray-500 md:bg-opacity-75 transition-opacity" />
                 </TransitionChild>
 
-                {/* This element is to trick the browser into centering the modal contents. */}
+                {/* Desktop centering trick */}
                 <span
-                  className="inline-block h-screen align-middle"
+                  className="hidden md:inline-block h-screen align-middle"
                   aria-hidden="true"
                 >
                   &#8203;
                 </span>
                 <TransitionChild
                   enter="ease-out duration-300"
-                  enterFrom="opacity-0 scale-95"
-                  enterTo="opacity-100 scale-100"
+                  enterFrom="opacity-0 translate-y-full md:translate-y-0 md:scale-95"
+                  enterTo="opacity-100 translate-y-0 md:scale-100"
                   leave="ease-in duration-200"
-                  leaveFrom="opacity-100 scale-100"
-                  leaveTo="opacity-0 scale-95"
+                  leaveFrom="opacity-100 translate-y-0 md:scale-100"
+                  leaveTo="opacity-0 translate-y-full md:translate-y-0 md:scale-95"
                 >
-                  <div className="align-middle inline-block w-full z-[200]">
-                    <div className="md:inline-flex my-8 items-start">
-                      <div className="align-middle bg-white inline-block md:px-40 px-6 py-10 rounded-2xl shadow-xl text-center transform transition-all max-w-2xl">
-                        <DialogTitle as="h3" className="leading-6 text-3xl">
+                  <div className="fixed inset-0 md:relative md:align-middle md:inline-block w-full z-[200]">
+                    {/* Mobile close button */}
+                    <div className="md:hidden flex items-center px-4 py-3 bg-white relative z-10">
+                      <button
+                        className="outline-none focus:outline-none p-1"
+                        onClick={closeModal}
+                      >
+                        <XIcon className="w-6 h-6 text-gray-500" />
+                      </button>
+                    </div>
+                    <div className="flex flex-col h-[calc(100%-48px)] md:h-auto md:inline-flex md:my-8 md:items-start">
+                      <div className="flex-1 overflow-y-auto bg-white md:inline-block md:px-40 px-6 py-6 md:py-10 md:rounded-2xl md:shadow-xl text-center transform transition-all md:max-w-2xl relative">
+                        <button
+                          className="absolute top-3 right-3 hidden md:block outline-none focus:outline-none"
+                          onClick={closeModal}
+                        >
+                          <XIcon className="w-6 h-6 text-gray-400 hover:text-gray-600" />
+                        </button>
+                        <DialogTitle as="h3" className="leading-6 text-2xl md:text-3xl font-bold mb-2">
                           {tr('auth')}
                         </DialogTitle>
                         {submitError && (
@@ -424,45 +439,56 @@ const SignInButton: FC = () => {
                                 <label className="text-sm text-gray-400 mb-2 block">
                                   {tr('personal_phone')}
                                 </label>
-                                <div className="relative">
-                                  <Controller
-                                    render={({
-                                      field: { onChange, value },
-                                    }) => (
-                                      <Input
-                                        defaultCountry="UZ"
-                                        country="UZ"
-                                        international
-                                        withCountryCallingCode
-                                        value={value}
-                                        className="border border-yellow focus:outline-none outline-none px-6 py-3 rounded-full text-sm w-full"
-                                        onChange={(e: any) => onChange(e)}
-                                        onKeyDown={(e: any) => {
-                                          if (e.key == 'Enter') {
-                                            e.preventDefault()
-                                            handleSubmit(onSubmit)()
-                                          }
-                                        }}
-                                      />
-                                    )}
-                                    rules={{
-                                      required: true,
-                                    }}
-                                    key="phone"
-                                    name="phone"
-                                    control={control}
-                                  />
-                                  {authPhone && (
-                                    <button
-                                      className="absolute focus:outline-none inset-y-0 outline-none right-4 text-gray-400"
-                                      onClick={() => {
-                                        resetField('phone')
-                                      }}
-                                    >
-                                      <XIcon className="cursor-pointer h-5 text-gray-400 w-5" />
-                                    </button>
-                                  )}
-                                </div>
+                                <Controller
+                                  render={({
+                                    field: { onChange, value },
+                                  }) => {
+                                    const digits = (value || '').replace(/\D/g, '').replace(/^998/, '')
+                                    const isValid = digits.length === 9
+                                    return (
+                                      <div className="flex items-center justify-center">
+                                        <input
+                                          type="tel"
+                                          inputMode="numeric"
+                                          autoComplete="tel"
+                                          ref={(el) => { if (el) setTimeout(() => el.focus(), 100) }}
+                                          placeholder="+998"
+                                          value={digits.length > 0 ? '+998 ' + digits : ''}
+                                          className="py-2 text-2xl text-center focus:outline-none outline-none bg-transparent w-full"
+                                          onChange={(e) => {
+                                            const raw = e.target.value.replace(/\D/g, '').replace(/^998/, '').substring(0, 9)
+                                            onChange(raw ? '+998' + raw : '')
+                                          }}
+                                          onKeyDown={(e) => {
+                                            if (e.key === 'Enter') {
+                                              e.preventDefault()
+                                              handleSubmit(onSubmit)()
+                                            }
+                                          }}
+                                        />
+                                        {digits.length > 0 && (
+                                          isValid ? (
+                                            <svg className="w-6 h-6 text-green-500 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
+                                              <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
+                                            </svg>
+                                          ) : (
+                                            <button
+                                              className="focus:outline-none outline-none flex-shrink-0"
+                                              onClick={() => onChange('')}
+                                              type="button"
+                                            >
+                                              <XIcon className="cursor-pointer h-6 w-6 text-red-400" />
+                                            </button>
+                                          )
+                                        )}
+                                      </div>
+                                    )
+                                  }}
+                                  rules={{ required: true }}
+                                  key="phone"
+                                  name="phone"
+                                  control={control}
+                                />
                               </div>
 
                               {showUserName && (
@@ -610,12 +636,6 @@ const SignInButton: FC = () => {
                           </>
                         )}
                       </div>
-                      <button
-                        className="text-white outline-none focus:outline-none transform hidden md:block"
-                        onClick={closeModal}
-                      >
-                        <XIcon className="text-white cursor-pointer w-10 h-10" />
-                      </button>
                     </div>
                   </div>
                 </TransitionChild>

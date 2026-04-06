@@ -89,6 +89,16 @@ const LocationTabs: FC = () => {
   const [tabIndex, setTabIndex] = useState(
     locationData?.deliveryType || 'deliver'
   )
+
+  useEffect(() => {
+    if (locationData?.deliveryType) {
+      setTabIndex(locationData.deliveryType)
+      if (locationData.deliveryType === 'pickup') {
+        loadPickupItems()
+      }
+    }
+  }, [locationData?.deliveryType])
+
   const [pickupIndex, setPickupIndex] = useState(1)
   const [pickupPoints, setPickupPoint] = useState([] as any[])
 
@@ -332,6 +342,7 @@ const LocationTabs: FC = () => {
           }
         : setLocationData({
             ...locationData,
+            deliveryType: tabIndex,
             terminal_id: undefined,
             terminalData: undefined,
           })
@@ -360,6 +371,7 @@ const LocationTabs: FC = () => {
           }
         : setLocationData({
             ...locationData,
+            deliveryType: tabIndex,
             terminal_id: undefined,
             terminalData: undefined,
           })
@@ -377,6 +389,7 @@ const LocationTabs: FC = () => {
             }
           : setLocationData({
               ...locationData,
+              deliveryType: tabIndex,
               terminal_id: undefined,
               terminalData: undefined,
             })
@@ -392,6 +405,7 @@ const LocationTabs: FC = () => {
           }
         : setLocationData({
             ...locationData,
+            deliveryType: tabIndex,
             terminal_id: terminalsData.data.items[0].id,
             terminalData: terminalsData.data.items[0],
           })
@@ -422,6 +436,7 @@ const LocationTabs: FC = () => {
     )
     setLocationData({
       ...locationData,
+      deliveryType: tabIndex,
       house: house,
       location: [selection.coordinates.lat, selection.coordinates.long],
       terminal_id: terminalData.terminal_id,
@@ -496,6 +511,7 @@ const LocationTabs: FC = () => {
     )
     setLocationData({
       ...locationData,
+      deliveryType: tabIndex,
       location: coords,
       address: data.data.formatted,
       house,
@@ -557,6 +573,7 @@ const LocationTabs: FC = () => {
     let terminalData = pickupPoints.find((pickup: any) => pickup.id == point.id)
     setLocationData({
       ...locationData,
+      deliveryType: tabIndex,
       terminal_id: point.id,
       terminalData,
     })
@@ -621,6 +638,7 @@ const LocationTabs: FC = () => {
       setLocationData({
         ...locationData,
         ...data,
+        deliveryType: tabIndex,
         // location: [
         //   terminalsData.data.items[0].latitude,
         //   terminalsData.data.items[0].longitude,

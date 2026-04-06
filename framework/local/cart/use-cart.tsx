@@ -81,7 +81,7 @@ export const handler: SWRHook<any> = {
               enumerable: true,
             },
           }),
-        []
+        [response.data]
       )
     },
 }

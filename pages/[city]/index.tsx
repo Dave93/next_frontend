@@ -294,9 +294,6 @@ export default function Home({
         description="Бесплатная доставка пиццы в Ташкенте, заказать можно на нашем сайте или через телеграм бот @Chopar_bot | Chopar Pizza"
       />
       <MainSlider />
-      <div className="lg:hidden mx-8 my-5">
-        <MobSetLocation />
-      </div>
       <CategoriesMenu categories={categories} channelName={channelName} />
       <div className="container mx-auto">
         <h1 className="py-1 md:text-4xl text-2xl w-max my-10 m-auto">

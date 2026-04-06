@@ -27,8 +27,9 @@ import { useRouter } from 'next/router'
 import useTranslation from 'next-translate/useTranslation'
 import axios from 'axios'
 import Cookies from 'js-cookie'
+import Hashids from 'hashids'
 import { useCart } from '@framework/cart'
-import { XIcon } from '@heroicons/react/solid'
+import { XIcon, CheckIcon } from '@heroicons/react/solid'
 import styles from './ProductItemNew.module.css'
 import { useUI } from '@components/ui/context'
 import { DateTime } from 'luxon'
@@ -47,11 +48,62 @@ const ProductItemNew: FC<ProductItem> = ({ product, channelName }) => {
   const [store, updateStore] = useState(product)
   const [isLoadingBasket, setIsLoadingBasket] = useState(false)
   const { stopProducts, locationData } = useUI()
-  const { mutate } = useCart()
+  const { data: cartData, mutate } = useCart()
 
   const [addToCartInProgress, setAddToCartInProgress] = useState(false)
+  const [addedToCart, setAddedToCart] = useState(false)
+
+  const hashids = useMemo(
+    () => new Hashids('basket', 15, 'abcdefghijklmnopqrstuvwxyz1234567890'),
+    []
+  )
+
+
+  const changeCartQuantity = async (delta: number) => {
+    if (!cartLineItem) return
+    setIsLoadingBasket(true)
+    await setCredentials()
+    const lineIdEncoded = hashids.encode(cartLineItem.id)
+    if (delta > 0) {
+      await axios.post(`${webAddress}/api/v1/basket-lines/${lineIdEncoded}/add`, { quantity: 1 })
+    } else {
+      if (cartLineItem.quantity <= 1) {
+        await axios.delete(`${webAddress}/api/baskets-lines/${lineIdEncoded}`)
+      } else {
+        await axios.put(`${webAddress}/api/v1/basket-lines/${lineIdEncoded}/remove`, { quantity: 1 })
+      }
+    }
+    await mutate()
+    setIsLoadingBasket(false)
+  }
   const [isChoosingModifier, setIsChoosingModifier] = useState(false)
   const [activeModifiers, setActiveModifiers] = useState([] as number[])
+
+  const effectiveProductId = useMemo(() => {
+    const activeVariant = store.variants?.find((v: any) => v.active)
+    if (!activeVariant) return String(store.id)
+    if (
+      activeVariant.modifierProduct &&
+      activeModifiers.includes(activeVariant.modifierProduct.id)
+    ) {
+      return String(activeVariant.modifierProduct.id)
+    }
+    return String(activeVariant.id)
+  }, [store, activeModifiers])
+
+  const cartLineItem = useMemo(() => {
+    if (!cartData?.lineItems?.length) return null
+    return cartData.lineItems.find((item: any) => {
+      return (
+        String(item.variant?.id) === effectiveProductId ||
+        String(item.variant?.product?.id) === effectiveProductId ||
+        String(item.variant?.product_id) === effectiveProductId
+      )
+    })
+  }, [cartData, effectiveProductId])
+
+  const cartQuantity = cartLineItem?.quantity || 0
+
   const [configData, setConfigData] = useState({} as any)
   let [isOpen, setIsOpen] = useState(false)
   let completeButtonRef = useRef(null)
@@ -311,6 +363,9 @@ const ProductItemNew: FC<ProductItem> = ({ product, channelName }) => {
       setIsChoosingModifier(false)
     }
 
+    setAddedToCart(true)
+    setTimeout(() => setAddedToCart(false), 1500)
+
     if (window.innerWidth < 768) {
       closeModal()
     }
@@ -542,7 +597,7 @@ const ProductItemNew: FC<ProductItem> = ({ product, channelName }) => {
                   cy="12"
                   r="10"
                   stroke="currentColor"
-                  stroke-width="4"
+                  strokeWidth="4"
                 ></circle>
                 <path
                   className="opacity-75"
@@ -635,7 +690,10 @@ const ProductItemNew: FC<ProductItem> = ({ product, channelName }) => {
           id={`prod-${store.id}`}
           itemScope
           itemType="https://schema.org/Product"
-          onClick={() => router.push(`/product/${store.id}`)}
+          onClick={() => {
+            const activeVariant = store.variants?.find((v: any) => v.active)
+            router.push(`/product/${store.id}${activeVariant ? `?variant=${activeVariant.id}` : ''}`)
+          }}
         >
           {/* Mobile compact vertical card */}
           <div className="md:hidden p-3">
@@ -659,21 +717,93 @@ const ProductItemNew: FC<ProductItem> = ({ product, channelName }) => {
                 />
               )}
             </div>
-            <div className="text-center text-sm font-semibold mb-2 truncate" itemProp="name">
+            <div className="text-center text-sm font-semibold mb-1 truncate" itemProp="name">
               {store?.attribute_data?.name[channelName][locale || 'ru']}
             </div>
-            <div
-              className="w-full text-center py-2 rounded-full text-sm font-bold text-white"
-              style={{ backgroundColor: '#F9B004' }}
-            >
-              {currency(prodPriceDesktop, {
-                pattern: '# !',
-                separator: ' ',
-                decimal: '.',
-                symbol: `${locale == 'uz' ? "so'm" : ''} ${locale == 'ru' ? 'сум' : ''} ${locale == 'en' ? 'sum' : ''}`,
-                precision: 0,
-              }).format()}
-            </div>
+            {store.variants && store.variants.length > 1 && (
+              <div
+                className="flex gap-1 mb-2 justify-center"
+                onClick={(e) => e.stopPropagation()}
+              >
+                {store.variants.map((v: any) => (
+                  <button
+                    key={v.id}
+                    className={`px-2 py-0.5 rounded-full text-[10px] font-medium outline-none ${
+                      v.active
+                        ? 'bg-yellow text-white'
+                        : 'bg-gray-100 text-gray-500'
+                    }`}
+                    onClick={() => updateOptionSelection(v.id)}
+                  >
+                    {locale == 'uz'
+                      ? v?.custom_name_uz
+                      : locale == 'en'
+                      ? v?.custom_name_en
+                      : v?.custom_name}
+                  </button>
+                ))}
+              </div>
+            )}
+            {cartQuantity > 0 ? (
+              <div
+                className="w-full flex items-center justify-between rounded-full py-1 px-1"
+                style={{ backgroundColor: '#F9B004' }}
+                onClick={(e) => e.stopPropagation()}
+              >
+                <button
+                  className="w-8 h-8 rounded-full bg-white flex items-center justify-center text-lg font-bold"
+                  style={{ color: '#F9B004' }}
+                  disabled={isLoadingBasket}
+                  onClick={() => changeCartQuantity(-1)}
+                >
+                  −
+                </button>
+                <span className="text-white font-bold text-sm">
+                  {isLoadingBasket ? '...' : cartQuantity}
+                </span>
+                <button
+                  className="w-8 h-8 rounded-full bg-white flex items-center justify-center text-lg font-bold"
+                  style={{ color: '#F9B004' }}
+                  disabled={isLoadingBasket}
+                  onClick={() => changeCartQuantity(1)}
+                >
+                  +
+                </button>
+              </div>
+            ) : (
+              <button
+                className="w-full text-center py-2 rounded-full text-sm font-bold text-white flex items-center justify-center gap-1 transition-colors"
+                style={{ backgroundColor: addedToCart ? '#22c55e' : '#F9B004' }}
+                disabled={isLoadingBasket}
+                onClick={(e) => {
+                  e.stopPropagation()
+                  if (modifiers && modifiers.length) {
+                    setIsLoadingBasket(true)
+                    const activeVariant = store.variants?.find((v: any) => v.active)
+                    router.push(`/product/${store.id}${activeVariant ? `?variant=${activeVariant.id}` : ''}`)
+                  } else {
+                    addToBasket()
+                  }
+                }}
+              >
+                {isLoadingBasket ? (
+                  <svg className="animate-spin h-5 w-5 text-white" viewBox="0 0 24 24">
+                    <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" fill="none" />
+                    <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" />
+                  </svg>
+                ) : addedToCart ? (
+                  <CheckIcon className="w-4 h-4" />
+                ) : (
+                  currency(prodPriceDesktop, {
+                    pattern: '# !',
+                    separator: ' ',
+                    decimal: '.',
+                    symbol: `${locale == 'uz' ? "so'm" : ''} ${locale == 'ru' ? 'сум' : ''} ${locale == 'en' ? 'sum' : ''}`,
+                    precision: 0,
+                  }).format()
+                )}
+              </button>
+            )}
           </div>
           {/* Desktop card */}
           <div className="hidden md:block">
@@ -776,7 +906,7 @@ const ProductItemNew: FC<ProductItem> = ({ product, channelName }) => {
                       cy="12"
                       r="10"
                       stroke="currentColor"
-                      stroke-width="4"
+                      strokeWidth="4"
                     ></circle>
                     <path
                       className="opacity-75"
@@ -1035,7 +1165,7 @@ const ProductItemNew: FC<ProductItem> = ({ product, channelName }) => {
                                   cy="12"
                                   r="10"
                                   stroke="currentColor"
-                                  stroke-width="4"
+                                  strokeWidth="4"
                                 ></circle>
                                 <path
                                   className="opacity-75"

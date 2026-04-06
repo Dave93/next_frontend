@@ -89,6 +89,16 @@ const MobLocationTabs: FC = () => {
   const [tabIndex, setTabIndex] = useState(
     locationData?.deliveryType || 'deliver'
   )
+
+  useEffect(() => {
+    if (locationData?.deliveryType) {
+      setTabIndex(locationData.deliveryType)
+      if (locationData.deliveryType === 'pickup') {
+        loadPickupItems()
+      }
+    }
+  }, [locationData?.deliveryType])
+
   const [pickupIndex, setPickupIndex] = useState(1)
   const [pickupPoints, setPickupPoint] = useState([] as any[])
 
@@ -332,6 +342,7 @@ const MobLocationTabs: FC = () => {
           }
         : setLocationData({
             ...locationData,
+            deliveryType: tabIndex,
             terminal_id: undefined,
             terminalData: undefined,
           })
@@ -360,6 +371,7 @@ const MobLocationTabs: FC = () => {
           }
         : setLocationData({
             ...locationData,
+            deliveryType: tabIndex,
             terminal_id: undefined,
             terminalData: undefined,
           })
@@ -377,6 +389,7 @@ const MobLocationTabs: FC = () => {
             }
           : setLocationData({
               ...locationData,
+              deliveryType: tabIndex,
               terminal_id: undefined,
               terminalData: undefined,
             })
@@ -392,6 +405,7 @@ const MobLocationTabs: FC = () => {
           }
         : setLocationData({
             ...locationData,
+            deliveryType: tabIndex,
             terminal_id: terminalsData.data.items[0].id,
             terminalData: terminalsData.data.items[0],
           })
@@ -422,6 +436,7 @@ const MobLocationTabs: FC = () => {
     )
     setLocationData({
       ...locationData,
+      deliveryType: tabIndex,
       house: house,
       location: [selection.coordinates.lat, selection.coordinates.long],
       terminal_id: terminalData.terminal_id,
@@ -498,6 +513,7 @@ const MobLocationTabs: FC = () => {
     )
     setLocationData({
       ...locationData,
+      deliveryType: tabIndex,
       location: coords,
       address: data.data.formatted,
       house,
@@ -559,6 +575,7 @@ const MobLocationTabs: FC = () => {
     let terminalData = pickupPoints.find((pickup: any) => pickup.id == point.id)
     setLocationData({
       ...locationData,
+      deliveryType: tabIndex,
       terminal_id: point.id,
       terminalData,
     })
@@ -622,6 +639,7 @@ const MobLocationTabs: FC = () => {
       setLocationData({
         ...locationData,
         ...data,
+        deliveryType: tabIndex,
         // location: [
         //   terminalsData.data.items[0].latitude,
         //   terminalsData.data.items[0].longitude,
@@ -948,23 +966,7 @@ const MobLocationTabs: FC = () => {
 
   return (
     <>
-      <div className="flex items-center pt-5 mb-8">
-        {locationTabsClosable && (
-          <span
-            onClick={() => {
-              if (locationTabsClosable) {
-                setLocationTabsClosable(false)
-                closeMobileLocationTabs()
-              }
-            }}
-            className="flex"
-          >
-            <Image src="/assets/back.png" width="24" height="24" alt="" />
-          </span>
-        )}
-        <div className="text-lg flex-grow text-center">Адрес</div>
-      </div>
-      <div className="bg-gray-100 flex rounded-full w-full h-11 items-center">
+      <div className="hidden md:flex bg-gray-100 rounded-full w-full h-11 items-center">
         <button
           className={`${
             tabIndex == 'deliver' ? 'bg-yellow text-white' : ' text-gray-400'
@@ -987,7 +989,7 @@ const MobLocationTabs: FC = () => {
           )}
         </button>
       </div>
-      {tabIndex == 'deliver' && (
+      {tabIndex == 'deliver' && (<>
         <div className="mt-5">
           <div className="flex justify-between items-center">
             <div className="text-gray-400 font-bold text-[18px]">
@@ -1323,46 +1325,47 @@ const MobLocationTabs: FC = () => {
                   </div>
                 </div>
               )}
-              <div className="flex mt-12 justify-center">
-                <button
-                  type="submit"
-                  className="bg-yellow font-bold px-12 py-3 rounded-full text-[18px] text-white outline-none focus:outline-none"
-                  disabled={isSearchingTerminals}
-                  onClick={(event: React.MouseEvent) =>
-                    saveDeliveryData(undefined, event)
-                  }
-                >
-                  {isSearchingTerminals ? (
-                    <svg
-                      className="animate-spin h-5 mx-auto text-center text-white w-5"
-                      xmlns="http://www.w3.org/2000/svg"
-                      fill="none"
-                      viewBox="0 0 24 24"
-                    >
-                      <circle
-                        className="opacity-25"
-                        cx="12"
-                        cy="12"
-                        r="10"
-                        stroke="currentColor"
-                        strokeWidth="4"
-                      ></circle>
-                      <path
-                        className="opacity-75"
-                        fill="currentColor"
-                        d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
-                      ></path>
-                    </svg>
-                  ) : (
-                    tr('confirm')
-                  )}
-                </button>
-              </div>
+              <div className="h-20" />
             </form>
           </div>
         </div>
-      )}
-      {tabIndex == 'pickup' && (
+        <div className="fixed bottom-0 left-0 right-0 p-4 bg-white border-t border-gray-100 z-50 md:relative md:border-0 md:p-0 md:mt-12">
+          <button
+            type="submit"
+            className="bg-yellow font-bold py-3 rounded-full text-[18px] text-white outline-none focus:outline-none w-full"
+            disabled={isSearchingTerminals}
+            onClick={(event: React.MouseEvent) =>
+              saveDeliveryData(undefined, event)
+            }
+          >
+            {isSearchingTerminals ? (
+              <svg
+                className="animate-spin h-5 mx-auto text-center text-white w-5"
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+              >
+                <circle
+                  className="opacity-25"
+                  cx="12"
+                  cy="12"
+                  r="10"
+                  stroke="currentColor"
+                  strokeWidth="4"
+                ></circle>
+                <path
+                  className="opacity-75"
+                  fill="currentColor"
+                  d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+                ></path>
+              </svg>
+            ) : (
+              tr('confirm')
+            )}
+          </button>
+        </div>
+      </>)}
+      {tabIndex == 'pickup' && (<>
         <div className="mt-5">
           {/* <div> */}
           <div className="font-bold text-[18px] text-gray-400">
@@ -1539,20 +1542,21 @@ const MobLocationTabs: FC = () => {
             </div>
             {/* )} */}
           </div>
-          <div className="flex mt-12 justify-center">
-            <button
-              type="submit"
-              className={`${
-                activePoint ? 'bg-yellow' : 'bg-gray-200'
-              } font-bold px-12 rounded-full text-[18px] text-white outline-none focus:outline-none w-full py-2`}
-              disabled={!activePoint}
-              onClick={submitPickup}
-            >
-              {tr('confirm')}
-            </button>
-          </div>
+          <div className="h-20" />
         </div>
-      )}
+        <div className="fixed bottom-0 left-0 right-0 p-4 bg-white border-t border-gray-100 z-50 md:relative md:border-0 md:p-0 md:mt-12">
+          <button
+            type="submit"
+            className={`${
+              activePoint ? 'bg-yellow' : 'bg-gray-200'
+            } font-bold rounded-full text-[18px] text-white outline-none focus:outline-none w-full py-3`}
+            disabled={!activePoint}
+            onClick={submitPickup}
+          >
+            {tr('confirm')}
+          </button>
+        </div>
+      </>)}
     </>
   )
 }

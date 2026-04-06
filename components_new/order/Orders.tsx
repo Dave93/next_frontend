@@ -361,6 +361,13 @@ const Orders: FC<OrdersProps> = ({ channelName }: { channelName: any }) => {
   const [tabIndex, setTabIndex] = useState(
     locationData?.deliveryType || 'deliver'
   )
+
+  useEffect(() => {
+    if (locationData?.deliveryType) {
+      setTabIndex(locationData.deliveryType)
+    }
+  }, [locationData?.deliveryType])
+
   const [pickupIndex, setPickupIndex] = useState(1)
   const [pickupPoints, setPickupPoint] = useState([] as any[])
   const [activePoint, setActivePoint] = useState(
@@ -552,6 +559,7 @@ const Orders: FC<OrdersProps> = ({ channelName }: { channelName: any }) => {
     )
     setLocationData({
       ...locationData,
+      deliveryType: tabIndex,
       house: house,
       location: [selection.coordinates.lat, selection.coordinates.long],
       terminal_id: terminalData.terminal_id,
@@ -623,6 +631,7 @@ const Orders: FC<OrdersProps> = ({ channelName }: { channelName: any }) => {
     )
     setLocationData({
       ...locationData,
+      deliveryType: tabIndex,
       location: coords,
       address: data.data.formatted,
       house,
@@ -773,6 +782,7 @@ const Orders: FC<OrdersProps> = ({ channelName }: { channelName: any }) => {
     let terminalData = pickupPoints.find((pickup: any) => pickup.id == point.id)
     setLocationData({
       ...locationData,
+      deliveryType: tabIndex,
       terminal_id: point.id,
       terminalData,
     })
@@ -795,6 +805,7 @@ const Orders: FC<OrdersProps> = ({ channelName }: { channelName: any }) => {
           }
         : setLocationData({
             ...locationData,
+            deliveryType: tabIndex,
             terminal_id: undefined,
             terminalData: undefined,
           })
@@ -823,6 +834,7 @@ const Orders: FC<OrdersProps> = ({ channelName }: { channelName: any }) => {
           }
         : setLocationData({
             ...locationData,
+            deliveryType: tabIndex,
             terminal_id: undefined,
             terminalData: undefined,
           })
@@ -840,6 +852,7 @@ const Orders: FC<OrdersProps> = ({ channelName }: { channelName: any }) => {
             }
           : setLocationData({
               ...locationData,
+              deliveryType: tabIndex,
               terminal_id: undefined,
               terminalData: undefined,
             })
@@ -855,6 +868,7 @@ const Orders: FC<OrdersProps> = ({ channelName }: { channelName: any }) => {
           }
         : setLocationData({
             ...locationData,
+            deliveryType: tabIndex,
             terminal_id: terminalsData.data.items[0].id,
             terminalData: terminalsData.data.items[0],
           })

@@ -58,6 +58,11 @@ const OrderWithNoSSR = dynamic(() => import('@components_new/order/Orders'), {
   ssr: false,
 })
 
+const MobileOrderWithNoSSR = dynamic(
+  () => import('@components_new/order/MobileOrders'),
+  { ssr: false }
+)
+
 export default function Order() {
   const [channelName, setChannelName] = useState('chopar')
 
@@ -71,9 +76,14 @@ export default function Order() {
   }, [])
 
   return (
-    <div>
-      <OrderWithNoSSR channelName={channelName} />
-    </div>
+    <>
+      <div className="md:hidden">
+        <MobileOrderWithNoSSR channelName={channelName} />
+      </div>
+      <div className="hidden md:block">
+        <OrderWithNoSSR channelName={channelName} />
+      </div>
+    </>
   )
 }
 
