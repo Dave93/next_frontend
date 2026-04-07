@@ -14,13 +14,17 @@ const MainSlider: FC = () => {
   const autoPlayRef = useRef<ReturnType<typeof setInterval> | null>(null)
   const touchStartX = useRef(0)
 
-  const [plugins, setPlugins] = useState(() => [
-    new Fade('', 0.4),
-    new AutoPlay({ duration: 3000, direction: 'NEXT', stopOnHover: false }),
-    new Pagination({ type: 'bullet' }),
-    new Arrow(),
-  ])
+  const [plugins, setPlugins] = useState<any[]>([])
   const sliderRef = createRef<Flicking>()
+
+  useEffect(() => {
+    setPlugins([
+      new Fade('', 0.4),
+      new AutoPlay({ duration: 3000, direction: 'NEXT', stopOnHover: false }),
+      new Pagination({ type: 'bullet' }),
+      new Arrow(),
+    ])
+  }, [])
 
   const fetchSliders = async () => {
     const { data } = await axios.get(
