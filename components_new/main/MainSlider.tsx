@@ -14,12 +14,12 @@ const MainSlider: FC = () => {
   const autoPlayRef = useRef<ReturnType<typeof setInterval> | null>(null)
   const touchStartX = useRef(0)
 
-  const plugins = [
+  const [plugins, setPlugins] = useState(() => [
     new Fade('', 0.4),
     new AutoPlay({ duration: 3000, direction: 'NEXT', stopOnHover: false }),
     new Pagination({ type: 'bullet' }),
     new Arrow(),
-  ]
+  ])
   const sliderRef = createRef<Flicking>()
 
   const fetchSliders = async () => {
@@ -30,6 +30,13 @@ const MainSlider: FC = () => {
     setDefaultIndex(0)
     setMobileIndex(0)
     setSliders(data.data)
+    // Recreate plugins so Pagination rebinds
+    setPlugins([
+      new Fade('', 0.4),
+      new AutoPlay({ duration: 3000, direction: 'NEXT', stopOnHover: false }),
+      new Pagination({ type: 'bullet' }),
+      new Arrow(),
+    ])
     setTimeout(() => {
       sliderRef.current?.init()
     }, 100)
