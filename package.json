@@ -8,7 +8,7 @@
     "analyze": "cross-env BUNDLE_ANALYZE=both yarn build",
     "prettier-fix": "prettier --write .",
     "find:unused": "npx next-unused",
-    "server": "cross-env NODE_ENV=production next start -p 4646",
+    "server": "cross-env NODE_ENV=production next start -p 5656",
     "generate": "graphql-codegen",
     "generate:shopify": "DOTENV_CONFIG_PATH=./.env.local graphql-codegen -r dotenv/config --config framework/shopify/codegen.json",
     "generate:vendure": "graphql-codegen --config framework/vendure/codegen.json",
