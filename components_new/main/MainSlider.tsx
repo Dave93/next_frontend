@@ -41,7 +41,7 @@ const MainSlider: FC = () => {
   }, [locale])
 
   return (
-    <div className="relative rounded-2xl">
+    <div className="relative rounded-2xl mx-3 md:mx-0 mt-2 md:mt-0 overflow-hidden">
       {sliders && sliders.length > 0 && (
         <>
           <Flicking
@@ -55,10 +55,10 @@ const MainSlider: FC = () => {
             autoInit={true}
           >
             {sliders.map((item: any) => (
-              <div className="panel max-w-full mr-6" key={item.id}>
+              <div className="panel w-full md:mr-6" key={item.id}>
                 <div className="rounded-[15px] overflow-hidden flex mb-[10px]">
                   {item.link ? (
-                    <a href={item.link}>
+                    <a href={item.link} className="w-full">
                       {item.asset && (
                         <>
                           <img
@@ -66,7 +66,7 @@ const MainSlider: FC = () => {
                             width={1600}
                             height={320}
                             data-href={item.link}
-                            className="hidden md:flex "
+                            className="hidden md:flex"
                           />
                           <img
                             src={
@@ -74,10 +74,8 @@ const MainSlider: FC = () => {
                                 ? item.asset[1].link
                                 : item.asset[0].link
                             }
-                            width={400}
-                            height={176}
                             data-href={item.link}
-                            className="md:hidden flex"
+                            className="md:hidden w-full h-[44vw] object-cover"
                           />
                         </>
                       )}
@@ -92,17 +90,14 @@ const MainSlider: FC = () => {
                             height={320}
                           />
                         </div>
-                        <div className="md:hidden flex">
-                          <img
-                            src={
-                              item.asset[1]
-                                ? item.asset[1].link
-                                : item.asset[0].link
-                            }
-                            width={400}
-                            height={176}
-                          />
-                        </div>
+                        <img
+                          src={
+                            item.asset[1]
+                              ? item.asset[1].link
+                              : item.asset[0].link
+                          }
+                          className="md:hidden w-full h-[44vw] object-cover"
+                        />
                       </>
                     )
                   )}

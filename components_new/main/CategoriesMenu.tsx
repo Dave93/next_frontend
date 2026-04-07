@@ -24,7 +24,7 @@ const CategoriesMenu: FC<{ categories: any[]; channelName: string }> = ({
 
   return (
     <div
-      className={`${
+      className={`hidden md:block ${
         fixed
           ? 'fixed left-0 m-auto right-0 top-0 z-30 bg-secondary w-full shadow-lg'
           : ''

@@ -1,23 +1,13 @@
-const express = require('express')
-const next = require('next')
-const dev = process.env.NODE_ENV !== 'production'
+// Next.js 16 does not support custom servers with Pages Router.
+// The useRouter() hook throws "NextRouter was not mounted" when using
+// any custom server (Express or native http.createServer).
+// Use `next start` directly instead.
+//
+// PM2 config: pm2 start "npx next start -p 4646" --name chopar
+// Or use package.json "server" script.
 
-const app = next({ dev })
-const router = express.Router()
-const handle = app.getRequestHandler()
+const { execSync } = require('child_process')
+const port = process.env.PORT || 4646
 
-app.prepare().then(() => {
-  const server = express()
-
-  server.get('*', (req, res) => {
-    return handle(req, res)
-  })
-  server.post('*', (req, res) => {
-    return handle(req, res)
-  })
-
-  server.listen(process.env.PORT, (err) => {
-    if (err) throw err
-    console.log(`> Ready on http://localhost:${process.env.PORT}`)
-  })
-})
+console.log(`> Starting Next.js on port ${port}`)
+execSync(`npx next start -p ${port}`, { stdio: 'inherit' })
