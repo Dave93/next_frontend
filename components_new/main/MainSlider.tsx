@@ -6,7 +6,6 @@ import { useUI } from '@components/ui'
 import axios from 'axios'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
-
 const MainSlider: FC = () => {
   let router = useRouter()
 
