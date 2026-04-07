@@ -1,0 +1,89 @@
+<h2>Mobile Product Cards: Which layout?</h2>
+<p class="subtitle">Current: image left + text right (desktop style). Goal: match Expo app feel.</p>
+
+<div class="cards">
+  <div class="card" data-choice="a" onclick="toggleSelect(this)">
+    <div class="card-image">
+      <div style="background:#f9fafb;border-radius:16px;padding:12px;font-family:system-ui;max-width:375px;margin:0 auto;">
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">
+          <!-- Card 1 -->
+          <div style="background:#fff;border-radius:20px;border:1px solid #e5e7eb;overflow:hidden;padding:12px;">
+            <div style="text-align:center;margin-bottom:8px;">
+              <div style="width:100px;height:80px;background:linear-gradient(135deg,#f59e0b22,#fbbf2422);border-radius:12px;margin:0 auto;display:flex;align-items:center;justify-content:center;font-size:32px;">🍕</div>
+            </div>
+            <div style="text-align:center;font-size:13px;font-weight:600;margin-bottom:8px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">Pepperoni</div>
+            <div style="background:#F9B004;color:#fff;text-align:center;padding:8px;border-radius:20px;font-size:13px;font-weight:700;">45 000 sum</div>
+          </div>
+          <!-- Card 2 -->
+          <div style="background:#fff;border-radius:20px;border:1px solid #e5e7eb;overflow:hidden;padding:12px;">
+            <div style="text-align:center;margin-bottom:8px;">
+              <div style="width:100px;height:80px;background:linear-gradient(135deg,#10b98122,#34d39922);border-radius:12px;margin:0 auto;display:flex;align-items:center;justify-content:center;font-size:32px;">🍕</div>
+            </div>
+            <div style="text-align:center;font-size:13px;font-weight:600;margin-bottom:8px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">Vegetarian</div>
+            <div style="background:#F9B004;color:#fff;text-align:center;padding:8px;border-radius:20px;font-size:13px;font-weight:700;">78 000 sum</div>
+          </div>
+          <!-- Card 3 -->
+          <div style="background:#fff;border-radius:20px;border:1px solid #e5e7eb;overflow:hidden;padding:12px;">
+            <div style="text-align:center;margin-bottom:8px;">
+              <div style="width:100px;height:80px;background:linear-gradient(135deg,#ef444422,#f8717122);border-radius:12px;margin:0 auto;display:flex;align-items:center;justify-content:center;font-size:32px;">🍕</div>
+            </div>
+            <div style="text-align:center;font-size:13px;font-weight:600;margin-bottom:8px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">Qo'ziqorinli</div>
+            <div style="background:#F9B004;color:#fff;text-align:center;padding:8px;border-radius:20px;font-size:13px;font-weight:700;">65 000 sum</div>
+          </div>
+          <!-- Card 4 -->
+          <div style="background:#fff;border-radius:20px;border:1px solid #e5e7eb;overflow:hidden;padding:12px;">
+            <div style="text-align:center;margin-bottom:8px;">
+              <div style="width:100px;height:80px;background:linear-gradient(135deg,#3b82f622,#60a5fa22);border-radius:12px;margin:0 auto;display:flex;align-items:center;justify-content:center;font-size:32px;">🍕</div>
+            </div>
+            <div style="text-align:center;font-size:13px;font-weight:600;margin-bottom:8px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">Margarita</div>
+            <div style="background:#F9B004;color:#fff;text-align:center;padding:8px;border-radius:20px;font-size:13px;font-weight:700;">39 000 sum</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="card-body">
+      <h3>A: 2-Column Grid (like Expo app)</h3>
+      <p>Image top, name centered, price button bottom. Compact, no description. Exactly matches native app. Tap card → product detail page.</p>
+    </div>
+  </div>
+
+  <div class="card" data-choice="b" onclick="toggleSelect(this)">
+    <div class="card-image">
+      <div style="background:#f9fafb;border-radius:16px;padding:12px;font-family:system-ui;max-width:375px;margin:0 auto;">
+        <div style="display:flex;flex-direction:column;gap:10px;">
+          <!-- Card 1 - horizontal -->
+          <div style="background:#fff;border-radius:16px;border:1px solid #e5e7eb;padding:12px;display:flex;gap:12px;align-items:center;">
+            <div style="width:80px;height:80px;background:linear-gradient(135deg,#f59e0b22,#fbbf2422);border-radius:12px;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:32px;">🍕</div>
+            <div style="flex:1;min-width:0;">
+              <div style="font-size:14px;font-weight:600;margin-bottom:2px;">Pepperoni</div>
+              <div style="font-size:11px;color:#6b7280;margin-bottom:6px;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;">maxsus tomatli sous, mozzarella pishloqi...</div>
+              <div style="background:#F9B004;color:#fff;text-align:center;padding:6px 16px;border-radius:20px;font-size:12px;font-weight:700;display:inline-block;">45 000 sum</div>
+            </div>
+          </div>
+          <!-- Card 2 - horizontal -->
+          <div style="background:#fff;border-radius:16px;border:1px solid #e5e7eb;padding:12px;display:flex;gap:12px;align-items:center;">
+            <div style="width:80px;height:80px;background:linear-gradient(135deg,#10b98122,#34d39922);border-radius:12px;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:32px;">🍕</div>
+            <div style="flex:1;min-width:0;">
+              <div style="font-size:14px;font-weight:600;margin-bottom:2px;">Vegetarian</div>
+              <div style="font-size:11px;color:#6b7280;margin-bottom:6px;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;">Maxsus tomat sousi va qaymoqli Motsarella...</div>
+              <div style="background:#F9B004;color:#fff;text-align:center;padding:6px 16px;border-radius:20px;font-size:12px;font-weight:700;display:inline-block;">78 000 sum</div>
+            </div>
+          </div>
+          <!-- Card 3 - horizontal -->
+          <div style="background:#fff;border-radius:16px;border:1px solid #e5e7eb;padding:12px;display:flex;gap:12px;align-items:center;">
+            <div style="width:80px;height:80px;background:linear-gradient(135deg,#ef444422,#f8717122);border-radius:12px;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:32px;">🍕</div>
+            <div style="flex:1;min-width:0;">
+              <div style="font-size:14px;font-weight:600;margin-bottom:2px;">Qo'ziqorinli</div>
+              <div style="font-size:11px;color:#6b7280;margin-bottom:6px;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;">Maxsus pomidor sousi, Mozzarella pishloqi...</div>
+              <div style="background:#F9B004;color:#fff;text-align:center;padding:6px 16px;border-radius:20px;font-size:12px;font-weight:700;display:inline-block;">65 000 sum</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="card-body">
+      <h3>B: Horizontal List (compact)</h3>
+      <p>Small image left, name + short description + price right. One column list. Shows more info per card but fewer cards visible at once.</p>
+    </div>
+  </div>
+</div>

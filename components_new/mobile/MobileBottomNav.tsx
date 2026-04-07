@@ -5,13 +5,13 @@ import {
   HomeIcon as HomeOutline,
   ClipboardListIcon as OrdersOutline,
   ShoppingCartIcon as CartOutline,
-  CogIcon as SettingsOutline,
+  UserIcon as ProfileOutline,
 } from '@heroicons/react/outline'
 import {
   HomeIcon as HomeSolid,
   ClipboardListIcon as OrdersSolid,
   ShoppingCartIcon as CartSolid,
-  CogIcon as SettingsSolid,
+  UserIcon as ProfileSolid,
 } from '@heroicons/react/solid'
 import { useUI } from '@components/ui/context'
 import useCart from '@framework/cart/use-cart'
@@ -36,7 +36,7 @@ const MobileBottomNav: FC = () => {
     home: { ru: 'Главная', uz: 'Bosh sahifa', en: 'Home' },
     orders: { ru: 'Заказы', uz: 'Buyurtmalar', en: 'Orders' },
     cart: { ru: 'Корзина', uz: 'Savat', en: 'Cart' },
-    profile: { ru: 'Настройки', uz: 'Sozlamalar', en: 'Settings' },
+    profile: { ru: 'Профиль', uz: 'Profil', en: 'Profile' },
   }
 
   const { data: cartData } = useCart()
@@ -76,8 +76,8 @@ const MobileBottomNav: FC = () => {
         key: 'profile',
         label: tabLabels.profile[locale] || 'Profile',
         href: `/${citySlug}/profile`,
-        iconOutline: SettingsOutline,
-        iconSolid: SettingsSolid,
+        iconOutline: ProfileOutline,
+        iconSolid: ProfileSolid,
         requiresAuth: true,
       },
     ],

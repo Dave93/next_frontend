@@ -63,9 +63,9 @@ const MobileHeader: FC = () => {
   }
 
   return (
-    <header className="sticky top-0 z-30 bg-white" id="mobile-header">
+    <header className="sticky top-0 z-30 bg-white">
       {/* Row 1: Logo + City */}
-      <div className="flex items-center justify-between px-4 py-2">
+      <div className="flex items-center justify-between px-4 py-2.5">
         <Link href={`/${citySlug}`} prefetch={false} legacyBehavior>
           <a className="flex">
             <Image
@@ -125,8 +125,8 @@ const MobileHeader: FC = () => {
         </div>
       </div>
       {/* Row 2: Delivery / Pickup toggle - only on main page */}
-      {pathname === '/[city]' && <div className="flex gap-2 px-4 pb-2">
-      <button
+      {pathname === '/[city]' && <div className="flex gap-2 px-4 pb-2.5">
+        <button
           className={`flex-1 flex items-center rounded-2xl p-3 transition-colors ${
             isDelivery
               ? 'border border-yellow-200 bg-yellow-50'

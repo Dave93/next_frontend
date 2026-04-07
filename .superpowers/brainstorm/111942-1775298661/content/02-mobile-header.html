@@ -1,0 +1,393 @@
+<h2>Mobile Header Layout</h2>
+<p class="subtitle">
+  The header needs to show logo, city selector, and delivery type. How should it
+  be organized?
+</p>
+
+<div class="cards">
+  <div class="card" data-choice="a" onclick="toggleSelect(this)">
+    <div class="card-image">
+      <div
+        style="
+          background: #fff;
+          border-radius: 12px;
+          padding: 16px;
+          font-family: system-ui;
+          max-width: 375px;
+          margin: 0 auto;
+        "
+      >
+        <div
+          style="
+            background: #f9fafb;
+            border-radius: 20px;
+            overflow: hidden;
+            border: 2px solid #e5e7eb;
+          "
+        >
+          <!-- Header Row 1: Logo + City -->
+          <div
+            style="
+              background: #fff;
+              padding: 10px 16px;
+              display: flex;
+              align-items: center;
+              justify-content: space-between;
+            "
+          >
+            <div
+              style="
+                font-weight: 800;
+                color: #2f5e8e;
+                font-size: 18px;
+                letter-spacing: -0.5px;
+              "
+            >
+              CHOPAR
+            </div>
+            <div
+              style="
+                display: flex;
+                align-items: center;
+                gap: 4px;
+                background: #f3f4f6;
+                padding: 6px 12px;
+                border-radius: 20px;
+                font-size: 12px;
+                color: #374151;
+              "
+            >
+              <svg
+                width="12"
+                height="12"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="#F9B004"
+                stroke-width="2.5"
+              >
+                <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z" />
+                <circle cx="12" cy="10" r="3" />
+              </svg>
+              Tashkent
+              <svg
+                width="10"
+                height="10"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="#9ca3af"
+                stroke-width="3"
+              >
+                <path d="M6 9l6 6 6-6" />
+              </svg>
+            </div>
+          </div>
+          <!-- Header Row 2: Delivery/Pickup toggle -->
+          <div style="padding: 0 16px 10px; display: flex; gap: 8px">
+            <div
+              style="
+                flex: 1;
+                background: #f9b004;
+                color: #fff;
+                padding: 8px;
+                border-radius: 12px;
+                text-align: center;
+                font-size: 12px;
+                font-weight: 600;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                gap: 4px;
+              "
+            >
+              <svg
+                width="14"
+                height="14"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="#fff"
+                stroke-width="2"
+              >
+                <circle cx="12" cy="12" r="10" />
+                <path d="M12 6v6l4 2" />
+              </svg>
+              Delivery
+            </div>
+            <div
+              style="
+                flex: 1;
+                background: #f3f4f6;
+                color: #6b7280;
+                padding: 8px;
+                border-radius: 12px;
+                text-align: center;
+                font-size: 12px;
+                font-weight: 500;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                gap: 4px;
+              "
+            >
+              <svg
+                width="14"
+                height="14"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="#6b7280"
+                stroke-width="2"
+              >
+                <path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z" />
+              </svg>
+              Pickup
+            </div>
+          </div>
+          <!-- Divider -->
+          <div style="border-top: 1px solid #f3f4f6"></div>
+          <!-- Content preview -->
+          <div style="padding: 12px 16px; background: #f9fafb; height: 80px">
+            <div style="font-size: 11px; color: #9ca3af">Content below...</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="card-body">
+      <h3>A: Two-Row Header (like Expo app)</h3>
+      <p>
+        Row 1: Logo + City selector. Row 2: Delivery/Pickup toggle. Sticky on
+        scroll. Matches native app layout closely.
+      </p>
+    </div>
+  </div>
+
+  <div class="card" data-choice="b" onclick="toggleSelect(this)">
+    <div class="card-image">
+      <div
+        style="
+          background: #fff;
+          border-radius: 12px;
+          padding: 16px;
+          font-family: system-ui;
+          max-width: 375px;
+          margin: 0 auto;
+        "
+      >
+        <div
+          style="
+            background: #f9fafb;
+            border-radius: 20px;
+            overflow: hidden;
+            border: 2px solid #e5e7eb;
+          "
+        >
+          <!-- Compact Header: Logo + City + Toggle all in one -->
+          <div style="background: #fff; padding: 10px 16px">
+            <div
+              style="
+                display: flex;
+                align-items: center;
+                justify-content: space-between;
+                margin-bottom: 8px;
+              "
+            >
+              <div
+                style="
+                  font-weight: 800;
+                  color: #2f5e8e;
+                  font-size: 18px;
+                  letter-spacing: -0.5px;
+                "
+              >
+                CHOPAR
+              </div>
+              <div
+                style="
+                  display: flex;
+                  align-items: center;
+                  gap: 4px;
+                  font-size: 12px;
+                  color: #374151;
+                "
+              >
+                <svg
+                  width="12"
+                  height="12"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="#F9B004"
+                  stroke-width="2.5"
+                >
+                  <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z" />
+                  <circle cx="12" cy="10" r="3" />
+                </svg>
+                Tashkent
+                <svg
+                  width="10"
+                  height="10"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="#9ca3af"
+                  stroke-width="3"
+                >
+                  <path d="M6 9l6 6 6-6" />
+                </svg>
+              </div>
+            </div>
+            <!-- Compact toggle: pill-style segmented control -->
+            <div
+              style="
+                background: #f3f4f6;
+                border-radius: 10px;
+                padding: 3px;
+                display: flex;
+              "
+            >
+              <div
+                style="
+                  flex: 1;
+                  background: #f9b004;
+                  color: #fff;
+                  padding: 6px;
+                  border-radius: 8px;
+                  text-align: center;
+                  font-size: 11px;
+                  font-weight: 600;
+                "
+              >
+                Delivery
+              </div>
+              <div
+                style="
+                  flex: 1;
+                  color: #6b7280;
+                  padding: 6px;
+                  border-radius: 8px;
+                  text-align: center;
+                  font-size: 11px;
+                  font-weight: 500;
+                "
+              >
+                Pickup
+              </div>
+            </div>
+          </div>
+          <!-- Divider -->
+          <div style="border-top: 1px solid #f3f4f6"></div>
+          <!-- Content preview -->
+          <div style="padding: 12px 16px; background: #f9fafb; height: 80px">
+            <div style="font-size: 11px; color: #9ca3af">Content below...</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="card-body">
+      <h3>B: Compact Header (segmented control)</h3>
+      <p>
+        All in one block. Delivery/Pickup is a pill-style segmented control.
+        Takes less vertical space. More "web native" feel.
+      </p>
+    </div>
+  </div>
+
+  <div class="card" data-choice="c" onclick="toggleSelect(this)">
+    <div class="card-image">
+      <div
+        style="
+          background: #fff;
+          border-radius: 12px;
+          padding: 16px;
+          font-family: system-ui;
+          max-width: 375px;
+          margin: 0 auto;
+        "
+      >
+        <div
+          style="
+            background: #f9fafb;
+            border-radius: 20px;
+            overflow: hidden;
+            border: 2px solid #e5e7eb;
+          "
+        >
+          <!-- Minimal Header: Just logo -->
+          <div
+            style="
+              background: #fff;
+              padding: 10px 16px;
+              display: flex;
+              align-items: center;
+              justify-content: center;
+            "
+          >
+            <div
+              style="
+                font-weight: 800;
+                color: #2f5e8e;
+                font-size: 18px;
+                letter-spacing: -0.5px;
+              "
+            >
+              CHOPAR
+            </div>
+          </div>
+          <!-- Address bar below -->
+          <div style="background: #fff; padding: 0 16px 10px">
+            <div
+              style="
+                background: #f3f4f6;
+                border-radius: 12px;
+                padding: 10px 14px;
+                display: flex;
+                align-items: center;
+                gap: 8px;
+              "
+            >
+              <svg
+                width="16"
+                height="16"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="#F9B004"
+                stroke-width="2"
+              >
+                <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z" />
+                <circle cx="12" cy="10" r="3" />
+              </svg>
+              <div style="flex: 1">
+                <div style="font-size: 11px; font-weight: 600; color: #374151">
+                  Delivery to: Tashkent
+                </div>
+                <div style="font-size: 10px; color: #9ca3af">
+                  Tap to change address
+                </div>
+              </div>
+              <svg
+                width="14"
+                height="14"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="#9ca3af"
+                stroke-width="2"
+              >
+                <path d="M9 18l6-6-6-6" />
+              </svg>
+            </div>
+          </div>
+          <!-- Divider -->
+          <div style="border-top: 1px solid #f3f4f6"></div>
+          <!-- Content preview -->
+          <div style="padding: 12px 16px; background: #f9fafb; height: 80px">
+            <div style="font-size: 11px; color: #9ca3af">Content below...</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="card-body">
+      <h3>C: Minimal Header + Address Bar</h3>
+      <p>
+        Logo centered. Below it, a tappable address/delivery bar (like Yandex
+        Eda / Glovo). Delivery/Pickup choice lives inside the address sheet.
+        Most compact.
+      </p>
+    </div>
+  </div>
+</div>

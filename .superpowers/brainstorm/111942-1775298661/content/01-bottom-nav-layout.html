@@ -1,0 +1,632 @@
+<h2>Mobile Navigation: Bottom Tab Bar</h2>
+<p class="subtitle">
+  How should the bottom navigation look and behave? Based on your Expo app's
+  CustomTabBar.
+</p>
+
+<div class="cards">
+  <div class="card" data-choice="a" onclick="toggleSelect(this)">
+    <div class="card-image">
+      <div
+        style="
+          background: #fff;
+          border-radius: 12px;
+          padding: 16px;
+          font-family: system-ui;
+          max-width: 375px;
+          margin: 0 auto;
+        "
+      >
+        <!-- Phone frame -->
+        <div
+          style="
+            background: #f9fafb;
+            border-radius: 24px;
+            overflow: hidden;
+            border: 2px solid #e5e7eb;
+            position: relative;
+            height: 420px;
+          "
+        >
+          <!-- Status bar -->
+          <div
+            style="
+              background: #fff;
+              padding: 6px 16px;
+              font-size: 11px;
+              display: flex;
+              justify-content: space-between;
+              color: #000;
+            "
+          >
+            <span>9:41</span>
+            <span>100%</span>
+          </div>
+          <!-- Header -->
+          <div
+            style="
+              background: #fff;
+              padding: 10px 16px;
+              display: flex;
+              align-items: center;
+              justify-content: space-between;
+              border-bottom: 1px solid #f3f4f6;
+            "
+          >
+            <div
+              style="
+                width: 24px;
+                height: 24px;
+                background: #e5e7eb;
+                border-radius: 4px;
+              "
+            ></div>
+            <div style="font-weight: 700; color: #2f5e8e; font-size: 16px">
+              CHOPAR
+            </div>
+            <div
+              style="
+                width: 24px;
+                height: 24px;
+                background: #e5e7eb;
+                border-radius: 4px;
+              "
+            ></div>
+          </div>
+          <!-- Content placeholder -->
+          <div style="padding: 12px; height: 260px; overflow: hidden">
+            <div
+              style="
+                background: #e5e7eb;
+                height: 80px;
+                border-radius: 12px;
+                margin-bottom: 8px;
+              "
+            ></div>
+            <div style="display: flex; gap: 6px; margin-bottom: 8px">
+              <div
+                style="
+                  background: #f9b004;
+                  color: #fff;
+                  padding: 6px 14px;
+                  border-radius: 20px;
+                  font-size: 12px;
+                "
+              >
+                Pizza
+              </div>
+              <div
+                style="
+                  background: #f3f4f6;
+                  padding: 6px 14px;
+                  border-radius: 20px;
+                  font-size: 12px;
+                  color: #666;
+                "
+              >
+                Drinks
+              </div>
+              <div
+                style="
+                  background: #f3f4f6;
+                  padding: 6px 14px;
+                  border-radius: 20px;
+                  font-size: 12px;
+                  color: #666;
+                "
+              >
+                Snacks
+              </div>
+            </div>
+            <div
+              style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px"
+            >
+              <div
+                style="
+                  background: #f9fafb;
+                  border-radius: 12px;
+                  padding: 8px;
+                  border: 1px solid #f3f4f6;
+                "
+              >
+                <div
+                  style="
+                    background: #e5e7eb;
+                    height: 60px;
+                    border-radius: 8px;
+                    margin-bottom: 4px;
+                  "
+                ></div>
+                <div style="font-size: 11px; font-weight: 600">Pepperoni</div>
+                <div style="font-size: 11px; color: #f9b004; font-weight: 700">
+                  45 000 sum
+                </div>
+              </div>
+              <div
+                style="
+                  background: #f9fafb;
+                  border-radius: 12px;
+                  padding: 8px;
+                  border: 1px solid #f3f4f6;
+                "
+              >
+                <div
+                  style="
+                    background: #e5e7eb;
+                    height: 60px;
+                    border-radius: 8px;
+                    margin-bottom: 4px;
+                  "
+                ></div>
+                <div style="font-size: 11px; font-weight: 600">Margarita</div>
+                <div style="font-size: 11px; color: #f9b004; font-weight: 700">
+                  39 000 sum
+                </div>
+              </div>
+            </div>
+          </div>
+          <!-- Bottom Tab Bar - FLOATING PILL -->
+          <div
+            style="
+              position: absolute;
+              bottom: 8px;
+              left: 8px;
+              right: 8px;
+              background: rgba(255, 255, 255, 0.92);
+              backdrop-filter: blur(20px);
+              border-radius: 24px;
+              padding: 8px 4px;
+              display: flex;
+              justify-content: space-around;
+              box-shadow: 0 4px 24px rgba(0, 0, 0, 0.08);
+              border: 1px solid rgba(0, 0, 0, 0.05);
+            "
+          >
+            <div
+              style="
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                padding: 6px 14px;
+                background: rgba(249, 176, 4, 0.12);
+                border-radius: 16px;
+              "
+            >
+              <svg
+                width="20"
+                height="20"
+                viewBox="0 0 24 24"
+                fill="#F9B004"
+                stroke="#F9B004"
+                stroke-width="2"
+              >
+                <path
+                  d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"
+                />
+              </svg>
+              <span
+                style="
+                  font-size: 9px;
+                  color: #f9b004;
+                  font-weight: 600;
+                  margin-top: 2px;
+                "
+                >Home</span
+              >
+            </div>
+            <div
+              style="
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                padding: 6px 14px;
+              "
+            >
+              <svg
+                width="20"
+                height="20"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="rgba(0,0,0,0.4)"
+                stroke-width="2"
+              >
+                <path
+                  d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"
+                />
+              </svg>
+              <span
+                style="
+                  font-size: 9px;
+                  color: rgba(0, 0, 0, 0.4);
+                  margin-top: 2px;
+                "
+                >Orders</span
+              >
+            </div>
+            <div
+              style="
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                padding: 6px 14px;
+                position: relative;
+              "
+            >
+              <svg
+                width="20"
+                height="20"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="rgba(0,0,0,0.4)"
+                stroke-width="2"
+              >
+                <circle cx="9" cy="21" r="1" />
+                <circle cx="20" cy="21" r="1" />
+                <path
+                  d="M1 1h4l2.68 13.39a2 2 0 002 1.61h9.72a2 2 0 002-1.61L23 6H6"
+                />
+              </svg>
+              <div
+                style="
+                  position: absolute;
+                  top: 0;
+                  right: 6px;
+                  background: #ef4444;
+                  color: #fff;
+                  font-size: 8px;
+                  width: 14px;
+                  height: 14px;
+                  border-radius: 7px;
+                  display: flex;
+                  align-items: center;
+                  justify-content: center;
+                  font-weight: 700;
+                "
+              >
+                3
+              </div>
+              <span
+                style="
+                  font-size: 9px;
+                  color: rgba(0, 0, 0, 0.4);
+                  margin-top: 2px;
+                "
+                >Cart</span
+              >
+            </div>
+            <div
+              style="
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                padding: 6px 14px;
+              "
+            >
+              <svg
+                width="20"
+                height="20"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="rgba(0,0,0,0.4)"
+                stroke-width="2"
+              >
+                <path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2" />
+                <circle cx="12" cy="7" r="4" />
+              </svg>
+              <span
+                style="
+                  font-size: 9px;
+                  color: rgba(0, 0, 0, 0.4);
+                  margin-top: 2px;
+                "
+                >Profile</span
+              >
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="card-body">
+      <h3>A: Floating Pill (as in Expo app)</h3>
+      <p>
+        Glassmorphism effect, rounded corners, floating above content with
+        shadow. Matches the native app experience exactly.
+      </p>
+    </div>
+  </div>
+
+  <div class="card" data-choice="b" onclick="toggleSelect(this)">
+    <div class="card-image">
+      <div
+        style="
+          background: #fff;
+          border-radius: 12px;
+          padding: 16px;
+          font-family: system-ui;
+          max-width: 375px;
+          margin: 0 auto;
+        "
+      >
+        <!-- Phone frame -->
+        <div
+          style="
+            background: #f9fafb;
+            border-radius: 24px;
+            overflow: hidden;
+            border: 2px solid #e5e7eb;
+            position: relative;
+            height: 420px;
+          "
+        >
+          <!-- Status bar -->
+          <div
+            style="
+              background: #fff;
+              padding: 6px 16px;
+              font-size: 11px;
+              display: flex;
+              justify-content: space-between;
+              color: #000;
+            "
+          >
+            <span>9:41</span>
+            <span>100%</span>
+          </div>
+          <!-- Header -->
+          <div
+            style="
+              background: #fff;
+              padding: 10px 16px;
+              display: flex;
+              align-items: center;
+              justify-content: space-between;
+              border-bottom: 1px solid #f3f4f6;
+            "
+          >
+            <div
+              style="
+                width: 24px;
+                height: 24px;
+                background: #e5e7eb;
+                border-radius: 4px;
+              "
+            ></div>
+            <div style="font-weight: 700; color: #2f5e8e; font-size: 16px">
+              CHOPAR
+            </div>
+            <div
+              style="
+                width: 24px;
+                height: 24px;
+                background: #e5e7eb;
+                border-radius: 4px;
+              "
+            ></div>
+          </div>
+          <!-- Content placeholder -->
+          <div style="padding: 12px; height: 280px; overflow: hidden">
+            <div
+              style="
+                background: #e5e7eb;
+                height: 80px;
+                border-radius: 12px;
+                margin-bottom: 8px;
+              "
+            ></div>
+            <div style="display: flex; gap: 6px; margin-bottom: 8px">
+              <div
+                style="
+                  background: #f9b004;
+                  color: #fff;
+                  padding: 6px 14px;
+                  border-radius: 20px;
+                  font-size: 12px;
+                "
+              >
+                Pizza
+              </div>
+              <div
+                style="
+                  background: #f3f4f6;
+                  padding: 6px 14px;
+                  border-radius: 20px;
+                  font-size: 12px;
+                  color: #666;
+                "
+              >
+                Drinks
+              </div>
+              <div
+                style="
+                  background: #f3f4f6;
+                  padding: 6px 14px;
+                  border-radius: 20px;
+                  font-size: 12px;
+                  color: #666;
+                "
+              >
+                Snacks
+              </div>
+            </div>
+            <div
+              style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px"
+            >
+              <div
+                style="
+                  background: #f9fafb;
+                  border-radius: 12px;
+                  padding: 8px;
+                  border: 1px solid #f3f4f6;
+                "
+              >
+                <div
+                  style="
+                    background: #e5e7eb;
+                    height: 60px;
+                    border-radius: 8px;
+                    margin-bottom: 4px;
+                  "
+                ></div>
+                <div style="font-size: 11px; font-weight: 600">Pepperoni</div>
+                <div style="font-size: 11px; color: #f9b004; font-weight: 700">
+                  45 000 sum
+                </div>
+              </div>
+              <div
+                style="
+                  background: #f9fafb;
+                  border-radius: 12px;
+                  padding: 8px;
+                  border: 1px solid #f3f4f6;
+                "
+              >
+                <div
+                  style="
+                    background: #e5e7eb;
+                    height: 60px;
+                    border-radius: 8px;
+                    margin-bottom: 4px;
+                  "
+                ></div>
+                <div style="font-size: 11px; font-weight: 600">Margarita</div>
+                <div style="font-size: 11px; color: #f9b004; font-weight: 700">
+                  39 000 sum
+                </div>
+              </div>
+            </div>
+          </div>
+          <!-- Bottom Tab Bar - DOCKED -->
+          <div
+            style="
+              position: absolute;
+              bottom: 0;
+              left: 0;
+              right: 0;
+              background: #fff;
+              border-top: 1px solid #e5e7eb;
+              padding: 8px 4px 16px;
+              display: flex;
+              justify-content: space-around;
+            "
+          >
+            <div
+              style="display: flex; flex-direction: column; align-items: center"
+            >
+              <svg
+                width="22"
+                height="22"
+                viewBox="0 0 24 24"
+                fill="#F9B004"
+                stroke="#F9B004"
+                stroke-width="2"
+              >
+                <path
+                  d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"
+                />
+              </svg>
+              <span
+                style="
+                  font-size: 10px;
+                  color: #f9b004;
+                  font-weight: 600;
+                  margin-top: 2px;
+                "
+                >Home</span
+              >
+            </div>
+            <div
+              style="display: flex; flex-direction: column; align-items: center"
+            >
+              <svg
+                width="22"
+                height="22"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="#9ca3af"
+                stroke-width="2"
+              >
+                <path
+                  d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"
+                />
+              </svg>
+              <span style="font-size: 10px; color: #9ca3af; margin-top: 2px"
+                >Orders</span
+              >
+            </div>
+            <div
+              style="
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                position: relative;
+              "
+            >
+              <svg
+                width="22"
+                height="22"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="#9ca3af"
+                stroke-width="2"
+              >
+                <circle cx="9" cy="21" r="1" />
+                <circle cx="20" cy="21" r="1" />
+                <path
+                  d="M1 1h4l2.68 13.39a2 2 0 002 1.61h9.72a2 2 0 002-1.61L23 6H6"
+                />
+              </svg>
+              <div
+                style="
+                  position: absolute;
+                  top: -2px;
+                  right: -4px;
+                  background: #ef4444;
+                  color: #fff;
+                  font-size: 9px;
+                  width: 16px;
+                  height: 16px;
+                  border-radius: 8px;
+                  display: flex;
+                  align-items: center;
+                  justify-content: center;
+                  font-weight: 700;
+                  border: 2px solid #fff;
+                "
+              >
+                3
+              </div>
+              <span style="font-size: 10px; color: #9ca3af; margin-top: 2px"
+                >Cart</span
+              >
+            </div>
+            <div
+              style="display: flex; flex-direction: column; align-items: center"
+            >
+              <svg
+                width="22"
+                height="22"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="#9ca3af"
+                stroke-width="2"
+              >
+                <path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2" />
+                <circle cx="12" cy="7" r="4" />
+              </svg>
+              <span style="font-size: 10px; color: #9ca3af; margin-top: 2px"
+                >Profile</span
+              >
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="card-body">
+      <h3>B: Docked Bar (classic)</h3>
+      <p>
+        Fixed to bottom edge, solid background with top border. Simpler, more
+        standard web pattern. Easier CSS, better browser compatibility.
+      </p>
+    </div>
+  </div>
+</div>
