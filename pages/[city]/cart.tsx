@@ -558,32 +558,32 @@ export default function Cart() {
           </button>
         </div>
       )}
-      {/* Mobile: checkout + cart combined */}
+      {/* Mobile: cart + checkout combined */}
       {!isEmpty && (
-        <div className="md:hidden bg-white pb-28">
-          <MobileOrderWithNoSSR channelName={channelName} />
-          {/* Header */}
-          <div className="flex justify-between items-center px-4 py-3">
-            <div className="text-lg font-bold">
-              {tr('basket')}{' '}
-              <span className="text-yellow">
-                ({data?.lineItems
-                  .map((item: any) => item.quantity)
-                  .reduce((a: number, b: number) => a + b, 0)})
-              </span>
+        <div className="md:hidden bg-gray-50 pb-28">
+          {/* Cart items section */}
+          <div className="bg-white mx-3 mt-3 rounded-2xl overflow-hidden shadow-sm">
+            {/* Cart header */}
+            <div className="flex justify-between items-center px-4 py-3 border-b border-gray-100">
+              <div className="text-base font-bold">
+                {tr('basket')}{' '}
+                <span style={{ color: '#F9B004' }}>
+                  ({data?.lineItems
+                    .map((item: any) => item.quantity)
+                    .reduce((a: number, b: number) => a + b, 0)})
+                </span>
+              </div>
+              <button
+                className="text-gray-400 text-xs flex items-center gap-1"
+                onClick={clearBasket}
+              >
+                {tr('clear_all')} <TrashIcon className="w-4 h-4" />
+              </button>
             </div>
-            <button
-              className="text-gray-400 text-xs flex items-center gap-1"
-              onClick={clearBasket}
-            >
-              {tr('clear_all')} <TrashIcon className="w-4 h-4" />
-            </button>
-          </div>
-          {/* Items */}
-          <div className="space-y-0">
+            {/* Items */}
             {data?.lineItems
               .map((lineItem: any) => (
-                <div key={lineItem.id} className="flex gap-3 px-4 py-3 border-b border-gray-100">
+                <div key={lineItem.id} className="flex gap-3 px-4 py-3 border-b border-gray-50">
                   <img
                     src={
                       lineItem?.variant?.product?.assets?.length
@@ -593,7 +593,7 @@ export default function Cart() {
                     className="w-16 h-16 object-contain rounded-xl flex-shrink-0"
                   />
                   <div className="flex-1 min-w-0">
-                    <div className="text-sm font-semibold uppercase leading-tight">
+                    <div className="text-sm font-semibold leading-tight">
                       {lineItem.child && lineItem.child.length == 1
                         ? `${lineItem?.variant?.product?.attribute_data?.name[channelName][locale || 'ru']} + ${lineItem?.child
                             .filter((v: any) => lineItem?.variant?.product?.box_id != v?.variant?.product?.id)
@@ -602,9 +602,9 @@ export default function Cart() {
                         : lineItem?.variant?.product?.attribute_data?.name[channelName][locale || 'ru']}
                     </div>
                     {lineItem.modifiers?.filter((mod: any) => mod.price > 0).length > 0 && (
-                      <div className="flex flex-wrap gap-1 mt-1">
+                      <div className="flex flex-wrap gap-1 mt-0.5">
                         {lineItem.modifiers.filter((mod: any) => mod.price > 0).map((mod: any) => (
-                          <span key={mod.id} className="text-[10px] text-gray-500">
+                          <span key={mod.id} className="text-[10px] text-gray-400">
                             + {locale == 'uz' ? mod.name_uz : locale == 'en' ? mod.name_en : mod.name}
                           </span>
                         ))}
@@ -627,7 +627,7 @@ export default function Cart() {
                               className="w-8 h-8 flex items-center justify-center"
                               onClick={() => decreaseQuantity(lineItem)}
                             >
-                              <MinusIcon className="w-4 h-4 text-gray-600" />
+                              <MinusIcon className="w-4 h-4 text-gray-500" />
                             </button>
                             <span className="text-sm font-bold min-w-[20px] text-center">
                               {lineItem.quantity}
@@ -636,7 +636,7 @@ export default function Cart() {
                               className="w-8 h-8 flex items-center justify-center"
                               onClick={() => increaseQuantity(lineItem.id)}
                             >
-                              <PlusIcon className="w-4 h-4 text-gray-600" />
+                              <PlusIcon className="w-4 h-4 text-gray-500" />
                             </button>
                           </div>
                         )}
@@ -652,25 +652,27 @@ export default function Cart() {
               ))
               .reverse()}
           </div>
+
           {/* Recommendations */}
           {biRecommendations.relatedItems.length > 0 && (
-            <div className="mt-6 px-4">
+            <div className="mt-4 px-4">
               <div className="text-base font-bold mb-3">
                 {tr('related_to_your_products')}
               </div>
               <div className="flex gap-3 overflow-x-auto pb-3 -mx-4 px-4 scrollbar-hide">
                 {biRecommendations.relatedItems.map((item: any) => (
-                  <div key={item.id} className="flex-shrink-0 w-28 bg-white rounded-2xl p-2 border border-gray-100">
+                  <div key={item.id} className="flex-shrink-0 w-28 bg-white rounded-2xl p-2 shadow-sm">
                     <img
                       src={item.image || '/no_photo.svg'}
                       className="w-full h-16 object-contain mb-1"
                       alt={item?.attribute_data?.name[channelName][locale || 'ru']}
                     />
-                    <div className="text-[10px] font-semibold text-center leading-tight h-6 overflow-hidden uppercase">
+                    <div className="text-[10px] font-semibold text-center leading-tight h-6 overflow-hidden">
                       {item?.attribute_data?.name[channelName][locale || 'ru']}
                     </div>
                     <button
-                      className="w-full mt-1 bg-yellow text-white text-[10px] font-bold py-1.5 rounded-full flex items-center justify-center"
+                      className="w-full mt-1 text-white text-[10px] font-bold py-1.5 rounded-full flex items-center justify-center"
+                      style={{ backgroundColor: '#F9B004' }}
                       onClick={() => addToBasket(item.id)}
                       disabled={addingItemId === item.id}
                     >
@@ -703,17 +705,18 @@ export default function Cart() {
               </div>
               <div className="flex gap-3 overflow-x-auto pb-3 -mx-4 px-4 scrollbar-hide">
                 {biRecommendations.topItems.map((item: any) => (
-                  <div key={item.id} className="flex-shrink-0 w-28 bg-white rounded-2xl p-2 border border-gray-100">
+                  <div key={item.id} className="flex-shrink-0 w-28 bg-white rounded-2xl p-2 shadow-sm">
                     <img
                       src={item.image || '/no_photo.svg'}
                       className="w-full h-16 object-contain mb-1"
                       alt={item?.attribute_data?.name[channelName][locale || 'ru']}
                     />
-                    <div className="text-[10px] font-semibold text-center leading-tight h-6 overflow-hidden uppercase">
+                    <div className="text-[10px] font-semibold text-center leading-tight h-6 overflow-hidden">
                       {item?.attribute_data?.name[channelName][locale || 'ru']}
                     </div>
                     <button
-                      className="w-full mt-1 bg-yellow text-white text-[10px] font-bold py-1.5 rounded-full flex items-center justify-center"
+                      className="w-full mt-1 text-white text-[10px] font-bold py-1.5 rounded-full flex items-center justify-center"
+                      style={{ backgroundColor: '#F9B004' }}
                       onClick={() => addToBasket(item.id)}
                       disabled={addingItemId === item.id}
                     >
@@ -737,7 +740,11 @@ export default function Cart() {
               </div>
             </div>
           )}
-          {/* Privacy notice at bottom */}
+
+          {/* Checkout section */}
+          <MobileOrderWithNoSSR channelName={channelName} />
+
+          {/* Privacy notice */}
           <div className="px-4 py-3 text-[11px] text-gray-400">
             {tr('processing_of_your_personal_data')}{' '}
             <a href="/privacy" className="text-yellow" target="_blank">

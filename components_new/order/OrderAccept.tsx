@@ -116,15 +116,43 @@ const OrderAccept: FC<OrderDetailProps> = ({ order, orderStatuses }) => {
 
   return (
     <div>
-      <div className="md:p-10 p-5 rounded-2xl text-xl mt-5 bg-white">
-        <div className=" flex justify-between items-center">
+      {/* Order header */}
+      <div className="md:p-10 p-4 rounded-2xl md:text-xl md:mt-5 bg-white">
+        {/* Mobile: compact layout */}
+        <div className="md:hidden">
+          <div className="flex items-center justify-between mb-3">
+            <div>
+              <div className="text-xs text-gray-500">
+                {tr('order_is_accepted')}
+              </div>
+              <div className="text-2xl font-bold">№ {order.id}</div>
+            </div>
+            {Object.keys(orderStatuses).map(
+              (status: any, key) =>
+                key == currentStatusIndex && (
+                  <div key={status}>
+                    <div className="bg-yellow rounded-full px-3 py-1 text-white text-xs font-medium">
+                      {tr(`order_status_${status}`)}
+                    </div>
+                  </div>
+                )
+            )}
+          </div>
+          <div className="text-sm text-gray-500">
+            {DateTime.fromISO(order?.created_at)
+              .setLocale(`${locale == 'uz' ? 'uz' : 'ru'}`)
+              .setZone('Asia/Tashkent')
+              .toLocaleString(DateTime.DATETIME_MED)}
+          </div>
+        </div>
+        {/* Desktop: original layout */}
+        <div className="hidden md:flex justify-between items-center">
           <div>
             <div className="text-base text-gray-500">
               {tr('order_is_accepted')}
             </div>
-            <div className="text-3xl  font-bold">№ {order.id}</div>
+            <div className="text-3xl font-bold">№ {order.id}</div>
           </div>
-
           <div className="text-center">
             <div className="text-base font-bold text-gray-500 mb-2">
               {tr('order_status')}
@@ -153,27 +181,22 @@ const OrderAccept: FC<OrderDetailProps> = ({ order, orderStatuses }) => {
           </div>
         </div>
         {canTrackOrder && (
-          <div className="mt-5 pt-5 border-t">
-            <div className="w-full md:w-auto">
-              <Link
-                prefetch={false}
-                href={`/${activeCity.slug}/track/${order.track_id}`}
-                legacyBehavior
-              >
-                <a className="w-full md:w-auto">
-                  <div className="text-sm rounded-lg py-2 px-7 text-white bg-yellow cursor-pointer w-full md:w-auto text-center">
-                    <TruckIcon className="inline-block w-5 h-5 mr-2" />
-                    {tr('tracking_page_title') || 'Отследить заказ'}
-                  </div>
-                </a>
-              </Link>
-            </div>
+          <div className="mt-4 pt-4 border-t">
+            <Link
+              prefetch={false}
+              href={`/${activeCity.slug}/track/${order.track_id}`}
+              className="block text-sm rounded-full py-3 px-7 text-white bg-yellow text-center font-semibold"
+            >
+              <TruckIcon className="inline-block w-5 h-5 mr-2" />
+              {tr('tracking_page_title') || 'Отследить заказ'}
+            </Link>
           </div>
         )}
       </div>
-      <div className="md:p-10 p-5 rounded-2xl text-xl mt-5 bg-white">
-        <div className="text-lg mb-7 font-bold">{tr('delivery_address')}</div>
-        <div>
+      {/* Address & delivery time */}
+      <div className="md:p-10 p-4 rounded-2xl md:text-xl mt-1 md:mt-5 bg-white">
+        <div className="text-base md:text-lg mb-3 md:mb-7 font-bold">{tr('delivery_address')}</div>
+        <div className="text-sm md:text-xl text-gray-700">
           {order?.billing_address}
           {order.house
             ? ', ' + tr('house').toLocaleLowerCase() + ': ' + order.house
@@ -192,18 +215,19 @@ const OrderAccept: FC<OrderDetailProps> = ({ order, orderStatuses }) => {
             : ''}
         </div>
         <div>
-          <div className="text-lg mb-7 font-bold mt-7">
+          <div className="text-base md:text-lg mb-3 md:mb-7 font-bold mt-4 md:mt-7">
             {tr('order_time_of_delivery')}
           </div>
-          <div>
+          <div className="text-sm md:text-xl text-gray-700">
             {order.delivery_schedule == 'now'
               ? tr('hurry_up')
               : order?.delivery_time}
           </div>
         </div>
       </div>
-      <div className="md:p-10 p-5 rounded-2xl text-xl mt-5 bg-white">
-        <div className="text-lg mb-10 font-bold">
+      {/* Order items */}
+      <div className="md:p-10 p-4 rounded-2xl md:text-xl mt-1 md:mt-5 bg-white">
+        <div className="text-base md:text-lg mb-4 md:mb-10 font-bold">
           {order?.basket?.lines.length} {tr('product')}{' '}
           {locale == 'ru' ? 'на' : ''}{' '}
           {currency(order?.order_total / 100, {
@@ -216,7 +240,7 @@ const OrderAccept: FC<OrderDetailProps> = ({ order, orderStatuses }) => {
         </div>
         {order?.basket?.lines.map((pizza: any) => (
           <div
-            className="flex items-center justify-between border-b mt-4 pb-4"
+            className="flex items-center justify-between border-b mt-3 md:mt-4 pb-3 md:pb-4"
             key={pizza.id}
           >
             <div className="flex items-center">
@@ -316,8 +340,8 @@ const OrderAccept: FC<OrderDetailProps> = ({ order, orderStatuses }) => {
                   />
                 </div>
               )}
-              <div className="ml-5">
-                <div className="text-xl font-bold">
+              <div className="ml-3 md:ml-5 flex-1 min-w-0">
+                <div className="text-sm md:text-xl font-bold">
                   {pizza.child && pizza.child.length > 1
                     ? `${
                         pizza?.variant?.product?.attribute_data?.name[
@@ -348,7 +372,7 @@ const OrderAccept: FC<OrderDetailProps> = ({ order, orderStatuses }) => {
                 </div>
               </div>
             </div>
-            <div>
+            <div className="text-sm md:text-xl whitespace-nowrap ml-2 flex-shrink-0">
               {pizza.child && pizza.child.length
                 ? (pizza.total > 0 ? pizza.quantity + ' X ' : '') +
                   currency(
@@ -378,7 +402,8 @@ const OrderAccept: FC<OrderDetailProps> = ({ order, orderStatuses }) => {
           </div>
         ))}
       </div>
-      <div className="md:p-10 p-5 rounded-2xl text-xl mt-5 bg-white mb-5">
+      {/* Reviews & actions */}
+      <div className="md:p-10 p-4 rounded-2xl md:text-xl mt-1 md:mt-5 bg-white mb-5 pb-20 md:pb-5">
         {reviewsData && reviewsData.length > 0 && (
           <div className="mt-2 mb-4">
             <div className="text-lg mb-4 font-bold">{tr('your_reviews')}</div>
@@ -401,19 +426,17 @@ const OrderAccept: FC<OrderDetailProps> = ({ order, orderStatuses }) => {
           </div>
         )}
         <form onSubmit={handleSubmit(onSubmit)}>
-          <div className="text-lg mb-7 font-bold">
+          <div className="text-base md:text-lg mb-4 md:mb-7 font-bold">
             {tr('waiting_your_feedback')}
           </div>
-          <div className="flex mt-3 md:w-96 h-28">
-            <div className="w-full">
-              <textarea
-                {...register('review')}
-                className="md:w-96 w-full h-28 bg-gray-100 rounded-2xl p-3 outline-none focus:outline-none resize-none text-xs"
-                placeholder={tr('order_review_placeholder')}
-              ></textarea>
-            </div>
+          <div className="mt-3">
+            <textarea
+              {...register('review')}
+              className="md:w-96 w-full h-24 md:h-28 bg-gray-100 rounded-2xl p-3 outline-none focus:outline-none resize-none text-sm"
+              placeholder={tr('order_review_placeholder')}
+            ></textarea>
           </div>
-          <button className="bg-yellow rounded-full flex items-center md:w-40 w-full justify-evenly py-2 mt-10 text-white">
+          <button className="bg-yellow rounded-full flex items-center md:w-40 w-full justify-center py-3 mt-5 md:mt-10 text-white font-semibold text-sm md:text-xl">
             {isSubmitting ? (
               <svg
                 className="animate-spin h-5 mx-auto text-center text-white w-5"
@@ -440,17 +463,13 @@ const OrderAccept: FC<OrderDetailProps> = ({ order, orderStatuses }) => {
             )}
           </button>
         </form>
-        <div className="flex justify-end mt-8">
-          {/* <button className="text-xl text-gray-500 bg-gray-100 flex h-12 items-center  rounded-full w-80 justify-evenly">
-            <img src="/left.png" />
-            <div>{tr('cancel_the_order')}</div>
-          </button> */}
+        <div className="flex justify-end mt-5 md:mt-8">
           <button
-            className="text-xl text-white bg-yellow flex h-12 items-center justify-evenly rounded-full md:w-80 w-full"
+            className="text-sm md:text-xl text-white bg-yellow flex h-12 items-center justify-center gap-2 rounded-full md:w-80 w-full font-semibold"
             onClick={() => router.push(`/${activeCity.slug}`)}
           >
-            <div>{tr('to_main')}</div>
-            <img src="/right.png" />
+            <span>{tr('to_main')}</span>
+            <img src="/right.png" className="w-4 h-4 md:w-auto md:h-auto" />
           </button>
         </div>
       </div>

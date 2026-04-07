@@ -1456,13 +1456,18 @@ const Orders: FC<OrdersProps> = ({ channelName, isMobile = false }) => {
       </div>
       {/* Compact address bar (mobile only) */}
       {isMobile && locationData?.terminal_id && (
-        <div className="bg-white px-4 py-3 flex items-center gap-3 mb-1 order-address-bar">
-          <LocationMarkerIcon className="w-5 h-5 flex-shrink-0" style={{ color: '#F9B004' }} />
+        <div className="mx-3 mt-4 mb-2 rounded-2xl bg-yellow-50 border border-yellow-200 px-4 py-3 flex items-center gap-3 order-address-bar">
+          <div
+            className="w-10 h-10 rounded-full flex items-center justify-center flex-shrink-0"
+            style={{ backgroundColor: '#F9B004' }}
+          >
+            <LocationMarkerIcon className="w-5 h-5 text-white" />
+          </div>
           <div className="flex-1 min-w-0">
-            <div className="text-xs text-gray-400">
+            <div className="text-xs font-medium" style={{ color: '#F9B004' }}>
               {tabIndex === 'deliver' ? tr('delivery') : tr('pickup')}
             </div>
-            <div className="text-sm font-medium truncate">
+            <div className="text-sm font-semibold text-gray-900 truncate">
               {tabIndex === 'deliver'
                 ? locationData?.address || ''
                 : (locationData?.terminalData as any)?.[

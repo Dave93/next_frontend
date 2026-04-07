@@ -776,6 +776,10 @@ const MobLocationTabs: FC = () => {
 
   const loadPolygonsToMap = (ymaps: any) => {
     setYmaps(ymaps)
+    // Remove zoom control for cleaner mobile look
+    try {
+      map.current.controls.remove('zoomControl')
+    } catch (e) {}
     map.current.controls.remove('geolocationControl')
     var geolocationControl = new ymaps.control.GeolocationControl({
       options: { noPlacemark: true },
@@ -1046,115 +1050,11 @@ const MobLocationTabs: FC = () => {
               </Menu>
             </div>
           </div>
-          <div>
-            {yandexGeoKey && (
-              <YMaps
-                // enterprise
-                query={{
-                  apikey: yandexGeoKey,
-                }}
-              >
-                <div className="relative">
-                  <Map
-                    state={mapState}
-                    onLoad={(ymaps: any) => loadPolygonsToMap(ymaps)}
-                    instanceRef={(ref) => (map.current = ref)}
-                    width="100%"
-                    height="270px"
-                    onClick={clickOnMap}
-                    modules={[
-                      'control.ZoomControl',
-                      'control.FullscreenControl',
-                      'control.GeolocationControl',
-                      'geoQuery',
-                    ]}
-                  >
-                    <span className="flex absolute h-3 w-3 left-1 top-1 z-10">
-                      <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-yellow opacity-75"></span>
-                      <span className="relative inline-flex rounded-full h-3 w-3 bg-yellow"></span>
-                    </span>
-                    {selectedCoordinates.map((item: any, index: number) => (
-                      <Placemark
-                        modules={['geoObject.addon.balloon']}
-                        defaultGeometry={[
-                          item?.coordinates?.lat,
-                          item?.coordinates?.long,
-                        ]}
-                        geomerty={[
-                          item?.coordinates?.lat,
-                          item?.coordinates?.long,
-                        ]}
-                        key={item.key}
-                        defaultOptions={{
-                          iconLayout: 'default#image',
-                          iconImageHref: '/map_placemark.png',
-                        }}
-                      />
-                    ))}
-                  </Map>
-                </div>
-              </YMaps>
-            )}
-          </div>
-          {addressList && addressList.length > 0 && (
-            <div className="mt-3">
-              <div className="font-bold text-[18px]">
-                {tr('profile_address')}
-              </div>
-              <div className="mt-2">
-                <div className="grid grid-cols-1 gap-1">
-                  <div
-                    className="w-max flex items-center cursor-pointer rounded-full bg-gray-100 px-4 py-2"
-                    onClick={() => addNewAddress()}
-                  >
-                    <PlusIcon className="h-5 text-gray-400 w-5  hover:text-yellow-light mr-2" />
-                    <div className=" ">{tr('add_new_address')}</div>
-                  </div>
-                  {addressList.map((item: Address) => (
-                    <div
-                      key={item.id}
-                      className={`px-4 py-1 rounded-full cursor-pointer relative pr-6 capitalize flex items-center ${
-                        addressId == item.id
-                          ? 'bg-primary text-white'
-                          : 'bg-gray-100'
-                      }`}
-                      onClick={() => selectAddressLocal(item)}
-                    >
-                      <div className="">
-                        <BookmarkIcon
-                          className={`h-5  w-5  hover:text-yellow-light mr-2 ${
-                            addressId == item.id
-                              ? ' text-white'
-                              : 'text-gray-400'
-                          }`}
-                        />
-                      </div>
-                      <div className="">
-                        <div>{item.label ? item.label : item.address}</div>
-                        <div
-                          className={`text-sm  ${
-                            addressId == item.id ? ' text-white' : ''
-                          }`}
-                        >
-                          {item.label && item.address}
-                        </div>
-                      </div>
-                      <button
-                        className="absolute focus:outline-none inset-y-0 outline-none right-2 text-gray-400"
-                        onClick={() => deleteAddress(item.id)}
-                      >
-                        <XIcon className="cursor-pointer h-5 text-gray-400 w-5" />
-                      </button>
-                    </div>
-                  ))}
-                </div>
-              </div>
-            </div>
-          )}
-          <div className="mt-3">
+          {/* Address search field - above map */}
+          <div className="mb-3">
             <form onSubmit={handleSubmit(onSubmit)}>
-              <div className="font-bold text-[18px]">{tr('address')}</div>
-              <div className="mt-3 space-y-6">
+              <div className="font-bold text-base">{tr('address')}</div>
+              <div className="mt-2 space-y-3">
                 <Downshift
                   onChange={(selection) => setSelectedAddress(selection)}
                   ref={downshiftControl}
@@ -1192,7 +1092,7 @@ const MobLocationTabs: FC = () => {
                             onChange: debouncedAddressInputChangeHandler,
                           })}
                           placeholder={tr('address')}
-                          className="bg-gray-100 focus:outline-none outline-none px-8 py-2 rounded-full w-full"
+                          className="bg-gray-100 focus:outline-none outline-none px-4 py-2.5 rounded-xl w-full text-sm"
                         />
                         {addresClear && (
                           <button
@@ -1241,22 +1141,128 @@ const MobLocationTabs: FC = () => {
                     </>
                   )}
                 </Downshift>
-                <div className="flex justify-between">
+                <div className="flex gap-3">
                   <input
                     type="text"
                     {...register('house')}
                     placeholder={tr('house')}
-                    className="bg-gray-100 px-8 py-2 rounded-full w-40 "
+                    className="bg-gray-100 px-4 py-2 rounded-xl w-full text-sm outline-none focus:outline-none"
                   />
                   <input
                     type="text"
                     {...register('flat')}
                     placeholder={tr('flat')}
-                    className="bg-gray-100 px-8 py-2 rounded-full w-40  outline-none focus:outline-none"
+                    className="bg-gray-100 px-4 py-2 rounded-xl w-full text-sm outline-none focus:outline-none"
                   />
                 </div>
               </div>
-              <div className="mt-5">
+            </form>
+          </div>
+
+          <div>
+            {yandexGeoKey && (
+              <YMaps
+                // enterprise
+                query={{
+                  apikey: yandexGeoKey,
+                }}
+              >
+                <div className="relative rounded-xl overflow-hidden">
+                  <Map
+                    state={mapState}
+                    onLoad={(ymaps: any) => loadPolygonsToMap(ymaps)}
+                    instanceRef={(ref) => (map.current = ref)}
+                    width="100%"
+                    height="180px"
+                    onClick={clickOnMap}
+                    options={{
+                      suppressMapOpenBlock: true,
+                    }}
+                    modules={[
+                      'control.ZoomControl',
+                      'control.FullscreenControl',
+                      'control.GeolocationControl',
+                      'geoQuery',
+                    ]}
+                  >
+                    {selectedCoordinates.map((item: any, index: number) => (
+                      <Placemark
+                        modules={['geoObject.addon.balloon']}
+                        defaultGeometry={[
+                          item?.coordinates?.lat,
+                          item?.coordinates?.long,
+                        ]}
+                        geomerty={[
+                          item?.coordinates?.lat,
+                          item?.coordinates?.long,
+                        ]}
+                        key={item.key}
+                        defaultOptions={{
+                          iconLayout: 'default#image',
+                          iconImageHref: '/map_placemark.png',
+                        }}
+                      />
+                    ))}
+                  </Map>
+                </div>
+              </YMaps>
+            )}
+          </div>
+          {addressList && addressList.length > 0 && (
+            <div className="mt-3">
+              <div className="font-bold text-base mb-2">
+                {tr('profile_address')}
+              </div>
+              <div className="space-y-1.5">
+                <button
+                  className="flex items-center gap-2 text-sm py-2 px-3 rounded-xl bg-gray-50 border border-dashed border-gray-300"
+                  onClick={() => addNewAddress()}
+                >
+                  <PlusIcon className="h-4 w-4 text-gray-400" />
+                  <span className="text-gray-600">{tr('add_new_address')}</span>
+                </button>
+                {addressList.map((item: Address) => (
+                  <div
+                    key={item.id}
+                    className={`flex items-center gap-2.5 px-3 py-2.5 rounded-xl cursor-pointer relative ${
+                      addressId == item.id
+                        ? 'bg-yellow-50 border border-yellow-200'
+                        : 'bg-gray-50'
+                    }`}
+                    onClick={() => selectAddressLocal(item)}
+                  >
+                    <BookmarkIcon
+                      className={`h-4 w-4 flex-shrink-0 ${
+                        addressId == item.id
+                          ? 'text-yellow-500'
+                          : 'text-gray-400'
+                      }`}
+                    />
+                    <div className="flex-1 min-w-0">
+                      <div className={`text-sm font-medium truncate ${
+                        addressId == item.id ? 'text-gray-900' : 'text-gray-700'
+                      }`}>
+                        {item.label ? item.label : item.address}
+                      </div>
+                      {item.label && item.address && (
+                        <div className="text-xs text-gray-400 truncate">
+                          {item.address}
+                        </div>
+                      )}
+                    </div>
+                    <button
+                      className="flex-shrink-0 p-1"
+                      onClick={(e) => { e.stopPropagation(); deleteAddress(item.id) }}
+                    >
+                      <XIcon className="h-4 w-4 text-gray-300" />
+                    </button>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
+          <div className="mt-3">
+              <div className="mt-3">
                 <Disclosure defaultOpen={true}>
                   {({ open }) => (
                     <>
@@ -1281,23 +1287,19 @@ const MobLocationTabs: FC = () => {
                         leaveTo="transform scale-95 opacity-0"
                       >
                         <DisclosurePanel>
-                          <div className="flex mt-3 justify-between">
-                            <div>
-                              <input
-                                type="text"
-                                {...register('entrance')}
-                                placeholder={tr('entrance')}
-                                className="bg-gray-100 px-8 py-2 rounded-full w-40  outline-none focus:outline-none"
-                              />
-                            </div>
-                            <div className="">
-                              <input
-                                type="text"
-                                {...register('door_code')}
-                                placeholder={tr('door_code')}
-                                className="bg-gray-100 px-8 py-2 rounded-full w-40 outline-none focus:outline-none"
-                              />
-                            </div>
+                          <div className="flex gap-3 mt-2">
+                            <input
+                              type="text"
+                              {...register('entrance')}
+                              placeholder={tr('entrance')}
+                              className="bg-gray-100 px-4 py-2 rounded-xl w-full text-sm outline-none focus:outline-none"
+                            />
+                            <input
+                              type="text"
+                              {...register('door_code')}
+                              placeholder={tr('door_code')}
+                              className="bg-gray-100 px-4 py-2 rounded-xl w-full text-sm outline-none focus:outline-none"
+                            />
                           </div>
                         </DisclosurePanel>
                       </Transition>
@@ -1305,15 +1307,13 @@ const MobLocationTabs: FC = () => {
                   )}
                 </Disclosure>
               </div>
-              <div className="mt-5">
-                <div className="flex">
-                  <input
-                    type="text"
-                    {...register('label')}
-                    placeholder={tr('address_label')}
-                    className="bg-gray-100 px-8 py-2 rounded-full outline-none w-full focus:outline-none"
-                  />
-                </div>
+              <div className="mt-3">
+                <input
+                  type="text"
+                  {...register('label')}
+                  placeholder={tr('address_label')}
+                  className="bg-gray-100 px-4 py-2 rounded-xl outline-none w-full text-sm focus:outline-none"
+                />
               </div>
               {locationData?.terminalData && (
                 <div className="md:mt-3 flex space-x-2 items-center">
@@ -1325,8 +1325,7 @@ const MobLocationTabs: FC = () => {
                   </div>
                 </div>
               )}
-              <div className="h-20" />
-            </form>
+              <div className="h-16" />
           </div>
         </div>
         <div className="fixed bottom-0 left-0 right-0 p-4 bg-white border-t border-gray-100 z-50 md:relative md:border-0 md:p-0 md:mt-12">

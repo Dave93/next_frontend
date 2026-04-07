@@ -565,7 +565,8 @@
 
 @media (max-width: 768px) {
   .container {
-    height: calc(100vh - 60px);
+    top: 48px;
+    height: calc(100vh - 48px);
   }
 
   .header {
@@ -597,7 +598,7 @@
 
   .sidebar {
     position: fixed;
-    bottom: 0;
+    bottom: 56px;
     left: 0;
     right: 0;
     top: auto;

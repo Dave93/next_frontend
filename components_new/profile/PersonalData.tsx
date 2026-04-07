@@ -3,7 +3,7 @@ import { XIcon } from '@heroicons/react/outline'
 import { useForm } from 'react-hook-form'
 import useTranslation from 'next-translate/useTranslation'
 import { useUI } from '@components/ui/context'
-import { DateTime } from 'luxon'
+
 import axios from 'axios'
 import Cookies from 'js-cookie'
 import { ToastContainer, toast } from 'react-toastify'
@@ -14,20 +14,11 @@ const PersonalData: FC = () => {
   const { t: tr } = useTranslation('common')
   const { user, setUserData } = useUI()
 
-  let birth = user?.user?.birth
-  // birthDay, birthMonth, birthYear from date string of format YYYY-MM-DD
-
-  let birthDay = birth?.split('-')[2]
-  let birthMonth = birth?.split('-')[1]
-  let birthYear = birth?.split('-')[0]
-
   type FormData = {
     name: string
     phone: string
     email: string
-    birthDay: string
-    birthMonth: string
-    birthYear: string
+    birth: string
   }
   const { register, handleSubmit, reset, watch, formState, getValues } =
     useForm<FormData>({
@@ -36,9 +27,7 @@ const PersonalData: FC = () => {
         name: user?.user?.name,
         phone: user?.user?.phone,
         email: user?.user?.email,
-        birthDay: birthDay,
-        birthMonth: birthMonth,
-        birthYear: birthYear,
+        birth: user?.user?.birth || '',
       },
     })
 
@@ -67,21 +56,7 @@ const PersonalData: FC = () => {
   }
 
   const onSubmit = async (data: any) => {
-    let birth = null
-    if (data.birthDay && data.birthMonth && data.birthYear) {
-      // init current date
-      let currentTime = DateTime.local()
-
-      // Change month, day and year of current date
-      currentTime = currentTime.set({
-        day: data.birthDay,
-        month: data.birthMonth,
-        year: data.birthYear,
-      })
-      // Convert date to format YYYY-MM-DD
-      birth = currentTime.toFormat('yyyy-MM-dd')
-    }
-
+    const birth = data.birth || null
     const { name, phone, email } = data
 
     await setCredentials()
@@ -138,10 +113,10 @@ const PersonalData: FC = () => {
   }
 
   return (
-    <div className="md:w-full md:max-w-xs mx-5 md:mx-0 mb-5">
-      <div className="text-2xl mt-8 mb-5">{tr('personal_data')}</div>
+    <div className="md:w-full md:max-w-xs mx-5 md:mx-0 mb-5 pb-20 md:pb-5">
+      <div className="text-2xl mt-8 mb-5 hidden md:block">{tr('personal_data')}</div>
       <form onSubmit={handleSubmit(onSubmit)}>
-        <div className="mt-10">
+        <div className="mt-5 md:mt-10">
           <label className="text-sm text-gray-400 mb-2 block">
             {tr('personal_data_name')}
           </label>
@@ -161,30 +136,20 @@ const PersonalData: FC = () => {
             )}
           </div>
         </div>
-        <div className="mt-10">
+        <div className="mt-5 md:mt-10">
           <label className="text-sm text-gray-400 mb-2 block">
             {tr('personal_phone')}
           </label>
           <div className="relative">
             <input
               type="text"
-              {...register('phone', {
-                required: true,
-                pattern: /^\+998\d\d\d\d\d\d\d\d\d$/i,
-              })}
-              className="borde focus:outline-none outline-none px-6 py-3 rounded-full text-sm w-full bg-gray-200"
+              readOnly
+              {...register('phone')}
+              className="border focus:outline-none outline-none px-6 py-3 rounded-full text-sm w-full bg-gray-100 text-gray-500 cursor-not-allowed"
             />
-            {authPhone && (
-              <button
-                className="absolute focus:outline-none inset-y-0 outline-none right-4 text-gray-400"
-                onClick={() => resetField('phone')}
-              >
-                <XIcon className="cursor-pointer h-5 text-gray-400 w-5" />
-              </button>
-            )}
           </div>
         </div>
-        <div className="mt-10">
+        <div className="mt-5 md:mt-10">
           <label className="text-sm text-gray-400 mb-2 block">
             {tr('personal_email')}
           </label>
@@ -204,35 +169,17 @@ const PersonalData: FC = () => {
             )}
           </div>
         </div>
-        <div className="mt-10">
+        <div className="mt-5 md:mt-10">
           <label className="text-sm text-gray-400 mb-2 block">
             {tr('personal_birth')}
           </label>
-          <div className="flex justify-between">
-            <input
-              type="text"
-              pattern="\d*"
-              maxLength={2}
-              {...register('birthDay')}
-              className="borde focus:outline-none outline-none px-10 py-3 rounded-full text-sm w-24 bg-gray-200"
-            />
-            <input
-              type="text"
-              pattern="\d*"
-              maxLength={2}
-              {...register('birthMonth')}
-              className="borde focus:outline-none outline-none px-10 py-3 rounded-full text-sm w-24 bg-gray-200"
-            />
-            <input
-              type="text"
-              pattern="\d*"
-              maxLength={4}
-              {...register('birthYear')}
-              className="borde focus:outline-none outline-none pl-8 py-3 rounded-full text-sm w-24 bg-gray-200"
-            />
-          </div>
+          <input
+            type="date"
+            {...register('birth')}
+            className="border focus:outline-none outline-none px-6 py-3 rounded-full text-sm w-full bg-gray-200"
+          />
         </div>
-        <div className="mt-10">
+        <div className="mt-5 md:mt-10">
           <button className="text-white font-bold text-xl rounded-full bg-yellow w-full h-10">
             {tr('personal_save_button')}
           </button>

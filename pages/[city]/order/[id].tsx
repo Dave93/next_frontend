@@ -5,6 +5,8 @@ import cookies from 'next-cookies'
 import axios from 'axios'
 import { GetServerSidePropsContext } from 'next'
 import { ParsedUrlQuery } from 'querystring'
+import { useRouter } from 'next/router'
+import { ArrowLeftIcon } from '@heroicons/react/outline'
 
 interface IParams extends ParsedUrlQuery {
   id: string
@@ -80,6 +82,10 @@ export async function getServerSideProps({
   }
 }
 
+const mobileLabels: Record<string, Record<string, string>> = {
+  order_detail: { ru: 'Детали заказа', uz: 'Buyurtma tafsilotlari', en: 'Order details' },
+}
+
 export default function OrderId({
   orderData,
   orderStatuses,
@@ -87,8 +93,25 @@ export default function OrderId({
   orderData: any
   orderStatuses: any
 }) {
+  const router = useRouter()
+  const { locale = 'ru' } = router
+
   return (
     <div>
+      {/* Mobile header */}
+      <div className="md:hidden sticky top-0 z-20 bg-white border-b border-gray-100">
+        <div className="flex items-center h-12 px-4">
+          <button
+            onClick={() => router.back()}
+            className="w-8 h-8 flex items-center justify-center -ml-1"
+          >
+            <ArrowLeftIcon className="w-5 h-5 text-gray-700" />
+          </button>
+          <h1 className="flex-1 text-center text-base font-semibold text-gray-900 pr-8">
+            {mobileLabels.order_detail[locale] || 'Детали заказа'}
+          </h1>
+        </div>
+      </div>
       <OrderAccept order={orderData} orderStatuses={orderStatuses} />
     </div>
   )

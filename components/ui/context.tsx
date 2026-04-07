@@ -282,12 +282,13 @@ function uiReducer(state: State, action: Action) {
       try {
         let locationNewData = JSON.stringify(action.value)
         locationNewData = Buffer.from(locationNewData).toString('base64')
-        // set cookies for 30 minutes
+        // save to localStorage (more reliable for large data than cookies)
+        localStorage.setItem('yetkazish', locationNewData)
+        // also keep cookie for backward compatibility
         var inFifteenMinutes = new Date(new Date().getTime() + 30 * 60 * 1000)
         Cookies.set('yetkazish', locationNewData, {
           expires: inFifteenMinutes,
         })
-        // sessionStorage.setItem('yetkazish', locationNewData)
       } catch (e) {}
       return {
         ...state,
@@ -408,10 +409,10 @@ export const UIProvider: FC<UIProviderProps> = (props) => {
       }
     } catch (e) {}
 
-    let locationData = Cookies.get('yetkazish')
+    let locationRaw = localStorage.getItem('yetkazish') || Cookies.get('yetkazish')
     try {
-      if (locationData) {
-        let locData: any = Buffer.from(locationData, 'base64')
+      if (locationRaw) {
+        let locData: any = Buffer.from(locationRaw, 'base64')
         locData = locData.toString()
         const parsedLocationData = JSON.parse(locData)
         dispatch({ type: 'SET_LOCATION_DATA', value: parsedLocationData })
