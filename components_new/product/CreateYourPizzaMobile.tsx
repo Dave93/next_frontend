@@ -679,9 +679,9 @@ const CreateYourPizza: FC<CreatePizzaProps> = ({ sec, channelName }) => {
                                 } flex flex-col justify-between overflow-hidden rounded-[15px] cursor-pointer`}
                                 onClick={() => addModifier(mod.id)}
                               >
-                                <div className="flex-grow pt-2 px-2">
+                                <div className="flex-grow pt-2 px-2 flex justify-center">
                                   {mod.assets.length ? (
-                                    <Image
+                                    <img
                                       src={
                                         mod.assets[0].local
                                           ? mod.assets[0].local
@@ -692,7 +692,7 @@ const CreateYourPizza: FC<CreatePizzaProps> = ({ sec, channelName }) => {
                                       alt={mod.name}
                                     />
                                   ) : (
-                                    <Image
+                                    <img
                                       src="/no_photo.svg"
                                       width={80}
                                       height={80}
