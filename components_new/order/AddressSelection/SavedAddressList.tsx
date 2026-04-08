@@ -85,14 +85,6 @@ const SavedAddressList: FC<SavedAddressListProps> = ({
           })}
         </>
       )}
-
-      <button
-        type="button"
-        onClick={onAddNew}
-        className="w-full rounded-xl border border-dashed border-gray-300 p-3 text-center text-sm text-yellow"
-      >
-        + {tr('add_new_address')}
-      </button>
     </div>
   )
 }

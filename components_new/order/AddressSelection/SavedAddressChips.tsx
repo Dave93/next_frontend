@@ -67,14 +67,6 @@ const SavedAddressChips: FC<SavedAddressChipsProps> = ({
           </button>
         )
       })}
-
-      <button
-        type="button"
-        onClick={onAddNew}
-        className="rounded-full px-4 py-2 border-2 border-transparent hover:border-gray-200 bg-gray-100 text-yellow text-sm font-semibold transition-all"
-      >
-        + {tr('add_new_address')}
-      </button>
     </div>
   )
 }

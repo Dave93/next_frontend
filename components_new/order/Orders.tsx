@@ -1167,17 +1167,6 @@ const Orders: FC<OrdersProps> = ({ channelName, isMobile = false }) => {
       setAddressId(null)
     } else {
       if (address.lat && address.lon) {
-        setSelectedCoordinates([
-          {
-            key: `${address.lat}${address.lon}`,
-            coordinates: {
-              lat: address.lat,
-              long: address.lon,
-            },
-          },
-        ])
-        setMapZoom(17)
-        setMapCenter([address.lat, address.lon])
         let terminalData = await searchTerminal(
           {
             location: [address.lat, address.lon],
@@ -1205,7 +1194,7 @@ const Orders: FC<OrdersProps> = ({ channelName, isMobile = false }) => {
           },
           addressId: address.id,
         })
-          } else {
+      } else {
         selectAddress({
           locationData: {
             ...address,
@@ -1472,7 +1461,9 @@ const Orders: FC<OrdersProps> = ({ channelName, isMobile = false }) => {
             setValue={setValue}
             locationData={locationData}
             setLocationData={setLocationData}
+            cities={cities}
             activeCity={activeCity}
+            setActiveCity={setActiveCity}
             addressList={addressList}
             addressId={addressId}
             onSelectAddress={selectAddressLocal}
@@ -1483,6 +1474,7 @@ const Orders: FC<OrdersProps> = ({ channelName, isMobile = false }) => {
             onChangeTab={changeTabIndex}
             searchTerminal={searchTerminal}
             downshiftRef={downshiftControl}
+            mapRef={map}
           />
         ) : (
           <AddressSelection

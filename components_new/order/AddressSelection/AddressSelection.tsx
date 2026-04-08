@@ -181,6 +181,20 @@ const AddressSelection: FC<AddressSelectionProps> = ({
     })
   }
 
+  const handleSelectSavedAddress = (address: Address) => {
+    if (address.lat && address.lon) {
+      setMapCenter([+address.lat, +address.lon])
+      setSelectedCoordinates([
+        {
+          key: `${address.lat}${address.lon}`,
+          coordinates: { lat: +address.lat, long: +address.lon },
+        },
+      ])
+      setMapZoom(17)
+    }
+    onSelectAddress(address)
+  }
+
   const clickOnMap = async (event: any) => {
     const coords = event.get('coords') || event.get('position')
 
@@ -377,7 +391,7 @@ const AddressSelection: FC<AddressSelectionProps> = ({
           <SavedAddressChips
             addresses={addressList}
             selectedId={addressId}
-            onSelect={onSelectAddress}
+            onSelect={handleSelectSavedAddress}
             onAddNew={onAddNewAddress}
           />
 
