@@ -1,11 +1,15 @@
 @font-face {
   font-family: 'pfhandbookprobold';
   src: local('pfhandbookprobold'),
+    url('/pfhandbookprobold.woff2') format('woff2'),
     url('/pfhandbookprobold.ttf') format('truetype');
+  font-display: swap;
 }
 
 @font-face {
   font-family: 'pfhandbookproregular';
   src: local('pfhandbookproregular'),
+    url('/pfhandbookproregular.woff2') format('woff2'),
     url('/pfhandbookproregular.ttf') format('truetype');
+  font-display: swap;
 }

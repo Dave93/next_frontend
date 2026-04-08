@@ -16,6 +16,9 @@ import { FaPersonWalking } from 'react-icons/fa6'
 import styles from './Track.module.css'
 import { useUI } from '@components/ui'
 
+// Import Leaflet CSS for this page
+import 'leaflet/dist/leaflet.css'
+
 // Conditionally import Leaflet only on client side
 let L: any
 if (typeof window !== 'undefined') {

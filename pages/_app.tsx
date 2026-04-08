@@ -9,8 +9,6 @@ import '@egjs/flicking-plugins/dist/arrow.css'
 
 import '@components_new/header/DatePicker.css'
 
-// Import Leaflet CSS globally for map pages
-import 'leaflet/dist/leaflet.css'
 
 import { FC, ReactNode, useEffect } from 'react'
 import type { AppProps } from 'next/app'
