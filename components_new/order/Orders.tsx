@@ -1318,6 +1318,15 @@ const Orders: FC<OrdersProps> = ({ channelName, isMobile = false }) => {
       addressId: null,
     })
     reset(newFields)
+    downshiftControl?.current?.reset({ inputValue: '' })
+    setLocationData({
+      ...locationData,
+      deliveryType: tabIndex,
+      location: [],
+      address: '',
+      terminal_id: undefined,
+      terminalData: undefined,
+    })
   }
 
   return (
