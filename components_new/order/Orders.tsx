@@ -60,6 +60,7 @@ import { chunk, sortBy } from 'lodash'
 import getAddressList from '@lib/load_addreses'
 import { Address } from '@commerce/types/address'
 import Hashids from 'hashids'
+import { AddressSelection, AddressSelectionMobile } from './AddressSelection'
 
 let webAddress = process.env.NEXT_PUBLIC_API_URL
 axios.defaults.withCredentials = true
@@ -1454,405 +1455,47 @@ const Orders: FC<OrdersProps> = ({ channelName, isMobile = false }) => {
           </form>
         </div>
       </div>
-      {/* Compact address bar (mobile only) */}
-      {isMobile && locationData?.terminal_id && (
-        <div className="mx-3 mt-4 mb-2 rounded-2xl bg-yellow-50 border border-yellow-200 px-4 py-3 flex items-center gap-3 order-address-bar">
-          <div
-            className="w-10 h-10 rounded-full flex items-center justify-center flex-shrink-0"
-            style={{ backgroundColor: '#F9B004' }}
-          >
-            <LocationMarkerIcon className="w-5 h-5 text-white" />
-          </div>
-          <div className="flex-1 min-w-0">
-            <div className="text-xs font-medium" style={{ color: '#F9B004' }}>
-              {tabIndex === 'deliver' ? tr('delivery') : tr('pickup')}
-            </div>
-            <div className="text-sm font-semibold text-gray-900 truncate">
-              {tabIndex === 'deliver'
-                ? locationData?.address || ''
-                : (locationData?.terminalData as any)?.[
-                    locale === 'uz' ? 'name_uz' : locale === 'en' ? 'name_en' : 'name'
-                  ] || ''}
-            </div>
-          </div>
-        </div>
-      )}
-      {/* Delivery/Pickup section - hidden on mobile when address exists */}
-      <div className={`mb-5 order-delivery-section ${isMobile && locationData?.terminal_id ? 'hidden' : ''}`}>
-        <div className="bg-white flex rounded-2xl w-full items-center p-10 h-32 mb-5">
-          <div className="bg-gray-100 flex  w-full rounded-full">
-            <button
-              className={`${
-                tabIndex == 'deliver'
-                  ? 'bg-yellow text-white'
-                  : ' text-gray-400'
-              } flex-1 font-bold py-3 text-[18px] rounded-full outline-none focus:outline-none`}
-              onClick={() => changeTabIndex('deliver')}
-            >
-              {tr('delivery')}
-            </button>
-            <button
-              className={`${
-                tabIndex == 'pickup' ? 'bg-yellow text-white' : ' text-gray-400'
-              } flex-1 font-bold py-3 text-[18px] rounded-full outline-none focus:outline-none`}
-              onClick={() => changeTabIndex('pickup')}
-            >
-              {tr('pickup')}
-            </button>
-          </div>
-        </div>
-        {tabIndex == 'deliver' && (
-          <div className="bg-white p-10 rounded-2xl">
-            <div className="flex justify-between items-center">
-              <div className="text-gray-400 font-bold text-lg">
-                {tr('chooseLocation')}
-              </div>
-              <div>
-                <Menu as="div" className="relative inline-block text-left">
-                  <div>
-                    <MenuButton className="focus:outline-none font-medium inline-flex justify-center py-2 text-secondary text-lg w-full items-center">
-                      {locale == 'uz'
-                        ? chosenCity?.name_uz
-                        : locale == 'ru'
-                        ? chosenCity?.name
-                        : locale == 'en'
-                        ? chosenCity?.name_en
-                        : ''}
-                      <ChevronDownIcon
-                        className="w-5 h-5 ml-2 -mr-1 text-violet-200 hover:text-violet-100"
-                        aria-hidden="true"
-                      />
-                    </MenuButton>
-                  </div>
-                  <Transition
-                    enter="transition ease-out duration-100"
-                    enterFrom="transform opacity-0 scale-95"
-                    enterTo="transform opacity-100 scale-100"
-                    leave="transition ease-in duration-75"
-                    leaveFrom="transform opacity-100 scale-100"
-                    leaveTo="transform opacity-0 scale-95"
-                  >
-                    <MenuItems className="z-20 absolute right-0 w-56 mt-2 origin-top-right bg-white divide-y divide-gray-100 rounded-md shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
-                      {cities.map((city: City) => (
-                        <MenuItem key={city.id}>
-                          <span
-                            onClick={() => setActive(city)}
-                            className={`block px-4 py-2 text-sm cursor-pointer ${
-                              city.id == chosenCity.id
-                                ? 'bg-secondary text-white'
-                                : 'text-secondary'
-                            }`}
-                          >
-                            {locale == 'uz'
-                              ? city.name_uz
-                              : locale == 'ru'
-                              ? city.name
-                              : locale == 'en'
-                              ? city.name_en
-                              : ''}
-                          </span>
-                        </MenuItem>
-                      ))}
-                    </MenuItems>
-                  </Transition>
-                </Menu>
-              </div>
-            </div>
-            <div>
-              {yandexGeoKey && (
-                <YMaps
-                  // enterprise
-                  query={{
-                    apikey: yandexGeoKey,
-                  }}
-                >
-                  <div className="relative">
-                    <Map
-                      state={mapState}
-                      onLoad={(ymaps: any) => loadPolygonsToMap(ymaps)}
-                      instanceRef={(ref) => (map.current = ref)}
-                      width="100%"
-                      height={`${window.innerWidth < 768 ? '250px' : '530px'}`}
-                      onClick={clickOnMap}
-                      modules={[
-                        'control.ZoomControl',
-                        'control.FullscreenControl',
-                        'control.GeolocationControl',
-                        'geoQuery',
-                      ]}
-                    >
-                      <span className="flex absolute h-3 w-3 left-1 top-1 z-10">
-                        <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-yellow opacity-75"></span>
-                      </span>
-                      {selectedCoordinates.map((item: any, index: number) => (
-                        <Placemark
-                          modules={['geoObject.addon.balloon']}
-                          defaultGeometry={[
-                            item?.coordinates?.lat,
-                            item?.coordinates?.long,
-                          ]}
-                          geomerty={[
-                            item?.coordinates?.lat,
-                            item?.coordinates?.long,
-                          ]}
-                          key={item.key}
-                          defaultOptions={{
-                            iconLayout: 'default#image',
-                            iconImageHref: '/map_placemark.png',
-                          }}
-                        />
-                      ))}
-                    </Map>
-                  </div>
-                </YMaps>
-              )}
-            </div>
-            {addressList && addressList.length > 0 && (
-              <div className="mt-3">
-                <div className="font-bold text-[18px]">
-                  {tr('profile_address')}
-                </div>
-                <div className="mt-2">
-                  <div className="grid md:grid-cols-2 grid-cols-1 gap-1">
-                    <div
-                      className="w-max flex items-center cursor-pointer rounded-full bg-gray-100 px-4 py-2"
-                      onClick={() => addNewAddress()}
-                    >
-                      <PlusIcon className="h-5 text-gray-400 w-5  hover:text-yellow-light mr-2" />
-                      <div className=" ">{tr('add_new_address')}</div>
-                    </div>
-                    {addressList.map((item: Address) => (
-                      <div
-                        key={item.id}
-                        className={`px-4 py-1 rounded-full cursor-pointer relative pr-6 capitalize flex items-center z-10 ${
-                          addressId == item.id
-                            ? 'bg-primary text-white'
-                            : 'bg-gray-100'
-                        }`}
-                        onClick={() => selectAddressLocal(item)}
-                      >
-                        <div className="">
-                          <BookmarkIcon
-                            className={`h-5  w-5  hover:text-yellow-light mr-2 ${
-                              addressId == item.id
-                                ? ' text-white'
-                                : 'text-gray-400'
-                            }`}
-                          />
-                        </div>
-                        <div className="">
-                          <div>{item.label ? item.label : item.address}</div>
-                          <div
-                            className={`text-sm  ${
-                              addressId == item.id ? ' text-white' : ''
-                            }`}
-                          >
-                            {item.label && item.address}
-                          </div>
-                        </div>
-                        <button
-                          className="absolute focus:outline-none inset-y-0 outline-none right-2 text-gray-400 z-50 hover:text-primary"
-                          onClick={() => deleteAddress(item.id)}
-                        >
-                          <XIcon className="cursor-pointer h-5 text-gray-400 w-5 hover:text-white" />
-                        </button>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-              </div>
-            )}
-            <div className="mt-3">
-              <form onSubmit={handleSubmit(onSubmit)}>
-                <div className="font-bold text-lg">{tr('address')}</div>
-                <div className="mt-3 space-y-2">
-                  <div className="md:flex justify-between md:w-full space-y-2 md:space-y-0 md:space-x-2 space-x-0">
-                    <Downshift
-                      onChange={(selection) => setSelectedAddress(selection)}
-                      ref={downshiftControl}
-                      itemToString={(item) =>
-                        item ? item.formatted : watch('address')
-                      }
-                      // inputValue={locationData?.address || currentAddress}
-                      initialInputValue={watch('address') || currentAddress}
-                      inputValue={watch('address')}
-                      onStateChange={(changes, stateAndHelpers) => {
-                        if (changes.hasOwnProperty('inputValue')) {
-                          setValue('address', changes.inputValue)
-                        }
-                      }}
-                    >
-                      {({
-                        getInputProps,
-                        getItemProps,
-                        getLabelProps,
-                        getMenuProps,
-                        isOpen,
-                        inputValue,
-                        highlightedIndex,
-                        selectedItem,
-                        getRootProps,
-                      }) => (
-                        <>
-                          <div
-                            className="relative md:w-7/12"
-                            {...getRootProps(undefined, {
-                              suppressRefError: true,
-                            })}
-                          >
-                            <input
-                              type="text"
-                              {...register('address', { required: true })}
-                              {...getInputProps({
-                                onChange: debouncedAddressInputChangeHandler,
-                              })}
-                              placeholder={tr('address')}
-                              className="bg-gray-100 px-8 py-3 rounded-full w-full outline-none focus:outline-none"
-                            />
-                            {addresClear && (
-                              <button
-                                className="absolute focus:outline-none inset-y-0 outline-none right-4 text-gray-400"
-                                onClick={() => resetField('address')}
-                              >
-                                <XIcon className="cursor-pointer h-5 text-gray-400 w-5 hover:text-yellow-light" />
-                              </button>
-                            )}
-                            <ul
-                              {...getMenuProps()}
-                              className="absolute w-full z-[1000] rounded-[15px] shadow-lg"
-                            >
-                              {isOpen
-                                ? geoSuggestions.map(
-                                    (item: any, index: number) => (
-                                      <li
-                                        {...getItemProps({
-                                          key: index,
-                                          index,
-                                          item,
-                                          className: `py-2 px-4 flex items-center ${
-                                            highlightedIndex == index
-                                              ? 'bg-gray-100'
-                                              : 'bg-white'
-                                          }`,
-                                        })}
-                                      >
-                                        <CheckIcon
-                                          className={`w-5 text-yellow font-bold mr-2 ${
-                                            highlightedIndex == index
-                                              ? ''
-                                              : 'invisible'
-                                          }`}
-                                        />
-                                        <div>
-                                          <div>{item.title}</div>
-                                          <div className="text-sm">
-                                            {item.description}
-                                          </div>
-                                        </div>
-                                      </li>
-                                    )
-                                  )
-                                : null}
-                            </ul>
-                          </div>
-                        </>
-                      )}
-                    </Downshift>
-                    <div className="md:w-2/12">
-                      <input
-                        type="text"
-                        {...register('house', { required: true })}
-                        placeholder={tr('house')}
-                        className="bg-gray-100 px-8 py-3 rounded-full w-full"
-                      />
-                      {errors.house && (
-                        <div className="text-sm text-center text-red-600">
-                          {tr('required')}
-                        </div>
-                      )}
-                    </div>
-                    <div className="md:w-3/12">
-                      <input
-                        type="text"
-                        {...register('flat')}
-                        placeholder={tr('flat')}
-                        className="bg-gray-100 px-8 py-3 rounded-full w-full outline-none focus:outline-none"
-                      />
-                    </div>
-                  </div>
-                  <div className="flex">
-                    <input
-                      type="text"
-                      {...register('label')}
-                      placeholder={tr('address_label')}
-                      className="bg-gray-100 px-8 py-3 rounded-full w-full outline-none focus:outline-none"
-                    />
-                  </div>
-                </div>
-                <div className="md:mt-5 flex items-end">
-                  <div className="md:w-6/12">
-                    <Disclosure defaultOpen={true}>
-                      {({ open }) => (
-                        <>
-                          <DisclosureButton className="flex text-yellow outline-none focus:outline-none">
-                            <span>{tr('indicate_intercom_and_entrance')}</span>
-                            {/*
-                          Use the `open` render prop to rotate the icon when the panel is open
-                        */}
-                            <ChevronRightIcon
-                              className={`w-6 transform ${
-                                open ? 'rotate-90' : '-rotate-90'
-                              }`}
-                            />
-                          </DisclosureButton>
-                          <Transition
-                            show={open}
-                            enter="transition duration-300 ease-out"
-                            enterFrom="transform scale-95 opacity-0"
-                            enterTo="transform scale-100 opacity-100"
-                            leave="transition duration-300 ease-out"
-                            leaveFrom="transform scale-100 opacity-100"
-                            leaveTo="transform scale-95 opacity-0"
-                          >
-                            <DisclosurePanel>
-                              <div className="md:flex mt-3 space-y-2 md:space-y-0">
-                                <div>
-                                  <input
-                                    type="text"
-                                    {...register('entrance')}
-                                    placeholder={tr('entrance')}
-                                    className="bg-gray-100 px-8 py-2 rounded-full w-60  outline-none focus:outline-none"
-                                  />
-                                </div>
-                                <div className="md:mx-5">
-                                  <input
-                                    type="text"
-                                    {...register('door_code')}
-                                    placeholder={tr('door_code')}
-                                    className="bg-gray-100 px-8 py-2 rounded-full w-60 outline-none focus:outline-none"
-                                  />
-                                </div>
-                              </div>
-                            </DisclosurePanel>
-                          </Transition>
-                        </>
-                      )}
-                    </Disclosure>
-                  </div>
-                </div>
-                {locationData?.terminalData && (
-                  <div className="md:mt-3 flex space-x-2 items-center">
-                    <LocationMarkerIcon className="w-5 h-5" />
-                    <div className="font-bold mt-2">
-                      {tr('nearest_filial', {
-                        filialName: locationData?.terminalData.name,
-                      })}
-                    </div>
-                  </div>
-                )}
-              </form>
-            </div>
-          </div>
+      {/* Address Selection */}
+      <div className="mb-5 order-delivery-section">
+        {isMobile ? (
+          <AddressSelectionMobile
+            register={register}
+            setValue={setValue}
+            locationData={locationData}
+            setLocationData={setLocationData}
+            activeCity={activeCity}
+            addressList={addressList}
+            addressId={addressId}
+            onSelectAddress={selectAddressLocal}
+            onAddNewAddress={addNewAddress}
+            yandexGeoKey={yandexGeoKey}
+            configData={configData}
+            tabIndex={tabIndex}
+            onChangeTab={changeTabIndex}
+            searchTerminal={searchTerminal}
+            downshiftRef={downshiftControl}
+          />
+        ) : (
+          <AddressSelection
+            register={register}
+            setValue={setValue}
+            locationData={locationData}
+            setLocationData={setLocationData}
+            cities={cities}
+            activeCity={activeCity}
+            setActiveCity={setActiveCity}
+            addressList={addressList}
+            addressId={addressId}
+            onSelectAddress={selectAddressLocal}
+            onAddNewAddress={addNewAddress}
+            yandexGeoKey={yandexGeoKey}
+            configData={configData}
+            tabIndex={tabIndex}
+            onChangeTab={changeTabIndex}
+            searchTerminal={searchTerminal}
+            downshiftRef={downshiftControl}
+            mapRef={map}
+          />
         )}
         {tabIndex == 'pickup' && (
           <div className="bg-white p-10 rounded-2xl">
