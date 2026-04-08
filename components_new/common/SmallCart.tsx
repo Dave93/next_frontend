@@ -327,7 +327,7 @@ const SmallCart: FC<SmallCartProps> = ({ channelName }) => {
                             <div className="h-14 w-40 flex relative">
                               <div className="w-5 absolute left-0">
                                 <div>
-                                  <Image
+                                  <img
                                     src={
                                       lineItem?.variant?.product?.assets?.length
                                         ? `${webAddress}/storage/${lineItem?.variant?.product?.assets[0]?.location}/${lineItem?.variant?.product?.assets[0]?.filename}`
@@ -335,7 +335,6 @@ const SmallCart: FC<SmallCartProps> = ({ channelName }) => {
                                     }
                                     width="40"
                                     height="40"
-                                    layout="fixed"
                                     className="rounded-full"
                                     alt=""
                                   />
@@ -350,7 +349,7 @@ const SmallCart: FC<SmallCartProps> = ({ channelName }) => {
                                       left: index == 0 ? '0.5rem' : '1.5rem',
                                     }}
                                   >
-                                    <Image
+                                    <img
                                       src={
                                         child.variant?.product?.assets?.length
                                           ? `${webAddress}/storage/${child.variant?.product?.assets[0]?.location}/${child.variant?.product?.assets[0]?.filename}`
@@ -358,7 +357,6 @@ const SmallCart: FC<SmallCartProps> = ({ channelName }) => {
                                       }
                                       width="40"
                                       height="40"
-                                      layout="fixed"
                                       className="rounded-full"
                                       alt=""
                                     />
@@ -369,7 +367,7 @@ const SmallCart: FC<SmallCartProps> = ({ channelName }) => {
                           ) : (
                             <div className="h-16 w-16 flex relative">
                               <div className="w-10 relative overflow-hidden">
-                                <Image
+                                <img
                                   src={
                                     lineItem?.variant?.product?.assets?.length
                                       ? `${webAddress}/storage/${lineItem?.variant?.product?.assets[0]?.location}/${lineItem?.variant?.product?.assets[0]?.filename}`
@@ -377,13 +375,12 @@ const SmallCart: FC<SmallCartProps> = ({ channelName }) => {
                                   }
                                   width="60"
                                   height="60"
-                                  layout="fixed"
-                                  className="absolute h-full max-w-2xl"
+                                  className="absolute h-full max-w-none"
                                   alt=""
                                 />
                               </div>
                               <div className="w-10 relative overflow-hidden">
-                                <Image
+                                <img
                                   src={
                                     lineItem?.child[0].variant?.product?.assets
                                       ?.length
@@ -392,8 +389,7 @@ const SmallCart: FC<SmallCartProps> = ({ channelName }) => {
                                   }
                                   width="60"
                                   height="60"
-                                  layout="fixed"
-                                  className="absolute h-full max-w-2xl right-0"
+                                  className="absolute h-full max-w-none right-0"
                                   alt=""
                                 />
                               </div>
@@ -401,7 +397,7 @@ const SmallCart: FC<SmallCartProps> = ({ channelName }) => {
                           )
                         ) : (
                           <div className="">
-                            <Image
+                            <img
                               src={
                                 lineItem?.variant?.product?.assets?.length
                                   ? `${webAddress}/storage/${lineItem?.variant?.product?.assets[0]?.location}/${lineItem?.variant?.product?.assets[0]?.filename}`
