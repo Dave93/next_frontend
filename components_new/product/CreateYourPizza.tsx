@@ -643,11 +643,12 @@ const CreateYourPizza: FC<CreatePizzaProps> = ({
                                 <CheckIcon className=" h-4 text-yellow border border-yellow rounded-full w-4" />
                               </div>
                             )}
-                          <Image
+                          <img
                             src={item.image}
                             width="110"
                             height="110"
                             alt=""
+                            className="mx-auto"
                           />
                           <div className="uppercase">
                             {
@@ -692,24 +693,22 @@ const CreateYourPizza: FC<CreatePizzaProps> = ({
                     >
                       <div className="w-40 relative overflow-hidden">
                         {leftSelectedProduct && (
-                          <Image
+                          <img
                             src={leftSelectedProduct.image}
                             width="320"
                             height="320"
-                            layout="fixed"
-                            className="absolute h-full max-w-2xl"
+                            className="absolute h-full max-w-none"
                             alt=""
                           />
                         )}
                       </div>
                       <div className="w-40 relative overflow-hidden">
                         {rightSelectedProduct && (
-                          <Image
+                          <img
                             src={rightSelectedProduct.image}
                             width="320"
                             height="320"
-                            layout="fixed"
-                            className="absolute h-full max-w-2xl right-0"
+                            className="absolute h-full max-w-none right-0"
                             alt=""
                           />
                         )}
@@ -962,11 +961,12 @@ const CreateYourPizza: FC<CreatePizzaProps> = ({
                                 <CheckIcon className=" h-4 text-yellow border border-yellow rounded-full w-4" />
                               </div>
                             )}
-                          <Image
+                          <img
                             src={item.image}
                             width="110"
                             height="110"
                             alt=""
+                            className="mx-auto"
                           />
                           <div className="uppercase">
                             {

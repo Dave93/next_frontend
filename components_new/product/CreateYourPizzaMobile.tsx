@@ -514,6 +514,15 @@ const CreateYourPizza: FC<CreatePizzaProps> = ({ sec, channelName }) => {
     setActiveCustomName(customNames[0])
   }, [customNames])
 
+  useEffect(() => {
+    if (modifiers.length > 0 && activeModifiers.length === 0) {
+      const freeModifier = modifiers.find((m: any) => m.price == 0)
+      if (freeModifier) {
+        setActiveModifeirs([freeModifier.id])
+      }
+    }
+  }, [modifiers])
+
   return (
     <>
       <div className="gap-4 grid grid-cols-2 py-4 md:py-0 items-center justify-between md:flex md:flex-col">
@@ -570,114 +579,96 @@ const CreateYourPizza: FC<CreatePizzaProps> = ({ sec, channelName }) => {
               leaveFrom="opacity-100 translate-y-0 sm:scale-100"
               leaveTo="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
             >
-              <div className="bg-white p-4 text-left transform h-screen overflow-y-auto w-full overflow-hidden fixed top-0">
+              <div className="bg-white p-4 text-left transform h-screen w-full fixed top-0 flex flex-col overflow-hidden">
                 {isSecondPage ? (
                   <>
                     <div className="flex my-2 w-full max-h-10 flex-col">
                       <div className="flex w-full items-center">
-                        <span
+                        <button
                           onClick={() => setIsSecondPage(false)}
-                          className="flex"
+                          className="flex p-2 z-10 relative"
+                          type="button"
                         >
-                          <Image
+                          <img
                             src="/assets/back.png"
                             width="24"
                             height="24"
-                            alt=""
+                            alt="back"
                           />
-                        </span>
+                        </button>
                       </div>
                     </div>
-                    <div className="h-[calc(100vh-180px)] overflow-hidden overflow-y-auto">
+                    <div className="flex-grow overflow-y-auto">
                       <div
                         className="h-80 w-80 mx-auto bg-cover flex relative"
                         style={{ backgroundImage: 'url(/createYourPizza.png)' }}
                       >
                         <div className="w-40 relative overflow-hidden">
                           {leftSelectedProduct && (
-                            <Image
+                            <img
                               src={leftSelectedProduct.image}
                               width="320"
                               height="320"
-                              layout="fixed"
-                              className="absolute h-full max-w-2xl"
+                              className="absolute h-full max-w-none"
                               alt=""
                             />
                           )}
                         </div>
                         <div className="w-40 relative overflow-hidden">
                           {rightSelectedProduct && (
-                            <Image
+                            <img
                               src={rightSelectedProduct.image}
                               width="320"
                               height="320"
-                              layout="fixed"
-                              className="absolute h-full max-w-2xl right-0"
+                              className="absolute h-full max-w-none right-0"
                               alt=""
                             />
                           )}
                         </div>
                       </div>
-                      <div className="divide-y space-y-3">
-                        <div className="mt-4 text-2xl">
-                          {
-                            leftSelectedProduct?.attribute_data?.name[
-                              channelName
-                            ][locale || 'ru']
-                          }{' '}
-                          +{' '}
-                          {
-                            rightSelectedProduct?.attribute_data?.name[
-                              channelName
-                            ][locale || 'ru']
-                          }
-                        </div>
-                        <div className="pt-3">
-                          <div className="text-xl">
-                            {
-                              leftSelectedProduct?.attribute_data?.name[
-                                channelName
-                              ][locale || 'ru']
-                            }
-                          </div>
-                          <div
-                            className="text-xs text-gray-400"
-                            dangerouslySetInnerHTML={{
-                              __html: leftSelectedProduct?.attribute_data
-                                ?.description
-                                ? leftSelectedProduct?.attribute_data
-                                    ?.description[channelName][locale || 'ru']
-                                : '',
-                            }}
-                          ></div>
-                        </div>
-                        <div className="pt-3">
-                          <div className="text-xl">
-                            {
-                              rightSelectedProduct?.attribute_data?.name[
-                                channelName
-                              ][locale || 'ru']
-                            }
-                          </div>
-                          <div
-                            className="text-xs text-gray-400"
-                            dangerouslySetInnerHTML={{
-                              __html: rightSelectedProduct?.attribute_data
-                                ?.description
-                                ? rightSelectedProduct?.attribute_data
-                                    ?.description[channelName][locale || 'ru']
-                                : '',
-                            }}
-                          ></div>
-                        </div>
+                      <div className="mt-4 text-lg font-semibold text-center">
+                        {leftSelectedProduct?.attribute_data?.name[channelName][locale || 'ru']}
+                        {' + '}
+                        {rightSelectedProduct?.attribute_data?.name[channelName][locale || 'ru']}
                       </div>
+                      {(leftSelectedProduct?.attribute_data?.description?.[channelName]?.[locale || 'ru'] ||
+                        rightSelectedProduct?.attribute_data?.description?.[channelName]?.[locale || 'ru']) && (
+                        <div className="divide-y space-y-2 mt-2">
+                          {leftSelectedProduct?.attribute_data?.description?.[channelName]?.[locale || 'ru'] && (
+                            <div className="pt-2">
+                              <div className="text-sm font-medium">
+                                {leftSelectedProduct?.attribute_data?.name[channelName][locale || 'ru']}
+                              </div>
+                              <div
+                                className="text-xs text-gray-400"
+                                dangerouslySetInnerHTML={{
+                                  __html: leftSelectedProduct.attribute_data.description[channelName][locale || 'ru'],
+                                }}
+                              ></div>
+                            </div>
+                          )}
+                          {rightSelectedProduct?.attribute_data?.description?.[channelName]?.[locale || 'ru'] && (
+                            <div className="pt-2">
+                              <div className="text-sm font-medium">
+                                {rightSelectedProduct?.attribute_data?.name[channelName][locale || 'ru']}
+                              </div>
+                              <div
+                                className="text-xs text-gray-400"
+                                dangerouslySetInnerHTML={{
+                                  __html: rightSelectedProduct.attribute_data.description[channelName][locale || 'ru'],
+                                }}
+                              ></div>
+                            </div>
+                          )}
+                        </div>
+                      )}
                       {modifiers.length > 0 && (
                         <div>
                           <div className="my-2">
                             <span>{tr('add_to_pizza')}</span>
                           </div>
                           <div className="grid grid-cols-4 gap-2">
-                            {modifiers.map((mod: any) => (
+                            {modifiers.filter((mod: any) => mod.price > 0).map((mod: any) => (
                               <div
                                 key={mod.id}
                                 className={`border ${
@@ -711,9 +702,11 @@ const CreateYourPizza: FC<CreatePizzaProps> = ({ sec, channelName }) => {
                                   )}
                                 </div>
                                 <div className="px-2 text-center text-xs pb-1">
-                                  {locale == 'uz' ? mod.name_uz : ''}
-                                  {locale == 'ru' ? mod.name_ru : ''}
-                                  {locale == 'en' ? mod.name_en : ''}
+                                  {locale == 'uz'
+                                    ? mod.name_uz || mod.name
+                                    : locale == 'en'
+                                    ? mod.name_en || mod.name
+                                    : mod.name_ru || mod.name}
                                 </div>
                                 <div
                                   className={`${
@@ -795,14 +788,14 @@ const CreateYourPizza: FC<CreatePizzaProps> = ({ sec, channelName }) => {
                   <>
                     <div className="flex w-full max-h-32 flex-col">
                       <div className="flex w-full items-center">
-                        <span onClick={closeModal} className="flex">
-                          <Image
+                        <button onClick={closeModal} className="flex p-2 z-10 relative" type="button">
+                          <img
                             src="/assets/back.png"
                             width="24"
                             height="24"
-                            alt=""
+                            alt="back"
                           />
-                        </span>
+                        </button>
                         <div className="text-lg flex-grow text-center -ml-10">
                           {tr('pizza')} 50/50 <br />{' '}
                           {tr('combine_your_two_favorite')}
@@ -824,7 +817,48 @@ const CreateYourPizza: FC<CreatePizzaProps> = ({ sec, channelName }) => {
                         ))}
                       </div>
                     </div>
-                    <div className="flex justify-around h-[calc(100vh-310px)] overflow-hidden overflow-y-auto">
+                    {(leftSelectedProduct || rightSelectedProduct) && (
+                      <div className="sticky top-0 z-10 bg-white py-2">
+                        <div className="flex items-center justify-center">
+                          <div className="relative w-32 h-32">
+                            {leftSelectedProduct ? (
+                              <div className="absolute inset-0 overflow-hidden" style={{ clipPath: 'inset(0 50% 0 0)' }}>
+                                <img
+                                  src={leftSelectedProduct.image}
+                                  className="w-32 h-32 object-contain"
+                                  alt=""
+                                />
+                              </div>
+                            ) : (
+                              <div className="absolute inset-0 overflow-hidden" style={{ clipPath: 'inset(0 50% 0 0)' }}>
+                                <div className="w-32 h-32 rounded-full bg-gray-100 flex items-center justify-center">
+                                  <span className="text-gray-300 text-3xl">?</span>
+                                </div>
+                              </div>
+                            )}
+                            {rightSelectedProduct ? (
+                              <div className="absolute inset-0 overflow-hidden" style={{ clipPath: 'inset(0 0 0 50%)' }}>
+                                <img
+                                  src={rightSelectedProduct.image}
+                                  className="w-32 h-32 object-contain"
+                                  alt=""
+                                />
+                              </div>
+                            ) : (
+                              <div className="absolute inset-0 overflow-hidden" style={{ clipPath: 'inset(0 0 0 50%)' }}>
+                                <div className="w-32 h-32 rounded-full bg-gray-100 flex items-center justify-center">
+                                  <span className="text-gray-300 text-3xl">?</span>
+                                </div>
+                              </div>
+                            )}
+                            <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
+                              <div className="w-px h-full bg-gray-300"></div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    )}
+                    <div className="flex justify-around flex-grow overflow-hidden overflow-y-auto">
                       <div className="text-center">
                         {readyProductList &&
                           readyProductList.map((item: any) => (
@@ -857,12 +891,14 @@ const CreateYourPizza: FC<CreatePizzaProps> = ({ sec, channelName }) => {
                                     <CheckIcon className=" h-4 text-yellow border border-yellow rounded-full w-4" />
                                   </div>
                                 )}
-                              <Image
-                                src={item.image}
-                                width="110"
-                                height="110"
-                                alt=""
-                              />
+                              <div className="flex justify-center">
+                                <img
+                                  src={item.image}
+                                  width="110"
+                                  height="110"
+                                  alt=""
+                                />
+                              </div>
                               <div className="uppercase">
                                 {
                                   item?.attribute_data?.name[channelName][
@@ -932,12 +968,14 @@ const CreateYourPizza: FC<CreatePizzaProps> = ({ sec, channelName }) => {
                                     <CheckIcon className=" h-4 text-yellow border border-yellow rounded-full w-4" />
                                   </div>
                                 )}
-                              <Image
-                                src={item.image}
-                                width="110"
-                                height="110"
-                                alt=""
-                              />
+                              <div className="flex justify-center">
+                                <img
+                                  src={item.image}
+                                  width="110"
+                                  height="110"
+                                  alt=""
+                                />
+                              </div>
                               <div className="uppercase">
                                 {
                                   item?.attribute_data?.name[channelName][
@@ -976,30 +1014,6 @@ const CreateYourPizza: FC<CreatePizzaProps> = ({ sec, channelName }) => {
                       </div>
                     </div>
                     <div className="w-full pt-3">
-                      <div className="flex w-full justify-between text-center divide-x">
-                        <div className="flex-grow py-2">
-                          {leftSelectedProduct && (
-                            <span>
-                              {
-                                leftSelectedProduct?.attribute_data?.name[
-                                  channelName
-                                ][locale || 'ru']
-                              }
-                            </span>
-                          )}
-                        </div>
-                        <div className="flex-grow py-2">
-                          {rightSelectedProduct && (
-                            <span>
-                              {
-                                rightSelectedProduct?.attribute_data?.name[
-                                  channelName
-                                ][locale || 'ru']
-                              }
-                            </span>
-                          )}
-                        </div>
-                      </div>
                       <button
                         className={`${
                           leftSelectedProduct && rightSelectedProduct
