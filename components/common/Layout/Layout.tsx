@@ -151,22 +151,18 @@ const Layout: FC<Props> = ({
             )}
           </main>
           <footer className="text-white md:flex flex-col flex">
-            <div className="hidden md:flex justify-center">
-              <Image
+            <div className="hidden md:block w-full">
+              <img
                 src="/assets/uzor.svg"
-                width={1920}
-                height={40}
                 alt="footer_bg"
-                priority
+                className="w-full h-auto"
               />
             </div>
-            <div className="md:hidden flex">
-              <Image
+            <div className="md:hidden w-full">
+              <img
                 src="/assets/uzormob.svg"
-                width={1000}
-                height={60}
-                className="object-cover"
                 alt="footer_bg_mb"
+                className="w-full h-auto object-cover"
               />
             </div>
             <div className="bg-secondary w-full pt-5 pb-2 px-4 md:px-0">

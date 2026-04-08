@@ -41,7 +41,7 @@ const MainSlider: FC = () => {
   }, [locale])
 
   return (
-    <div className="relative rounded-2xl mx-3 md:mx-0 mt-2 md:mt-0 overflow-hidden">
+    <div className="relative rounded-2xl mx-3 md:mx-auto mt-2 md:mt-0 overflow-hidden md:container">
       {sliders && sliders.length > 0 && (
         <>
           <Flicking
@@ -55,7 +55,7 @@ const MainSlider: FC = () => {
             autoInit={true}
           >
             {sliders.map((item: any) => (
-              <div className="panel w-full md:mr-6" key={item.id}>
+              <div className="panel w-full" key={item.id}>
                 <div className="rounded-[15px] overflow-hidden flex mb-[10px]">
                   {item.link ? (
                     <a href={item.link} className="w-full">
@@ -63,10 +63,8 @@ const MainSlider: FC = () => {
                         <>
                           <img
                             src={item.asset[0].link}
-                            width={1600}
-                            height={320}
                             data-href={item.link}
-                            className="hidden md:flex"
+                            className="hidden md:block w-full max-h-[400px] object-cover"
                           />
                           <img
                             src={
@@ -83,13 +81,10 @@ const MainSlider: FC = () => {
                   ) : (
                     item.asset && (
                       <>
-                        <div className="hidden md:flex">
-                          <img
-                            src={item.asset[0].link}
-                            width={1600}
-                            height={320}
-                          />
-                        </div>
+                        <img
+                          src={item.asset[0].link}
+                          className="hidden md:block w-full max-h-[400px] object-cover"
+                        />
                         <img
                           src={
                             item.asset[1]
@@ -105,7 +100,7 @@ const MainSlider: FC = () => {
               </div>
             ))}
             <ViewportSlot>
-              <div className="md:hidden flicking-pagination justify-center flex"></div>
+              <div className="flicking-pagination justify-center flex"></div>
               <span className="flicking-arrow-prev is-circle hidden md:block"></span>
               <span className="flicking-arrow-next is-circle hidden md:block"></span>
             </ViewportSlot>
