@@ -194,8 +194,8 @@ const AddressSelectionMobile: FC<AddressSelectionMobileProps> = ({
     // Load polygons FIRST so clickOnMap can check containment
     const objectManager = ymaps.geoQuery(
       cities
-        .filter((city: City) => city.polygon)
-        .map((city: City) => ({
+        .filter((city: any) => city.polygon)
+        .map((city: any) => ({
           type: 'Feature',
           geometry: { type: 'Polygon', coordinates: [JSON.parse(city.polygon)] },
           properties: { slug: city.slug },
