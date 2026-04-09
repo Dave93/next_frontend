@@ -301,7 +301,7 @@ export default function Home({
       </div>
       <div className="container mx-auto">
         <h1 className="py-1 md:text-4xl text-2xl w-max mt-4 mb-10 md:my-10 m-auto">
-          {tr('pizza_for_family_' + activeCity.slug)}
+          {tr('pizza_for_family_' + (activeCity?.slug || ''))}
         </h1>
         <div className="grid lg:grid-cols-4 grid-cols-1 md:grid-cols-2 gap-10 mt-10">
           {threeCategories.length > 0 && (

@@ -109,7 +109,8 @@ const ProductItemNew: FC<ProductItem> = ({ product, channelName }) => {
   let [isOpen, setIsOpen] = useState(false)
   let completeButtonRef = useRef(null)
   const router = useRouter()
-  const { locale } = router
+  const { locale, query } = router
+  const citySlug = (query.city as string) || ''
 
   const fetchConfig = async () => {
     let configData
@@ -679,7 +680,7 @@ const ProductItemNew: FC<ProductItem> = ({ product, channelName }) => {
           itemType="https://schema.org/Product"
           onClick={() => {
             const activeVariant = store.variants?.find((v: any) => v.active)
-            router.push(`/product/${store.id}${activeVariant ? `?variant=${activeVariant.id}` : ''}`)
+            router.push(`/${citySlug}/product/${store.id}${activeVariant ? `?variant=${activeVariant.id}` : ''}`)
           }}
         >
           {/* Mobile compact vertical card */}
@@ -767,7 +768,7 @@ const ProductItemNew: FC<ProductItem> = ({ product, channelName }) => {
                   if (modifiers && modifiers.length) {
                     setIsLoadingBasket(true)
                     const activeVariant = store.variants?.find((v: any) => v.active)
-                    router.push(`/product/${store.id}${activeVariant ? `?variant=${activeVariant.id}` : ''}`)
+                    router.push(`/${citySlug}/product/${store.id}${activeVariant ? `?variant=${activeVariant.id}` : ''}`)
                   } else {
                     addToBasket()
                   }
