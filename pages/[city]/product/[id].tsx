@@ -150,7 +150,7 @@ export default function ProductPage({
       await axios.post(`${webAddress}/api/v1/basket-lines/${lineIdEncoded}/add`, { quantity: 1 })
     } else {
       if (cartLineItem.quantity <= 1) {
-        await axios.delete(`${webAddress}/api/baskets-lines/${lineIdEncoded}`)
+        await axios.delete(`${webAddress}/api/basket-lines/${lineIdEncoded}`)
       } else {
         await axios.put(`${webAddress}/api/v1/basket-lines/${lineIdEncoded}/remove`, { quantity: 1 })
       }
@@ -683,14 +683,13 @@ export default function ProductPage({
                           +
                         </button>
                       </div>
-                      <button
-                        className="bg-yellow focus:outline-none font-bold outline-none px-6 rounded-full text-white uppercase text-sm h-[48px]"
-                        onClick={() =>
-                          router.push(`/${chosenCity?.slug || ''}/cart`)
-                        }
+                      <Link
+                        href={`/${chosenCity?.slug || ''}/cart`}
+                        prefetch={false}
+                        className="bg-yellow focus:outline-none font-bold outline-none px-6 rounded-full text-white uppercase text-sm h-[48px] hidden md:flex items-center"
                       >
                         {tr('main_to_basket')}
-                      </button>
+                      </Link>
                     </>
                   ) : (
                     <button

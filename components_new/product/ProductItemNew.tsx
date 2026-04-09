@@ -69,7 +69,7 @@ const ProductItemNew: FC<ProductItem> = ({ product, channelName }) => {
       await axios.post(`${webAddress}/api/v1/basket-lines/${lineIdEncoded}/add`, { quantity: 1 })
     } else {
       if (cartLineItem.quantity <= 1) {
-        await axios.delete(`${webAddress}/api/baskets-lines/${lineIdEncoded}`)
+        await axios.delete(`${webAddress}/api/basket-lines/${lineIdEncoded}`)
       } else {
         await axios.put(`${webAddress}/api/v1/basket-lines/${lineIdEncoded}/remove`, { quantity: 1 })
       }
@@ -674,40 +674,38 @@ const ProductItemNew: FC<ProductItem> = ({ product, channelName }) => {
         <div
           className={`${styles.gridItemOutline} ${
             isProductInStop ? 'opacity-25' : ''
-          } overflow-hidden bg-white rounded-[20px] md:rounded-[15px] hover:shadow-xl shadow-sm group cursor-pointer md:py-3 md:px-3 flex flex-col h-full`}
+          } overflow-hidden bg-white rounded-[20px] md:rounded-[15px] hover:shadow-xl shadow-sm group md:py-3 md:px-3 flex flex-col h-full`}
           id={`prod-${store.id}`}
           itemScope
           itemType="https://schema.org/Product"
-          onClick={() => {
-            const activeVariant = store.variants?.find((v: any) => v.active)
-            router.push(`/${citySlug}/product/${store.id}${activeVariant ? `?variant=${activeVariant.id}` : ''}`)
-          }}
         >
           {/* Mobile compact vertical card */}
           <div className="md:hidden p-3">
-            <div className="text-center mb-2">
-              {store.image ? (
-                <img
-                  src={store.image}
-                  width={120}
-                  height={96}
-                  alt={store?.attribute_data?.name[channelName][locale || 'ru']}
-                  className="mx-auto object-contain"
-                  itemProp="image"
-                />
-              ) : (
-                <img
-                  src="/no_photo.svg"
-                  width={120}
-                  height={96}
-                  alt={store?.attribute_data?.name[channelName][locale || 'ru']}
-                  className="mx-auto"
-                />
-              )}
-            </div>
-            <div className="text-center text-sm font-semibold mb-1 truncate" itemProp="name">
-              {store?.attribute_data?.name[channelName][locale || 'ru']}
-            </div>
+            <Link href={`/${citySlug}/product/${store.id}`} prefetch={false}>
+              <div className="text-center mb-2">
+                {store.image ? (
+                  <img
+                    src={store.image}
+                    width={120}
+                    height={96}
+                    alt={store?.attribute_data?.name[channelName][locale || 'ru']}
+                    className="mx-auto object-contain"
+                    itemProp="image"
+                  />
+                ) : (
+                  <img
+                    src="/no_photo.svg"
+                    width={120}
+                    height={96}
+                    alt={store?.attribute_data?.name[channelName][locale || 'ru']}
+                    className="mx-auto"
+                  />
+                )}
+              </div>
+              <div className="text-center text-sm font-semibold mb-1 truncate" itemProp="name">
+                {store?.attribute_data?.name[channelName][locale || 'ru']}
+              </div>
+            </Link>
             {store.variants && store.variants.length > 1 && (
               <div
                 className="flex gap-1 mb-2 justify-center"
@@ -795,30 +793,32 @@ const ProductItemNew: FC<ProductItem> = ({ product, channelName }) => {
           </div>
           {/* Desktop card */}
           <div className="hidden md:flex md:flex-col md:h-full">
-          <div className="text-center">
-            {store.image ? (
-              <img
-                src={store.image}
-                width={250}
-                height={250}
-                alt={store?.attribute_data?.name[channelName][locale || 'ru']}
-                className="transform motion-safe:group-hover:scale-105 transition duration-500 object-cover"
-                itemProp="image"
-              />
-            ) : (
-              <img
-                src="/no_photo.svg"
-                width={250}
-                height={250}
-                alt={store?.attribute_data?.name[channelName][locale || 'ru']}
-                className="rounded-full transform motion-safe:group-hover:scale-105 transition duration-500"
-              />
-            )}
-          </div>
-          <div className="flex flex-col flex-grow w-full">
+          <Link href={`/${citySlug}/product/${store.id}`} prefetch={false} className="cursor-pointer">
+            <div className="text-center">
+              {store.image ? (
+                <img
+                  src={store.image}
+                  width={250}
+                  height={250}
+                  alt={store?.attribute_data?.name[channelName][locale || 'ru']}
+                  className="transform motion-safe:group-hover:scale-105 transition duration-500 object-cover"
+                  itemProp="image"
+                />
+              ) : (
+                <img
+                  src="/no_photo.svg"
+                  width={250}
+                  height={250}
+                  alt={store?.attribute_data?.name[channelName][locale || 'ru']}
+                  className="rounded-full transform motion-safe:group-hover:scale-105 transition duration-500"
+                />
+              )}
+            </div>
             <div className="font-serif mt-4 text-xl uppercase" itemProp="name">
               {store?.attribute_data?.name[channelName][locale || 'ru']}
             </div>
+          </Link>
+          <div className="flex flex-col flex-grow w-full">
             {store.sizeDesc && (
               <div className="mt-2 text-gray-700 text-xs">{store.sizeDesc}</div>
             )}
@@ -873,39 +873,74 @@ const ProductItemNew: FC<ProductItem> = ({ product, channelName }) => {
               )}
             </div>
             <div className="mt-10 flex justify-between items-center text-sm">
-              <button
-                className="bg-yellow focus:outline-none w-32 justify-around font-bold outline-none py-2 rounded-full text-white uppercase inline-flex items-center"
-                onClick={(e) => {
-                  e.stopPropagation()
-                  handleSubmit(e)
-                }}
-                disabled={isLoadingBasket}
-              >
-                {isLoadingBasket ? (
-                  <svg
-                    className="animate-spin h-5 w-5 text-white flex-grow text-center"
-                    xmlns="http://www.w3.org/2000/svg"
-                    fill="none"
-                    viewBox="0 0 24 24"
+              {cartQuantity > 0 ? (
+                <div
+                  className={`flex items-center rounded-full py-0.5 px-0.5 w-32 transition-opacity ${
+                    isLoadingBasket ? 'opacity-50 pointer-events-none' : ''
+                  }`}
+                  style={{ backgroundColor: '#F9B004' }}
+                >
+                  <button
+                    className="w-8 h-8 rounded-full bg-white flex items-center justify-center text-lg font-bold"
+                    style={{ color: '#F9B004' }}
+                    disabled={isLoadingBasket}
+                    onClick={(e) => {
+                      e.stopPropagation()
+                      changeCartQuantity(-1)
+                    }}
                   >
-                    <circle
-                      className="opacity-25"
-                      cx="12"
-                      cy="12"
-                      r="10"
-                      stroke="currentColor"
-                      strokeWidth="4"
-                    ></circle>
-                    <path
-                      className="opacity-75"
-                      fill="currentColor"
-                      d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
-                    ></path>
-                  </svg>
-                ) : (
-                  tr('main_to_basket')
-                )}
-              </button>
+                    −
+                  </button>
+                  <span className="flex-1 text-center text-white font-bold">
+                    {cartQuantity}
+                  </span>
+                  <button
+                    className="w-8 h-8 rounded-full bg-white flex items-center justify-center text-lg font-bold"
+                    style={{ color: '#F9B004' }}
+                    disabled={isLoadingBasket}
+                    onClick={(e) => {
+                      e.stopPropagation()
+                      changeCartQuantity(1)
+                    }}
+                  >
+                    +
+                  </button>
+                </div>
+              ) : (
+                <button
+                  className="bg-yellow focus:outline-none w-32 justify-around font-bold outline-none py-2 rounded-full text-white uppercase inline-flex items-center"
+                  onClick={(e) => {
+                    e.stopPropagation()
+                    handleSubmit(e)
+                  }}
+                  disabled={isLoadingBasket}
+                >
+                  {isLoadingBasket ? (
+                    <svg
+                      className="animate-spin h-5 w-5 text-white flex-grow text-center"
+                      xmlns="http://www.w3.org/2000/svg"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                    >
+                      <circle
+                        className="opacity-25"
+                        cx="12"
+                        cy="12"
+                        r="10"
+                        stroke="currentColor"
+                        strokeWidth="4"
+                      ></circle>
+                      <path
+                        className="opacity-75"
+                        fill="currentColor"
+                        d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+                      ></path>
+                    </svg>
+                  ) : (
+                    tr('main_to_basket')
+                  )}
+                </button>
+              )}
               <div
                 itemProp="offers"
                 itemScope
