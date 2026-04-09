@@ -24,6 +24,7 @@ import { useCart } from '@framework/cart'
 import useTranslation from 'next-translate/useTranslation'
 import { useUI } from '@components/ui/context'
 import { DateTime } from 'luxon'
+import getAssetUrl from '@utils/getAssetUrl'
 
 type CreatePizzaProps = {
   sec: any
@@ -828,26 +829,12 @@ const CreateYourPizza: FC<CreatePizzaProps> = ({
                               onClick={() => addModifier(mod.id)}
                             >
                               <div className="flex-grow pt-2 px-2 flex justify-center">
-                                {mod.assets.length ? (
-                                  <img
-                                    src={
-                                      mod.assets[0].local
-                                        ? mod.assets[0].local
-                                        : `${webAddress}/storage/${mod.assets[0]?.location}/${mod.assets[0]?.filename}`
-                                    }
-                                    width={80}
-                                    height={80}
-                                    alt={mod.name}
-                                  />
-                                ) : (
-                                  <img
-                                    src="/no_photo.svg"
-                                    width={80}
-                                    height={80}
-                                    alt={mod.name}
-                                    className="rounded-full"
-                                  />
-                                )}
+                                <img
+                                  src={getAssetUrl(mod.assets)}
+                                  width={80}
+                                  height={80}
+                                  alt={mod.name}
+                                />
                               </div>
                               <div className="px-2 text-center text-xs pb-1">
                                 {locale == 'uz' ? mod.name_uz : ''}

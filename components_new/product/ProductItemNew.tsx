@@ -28,6 +28,7 @@ import useTranslation from 'next-translate/useTranslation'
 import axios from 'axios'
 import Cookies from 'js-cookie'
 import Hashids from 'hashids'
+import getAssetUrl from '@utils/getAssetUrl'
 import { useCart } from '@framework/cart'
 import { XIcon, CheckIcon } from '@heroicons/react/solid'
 import styles from './ProductItemNew.module.css'
@@ -629,27 +630,13 @@ const ProductItemNew: FC<ProductItem> = ({ product, channelName }) => {
                   onClick={() => addModifier(mod.id)}
                 >
                   <div className="px-2">
-                    {mod.assets.length ? (
-                      <img
-                        src={
-                          mod.assets[0].local
-                            ? mod.assets[0].local
-                            : `${webAddress}/storage/${mod.assets[0]?.location}/${mod.assets[0]?.filename}`
-                        }
-                        width={50}
-                        height={50}
-                        alt={mod.name}
-                        className="mx-auto"
-                      />
-                    ) : (
-                      <img
-                        src="/no_photo.svg"
-                        width={50}
-                        height={50}
-                        alt={mod.name}
-                        className="rounded-full mx-auto"
-                      />
-                    )}
+                    <img
+                      src={getAssetUrl(mod.assets)}
+                      width={50}
+                      height={50}
+                      alt={mod.name}
+                      className="mx-auto"
+                    />
                   </div>
                   <div className="text-center text-base m-auto">
                     <div>
@@ -1093,27 +1080,13 @@ const ProductItemNew: FC<ProductItem> = ({ product, channelName }) => {
                                       onClick={() => addModifier(mod.id)}
                                     >
                                       <div className="flex-grow pt-2 px-2">
-                                        {mod.assets.length ? (
-                                          <img
-                                            src={
-                                              mod.assets[0].local
-                                                ? mod.assets[0].local
-                                                : `${webAddress}/storage/${mod.assets[0]?.location}/${mod.assets[0]?.filename}`
-                                            }
-                                            width={50}
-                                            height={50}
-                                            alt={mod.name}
-                                            className="mx-auto"
-                                          />
-                                        ) : (
-                                          <img
-                                            src="/no_photo.svg"
-                                            width={50}
-                                            height={50}
-                                            alt={mod.name}
-                                            className="rounded-full mx-auto"
-                                          />
-                                        )}
+                                        <img
+                                          src={getAssetUrl(mod.assets)}
+                                          width={50}
+                                          height={50}
+                                          alt={mod.name}
+                                          className="mx-auto"
+                                        />
                                       </div>
                                       <div className="text-center text-xs">
                                         {locale == 'uz'

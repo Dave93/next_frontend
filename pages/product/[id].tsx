@@ -19,6 +19,7 @@ import { useUI } from '@components/ui/context'
 import defaultChannel from '@lib/defaultChannel'
 import { NextSeo } from 'next-seo'
 import { DateTime } from 'luxon'
+import getAssetUrl from '@utils/getAssetUrl'
 
 let webAddress = process.env.NEXT_PUBLIC_API_URL
 axios.defaults.withCredentials = true
@@ -621,27 +622,13 @@ export default function ProductPage({
                         onClick={() => addModifier(mod.id)}
                       >
                         <div className="mb-1">
-                          {mod.assets && mod.assets.length ? (
-                            <img
-                              src={
-                                mod.assets[0].local
-                                  ? mod.assets[0].local
-                                  : `${webAddress}/storage/${mod.assets[0]?.location}/${mod.assets[0]?.filename}`
-                              }
-                              width={50}
-                              height={50}
-                              alt={mod.name}
-                              className="mx-auto"
-                            />
-                          ) : (
-                            <img
-                              src="/no_photo.svg"
-                              width={50}
-                              height={50}
-                              alt={mod.name}
-                              className="rounded-full mx-auto"
-                            />
-                          )}
+                          <img
+                            src={getAssetUrl(mod.assets)}
+                            width={50}
+                            height={50}
+                            alt={mod.name}
+                            className="mx-auto"
+                          />
                         </div>
                         <div className="text-center text-xs">
                           {locale == 'uz' ? mod.name_uz : ''}

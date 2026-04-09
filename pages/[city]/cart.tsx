@@ -13,6 +13,7 @@ import axios from 'axios'
 import Cookies from 'js-cookie'
 import defaultChannel from '@lib/defaultChannel'
 import currency from 'currency.js'
+import getAssetUrl from '@utils/getAssetUrl'
 import { useUI } from '@components/ui/context'
 import Flicking, { ViewportSlot } from '@egjs/react-flicking'
 import Slider from 'react-slick'
@@ -584,14 +585,30 @@ export default function Cart() {
             {data?.lineItems
               .map((lineItem: any) => (
                 <div key={lineItem.id} className="flex gap-3 px-4 py-3 border-b border-gray-50">
-                  <img
-                    src={
-                      lineItem?.variant?.product?.assets?.length
-                        ? `${webAddress}/storage/${lineItem?.variant?.product?.assets[0]?.location}/${lineItem?.variant?.product?.assets[0]?.filename}`
-                        : '/no_photo.svg'
-                    }
-                    className="w-16 h-16 object-contain rounded-xl flex-shrink-0"
-                  />
+                  {lineItem.child &&
+                  lineItem.child.length === 1 &&
+                  lineItem.child[0].variant?.product?.id !==
+                    lineItem?.variant?.product?.box_id ? (
+                    <div className="w-16 h-16 flex rounded-full overflow-hidden flex-shrink-0">
+                      <div className="w-1/2 relative overflow-hidden">
+                        <img
+                          src={getAssetUrl(lineItem?.variant?.product?.assets)}
+                          className="absolute h-full max-w-none left-0"
+                        />
+                      </div>
+                      <div className="w-1/2 relative overflow-hidden">
+                        <img
+                          src={getAssetUrl(lineItem?.child[0].variant?.product?.assets)}
+                          className="absolute h-full max-w-none right-0"
+                        />
+                      </div>
+                    </div>
+                  ) : (
+                    <img
+                      src={getAssetUrl(lineItem?.variant?.product?.assets)}
+                      className="w-16 h-16 object-contain rounded-xl flex-shrink-0"
+                    />
+                  )}
                   <div className="flex-1 min-w-0">
                     <div className="text-sm font-semibold leading-tight">
                       {lineItem.child && lineItem.child.length == 1
@@ -796,16 +813,10 @@ export default function Cart() {
                               <div className="h-14 w-40 flex relative">
                                 <div className="w-5 absolute left-0">
                                   <div>
-                                    <Image
-                                      src={
-                                        lineItem?.variant?.product?.assets
-                                          ?.length
-                                          ? `${webAddress}/storage/${lineItem?.variant?.product?.assets[0]?.location}/${lineItem?.variant?.product?.assets[0]?.filename}`
-                                          : '/no_photo.svg'
-                                      }
+                                    <img
+                                      src={getAssetUrl(lineItem?.variant?.product?.assets)}
                                       width="40"
                                       height="40"
-                                      layout="fixed"
                                       className="rounded-full"
                                       alt=""
                                     />
@@ -820,15 +831,10 @@ export default function Cart() {
                                         left: index == 0 ? '0.5rem' : '1.5rem',
                                       }}
                                     >
-                                      <Image
-                                        src={
-                                          child.variant?.product?.assets?.length
-                                            ? `${webAddress}/storage/${child.variant?.product?.assets[0]?.location}/${child.variant?.product?.assets[0]?.filename}`
-                                            : '/no_photo.svg'
-                                        }
+                                      <img
+                                        src={getAssetUrl(child.variant?.product?.assets)}
                                         width="40"
                                         height="40"
-                                        layout="fixed"
                                         className="rounded-full"
                                         alt=""
                                       />
@@ -837,34 +843,18 @@ export default function Cart() {
                                 )}
                               </div>
                             ) : (
-                              <div className="h-28 md:w-1/3 w-24 flex relative">
-                                <div className="w-full relative overflow-hidden">
-                                  <Image
-                                    src={
-                                      lineItem?.variant?.product?.assets?.length
-                                        ? `${webAddress}/storage/${lineItem?.variant?.product?.assets[0]?.location}/${lineItem?.variant?.product?.assets[0]?.filename}`
-                                        : '/no_photo.svg'
-                                    }
-                                    width="100"
-                                    height="100"
-                                    layout="fixed"
-                                    className="absolute max-w-max"
+                              <div className="w-28 h-28 flex rounded-full overflow-hidden flex-shrink-0">
+                                <div className="w-1/2 relative overflow-hidden">
+                                  <img
+                                    src={getAssetUrl(lineItem?.variant?.product?.assets)}
+                                    className="absolute h-full max-w-none left-0"
                                     alt=""
                                   />
                                 </div>
-
-                                <div className="w-full relative overflow-hidden">
-                                  <Image
-                                    src={
-                                      lineItem?.child[0].variant?.product
-                                        ?.assets?.length
-                                        ? `${webAddress}/storage/${lineItem?.child[0].variant?.product?.assets[0]?.location}/${lineItem?.child[0].variant?.product?.assets[0]?.filename}`
-                                        : '/no_photo.svg'
-                                    }
-                                    width="100"
-                                    height="100"
-                                    layout="fixed"
-                                    className="absolute  max-w-max right-0"
+                                <div className="w-1/2 relative overflow-hidden">
+                                  <img
+                                    src={getAssetUrl(lineItem?.child[0].variant?.product?.assets)}
+                                    className="absolute h-full max-w-none right-0"
                                     alt=""
                                   />
                                 </div>
@@ -874,9 +864,7 @@ export default function Cart() {
                             <div className="w-16 h-16 md:w-28 md:h-auto flex-shrink-0 relative">
                               <img
                                 src={
-                                  lineItem?.variant?.product?.assets?.length
-                                    ? `${webAddress}/storage/${lineItem?.variant?.product?.assets[0]?.location}/${lineItem?.variant?.product?.assets[0]?.filename}`
-                                    : '/no_photo.svg'
+                                  getAssetUrl(lineItem?.variant?.product?.assets)
                                 }
                                 width={100}
                                 height={100}

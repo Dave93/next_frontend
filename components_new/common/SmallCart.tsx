@@ -10,6 +10,7 @@ import { useRouter } from 'next/router'
 import useTranslation from 'next-translate/useTranslation'
 import Hashids from 'hashids'
 import { useUI } from '@components/ui/context'
+import getAssetUrl from '@utils/getAssetUrl'
 import { toast } from 'react-toastify'
 import SimpleBar from 'simplebar-react'
 import 'simplebar/dist/simplebar.min.css'
@@ -329,9 +330,7 @@ const SmallCart: FC<SmallCartProps> = ({ channelName }) => {
                                 <div>
                                   <img
                                     src={
-                                      lineItem?.variant?.product?.assets?.length
-                                        ? `${webAddress}/storage/${lineItem?.variant?.product?.assets[0]?.location}/${lineItem?.variant?.product?.assets[0]?.filename}`
-                                        : '/no_photo.svg'
+                                      getAssetUrl(lineItem?.variant?.product?.assets)
                                     }
                                     width="40"
                                     height="40"
@@ -351,9 +350,7 @@ const SmallCart: FC<SmallCartProps> = ({ channelName }) => {
                                   >
                                     <img
                                       src={
-                                        child.variant?.product?.assets?.length
-                                          ? `${webAddress}/storage/${child.variant?.product?.assets[0]?.location}/${child.variant?.product?.assets[0]?.filename}`
-                                          : '/no_photo.svg'
+                                        getAssetUrl(child.variant?.product?.assets)
                                       }
                                       width="40"
                                       height="40"
@@ -369,9 +366,7 @@ const SmallCart: FC<SmallCartProps> = ({ channelName }) => {
                               <div className="w-10 relative overflow-hidden">
                                 <img
                                   src={
-                                    lineItem?.variant?.product?.assets?.length
-                                      ? `${webAddress}/storage/${lineItem?.variant?.product?.assets[0]?.location}/${lineItem?.variant?.product?.assets[0]?.filename}`
-                                      : '/no_photo.svg'
+                                    getAssetUrl(lineItem?.variant?.product?.assets)
                                   }
                                   width="60"
                                   height="60"
@@ -382,10 +377,7 @@ const SmallCart: FC<SmallCartProps> = ({ channelName }) => {
                               <div className="w-10 relative overflow-hidden">
                                 <img
                                   src={
-                                    lineItem?.child[0].variant?.product?.assets
-                                      ?.length
-                                      ? `${webAddress}/storage/${lineItem?.child[0].variant?.product?.assets[0]?.location}/${lineItem?.child[0].variant?.product?.assets[0]?.filename}`
-                                      : '/no_photo.svg'
+                                    getAssetUrl(lineItem?.child[0].variant?.product?.assets)
                                   }
                                   width="60"
                                   height="60"
@@ -399,9 +391,7 @@ const SmallCart: FC<SmallCartProps> = ({ channelName }) => {
                           <div className="">
                             <img
                               src={
-                                lineItem?.variant?.product?.assets?.length
-                                  ? `${webAddress}/storage/${lineItem?.variant?.product?.assets[0]?.location}/${lineItem?.variant?.product?.assets[0]?.filename}`
-                                  : '/no_photo.svg'
+                                getAssetUrl(lineItem?.variant?.product?.assets)
                               }
                               width={60}
                               height={60}

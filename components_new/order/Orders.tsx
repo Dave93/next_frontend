@@ -1,4 +1,5 @@
 import { XIcon, PlusIcon, BookmarkIcon } from '@heroicons/react/outline'
+import getAssetUrl from '@utils/getAssetUrl'
 import { useForm, Controller } from 'react-hook-form'
 import useTranslation from 'next-translate/useTranslation'
 import { useUI } from '@components/ui/context'
@@ -2000,39 +2001,21 @@ const Orders: FC<OrdersProps> = ({ channelName, isMobile = false }) => {
                 <div
                   className={`${
                     isProductInStop.includes(lineItem.id) ? 'opacity-25' : ''
-                  } h-20 w-20 flex relative`}
+                  } w-20 h-20 flex rounded-full overflow-hidden flex-shrink-0`}
                 >
-                  <div className="w-full relative overflow-hidden">
-                    <div>
-                      <Image
-                        src={
-                          lineItem?.variant?.product?.assets?.length
-                            ? `${webAddress}/storage/${lineItem?.variant?.product?.assets[0]?.location}/${lineItem?.variant?.product?.assets[0]?.filename}`
-                            : '/no_photo.svg'
-                        }
-                        width="80"
-                        height="80"
-                        layout="fixed"
-                        className="absolute max-w-2xl"
-                        alt=""
-                      />
-                    </div>
+                  <div className="w-1/2 relative overflow-hidden">
+                    <img
+                      src={getAssetUrl(lineItem?.variant?.product?.assets)}
+                      className="absolute h-full max-w-none left-0"
+                      alt=""
+                    />
                   </div>
-                  <div className="w-full relative overflow-hidden">
-                    <div className="absolute right-0">
-                      <Image
-                        src={
-                          lineItem?.child[0].variant?.product?.assets?.length
-                            ? `${webAddress}/storage/${lineItem?.child[0].variant?.product?.assets[0]?.location}/${lineItem?.child[0].variant?.product?.assets[0]?.filename}`
-                            : '/no_photo.svg'
-                        }
-                        width="80"
-                        height="80"
-                        layout="fixed"
-                        className="absolute  max-w-2xl right-0"
-                        alt=""
-                      />
-                    </div>
+                  <div className="w-1/2 relative overflow-hidden">
+                    <img
+                      src={getAssetUrl(lineItem?.child[0].variant?.product?.assets)}
+                      className="absolute h-full max-w-none right-0"
+                      alt=""
+                    />
                   </div>
                 </div>
               ) : (
@@ -2041,15 +2024,11 @@ const Orders: FC<OrdersProps> = ({ channelName, isMobile = false }) => {
                     isProductInStop.includes(lineItem.id) ? 'opacity-25' : ''
                   } flex items-center`}
                 >
-                  <Image
-                    src={
-                      lineItem?.variant?.product?.assets?.length
-                        ? `${webAddress}/storage/${lineItem?.variant?.product?.assets[0]?.location}/${lineItem?.variant?.product?.assets[0]?.filename}`
-                        : '/no_photo.svg'
-                    }
+                  <img
+                    src={getAssetUrl(lineItem?.variant?.product?.assets)}
                     width={80}
                     height={80}
-                    className="rounded-full"
+                    className="rounded-full object-cover"
                     alt=""
                   />
                 </div>
