@@ -106,6 +106,7 @@ export default function Cart() {
   const { data, isLoading, isEmpty, mutate } = useCart()
 
   const [isCartLoading, setIsCartLoading] = useState(false)
+  const [loadingLineId, setLoadingLineId] = useState<string | null>(null)
   const [addingItemId, setAddingItemId] = useState<number | null>(null)
 
   const { register, handleSubmit } = useForm()
@@ -175,7 +176,7 @@ export default function Cart() {
   }
 
   const destroyLine = async (lineId: string) => {
-    setIsCartLoading(true)
+    setLoadingLineId(lineId)
     await setCredentials()
     const { data } = await axios.delete(
       `${webAddress}/api/basket-lines/${hashids.encode(lineId)}`
@@ -202,7 +203,7 @@ export default function Cart() {
       }
 
       await mutate(basketResult, false)
-      setIsCartLoading(false)
+      setLoadingLineId(null)
     }
   }
 
@@ -210,7 +211,7 @@ export default function Cart() {
     if (line.quantity == 1) {
       return
     }
-    setIsCartLoading(true)
+    setLoadingLineId(line.id)
     await setCredentials()
     const { data: basket } = await axios.put(
       `${webAddress}/api/v1/basket-lines/${hashids.encode(line.id)}/remove`,
@@ -235,12 +236,12 @@ export default function Cart() {
       }
 
       await mutate(basketResult, false)
-      setIsCartLoading(false)
+      setLoadingLineId(null)
     }
   }
 
   const increaseQuantity = async (lineId: string) => {
-    setIsCartLoading(true)
+    setLoadingLineId(lineId)
     await setCredentials()
     const { data: basket } = await axios.post(
       `${webAddress}/api/v1/basket-lines/${hashids.encode(lineId)}/add`,
@@ -271,7 +272,7 @@ export default function Cart() {
       }
 
       await mutate(basketResult, false)
-      setIsCartLoading(false)
+      setLoadingLineId(null)
     }
   }
 
@@ -584,7 +585,15 @@ export default function Cart() {
             {/* Items */}
             {data?.lineItems
               .map((lineItem: any) => (
-                <div key={lineItem.id} className="flex gap-3 px-4 py-3 border-b border-gray-50">
+                <div key={lineItem.id} className="flex gap-3 px-4 py-3 border-b border-gray-50 relative">
+                  {loadingLineId === lineItem.id && (
+                    <div className="absolute inset-0 flex items-center justify-center bg-white bg-opacity-70 z-10">
+                      <svg className="animate-spin h-5 w-5 text-yellow" viewBox="0 0 24 24">
+                        <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" fill="none" />
+                        <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" />
+                      </svg>
+                    </div>
+                  )}
                   {lineItem.child &&
                   lineItem.child.length === 1 &&
                   lineItem.child[0].variant?.product?.id !==
@@ -803,47 +812,46 @@ export default function Cart() {
                         className="border-b pb-4 mb-1"
                         key={lineItem.id}
                       >
-                        {/* Desktop layout */}
-                        <div className="hidden md:flex md:justify-between md:items-center">
+                        {/* Desktop layout — single row: image | name+modifiers | counter | price | delete */}
+                        <div className="hidden md:flex md:items-center md:gap-4 relative">
+                        {loadingLineId === lineItem.id && (
+                          <div className="absolute inset-0 flex items-center justify-center bg-white bg-opacity-70 z-10 rounded-lg">
+                            <svg className="animate-spin h-6 w-6 text-yellow" viewBox="0 0 24 24">
+                              <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" fill="none" />
+                              <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" />
+                            </svg>
+                          </div>
+                        )}
+                          {/* Image */}
                           {lineItem.child &&
                           lineItem.child.length &&
                           lineItem.child[0].variant?.product?.id !=
                             lineItem?.variant?.product?.box_id ? (
                             lineItem.child.length > 1 ? (
-                              <div className="h-14 w-40 flex relative">
-                                <div className="w-5 absolute left-0">
-                                  <div>
-                                    <img
-                                      src={getAssetUrl(lineItem?.variant?.product?.assets)}
-                                      width="40"
-                                      height="40"
-                                      className="rounded-full"
-                                      alt=""
-                                    />
-                                  </div>
-                                </div>
+                              <div className="h-14 w-14 flex relative flex-shrink-0">
+                                <img
+                                  src={getAssetUrl(lineItem?.variant?.product?.assets)}
+                                  width="40"
+                                  height="40"
+                                  className="rounded-full absolute left-0"
+                                  alt=""
+                                />
                                 {lineItem.child.map(
                                   (child: any, index: number) => (
-                                    <div
+                                    <img
                                       key={`three_child_${index}`}
-                                      className="w-5 absolute"
-                                      style={{
-                                        left: index == 0 ? '0.5rem' : '1.5rem',
-                                      }}
-                                    >
-                                      <img
-                                        src={getAssetUrl(child.variant?.product?.assets)}
-                                        width="40"
-                                        height="40"
-                                        className="rounded-full"
-                                        alt=""
-                                      />
-                                    </div>
+                                      src={getAssetUrl(child.variant?.product?.assets)}
+                                      width="40"
+                                      height="40"
+                                      className="rounded-full absolute"
+                                      style={{ left: (index + 1) * 10 }}
+                                      alt=""
+                                    />
                                   )
                                 )}
                               </div>
                             ) : (
-                              <div className="w-28 h-28 flex rounded-full overflow-hidden flex-shrink-0">
+                              <div className="w-16 h-16 flex rounded-full overflow-hidden flex-shrink-0">
                                 <div className="w-1/2 relative overflow-hidden">
                                   <img
                                     src={getAssetUrl(lineItem?.variant?.product?.assets)}
@@ -861,109 +869,62 @@ export default function Cart() {
                               </div>
                             )
                           ) : (
-                            <div className="w-16 h-16 md:w-28 md:h-auto flex-shrink-0 relative">
+                            <div className="w-16 h-16 flex-shrink-0">
                               <img
-                                src={
-                                  getAssetUrl(lineItem?.variant?.product?.assets)
-                                }
-                                width={100}
-                                height={100}
-                                className="rounded-full w-full h-full object-contain"
+                                src={getAssetUrl(lineItem?.variant?.product?.assets)}
+                                className="w-full h-full object-contain rounded-full"
+                                alt=""
                               />
                             </div>
                           )}
-                          <div className="flex-1 space-y-1 md:space-y-2 md:ml-4 md:text-left">
-                            <div className="text-sm md:text-xl font-bold md:w-full">
+                          {/* Name + modifiers */}
+                          <div className="flex-1 min-w-0">
+                            <div className="text-base font-bold truncate">
                               {lineItem.child && lineItem.child.length == 1
-                                ? `${
-                                    lineItem?.variant?.product?.attribute_data
-                                      ?.name[channelName][locale || 'ru']
-                                  } + ${lineItem?.child
-                                    .filter(
-                                      (v: any) =>
-                                        lineItem?.variant?.product?.box_id !=
-                                        v?.variant?.product?.id
-                                    )
-                                    .map(
-                                      (v: any) =>
-                                        v?.variant?.product?.attribute_data
-                                          ?.name[channelName][locale || 'ru']
-                                    )
+                                ? `${lineItem?.variant?.product?.attribute_data?.name[channelName][locale || 'ru']} + ${lineItem?.child
+                                    .filter((v: any) => lineItem?.variant?.product?.box_id != v?.variant?.product?.id)
+                                    .map((v: any) => v?.variant?.product?.attribute_data?.name[channelName][locale || 'ru'])
                                     .join(' + ')}`
-                                : lineItem?.variant?.product?.attribute_data
-                                    ?.name[channelName][locale || 'ru']}{' '}
-                              {lineItem.bonus_id && (
-                                <span className="text-yellow">
-                                  ({tr('bonus')})
-                                </span>
-                              )}
-                              {lineItem.sale_id && (
-                                <span className="text-yellow">
-                                  ({tr('sale_label')})
-                                </span>
-                              )}
+                                : lineItem?.variant?.product?.attribute_data?.name[channelName][locale || 'ru']}
+                              {lineItem.bonus_id && <span className="text-yellow ml-1">({tr('bonus')})</span>}
+                              {lineItem.sale_id && <span className="text-yellow ml-1">({tr('sale_label')})</span>}
                             </div>
-                          </div>
-                          <div className="flex flex-wrap gap-1">
-                            {lineItem.modifiers &&
-                              lineItem.modifiers
-                                .filter((mod: any) => mod.price > 0)
-                                .map((mod: any) => (
-                                  <div
-                                    className="bg-yellow rounded-full px-2 py-0.5 text-[10px] md:text-xs md:py-1 text-white"
-                                    key={mod.id}
-                                  >
-                                    {locale == 'uz'
-                                      ? mod.name_uz
-                                      : locale == 'ru'
-                                      ? mod.name
-                                      : locale == 'en'
-                                      ? mod.name_en
-                                      : ''}
-                                  </div>
+                            {lineItem.modifiers?.filter((mod: any) => mod.price > 0).length > 0 && (
+                              <div className="flex flex-wrap gap-1 mt-1">
+                                {lineItem.modifiers.filter((mod: any) => mod.price > 0).map((mod: any) => (
+                                  <span className="bg-yellow rounded-full px-2 py-0.5 text-xs text-white" key={mod.id}>
+                                    {locale == 'uz' ? mod.name_uz : locale == 'en' ? mod.name_en : mod.name}
+                                  </span>
                                 ))}
+                              </div>
+                            )}
                           </div>
-                        </div>
-                        <div className="flex md:space-x-10 items-center hidden md:flex">
+                          {/* Counter */}
                           {!readonlyItems.includes(lineItem.id) && (
-                            <div className="w-20 h-6 ml-1 bg-yellow rounded-full flex items-center text-white">
-                              <div className="w-6 h-6 items-center flex justify-around">
-                                <MinusIcon
-                                  className="cursor-pointer w-5 h-5"
-                                  onClick={() => decreaseQuantity(lineItem)}
-                                />
-                              </div>
-                              <div className="flex-grow text-center">
-                                {lineItem.quantity}
-                              </div>
-                              <div className="w-6 h-6 items-center flex justify-around">
-                                <PlusIcon
-                                  className="cursor-pointer w-5 h-5"
-                                  onClick={() => increaseQuantity(lineItem.id)}
-                                />
-                              </div>
+                            <div className="w-24 h-8 bg-yellow rounded-full flex items-center text-white flex-shrink-0">
+                              <button className="w-8 h-8 flex items-center justify-center" onClick={() => decreaseQuantity(lineItem)}>
+                                <MinusIcon className="w-4 h-4" />
+                              </button>
+                              <span className="flex-grow text-center text-sm font-bold">{lineItem.quantity}</span>
+                              <button className="w-8 h-8 flex items-center justify-center" onClick={() => increaseQuantity(lineItem.id)}>
+                                <PlusIcon className="w-4 h-4" />
+                              </button>
                             </div>
                           )}
-                          <div className="text-xl">
+                          {/* Price */}
+                          <div className="text-lg font-bold w-36 text-right flex-shrink-0">
                             {currency(lineItem.total, {
                               pattern: '# !',
                               separator: ' ',
                               decimal: '.',
-                              symbol: `${
-                                locale == 'uz'
-                                  ? "so'm"
-                                  : locale == 'ru'
-                                  ? 'сум'
-                                  : locale == 'en'
-                                  ? 'sum'
-                                  : ''
-                              }`,
+                              symbol: `${locale == 'uz' ? "so'm" : locale == 'ru' ? 'сум' : 'sum'}`,
                               precision: 0,
                             }).format()}
                           </div>
+                          {/* Delete */}
                           {!readonlyItems.includes(lineItem.id) && (
                             <XIcon
-                              className="cursor-pointer h-4 text-black w-4"
+                              className="cursor-pointer h-5 w-5 text-gray-400 hover:text-red-500 flex-shrink-0"
                               onClick={() => destroyLine(lineItem.id)}
                             />
                           )}
@@ -1021,24 +982,33 @@ export default function Cart() {
                         Просто объедение!
                       </div> */}
                         <div
-                          className="rounded-full bg-yellow text-white font-normal cursor-pointer py-1"
+                          className={`rounded-full bg-yellow text-white font-normal cursor-pointer py-1 flex items-center justify-center transition-opacity ${
+                            addingItemId === item.id ? 'opacity-50 pointer-events-none' : ''
+                          }`}
                           onClick={() => addToBasket(item.id)}
                         >
-                          {currency(parseInt(item.price, 0) || 0, {
-                            pattern: '# !',
-                            separator: ' ',
-                            decimal: '.',
-                            symbol: `${
-                              locale == 'uz'
-                                ? "so'm"
-                                : locale == 'ru'
-                                ? 'сум'
-                                : locale == 'en'
-                                ? 'sum'
-                                : ''
-                            }`,
-                            precision: 0,
-                          }).format()}
+                          {addingItemId === item.id ? (
+                            <svg className="animate-spin h-5 w-5 text-white" viewBox="0 0 24 24">
+                              <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" fill="none" />
+                              <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" />
+                            </svg>
+                          ) : (
+                            currency(parseInt(item.price, 0) || 0, {
+                              pattern: '# !',
+                              separator: ' ',
+                              decimal: '.',
+                              symbol: `${
+                                locale == 'uz'
+                                  ? "so'm"
+                                  : locale == 'ru'
+                                  ? 'сум'
+                                  : locale == 'en'
+                                  ? 'sum'
+                                  : ''
+                              }`,
+                              precision: 0,
+                            }).format()
+                          )}
                         </div>
                       </div>
                     ))}
@@ -1092,24 +1062,33 @@ export default function Cart() {
                         Просто объедение!
                       </div> */}
                         <div
-                          className="rounded-full bg-yellow text-white font-normal cursor-pointer py-1"
+                          className={`rounded-full bg-yellow text-white font-normal cursor-pointer py-1 flex items-center justify-center transition-opacity ${
+                            addingItemId === item.id ? 'opacity-50 pointer-events-none' : ''
+                          }`}
                           onClick={() => addToBasket(item.id)}
                         >
-                          {currency(parseInt(item.price, 0) || 0, {
-                            pattern: '# !',
-                            separator: ' ',
-                            decimal: '.',
-                            symbol: `${
-                              locale == 'uz'
-                                ? "so'm"
-                                : locale == 'ru'
-                                ? 'сум'
-                                : locale == 'en'
-                                ? 'sum'
-                                : ''
-                            }`,
-                            precision: 0,
-                          }).format()}
+                          {addingItemId === item.id ? (
+                            <svg className="animate-spin h-5 w-5 text-white" viewBox="0 0 24 24">
+                              <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" fill="none" />
+                              <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" />
+                            </svg>
+                          ) : (
+                            currency(parseInt(item.price, 0) || 0, {
+                              pattern: '# !',
+                              separator: ' ',
+                              decimal: '.',
+                              symbol: `${
+                                locale == 'uz'
+                                  ? "so'm"
+                                  : locale == 'ru'
+                                  ? 'сум'
+                                  : locale == 'en'
+                                  ? 'sum'
+                                  : ''
+                              }`,
+                              precision: 0,
+                            }).format()
+                          )}
                         </div>
                       </div>
                     ))}

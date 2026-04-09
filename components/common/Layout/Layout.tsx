@@ -136,7 +136,7 @@ const Layout: FC<Props> = ({
       <div className="font-sans">
         {/* Mobile header + categories — no wrapper divs, md:hidden is on each component */}
         <MobileHeader />
-        {categories.length > 0 && (
+        {categories.length > 0 && pathname === '/[city]' && (
           <MobileCategoriesMenu categories={categories} />
         )}
         {/* Desktop header */}
