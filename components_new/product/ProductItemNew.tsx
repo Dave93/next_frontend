@@ -686,7 +686,7 @@ const ProductItemNew: FC<ProductItem> = ({ product, channelName }) => {
         <div
           className={`${styles.gridItemOutline} ${
             isProductInStop ? 'opacity-25' : ''
-          } overflow-hidden bg-white rounded-[20px] md:rounded-[15px] hover:shadow-xl shadow-sm group cursor-pointer md:py-3 md:px-3`}
+          } overflow-hidden bg-white rounded-[20px] md:rounded-[15px] hover:shadow-xl shadow-sm group cursor-pointer md:py-3 md:px-3 flex flex-col h-full`}
           id={`prod-${store.id}`}
           itemScope
           itemType="https://schema.org/Product"
@@ -806,7 +806,7 @@ const ProductItemNew: FC<ProductItem> = ({ product, channelName }) => {
             )}
           </div>
           {/* Desktop card */}
-          <div className="hidden md:block">
+          <div className="hidden md:flex md:flex-col md:h-full">
           <div className="text-center">
             {store.image ? (
               <img
@@ -835,7 +835,7 @@ const ProductItemNew: FC<ProductItem> = ({ product, channelName }) => {
               <div className="mt-2 text-gray-700 text-xs">{store.sizeDesc}</div>
             )}
             <div
-              className="mt-1 flex-grow"
+              className="mt-1 flex-grow product-desc-clamp"
               dangerouslySetInnerHTML={{
                 __html: store?.attribute_data?.description
                   ? store?.attribute_data?.description[channelName][
@@ -845,7 +845,7 @@ const ProductItemNew: FC<ProductItem> = ({ product, channelName }) => {
               }}
               itemProp="description"
             ></div>
-            <div>
+            <div className="mt-auto">
               {store.variants && store.variants.length > 0 && (
                 <div className="flex mt-5 space-x-1 -mx-2">
                   {store.variants.map((v) => (
@@ -1032,7 +1032,7 @@ const ProductItemNew: FC<ProductItem> = ({ product, channelName }) => {
                             }
                           </div>
                           <div
-                            className="mt-1 text-base flex-grow"
+                            className="mt-1 text-base product-desc-clamp"
                             dangerouslySetInnerHTML={{
                               __html: store?.attribute_data?.description
                                 ? store?.attribute_data?.description[
