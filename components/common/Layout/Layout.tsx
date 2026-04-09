@@ -39,7 +39,9 @@ import SignInModal from '@components_new/header/SignInModal'
 import { XIcon } from '@heroicons/react/solid'
 import LocationTabs from '@components_new/header/LocationTabs'
 import MobLocationTabs from '@components_new/header/MobLocationTabs.'
-import MobileLayout from '@components_new/mobile/MobileLayout'
+import MobileHeader from '@components_new/mobile/MobileHeader'
+import MobileBottomNav from '@components_new/mobile/MobileBottomNav'
+import MobileCategoriesMenu from '@components_new/main/MobileCategoriesMenu'
 
 const LinkScroll = Scroll.Link
 
@@ -132,25 +134,31 @@ const Layout: FC<Props> = ({
   return (
     <CommerceProvider locale={locale}>
       <div className="font-sans">
-        {/* Mobile Layout */}
-        <div className="md:hidden">
-          <MobileLayout>{children}</MobileLayout>
-        </div>
-        {/* Desktop Layout */}
-        <div className="hidden md:flex md:flex-col h-screen">
+        {/* Mobile header + categories — no wrapper divs, md:hidden is on each component */}
+        <MobileHeader />
+        {categories.length > 0 && (
+          <MobileCategoriesMenu categories={categories} />
+        )}
+        {/* Desktop header */}
+        <div className="hidden md:block">
           <Header menu={topMenu} />
-          <main
-            className={`${
-              cleanBackground == true ? 'bg-gray-100' : ''
-            } flex-grow md:pb-14`}
-          >
-            {pathname == '/[city]' ? (
-              children
-            ) : (
-              <div className="container mx-auto">{children}</div>
-            )}
-          </main>
-          <footer className="text-white md:flex flex-col flex">
+        </div>
+        {/* Content - rendered ONCE */}
+        <main
+          className={`${
+            cleanBackground == true ? 'bg-gray-100' : ''
+          } md:pb-14 pb-16`}
+        >
+          {pathname == '/[city]' ? (
+            children
+          ) : (
+            <div className="container mx-auto">{children}</div>
+          )}
+        </main>
+        {/* Mobile bottom nav */}
+        <MobileBottomNav />
+        {/* Desktop footer */}
+        <footer className="text-white hidden md:flex flex-col">
             <div className="hidden md:block w-full">
               <img
                 src="/assets/uzor.svg"
@@ -375,7 +383,6 @@ const Layout: FC<Props> = ({
               </div>
             </div>
           </footer>
-        </div>
 
         {/* <BonusModalNoSSR /> */}
         <SignInModal />

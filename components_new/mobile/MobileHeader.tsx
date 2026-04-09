@@ -71,7 +71,7 @@ const MobileHeader: FC = () => {
   }, [])
 
   return (
-    <header ref={headerRef} className="sticky top-0 z-30 bg-white">
+    <header ref={headerRef} className="md:hidden sticky top-0 z-30 bg-white">
       <div className="flex items-center justify-between px-4 py-2.5">
         <Link href={`/${citySlug}`} prefetch={false} legacyBehavior>
           <a className="flex">

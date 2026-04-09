@@ -22,7 +22,7 @@ import useTranslation from 'next-translate/useTranslation'
 import { useUI } from '@components/ui/context'
 import cookies from 'next-cookies'
 import axios from 'axios'
-import { Link as ScrollLink } from 'react-scroll'
+
 
 let webAddress = process.env.NEXT_PUBLIC_API_URL
 
@@ -296,39 +296,9 @@ export default function Home({
         description="Бесплатная доставка пиццы в Ташкенте, заказать можно на нашем сайте или через телеграм бот @Chopar_bot | Chopar Pizza"
       />
       <MainSlider />
-      {/* Mobile: sticky categories bar - sits right below the sticky header */}
-      <div id="mobileCategoriesBar" className="md:hidden sticky z-20 mt-2" style={{ top: 'var(--header-h, 0px)' }}>
-        <div id="mobileCatScroller" className="bg-secondary overflow-x-auto rounded-xl mx-3" style={{ scrollbarWidth: 'none' }}>
-          <div className="flex h-11 items-center px-3 min-w-max">
-            {categories.map((item: any) => (
-              <div
-                className="text-white font-serif text-sm text-center cursor-pointer uppercase px-3 whitespace-nowrap"
-                key={item.id}
-                id={`mobileCat_${item.id}`}
-              >
-                <ScrollLink
-                  to={`productSection_${item.id}`}
-                  spy={true}
-                  smooth={true}
-                  activeClass="text-yellow"
-                  offset={-200}
-                  onSetActive={() => {
-                    const el = document.getElementById(`mobileCat_${item.id}`)
-                    const scroller = document.getElementById('mobileCatScroller')
-                    if (el && scroller) {
-                      const left = el.offsetLeft - scroller.offsetWidth / 2 + el.offsetWidth / 2
-                      scroller.scrollTo({ left, behavior: 'smooth' })
-                    }
-                  }}
-                >
-                  {item?.attribute_data?.name[channelName][locale || 'ru']}
-                </ScrollLink>
-              </div>
-            ))}
-          </div>
-        </div>
+      <div className="hidden md:block">
+        <CategoriesMenu categories={categories} channelName={channelName} />
       </div>
-      <CategoriesMenu categories={categories} channelName={channelName} />
       <div className="container mx-auto">
         <h1 className="py-1 md:text-4xl text-2xl w-max mt-4 mb-10 md:my-10 m-auto">
           {tr('pizza_for_family_' + activeCity.slug)}

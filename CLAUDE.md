@@ -4,16 +4,18 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project Overview
 
-Next.js 14 e-commerce platform (Chopar Pizza food delivery) with multi-language (ru/uz/en) and multi-city support. Uses Pages Router, not App Router.
+Next.js 16 e-commerce platform (Chopar Pizza food delivery) with multi-language (ru/uz/en) and multi-city support. Uses Pages Router, not App Router.
 
 ## Commands
 
 - `bun dev` - Start dev server on port 5656 (with Node inspect)
 - `bun run build` - Production build
 - `bun run start` - Start production server on port 5656
-- `bun run server` - Run Express production server on port 4646
+- `bun run server` - Run production server on port 4646 (wraps `next start`)
 - `bun run prettier-fix` - Format codebase
 - `bun run generate` - Generate GraphQL types
+- `bun run analyze` - Bundle analysis (opens both client/server reports)
+- `npx next-unused` - Find unused components/exports
 
 ## Code Style
 
@@ -78,6 +80,13 @@ Pages Router with `[city]` dynamic segments for multi-city support:
 - `NEXT_PUBLIC_*` - Client-exposed variables
 - See `.env.local.example` for full list
 
+### App Provider Hierarchy (`_app.tsx`)
+
+Every page renders within this wrapper chain (outermost first):
+`GoogleReCaptchaProvider` → `ManagedUIContext` → `QueryClientProvider` → `Layout` → `Page`
+
+Pages can define a custom `Layout` via `Component.Layout`; defaults to passthrough. `ManagedUIContext` receives `pageProps` and provides all UI/user/location/city state.
+
 ## Deployment
 
-PM2 with Bun runtime. Express custom server (`server.js`) for production.
+PM2 with Bun runtime. `server.js` wraps `next start` on port 4646. Next.js 16 does not support custom Express servers with Pages Router — use `next start` directly.
