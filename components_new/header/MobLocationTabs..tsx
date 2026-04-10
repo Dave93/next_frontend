@@ -142,7 +142,7 @@ const MobLocationTabs: FC = () => {
   const [configData, setConfigData] = useState({} as any)
 
   let currentAddress = ''
-  if (activeCity.active) {
+  if (activeCity?.active) {
     if (locale == 'ru') {
       currentAddress = 'Узбекистан, ' + activeCity.name + ','
     } else if (locale == 'uz') {

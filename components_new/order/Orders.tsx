@@ -186,7 +186,7 @@ const Orders: FC<OrdersProps> = ({ channelName, isMobile = false }) => {
   })
   const [deposit, setDeposit] = useState(0)
   let currentAddress = ''
-  if (activeCity.active) {
+  if (activeCity?.active) {
     if (locale == 'ru') {
       currentAddress = 'Узбекистан, ' + activeCity.name + ','
     } else if (locale == 'uz') {
