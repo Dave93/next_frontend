@@ -54,6 +54,9 @@ const ProductItemNew: FC<ProductItem> = ({ product, channelName }) => {
   const [addToCartInProgress, setAddToCartInProgress] = useState(false)
   const [addedToCart, setAddedToCart] = useState(false)
   const [imageLoaded, setImageLoaded] = useState(false)
+  const imgRefCallback = (el: HTMLImageElement | null) => {
+    if (el?.complete && el.naturalWidth > 0) setImageLoaded(true)
+  }
 
   const hashids = useMemo(
     () => new Hashids('basket', 15, 'abcdefghijklmnopqrstuvwxyz1234567890'),
@@ -690,6 +693,7 @@ const ProductItemNew: FC<ProductItem> = ({ product, channelName }) => {
                 )}
                 {store.image ? (
                   <img
+                    ref={imgRefCallback}
                     src={store.image}
                     width={120}
                     height={96}
@@ -808,6 +812,7 @@ const ProductItemNew: FC<ProductItem> = ({ product, channelName }) => {
               )}
               {store.image ? (
                 <img
+                  ref={imgRefCallback}
                   src={store.image}
                   width={250}
                   height={250}
