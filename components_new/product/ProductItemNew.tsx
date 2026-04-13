@@ -53,6 +53,7 @@ const ProductItemNew: FC<ProductItem> = ({ product, channelName }) => {
 
   const [addToCartInProgress, setAddToCartInProgress] = useState(false)
   const [addedToCart, setAddedToCart] = useState(false)
+  const [imageLoaded, setImageLoaded] = useState(false)
 
   const hashids = useMemo(
     () => new Hashids('basket', 15, 'abcdefghijklmnopqrstuvwxyz1234567890'),
@@ -683,16 +684,20 @@ const ProductItemNew: FC<ProductItem> = ({ product, channelName }) => {
           {/* Mobile compact vertical card */}
           <div className="md:hidden p-3">
             <Link href={`/${citySlug}/product/${store.id}`} prefetch={false}>
-              <div className="text-center mb-2">
+              <div className="text-center mb-2 relative">
+                {!imageLoaded && store.image && (
+                  <div className="mx-auto w-[120px] h-[96px] rounded-lg bg-gray-100 animate-pulse" />
+                )}
                 {store.image ? (
                   <img
                     src={store.image}
                     width={120}
                     height={96}
                     alt={store?.attribute_data?.name[channelName][locale || 'ru']}
-                    className="mx-auto object-contain"
+                    className={`mx-auto object-contain ${imageLoaded ? '' : 'absolute opacity-0'}`}
                     itemProp="image"
                     loading="lazy"
+                    onLoad={() => setImageLoaded(true)}
                   />
                 ) : (
                   <img
@@ -797,16 +802,20 @@ const ProductItemNew: FC<ProductItem> = ({ product, channelName }) => {
           {/* Desktop card */}
           <div className="hidden md:flex md:flex-col md:h-full">
           <Link href={`/${citySlug}/product/${store.id}`} prefetch={false} className="cursor-pointer">
-            <div className="text-center">
+            <div className="text-center relative">
+              {!imageLoaded && store.image && (
+                <div className="mx-auto w-[250px] h-[250px] rounded-full bg-gray-100 animate-pulse" />
+              )}
               {store.image ? (
                 <img
                   src={store.image}
                   width={250}
                   height={250}
                   alt={store?.attribute_data?.name[channelName][locale || 'ru']}
-                  className="transform motion-safe:group-hover:scale-105 transition duration-500 object-cover"
+                  className={`transform motion-safe:group-hover:scale-105 transition duration-500 object-cover ${imageLoaded ? '' : 'absolute opacity-0'}`}
                   itemProp="image"
                   loading="lazy"
+                  onLoad={() => setImageLoaded(true)}
                 />
               ) : (
                 <img
