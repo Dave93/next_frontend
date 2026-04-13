@@ -637,6 +637,7 @@ const ProductItemNew: FC<ProductItem> = ({ product, channelName }) => {
                       height={50}
                       alt={mod.name}
                       className="mx-auto"
+                      loading="lazy"
                     />
                   </div>
                   <div className="text-center text-base m-auto">
@@ -691,6 +692,7 @@ const ProductItemNew: FC<ProductItem> = ({ product, channelName }) => {
                     alt={store?.attribute_data?.name[channelName][locale || 'ru']}
                     className="mx-auto object-contain"
                     itemProp="image"
+                    loading="lazy"
                   />
                 ) : (
                   <img
@@ -699,6 +701,7 @@ const ProductItemNew: FC<ProductItem> = ({ product, channelName }) => {
                     height={96}
                     alt={store?.attribute_data?.name[channelName][locale || 'ru']}
                     className="mx-auto"
+                    loading="lazy"
                   />
                 )}
               </div>
@@ -803,6 +806,7 @@ const ProductItemNew: FC<ProductItem> = ({ product, channelName }) => {
                   alt={store?.attribute_data?.name[channelName][locale || 'ru']}
                   className="transform motion-safe:group-hover:scale-105 transition duration-500 object-cover"
                   itemProp="image"
+                  loading="lazy"
                 />
               ) : (
                 <img
@@ -811,6 +815,7 @@ const ProductItemNew: FC<ProductItem> = ({ product, channelName }) => {
                   height={250}
                   alt={store?.attribute_data?.name[channelName][locale || 'ru']}
                   className="rounded-full transform motion-safe:group-hover:scale-105 transition duration-500"
+                  loading="lazy"
                 />
               )}
             </div>

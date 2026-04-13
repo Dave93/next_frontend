@@ -1,4 +1,4 @@
-import { FC, memo, createRef, useState, useEffect } from 'react'
+import { FC, memo, createRef, useState, useEffect, useRef } from 'react'
 import Flicking, { ViewportSlot } from '@egjs/react-flicking'
 import { Fade, AutoPlay, Pagination, Arrow } from '@egjs/flicking-plugins'
 import Image from 'next/image'
@@ -6,10 +6,14 @@ import { useUI } from '@components/ui'
 import axios from 'axios'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
-const MainSlider: FC = () => {
+interface MainSliderProps {
+  initialSliders?: any[]
+}
+
+const MainSlider: FC<MainSliderProps> = ({ initialSliders }) => {
   let router = useRouter()
 
-  const [sliders, setSliders] = useState([])
+  const [sliders, setSliders] = useState(initialSliders || [])
   const [defaultIndex, setDefaultIndex] = useState(0)
 
   const { locale } = router
@@ -26,7 +30,6 @@ const MainSlider: FC = () => {
     const { data } = await axios.get(
       `${process.env.NEXT_PUBLIC_API_URL}/api/sliders/public?locale=${locale}`
     )
-    // sliderRef.current?.moveTo(0)
     sliderRef.current?.destroy()
     setDefaultIndex(0)
     setSliders(data.data)
@@ -35,9 +38,19 @@ const MainSlider: FC = () => {
     }, 100)
   }
 
+  const prevLocale = useRef(locale)
+
   useEffect(() => {
-    fetchSliders()
-    return
+    if (!initialSliders?.length) {
+      fetchSliders()
+    }
+  }, [])
+
+  useEffect(() => {
+    if (prevLocale.current !== locale) {
+      prevLocale.current = locale
+      fetchSliders()
+    }
   }, [locale])
 
   return (
@@ -54,7 +67,7 @@ const MainSlider: FC = () => {
             autoResize={true}
             autoInit={true}
           >
-            {sliders.map((item: any) => (
+            {sliders.map((item: any, index: number) => (
               <div className="panel w-full" key={item.id}>
                 <div className="rounded-[15px] overflow-hidden flex mb-[10px]">
                   {item.link ? (
@@ -65,6 +78,10 @@ const MainSlider: FC = () => {
                             src={item.asset[0].link}
                             data-href={item.link}
                             className="hidden md:block w-full max-h-[400px] object-cover"
+                            loading={index === 0 ? 'eager' : 'lazy'}
+                            fetchPriority={index === 0 ? 'high' : 'auto'}
+                            width={1200}
+                            height={400}
                           />
                           <img
                             src={
@@ -74,6 +91,10 @@ const MainSlider: FC = () => {
                             }
                             data-href={item.link}
                             className="md:hidden w-full h-[44vw] object-cover"
+                            loading={index === 0 ? 'eager' : 'lazy'}
+                            fetchPriority={index === 0 ? 'high' : 'auto'}
+                            width={600}
+                            height={264}
                           />
                         </>
                       )}
@@ -84,6 +105,10 @@ const MainSlider: FC = () => {
                         <img
                           src={item.asset[0].link}
                           className="hidden md:block w-full max-h-[400px] object-cover"
+                          loading={index === 0 ? 'eager' : 'lazy'}
+                          fetchPriority={index === 0 ? 'high' : 'auto'}
+                          width={1200}
+                          height={400}
                         />
                         <img
                           src={
@@ -92,6 +117,10 @@ const MainSlider: FC = () => {
                               : item.asset[0].link
                           }
                           className="md:hidden w-full h-[44vw] object-cover"
+                          loading={index === 0 ? 'eager' : 'lazy'}
+                          fetchPriority={index === 0 ? 'high' : 'auto'}
+                          width={600}
+                          height={264}
                         />
                       </>
                     )

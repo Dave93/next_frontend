@@ -17,10 +17,13 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe>`,
           <script
             dangerouslySetInnerHTML={{
               __html: `
-                (function(w,d,u){
-                var s=d.createElement('script');s.async=true;s.src=u+'?'+(Date.now()/60000|0);
-                var h=d.getElementsByTagName('script')[0];h.parentNode.insertBefore(s,h);
-                })(window,document,'https://crm.choparpizza.uz/upload/crm/tag/call.tracker.js');
+                window.addEventListener('load', function(){
+                  setTimeout(function(){
+                    var s=document.createElement('script');s.async=true;
+                    s.src='https://crm.choparpizza.uz/upload/crm/tag/call.tracker.js?'+(Date.now()/60000|0);
+                    document.body.appendChild(s);
+                  }, 3000);
+                });
               `,
             }}
           ></script>

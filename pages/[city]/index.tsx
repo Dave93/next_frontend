@@ -63,6 +63,14 @@ export async function getServerSideProps({
   })
   const pagesPromise = commerce.getAllPages({ config, preview })
   const siteInfoPromise = commerce.getSiteInfo({ config, preview })
+  let sliders: any[] = []
+  try {
+    const { data: slidersRes } = await axios.get(
+      `${webAddress}/api/sliders/public?locale=${locale}`
+    )
+    sliders = slidersRes.data || []
+  } catch (e) {}
+
   const { products }: { products: any[] } = await productsPromise
   const { pages } = await pagesPromise
 
@@ -93,6 +101,7 @@ export async function getServerSideProps({
       socials,
       cities,
       currentCity,
+      sliders,
       cleanBackground: false,
     },
   }
@@ -111,9 +120,11 @@ interface CategoriesType {
 export default function Home({
   products,
   categories,
+  sliders,
 }: {
   products: any[]
   categories: any[]
+  sliders: any[]
 }) {
   const router = useRouter()
   const { locale } = router
@@ -295,7 +306,7 @@ export default function Home({
         title="Заказать пиццу с доставкой в Ташкенте | Chopar Pizza"
         description="Бесплатная доставка пиццы в Ташкенте, заказать можно на нашем сайте или через телеграм бот @Chopar_bot | Chopar Pizza"
       />
-      <MainSlider />
+      <MainSlider initialSliders={sliders} />
       <div className="hidden md:block">
         <CategoriesMenu categories={categories} channelName={channelName} />
       </div>
