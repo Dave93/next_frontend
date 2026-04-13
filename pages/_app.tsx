@@ -20,6 +20,7 @@ import FacebookPixel from '@components/common/FacebookPixel'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import { GoogleReCaptchaProvider } from 'react-google-recaptcha-v3'
 import { YMInitializer } from 'react-yandex-metrika'
+import { PostHogProvider } from '@lib/posthog'
 
 const isBrowser = typeof window !== 'undefined'
 
@@ -39,31 +40,33 @@ export default function MyApp({ Component, pageProps }: AppProps) {
 
   return (
     <>
-      <GoogleReCaptchaProvider
-        reCaptchaKey="6LfDMQElAAAAAL0Nbu6ypK_-chUW81SXBIQgeuoe"
-        language="RU"
-      >
-        <Head />
-        <FacebookPixel />
-        <ManagedUIContext pageProps={pageProps}>
-          <QueryClientProvider client={queryClient}>
-            <Layout pageProps={pageProps}>
-              <Component {...pageProps} />
-            </Layout>
-          </QueryClientProvider>
-        </ManagedUIContext>
-        <ToastContainer />
-        {/* <YMInitializer
-        accounts={[86632071]}
-        options={{
-          webvisor: true,
-          clickmap: true,
-          trackLinks: true,
-          accurateTrackBounce: true,
-        }}
-        version="2"
-      /> */}
-      </GoogleReCaptchaProvider>
+      <PostHogProvider>
+        <GoogleReCaptchaProvider
+          reCaptchaKey="6LfDMQElAAAAAL0Nbu6ypK_-chUW81SXBIQgeuoe"
+          language="RU"
+        >
+          <Head />
+          <FacebookPixel />
+          <ManagedUIContext pageProps={pageProps}>
+            <QueryClientProvider client={queryClient}>
+              <Layout pageProps={pageProps}>
+                <Component {...pageProps} />
+              </Layout>
+            </QueryClientProvider>
+          </ManagedUIContext>
+          <ToastContainer />
+          {/* <YMInitializer
+          accounts={[86632071]}
+          options={{
+            webvisor: true,
+            clickmap: true,
+            trackLinks: true,
+            accurateTrackBounce: true,
+          }}
+          version="2"
+        /> */}
+        </GoogleReCaptchaProvider>
+      </PostHogProvider>
     </>
   )
 }
