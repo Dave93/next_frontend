@@ -63,16 +63,17 @@ export async function getServerSideProps({
   })
   const pagesPromise = commerce.getAllPages({ config, preview })
   const siteInfoPromise = commerce.getSiteInfo({ config, preview })
-  let sliders: any[] = []
-  try {
-    const { data: slidersRes } = await axios.get(
-      `${webAddress}/api/sliders/public?locale=${locale}`
-    )
-    sliders = slidersRes.data || []
-  } catch (e) {}
+  const slidersPromise = axios
+    .get(`${webAddress}/api/sliders/public?locale=${locale}`)
+    .then((res) => res.data.data || [])
+    .catch(() => [])
 
-  const { products }: { products: any[] } = await productsPromise
-  const { pages } = await pagesPromise
+  const [{ products }, { pages }, siteInfo, sliders] = await Promise.all([
+    productsPromise as Promise<{ products: any[] }>,
+    pagesPromise,
+    siteInfoPromise,
+    slidersPromise,
+  ])
 
   const {
     categories,
@@ -82,7 +83,7 @@ export async function getServerSideProps({
     socials,
     cities,
     currentCity,
-  } = await siteInfoPromise
+  } = siteInfo
 
   if (!currentCity) {
     return {
