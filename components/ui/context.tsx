@@ -304,12 +304,8 @@ function uiReducer(state: State, action: Action) {
       try {
         let locationNewData = JSON.stringify(action.value)
         locationNewData = Buffer.from(locationNewData).toString('base64')
-        Cookies.set('activeCity', locationNewData)
-        var inFifteenMinutes = new Date(new Date().getTime() + 30 * 60 * 1000)
-        // Set city_slug cookies for a half hour
-        Cookies.set('city_slug', action.value.slug, {
-          expires: inFifteenMinutes,
-        })
+        Cookies.set('activeCity', locationNewData, { expires: 365 })
+        Cookies.set('city_slug', action.value.slug, { expires: 365 })
       } catch (e) {}
       return {
         ...state,

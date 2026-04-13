@@ -2213,11 +2213,11 @@ const Orders: FC<OrdersProps> = ({ channelName, isMobile = false }) => {
       )}
       <div className={`w-full bg-white mb-5 rounded-2xl p-10 order-confirm-section`}>
         <div className={`${isMobile ? 'hidden' : 'md:flex'}`}>
-          {!!user.user.sms_sub != true ||
-            (!!user.user.email_sub != true && (
+          {!!user?.user?.sms_sub != true ||
+            (!!user?.user?.email_sub != true && (
               <div className="mr-8 text-gray-400">{tr('agree_to_send')}</div>
             ))}
-          {!!user.user.sms_sub != true && (
+          {!!user?.user?.sms_sub != true && (
             <label className="mr-8 cursor-pointer text-gray-400 items-center flex">
               <input
                 type="checkbox"
@@ -2230,7 +2230,7 @@ const Orders: FC<OrdersProps> = ({ channelName, isMobile = false }) => {
               <div>SMS</div>
             </label>
           )}
-          {!!user.user.email_sub != true && authEmail && (
+          {!!user?.user?.email_sub != true && authEmail && (
             <label className="cursor-pointer text-gray-400 items-center flex">
               <input
                 type="checkbox"

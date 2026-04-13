@@ -8,6 +8,7 @@ import {
 } from '@headlessui/react'
 import { useUI } from '@components/ui'
 import { City } from '@commerce/types/cities'
+import Cookies from 'js-cookie'
 import router, { useRouter } from 'next/router'
 import useTranslation from 'next-translate/useTranslation'
 
@@ -35,6 +36,7 @@ const ChooseCityDropDown: FC = () => {
     })
     router.push(link)
     setActiveCity(city)
+    Cookies.set('city_confirmed', '1', { expires: 365 })
   }
 
   return (

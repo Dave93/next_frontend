@@ -71,6 +71,7 @@ const MobileBottomNav: FC = () => {
         href: `/${citySlug}/cart`,
         iconOutline: CartOutline,
         iconSolid: CartSolid,
+        requiresAuth: true,
       },
       {
         key: 'profile',

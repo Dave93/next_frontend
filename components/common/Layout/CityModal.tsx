@@ -47,18 +47,16 @@ const CityModal: FC<Props> = ({ cities }) => {
   }
 
   const changeCity = (city: City) => {
+    Cookies.set('city_confirmed', '1', { expires: 365 })
     setActiveCity(city)
     router.push(`/${city.slug}`)
     closeModal()
   }
 
   useEffect(() => {
-    if (!Cookies.get('city_slug')) {
+    if (!Cookies.get('city_confirmed')) {
       setIsShowCityList(true)
-    } else {
-      // setIsShowCityPrompt(true)
     }
-    return () => {}
   }, [])
 
   return (
@@ -66,11 +64,11 @@ const CityModal: FC<Props> = ({ cities }) => {
       <Transition appear show={isShowCityList}>
         <Dialog
           as="div"
-          className="fixed inset-0 z-10 overflow-y-auto"
+          className="fixed inset-0 z-50 overflow-y-auto"
           onClose={() => {}}
           initialFocus={cityListRef}
         >
-          <div className="min-h-screen px-4 text-center">
+          <div className="fixed inset-0 flex items-center justify-center px-4">
             <TransitionChild
               enter="ease-out duration-300"
               enterFrom="opacity-0"
@@ -90,7 +88,7 @@ const CityModal: FC<Props> = ({ cities }) => {
               leaveFrom="opacity-100 scale-100"
               leaveTo="opacity-0 scale-95"
             >
-              <div className="inline-block w-full max-w-md p-6 my-8 overflow-hidden text-left align-middle transition-all transform bg-secondary shadow-xl rounded-2xl">
+              <div className="relative w-full max-w-md p-6 overflow-hidden text-left transition-all transform bg-secondary shadow-xl rounded-2xl">
                 <DialogTitle
                   as="h3"
                   className="text-2xl font-medium leading-6 text-white"

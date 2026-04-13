@@ -42,6 +42,7 @@ import MobLocationTabs from '@components_new/header/MobLocationTabs.'
 import MobileHeader from '@components_new/mobile/MobileHeader'
 import MobileBottomNav from '@components_new/mobile/MobileBottomNav'
 import MobileCategoriesMenu from '@components_new/main/MobileCategoriesMenu'
+import CityModal from './CityModal'
 
 const LinkScroll = Scroll.Link
 
@@ -386,6 +387,7 @@ const Layout: FC<Props> = ({
 
         {/* <BonusModalNoSSR /> */}
         <SignInModal />
+        {cities.length > 0 && <CityModal cities={cities} />}
       </div>
       <div className={cn(styles.root)}>
         {/* <Navbar links={navBarlinks} />

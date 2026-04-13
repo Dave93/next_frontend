@@ -6,6 +6,7 @@ import { LocationMarkerIcon, ChevronDownIcon } from '@heroicons/react/solid'
 import useTranslation from 'next-translate/useTranslation'
 import { useUI } from '@components/ui/context'
 import { City } from '@commerce/types/cities'
+import Cookies from 'js-cookie'
 
 const MobileHeader: FC = () => {
   const routerInstance = useRouter()
@@ -46,6 +47,7 @@ const MobileHeader: FC = () => {
     })
     routerInstance.push(link)
     setActiveCity(city)
+    Cookies.set('city_confirmed', '1', { expires: 365 })
     setLocationData({
       deliveryType: 'deliver',
       location: [],
