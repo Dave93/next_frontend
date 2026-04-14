@@ -330,22 +330,42 @@ const SignInButton: FC = () => {
                     <div className="flex flex-col h-[calc(100%-48px)] md:h-auto md:inline-flex md:my-8 md:items-start">
                       <div className="flex-1 overflow-y-auto bg-white md:inline-block md:px-40 px-6 py-6 md:py-10 md:rounded-2xl md:shadow-xl text-center transform transition-all md:max-w-2xl relative">
                         <button
-                          className="absolute top-3 right-3 hidden md:block outline-none focus:outline-none"
+                          className="absolute top-4 right-4 hidden md:block outline-none focus:outline-none rounded-full hover:bg-gray-100 p-1 transition-colors"
                           onClick={closeModal}
                         >
-                          <XIcon className="w-6 h-6 text-gray-400 hover:text-gray-600" />
+                          <XIcon className="w-5 h-5 text-gray-400 hover:text-gray-600" />
                         </button>
-                        <DialogTitle as="h3" className="leading-6 text-2xl md:text-3xl font-bold mb-2">
+
+                        {/* Icon */}
+                        <div className="flex justify-center mb-4">
+                          <div className="w-16 h-16 rounded-full bg-yellow bg-opacity-10 flex items-center justify-center">
+                            <svg className="w-8 h-8" style={{ color: '#F9B004' }} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
+                              <path strokeLinecap="round" strokeLinejoin="round" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
+                            </svg>
+                          </div>
+                        </div>
+
+                        <DialogTitle as="h3" className="leading-6 text-2xl md:text-3xl font-bold mb-1 text-gray-900">
                           {tr('auth')}
                         </DialogTitle>
+                        <p className="text-sm text-gray-400 mb-6">
+                          {tr('personal_phone')}
+                        </p>
+
                         {submitError && (
-                          <div className="bg-red-200 p-5 font-bold text-red-600 my-6">
-                            {submitError}
+                          <div className="rounded-xl bg-red-50 border border-red-200 p-4 text-sm text-red-600 mb-6 flex items-start gap-3">
+                            <svg className="w-5 h-5 text-red-400 flex-shrink-0 mt-0.5" fill="currentColor" viewBox="0 0 20 20">
+                              <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clipRule="evenodd" />
+                            </svg>
+                            <span>{submitError}</span>
                           </div>
                         )}
                         {user && (
-                          <div className="mt-10 bg-green-200 font-bold text-green-800 p-4">
-                            {tr('successfully_logged')} {user.user.name}!
+                          <div className="rounded-xl bg-green-50 border border-green-200 p-4 text-sm text-green-700 mb-6 flex items-center gap-3">
+                            <svg className="w-5 h-5 text-green-500 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
+                              <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
+                            </svg>
+                            <span className="font-medium">{tr('successfully_logged')} {user.user.name}!</span>
                           </div>
                         )}
                         {!user && isShowPasswordForm && (
@@ -355,90 +375,78 @@ const SignInButton: FC = () => {
                                 submitPasswordForm
                               )}
                             >
-                              <div className="mt-10">
-                                <label className="text-sm text-gray-400 mb-2 block">
+                              <div className="mb-6">
+                                <p className="text-sm text-gray-500 mb-4">
                                   {tr('sms_code')}
-                                </label>
+                                </p>
                                 <OtpInput
                                   value={otpCode}
                                   onChange={handleOtpChange}
                                   numInputs={4}
                                   inputType="number"
                                   containerStyle={{
-                                    display: 'grid',
-                                    gridTemplateColumns: 'repeat(4, 1fr)',
-                                    gap: '0.375rem',
+                                    display: 'flex',
+                                    gap: '0.75rem',
                                     justifyContent: 'center',
                                   }}
                                   renderInput={(props) => (
                                     <input
                                       {...props}
-                                      className={`${styles.digitField} border border-yellow w-16 rounded-3xl h-12 outline-none focus:outline-none text-center`}
+                                      className="!w-14 h-14 text-xl font-semibold text-center border-2 border-gray-200 rounded-xl outline-none transition-colors focus:border-yellow"
+                                      style={{ width: '3.5rem' }}
                                     />
                                   )}
                                 />
-                                {otpShowCode > 0 ? (
-                                  <div className="text-xs text-yellow mt-3">
-                                    {otpTimerText}
-                                  </div>
-                                ) : (
-                                  <button
-                                    className="text-xs text-yellow mt-3 outline-none focus:outline-none border-b border-yellow pb-0.5"
-                                    onClick={(e) => getNewCode(e)}
-                                  >
-                                    {tr('get_code_again')}
-                                  </button>
-                                )}
+                                <div className="mt-4 text-center">
+                                  {otpShowCode > 0 ? (
+                                    <span className="text-sm text-gray-400">
+                                      {otpTimerText}
+                                    </span>
+                                  ) : (
+                                    <button
+                                      className="text-sm font-medium outline-none focus:outline-none hover:opacity-80 transition-opacity"
+                                      style={{ color: '#F9B004' }}
+                                      onClick={(e) => getNewCode(e)}
+                                    >
+                                      {tr('get_code_again')}
+                                    </button>
+                                  )}
+                                </div>
                               </div>
-                              <div className="text-primary mt-3">
+                              <div className="text-base text-gray-500 mb-6 leading-relaxed">
                                 {tr('callUsIfSmsNotReceived')}
                               </div>
-                              <div className="mt-10">
-                                <button
-                                  className={`py-3 px-20 text-white font-bold text-xl text-center rounded-full w-full outline-none focus:outline-none ${
-                                    otpCode.length >= 4
-                                      ? 'bg-yellow'
-                                      : 'bg-gray-400'
-                                  }`}
-                                  disabled={otpCode.length < 4}
-                                  ref={authButtonRef}
-                                >
-                                  {passwordFormState.isSubmitting ? (
-                                    <svg
-                                      className="animate-spin h-5 mx-auto text-center text-white w-5"
-                                      xmlns="http://www.w3.org/2000/svg"
-                                      fill="none"
-                                      viewBox="0 0 24 24"
-                                    >
-                                      <circle
-                                        className="opacity-25"
-                                        cx="12"
-                                        cy="12"
-                                        r="10"
-                                        stroke="currentColor"
-                                        strokeWidth="4"
-                                      ></circle>
-                                      <path
-                                        className="opacity-75"
-                                        fill="currentColor"
-                                        d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
-                                      ></path>
-                                    </svg>
-                                  ) : (
-                                    tr('signIn')
-                                  )}
-                                </button>
-                              </div>
+                              <button
+                                className={`py-3.5 text-white font-bold text-lg text-center rounded-full w-full outline-none focus:outline-none transition-all duration-200 ${
+                                  otpCode.length >= 4
+                                    ? 'bg-yellow shadow-lg hover:shadow-xl hover:brightness-105'
+                                    : 'bg-gray-300 cursor-not-allowed'
+                                }`}
+                                style={otpCode.length >= 4 ? { backgroundColor: '#F9B004' } : undefined}
+                                disabled={otpCode.length < 4}
+                                ref={authButtonRef}
+                              >
+                                {passwordFormState.isSubmitting ? (
+                                  <svg
+                                    className="animate-spin h-5 mx-auto text-white w-5"
+                                    xmlns="http://www.w3.org/2000/svg"
+                                    fill="none"
+                                    viewBox="0 0 24 24"
+                                  >
+                                    <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
+                                    <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z" />
+                                  </svg>
+                                ) : (
+                                  tr('signIn')
+                                )}
+                              </button>
                             </form>
                           </div>
                         )}{' '}
                         {!user && !isShowPasswordForm && (
                           <>
                             <form onSubmit={handleSubmit(onSubmit)}>
-                              <div className="mt-10">
-                                <label className="text-sm text-gray-400 mb-2 block">
-                                  {tr('personal_phone')}
-                                </label>
+                              <div className="mb-6">
                                 <Controller
                                   render={({
                                     field: { onChange, value },
@@ -446,17 +454,24 @@ const SignInButton: FC = () => {
                                     const digits = (value || '').replace(/\D/g, '').replace(/^998/, '')
                                     const isValid = digits.length === 9
                                     return (
-                                      <div className="flex items-center justify-center">
+                                      <div className={`flex items-center rounded-2xl px-4 py-3 transition-all duration-200 ${
+                                        isValid ? 'bg-green-50 ring-2 ring-green-400' : digits.length > 0 ? 'bg-yellow-50 ring-2 ring-yellow-400' : 'bg-gray-50 ring-1 ring-gray-200'
+                                      }`}>
+                                        <span className="text-gray-400 text-lg font-medium mr-1 select-none">+998</span>
                                         <input
                                           type="tel"
                                           inputMode="numeric"
                                           autoComplete="tel"
                                           ref={(el) => { if (el) setTimeout(() => el.focus(), 100) }}
-                                          placeholder="+998"
-                                          value={digits.length > 0 ? '+998 ' + digits : ''}
-                                          className="py-2 text-2xl text-center focus:outline-none outline-none bg-transparent w-full"
+                                          placeholder="XX XXX XX XX"
+                                          value={digits
+                                            ? digits.replace(/(\d{2})(\d{3})?(\d{2})?(\d{2})?/, (_m: string, a: string, b: string, c: string, d: string) =>
+                                              [a, b, c, d].filter(Boolean).join(' ')
+                                            )
+                                            : ''}
+                                          className="flex-1 text-lg font-medium focus:outline-none focus:ring-0 outline-none border-none bg-transparent ml-1 placeholder-gray-300"
                                           onChange={(e) => {
-                                            const raw = e.target.value.replace(/\D/g, '').replace(/^998/, '').substring(0, 9)
+                                            const raw = e.target.value.replace(/\D/g, '').substring(0, 9)
                                             onChange(raw ? '+998' + raw : '')
                                           }}
                                           onKeyDown={(e) => {
@@ -473,11 +488,11 @@ const SignInButton: FC = () => {
                                             </svg>
                                           ) : (
                                             <button
-                                              className="focus:outline-none outline-none flex-shrink-0"
+                                              className="focus:outline-none outline-none flex-shrink-0 hover:bg-gray-100 rounded-full p-1 transition-colors"
                                               onClick={() => onChange('')}
                                               type="button"
                                             >
-                                              <XIcon className="cursor-pointer h-6 w-6 text-red-400" />
+                                              <XIcon className="cursor-pointer h-5 w-5 text-gray-400" />
                                             </button>
                                           )
                                         )}
@@ -493,146 +508,114 @@ const SignInButton: FC = () => {
 
                               {showUserName && (
                                 <>
-                                  <div className="mt-5">
-                                    <label className="text-sm text-gray-400 mb-2 block">
+                                  <div className="mb-4">
+                                    <label className="text-sm text-gray-500 mb-1.5 block font-medium">
                                       {tr('your_name')}
                                     </label>
                                     <div className="relative">
                                       <input
                                         type="text"
                                         {...register('name')}
-                                        className="border border-yellow focus:outline-none outline-none px-6 py-3 rounded-full text-sm w-full"
+                                        className="border-2 border-gray-200 focus:border-yellow focus:outline-none outline-none px-4 py-3 rounded-2xl text-base w-full transition-colors"
                                       />
                                       {authName && (
                                         <button
-                                          className="absolute focus:outline-none inset-y-0 outline-none right-4 text-gray-400"
+                                          className="absolute focus:outline-none inset-y-0 outline-none right-3 text-gray-400 hover:text-gray-600"
                                           onClick={() => {
                                             resetField('name')
                                           }}
                                         >
-                                          <XIcon className="cursor-pointer h-5 text-gray-400 w-5" />
+                                          <XIcon className="cursor-pointer h-5 w-5" />
                                         </button>
                                       )}
                                     </div>
                                   </div>
-                                  <div className="mt-5">
-                                    <label className="text-sm text-gray-400 mb-2 block">
+                                  <div className="mb-4">
+                                    <label className="text-sm text-gray-500 mb-1.5 block font-medium">
                                       {tr('personal_birth')}
                                     </label>
-                                    <div className="relative">
-                                      <div className="border border-yellow focus:outline-none outline-none px-2 py-3 rounded-full text-sm w-full">
-                                        <Controller
-                                          render={({
-                                            field: { onChange, value },
-                                          }) => (
-                                            <DatePicker
-                                              value={value}
-                                              format="dd.MM.yyyy"
-                                              onChange={onChange}
-                                              calendarIcon={null}
-                                              className="w-full"
-                                            />
-                                          )}
-                                          rules={{
-                                            required: true,
-                                          }}
-                                          key="birth"
-                                          name="birth"
-                                          control={control}
-                                        />
-                                      </div>
+                                    <div className="border-2 border-gray-200 focus-within:border-yellow rounded-2xl px-4 py-3 transition-colors">
+                                      <Controller
+                                        render={({
+                                          field: { onChange, value },
+                                        }) => (
+                                          <DatePicker
+                                            value={value}
+                                            format="dd.MM.yyyy"
+                                            onChange={onChange}
+                                            calendarIcon={null}
+                                            className="w-full"
+                                          />
+                                        )}
+                                        rules={{
+                                          required: true,
+                                        }}
+                                        key="birth"
+                                        name="birth"
+                                        control={control}
+                                      />
                                     </div>
                                   </div>
-                                  <div className="mt-5">
-                                    <div className="relative">
-                                      <div className="flex justify-between">
-                                        <div className="flex items-center mb-4">
-                                          <input
-                                            id="male_gender"
-                                            type="radio"
-                                            value="1"
-                                            className="w-4 h-4 border-gray-300 focus:ring-2 focus:ring-blue-300 dark:focus:ring-blue-600 dark:focus:bg-blue-600 dark:bg-gray-700 dark:border-gray-600"
-                                            {...register('gender')}
-                                          />
-                                          <label
-                                            htmlFor="male_gender"
-                                            className="block ml-2 text-sm font-medium text-gray-900 dark:text-gray-300"
-                                          >
-                                            {tr('male_gender')}
-                                          </label>
-                                        </div>
-
-                                        <div className="flex items-center mb-4">
-                                          <input
-                                            id="female_gender"
-                                            type="radio"
-                                            value="0"
-                                            className="w-4 h-4 border-gray-300 focus:ring-2 focus:ring-blue-300 dark:focus:ring-blue-600 dark:focus:bg-blue-600 dark:bg-gray-700 dark:border-gray-600"
-                                            {...register('gender')}
-                                          />
-                                          <label
-                                            htmlFor="female_gender"
-                                            className="block ml-2 text-sm font-medium text-gray-900 dark:text-gray-300"
-                                          >
-                                            {tr('female_gender')}
-                                          </label>
-                                        </div>
-                                      </div>
+                                  <div className="mb-4">
+                                    <div className="flex gap-6 justify-center">
+                                      <label htmlFor="male_gender" className="flex items-center gap-2 cursor-pointer">
+                                        <input
+                                          id="male_gender"
+                                          type="radio"
+                                          value="1"
+                                          className="w-4 h-4 accent-yellow"
+                                          style={{ accentColor: '#F9B004' }}
+                                          {...register('gender')}
+                                        />
+                                        <span className="text-sm font-medium text-gray-700">
+                                          {tr('male_gender')}
+                                        </span>
+                                      </label>
+                                      <label htmlFor="female_gender" className="flex items-center gap-2 cursor-pointer">
+                                        <input
+                                          id="female_gender"
+                                          type="radio"
+                                          value="0"
+                                          className="w-4 h-4"
+                                          style={{ accentColor: '#F9B004' }}
+                                          {...register('gender')}
+                                        />
+                                        <span className="text-sm font-medium text-gray-700">
+                                          {tr('female_gender')}
+                                        </span>
+                                      </label>
                                     </div>
                                   </div>
                                 </>
                               )}
-                              <div className="text-primary mt-3">
+                              <div className="text-base text-gray-500 mb-6 leading-relaxed">
                                 {tr('callUsIfSmsNotReceived')}
                               </div>
-                              <div className="mt-10">
-                                <button
-                                  className={`py-3 md:px-20 text-white font-bold text-xl text-center rounded-full w-full outline-none focus:outline-none ${
-                                    formState.isValid
-                                      ? 'bg-yellow'
-                                      : 'bg-gray-400'
-                                  }`}
-                                  disabled={!formState.isValid}
-                                  ref={authButtonRef}
-                                >
-                                  {formState.isSubmitting ? (
-                                    <svg
-                                      className="animate-spin h-5 mx-auto text-center text-white w-5"
-                                      xmlns="http://www.w3.org/2000/svg"
-                                      fill="none"
-                                      viewBox="0 0 24 24"
-                                    >
-                                      <circle
-                                        className="opacity-25"
-                                        cx="12"
-                                        cy="12"
-                                        r="10"
-                                        stroke="currentColor"
-                                        strokeWidth="4"
-                                      ></circle>
-                                      <path
-                                        className="opacity-75"
-                                        fill="currentColor"
-                                        d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
-                                      ></path>
-                                    </svg>
-                                  ) : (
-                                    tr('get_code')
-                                  )}
-                                </button>
-                              </div>
-                            </form>
-                            {/*<div className="mt-5 text-gray-400 text-sm">
-                              Нажимая получить код я принимаю условия{' '}
-                              <a
-                                href="/privacy"
-                                onClick={showPrivacy}
-                                className="text-yellow block"
-                                target="_blank"
+                              <button
+                                className={`py-3.5 text-white font-bold text-lg text-center rounded-full w-full outline-none focus:outline-none transition-all duration-200 ${
+                                  formState.isValid
+                                    ? 'shadow-lg hover:shadow-xl hover:brightness-105'
+                                    : 'bg-gray-300 cursor-not-allowed'
+                                }`}
+                                style={formState.isValid ? { backgroundColor: '#F9B004' } : undefined}
+                                disabled={!formState.isValid}
+                                ref={authButtonRef}
                               >
-                                пользовательского соглашения
-                              </a>
-                                </div>*/}
+                                {formState.isSubmitting ? (
+                                  <svg
+                                    className="animate-spin h-5 mx-auto text-white w-5"
+                                    xmlns="http://www.w3.org/2000/svg"
+                                    fill="none"
+                                    viewBox="0 0 24 24"
+                                  >
+                                    <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
+                                    <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z" />
+                                  </svg>
+                                ) : (
+                                  tr('get_code')
+                                )}
+                              </button>
+                            </form>
                           </>
                         )}
                       </div>
