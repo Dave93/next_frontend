@@ -80,7 +80,6 @@ axios.defaults.withCredentials = true
 
 export default function Cart() {
   const [channelName, setChannelName] = useState('chopar')
-  const [recomendedItems, setRecomendedItems] = useState([])
   const [biRecommendations, setBiRecommendations] = useState({
     relatedItems: [],
     topItems: [],
@@ -121,17 +120,6 @@ export default function Cart() {
     'abcdefghijklmnopqrstuvwxyz1234567890'
   )
   const [configData, setConfigData] = useState({} as any)
-
-  const fetchRecomendedItems = async () => {
-    if (cartId) {
-      const { data } = await axios.get(
-        `${webAddress}/api/baskets/related/${cartId}`
-      )
-      if (data.data && data.data.length) {
-        setRecomendedItems(data.data)
-      }
-    }
-  }
 
   const fetchConfig = async () => {
     let configData
@@ -366,7 +354,6 @@ export default function Cart() {
     }
 
     await mutate()
-    fetchRecomendedItems()
     setAddingItemId(null)
   }
 
@@ -453,10 +440,14 @@ export default function Cart() {
 
   useEffect(() => {
     fetchConfig()
-    fetchRecomendedItems()
-    loadBiRecommendations()
     return
   }, [])
+
+  useEffect(() => {
+    if (data && data.lineItems && data.lineItems.length > 0) {
+      loadBiRecommendations()
+    }
+  }, [data?.lineItems?.length])
 
   const isWorkTime = useMemo(() => {
     let currentHour = new Date().getHours()
