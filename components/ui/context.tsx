@@ -418,15 +418,15 @@ export const UIProvider: FC<UIProviderProps> = (props) => {
 
   // PostHog: identify user when user data changes
   useEffect(() => {
-    if (state.user && state.user.id) {
-      identifyUser(state.user.id, {
-        phone_masked: state.user.phone
-          ? '***' + String(state.user.phone).slice(-4)
+    if (state.user && state.user.user_identity && state.user.user_identity.length > 0) {
+      identifyUser(state.user.user_identity[0], {
+        phone_masked: state.user.user_contact
+          ? '***' + String(state.user.user_contact).slice(-4)
           : undefined,
         registration_source: 'web',
       })
     }
-  }, [state.user?.id])
+  }, [state.user?.user_identity])
 
   const openSidebar = useCallback(
     () => dispatch({ type: 'OPEN_SIDEBAR' }),
