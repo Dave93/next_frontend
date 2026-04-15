@@ -1067,8 +1067,6 @@ const Orders: FC<OrdersProps> = ({ channelName, isMobile = false }) => {
           // PostHog: order_failed (validation error)
           trackOrderFailed({
             error_message: erText,
-            cart_total: data?.totalPrice / 100,
-            items_count: data?.lineItems?.length,
           })
 
           setIsSavingOrder(false)
@@ -1109,7 +1107,7 @@ const Orders: FC<OrdersProps> = ({ channelName, isMobile = false }) => {
       trackOrderPlaced({
         order_id: data.order.id,
         order_total: data.order.order_total / 100,
-        items_count: data?.lineItems?.length || 0,
+        items_count: data.order.items_count || 0,
         pay_type: payType,
         delivery_type: locationData?.deliveryType,
         city: activeCity?.slug,
@@ -1151,8 +1149,6 @@ const Orders: FC<OrdersProps> = ({ channelName, isMobile = false }) => {
       // PostHog: order_failed (server error)
       trackOrderFailed({
         error_message: e.response?.data?.error?.message || e.message || 'Unknown error',
-        cart_total: data?.totalPrice / 100,
-        items_count: data?.lineItems?.length,
       })
 
       setIsSavingOrder(false)
