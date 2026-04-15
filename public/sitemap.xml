@@ -1,11 +1,1084 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<urlset
-      xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-     
-<url>
-  <loc>https://choparpizza.uz/tashkent</loc>
-  <lastmod>2021-12-16T07:03:32+00:00</lastmod>
-</url>
-
-
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+        xmlns:xhtml="http://www.w3.org/1999/xhtml">
+  <url>
+    <loc>https://choparpizza.uz/tashkent</loc>
+    <lastmod>2026-04-15</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>1.0</priority>
+    <xhtml:link rel="alternate" hreflang="ru" href="https://choparpizza.uz/tashkent"/>
+    <xhtml:link rel="alternate" hreflang="uz" href="https://choparpizza.uz/uz/tashkent"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://choparpizza.uz/en/tashkent"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://choparpizza.uz/tashkent"/>
+  </url>
+  <url>
+    <loc>https://choparpizza.uz/uz/tashkent</loc>
+    <lastmod>2026-04-15</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>1.0</priority>
+    <xhtml:link rel="alternate" hreflang="ru" href="https://choparpizza.uz/tashkent"/>
+    <xhtml:link rel="alternate" hreflang="uz" href="https://choparpizza.uz/uz/tashkent"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://choparpizza.uz/en/tashkent"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://choparpizza.uz/tashkent"/>
+  </url>
+  <url>
+    <loc>https://choparpizza.uz/en/tashkent</loc>
+    <lastmod>2026-04-15</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>1.0</priority>
+    <xhtml:link rel="alternate" hreflang="ru" href="https://choparpizza.uz/tashkent"/>
+    <xhtml:link rel="alternate" hreflang="uz" href="https://choparpizza.uz/uz/tashkent"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://choparpizza.uz/en/tashkent"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://choparpizza.uz/tashkent"/>
+  </url>
+  <url>
+    <loc>https://choparpizza.uz/tashkent/about</loc>
+    <lastmod>2026-04-15</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.5</priority>
+    <xhtml:link rel="alternate" hreflang="ru" href="https://choparpizza.uz/tashkent/about"/>
+    <xhtml:link rel="alternate" hreflang="uz" href="https://choparpizza.uz/uz/tashkent/about"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://choparpizza.uz/en/tashkent/about"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://choparpizza.uz/tashkent/about"/>
+  </url>
+  <url>
+    <loc>https://choparpizza.uz/uz/tashkent/about</loc>
+    <lastmod>2026-04-15</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.5</priority>
+    <xhtml:link rel="alternate" hreflang="ru" href="https://choparpizza.uz/tashkent/about"/>
+    <xhtml:link rel="alternate" hreflang="uz" href="https://choparpizza.uz/uz/tashkent/about"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://choparpizza.uz/en/tashkent/about"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://choparpizza.uz/tashkent/about"/>
+  </url>
+  <url>
+    <loc>https://choparpizza.uz/en/tashkent/about</loc>
+    <lastmod>2026-04-15</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.5</priority>
+    <xhtml:link rel="alternate" hreflang="ru" href="https://choparpizza.uz/tashkent/about"/>
+    <xhtml:link rel="alternate" hreflang="uz" href="https://choparpizza.uz/uz/tashkent/about"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://choparpizza.uz/en/tashkent/about"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://choparpizza.uz/tashkent/about"/>
+  </url>
+  <url>
+    <loc>https://choparpizza.uz/tashkent/contacts</loc>
+    <lastmod>2026-04-15</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.5</priority>
+    <xhtml:link rel="alternate" hreflang="ru" href="https://choparpizza.uz/tashkent/contacts"/>
+    <xhtml:link rel="alternate" hreflang="uz" href="https://choparpizza.uz/uz/tashkent/contacts"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://choparpizza.uz/en/tashkent/contacts"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://choparpizza.uz/tashkent/contacts"/>
+  </url>
+  <url>
+    <loc>https://choparpizza.uz/uz/tashkent/contacts</loc>
+    <lastmod>2026-04-15</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.5</priority>
+    <xhtml:link rel="alternate" hreflang="ru" href="https://choparpizza.uz/tashkent/contacts"/>
+    <xhtml:link rel="alternate" hreflang="uz" href="https://choparpizza.uz/uz/tashkent/contacts"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://choparpizza.uz/en/tashkent/contacts"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://choparpizza.uz/tashkent/contacts"/>
+  </url>
+  <url>
+    <loc>https://choparpizza.uz/en/tashkent/contacts</loc>
+    <lastmod>2026-04-15</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.5</priority>
+    <xhtml:link rel="alternate" hreflang="ru" href="https://choparpizza.uz/tashkent/contacts"/>
+    <xhtml:link rel="alternate" hreflang="uz" href="https://choparpizza.uz/uz/tashkent/contacts"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://choparpizza.uz/en/tashkent/contacts"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://choparpizza.uz/tashkent/contacts"/>
+  </url>
+  <url>
+    <loc>https://choparpizza.uz/tashkent/delivery</loc>
+    <lastmod>2026-04-15</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+    <xhtml:link rel="alternate" hreflang="ru" href="https://choparpizza.uz/tashkent/delivery"/>
+    <xhtml:link rel="alternate" hreflang="uz" href="https://choparpizza.uz/uz/tashkent/delivery"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://choparpizza.uz/en/tashkent/delivery"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://choparpizza.uz/tashkent/delivery"/>
+  </url>
+  <url>
+    <loc>https://choparpizza.uz/uz/tashkent/delivery</loc>
+    <lastmod>2026-04-15</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+    <xhtml:link rel="alternate" hreflang="ru" href="https://choparpizza.uz/tashkent/delivery"/>
+    <xhtml:link rel="alternate" hreflang="uz" href="https://choparpizza.uz/uz/tashkent/delivery"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://choparpizza.uz/en/tashkent/delivery"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://choparpizza.uz/tashkent/delivery"/>
+  </url>
+  <url>
+    <loc>https://choparpizza.uz/en/tashkent/delivery</loc>
+    <lastmod>2026-04-15</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+    <xhtml:link rel="alternate" hreflang="ru" href="https://choparpizza.uz/tashkent/delivery"/>
+    <xhtml:link rel="alternate" hreflang="uz" href="https://choparpizza.uz/uz/tashkent/delivery"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://choparpizza.uz/en/tashkent/delivery"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://choparpizza.uz/tashkent/delivery"/>
+  </url>
+  <url>
+    <loc>https://choparpizza.uz/tashkent/sale</loc>
+    <lastmod>2026-04-15</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+    <xhtml:link rel="alternate" hreflang="ru" href="https://choparpizza.uz/tashkent/sale"/>
+    <xhtml:link rel="alternate" hreflang="uz" href="https://choparpizza.uz/uz/tashkent/sale"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://choparpizza.uz/en/tashkent/sale"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://choparpizza.uz/tashkent/sale"/>
+  </url>
+  <url>
+    <loc>https://choparpizza.uz/uz/tashkent/sale</loc>
+    <lastmod>2026-04-15</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+    <xhtml:link rel="alternate" hreflang="ru" href="https://choparpizza.uz/tashkent/sale"/>
+    <xhtml:link rel="alternate" hreflang="uz" href="https://choparpizza.uz/uz/tashkent/sale"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://choparpizza.uz/en/tashkent/sale"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://choparpizza.uz/tashkent/sale"/>
+  </url>
+  <url>
+    <loc>https://choparpizza.uz/en/tashkent/sale</loc>
+    <lastmod>2026-04-15</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+    <xhtml:link rel="alternate" hreflang="ru" href="https://choparpizza.uz/tashkent/sale"/>
+    <xhtml:link rel="alternate" hreflang="uz" href="https://choparpizza.uz/uz/tashkent/sale"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://choparpizza.uz/en/tashkent/sale"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://choparpizza.uz/tashkent/sale"/>
+  </url>
+  <url>
+    <loc>https://choparpizza.uz/tashkent/branch</loc>
+    <lastmod>2026-04-15</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+    <xhtml:link rel="alternate" hreflang="ru" href="https://choparpizza.uz/tashkent/branch"/>
+    <xhtml:link rel="alternate" hreflang="uz" href="https://choparpizza.uz/uz/tashkent/branch"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://choparpizza.uz/en/tashkent/branch"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://choparpizza.uz/tashkent/branch"/>
+  </url>
+  <url>
+    <loc>https://choparpizza.uz/uz/tashkent/branch</loc>
+    <lastmod>2026-04-15</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+    <xhtml:link rel="alternate" hreflang="ru" href="https://choparpizza.uz/tashkent/branch"/>
+    <xhtml:link rel="alternate" hreflang="uz" href="https://choparpizza.uz/uz/tashkent/branch"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://choparpizza.uz/en/tashkent/branch"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://choparpizza.uz/tashkent/branch"/>
+  </url>
+  <url>
+    <loc>https://choparpizza.uz/en/tashkent/branch</loc>
+    <lastmod>2026-04-15</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+    <xhtml:link rel="alternate" hreflang="ru" href="https://choparpizza.uz/tashkent/branch"/>
+    <xhtml:link rel="alternate" hreflang="uz" href="https://choparpizza.uz/uz/tashkent/branch"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://choparpizza.uz/en/tashkent/branch"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://choparpizza.uz/tashkent/branch"/>
+  </url>
+  <url>
+    <loc>https://choparpizza.uz/samarkand</loc>
+    <lastmod>2026-04-15</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="ru" href="https://choparpizza.uz/samarkand"/>
+    <xhtml:link rel="alternate" hreflang="uz" href="https://choparpizza.uz/uz/samarkand"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://choparpizza.uz/en/samarkand"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://choparpizza.uz/samarkand"/>
+  </url>
+  <url>
+    <loc>https://choparpizza.uz/uz/samarkand</loc>
+    <lastmod>2026-04-15</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="ru" href="https://choparpizza.uz/samarkand"/>
+    <xhtml:link rel="alternate" hreflang="uz" href="https://choparpizza.uz/uz/samarkand"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://choparpizza.uz/en/samarkand"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://choparpizza.uz/samarkand"/>
+  </url>
+  <url>
+    <loc>https://choparpizza.uz/en/samarkand</loc>
+    <lastmod>2026-04-15</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="ru" href="https://choparpizza.uz/samarkand"/>
+    <xhtml:link rel="alternate" hreflang="uz" href="https://choparpizza.uz/uz/samarkand"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://choparpizza.uz/en/samarkand"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://choparpizza.uz/samarkand"/>
+  </url>
+  <url>
+    <loc>https://choparpizza.uz/samarkand/about</loc>
+    <lastmod>2026-04-15</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.4</priority>
+    <xhtml:link rel="alternate" hreflang="ru" href="https://choparpizza.uz/samarkand/about"/>
+    <xhtml:link rel="alternate" hreflang="uz" href="https://choparpizza.uz/uz/samarkand/about"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://choparpizza.uz/en/samarkand/about"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://choparpizza.uz/samarkand/about"/>
+  </url>
+  <url>
+    <loc>https://choparpizza.uz/uz/samarkand/about</loc>
+    <lastmod>2026-04-15</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.4</priority>
+    <xhtml:link rel="alternate" hreflang="ru" href="https://choparpizza.uz/samarkand/about"/>
+    <xhtml:link rel="alternate" hreflang="uz" href="https://choparpizza.uz/uz/samarkand/about"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://choparpizza.uz/en/samarkand/about"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://choparpizza.uz/samarkand/about"/>
+  </url>
+  <url>
+    <loc>https://choparpizza.uz/en/samarkand/about</loc>
+    <lastmod>2026-04-15</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.4</priority>
+    <xhtml:link rel="alternate" hreflang="ru" href="https://choparpizza.uz/samarkand/about"/>
+    <xhtml:link rel="alternate" hreflang="uz" href="https://choparpizza.uz/uz/samarkand/about"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://choparpizza.uz/en/samarkand/about"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://choparpizza.uz/samarkand/about"/>
+  </url>
+  <url>
+    <loc>https://choparpizza.uz/samarkand/contacts</loc>
+    <lastmod>2026-04-15</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.4</priority>
+    <xhtml:link rel="alternate" hreflang="ru" href="https://choparpizza.uz/samarkand/contacts"/>
+    <xhtml:link rel="alternate" hreflang="uz" href="https://choparpizza.uz/uz/samarkand/contacts"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://choparpizza.uz/en/samarkand/contacts"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://choparpizza.uz/samarkand/contacts"/>
+  </url>
+  <url>
+    <loc>https://choparpizza.uz/uz/samarkand/contacts</loc>
+    <lastmod>2026-04-15</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.4</priority>
+    <xhtml:link rel="alternate" hreflang="ru" href="https://choparpizza.uz/samarkand/contacts"/>
+    <xhtml:link rel="alternate" hreflang="uz" href="https://choparpizza.uz/uz/samarkand/contacts"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://choparpizza.uz/en/samarkand/contacts"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://choparpizza.uz/samarkand/contacts"/>
+  </url>
+  <url>
+    <loc>https://choparpizza.uz/en/samarkand/contacts</loc>
+    <lastmod>2026-04-15</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.4</priority>
+    <xhtml:link rel="alternate" hreflang="ru" href="https://choparpizza.uz/samarkand/contacts"/>
+    <xhtml:link rel="alternate" hreflang="uz" href="https://choparpizza.uz/uz/samarkand/contacts"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://choparpizza.uz/en/samarkand/contacts"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://choparpizza.uz/samarkand/contacts"/>
+  </url>
+  <url>
+    <loc>https://choparpizza.uz/samarkand/delivery</loc>
+    <lastmod>2026-04-15</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.5</priority>
+    <xhtml:link rel="alternate" hreflang="ru" href="https://choparpizza.uz/samarkand/delivery"/>
+    <xhtml:link rel="alternate" hreflang="uz" href="https://choparpizza.uz/uz/samarkand/delivery"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://choparpizza.uz/en/samarkand/delivery"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://choparpizza.uz/samarkand/delivery"/>
+  </url>
+  <url>
+    <loc>https://choparpizza.uz/uz/samarkand/delivery</loc>
+    <lastmod>2026-04-15</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.5</priority>
+    <xhtml:link rel="alternate" hreflang="ru" href="https://choparpizza.uz/samarkand/delivery"/>
+    <xhtml:link rel="alternate" hreflang="uz" href="https://choparpizza.uz/uz/samarkand/delivery"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://choparpizza.uz/en/samarkand/delivery"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://choparpizza.uz/samarkand/delivery"/>
+  </url>
+  <url>
+    <loc>https://choparpizza.uz/en/samarkand/delivery</loc>
+    <lastmod>2026-04-15</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.5</priority>
+    <xhtml:link rel="alternate" hreflang="ru" href="https://choparpizza.uz/samarkand/delivery"/>
+    <xhtml:link rel="alternate" hreflang="uz" href="https://choparpizza.uz/uz/samarkand/delivery"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://choparpizza.uz/en/samarkand/delivery"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://choparpizza.uz/samarkand/delivery"/>
+  </url>
+  <url>
+    <loc>https://choparpizza.uz/samarkand/sale</loc>
+    <lastmod>2026-04-15</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+    <xhtml:link rel="alternate" hreflang="ru" href="https://choparpizza.uz/samarkand/sale"/>
+    <xhtml:link rel="alternate" hreflang="uz" href="https://choparpizza.uz/uz/samarkand/sale"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://choparpizza.uz/en/samarkand/sale"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://choparpizza.uz/samarkand/sale"/>
+  </url>
+  <url>
+    <loc>https://choparpizza.uz/uz/samarkand/sale</loc>
+    <lastmod>2026-04-15</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+    <xhtml:link rel="alternate" hreflang="ru" href="https://choparpizza.uz/samarkand/sale"/>
+    <xhtml:link rel="alternate" hreflang="uz" href="https://choparpizza.uz/uz/samarkand/sale"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://choparpizza.uz/en/samarkand/sale"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://choparpizza.uz/samarkand/sale"/>
+  </url>
+  <url>
+    <loc>https://choparpizza.uz/en/samarkand/sale</loc>
+    <lastmod>2026-04-15</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+    <xhtml:link rel="alternate" hreflang="ru" href="https://choparpizza.uz/samarkand/sale"/>
+    <xhtml:link rel="alternate" hreflang="uz" href="https://choparpizza.uz/uz/samarkand/sale"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://choparpizza.uz/en/samarkand/sale"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://choparpizza.uz/samarkand/sale"/>
+  </url>
+  <url>
+    <loc>https://choparpizza.uz/samarkand/branch</loc>
+    <lastmod>2026-04-15</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.5</priority>
+    <xhtml:link rel="alternate" hreflang="ru" href="https://choparpizza.uz/samarkand/branch"/>
+    <xhtml:link rel="alternate" hreflang="uz" href="https://choparpizza.uz/uz/samarkand/branch"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://choparpizza.uz/en/samarkand/branch"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://choparpizza.uz/samarkand/branch"/>
+  </url>
+  <url>
+    <loc>https://choparpizza.uz/uz/samarkand/branch</loc>
+    <lastmod>2026-04-15</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.5</priority>
+    <xhtml:link rel="alternate" hreflang="ru" href="https://choparpizza.uz/samarkand/branch"/>
+    <xhtml:link rel="alternate" hreflang="uz" href="https://choparpizza.uz/uz/samarkand/branch"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://choparpizza.uz/en/samarkand/branch"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://choparpizza.uz/samarkand/branch"/>
+  </url>
+  <url>
+    <loc>https://choparpizza.uz/en/samarkand/branch</loc>
+    <lastmod>2026-04-15</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.5</priority>
+    <xhtml:link rel="alternate" hreflang="ru" href="https://choparpizza.uz/samarkand/branch"/>
+    <xhtml:link rel="alternate" hreflang="uz" href="https://choparpizza.uz/uz/samarkand/branch"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://choparpizza.uz/en/samarkand/branch"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://choparpizza.uz/samarkand/branch"/>
+  </url>
+  <url>
+    <loc>https://choparpizza.uz/kokand</loc>
+    <lastmod>2026-04-15</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+    <xhtml:link rel="alternate" hreflang="ru" href="https://choparpizza.uz/kokand"/>
+    <xhtml:link rel="alternate" hreflang="uz" href="https://choparpizza.uz/uz/kokand"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://choparpizza.uz/en/kokand"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://choparpizza.uz/kokand"/>
+  </url>
+  <url>
+    <loc>https://choparpizza.uz/uz/kokand</loc>
+    <lastmod>2026-04-15</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+    <xhtml:link rel="alternate" hreflang="ru" href="https://choparpizza.uz/kokand"/>
+    <xhtml:link rel="alternate" hreflang="uz" href="https://choparpizza.uz/uz/kokand"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://choparpizza.uz/en/kokand"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://choparpizza.uz/kokand"/>
+  </url>
+  <url>
+    <loc>https://choparpizza.uz/en/kokand</loc>
+    <lastmod>2026-04-15</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+    <xhtml:link rel="alternate" hreflang="ru" href="https://choparpizza.uz/kokand"/>
+    <xhtml:link rel="alternate" hreflang="uz" href="https://choparpizza.uz/uz/kokand"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://choparpizza.uz/en/kokand"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://choparpizza.uz/kokand"/>
+  </url>
+  <url>
+    <loc>https://choparpizza.uz/kokand/about</loc>
+    <lastmod>2026-04-15</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.3</priority>
+    <xhtml:link rel="alternate" hreflang="ru" href="https://choparpizza.uz/kokand/about"/>
+    <xhtml:link rel="alternate" hreflang="uz" href="https://choparpizza.uz/uz/kokand/about"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://choparpizza.uz/en/kokand/about"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://choparpizza.uz/kokand/about"/>
+  </url>
+  <url>
+    <loc>https://choparpizza.uz/uz/kokand/about</loc>
+    <lastmod>2026-04-15</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.3</priority>
+    <xhtml:link rel="alternate" hreflang="ru" href="https://choparpizza.uz/kokand/about"/>
+    <xhtml:link rel="alternate" hreflang="uz" href="https://choparpizza.uz/uz/kokand/about"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://choparpizza.uz/en/kokand/about"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://choparpizza.uz/kokand/about"/>
+  </url>
+  <url>
+    <loc>https://choparpizza.uz/en/kokand/about</loc>
+    <lastmod>2026-04-15</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.3</priority>
+    <xhtml:link rel="alternate" hreflang="ru" href="https://choparpizza.uz/kokand/about"/>
+    <xhtml:link rel="alternate" hreflang="uz" href="https://choparpizza.uz/uz/kokand/about"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://choparpizza.uz/en/kokand/about"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://choparpizza.uz/kokand/about"/>
+  </url>
+  <url>
+    <loc>https://choparpizza.uz/kokand/contacts</loc>
+    <lastmod>2026-04-15</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.3</priority>
+    <xhtml:link rel="alternate" hreflang="ru" href="https://choparpizza.uz/kokand/contacts"/>
+    <xhtml:link rel="alternate" hreflang="uz" href="https://choparpizza.uz/uz/kokand/contacts"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://choparpizza.uz/en/kokand/contacts"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://choparpizza.uz/kokand/contacts"/>
+  </url>
+  <url>
+    <loc>https://choparpizza.uz/uz/kokand/contacts</loc>
+    <lastmod>2026-04-15</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.3</priority>
+    <xhtml:link rel="alternate" hreflang="ru" href="https://choparpizza.uz/kokand/contacts"/>
+    <xhtml:link rel="alternate" hreflang="uz" href="https://choparpizza.uz/uz/kokand/contacts"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://choparpizza.uz/en/kokand/contacts"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://choparpizza.uz/kokand/contacts"/>
+  </url>
+  <url>
+    <loc>https://choparpizza.uz/en/kokand/contacts</loc>
+    <lastmod>2026-04-15</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.3</priority>
+    <xhtml:link rel="alternate" hreflang="ru" href="https://choparpizza.uz/kokand/contacts"/>
+    <xhtml:link rel="alternate" hreflang="uz" href="https://choparpizza.uz/uz/kokand/contacts"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://choparpizza.uz/en/kokand/contacts"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://choparpizza.uz/kokand/contacts"/>
+  </url>
+  <url>
+    <loc>https://choparpizza.uz/kokand/delivery</loc>
+    <lastmod>2026-04-15</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.4</priority>
+    <xhtml:link rel="alternate" hreflang="ru" href="https://choparpizza.uz/kokand/delivery"/>
+    <xhtml:link rel="alternate" hreflang="uz" href="https://choparpizza.uz/uz/kokand/delivery"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://choparpizza.uz/en/kokand/delivery"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://choparpizza.uz/kokand/delivery"/>
+  </url>
+  <url>
+    <loc>https://choparpizza.uz/uz/kokand/delivery</loc>
+    <lastmod>2026-04-15</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.4</priority>
+    <xhtml:link rel="alternate" hreflang="ru" href="https://choparpizza.uz/kokand/delivery"/>
+    <xhtml:link rel="alternate" hreflang="uz" href="https://choparpizza.uz/uz/kokand/delivery"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://choparpizza.uz/en/kokand/delivery"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://choparpizza.uz/kokand/delivery"/>
+  </url>
+  <url>
+    <loc>https://choparpizza.uz/en/kokand/delivery</loc>
+    <lastmod>2026-04-15</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.4</priority>
+    <xhtml:link rel="alternate" hreflang="ru" href="https://choparpizza.uz/kokand/delivery"/>
+    <xhtml:link rel="alternate" hreflang="uz" href="https://choparpizza.uz/uz/kokand/delivery"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://choparpizza.uz/en/kokand/delivery"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://choparpizza.uz/kokand/delivery"/>
+  </url>
+  <url>
+    <loc>https://choparpizza.uz/kokand/sale</loc>
+    <lastmod>2026-04-15</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.5</priority>
+    <xhtml:link rel="alternate" hreflang="ru" href="https://choparpizza.uz/kokand/sale"/>
+    <xhtml:link rel="alternate" hreflang="uz" href="https://choparpizza.uz/uz/kokand/sale"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://choparpizza.uz/en/kokand/sale"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://choparpizza.uz/kokand/sale"/>
+  </url>
+  <url>
+    <loc>https://choparpizza.uz/uz/kokand/sale</loc>
+    <lastmod>2026-04-15</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.5</priority>
+    <xhtml:link rel="alternate" hreflang="ru" href="https://choparpizza.uz/kokand/sale"/>
+    <xhtml:link rel="alternate" hreflang="uz" href="https://choparpizza.uz/uz/kokand/sale"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://choparpizza.uz/en/kokand/sale"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://choparpizza.uz/kokand/sale"/>
+  </url>
+  <url>
+    <loc>https://choparpizza.uz/en/kokand/sale</loc>
+    <lastmod>2026-04-15</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.5</priority>
+    <xhtml:link rel="alternate" hreflang="ru" href="https://choparpizza.uz/kokand/sale"/>
+    <xhtml:link rel="alternate" hreflang="uz" href="https://choparpizza.uz/uz/kokand/sale"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://choparpizza.uz/en/kokand/sale"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://choparpizza.uz/kokand/sale"/>
+  </url>
+  <url>
+    <loc>https://choparpizza.uz/kokand/branch</loc>
+    <lastmod>2026-04-15</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.4</priority>
+    <xhtml:link rel="alternate" hreflang="ru" href="https://choparpizza.uz/kokand/branch"/>
+    <xhtml:link rel="alternate" hreflang="uz" href="https://choparpizza.uz/uz/kokand/branch"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://choparpizza.uz/en/kokand/branch"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://choparpizza.uz/kokand/branch"/>
+  </url>
+  <url>
+    <loc>https://choparpizza.uz/uz/kokand/branch</loc>
+    <lastmod>2026-04-15</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.4</priority>
+    <xhtml:link rel="alternate" hreflang="ru" href="https://choparpizza.uz/kokand/branch"/>
+    <xhtml:link rel="alternate" hreflang="uz" href="https://choparpizza.uz/uz/kokand/branch"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://choparpizza.uz/en/kokand/branch"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://choparpizza.uz/kokand/branch"/>
+  </url>
+  <url>
+    <loc>https://choparpizza.uz/en/kokand/branch</loc>
+    <lastmod>2026-04-15</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.4</priority>
+    <xhtml:link rel="alternate" hreflang="ru" href="https://choparpizza.uz/kokand/branch"/>
+    <xhtml:link rel="alternate" hreflang="uz" href="https://choparpizza.uz/uz/kokand/branch"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://choparpizza.uz/en/kokand/branch"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://choparpizza.uz/kokand/branch"/>
+  </url>
+  <url>
+    <loc>https://choparpizza.uz/andijan</loc>
+    <lastmod>2026-04-15</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+    <xhtml:link rel="alternate" hreflang="ru" href="https://choparpizza.uz/andijan"/>
+    <xhtml:link rel="alternate" hreflang="uz" href="https://choparpizza.uz/uz/andijan"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://choparpizza.uz/en/andijan"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://choparpizza.uz/andijan"/>
+  </url>
+  <url>
+    <loc>https://choparpizza.uz/uz/andijan</loc>
+    <lastmod>2026-04-15</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+    <xhtml:link rel="alternate" hreflang="ru" href="https://choparpizza.uz/andijan"/>
+    <xhtml:link rel="alternate" hreflang="uz" href="https://choparpizza.uz/uz/andijan"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://choparpizza.uz/en/andijan"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://choparpizza.uz/andijan"/>
+  </url>
+  <url>
+    <loc>https://choparpizza.uz/en/andijan</loc>
+    <lastmod>2026-04-15</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+    <xhtml:link rel="alternate" hreflang="ru" href="https://choparpizza.uz/andijan"/>
+    <xhtml:link rel="alternate" hreflang="uz" href="https://choparpizza.uz/uz/andijan"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://choparpizza.uz/en/andijan"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://choparpizza.uz/andijan"/>
+  </url>
+  <url>
+    <loc>https://choparpizza.uz/andijan/about</loc>
+    <lastmod>2026-04-15</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.3</priority>
+    <xhtml:link rel="alternate" hreflang="ru" href="https://choparpizza.uz/andijan/about"/>
+    <xhtml:link rel="alternate" hreflang="uz" href="https://choparpizza.uz/uz/andijan/about"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://choparpizza.uz/en/andijan/about"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://choparpizza.uz/andijan/about"/>
+  </url>
+  <url>
+    <loc>https://choparpizza.uz/uz/andijan/about</loc>
+    <lastmod>2026-04-15</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.3</priority>
+    <xhtml:link rel="alternate" hreflang="ru" href="https://choparpizza.uz/andijan/about"/>
+    <xhtml:link rel="alternate" hreflang="uz" href="https://choparpizza.uz/uz/andijan/about"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://choparpizza.uz/en/andijan/about"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://choparpizza.uz/andijan/about"/>
+  </url>
+  <url>
+    <loc>https://choparpizza.uz/en/andijan/about</loc>
+    <lastmod>2026-04-15</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.3</priority>
+    <xhtml:link rel="alternate" hreflang="ru" href="https://choparpizza.uz/andijan/about"/>
+    <xhtml:link rel="alternate" hreflang="uz" href="https://choparpizza.uz/uz/andijan/about"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://choparpizza.uz/en/andijan/about"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://choparpizza.uz/andijan/about"/>
+  </url>
+  <url>
+    <loc>https://choparpizza.uz/andijan/contacts</loc>
+    <lastmod>2026-04-15</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.3</priority>
+    <xhtml:link rel="alternate" hreflang="ru" href="https://choparpizza.uz/andijan/contacts"/>
+    <xhtml:link rel="alternate" hreflang="uz" href="https://choparpizza.uz/uz/andijan/contacts"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://choparpizza.uz/en/andijan/contacts"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://choparpizza.uz/andijan/contacts"/>
+  </url>
+  <url>
+    <loc>https://choparpizza.uz/uz/andijan/contacts</loc>
+    <lastmod>2026-04-15</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.3</priority>
+    <xhtml:link rel="alternate" hreflang="ru" href="https://choparpizza.uz/andijan/contacts"/>
+    <xhtml:link rel="alternate" hreflang="uz" href="https://choparpizza.uz/uz/andijan/contacts"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://choparpizza.uz/en/andijan/contacts"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://choparpizza.uz/andijan/contacts"/>
+  </url>
+  <url>
+    <loc>https://choparpizza.uz/en/andijan/contacts</loc>
+    <lastmod>2026-04-15</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.3</priority>
+    <xhtml:link rel="alternate" hreflang="ru" href="https://choparpizza.uz/andijan/contacts"/>
+    <xhtml:link rel="alternate" hreflang="uz" href="https://choparpizza.uz/uz/andijan/contacts"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://choparpizza.uz/en/andijan/contacts"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://choparpizza.uz/andijan/contacts"/>
+  </url>
+  <url>
+    <loc>https://choparpizza.uz/andijan/delivery</loc>
+    <lastmod>2026-04-15</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.4</priority>
+    <xhtml:link rel="alternate" hreflang="ru" href="https://choparpizza.uz/andijan/delivery"/>
+    <xhtml:link rel="alternate" hreflang="uz" href="https://choparpizza.uz/uz/andijan/delivery"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://choparpizza.uz/en/andijan/delivery"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://choparpizza.uz/andijan/delivery"/>
+  </url>
+  <url>
+    <loc>https://choparpizza.uz/uz/andijan/delivery</loc>
+    <lastmod>2026-04-15</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.4</priority>
+    <xhtml:link rel="alternate" hreflang="ru" href="https://choparpizza.uz/andijan/delivery"/>
+    <xhtml:link rel="alternate" hreflang="uz" href="https://choparpizza.uz/uz/andijan/delivery"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://choparpizza.uz/en/andijan/delivery"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://choparpizza.uz/andijan/delivery"/>
+  </url>
+  <url>
+    <loc>https://choparpizza.uz/en/andijan/delivery</loc>
+    <lastmod>2026-04-15</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.4</priority>
+    <xhtml:link rel="alternate" hreflang="ru" href="https://choparpizza.uz/andijan/delivery"/>
+    <xhtml:link rel="alternate" hreflang="uz" href="https://choparpizza.uz/uz/andijan/delivery"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://choparpizza.uz/en/andijan/delivery"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://choparpizza.uz/andijan/delivery"/>
+  </url>
+  <url>
+    <loc>https://choparpizza.uz/andijan/sale</loc>
+    <lastmod>2026-04-15</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.5</priority>
+    <xhtml:link rel="alternate" hreflang="ru" href="https://choparpizza.uz/andijan/sale"/>
+    <xhtml:link rel="alternate" hreflang="uz" href="https://choparpizza.uz/uz/andijan/sale"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://choparpizza.uz/en/andijan/sale"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://choparpizza.uz/andijan/sale"/>
+  </url>
+  <url>
+    <loc>https://choparpizza.uz/uz/andijan/sale</loc>
+    <lastmod>2026-04-15</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.5</priority>
+    <xhtml:link rel="alternate" hreflang="ru" href="https://choparpizza.uz/andijan/sale"/>
+    <xhtml:link rel="alternate" hreflang="uz" href="https://choparpizza.uz/uz/andijan/sale"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://choparpizza.uz/en/andijan/sale"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://choparpizza.uz/andijan/sale"/>
+  </url>
+  <url>
+    <loc>https://choparpizza.uz/en/andijan/sale</loc>
+    <lastmod>2026-04-15</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.5</priority>
+    <xhtml:link rel="alternate" hreflang="ru" href="https://choparpizza.uz/andijan/sale"/>
+    <xhtml:link rel="alternate" hreflang="uz" href="https://choparpizza.uz/uz/andijan/sale"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://choparpizza.uz/en/andijan/sale"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://choparpizza.uz/andijan/sale"/>
+  </url>
+  <url>
+    <loc>https://choparpizza.uz/andijan/branch</loc>
+    <lastmod>2026-04-15</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.4</priority>
+    <xhtml:link rel="alternate" hreflang="ru" href="https://choparpizza.uz/andijan/branch"/>
+    <xhtml:link rel="alternate" hreflang="uz" href="https://choparpizza.uz/uz/andijan/branch"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://choparpizza.uz/en/andijan/branch"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://choparpizza.uz/andijan/branch"/>
+  </url>
+  <url>
+    <loc>https://choparpizza.uz/uz/andijan/branch</loc>
+    <lastmod>2026-04-15</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.4</priority>
+    <xhtml:link rel="alternate" hreflang="ru" href="https://choparpizza.uz/andijan/branch"/>
+    <xhtml:link rel="alternate" hreflang="uz" href="https://choparpizza.uz/uz/andijan/branch"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://choparpizza.uz/en/andijan/branch"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://choparpizza.uz/andijan/branch"/>
+  </url>
+  <url>
+    <loc>https://choparpizza.uz/en/andijan/branch</loc>
+    <lastmod>2026-04-15</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.4</priority>
+    <xhtml:link rel="alternate" hreflang="ru" href="https://choparpizza.uz/andijan/branch"/>
+    <xhtml:link rel="alternate" hreflang="uz" href="https://choparpizza.uz/uz/andijan/branch"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://choparpizza.uz/en/andijan/branch"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://choparpizza.uz/andijan/branch"/>
+  </url>
+  <url>
+    <loc>https://choparpizza.uz/fergana</loc>
+    <lastmod>2026-04-15</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+    <xhtml:link rel="alternate" hreflang="ru" href="https://choparpizza.uz/fergana"/>
+    <xhtml:link rel="alternate" hreflang="uz" href="https://choparpizza.uz/uz/fergana"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://choparpizza.uz/en/fergana"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://choparpizza.uz/fergana"/>
+  </url>
+  <url>
+    <loc>https://choparpizza.uz/uz/fergana</loc>
+    <lastmod>2026-04-15</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+    <xhtml:link rel="alternate" hreflang="ru" href="https://choparpizza.uz/fergana"/>
+    <xhtml:link rel="alternate" hreflang="uz" href="https://choparpizza.uz/uz/fergana"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://choparpizza.uz/en/fergana"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://choparpizza.uz/fergana"/>
+  </url>
+  <url>
+    <loc>https://choparpizza.uz/en/fergana</loc>
+    <lastmod>2026-04-15</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+    <xhtml:link rel="alternate" hreflang="ru" href="https://choparpizza.uz/fergana"/>
+    <xhtml:link rel="alternate" hreflang="uz" href="https://choparpizza.uz/uz/fergana"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://choparpizza.uz/en/fergana"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://choparpizza.uz/fergana"/>
+  </url>
+  <url>
+    <loc>https://choparpizza.uz/fergana/about</loc>
+    <lastmod>2026-04-15</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.3</priority>
+    <xhtml:link rel="alternate" hreflang="ru" href="https://choparpizza.uz/fergana/about"/>
+    <xhtml:link rel="alternate" hreflang="uz" href="https://choparpizza.uz/uz/fergana/about"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://choparpizza.uz/en/fergana/about"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://choparpizza.uz/fergana/about"/>
+  </url>
+  <url>
+    <loc>https://choparpizza.uz/uz/fergana/about</loc>
+    <lastmod>2026-04-15</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.3</priority>
+    <xhtml:link rel="alternate" hreflang="ru" href="https://choparpizza.uz/fergana/about"/>
+    <xhtml:link rel="alternate" hreflang="uz" href="https://choparpizza.uz/uz/fergana/about"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://choparpizza.uz/en/fergana/about"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://choparpizza.uz/fergana/about"/>
+  </url>
+  <url>
+    <loc>https://choparpizza.uz/en/fergana/about</loc>
+    <lastmod>2026-04-15</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.3</priority>
+    <xhtml:link rel="alternate" hreflang="ru" href="https://choparpizza.uz/fergana/about"/>
+    <xhtml:link rel="alternate" hreflang="uz" href="https://choparpizza.uz/uz/fergana/about"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://choparpizza.uz/en/fergana/about"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://choparpizza.uz/fergana/about"/>
+  </url>
+  <url>
+    <loc>https://choparpizza.uz/fergana/contacts</loc>
+    <lastmod>2026-04-15</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.3</priority>
+    <xhtml:link rel="alternate" hreflang="ru" href="https://choparpizza.uz/fergana/contacts"/>
+    <xhtml:link rel="alternate" hreflang="uz" href="https://choparpizza.uz/uz/fergana/contacts"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://choparpizza.uz/en/fergana/contacts"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://choparpizza.uz/fergana/contacts"/>
+  </url>
+  <url>
+    <loc>https://choparpizza.uz/uz/fergana/contacts</loc>
+    <lastmod>2026-04-15</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.3</priority>
+    <xhtml:link rel="alternate" hreflang="ru" href="https://choparpizza.uz/fergana/contacts"/>
+    <xhtml:link rel="alternate" hreflang="uz" href="https://choparpizza.uz/uz/fergana/contacts"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://choparpizza.uz/en/fergana/contacts"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://choparpizza.uz/fergana/contacts"/>
+  </url>
+  <url>
+    <loc>https://choparpizza.uz/en/fergana/contacts</loc>
+    <lastmod>2026-04-15</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.3</priority>
+    <xhtml:link rel="alternate" hreflang="ru" href="https://choparpizza.uz/fergana/contacts"/>
+    <xhtml:link rel="alternate" hreflang="uz" href="https://choparpizza.uz/uz/fergana/contacts"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://choparpizza.uz/en/fergana/contacts"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://choparpizza.uz/fergana/contacts"/>
+  </url>
+  <url>
+    <loc>https://choparpizza.uz/fergana/delivery</loc>
+    <lastmod>2026-04-15</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.4</priority>
+    <xhtml:link rel="alternate" hreflang="ru" href="https://choparpizza.uz/fergana/delivery"/>
+    <xhtml:link rel="alternate" hreflang="uz" href="https://choparpizza.uz/uz/fergana/delivery"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://choparpizza.uz/en/fergana/delivery"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://choparpizza.uz/fergana/delivery"/>
+  </url>
+  <url>
+    <loc>https://choparpizza.uz/uz/fergana/delivery</loc>
+    <lastmod>2026-04-15</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.4</priority>
+    <xhtml:link rel="alternate" hreflang="ru" href="https://choparpizza.uz/fergana/delivery"/>
+    <xhtml:link rel="alternate" hreflang="uz" href="https://choparpizza.uz/uz/fergana/delivery"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://choparpizza.uz/en/fergana/delivery"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://choparpizza.uz/fergana/delivery"/>
+  </url>
+  <url>
+    <loc>https://choparpizza.uz/en/fergana/delivery</loc>
+    <lastmod>2026-04-15</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.4</priority>
+    <xhtml:link rel="alternate" hreflang="ru" href="https://choparpizza.uz/fergana/delivery"/>
+    <xhtml:link rel="alternate" hreflang="uz" href="https://choparpizza.uz/uz/fergana/delivery"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://choparpizza.uz/en/fergana/delivery"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://choparpizza.uz/fergana/delivery"/>
+  </url>
+  <url>
+    <loc>https://choparpizza.uz/fergana/sale</loc>
+    <lastmod>2026-04-15</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.5</priority>
+    <xhtml:link rel="alternate" hreflang="ru" href="https://choparpizza.uz/fergana/sale"/>
+    <xhtml:link rel="alternate" hreflang="uz" href="https://choparpizza.uz/uz/fergana/sale"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://choparpizza.uz/en/fergana/sale"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://choparpizza.uz/fergana/sale"/>
+  </url>
+  <url>
+    <loc>https://choparpizza.uz/uz/fergana/sale</loc>
+    <lastmod>2026-04-15</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.5</priority>
+    <xhtml:link rel="alternate" hreflang="ru" href="https://choparpizza.uz/fergana/sale"/>
+    <xhtml:link rel="alternate" hreflang="uz" href="https://choparpizza.uz/uz/fergana/sale"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://choparpizza.uz/en/fergana/sale"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://choparpizza.uz/fergana/sale"/>
+  </url>
+  <url>
+    <loc>https://choparpizza.uz/en/fergana/sale</loc>
+    <lastmod>2026-04-15</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.5</priority>
+    <xhtml:link rel="alternate" hreflang="ru" href="https://choparpizza.uz/fergana/sale"/>
+    <xhtml:link rel="alternate" hreflang="uz" href="https://choparpizza.uz/uz/fergana/sale"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://choparpizza.uz/en/fergana/sale"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://choparpizza.uz/fergana/sale"/>
+  </url>
+  <url>
+    <loc>https://choparpizza.uz/fergana/branch</loc>
+    <lastmod>2026-04-15</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.4</priority>
+    <xhtml:link rel="alternate" hreflang="ru" href="https://choparpizza.uz/fergana/branch"/>
+    <xhtml:link rel="alternate" hreflang="uz" href="https://choparpizza.uz/uz/fergana/branch"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://choparpizza.uz/en/fergana/branch"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://choparpizza.uz/fergana/branch"/>
+  </url>
+  <url>
+    <loc>https://choparpizza.uz/uz/fergana/branch</loc>
+    <lastmod>2026-04-15</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.4</priority>
+    <xhtml:link rel="alternate" hreflang="ru" href="https://choparpizza.uz/fergana/branch"/>
+    <xhtml:link rel="alternate" hreflang="uz" href="https://choparpizza.uz/uz/fergana/branch"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://choparpizza.uz/en/fergana/branch"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://choparpizza.uz/fergana/branch"/>
+  </url>
+  <url>
+    <loc>https://choparpizza.uz/en/fergana/branch</loc>
+    <lastmod>2026-04-15</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.4</priority>
+    <xhtml:link rel="alternate" hreflang="ru" href="https://choparpizza.uz/fergana/branch"/>
+    <xhtml:link rel="alternate" hreflang="uz" href="https://choparpizza.uz/uz/fergana/branch"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://choparpizza.uz/en/fergana/branch"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://choparpizza.uz/fergana/branch"/>
+  </url>
+  <url>
+    <loc>https://choparpizza.uz/bukhara</loc>
+    <lastmod>2026-04-15</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+    <xhtml:link rel="alternate" hreflang="ru" href="https://choparpizza.uz/bukhara"/>
+    <xhtml:link rel="alternate" hreflang="uz" href="https://choparpizza.uz/uz/bukhara"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://choparpizza.uz/en/bukhara"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://choparpizza.uz/bukhara"/>
+  </url>
+  <url>
+    <loc>https://choparpizza.uz/uz/bukhara</loc>
+    <lastmod>2026-04-15</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+    <xhtml:link rel="alternate" hreflang="ru" href="https://choparpizza.uz/bukhara"/>
+    <xhtml:link rel="alternate" hreflang="uz" href="https://choparpizza.uz/uz/bukhara"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://choparpizza.uz/en/bukhara"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://choparpizza.uz/bukhara"/>
+  </url>
+  <url>
+    <loc>https://choparpizza.uz/en/bukhara</loc>
+    <lastmod>2026-04-15</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+    <xhtml:link rel="alternate" hreflang="ru" href="https://choparpizza.uz/bukhara"/>
+    <xhtml:link rel="alternate" hreflang="uz" href="https://choparpizza.uz/uz/bukhara"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://choparpizza.uz/en/bukhara"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://choparpizza.uz/bukhara"/>
+  </url>
+  <url>
+    <loc>https://choparpizza.uz/bukhara/about</loc>
+    <lastmod>2026-04-15</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.3</priority>
+    <xhtml:link rel="alternate" hreflang="ru" href="https://choparpizza.uz/bukhara/about"/>
+    <xhtml:link rel="alternate" hreflang="uz" href="https://choparpizza.uz/uz/bukhara/about"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://choparpizza.uz/en/bukhara/about"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://choparpizza.uz/bukhara/about"/>
+  </url>
+  <url>
+    <loc>https://choparpizza.uz/uz/bukhara/about</loc>
+    <lastmod>2026-04-15</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.3</priority>
+    <xhtml:link rel="alternate" hreflang="ru" href="https://choparpizza.uz/bukhara/about"/>
+    <xhtml:link rel="alternate" hreflang="uz" href="https://choparpizza.uz/uz/bukhara/about"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://choparpizza.uz/en/bukhara/about"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://choparpizza.uz/bukhara/about"/>
+  </url>
+  <url>
+    <loc>https://choparpizza.uz/en/bukhara/about</loc>
+    <lastmod>2026-04-15</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.3</priority>
+    <xhtml:link rel="alternate" hreflang="ru" href="https://choparpizza.uz/bukhara/about"/>
+    <xhtml:link rel="alternate" hreflang="uz" href="https://choparpizza.uz/uz/bukhara/about"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://choparpizza.uz/en/bukhara/about"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://choparpizza.uz/bukhara/about"/>
+  </url>
+  <url>
+    <loc>https://choparpizza.uz/bukhara/contacts</loc>
+    <lastmod>2026-04-15</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.3</priority>
+    <xhtml:link rel="alternate" hreflang="ru" href="https://choparpizza.uz/bukhara/contacts"/>
+    <xhtml:link rel="alternate" hreflang="uz" href="https://choparpizza.uz/uz/bukhara/contacts"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://choparpizza.uz/en/bukhara/contacts"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://choparpizza.uz/bukhara/contacts"/>
+  </url>
+  <url>
+    <loc>https://choparpizza.uz/uz/bukhara/contacts</loc>
+    <lastmod>2026-04-15</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.3</priority>
+    <xhtml:link rel="alternate" hreflang="ru" href="https://choparpizza.uz/bukhara/contacts"/>
+    <xhtml:link rel="alternate" hreflang="uz" href="https://choparpizza.uz/uz/bukhara/contacts"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://choparpizza.uz/en/bukhara/contacts"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://choparpizza.uz/bukhara/contacts"/>
+  </url>
+  <url>
+    <loc>https://choparpizza.uz/en/bukhara/contacts</loc>
+    <lastmod>2026-04-15</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.3</priority>
+    <xhtml:link rel="alternate" hreflang="ru" href="https://choparpizza.uz/bukhara/contacts"/>
+    <xhtml:link rel="alternate" hreflang="uz" href="https://choparpizza.uz/uz/bukhara/contacts"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://choparpizza.uz/en/bukhara/contacts"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://choparpizza.uz/bukhara/contacts"/>
+  </url>
+  <url>
+    <loc>https://choparpizza.uz/bukhara/delivery</loc>
+    <lastmod>2026-04-15</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.4</priority>
+    <xhtml:link rel="alternate" hreflang="ru" href="https://choparpizza.uz/bukhara/delivery"/>
+    <xhtml:link rel="alternate" hreflang="uz" href="https://choparpizza.uz/uz/bukhara/delivery"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://choparpizza.uz/en/bukhara/delivery"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://choparpizza.uz/bukhara/delivery"/>
+  </url>
+  <url>
+    <loc>https://choparpizza.uz/uz/bukhara/delivery</loc>
+    <lastmod>2026-04-15</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.4</priority>
+    <xhtml:link rel="alternate" hreflang="ru" href="https://choparpizza.uz/bukhara/delivery"/>
+    <xhtml:link rel="alternate" hreflang="uz" href="https://choparpizza.uz/uz/bukhara/delivery"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://choparpizza.uz/en/bukhara/delivery"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://choparpizza.uz/bukhara/delivery"/>
+  </url>
+  <url>
+    <loc>https://choparpizza.uz/en/bukhara/delivery</loc>
+    <lastmod>2026-04-15</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.4</priority>
+    <xhtml:link rel="alternate" hreflang="ru" href="https://choparpizza.uz/bukhara/delivery"/>
+    <xhtml:link rel="alternate" hreflang="uz" href="https://choparpizza.uz/uz/bukhara/delivery"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://choparpizza.uz/en/bukhara/delivery"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://choparpizza.uz/bukhara/delivery"/>
+  </url>
+  <url>
+    <loc>https://choparpizza.uz/bukhara/sale</loc>
+    <lastmod>2026-04-15</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.5</priority>
+    <xhtml:link rel="alternate" hreflang="ru" href="https://choparpizza.uz/bukhara/sale"/>
+    <xhtml:link rel="alternate" hreflang="uz" href="https://choparpizza.uz/uz/bukhara/sale"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://choparpizza.uz/en/bukhara/sale"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://choparpizza.uz/bukhara/sale"/>
+  </url>
+  <url>
+    <loc>https://choparpizza.uz/uz/bukhara/sale</loc>
+    <lastmod>2026-04-15</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.5</priority>
+    <xhtml:link rel="alternate" hreflang="ru" href="https://choparpizza.uz/bukhara/sale"/>
+    <xhtml:link rel="alternate" hreflang="uz" href="https://choparpizza.uz/uz/bukhara/sale"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://choparpizza.uz/en/bukhara/sale"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://choparpizza.uz/bukhara/sale"/>
+  </url>
+  <url>
+    <loc>https://choparpizza.uz/en/bukhara/sale</loc>
+    <lastmod>2026-04-15</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.5</priority>
+    <xhtml:link rel="alternate" hreflang="ru" href="https://choparpizza.uz/bukhara/sale"/>
+    <xhtml:link rel="alternate" hreflang="uz" href="https://choparpizza.uz/uz/bukhara/sale"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://choparpizza.uz/en/bukhara/sale"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://choparpizza.uz/bukhara/sale"/>
+  </url>
+  <url>
+    <loc>https://choparpizza.uz/bukhara/branch</loc>
+    <lastmod>2026-04-15</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.4</priority>
+    <xhtml:link rel="alternate" hreflang="ru" href="https://choparpizza.uz/bukhara/branch"/>
+    <xhtml:link rel="alternate" hreflang="uz" href="https://choparpizza.uz/uz/bukhara/branch"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://choparpizza.uz/en/bukhara/branch"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://choparpizza.uz/bukhara/branch"/>
+  </url>
+  <url>
+    <loc>https://choparpizza.uz/uz/bukhara/branch</loc>
+    <lastmod>2026-04-15</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.4</priority>
+    <xhtml:link rel="alternate" hreflang="ru" href="https://choparpizza.uz/bukhara/branch"/>
+    <xhtml:link rel="alternate" hreflang="uz" href="https://choparpizza.uz/uz/bukhara/branch"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://choparpizza.uz/en/bukhara/branch"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://choparpizza.uz/bukhara/branch"/>
+  </url>
+  <url>
+    <loc>https://choparpizza.uz/en/bukhara/branch</loc>
+    <lastmod>2026-04-15</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.4</priority>
+    <xhtml:link rel="alternate" hreflang="ru" href="https://choparpizza.uz/bukhara/branch"/>
+    <xhtml:link rel="alternate" hreflang="uz" href="https://choparpizza.uz/uz/bukhara/branch"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://choparpizza.uz/en/bukhara/branch"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://choparpizza.uz/bukhara/branch"/>
+  </url>
 </urlset>
