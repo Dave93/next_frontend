@@ -35,6 +35,7 @@ import styles from './ProductItemNew.module.css'
 import { useUI } from '@components/ui/context'
 import { DateTime } from 'luxon'
 import { toast } from 'react-toastify'
+import { trackAddToCart } from '@lib/posthog-events'
 // import SessionContext from 'react-storefront/session/SessionContext'
 
 type ProductItem = {
@@ -366,6 +367,19 @@ const ProductItemNew: FC<ProductItem> = ({ product, channelName }) => {
 
     await mutate(basketResult, false)
     setIsLoadingBasket(false)
+
+    // PostHog: add_to_cart
+    trackAddToCart({
+      product_id: store.id,
+      product_name: store.name,
+      variant_id: selectedProdId,
+      quantity: 1,
+      price: parseInt(store.price, 0) / 100,
+      cart_items_count: basketResult?.lineItems?.length,
+      cart_total: basketResult?.totalPrice / 100,
+      city: citySlug,
+    })
+
     if (modifiers && modifiers.length) {
       setIsChoosingModifier(false)
     }

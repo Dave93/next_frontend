@@ -62,6 +62,7 @@ import getAddressList from '@lib/load_addreses'
 import { Address } from '@commerce/types/address'
 import Hashids from 'hashids'
 import { AddressSelection, AddressSelectionMobile } from './AddressSelection'
+import { trackOrderPlaced, trackOrderFailed } from '@lib/posthog-events'
 
 let webAddress = process.env.NEXT_PUBLIC_API_URL
 axios.defaults.withCredentials = true
@@ -1062,6 +1063,14 @@ const Orders: FC<OrdersProps> = ({ channelName, isMobile = false }) => {
             position: toast.POSITION.BOTTOM_RIGHT,
             hideProgressBar: true,
           })
+
+          // PostHog: order_failed (validation error)
+          trackOrderFailed({
+            error_message: erText,
+            cart_total: data?.totalPrice / 100,
+            items_count: data?.lineItems?.length,
+          })
+
           setIsSavingOrder(false)
           return
         }
@@ -1096,6 +1105,18 @@ const Orders: FC<OrdersProps> = ({ channelName, isMobile = false }) => {
       // setUserData(data.user)
       localStorage.removeItem('basketId')
 
+      // PostHog: order_placed
+      trackOrderPlaced({
+        order_id: data.order.id,
+        order_total: data.order.order_total / 100,
+        items_count: data?.lineItems?.length || 0,
+        pay_type: payType,
+        delivery_type: locationData?.deliveryType,
+        city: activeCity?.slug,
+        source_type: sourceType,
+        has_discount: (data.order.discount_total || 0) > 0,
+      })
+
       let basketData = {
         id: '',
         createdAt: '',
@@ -1126,6 +1147,14 @@ const Orders: FC<OrdersProps> = ({ channelName, isMobile = false }) => {
         position: toast.POSITION.BOTTOM_RIGHT,
         hideProgressBar: true,
       })
+
+      // PostHog: order_failed (server error)
+      trackOrderFailed({
+        error_message: e.response?.data?.error?.message || e.message || 'Unknown error',
+        cart_total: data?.totalPrice / 100,
+        items_count: data?.lineItems?.length,
+      })
+
       setIsSavingOrder(false)
     }
   }

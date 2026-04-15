@@ -1,7 +1,8 @@
 import { City } from '@commerce/types/cities'
-import React, { FC, useCallback, useMemo } from 'react'
+import React, { FC, useCallback, useMemo, useEffect } from 'react'
 import Cookies from 'js-cookie'
 import { Address } from '@commerce/types/address'
+import { identifyUser } from '@lib/posthog-events'
 
 let userData: any = null
 
@@ -414,6 +415,18 @@ export const UIProvider: FC<UIProviderProps> = (props) => {
       }
     } catch (e) {}
   }, [])
+
+  // PostHog: identify user when user data changes
+  useEffect(() => {
+    if (state.user && state.user.id) {
+      identifyUser(state.user.id, {
+        phone_masked: state.user.phone
+          ? '***' + String(state.user.phone).slice(-4)
+          : undefined,
+        registration_source: 'web',
+      })
+    }
+  }, [state.user?.id])
 
   const openSidebar = useCallback(
     () => dispatch({ type: 'OPEN_SIDEBAR' }),

@@ -20,6 +20,7 @@ import Slider from 'react-slick'
 import 'slick-carousel/slick/slick.css'
 import 'slick-carousel/slick/slick-theme.css'
 import dynamic from 'next/dynamic'
+import { trackCheckoutStarted, trackCartViewed, trackRemoveFromCart } from '@lib/posthog-events'
 
 const MobileOrderWithNoSSR = dynamic(
   () => import('@components_new/order/MobileOrders'),
@@ -165,8 +166,12 @@ export default function Cart() {
 
   const destroyLine = async (lineId: string) => {
     setLoadingLineId(lineId)
+
+    // Find item being removed (before deletion)
+    const itemBeingRemoved = data?.lineItems?.find((l: any) => l.id == lineId)
+
     await setCredentials()
-    const { data } = await axios.delete(
+    const { data: deleteResult } = await axios.delete(
       `${webAddress}/api/basket-lines/${hashids.encode(lineId)}`
     )
     if (cartId) {
@@ -191,6 +196,15 @@ export default function Cart() {
       }
 
       await mutate(basketResult, false)
+
+      // PostHog: remove_from_cart
+      trackRemoveFromCart({
+        product_id: itemBeingRemoved?.variant?.product_id || lineId,
+        product_name: itemBeingRemoved?.variant?.name || '',
+        cart_total: basketResult.totalPrice / 100,
+        cart_items_count: basketResult.lineItems.length,
+      })
+
       setLoadingLineId(null)
     }
   }
@@ -407,6 +421,15 @@ export default function Cart() {
 
   const goToCheckout = (e: any) => {
     e.preventDefault()
+
+    // PostHog: checkout_started
+    trackCheckoutStarted({
+      cart_items_count: data?.lineItems?.length || 0,
+      cart_total: data?.totalPrice / 100 || 0,
+      city: activeCity?.slug,
+      delivery_type: locationData?.deliveryType,
+    })
+
     router.push(`/${activeCity.slug}/order/`)
   }
 
@@ -441,6 +464,17 @@ export default function Cart() {
   useEffect(() => {
     fetchConfig()
     return
+  }, [])
+
+  // PostHog: cart_viewed
+  useEffect(() => {
+    if (data && data.lineItems && data.lineItems.length > 0) {
+      trackCartViewed({
+        cart_items_count: data.lineItems.length,
+        cart_total: data.totalPrice / 100,
+        city: activeCity?.slug,
+      })
+    }
   }, [])
 
   useEffect(() => {
