@@ -20,10 +20,9 @@ err()  { echo -e "${RED}[error ]${NC} $1" >&2; }
 
 cd "$PROJECT_DIR"
 
-# ─── Load nvm ─────────────────────────────────────────────────────────────────
-export NVM_DIR="${NVM_DIR:-$HOME/.nvm}"
-[ -s "$NVM_DIR/nvm.sh" ] && . "$NVM_DIR/nvm.sh"
-nvm use 20
+# ─── Node version ─────────────────────────────────────────────────────────────
+NODE_BIN="/root/.nvm/versions/node/v20.20.2/bin"
+export PATH="$NODE_BIN:$PATH"
 ok "Node $(node -v) active"
 
 # ─── Step 1: Pull latest code ────────────────────────────────────────────────
@@ -83,7 +82,7 @@ sleep 5
 
 HEALTH_STATUS=$(curl -s -o /dev/null -w '%{http_code}' http://localhost:5656/ --max-time 10 || echo "000")
 
-if [ "$HEALTH_STATUS" = "200" ] || [ "$HEALTH_STATUS" = "301" ] || [ "$HEALTH_STATUS" = "302" ]; then
+if [ "$HEALTH_STATUS" = "200" ] || [ "$HEALTH_STATUS" = "301" ] || [ "$HEALTH_STATUS" = "302" ] || [ "$HEALTH_STATUS" = "307" ]; then
   ok "Health check passed (HTTP $HEALTH_STATUS)"
 else
   warn "Health check returned HTTP $HEALTH_STATUS — check: pm2 logs $PM2_APP --lines 50"
