@@ -61,7 +61,14 @@ if [ ! -d ".next/standalone" ]; then
 fi
 cp -r .next/static .next/standalone/.next/static
 cp -r public .next/standalone/public 2>/dev/null || true
-ok "Standalone build ready"
+
+# Pre-compress static assets for nginx gzip_static
+log "Pre-compressing static assets..."
+find .next/static -type f \( -name '*.js' -o -name '*.css' -o -name '*.svg' \) | while read f; do
+  gzip -9 -k -f "$f"
+done
+GZIP_COUNT=$(find .next/static -name '*.gz' | wc -l)
+ok "Standalone build ready ($GZIP_COUNT files pre-compressed)"
 
 # ─── Step 4: Restart PM2 ─────────────────────────────────────────────────────
 log "Step 4/5: Restarting PM2 (standalone server.js)..."
