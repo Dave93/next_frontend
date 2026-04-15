@@ -375,8 +375,6 @@ const ProductItemNew: FC<ProductItem> = ({ product, channelName }) => {
       variant_id: selectedProdId,
       quantity: 1,
       price: parseInt(store.price, 0) / 100,
-      cart_items_count: basketResult?.lineItems?.length,
-      cart_total: basketResult?.totalPrice / 100,
       city: citySlug,
     })
 
