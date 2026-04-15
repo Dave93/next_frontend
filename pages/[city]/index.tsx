@@ -128,7 +128,7 @@ export default function Home({
   sliders: any[]
 }) {
   const router = useRouter()
-  const { locale } = router
+  const { locale, query } = router
   const [channelName, setChannelName] = useState('chopar')
   const [isStickySmall, setIsStickySmall] = useState(false)
   const { t: tr } = useTranslation('common')
@@ -306,6 +306,19 @@ export default function Home({
       <NextSeo
         title="Заказать пиццу с доставкой в Ташкенте | Chopar Pizza"
         description="Бесплатная доставка пиццы в Ташкенте, заказать можно на нашем сайте или через телеграм бот @Chopar_bot | Chopar Pizza"
+        canonical={`https://choparpizza.uz${locale === 'ru' ? '' : `/${locale}`}/${query.city || 'tashkent'}`}
+        openGraph={{
+          title: 'Заказать пиццу с доставкой в Ташкенте | Chopar Pizza',
+          description: 'Бесплатная доставка пиццы в Ташкенте, заказать можно на нашем сайте или через телеграм бот @Chopar_bot | Chopar Pizza',
+          url: `https://choparpizza.uz${locale === 'ru' ? '' : `/${locale}`}/${query.city || 'tashkent'}`,
+          locale: locale === 'uz' ? 'uz_UZ' : locale === 'en' ? 'en_US' : 'ru_UZ',
+          images: [{ url: 'https://choparpizza.uz/icon512x.png', width: 800, height: 600, alt: 'Chopar Pizza — доставка пиццы' }],
+        }}
+        languageAlternates={[
+          { hrefLang: 'ru', href: `https://choparpizza.uz/${query.city || 'tashkent'}` },
+          { hrefLang: 'uz', href: `https://choparpizza.uz/uz/${query.city || 'tashkent'}` },
+          { hrefLang: 'en', href: `https://choparpizza.uz/en/${query.city || 'tashkent'}` },
+        ]}
       />
       <MainSlider initialSliders={sliders} />
       <div className="hidden md:block">

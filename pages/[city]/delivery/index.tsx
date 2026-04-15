@@ -5,6 +5,7 @@ import Delivery from '@components_new/delivery/Delivery'
 import React from 'react'
 import Head from 'next/head'
 import { NextSeo } from 'next-seo'
+import { useRouter } from 'next/router'
 
 export async function getServerSideProps({
   preview,
@@ -43,11 +44,22 @@ export async function getServerSideProps({
 }
 
 export default function DeliveryPage() {
+  const { locale, query } = useRouter()
   return (
     <>
       <NextSeo
         title="Доставка и оплата"
         description="Как сделать заказ, инструкция и дополнительная информация"
+        canonical={`https://choparpizza.uz${locale === 'ru' ? '' : `/${locale}`}/${query.city || 'tashkent'}/delivery`}
+        openGraph={{
+          url: `https://choparpizza.uz${locale === 'ru' ? '' : `/${locale}`}/${query.city || 'tashkent'}/delivery`,
+          locale: locale === 'uz' ? 'uz_UZ' : locale === 'en' ? 'en_US' : 'ru_UZ',
+        }}
+        languageAlternates={[
+          { hrefLang: 'ru', href: `https://choparpizza.uz/${query.city || 'tashkent'}/delivery` },
+          { hrefLang: 'uz', href: `https://choparpizza.uz/uz/${query.city || 'tashkent'}/delivery` },
+          { hrefLang: 'en', href: `https://choparpizza.uz/en/${query.city || 'tashkent'}/delivery` },
+        ]}
       />
       <Delivery />
     </>

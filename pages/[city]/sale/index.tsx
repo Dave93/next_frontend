@@ -60,7 +60,7 @@ export default function Sale({ sale }: { sale: any }) {
   const { t: tr } = useTranslation('common')
   const router = useRouter()
   const { activeCity } = useUI()
-  const { locale, pathname } = router
+  const { locale, pathname, query } = router
   let items = menuItems.map((item) => {
     return {
       ...item,
@@ -71,7 +71,17 @@ export default function Sale({ sale }: { sale: any }) {
     <>
       <NextSeo
         title="Акции от Chopar Pizza"
-        description="Акции проводимые компанией "
+        description="Акции и специальные предложения Chopar Pizza — скидки на пиццу, сеты и доставку"
+        canonical={`https://choparpizza.uz${locale === 'ru' ? '' : `/${locale}`}/${query.city || 'tashkent'}/sale`}
+        openGraph={{
+          url: `https://choparpizza.uz${locale === 'ru' ? '' : `/${locale}`}/${query.city || 'tashkent'}/sale`,
+          locale: locale === 'uz' ? 'uz_UZ' : locale === 'en' ? 'en_US' : 'ru_UZ',
+        }}
+        languageAlternates={[
+          { hrefLang: 'ru', href: `https://choparpizza.uz/${query.city || 'tashkent'}/sale` },
+          { hrefLang: 'uz', href: `https://choparpizza.uz/uz/${query.city || 'tashkent'}/sale` },
+          { hrefLang: 'en', href: `https://choparpizza.uz/en/${query.city || 'tashkent'}/sale` },
+        ]}
       />
       <div className="flex items-center justify-center md:my-10 space-x-6 py-6 md:py-0">
         {items.map((item, id) => {

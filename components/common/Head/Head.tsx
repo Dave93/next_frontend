@@ -5,7 +5,7 @@ import { DefaultSeo } from 'next-seo'
 import config from '@config/seo.json'
 
 const APP_NAME = 'Chopar Pizza'
-const APP_DESCRIPTION = 'Chopar Pizza'
+const APP_DESCRIPTION = 'Доставка пиццы с тандырным тестом в Ташкенте. Халяль. Бесплатная доставка.'
 
 const Head: FC = () => {
   return (

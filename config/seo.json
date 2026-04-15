@@ -1,26 +1,24 @@
 {
-  "title": "Chopar",
-  "titleTemplate": "%s",
-  "description": "Chopar Pizza",
+  "title": "Chopar Pizza — Доставка пиццы в Ташкенте | Заказать онлайн",
+  "titleTemplate": "%s | Chopar Pizza",
+  "description": "Chopar Pizza — доставка пиццы с тандырным тестом в Ташкенте. Бесплатная доставка. Халяль. Заказ на сайте или в Telegram @Chopar_bot",
   "openGraph": {
-    "title": "Chopar Pizza",
-    "description": "Chopar Pizza",
+    "title": "Chopar Pizza — Доставка пиццы в Ташкенте",
+    "description": "Бесплатная доставка пиццы с тандырным тестом. Халяль. Заказ на сайте или в Telegram @Chopar_bot",
     "type": "website",
-    "locale": "en_IE",
+    "locale": "ru_UZ",
     "url": "https://choparpizza.uz",
     "site_name": "Chopar Pizza",
     "images": [
       {
-        "url": "/icon512x.png",
+        "url": "https://choparpizza.uz/icon512x.png",
         "width": 800,
         "height": 600,
-        "alt": "Chopar Pizza"
+        "alt": "Chopar Pizza — доставка пиццы"
       }
     ]
   },
   "twitter": {
-    "handle": "@nextjs",
-    "site": "@nextjs",
     "cardType": "summary_large_image"
   }
 }

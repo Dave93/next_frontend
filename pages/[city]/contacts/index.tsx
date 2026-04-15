@@ -5,6 +5,7 @@ import Contacts from '@components_new/contacts/Contacts'
 import React from 'react'
 import Head from 'next/head'
 import { NextSeo } from 'next-seo'
+import { useRouter } from 'next/router'
 
 export async function getServerSideProps({
   preview,
@@ -43,11 +44,22 @@ export async function getServerSideProps({
 }
 
 export default function ContactsPage() {
+  const { locale, query } = useRouter()
   return (
     <>
       <NextSeo
         title="Наши контакты"
         description="Контакты и график работы Chopar Pizza"
+        canonical={`https://choparpizza.uz${locale === 'ru' ? '' : `/${locale}`}/${query.city || 'tashkent'}/contacts`}
+        openGraph={{
+          url: `https://choparpizza.uz${locale === 'ru' ? '' : `/${locale}`}/${query.city || 'tashkent'}/contacts`,
+          locale: locale === 'uz' ? 'uz_UZ' : locale === 'en' ? 'en_US' : 'ru_UZ',
+        }}
+        languageAlternates={[
+          { hrefLang: 'ru', href: `https://choparpizza.uz/${query.city || 'tashkent'}/contacts` },
+          { hrefLang: 'uz', href: `https://choparpizza.uz/uz/${query.city || 'tashkent'}/contacts` },
+          { hrefLang: 'en', href: `https://choparpizza.uz/en/${query.city || 'tashkent'}/contacts` },
+        ]}
       />
       <Contacts />
     </>

@@ -25,12 +25,14 @@ export async function getServerSideProps({
     return {
       redirect: {
         destination: `/${c['city_slug']}`,
+        permanent: true,
       },
     }
   } else {
     return {
       redirect: {
         destination: `/tashkent`,
+        permanent: true,
       },
     }
   }
