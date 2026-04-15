@@ -3,15 +3,15 @@ module.exports = {
     {
       name: 'chopar',
       script: '.next/standalone/server.js',
-      interpreter: 'bun',
+      interpreter: '/root/.nvm/versions/node/v20.20.2/bin/node',
       env: {
         NODE_ENV: 'production',
         PORT: 5656,
         HOSTNAME: '0.0.0.0',
       },
-      instances: 2,
+      instances: 1,
       exec_mode: 'fork',
-      wait_ready: true,
+      wait_ready: false,
       listen_timeout: 10000,
       kill_timeout: 5000,
       max_memory_restart: '512M',
