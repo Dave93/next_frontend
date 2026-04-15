@@ -39,7 +39,7 @@ log "Step 2/5: Installing dependencies..."
 if command -v bun &>/dev/null; then
   bun install --frozen-lockfile 2>/dev/null || bun install
 else
-  npm ci --prefer-offline
+  npm install --legacy-peer-deps
 fi
 ok "Dependencies installed"
 
