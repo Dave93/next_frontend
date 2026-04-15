@@ -17,6 +17,7 @@ const withPWA = require('next-pwa')
 
 const baseConfig = withCommerceConfig({
   commerce,
+  output: 'standalone',
   env: {
     NEXT_PUBLIC_API_URL: process.env.API_URL,
   },
