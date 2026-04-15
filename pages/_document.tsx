@@ -20,7 +20,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe>`,
                 window.addEventListener('load', function(){
                   setTimeout(function(){
                     var s=document.createElement('script');s.async=true;
-                    s.src='https://crm.choparpizza.uz/upload/crm/tag/call.tracker.js?'+(Date.now()/60000|0);
+                    s.src='/crm-scripts/ct.min.js?'+(Date.now()/60000|0);
                     document.body.appendChild(s);
                   }, 3000);
                 });
