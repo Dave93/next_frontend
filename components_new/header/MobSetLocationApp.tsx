@@ -1,16 +1,11 @@
 'use client'
 import { memo, FC } from 'react'
-import { useTranslations } from 'next-intl'
 import Image from 'next/image'
 import { useUI } from '@components/ui'
 
 const SetLocation: FC = () => {
-  const t = useTranslations()
-  const {
-    locationData,
-    openMobileLocationTabs,
-    setLocationTabsClosable,
-  } = useUI()
+  const { locationData, openMobileLocationTabs, setLocationTabsClosable } =
+    useUI()
   return (
     <>
       <button
@@ -27,7 +22,7 @@ const SetLocation: FC = () => {
           ? locationData.label
             ? locationData.label
             : locationData.address
-          : t('Укажите свой адрес')}
+          : 'Укажите свой адрес'}
       </button>
     </>
   )

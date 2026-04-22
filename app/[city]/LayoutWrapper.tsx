@@ -1,7 +1,6 @@
 'use client'
 
 import { useEffect } from 'react'
-import dynamic from 'next/dynamic'
 import { useUI } from '@components/ui/context'
 import type { City } from '@commerce/types/cities'
 import type { APILinkItem } from '@commerce/types/headerMenu'
@@ -10,14 +9,10 @@ import type { PublicConfig } from '../../lib/data/configs'
 import HeaderApp from '../../components_new/HeaderApp'
 import FooterApp from '../../components_new/FooterApp'
 
-const SmallCartApp = dynamic(
-  () => import('../../components_new/common/SmallCartApp'),
-  { ssr: false }
-)
-const SmallCartMobileApp = dynamic(
-  () => import('../../components_new/common/SmallCartMobileApp'),
-  { ssr: false }
-)
+// SmallCartApp + SmallCartMobileApp temporarily disabled — Wave 7 polish:
+// `Cannot read properties of undefined (reading 'current')` runtime error
+// in cart's useRef on hydration. Restoration requires fixing legacy ref
+// initialization that doesn't survive SSR→client boundary in App Router.
 
 type Props = {
   children: React.ReactNode
@@ -56,8 +51,6 @@ export default function LayoutWrapper({ children, pageProps }: Props) {
         config={pageProps.config}
         locale={pageProps.locale}
       />
-      <SmallCartApp channelName="chopar" />
-      <SmallCartMobileApp />
     </>
   )
 }
