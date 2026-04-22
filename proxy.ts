@@ -7,19 +7,20 @@ const intlProxy = createMiddleware(routing)
 export function proxy(request: NextRequest) {
   // App Router URL'ы постепенно расширяются по мере миграции страниц.
   // Wave 1: /test-foundation (удалена)
-  // Wave 2: /[city]/about (только about, остальные статичные — Wave 2B)
-  // Wave 3+: контент, каталог, personal, etc.
+  // Wave 2: /[city]/about
+  // Wave 2B-lite: + /[city]/about/fran, /[city]/delivery, /[city]/privacy
+  // Waves далее добавят остальные routes (контент, каталог, personal).
   return intlProxy(request)
 }
 
-// Matcher включает ТОЛЬКО App Router URL'ы. Pages Router URL'ы (/[city],
-// /[city]/cart, /[city]/news, etc.) обходят proxy.ts.
-//
-// (tashkent|samarkand|...) — все known city slugs. Если бэкенд добавит
-// новый город — добавить в этот список (либо в Wave 5/6 переключиться
-// на динамический matcher через middleware logic).
+const CITIES =
+  '(tashkent|samarkand|bukhara|namangan|fergana|andijan|qarshi|nukus|urgench|jizzakh|gulistan|termez|chirchiq|navoi)'
+
 export const config = {
   matcher: [
-    '/(tashkent|samarkand|bukhara|namangan|fergana|andijan|qarshi|nukus|urgench|jizzakh|gulistan|termez|chirchiq|navoi)/about',
+    `/${CITIES}/about`,
+    `/${CITIES}/about/fran`,
+    `/${CITIES}/delivery`,
+    `/${CITIES}/privacy`,
   ],
 }
