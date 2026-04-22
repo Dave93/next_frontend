@@ -1,17 +1,21 @@
 'use client'
 
-import { useExtracted } from 'next-intl'
+import { useTranslations, useLocale } from 'next-intl'
 import { useState } from 'react'
 
 export default function TestClient() {
-  const t = useExtracted()
+  const t = useTranslations()
+  const locale = useLocale()
   const [count, setCount] = useState(0)
 
   return (
     <div>
       <p>
-        <strong>Test message (from .po):</strong>{' '}
-        <code>{t('__test_extracted_message__')}</code>
+        <strong>Client locale:</strong> <code>{locale}</code>
+      </p>
+      <p>
+        <strong>Translated:</strong>{' '}
+        <code>{t('__test_message__')}</code>
       </p>
       <p>
         <strong>useState works:</strong> count = {count}{' '}

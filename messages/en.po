@@ -4,5 +4,5 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Language: en\n"
 
-msgid "__test_extracted_message__"
-msgstr "__test_extracted_message___en"
+msgid "__test_message__"
+msgstr "Test message EN"
