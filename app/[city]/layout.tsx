@@ -25,16 +25,7 @@ export default async function CityLayout({
   if (!currentCity) notFound()
 
   return (
-    <LayoutWrapper
-      pageProps={{
-        categories: siteInfo.categories,
-        topMenu: siteInfo.topMenu,
-        footerInfoMenu: siteInfo.footerInfoMenu,
-        socials: siteInfo.socials,
-        cities,
-        currentCity,
-      }}
-    >
+    <LayoutWrapper pageProps={{ cities, currentCity }}>
       {children}
     </LayoutWrapper>
   )
