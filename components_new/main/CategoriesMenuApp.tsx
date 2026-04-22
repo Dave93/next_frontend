@@ -1,7 +1,6 @@
 'use client'
 import { FC, memo, useEffect, useState } from 'react'
 import { useLocale } from 'next-intl'
-import { LinkItem } from '@commerce/types/headerMenu'
 import Image from 'next/image'
 import { Link } from 'react-scroll'
 
@@ -14,7 +13,7 @@ const CategoriesMenu: FC<{ categories: any[]; channelName: string }> = ({
   const [fixed, changeState] = useState(false)
 
   const categoriesFixing = () => {
-    window.pageYOffset > 450 ? changeState(true) : changeState(false)
+    window.scrollY > 450 ? changeState(true) : changeState(false)
   }
 
   useEffect(() => {

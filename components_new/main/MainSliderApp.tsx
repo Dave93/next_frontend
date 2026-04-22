@@ -2,10 +2,7 @@
 import { FC, memo, createRef, useState, useEffect, useRef } from 'react'
 import Flicking, { ViewportSlot } from '@egjs/react-flicking'
 import { Fade, AutoPlay, Pagination, Arrow } from '@egjs/flicking-plugins'
-import Image from 'next/image'
-import { useUI } from '@components/ui'
 import axios from 'axios'
-import Link from 'next/link'
 import { useLocale } from 'next-intl'
 interface MainSliderProps {
   initialSliders?: any[]

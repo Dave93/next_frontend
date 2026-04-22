@@ -1,5 +1,5 @@
 'use client'
-import { FC, Fragment, useEffect, useMemo, useRef, useState } from 'react'
+import { FC, useRef, useState } from 'react'
 import {
   Dialog,
   DialogBackdrop,
@@ -7,10 +7,8 @@ import {
   TransitionChild,
 } from '@headlessui/react'
 import { CheckIcon, XIcon } from '@heroicons/react/outline'
-import { useTranslations } from 'next-intl'
 import { useLocale } from 'next-intl'
 import { useUI } from '@components/ui/context'
-import { DateTime } from 'luxon'
 import axios from 'axios'
 import Image from 'next/image'
 import Cookies from 'js-cookie'
@@ -28,32 +26,11 @@ axios.defaults.withCredentials = true
 const ThreePizza: FC<ThreePizzaProps> = ({ items, channelName }) => {
   let [isOpen, setIsOpen] = useState(false)
   let completeButtonRef = useRef(null)
-  const t = useTranslations()
   const locale = useLocale()
-  const { stopProducts, locationData } = useUI()
-  const [configData, setConfigData] = useState({} as any)
-  const [activeCustomName, setActiveCustomName] = useState('')
+  const { locationData } = useUI()
   const [selected, setSelected] = useState([] as number[])
   const [isLoadingBasket, setIsLoadingBasket] = useState(false)
   const { mutate } = useCart()
-
-  const fetchConfig = async () => {
-    let configData
-    if (!sessionStorage.getItem('configData')) {
-      let { data } = await axios.get(`${webAddress}/api/configs/public`)
-      configData = data.data
-      sessionStorage.setItem('configData', data.data)
-    } else {
-      configData = sessionStorage.getItem('configData')
-    }
-
-    try {
-      configData = Buffer.from(configData, 'base64')
-      configData = configData.toString('ascii')
-      configData = JSON.parse(configData)
-      setConfigData(configData)
-    } catch (e) {}
-  }
 
   const selectProduct = (id: number) => {
     if (selected.includes(id)) {

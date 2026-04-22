@@ -1,24 +1,16 @@
 'use client'
-import React, { Fragment, useRef, useState, memo, FC } from 'react'
+import { memo, FC } from 'react'
 import { useTranslations } from 'next-intl'
-import { Dialog, Transition } from '@headlessui/react'
 import Image from 'next/image'
-import MobLocationTabs from './MobLocationTabs.'
 import { useUI } from '@components/ui'
 
 const SetLocation: FC = () => {
   const t = useTranslations()
-  const [open, setOpen] = useState(false)
   const {
     locationData,
     openMobileLocationTabs,
-    closeMobileLocationTabs,
     setLocationTabsClosable,
-    locationTabsClosable,
-    showLocationTabs,
   } = useUI()
-
-  const cancelButtonRef = useRef(null)
   return (
     <>
       <button
