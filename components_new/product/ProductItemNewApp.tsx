@@ -138,13 +138,6 @@ const ProductItemNewApp: FC<ProductItem> = ({ product, channelName }) => {
 
   // openModal removed (was unused) — opening modal is handled inline by handleSubmit / modifier flow
 
-  function _openModal() {
-    if (isProductInStop) {
-      return
-    }
-    setIsOpen(true)
-  }
-
   const updateOptionSelection = (valueId: string) => {
     const prod = store
     if (prod.variants) {
