@@ -5,15 +5,21 @@ import { routing } from './i18n/routing'
 const intlProxy = createMiddleware(routing)
 
 export function proxy(request: NextRequest) {
-  // В Wave 1 единственный App Router URL — /test-foundation.
-  // localePrefix='never' в i18n/routing.ts означает что middleware не делает
-  // URL rewrites для локалей; locale определяется через NEXT_LOCALE cookie.
-  // Дополнительная логика и matcher расширятся в Wave 2-5.
+  // App Router URL'ы постепенно расширяются по мере миграции страниц.
+  // Wave 1: /test-foundation (удалена)
+  // Wave 2: /[city]/about (только about, остальные статичные — Wave 2B)
+  // Wave 3+: контент, каталог, personal, etc.
   return intlProxy(request)
 }
 
-// Matcher включает ТОЛЬКО App Router URL'ы. Legacy pages обрабатываются
-// Pages Router без перехвата proxy.
+// Matcher включает ТОЛЬКО App Router URL'ы. Pages Router URL'ы (/[city],
+// /[city]/cart, /[city]/news, etc.) обходят proxy.ts.
+//
+// (tashkent|samarkand|...) — все known city slugs. Если бэкенд добавит
+// новый город — добавить в этот список (либо в Wave 5/6 переключиться
+// на динамический matcher через middleware logic).
 export const config = {
-  matcher: ['/test-foundation/:path*', '/test-foundation'],
+  matcher: [
+    '/(tashkent|samarkand|bukhara|namangan|fergana|andijan|qarshi|nukus|urgench|jizzakh|gulistan|termez|chirchiq|navoi)/about',
+  ],
 }
