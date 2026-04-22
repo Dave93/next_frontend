@@ -58,17 +58,13 @@ const LanguageDropDownApp: FC = () => {
               const Flag = flagComponents[loc]
               return (
                 <MenuItem key={loc}>
-                  {({ active }) => (
-                    <a
-                      className={`${
-                        active ? 'text-primary' : 'text-gray-900'
-                      } group flex rounded-md items-center w-full px-2 py-2 text-lg`}
-                      href="#"
-                      onClick={(e) => changeLang(e, loc)}
-                    >
-                      <Flag /> <span className="ml-2">{localeLabel[loc]}</span>
-                    </a>
-                  )}
+                  <a
+                    className="text-gray-900 hover:text-primary group flex rounded-md items-center w-full px-2 py-2 text-lg"
+                    href="#"
+                    onClick={(e) => changeLang(e, loc)}
+                  >
+                    <Flag /> <span className="ml-2">{localeLabel[loc]}</span>
+                  </a>
                 </MenuItem>
               )
             })}

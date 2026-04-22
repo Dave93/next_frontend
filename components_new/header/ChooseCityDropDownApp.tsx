@@ -1,6 +1,6 @@
 'use client'
 
-import { Fragment, FC, memo, useMemo } from 'react'
+import { FC, memo, useMemo } from 'react'
 import {
   Menu,
   MenuButton,
