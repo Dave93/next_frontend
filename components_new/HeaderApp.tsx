@@ -1,6 +1,6 @@
 'use client'
 
-import React, { FC, useMemo } from 'react'
+import { FC, useMemo } from 'react'
 import Image from 'next/image'
 import { Link } from '../i18n/navigation'
 import { useUI } from '@components/ui/context'
