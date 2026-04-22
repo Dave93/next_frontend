@@ -10,6 +10,7 @@ export function proxy(request: NextRequest) {
   // Wave 2: /[city]/about
   // Wave 2B-lite: + /[city]/about/fran, /[city]/delivery, /[city]/privacy
   // Wave 2B-Maps: + /[city]/branch
+  // Wave 2B-Form: + /[city]/contacts
   // Waves далее добавят остальные routes (контент, каталог, personal).
   return intlProxy(request)
 }
@@ -25,5 +26,6 @@ export const config = {
     '/(tashkent|samarkand|bukhara|namangan|fergana|andijan|qarshi|nukus|urgench|jizzakh|gulistan|termez|chirchiq|navoi)/delivery',
     '/(tashkent|samarkand|bukhara|namangan|fergana|andijan|qarshi|nukus|urgench|jizzakh|gulistan|termez|chirchiq|navoi)/privacy',
     '/(tashkent|samarkand|bukhara|namangan|fergana|andijan|qarshi|nukus|urgench|jizzakh|gulistan|termez|chirchiq|navoi)/branch',
+    '/(tashkent|samarkand|bukhara|namangan|fergana|andijan|qarshi|nukus|urgench|jizzakh|gulistan|termez|chirchiq|navoi)/contacts',
   ],
 }
