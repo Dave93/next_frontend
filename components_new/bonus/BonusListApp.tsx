@@ -23,7 +23,7 @@ interface BonusListAppProps {
   bonusProducts?: any[]
 }
 
-export default function BonusListApp({ bonusProducts }: BonusListAppProps) {
+export default function BonusListApp(_props: BonusListAppProps) {
   const router = useRouter()
   const locale = useLocale()
   const { activeCity, cities } = useUI()
