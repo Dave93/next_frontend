@@ -51,7 +51,13 @@
       "Bash(grep -E \"\\\\.\\(tsx?|jsx?\\)$\")",
       "Bash(grep -n \"{/\\\\* \\\\|^\\\\s*</div>\\\\s*$\" \"C:\\\\projects\\\\next_frontend\\\\components_new\\\\order\\\\Orders.tsx\")",
       "WebSearch",
-      "Bash(node -e ':*)"
+      "Bash(node -e ':*)",
+      "Bash(rm -rf .next/* .next/.*)",
+      "Bash(rm -rf .next)",
+      "Bash(bun run *)",
+      "Bash(echo \"EXIT_CODE=$?\")",
+      "Read(//tmp/**)",
+      "Bash(rm -rf .next/*)"
     ],
     "deny": []
   }
