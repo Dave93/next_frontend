@@ -1,4 +1,4 @@
-const webAddress = process.env.NEXT_PUBLIC_API_URL
+const webAddress = process.env.NEXT_PUBLIC_CDN_URL
 
 interface Asset {
   location?: string
