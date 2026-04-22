@@ -5,7 +5,9 @@ const {
   getProviderName,
 } = require('./framework/commerce/config')
 const nextTranslate = require('next-translate-plugin')
-// require('dotenv').config()
+const createNextIntlPlugin = require('next-intl/plugin')
+
+const withNextIntl = createNextIntlPlugin('./i18n/request.ts')
 
 const provider = commerce.provider || getProviderName()
 const isBC = provider === 'bigcommerce'
@@ -13,7 +15,6 @@ const isShopify = provider === 'shopify'
 const isSaleor = provider === 'saleor'
 const isSwell = provider === 'swell'
 const isVendure = provider === 'vendure'
-const withPWA = require('next-pwa')
 
 const baseConfig = withCommerceConfig({
   commerce,
@@ -27,14 +28,10 @@ const baseConfig = withCommerceConfig({
         source: '/checkout',
         destination: '/api/checkout',
       },
-      // The logout is also an action so this route is not required, but it's also another way
-      // you can allow a logout!
       isBC && {
         source: '/logout',
         destination: '/api/logout?redirect_to=/',
       },
-      // For Vendure, rewrite the local api url to the remote (external) api url. This is required
-      // to make the session cookies work.
       isVendure &&
         process.env.NEXT_PUBLIC_VENDURE_LOCAL_URL && {
           source: `${process.env.NEXT_PUBLIC_VENDURE_LOCAL_URL}/:path*`,
@@ -52,17 +49,6 @@ const baseConfig = withCommerceConfig({
   },
 })
 
-// Apply nextTranslate without the extra properties that Next.js doesn't recognize
-const moduleExports = nextTranslate(baseConfig)
-
-module.exports = moduleExports
-
-// module.exports =
-// withPWA(
-
-// )
-
-// Log commerce config only during builds (useful for debugging Vercel deployments)
-if (process.env.NODE_ENV !== 'production') {
-  console.log('next.config.js', JSON.stringify(module.exports, null, 2))
-}
+// Композируем оба плагина: next-intl сверху, next-translate снизу.
+// Pages Router использует next-translate (legacy), App Router — next-intl.
+module.exports = withNextIntl(nextTranslate(baseConfig))
