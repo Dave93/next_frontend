@@ -1,5 +1,4 @@
 const commerce = require('./commerce.config.json')
-const prod = process.env.NODE_ENV === 'production'
 const {
   withCommerceConfig,
   getProviderName,
@@ -12,7 +11,6 @@ const withNextIntl = createNextIntlPlugin('./i18n/request.ts')
 const provider = commerce.provider || getProviderName()
 const isBC = provider === 'bigcommerce'
 const isShopify = provider === 'shopify'
-const isSaleor = provider === 'saleor'
 const isSwell = provider === 'swell'
 const isVendure = provider === 'vendure'
 
