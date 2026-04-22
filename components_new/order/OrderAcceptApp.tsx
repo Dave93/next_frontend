@@ -2,7 +2,7 @@
 
 import { useUI } from '@components/ui/context'
 import { memo, FC, useState, useEffect } from 'react'
-import { ChevronDownIcon, TruckIcon } from '@heroicons/react/solid'
+import { TruckIcon } from '@heroicons/react/solid'
 import Link from 'next/link'
 import { useForm } from 'react-hook-form'
 import currency from 'currency.js'
@@ -77,7 +77,7 @@ const OrderAcceptApp: FC<OrderDetailProps> = ({ order, orderStatuses }) => {
     axios.defaults.headers.common['XCSRF-TOKEN'] = csrf
   }
 
-  const onSubmit = async (data: any) => {
+  const onSubmit = async (_data: any) => {
     setIsSubmitting(true)
     await setCredentials()
     let values = { ...getValues() }

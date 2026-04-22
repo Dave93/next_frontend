@@ -1,20 +1,28 @@
 'use client'
 
 import { useUI } from '@components/ui/context'
-import { memo, FC, useState, useEffect, useMemo, useRef } from 'react'
+import { FC, useState, useEffect } from 'react'
 import { useQuery } from '@tanstack/react-query'
 import Cookies from 'js-cookie'
 import axios from 'axios'
 import dynamic from 'next/dynamic'
-import type { MapState, MapStateBase, MapStateCenter } from 'react-yandex-maps'
+import type { ComponentType } from 'react'
 
 axios.defaults.withCredentials = true
+
+type YMapsMapProps = {
+  mapCenter: number[]
+  placeMarks: any[]
+  coords: any[]
+  points: any
+  courier: any
+}
 
 // Wrap YMaps map components in dynamic to avoid SSR issues
 const YMapsMap = dynamic(
   () => import('./OrderTrackingMap').then((mod) => mod.default),
   { ssr: false }
-)
+) as ComponentType<YMapsMapProps>
 
 type OrderTrackingDetailProps = {
   orderId: any
@@ -26,7 +34,7 @@ const OrderTrackingApp: FC<OrderTrackingDetailProps> = ({ orderId }) => {
   const { openSignInModal } = useUI()
 
   const [shouldFetch, setShouldFetch] = useState(true)
-  const { data, isLoading, isError } = useQuery({
+  const { data, isError } = useQuery({
     queryKey: ['track_order'],
     queryFn: async () => {
       const { data } = await axios.get(
