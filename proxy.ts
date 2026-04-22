@@ -13,14 +13,15 @@ export function proxy(request: NextRequest) {
   return intlProxy(request)
 }
 
-const CITIES =
-  '(tashkent|samarkand|bukhara|namangan|fergana|andijan|qarshi|nukus|urgench|jizzakh|gulistan|termez|chirchiq|navoi)'
-
+// Matcher должен быть literal — Next.js парсит его статически,
+// template literals с expressions не поддерживаются.
+// Cities: tashkent, samarkand, bukhara, namangan, fergana, andijan, qarshi,
+// nukus, urgench, jizzakh, gulistan, termez, chirchiq, navoi
 export const config = {
   matcher: [
-    `/${CITIES}/about`,
-    `/${CITIES}/about/fran`,
-    `/${CITIES}/delivery`,
-    `/${CITIES}/privacy`,
+    '/(tashkent|samarkand|bukhara|namangan|fergana|andijan|qarshi|nukus|urgench|jizzakh|gulistan|termez|chirchiq|navoi)/about',
+    '/(tashkent|samarkand|bukhara|namangan|fergana|andijan|qarshi|nukus|urgench|jizzakh|gulistan|termez|chirchiq|navoi)/about/fran',
+    '/(tashkent|samarkand|bukhara|namangan|fergana|andijan|qarshi|nukus|urgench|jizzakh|gulistan|termez|chirchiq|navoi)/delivery',
+    '/(tashkent|samarkand|bukhara|namangan|fergana|andijan|qarshi|nukus|urgench|jizzakh|gulistan|termez|chirchiq|navoi)/privacy',
   ],
 }
