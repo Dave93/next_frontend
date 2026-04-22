@@ -1,7 +1,6 @@
 'use client'
 
 import { useMemo, FC } from 'react'
-import dynamic from 'next/dynamic'
 import MainSliderApp from './MainSliderApp'
 import CategoriesMenuApp from './CategoriesMenuApp'
 import MobileCategoriesMenuApp from './MobileCategoriesMenuApp'
@@ -10,7 +9,7 @@ import ProductListSectionTitle from '../product/ProductListSectionTitle'
 import MobSetLocationApp from '../header/MobSetLocationApp'
 import { useLocale } from 'next-intl'
 
-const ThreePizzaApp = dynamic(() => import('./ThreePizzaApp'), { ssr: false })
+// ThreePizzaApp temporarily disabled — Wave 7 polish will restore
 
 type Props = {
   products: any[]
@@ -53,7 +52,7 @@ const CityMainApp: FC<Props> = ({ products, categories, sliders, channelName }) 
       <div className="md:hidden">
         <MobileCategoriesMenuApp categories={categories} />
       </div>
-      <ThreePizzaApp items={[]} channelName={channelName} />
+      {/* ThreePizzaApp temporarily disabled — Wave 7 polish will restore with proper items prop */}
       <div className="container mx-auto py-4">
         {categories.map((cat) => {
           const items = productsByCategory[String(cat.id)] || []

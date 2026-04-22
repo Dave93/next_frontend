@@ -25,5 +25,16 @@ export default getRequestConfig(async ({ requestLocale }) => {
     }
   }
 
-  return { locale, messages }
+  return {
+    locale,
+    messages,
+    // Tolerate missing messages — components use useExtracted with inline RU
+    // strings as the source of truth; PO files are populated via build-time
+    // extraction (Wave 7 polish). Until then, fall back to the inline message
+    // string and don't throw on miss.
+    onError: () => {
+      // suppress IntlError logs for MISSING_MESSAGE
+    },
+    getMessageFallback: ({ key }: { key: string }) => key,
+  }
 })
