@@ -1,7 +1,13 @@
-import { getExtracted } from 'next-intl/server'
+import { getExtracted, setRequestLocale } from 'next-intl/server'
 import TestClient from './TestClient'
 
-export default async function TestPage() {
+export default async function TestPage({
+  params,
+}: {
+  params: Promise<{ locale: string }>
+}) {
+  const { locale } = await params
+  setRequestLocale(locale)
   const t = await getExtracted()
   return (
     <div style={{ padding: '2rem', fontFamily: 'system-ui' }}>
