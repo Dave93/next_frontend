@@ -1,0 +1,9 @@
+# Chopar Pizza — RU translations (source locale)
+# Auto-managed by next-intl useExtracted/getExtracted
+msgid ""
+msgstr ""
+"Content-Type: text/plain; charset=UTF-8\n"
+"Language: ru\n"
+
+msgid "__test_extracted_message__"
+msgstr "__test_extracted_message__"

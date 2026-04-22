@@ -1,0 +1,8 @@
+# Chopar Pizza — UZ translations
+msgid ""
+msgstr ""
+"Content-Type: text/plain; charset=UTF-8\n"
+"Language: uz\n"
+
+msgid "__test_extracted_message__"
+msgstr "__test_extracted_message___uz"
