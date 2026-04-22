@@ -3,29 +3,25 @@
 import { useEffect } from 'react'
 import { useUI } from '@components/ui/context'
 import type { City } from '@commerce/types/cities'
+import type { APILinkItem } from '@commerce/types/headerMenu'
+import type { SocialIcons } from '@commerce/types/socialIcons'
+import type { PublicConfig } from '../../lib/data/configs'
+import HeaderApp from '../../components_new/HeaderApp'
+import FooterApp from '../../components_new/FooterApp'
 
 type Props = {
   children: React.ReactNode
   pageProps: {
     cities: City[]
     currentCity: City
+    categories: any[]
+    footerInfoMenu: APILinkItem[]
+    socials: SocialIcons[]
+    config: PublicConfig
+    locale: string
   }
 }
 
-// Wave 2A: минимальный city layout без legacy Layout (Header/Footer/CityModal/...).
-// Причины:
-// - Legacy Layout использует useRouter() из next/router (Pages Router API),
-//   что вызывает "NextRouter was not mounted" в App Router context.
-// - Legacy Layout читает router.locale, router.pathname, router.query —
-//   все это нужно переписать на next/navigation + next-intl, что является
-//   объёмом отдельных Wave (Header/Footer migration).
-//
-// Что мы делаем сейчас: только syncим currentCity/cities в ManagedUIContext
-// (для совместимости с legacy code) и рендерим children.
-//
-// Wave 3/4 спланируют отдельную миграцию Header/Footer/Modals для App Router.
-// До тех пор страницы под app/[city]/* отображаются "голыми" (без шапки/футера),
-// но контент рендерится корректно и SEO meta присутствуют.
 export default function LayoutWrapper({ children, pageProps }: Props) {
   const { setActiveCity, setCitiesData } = useUI()
 
@@ -38,5 +34,18 @@ export default function LayoutWrapper({ children, pageProps }: Props) {
     }
   }, [pageProps.currentCity, pageProps.cities, setActiveCity, setCitiesData])
 
-  return <main className="container mx-auto py-8">{children}</main>
+  return (
+    <>
+      <HeaderApp />
+      <main className="container mx-auto py-8">{children}</main>
+      <FooterApp
+        categories={pageProps.categories}
+        footerInfoMenu={pageProps.footerInfoMenu}
+        socials={pageProps.socials}
+        currentCity={pageProps.currentCity}
+        config={pageProps.config}
+        locale={pageProps.locale}
+      />
+    </>
+  )
 }
