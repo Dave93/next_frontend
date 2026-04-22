@@ -71,8 +71,7 @@ const SmallCartMobile: FC = () => {
   const [showUserName, setShowUserName] = useState(false)
   const [showSignInModal, setShowSignInModal] = useState(false)
 
-  const { user, setUserData, openSignInModal, closeSignInModal, activeCity } =
-    useUI()
+  const { user, setUserData, openSignInModal, activeCity } = useUI()
 
   const otpTime = useRef(0)
 
