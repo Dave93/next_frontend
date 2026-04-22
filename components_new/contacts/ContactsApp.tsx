@@ -165,7 +165,6 @@ const ContactsApp: FC<Props> = ({ workTime }) => {
                 <Controller
                   render={({ field: { onChange, value } }) => (
                     <Input
-                      defaultCountry="UZ"
                       country="UZ"
                       international
                       withCountryCallingCode
