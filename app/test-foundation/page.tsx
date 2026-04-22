@@ -1,17 +1,15 @@
-import { getExtracted, setRequestLocale } from 'next-intl/server'
+import { getExtracted, getLocale } from 'next-intl/server'
 import TestClient from './TestClient'
 
-export default async function TestPage({
-  params,
-}: {
-  params: Promise<{ locale: string }>
-}) {
-  const { locale } = await params
-  setRequestLocale(locale)
+export default async function TestFoundationPage() {
+  const locale = await getLocale()
   const t = await getExtracted()
   return (
     <div style={{ padding: '2rem', fontFamily: 'system-ui' }}>
       <h1>App Router Foundation — Sanity Check</h1>
+      <p>
+        Active locale: <code>{locale}</code>
+      </p>
 
       <section style={{ marginTop: '2rem' }}>
         <h2>Server Component (getExtracted)</h2>
