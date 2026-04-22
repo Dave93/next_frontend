@@ -1,6 +1,6 @@
 'use client'
 
-import React, { FC, memo } from 'react'
+import { FC, memo } from 'react'
 import { useUI } from '@components/ui/context'
 import { ShoppingCartIcon } from '@heroicons/react/outline'
 import Link from 'next/link'
