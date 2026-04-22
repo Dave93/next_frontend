@@ -8,7 +8,6 @@ import React, {
   useRef,
   useEffect,
 } from 'react'
-import Image from 'next/image'
 import Link from 'next/link'
 import currency from 'currency.js'
 import {
@@ -137,7 +136,9 @@ const ProductItemNewApp: FC<ProductItem> = ({ product, channelName }) => {
     setIsOpen(false)
   }
 
-  function openModal() {
+  // openModal removed (was unused) — opening modal is handled inline by handleSubmit / modifier flow
+
+  function _openModal() {
     if (isProductInStop) {
       return
     }
@@ -172,7 +173,6 @@ const ProductItemNewApp: FC<ProductItem> = ({ product, channelName }) => {
         modifierProduct = activeValue.modifierProduct
       }
     }
-    let zeroModifier = modifiers.find((mod: any) => mod.price == 0)
     if (activeModifiers.includes(modId)) {
       let currentModifier: any = modifiers.find((mod: any) => mod.id == modId)
       if (!currentModifier) return
@@ -563,26 +563,10 @@ const ProductItemNewApp: FC<ProductItem> = ({ product, channelName }) => {
     return 0
   }, [store.price, store.variants, locationData, configData])
 
-  const prodPriceMobile = useMemo(() => {
-    let price: number = parseInt(store.price, 0) || 0
-    if (store.variants && store.variants.length > 0) {
-      const activeValue: any = store.variants[0]
-      if (activeValue) price += parseInt(activeValue.price, 0)
-    }
-
-    return price
-  }, [store.price, store.variants])
-
   const handleSubmit = async (event: React.MouseEvent<HTMLElement>) => {
     event.preventDefault() // prevent the page location from changing
     // setAddToCartInProgress(true) // disable the add to cart button until the request is finished
     if (modifiers && modifiers.length) {
-      if (store.variants && store.variants.length) {
-        let selectedVariant = store.variants.find((v: any) => v.active == true)
-        let selectedProdId = selectedVariant.id
-      } else {
-        let selectedProdId = store.id
-      }
       if (isProductInStop) {
         return // if the product is in stop, do not add to basket
       }
@@ -1143,7 +1127,7 @@ const ProductItemNewApp: FC<ProductItem> = ({ product, channelName }) => {
                               </div>
                               <div className="overflow-x-scroll">
                                 <div className="-mr-20 flex space-x-2 pb-2">
-                                  {modifiers.map((mod: any, index: number) => (
+                                  {modifiers.map((mod: any) => (
                                     <div
                                       key={mod.id}
                                       className={`border ${
