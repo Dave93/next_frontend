@@ -43,6 +43,7 @@ const baseConfig = withCommerceConfig({
       { protocol: 'https', hostname: 'api.hq.fungeek.net' },
       { protocol: 'https', hostname: 'choparpizza.uz' },
       { protocol: 'https', hostname: 'api.choparpizza.uz' },
+      { protocol: 'https', hostname: 'cdn.choparpizza.uz' },
     ],
   },
 })
