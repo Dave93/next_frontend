@@ -4,6 +4,24 @@
 **Проект:** Chopar Pizza (next_frontend)
 **Текущая версия Next.js:** 16.2.2
 **Стратегия:** Big Bang в feature-ветке
+**Last updated:** 2026-04-22 (поправки после Wave 1)
+
+---
+
+## Lessons learned после Wave 1 (поправки к спеке)
+
+1. **`localePrefix: 'never'` (не `'as-needed'`) пока сосуществуют Pages и App Router.**
+   Next.js не позволяет `[locale]` (App) и `[city]` (Pages) на одном URL уровне ("different slug names for the same dynamic path"). До удаления `pages/[city]/` локаль определяется через `NEXT_LOCALE` cookie. Переключение на `'as-needed'` + `app/[locale]/...` структуру переносится в **Wave 5/6** одновременно с удалением `pages/[city]/`.
+
+2. **`useExtracted`/`getExtracted` обязательны — `useTranslations`/`getTranslations` запрещены.** В dev mode `useExtracted('Текст')` возвращает inline-сообщение как есть; extraction → ключ → msgstr происходит на build time. Для проверки переводов в dev — `bun run build && bun run start`, не `bun dev`.
+
+3. **`@/*` path alias непостоянен.** Next.js при каждом dev start удаляет нестандартные aliases из tsconfig. В новом коде используем относительные импорты или существующие aliases (`@lib`, `@components_new` и т.п.).
+
+4. **Legacy `noopApi` пришлось пофиксить** в `framework/local/api/endpoints/*` чтобы default export возвращал handler `(req, res) => unknown` вместо `void`. Next 16 type validator более строгий.
+
+5. **PostHog dual implementation:** `lib/posthog.tsx` использует `next/router.events` и работает только в Pages Router. Создан `lib/posthog-app.tsx` с `usePathname`/`useSearchParams` для App Router. После Wave 6 cleanup `posthog.tsx` удаляется, `posthog-app.tsx` переименовывается обратно.
+
+6. **Composition `withNextIntl(nextTranslate(baseConfig))`** работает: оба плагина уживаются, Pages Router использует next-translate (legacy), App Router — next-intl. Warning от next-intl про `i18n` свойство в config — ожидаемый и безвредный во время cohabitation.
 
 ---
 
@@ -54,10 +72,11 @@
 |---|---|
 | Стратегия миграции | **Big Bang в feature-ветке**, переключение одним PR |
 | Валидация | **Chrome DevTools MCP** — диф `localhost:5656` ↔ `https://choparpizza.uz` |
-| i18n библиотека | **`next-intl@4.5+`** |
-| API переводов | **`useExtracted`** (Client) / **`getExtracted`** (Server) — inline, без ручных ключей |
-| Формат хранения переводов | **`.po`** нативно (auto-extracted в `messages/{locale}.po`) |
+| i18n библиотека | **`next-intl@4.5+`** (установлен `4.9.1`) |
+| API переводов | **`useExtracted`** (Client) / **`getExtracted`** (Server) — **строго запрещены `useTranslations`/`getTranslations`** |
+| Формат хранения переводов | **`.po`** через `gettext-parser` loader в `i18n/request.ts` |
 | Source locale | `ru` |
+| URL locale prefix | **Wave 1-4: `'never'`** (cookie-based) → **Wave 5/6: `'as-needed'`** (URL-based с `[locale]` segment) |
 | Источник переводов | **Снимаем визуально с прода** через Chrome DevTools MCP, локали ru/uz/en |
 | Бэкенд `/api/get_langs` | Игнорируется (не используется в новом коде) |
 | Edge file convention | **`proxy.ts`** (Next 16, заменяет `middleware.ts`) |
