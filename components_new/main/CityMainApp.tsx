@@ -8,13 +8,28 @@ import ProductItemNewApp from '../product/ProductItemNewApp'
 import ProductListSectionTitle from '../product/ProductListSectionTitle'
 import MobSetLocationApp from '../header/MobSetLocationApp'
 import ThreePizzaApp from './ThreePizzaApp'
+import SmallCartApp from '../common/SmallCartApp'
 import { useLocale } from 'next-intl'
+import { useUI } from '@components/ui/context'
 
 type Props = {
   products: any[]
   categories: any[]
   sliders: any[]
   channelName: string
+}
+
+const cityHeading: Record<string, Record<string, string>> = {
+  tashkent: {
+    ru: 'Пицца для всей семьи в Ташкенте',
+    uz: 'Toshkentdagi butun oila uchun pitsa',
+    en: 'Pizza for the whole family in Tashkent',
+  },
+  samarkand: {
+    ru: 'Пицца для всей семьи в Самарканде',
+    uz: 'Samarqanddagi butun oila uchun pitsa',
+    en: 'Pizza for the whole family in Samarkand',
+  },
 }
 
 const CityMainApp: FC<Props> = ({
@@ -24,6 +39,17 @@ const CityMainApp: FC<Props> = ({
   channelName,
 }) => {
   const locale = useLocale()
+  const { activeCity } = useUI()
+
+  const heading = useMemo(() => {
+    const slug = activeCity?.slug || 'tashkent'
+    return (
+      cityHeading[slug]?.[locale] ||
+      cityHeading[slug]?.ru ||
+      cityHeading.tashkent[locale] ||
+      cityHeading.tashkent.ru
+    )
+  }, [activeCity, locale])
 
   const categoryName = (cat: any): string => {
     const fromAttr =
@@ -56,9 +82,6 @@ const CityMainApp: FC<Props> = ({
     return res
   }, [products])
 
-  // The /products/public endpoint returns root categories with their items
-  // already grouped — no need to map by category_id ourselves. Fall back to
-  // siteInfo categories only when products payload is empty.
   const sections = useMemo(() => {
     if (Array.isArray(products) && products.length > 0) {
       return products
@@ -67,6 +90,12 @@ const CityMainApp: FC<Props> = ({
           id: cat.id,
           title: categoryName(cat),
           items: cat.items,
+          desc:
+            locale === 'uz'
+              ? cat.desc_uz
+              : locale === 'en'
+              ? (cat as any).desc_en
+              : cat.desc,
         }))
     }
     return []
@@ -86,28 +115,52 @@ const CityMainApp: FC<Props> = ({
       <div className="md:hidden">
         <MobileCategoriesMenuApp categories={categories} />
       </div>
-      {threeCategories.length > 0 && (
-        <ThreePizzaApp items={threeCategories} channelName={channelName} />
-      )}
-      <div className="container mx-auto py-4">
-        {sections.map((section) => (
-          <section
-            id={`productSection_${section.id}`}
-            key={section.id}
-            className="mb-10"
-          >
-            <ProductListSectionTitle title={section.title} />
-            <div className="md:grid md:grid-cols-3 gap-6">
-              {section.items.map((product: any) => (
-                <ProductItemNewApp
-                  key={product.id}
-                  product={product}
+      <div className="container mx-auto">
+        <h1 className="py-1 md:text-4xl text-2xl w-max mt-4 mb-10 md:my-10 m-auto">
+          {heading}
+        </h1>
+        <div className="grid lg:grid-cols-4 grid-cols-1 md:grid-cols-2 gap-10 mt-10">
+          {threeCategories.length > 0 && (
+            <div className="col-span-3 md:hidden">
+              <ThreePizzaApp
+                items={threeCategories}
+                channelName={channelName}
+              />
+            </div>
+          )}
+          <div className="col-span-3 space-y-16">
+            {threeCategories.length > 0 && (
+              <div className="hidden md:block">
+                <ThreePizzaApp
+                  items={threeCategories}
                   channelName={channelName}
                 />
-              ))}
-            </div>
-          </section>
-        ))}
+              </div>
+            )}
+            {sections.map((section) => (
+              <div key={section.id} id={`productSection_${section.id}`}>
+                <ProductListSectionTitle title={section.title} />
+                <div className="grid grid-cols-2 lg:grid-cols-3 md:grid-cols-2 gap-2.5 md:gap-3 px-4 md:px-0">
+                  {section.items.map((product: any) => (
+                    <ProductItemNewApp
+                      key={product.id}
+                      product={product}
+                      channelName={channelName}
+                    />
+                  ))}
+                </div>
+                {section.desc && (
+                  <div className="mt-5 px-4 md:px-0">
+                    <p>{section.desc}</p>
+                  </div>
+                )}
+              </div>
+            ))}
+          </div>
+          <div className="sticky top-16 max-h-screen hidden md:block">
+            <SmallCartApp channelName={channelName} />
+          </div>
+        </div>
       </div>
     </>
   )

@@ -8,7 +8,6 @@ import type { SocialIcons } from '@commerce/types/socialIcons'
 import type { PublicConfig } from '../../lib/data/configs'
 import HeaderApp from '../../components_new/HeaderApp'
 import FooterApp from '../../components_new/FooterApp'
-import SmallCartApp from '../../components_new/common/SmallCartApp'
 import SmallCartMobileApp from '../../components_new/common/SmallCartMobileApp'
 
 type Props = {
@@ -39,9 +38,8 @@ export default function LayoutWrapper({ children, pageProps }: Props) {
   return (
     <>
       <HeaderApp />
-      <SmallCartApp channelName="chopar" />
       <SmallCartMobileApp />
-      <main className="container mx-auto py-8">{children}</main>
+      <main>{children}</main>
       <FooterApp
         categories={pageProps.categories}
         footerInfoMenu={pageProps.footerInfoMenu}
