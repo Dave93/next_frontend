@@ -1,7 +1,8 @@
 'use client'
 import { FC, memo, createRef, useState, useEffect, useRef } from 'react'
 import Flicking, { ViewportSlot } from '@egjs/react-flicking'
-import { Fade, AutoPlay, Pagination, Arrow } from '@egjs/flicking-plugins'
+import { AutoPlay, Pagination, Arrow } from '@egjs/flicking-plugins'
+import '@egjs/react-flicking/dist/flicking.css'
 import axios from 'axios'
 import { useLocale } from 'next-intl'
 interface MainSliderProps {
@@ -15,7 +16,6 @@ const MainSlider: FC<MainSliderProps> = ({ initialSliders }) => {
   const [defaultIndex, setDefaultIndex] = useState(0)
 
   const plugins = [
-    new Fade('', 0.4),
     new AutoPlay({ duration: 3000, direction: 'NEXT', stopOnHover: false }),
     new Pagination({ type: 'bullet' }),
     new Arrow(),

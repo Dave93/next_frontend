@@ -990,7 +990,7 @@ const ProductItemNewApp: FC<ProductItem> = ({ product, channelName }) => {
                     }).format()}
                   </span>
                 )}
-                <span className="text-xl bg-white block w-auto rounded-full text-sm text-center px-0 py-0 text-black">
+                <span className="text-xl md:text-2xl font-bold bg-white block w-auto rounded-full text-right px-0 py-0 text-black whitespace-nowrap">
                   {currency(prodPriceDesktop, {
                     pattern: '# !',
                     separator: ' ',
