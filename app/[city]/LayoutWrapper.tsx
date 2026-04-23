@@ -9,6 +9,7 @@ import type { PublicConfig } from '../../lib/data/configs'
 import HeaderApp from '../../components_new/HeaderApp'
 import FooterApp from '../../components_new/FooterApp'
 import SmallCartMobileApp from '../../components_new/common/SmallCartMobileApp'
+import MobileBottomNavApp from '../../components_new/mobile/MobileBottomNavApp'
 
 type Props = {
   children: React.ReactNode
@@ -40,6 +41,7 @@ export default function LayoutWrapper({ children, pageProps }: Props) {
       <HeaderApp />
       <SmallCartMobileApp />
       <main>{children}</main>
+      <MobileBottomNavApp />
       <FooterApp
         categories={pageProps.categories}
         footerInfoMenu={pageProps.footerInfoMenu}
