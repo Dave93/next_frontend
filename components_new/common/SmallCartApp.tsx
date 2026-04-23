@@ -8,7 +8,7 @@ import { XIcon, MinusIcon, PlusIcon } from '@heroicons/react/solid'
 import currency from 'currency.js'
 import axios from 'axios'
 import Cookies from 'js-cookie'
-import { useLocale } from 'next-intl'
+import { useLocale, useExtracted } from 'next-intl'
 import { useRouter } from '../../i18n/navigation'
 import Hashids from 'hashids'
 import { useUI } from '@components/ui/context'
@@ -26,6 +26,7 @@ type SmallCartProps = {
 
 const SmallCartApp: FC<SmallCartProps> = ({ channelName }) => {
   const locale = useLocale()
+  const t = useExtracted()
   const router = useRouter()
   let cartId: string | null = null
   if (typeof window !== 'undefined') {
@@ -288,7 +289,7 @@ const SmallCartApp: FC<SmallCartProps> = ({ channelName }) => {
         )}
         <div className="border-b-2 border-yellow flex items-center justify-between pb-4">
           <div>
-            <span className="font-bold mr-1 text-xl">{'Корзина'}</span>
+            <span className="font-bold mr-1 text-xl">{t('Корзина')}</span>
             {data?.lineItems?.length > 0 && (
               <span className="font-bold text-[18px] text-yellow">
                 (
@@ -306,8 +307,8 @@ const SmallCartApp: FC<SmallCartProps> = ({ channelName }) => {
         {isEmpty && (
           <div className="flex flex-col items-center mt-2 text-center text-gray-400 text-sm">
             <Image src="/cart_empty.png" width={130} height={119} alt="" />
-            <div>{'Корзина пуста'}</div>
-            <div>{'Выберите пиццу'}</div>
+            <div>{t('Корзина пуста')}</div>
+            <div>{t('Выберите пиццу')}</div>
           </div>
         )}
         {!isEmpty && (

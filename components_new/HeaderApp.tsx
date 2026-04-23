@@ -2,7 +2,7 @@
 
 import { FC, useMemo } from 'react'
 import Image from 'next/image'
-import { useLocale } from 'next-intl'
+import { useExtracted } from 'next-intl'
 import { Link } from '../i18n/navigation'
 import { useUI } from '@components/ui/context'
 import ChooseCityDropDownApp from './header/ChooseCityDropDownApp'
@@ -11,15 +11,9 @@ import LanguageDropDownApp from './header/LanguageDropDownApp'
 import SignInButtonApp from './header/SignInButtonApp'
 import SideMenuApp from './header/SideMenuApp'
 
-const addressLabels: Record<string, string> = {
-  ru: 'Укажите свой адрес',
-  uz: 'Manzilni tanlang',
-  en: 'Enter your address',
-}
-
 const HeaderApp: FC = () => {
   const { activeCity, cities, locationData, openSidebar } = useUI() as any
-  const locale = useLocale()
+  const t = useExtracted()
 
   const chosenCity = useMemo(() => {
     if (activeCity) return activeCity
@@ -29,8 +23,8 @@ const HeaderApp: FC = () => {
 
   const addressLabel = useMemo(() => {
     if (locationData?.address) return locationData.address as string
-    return addressLabels[locale] || addressLabels.ru
-  }, [locationData, locale])
+    return t('Укажите свой адрес')
+  }, [locationData, t])
 
   return (
     <header

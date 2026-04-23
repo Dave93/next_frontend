@@ -1,6 +1,91 @@
-# Chopar Pizza — RU translations (source locale)
-# Auto-managed by next-intl useExtracted/getExtracted
 msgid ""
 msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Language: ru\n"
+
+msgid "Войти"
+msgstr "Войти"
+
+msgid "Корзина"
+msgstr "Корзина"
+
+msgid "Корзина пуста"
+msgstr "Корзина пуста"
+
+msgid "Выберите пиццу"
+msgstr "Выберите пиццу"
+
+msgid "Соберите свою пиццу"
+msgstr "Соберите свою пиццу"
+
+msgid "Собрать пиццу"
+msgstr "Собрать пиццу"
+
+msgid "В КОРЗИНУ"
+msgstr "В КОРЗИНУ"
+
+msgid "В корзину"
+msgstr "В корзину"
+
+msgid "Вернуться в меню"
+msgstr "Вернуться в меню"
+
+msgid "Укажите свой адрес"
+msgstr "Укажите свой адрес"
+
+msgid "Меню"
+msgstr "Меню"
+
+msgid "Информация"
+msgstr "Информация"
+
+msgid "О нас"
+msgstr "О нас"
+
+msgid "Доставка и оплата"
+msgstr "Доставка и оплата"
+
+msgid "Адреса ресторанов"
+msgstr "Адреса ресторанов"
+
+msgid "Контакты"
+msgstr "Контакты"
+
+msgid "Акции"
+msgstr "Акции"
+
+msgid "Конфиденциальность"
+msgstr "Конфиденциальность"
+
+msgid "Присоединяйтесь к нашей команде"
+msgstr "Присоединяйтесь к нашей команде"
+
+msgid "График работы"
+msgstr "График работы"
+
+msgid "с 10-00 до 03-00 ежедневно"
+msgstr "с 10-00 до 03-00 ежедневно"
+
+msgid "Подписывайтесь на нас:"
+msgstr "Подписывайтесь на нас:"
+
+msgid "Все права защищены"
+msgstr "Все права защищены"
+
+msgid "Вкус, который объединяет!"
+msgstr "Вкус, который объединяет!"
+
+msgid "Главная"
+msgstr "Главная"
+
+msgid "Заказы"
+msgstr "Заказы"
+
+msgid "Настройки"
+msgstr "Настройки"
+
+msgid "Доставка"
+msgstr "Доставка"
+
+msgid "Самовывоз"
+msgstr "Самовывоз"

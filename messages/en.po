@@ -1,5 +1,91 @@
-# Chopar Pizza — EN translations
 msgid ""
 msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Language: en\n"
+
+msgid "Войти"
+msgstr "Sign in"
+
+msgid "Корзина"
+msgstr "Cart"
+
+msgid "Корзина пуста"
+msgstr "Cart is empty"
+
+msgid "Выберите пиццу"
+msgstr "Choose a pizza"
+
+msgid "Соберите свою пиццу"
+msgstr "Build your pizza"
+
+msgid "Собрать пиццу"
+msgstr "Build pizza"
+
+msgid "В КОРЗИНУ"
+msgstr "ADD TO CART"
+
+msgid "В корзину"
+msgstr "Add to cart"
+
+msgid "Вернуться в меню"
+msgstr "Back to menu"
+
+msgid "Укажите свой адрес"
+msgstr "Enter your address"
+
+msgid "Меню"
+msgstr "Menu"
+
+msgid "Информация"
+msgstr "Information"
+
+msgid "О нас"
+msgstr "About"
+
+msgid "Доставка и оплата"
+msgstr "Delivery and payment"
+
+msgid "Адреса ресторанов"
+msgstr "Restaurant locations"
+
+msgid "Контакты"
+msgstr "Contacts"
+
+msgid "Акции"
+msgstr "Promo"
+
+msgid "Конфиденциальность"
+msgstr "Privacy"
+
+msgid "Присоединяйтесь к нашей команде"
+msgstr "Join our team"
+
+msgid "График работы"
+msgstr "Hours"
+
+msgid "с 10-00 до 03-00 ежедневно"
+msgstr "from 10:00 till 03:00 daily"
+
+msgid "Подписывайтесь на нас:"
+msgstr "Follow us:"
+
+msgid "Все права защищены"
+msgstr "All rights reserved"
+
+msgid "Вкус, который объединяет!"
+msgstr "Flavor that brings us together!"
+
+msgid "Главная"
+msgstr "Home"
+
+msgid "Заказы"
+msgstr "Orders"
+
+msgid "Настройки"
+msgstr "Settings"
+
+msgid "Доставка"
+msgstr "Delivery"
+
+msgid "Самовывоз"
+msgstr "Pickup"

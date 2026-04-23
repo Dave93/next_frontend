@@ -4,7 +4,7 @@ import { createRef, useEffect, useMemo, useState } from 'react'
 import useCart from '@framework/cart/use-cart'
 import { XIcon, MinusIcon, PlusIcon, TrashIcon } from '@heroicons/react/solid'
 import { useForm } from 'react-hook-form'
-import { useLocale } from 'next-intl'
+import { useLocale, useExtracted } from 'next-intl'
 import { useRouter } from '../../i18n/navigation'
 import Hashids from 'hashids'
 import axios from 'axios'
@@ -48,6 +48,7 @@ export default function CartApp({ products }: CartAppProps) {
   }, [])
 
   const locale = useLocale()
+  const t = useExtracted()
   const cartId = typeof window !== 'undefined' ? localStorage.getItem('basketId') : null
 
   const { data, isLoading, isEmpty, mutate } = useCart()
@@ -532,12 +533,13 @@ export default function CartApp({ products }: CartAppProps) {
       {isEmpty && (
         <div className="flex flex-col items-center justify-center text-center text-gray-400 text-sm min-h-[60vh]">
           <img src="/cart_empty.png" width={130} height={119} />
-          <div className="w-6/12 mt-3">{'Корзина пуста'}</div>
+          <div className="mt-3">{t('Корзина пуста')}</div>
+          <div>{t('Выберите пиццу')}</div>
           <button
             className="bg-yellow text-white p-3 mt-4 rounded-full hidden md:block"
             onClick={() => router.push(`/${activeCity?.slug}`)}
           >
-            {'Вернуться в меню'}
+            {t('Вернуться в меню')}
           </button>
         </div>
       )}

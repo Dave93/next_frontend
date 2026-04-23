@@ -2,7 +2,7 @@
 
 import { FC, useMemo, useCallback } from 'react'
 import { usePathname, useParams } from 'next/navigation'
-import { useLocale } from 'next-intl'
+import { useExtracted } from 'next-intl'
 import { Link } from '../../i18n/navigation'
 import {
   HomeIcon as HomeOutline,
@@ -28,17 +28,10 @@ interface Tab {
   requiresAuth?: boolean
 }
 
-const tabLabels: Record<string, Record<string, string>> = {
-  home: { ru: 'Главная', uz: 'Bosh sahifa', en: 'Home' },
-  orders: { ru: 'Заказы', uz: 'Buyurtmalar', en: 'Orders' },
-  cart: { ru: 'Корзина', uz: 'Savat', en: 'Cart' },
-  profile: { ru: 'Настройки', uz: 'Sozlamalar', en: 'Settings' },
-}
-
 const MobileBottomNavApp: FC = () => {
   const pathname = usePathname() || '/'
   const params = useParams()
-  const locale = useLocale()
+  const t = useExtracted()
   const { activeCity, user, openSignInModal } = useUI()
   const citySlug =
     (params?.city as string) || activeCity?.slug || 'tashkent'
@@ -56,14 +49,14 @@ const MobileBottomNavApp: FC = () => {
     () => [
       {
         key: 'home',
-        label: tabLabels.home[locale] || 'Home',
+        label: t('Главная'),
         href: `/${citySlug}`,
         iconOutline: HomeOutline,
         iconSolid: HomeSolid,
       },
       {
         key: 'orders',
-        label: tabLabels.orders[locale] || 'Orders',
+        label: t('Заказы'),
         href: `/${citySlug}/profile/orders`,
         iconOutline: OrdersOutline,
         iconSolid: OrdersSolid,
@@ -71,21 +64,21 @@ const MobileBottomNavApp: FC = () => {
       },
       {
         key: 'cart',
-        label: tabLabels.cart[locale] || 'Cart',
+        label: t('Корзина'),
         href: `/${citySlug}/cart`,
         iconOutline: CartOutline,
         iconSolid: CartSolid,
       },
       {
         key: 'profile',
-        label: tabLabels.profile[locale] || 'Profile',
+        label: t('Настройки'),
         href: `/${citySlug}/profile`,
         iconOutline: SettingsOutline,
         iconSolid: SettingsSolid,
         requiresAuth: true,
       },
     ],
-    [citySlug, locale]
+    [citySlug, t]
   )
 
   const activeTab = useMemo(() => {

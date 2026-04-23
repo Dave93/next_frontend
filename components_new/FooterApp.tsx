@@ -1,4 +1,7 @@
+'use client'
+
 import Image from 'next/image'
+import { useExtracted } from 'next-intl'
 import { Link } from '../i18n/navigation'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import {
@@ -35,6 +38,7 @@ export default function FooterApp({
   config,
   locale,
 }: Props) {
+  const t = useExtracted()
   const workTime =
     locale === 'uz'
       ? config.workTimeUz
@@ -66,7 +70,7 @@ export default function FooterApp({
                 />
               </div>
               <h3 className="md:block mt-7 text-xl hidden">
-                Вкус, который объединяет!
+                {t('Вкус, который объединяет!')}
               </h3>
               <div className="md:absolute">
                 <a
@@ -107,7 +111,7 @@ export default function FooterApp({
             <div className="flex-grow border-b border-blue md:border-0 mt-5 md:mt-0 pb-5 md:pb-0">
               <div className="md:flex justify-center">
                 <div className="mr-24 hidden md:block">
-                  <span className="block font-bold mb-3 text-[16px]">Меню</span>
+                  <span className="block font-bold mb-3 text-[16px]">{t('Меню')}</span>
                   <ul className="ml-3">
                     {categories.map((item: any) => (
                       <li
@@ -129,7 +133,7 @@ export default function FooterApp({
                   {footerInfoMenu && footerInfoMenu.length > 0 && (
                     <>
                       <span className="block font-bold mb-3 text-[16px]">
-                        Информация
+                        {t('Информация')}
                       </span>
                       <ul className="ml-3">
                         {footerInfoMenu.map((item: any) => {
@@ -158,11 +162,11 @@ export default function FooterApp({
             </div>
             <div className="md:text-right text-sm leading-7 mt-5 md:mt-0">
               <div className="border-b border-blue md:border-0 pb-5 md:pb-0">
-                График работы <br />
+                {t('График работы')} <br />
                 {workTime}
               </div>
               <div className="mt-4 border-b border-blue md:border-0 pb-5 md:pb-0">
-                <span>Подписывайтесь на нас:</span>
+                <span>{t('Подписывайтесь на нас:')}</span>
                 <ul className="flex md:justify-end text-4xl">
                   {socials.map((soc) => (
                     <li key={soc.code} className="mx-1">
@@ -186,7 +190,7 @@ export default function FooterApp({
             </div>
           </div>
           <div className="mb-7 md:mb-0">
-            {new Date().getFullYear()} Все права защищены
+            {new Date().getFullYear()} {t('Все права защищены')}
           </div>
         </div>
       </div>

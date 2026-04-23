@@ -9,7 +9,7 @@ import {
   TransitionChild,
 } from '@headlessui/react'
 import { XIcon, CheckIcon } from '@heroicons/react/outline'
-import { useLocale } from 'next-intl'
+import { useLocale, useExtracted } from 'next-intl'
 import currency from 'currency.js'
 import axios from 'axios'
 import Cookies from 'js-cookie'
@@ -33,6 +33,7 @@ const CreateYourPizzaApp: FC<CreatePizzaProps> = ({
   isSmall,
 }) => {
   const locale = useLocale()
+  const t = useExtracted()
   let [isOpen, setIsOpen] = useState(false)
   let completeButtonRef = useRef(null)
   const { stopProducts, locationData } = useUI()
@@ -540,7 +541,7 @@ const CreateYourPizzaApp: FC<CreatePizzaProps> = ({
         <div className="text-center z-10">
           <div className={isSmall ? 'hidden' : ''}>
             <div className="text-lg font-bold mb-2">
-              {'Соберите свою пиццу'}
+              {t('Соберите свою пиццу')}
             </div>
             <Image src="/createYourPizza.png" width={150} height={150} alt="" />
           </div>
@@ -549,7 +550,7 @@ const CreateYourPizzaApp: FC<CreatePizzaProps> = ({
               className="bg-gray-100 focus:outline-none font-bold outline-none px-6 py-2 rounded-full text-center text-yellow uppercase"
               onClick={openModal}
             >
-              {'Собрать пиццу'}
+              {t('Собрать пиццу')}
             </button>
           </div>
         </div>

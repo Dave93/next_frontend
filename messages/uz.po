@@ -1,5 +1,91 @@
-# Chopar Pizza — UZ translations
 msgid ""
 msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Language: uz\n"
+
+msgid "Войти"
+msgstr "Kirish"
+
+msgid "Корзина"
+msgstr "Savat"
+
+msgid "Корзина пуста"
+msgstr "Savat bo'sh"
+
+msgid "Выберите пиццу"
+msgstr "Pitsa tanlang"
+
+msgid "Соберите свою пиццу"
+msgstr "O'z pitsangizni yarating"
+
+msgid "Собрать пиццу"
+msgstr "Pitsa yaratish"
+
+msgid "В КОРЗИНУ"
+msgstr "SAVATGA"
+
+msgid "В корзину"
+msgstr "Savatga"
+
+msgid "Вернуться в меню"
+msgstr "Menyuga qaytish"
+
+msgid "Укажите свой адрес"
+msgstr "Manzilni tanlang"
+
+msgid "Меню"
+msgstr "Menyu"
+
+msgid "Информация"
+msgstr "Ma'lumot"
+
+msgid "О нас"
+msgstr "Biz haqimizda"
+
+msgid "Доставка и оплата"
+msgstr "Yetkazib berish va to'lov"
+
+msgid "Адреса ресторанов"
+msgstr "Restoran manzillari"
+
+msgid "Контакты"
+msgstr "Kontaktlar"
+
+msgid "Акции"
+msgstr "Aksiyalar"
+
+msgid "Конфиденциальность"
+msgstr "Maxfiylik"
+
+msgid "Присоединяйтесь к нашей команде"
+msgstr "Jamoamizga qo'shiling"
+
+msgid "График работы"
+msgstr "Ish vaqti"
+
+msgid "с 10-00 до 03-00 ежедневно"
+msgstr "har kuni soat 10-00 dan 03-00 gacha"
+
+msgid "Подписывайтесь на нас:"
+msgstr "Bizga obuna bo'ling:"
+
+msgid "Все права защищены"
+msgstr "Barcha huquqlar himoyalangan"
+
+msgid "Вкус, который объединяет!"
+msgstr "Birlashtiradigan ta'm!"
+
+msgid "Главная"
+msgstr "Bosh sahifa"
+
+msgid "Заказы"
+msgstr "Buyurtmalar"
+
+msgid "Настройки"
+msgstr "Sozlamalar"
+
+msgid "Доставка"
+msgstr "Yetkazib berish"
+
+msgid "Самовывоз"
+msgstr "Olib ketish"

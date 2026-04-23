@@ -9,36 +9,20 @@ import {
 } from '@headlessui/react'
 import { Link } from '../../i18n/navigation'
 import { useUI } from '@components/ui/context'
-import { useLocale } from 'next-intl'
-
-const labels: Record<string, Record<string, string>> = {
-  about: { ru: 'О нас', uz: 'Biz haqimizda', en: 'About' },
-  delivery: { ru: 'Доставка и оплата', uz: 'Yetkazib berish', en: 'Delivery' },
-  contacts: { ru: 'Контакты', uz: 'Kontaktlar', en: 'Contacts' },
-  branch: {
-    ru: 'Адреса ресторанов',
-    uz: 'Restoran manzillari',
-    en: 'Locations',
-  },
-  sale: { ru: 'Акции', uz: 'Aksiyalar', en: 'Promo' },
-  fran: { ru: 'Франшиза', uz: 'Franshiza', en: 'Franchise' },
-  privacy: { ru: 'Конфиденциальность', uz: 'Maxfiylik', en: 'Privacy' },
-  bonus: { ru: 'Бонусная программа', uz: 'Bonus dasturi', en: 'Bonus' },
-}
+import { useExtracted } from 'next-intl'
 
 const items = [
-  { key: 'about', href: '/about' },
-  { key: 'delivery', href: '/delivery' },
-  { key: 'branch', href: '/branch' },
-  { key: 'contacts', href: '/contacts' },
-  { key: 'sale', href: '/sale' },
-  { key: 'privacy', href: '/privacy' },
+  { ru: 'О нас', href: '/about' },
+  { ru: 'Доставка и оплата', href: '/delivery' },
+  { ru: 'Адреса ресторанов', href: '/branch' },
+  { ru: 'Контакты', href: '/contacts' },
+  { ru: 'Акции', href: '/sale' },
+  { ru: 'Конфиденциальность', href: '/privacy' },
 ]
 
 const SideMenuApp: FC = () => {
   const { activeCity } = useUI()
-  const locale = useLocale()
-  const t = (key: string) => labels[key]?.[locale] || labels[key]?.ru || key
+  const t = useExtracted()
   const citySlug = activeCity?.slug || 'tashkent'
 
   return (
@@ -89,18 +73,18 @@ const SideMenuApp: FC = () => {
           >
             <PopoverPanel className="absolute right-0 top-full mt-2 w-64 origin-top-right rounded-2xl bg-white shadow-xl ring-1 ring-black/5 py-2 z-50 focus:outline-none">
               <div className="px-4 pt-2 pb-2 text-xs font-semibold uppercase tracking-wide text-gray-400">
-                Меню
+                {t('Меню')}
               </div>
               <ul>
                 {items.map((item) => (
-                  <li key={item.key}>
+                  <li key={item.ru}>
                     <Link
                       href={`/${citySlug}${item.href}`}
                       prefetch={false}
                       onClick={() => close()}
                       className="flex items-center px-4 py-2.5 text-sm text-gray-700 hover:bg-yellow-50 hover:text-yellow-700 transition-colors"
                     >
-                      {t(item.key)}
+                      {t(item.ru)}
                     </Link>
                   </li>
                 ))}
