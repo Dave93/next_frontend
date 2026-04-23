@@ -84,6 +84,9 @@ const HeaderApp: FC = () => {
               </div>
               <SideMenuApp />
             </div>
+            <div className="md:hidden mr-4">
+              <ChooseCityDropDownApp />
+            </div>
           </div>
         </div>
       </div>
