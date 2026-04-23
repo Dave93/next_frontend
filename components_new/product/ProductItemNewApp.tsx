@@ -48,7 +48,19 @@ const ProductItemNewApp: FC<ProductItem> = ({ product, channelName }) => {
   const params = useParams()
   const citySlug = (params?.city as string) || ''
 
-  const [store, updateStore] = useState(product)
+  const [store, updateStore] = useState<any>(() => {
+    const p: any = { ...product }
+    if (Array.isArray(p.variants) && p.variants.length > 0) {
+      const enabled = p.variants.filter((v: any) => v.active)
+      const pool = enabled.length > 0 ? enabled : p.variants
+      const defaultId = pool[pool.length - 1]?.id
+      p.variants = p.variants.map((v: any) => ({
+        ...v,
+        active: v.id === defaultId,
+      }))
+    }
+    return p
+  })
   const [isLoadingBasket, setIsLoadingBasket] = useState(false)
   const { stopProducts, locationData } = useUI()
   const { data: cartData, mutate } = useCart()
@@ -141,7 +153,7 @@ const ProductItemNewApp: FC<ProductItem> = ({ product, channelName }) => {
   const updateOptionSelection = (valueId: string) => {
     const prod = store
     if (prod.variants) {
-      prod.variants = prod.variants.map((v) => {
+      prod.variants = prod.variants.map((v: any) => {
         if (v.id == valueId) {
           v.active = true
         } else {
@@ -159,7 +171,7 @@ const ProductItemNewApp: FC<ProductItem> = ({ product, channelName }) => {
     let modifierProduct: any = null
     if (store.variants && store.variants.length) {
       const activeValue: any = store.variants.find(
-        (item) => item.active == true
+        (item: any) => item.active == true
       )
 
       if (activeValue.modifierProduct) {
@@ -388,7 +400,7 @@ const ProductItemNewApp: FC<ProductItem> = ({ product, channelName }) => {
     let modifier = null
     if (store.variants && store.variants.length) {
       const activeValue: any = store.variants.find(
-        (item) => item.active == true
+        (item: any) => item.active == true
       )
       if (activeValue && activeValue.modifiers) {
         modifier = activeValue.modifiers
@@ -438,7 +450,7 @@ const ProductItemNewApp: FC<ProductItem> = ({ product, channelName }) => {
     let price: number = parseInt(store.price, 0) || 0
     if (store.variants && store.variants.length > 0) {
       const activeValue: any = store.variants.find(
-        (item) => item.active == true
+        (item: any) => item.active == true
       )
       if (activeValue) price += parseInt(activeValue.price, 0)
     }
@@ -500,7 +512,7 @@ const ProductItemNewApp: FC<ProductItem> = ({ product, channelName }) => {
     let price: number = parseInt(store.price, 0) || 0
     if (store.variants && store.variants.length > 0) {
       const activeValue: any = store.variants.find(
-        (item) => item.active == true
+        (item: any) => item.active == true
       )
       if (activeValue) price += parseInt(activeValue.price, 0)
     }
@@ -530,7 +542,7 @@ const ProductItemNewApp: FC<ProductItem> = ({ product, channelName }) => {
     let price: number = parseInt(store.price, 0) || 0
     if (store.variants && store.variants.length > 0) {
       const activeValue: any = store.variants.find(
-        (item) => item.active == true
+        (item: any) => item.active == true
       )
       if (activeValue) price += parseInt(activeValue.price, 0)
     }
@@ -852,7 +864,7 @@ const ProductItemNewApp: FC<ProductItem> = ({ product, channelName }) => {
             <div className="mt-auto">
               {store.variants && store.variants.length > 0 && (
                 <div className="flex mt-5 space-x-1 -mx-2">
-                  {store.variants.map((v) => (
+                  {store.variants.map((v: any) => (
                     <div className="w-full" key={v.id}>
                       <div
                         className={`w-full text-center cursor-pointer rounded-2xl outline-none ${
@@ -1082,7 +1094,7 @@ const ProductItemNewApp: FC<ProductItem> = ({ product, channelName }) => {
                           ></div>
                           {store.variants && store.variants.length > 0 && (
                             <div className="flex mt-5 space-x-1">
-                              {store.variants.map((v) => (
+                              {store.variants.map((v: any) => (
                                 <div className="w-full" key={v.id}>
                                   <div
                                     className={`w-full text-center cursor-pointer rounded-2xl outline-none ${

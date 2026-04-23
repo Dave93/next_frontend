@@ -85,7 +85,12 @@ const CityMainApp: FC<Props> = ({
   const sections = useMemo(() => {
     if (Array.isArray(products) && products.length > 0) {
       return products
-        .filter((cat: any) => Array.isArray(cat.items) && cat.items.length > 0)
+        .filter(
+          (cat: any) =>
+            !cat.half_mode &&
+            Array.isArray(cat.items) &&
+            cat.items.length > 0
+        )
         .map((cat: any) => ({
           id: cat.id,
           title: categoryName(cat),
