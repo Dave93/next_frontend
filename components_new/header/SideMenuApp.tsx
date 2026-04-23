@@ -32,8 +32,6 @@ const items = [
   { key: 'branch', href: '/branch' },
   { key: 'contacts', href: '/contacts' },
   { key: 'sale', href: '/sale' },
-  { key: 'fran', href: '/about/fran' },
-  { key: 'bonus', href: '/bonus' },
   { key: 'privacy', href: '/privacy' },
 ]
 
