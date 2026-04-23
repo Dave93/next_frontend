@@ -64,10 +64,9 @@ import { chunk, sortBy } from 'lodash'
 import getAddressList from '@lib/load_addreses'
 import { Address } from '@commerce/types/address'
 import Hashids from 'hashids'
-// AddressSelection components removed in Wave 6 cleanup (legacy next-translate orphans).
-// Wave 7 polish will reimplement address picker for App Router.
-const AddressSelection = (_props: any) => null
-const AddressSelectionMobile = (_props: any) => null
+import AddressSelection, {
+  AddressSelectionMobileApp as AddressSelectionMobile,
+} from './AddressSelectionApp'
 import { trackOrderPlaced, trackOrderFailed } from '@lib/posthog-events'
 
 let webAddress = process.env.NEXT_PUBLIC_API_URL
