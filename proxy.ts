@@ -1,51 +1,31 @@
-import createMiddleware from 'next-intl/middleware'
-import { type NextRequest } from 'next/server'
-import { routing } from './i18n/routing'
+import { NextResponse, type NextRequest } from 'next/server'
 
-const intlProxy = createMiddleware(routing)
-
+// Wave 7: next-intl middleware removed entirely.
+// With localePrefix:'never' the middleware still rewrites '/tashkent' →
+// '/ru/tashkent' internally, but our app structure is `app/[city]/...`
+// (NOT `app/[locale]/[city]/...`), so every rewrite produces 404.
+// Locale is now resolved per-request in i18n/request.ts via NEXT_LOCALE
+// cookie + Accept-Language header (handled by getRequestConfig).
+//
+// Future: switch to `localePrefix:'as-needed'` with `app/[locale]/[city]/...`
+// restructure if SEO needs `/uz/`, `/en/` URLs visible (separate wave).
 export function proxy(request: NextRequest) {
-  // App Router URL'ы постепенно расширяются по мере миграции страниц.
-  // Wave 1: /test-foundation (удалена)
-  // Wave 2: /[city]/about
-  // Wave 2B-lite: + /[city]/about/fran, /[city]/delivery, /[city]/privacy
-  // Wave 2B-Maps: + /[city]/branch
-  // Wave 2B-Form: + /[city]/contacts
-  // Wave 3: + /[city]/news, /news/[id], /sale, /sale/[id]
-  // Wave 4: + /[city] (city home), /[city]/product/[id], /product/[id] legacy redirect
-  // Waves далее: personal (cart, profile, orders, tracking, bonus).
-  return intlProxy(request)
+  // Legacy product redirect: /product/[id] → /[city]/product/[id]
+  const m = request.nextUrl.pathname.match(/^\/product\/(\d+)$/)
+  if (m) {
+    const citySlug = request.cookies.get('city_slug')?.value || 'tashkent'
+    return NextResponse.redirect(
+      new URL(`/${citySlug}/product/${m[1]}`, request.url)
+    )
+  }
+  // Root → city redirect
+  if (request.nextUrl.pathname === '/') {
+    const citySlug = request.cookies.get('city_slug')?.value || 'tashkent'
+    return NextResponse.redirect(new URL(`/${citySlug}`, request.url))
+  }
+  return NextResponse.next()
 }
 
-// Matcher должен быть literal — Next.js парсит его статически,
-// template literals с expressions не поддерживаются.
-// Cities: tashkent, samarkand, bukhara, namangan, fergana, andijan, qarshi,
-// nukus, urgench, jizzakh, gulistan, termez, chirchiq, navoi
 export const config = {
-  matcher: [
-    '/(tashkent|samarkand|bukhara|namangan|fergana|andijan|qarshi|nukus|urgench|jizzakh|gulistan|termez|chirchiq|navoi)/about',
-    '/(tashkent|samarkand|bukhara|namangan|fergana|andijan|qarshi|nukus|urgench|jizzakh|gulistan|termez|chirchiq|navoi)/about/fran',
-    '/(tashkent|samarkand|bukhara|namangan|fergana|andijan|qarshi|nukus|urgench|jizzakh|gulistan|termez|chirchiq|navoi)/delivery',
-    '/(tashkent|samarkand|bukhara|namangan|fergana|andijan|qarshi|nukus|urgench|jizzakh|gulistan|termez|chirchiq|navoi)/privacy',
-    '/(tashkent|samarkand|bukhara|namangan|fergana|andijan|qarshi|nukus|urgench|jizzakh|gulistan|termez|chirchiq|navoi)/branch',
-    '/(tashkent|samarkand|bukhara|namangan|fergana|andijan|qarshi|nukus|urgench|jizzakh|gulistan|termez|chirchiq|navoi)/contacts',
-    '/(tashkent|samarkand|bukhara|namangan|fergana|andijan|qarshi|nukus|urgench|jizzakh|gulistan|termez|chirchiq|navoi)/news',
-    '/(tashkent|samarkand|bukhara|namangan|fergana|andijan|qarshi|nukus|urgench|jizzakh|gulistan|termez|chirchiq|navoi)/news/:id',
-    '/(tashkent|samarkand|bukhara|namangan|fergana|andijan|qarshi|nukus|urgench|jizzakh|gulistan|termez|chirchiq|navoi)/sale',
-    '/(tashkent|samarkand|bukhara|namangan|fergana|andijan|qarshi|nukus|urgench|jizzakh|gulistan|termez|chirchiq|navoi)/sale/:id',
-    '/(tashkent|samarkand|bukhara|namangan|fergana|andijan|qarshi|nukus|urgench|jizzakh|gulistan|termez|chirchiq|navoi)',
-    '/(tashkent|samarkand|bukhara|namangan|fergana|andijan|qarshi|nukus|urgench|jizzakh|gulistan|termez|chirchiq|navoi)/product/:id',
-    '/product/:id',
-    '/(tashkent|samarkand|bukhara|namangan|fergana|andijan|qarshi|nukus|urgench|jizzakh|gulistan|termez|chirchiq|navoi)/cart',
-    '/(tashkent|samarkand|bukhara|namangan|fergana|andijan|qarshi|nukus|urgench|jizzakh|gulistan|termez|chirchiq|navoi)/order',
-    '/(tashkent|samarkand|bukhara|namangan|fergana|andijan|qarshi|nukus|urgench|jizzakh|gulistan|termez|chirchiq|navoi)/order/:id',
-    '/(tashkent|samarkand|bukhara|namangan|fergana|andijan|qarshi|nukus|urgench|jizzakh|gulistan|termez|chirchiq|navoi)/order/success',
-    '/(tashkent|samarkand|bukhara|namangan|fergana|andijan|qarshi|nukus|urgench|jizzakh|gulistan|termez|chirchiq|navoi)/profile',
-    '/(tashkent|samarkand|bukhara|namangan|fergana|andijan|qarshi|nukus|urgench|jizzakh|gulistan|termez|chirchiq|navoi)/profile/account',
-    '/(tashkent|samarkand|bukhara|namangan|fergana|andijan|qarshi|nukus|urgench|jizzakh|gulistan|termez|chirchiq|navoi)/profile/address',
-    '/(tashkent|samarkand|bukhara|namangan|fergana|andijan|qarshi|nukus|urgench|jizzakh|gulistan|termez|chirchiq|navoi)/profile/orders',
-    '/(tashkent|samarkand|bukhara|namangan|fergana|andijan|qarshi|nukus|urgench|jizzakh|gulistan|termez|chirchiq|navoi)/track/:id',
-    '/(tashkent|samarkand|bukhara|namangan|fergana|andijan|qarshi|nukus|urgench|jizzakh|gulistan|termez|chirchiq|navoi)/_bonus',
-    '/(tashkent|samarkand|bukhara|namangan|fergana|andijan|qarshi|nukus|urgench|jizzakh|gulistan|termez|chirchiq|navoi)/_bonus/start',
-  ],
+  matcher: ['/', '/product/:id'],
 }
