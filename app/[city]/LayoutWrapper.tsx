@@ -8,11 +8,8 @@ import type { SocialIcons } from '@commerce/types/socialIcons'
 import type { PublicConfig } from '../../lib/data/configs'
 import HeaderApp from '../../components_new/HeaderApp'
 import FooterApp from '../../components_new/FooterApp'
-
-// SmallCartApp + SmallCartMobileApp temporarily disabled — Wave 7 polish:
-// `Cannot read properties of undefined (reading 'current')` runtime error
-// in cart's useRef on hydration. Restoration requires fixing legacy ref
-// initialization that doesn't survive SSR→client boundary in App Router.
+import SmallCartApp from '../../components_new/common/SmallCartApp'
+import SmallCartMobileApp from '../../components_new/common/SmallCartMobileApp'
 
 type Props = {
   children: React.ReactNode
@@ -42,6 +39,8 @@ export default function LayoutWrapper({ children, pageProps }: Props) {
   return (
     <>
       <HeaderApp />
+      <SmallCartApp channelName="chopar" />
+      <SmallCartMobileApp />
       <main className="container mx-auto py-8">{children}</main>
       <FooterApp
         categories={pageProps.categories}

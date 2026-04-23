@@ -54,7 +54,7 @@ const SmallCartMobile: FC = () => {
 
   const router = useRouter()
   let cartId: string | null = null
-  if (typeof window !== undefined) {
+  if (typeof window !== 'undefined') {
     cartId = localStorage.getItem('basketId')
   }
   const { locationData } = useUI()
