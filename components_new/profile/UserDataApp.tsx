@@ -3,7 +3,7 @@
 import { FC, memo } from 'react'
 import menuItems from '@commerce/data/profileMenu'
 import { useUI } from '@components/ui/context'
-import Link from 'next/link'
+import { Link } from '../../i18n/navigation'
 import { usePathname, useRouter } from '../../i18n/navigation'
 import { useLocale } from 'next-intl'
 

@@ -3,7 +3,7 @@
 import { FC, memo } from 'react'
 import { useUI } from '@components/ui/context'
 import { ShoppingCartIcon } from '@heroicons/react/outline'
-import Link from 'next/link'
+import { Link } from '../../i18n/navigation'
 import Hashids from 'hashids'
 import { DateTime } from 'luxon'
 import currency from 'currency.js'

@@ -6,7 +6,7 @@ import { useLocale } from 'next-intl'
 import { useRouter } from '../../i18n/navigation'
 import { Ru, Uz } from 'react-flags-select'
 import { useUI } from '@components/ui/context'
-import Link from 'next/link'
+import { Link } from '../../i18n/navigation'
 import { motion } from 'framer-motion'
 import { shuffle as lodashShuffle } from 'lodash'
 import {

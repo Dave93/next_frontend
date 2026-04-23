@@ -3,7 +3,7 @@
 import { useUI } from '@components/ui/context'
 import { memo, FC, useState, useEffect } from 'react'
 import { TruckIcon } from '@heroicons/react/solid'
-import Link from 'next/link'
+import { Link } from '../../i18n/navigation'
 import { useForm } from 'react-hook-form'
 import currency from 'currency.js'
 import defaultChannel from '@lib/defaultChannel'

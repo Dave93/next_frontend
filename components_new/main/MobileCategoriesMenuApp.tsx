@@ -3,7 +3,7 @@ import { FC, memo, useEffect, useState } from 'react'
 import { useLocale } from 'next-intl'
 import { usePathname } from '../../i18n/navigation'
 import { Link as ScrollLink } from 'react-scroll'
-import NextLink from 'next/link'
+import { Link as NextLink } from '../../i18n/navigation'
 import defaultChannel from '@lib/defaultChannel'
 import { useUI } from '@components/ui/context'
 

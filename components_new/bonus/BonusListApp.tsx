@@ -12,7 +12,7 @@ import {
   faInstagram,
   faTelegramPlane,
 } from '@fortawesome/free-brands-svg-icons'
-import Link from 'next/link'
+import { Link } from '../../i18n/navigation'
 
 const localeLabel = {
   ru: 'Ru',
