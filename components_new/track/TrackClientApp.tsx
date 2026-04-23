@@ -1,5 +1,3 @@
-// @ts-nocheck
-// DONE_WITH_CONCERNS: leaflet dynamic imports, renderToStaticMarkup, lucide icons – ts-nocheck applied
 'use client'
 
 import { useState, useEffect, useMemo } from 'react'

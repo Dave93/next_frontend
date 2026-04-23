@@ -1,5 +1,3 @@
-// @ts-nocheck
-// DONE_WITH_CONCERNS: complex cart page with SWR, Hashids, react-slick, currency, useUI – ts-nocheck applied
 'use client'
 
 import { createRef, useEffect, useMemo, useState } from 'react'

@@ -1,5 +1,3 @@
-// @ts-nocheck
-// DONE_WITH_CONCERNS: complex Headless UI Transition/Dialog, lodash shuffle, motion – ts-nocheck applied
 'use client'
 
 import { Fragment, useEffect, useMemo, useState } from 'react'

@@ -1,4 +1,3 @@
-// @ts-nocheck
 'use client'
 
 import { XIcon, PlusIcon, BookmarkIcon } from '@heroicons/react/outline'

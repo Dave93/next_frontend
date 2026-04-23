@@ -3,19 +3,6 @@
 import { FC, useMemo } from 'react'
 import { useLocale } from 'next-intl'
 
-type Address = {
-  id: number
-  address?: string
-  label?: string
-  lat?: number
-  lon?: number
-  house?: string
-  flat?: string
-  entrance?: string
-  door_code?: string
-  floor?: string
-}
-
 type Props = {
   register?: any
   setValue?: any
@@ -24,10 +11,10 @@ type Props = {
   cities?: any[]
   activeCity?: any
   setActiveCity?: any
-  addressList?: Address[]
+  addressList?: any[]
   addressId?: number
-  onSelectAddress: (addr: Address) => void
-  onAddNewAddress: () => void
+  onSelectAddress: (addr: any) => void | Promise<void>
+  onAddNewAddress: () => void | Promise<void>
   yandexGeoKey?: string
   configData?: any
   tabIndex?: any
@@ -68,7 +55,7 @@ const AddressSelectionApp: FC<Props> = ({
     [addressList]
   )
 
-  const formatAddress = (addr: Address) => {
+  const formatAddress = (addr: any) => {
     const parts: string[] = []
     if (addr.label) parts.push(addr.label)
     if (addr.address) parts.push(addr.address)
