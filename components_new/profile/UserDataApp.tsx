@@ -33,7 +33,7 @@ const UserDataApp: FC = () => {
     localStorage.removeItem('mijoz')
     localStorage.removeItem('basketId')
     setUserData(null)
-    router.push(`/${activeCity.slug}`)
+    router.push(`/${activeCity?.slug}`)
   }
 
   return (
@@ -48,7 +48,7 @@ const UserDataApp: FC = () => {
         {items.map((item, id) => {
           let href = item.href
           if (href.indexOf('http') < 0) {
-            href = `/${activeCity.slug}${item.href}`
+            href = `/${activeCity?.slug}${item.href}`
           }
           return (
             <div className="flex items-center md:ml-10" key={id}>

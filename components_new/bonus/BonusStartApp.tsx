@@ -101,7 +101,7 @@ export default function BonusStartApp({
   }
 
   const goHome = () => {
-    router.push(`/${activeCity.slug}`)
+    router.push(`/${activeCity?.slug}`)
   }
 
   const startShuffle = () => {

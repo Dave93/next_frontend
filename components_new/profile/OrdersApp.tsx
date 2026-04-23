@@ -177,7 +177,7 @@ const OrdersApp: FC = () => {
         {allOrders.map((order: any) => (
           <Link
             key={order.id}
-            href={`/${activeCity.slug}/order/${hashids.encode(order.id)}`}
+            href={`/${activeCity?.slug}/order/${hashids.encode(order.id)}`}
             prefetch={false}
             className="block rounded-2xl bg-white p-4 shadow-sm border border-gray-100 active:bg-gray-50"
           >
@@ -216,7 +216,7 @@ const OrdersApp: FC = () => {
             <div className="flex items-start justify-between mb-4">
               <div>
                 <Link
-                  href={`/${activeCity.slug}/order/${hashids.encode(order.id)}`}
+                  href={`/${activeCity?.slug}/order/${hashids.encode(order.id)}`}
                   className="text-blue-600 font-semibold text-lg hover:text-blue-700 hover:underline"
                 >
                   Заказ № {order.id}
@@ -291,7 +291,7 @@ const OrdersApp: FC = () => {
                 )}
               </div>
               <Link
-                href={`/${activeCity.slug}/order/${hashids.encode(order.id)}`}
+                href={`/${activeCity?.slug}/order/${hashids.encode(order.id)}`}
                 className="text-blue-600 text-sm font-medium hover:text-blue-700 flex items-center"
               >
                 {t('details')}

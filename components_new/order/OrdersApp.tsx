@@ -262,11 +262,11 @@ const OrdersApp: FC<OrdersProps> = ({ channelName, isMobile = false }) => {
   let currentAddress = ''
   if (activeCity?.active) {
     if (locale == 'ru') {
-      currentAddress = 'Узбекистан, ' + activeCity.name + ','
+      currentAddress = 'Узбекистан, ' + activeCity?.name + ','
     } else if (locale == 'uz') {
-      currentAddress = "O'zbekiston, " + activeCity.name_uz + ','
+      currentAddress = "O'zbekiston, " + activeCity?.name_uz + ','
     } else if (locale == 'en') {
-      currentAddress = 'Uzbekistan, ' + activeCity.name_en + ','
+      currentAddress = 'Uzbekistan, ' + activeCity?.name_en + ','
     }
   }
   const {
@@ -575,7 +575,7 @@ const OrdersApp: FC<OrdersProps> = ({ channelName, isMobile = false }) => {
     }
     const { data: getCodeData } = await axios.get(
       `/api/geocode?text=${encodeURI(event.target.value)}&bounds=${
-        activeCity.bounds
+        activeCity?.bounds
       }`
     )
 
@@ -670,7 +670,7 @@ const OrdersApp: FC<OrdersProps> = ({ channelName, isMobile = false }) => {
         (city: City) => city.slug == polygon.properties._data.slug
       )
 
-      if (pickedCity.id != activeCity.id) {
+      if (pickedCity.id != activeCity?.id) {
         changeCity(pickedCity)
       }
     }
@@ -793,7 +793,7 @@ const OrdersApp: FC<OrdersProps> = ({ channelName, isMobile = false }) => {
 
   const loadPickupItems = async () => {
     const { data } = await axios.get(
-      `${webAddress}/api/terminals/pickup?city_id=${activeCity.id}`
+      `${webAddress}/api/terminals/pickup?city_id=${activeCity?.id}`
     )
 
     let res: any[] = []
@@ -1206,7 +1206,7 @@ const OrdersApp: FC<OrdersProps> = ({ channelName, isMobile = false }) => {
         15,
         'abcdefghijklmnopqrstuvwxyz1234567890'
       )
-      router.push(`/${activeCity.slug}/order/${data.order.id}`)
+      router.push(`/${activeCity?.slug}/order/${data.order.id}`)
       setTimeout(() => {
         ;(window.b24order = window.b24order || []).push({
           id: orderHashids.decode(data.order.id)[0],
@@ -2411,7 +2411,7 @@ const OrdersApp: FC<OrdersProps> = ({ channelName, isMobile = false }) => {
             className="md:text-xl text-gray-400 bg-gray-200 flex h-12 items-center justify-between px-12 rounded-full md:w-80 w-full"
             onClick={(e) => {
               e.preventDefault()
-              router.push(`/${activeCity.slug}/cart/`)
+              router.push(`/${activeCity?.slug}/cart/`)
             }}
           >
             <img src="/left.png" /> {tr('back_to_basket')}

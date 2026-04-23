@@ -372,7 +372,7 @@ export default function CartApp({ products }: CartAppProps) {
       delivery_type: locationData?.deliveryType,
     })
 
-    router.push(`/${activeCity.slug}/order/`)
+    router.push(`/${activeCity?.slug}/order/`)
   }
 
   const clearBasket = async () => {
@@ -537,7 +537,7 @@ export default function CartApp({ products }: CartAppProps) {
           <div className="w-6/12 mt-3">{'Корзина пуста'}</div>
           <button
             className="bg-yellow text-white p-3 mt-4 rounded-full hidden md:block"
-            onClick={() => router.push(`/${activeCity.slug}`)}
+            onClick={() => router.push(`/${activeCity?.slug}`)}
           >
             {'Вернуться в меню'}
           </button>
@@ -1109,7 +1109,7 @@ export default function CartApp({ products }: CartAppProps) {
                   className="text-xl text-gray-400 bg-gray-100 flex h-8 items-center rounded-full justify-evenly w-full"
                   onClick={(e) => {
                     e.preventDefault()
-                    router.push(`/${activeCity.slug}`)
+                    router.push(`/${activeCity?.slug}`)
                   }}
                 >
                   <img src="/left.png" /> {'Вернуться в меню'}
