@@ -1,12 +1,13 @@
 'use client'
 
-import { FC, useMemo } from 'react'
+import { FC, useMemo, useState } from 'react'
 import Image from 'next/image'
 import { Link } from '../i18n/navigation'
 import { useUI } from '@components/ui/context'
 import ChooseCityDropDownApp from './header/ChooseCityDropDownApp'
 import HeaderPhoneApp from './header/HeaderPhoneApp'
 import SignInButtonApp from './header/SignInButtonApp'
+import SideMenuApp from './header/SideMenuApp'
 
 const addressLabels: Record<string, string> = {
   ru: 'Укажите свой адрес',
@@ -16,6 +17,7 @@ const addressLabels: Record<string, string> = {
 
 const HeaderApp: FC = () => {
   const { activeCity, cities, locationData, openSidebar } = useUI() as any
+  const [menuOpen, setMenuOpen] = useState(false)
 
   const chosenCity = useMemo(() => {
     if (activeCity) return activeCity
@@ -83,6 +85,7 @@ const HeaderApp: FC = () => {
               <button
                 type="button"
                 aria-label="menu"
+                onClick={() => setMenuOpen(true)}
                 className="ml-3 p-2 text-gray-700 hover:text-gray-900"
               >
                 <svg
@@ -100,6 +103,7 @@ const HeaderApp: FC = () => {
                   <line x1="3" y1="18" x2="21" y2="18" />
                 </svg>
               </button>
+              <SideMenuApp open={menuOpen} onClose={() => setMenuOpen(false)} />
             </div>
           </div>
         </div>

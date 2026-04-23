@@ -47,6 +47,8 @@
     "dotenv": "^10.0.0",
     "downshift": "^6.1.5",
     "email-validator": "^2.0.4",
+    "embla-carousel-autoplay": "^8.6.0",
+    "embla-carousel-react": "^8.6.0",
     "eslint-config-next": "^16.2.2",
     "express": "^4.17.1",
     "fastify": "^3.18.0",
