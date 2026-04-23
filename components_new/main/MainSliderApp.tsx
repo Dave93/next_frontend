@@ -10,9 +10,11 @@ interface MainSliderProps {
   initialSliders?: any[]
 }
 
-const MainSlider: FC<MainSliderProps> = ({ initialSliders }) => {
-  const locale = useLocale()
-  const [sliders, setSliders] = useState(initialSliders || [])
+type CarouselProps = {
+  sliders: any[]
+}
+
+const SliderCarousel: FC<CarouselProps> = ({ sliders }) => {
   const autoplayRef = useRef(
     Autoplay({ delay: 4000, stopOnInteraction: false, stopOnMouseEnter: true })
   )
@@ -34,35 +36,11 @@ const MainSlider: FC<MainSliderProps> = ({ initialSliders }) => {
     emblaApi.on('select', onSelect)
     emblaApi.on('reInit', onSelect)
     onSelect()
+    return () => {
+      emblaApi.off('select', onSelect)
+      emblaApi.off('reInit', onSelect)
+    }
   }, [emblaApi, onSelect])
-
-  const fetchSliders = async () => {
-    const { data } = await axios.get(
-      `${process.env.NEXT_PUBLIC_API_URL}/api/sliders/public?locale=${locale}`
-    )
-    setSliders(data.data)
-  }
-
-  const prevLocale = useRef(locale)
-
-  useEffect(() => {
-    if (!initialSliders?.length) {
-      fetchSliders()
-    }
-  }, [])
-
-  useEffect(() => {
-    if (prevLocale.current !== locale) {
-      prevLocale.current = locale
-      fetchSliders()
-    }
-  }, [locale])
-
-  useEffect(() => {
-    if (emblaApi) {
-      emblaApi.reInit()
-    }
-  }, [sliders, emblaApi])
 
   const scrollPrev = useCallback(() => emblaApi?.scrollPrev(), [emblaApi])
   const scrollNext = useCallback(() => emblaApi?.scrollNext(), [emblaApi])
@@ -70,8 +48,6 @@ const MainSlider: FC<MainSliderProps> = ({ initialSliders }) => {
     (i: number) => emblaApi?.scrollTo(i),
     [emblaApi]
   )
-
-  if (!sliders || sliders.length === 0) return null
 
   return (
     <div className="relative rounded-2xl mx-3 md:mx-auto mt-2 md:mt-0 overflow-hidden md:container">
@@ -98,7 +74,9 @@ const MainSlider: FC<MainSliderProps> = ({ initialSliders }) => {
                       />
                       <img
                         src={
-                          item.asset[1] ? item.asset[1].link : item.asset[0].link
+                          item.asset[1]
+                            ? item.asset[1].link
+                            : item.asset[0].link
                         }
                         className="md:hidden w-full h-[44vw] object-cover"
                         loading={index === 0 ? 'eager' : 'lazy'}
@@ -124,7 +102,9 @@ const MainSlider: FC<MainSliderProps> = ({ initialSliders }) => {
                     />
                     <img
                       src={
-                        item.asset[1] ? item.asset[1].link : item.asset[0].link
+                        item.asset[1]
+                          ? item.asset[1].link
+                          : item.asset[0].link
                       }
                       className="md:hidden w-full h-[44vw] object-cover"
                       loading={index === 0 ? 'eager' : 'lazy'}
@@ -198,6 +178,39 @@ const MainSlider: FC<MainSliderProps> = ({ initialSliders }) => {
       )}
     </div>
   )
+}
+
+const MainSlider: FC<MainSliderProps> = ({ initialSliders }) => {
+  const locale = useLocale()
+  const [sliders, setSliders] = useState(initialSliders || [])
+  const prevLocale = useRef(locale)
+
+  const fetchSliders = async (forLocale: string) => {
+    const { data } = await axios.get(
+      `${process.env.NEXT_PUBLIC_API_URL}/api/sliders/public?locale=${forLocale}`
+    )
+    setSliders(data.data || [])
+  }
+
+  useEffect(() => {
+    if (!initialSliders?.length) {
+      fetchSliders(locale)
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
+
+  useEffect(() => {
+    if (prevLocale.current !== locale) {
+      prevLocale.current = locale
+      fetchSliders(locale)
+    }
+  }, [locale])
+
+  if (!sliders || sliders.length === 0) return null
+
+  // Keying on locale forces a fresh embla instance when language changes —
+  // avoids stale snap-points and dead pagination after a full re-fetch.
+  return <SliderCarousel key={locale} sliders={sliders} />
 }
 
 export default memo(MainSlider)
