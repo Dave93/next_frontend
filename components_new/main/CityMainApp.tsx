@@ -7,6 +7,7 @@ import MobileCategoriesMenuApp from './MobileCategoriesMenuApp'
 import ProductItemNewApp from '../product/ProductItemNewApp'
 import ProductListSectionTitle from '../product/ProductListSectionTitle'
 import MobSetLocationApp from '../header/MobSetLocationApp'
+import ThreePizzaApp from './ThreePizzaApp'
 import { useLocale } from 'next-intl'
 
 type Props = {
@@ -30,6 +31,30 @@ const CityMainApp: FC<Props> = ({
       cat?.attribute_data?.name?.['chopar']?.['ru']
     return fromAttr || cat?.name || ''
   }
+
+  const threeCategories = useMemo(() => {
+    const res: any[] = []
+    for (const prod of products || []) {
+      if (prod.items) {
+        for (const item of prod.items) {
+          if (item.variants?.length) {
+            for (const v of item.variants) {
+              if (v.threesome) res.push(v)
+            }
+          } else if (item.threesome) {
+            res.push(item)
+          }
+        }
+      } else if (prod.variants?.length) {
+        for (const v of prod.variants) {
+          if (v.threesome) res.push(v)
+        }
+      } else if (prod.threesome) {
+        res.push(prod)
+      }
+    }
+    return res
+  }, [products])
 
   // The /products/public endpoint returns root categories with their items
   // already grouped — no need to map by category_id ourselves. Fall back to
@@ -61,6 +86,9 @@ const CityMainApp: FC<Props> = ({
       <div className="md:hidden">
         <MobileCategoriesMenuApp categories={categories} />
       </div>
+      {threeCategories.length > 0 && (
+        <ThreePizzaApp items={threeCategories} channelName={channelName} />
+      )}
       <div className="container mx-auto py-4">
         {sections.map((section) => (
           <section
