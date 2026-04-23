@@ -5,7 +5,7 @@ import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import { GoogleReCaptchaProvider } from 'react-google-recaptcha-v3'
 import { ToastContainer } from 'react-toastify'
 import { ManagedUIContext } from '@components/ui/context'
-import FacebookPixel from '@components/common/FacebookPixel'
+import FacebookPixel from '../components_new/analytics/FacebookPixelApp'
 import { PostHogProvider } from '@lib/posthog-app'
 
 export default function Providers({

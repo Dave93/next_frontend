@@ -2,8 +2,6 @@ import type { CommerceAPI, CommerceAPIConfig } from '@commerce/api'
 import { getCommerceApi as commerceApi } from '@commerce/api'
 import createFetcher from './utils/fetch-local'
 
-import getAllPages from './operations/get-all-pages'
-import getPage from './operations/get-page'
 import getSiteInfo from './operations/get-site-info'
 import getCustomerWishlist from './operations/get-customer-wishlist'
 import getAllProductPaths from './operations/get-all-product-paths'
@@ -22,8 +20,6 @@ const config: LocalConfig = {
 }
 
 const operations = {
-  getAllPages,
-  getPage,
   getSiteInfo,
   getCustomerWishlist,
   getAllProductPaths,

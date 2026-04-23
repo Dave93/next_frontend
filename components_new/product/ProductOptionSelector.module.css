@@ -1,8 +1,0 @@
-.productSelectorOption {
-  display: flex;
-  box-sizing: border-box;
-  border-radius: 17.5px;
-  justify-content: space-between;
-  margin-top: 20px;
-  flex-wrap: nowrap !important;
-}
