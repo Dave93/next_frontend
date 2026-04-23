@@ -1,6 +1,7 @@
 'use client'
 
 import { useMemo, FC } from 'react'
+import dynamic from 'next/dynamic'
 import MainSliderApp from './MainSliderApp'
 import CategoriesMenuApp from './CategoriesMenuApp'
 import MobileCategoriesMenuApp from './MobileCategoriesMenuApp'
@@ -11,6 +12,12 @@ import ThreePizzaApp from './ThreePizzaApp'
 import SmallCartApp from '../common/SmallCartApp'
 import { useLocale } from 'next-intl'
 import { useUI } from '@components/ui/context'
+
+// Pizza-50/50 builder is desktop+mobile via internal switch — load client-only.
+const HalfPizzaApp = dynamic(
+  () => import('../product/CreateYourPizzaCommonApp'),
+  { ssr: false }
+)
 
 type Props = {
   products: any[]
@@ -57,6 +64,33 @@ const CityMainApp: FC<Props> = ({
       cat?.attribute_data?.name?.['chopar']?.['ru']
     return fromAttr || cat?.name || ''
   }
+
+  // 50/50 categories: legacy renders these via the HalfPizza builder both
+  // inline (mobile) and inside the right-rail sticky column (desktop).
+  // Mark variant index 1 as the default size (matches legacy behaviour).
+  const halfModeProds = useMemo(() => {
+    return (products || [])
+      .map((prod: any) => {
+        if (!prod.half_mode) return null
+        const next = { ...prod }
+        if (next.variants?.length) {
+          next.variants = next.variants.map((v: any, i: number) => ({
+            ...v,
+            active: i === 1,
+          }))
+        } else if (next.items?.length) {
+          next.items = next.items.map((item: any) => ({
+            ...item,
+            variants: (item.variants || []).map((v: any, i: number) => ({
+              ...v,
+              active: i === 1,
+            })),
+          }))
+        }
+        return next
+      })
+      .filter((p: any) => p !== null)
+  }, [products])
 
   const threeCategories = useMemo(() => {
     const res: any[] = []
@@ -133,6 +167,18 @@ const CityMainApp: FC<Props> = ({
               />
             </div>
           )}
+          {halfModeProds.length > 0 && (
+            <div className="col-span-3 md:hidden space-y-4">
+              {halfModeProds.map((sec: any) => (
+                <div
+                  key={sec.id}
+                  className="border border-yellow p-3 mx-4 relative rounded-[15px] bg-white shadow-sm hover:shadow-xl"
+                >
+                  <HalfPizzaApp sec={sec} channelName={channelName} />
+                </div>
+              ))}
+            </div>
+          )}
           <div className="col-span-3 space-y-16">
             {threeCategories.length > 0 && (
               <div className="hidden md:block">
@@ -162,7 +208,15 @@ const CityMainApp: FC<Props> = ({
               </div>
             ))}
           </div>
-          <div className="sticky top-16 max-h-screen hidden md:block">
+          <div className="sticky top-16 max-h-screen hidden md:block space-y-4">
+            {halfModeProds.map((sec: any) => (
+              <div
+                key={sec.id}
+                className="border border-yellow px-5 py-7 relative rounded-[15px] bg-white shadow-sm hover:shadow-xl overflow-hidden"
+              >
+                <HalfPizzaApp sec={sec} channelName={channelName} isSmall />
+              </div>
+            ))}
             <SmallCartApp channelName={channelName} />
           </div>
         </div>
