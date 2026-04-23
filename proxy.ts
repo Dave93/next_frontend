@@ -10,6 +10,11 @@ import { NextResponse, type NextRequest } from 'next/server'
 // Future: switch to `localePrefix:'as-needed'` with `app/[locale]/[city]/...`
 // restructure if SEO needs `/uz/`, `/en/` URLs visible (separate wave).
 export function proxy(request: NextRequest) {
+  // Legacy /[city]/_bonus → /[city]/bonus (Wave 7 rename for Next folder convention)
+  if (request.nextUrl.pathname.includes('/_bonus')) {
+    const newPath = request.nextUrl.pathname.replace('/_bonus', '/bonus')
+    return NextResponse.redirect(new URL(newPath, request.url))
+  }
   // Legacy product redirect: /product/[id] → /[city]/product/[id]
   const m = request.nextUrl.pathname.match(/^\/product\/(\d+)$/)
   if (m) {
@@ -27,5 +32,9 @@ export function proxy(request: NextRequest) {
 }
 
 export const config = {
-  matcher: ['/', '/product/:id'],
+  matcher: [
+    '/',
+    '/product/:id',
+    '/(tashkent|samarkand|bukhara|namangan|fergana|andijan|qarshi|nukus|urgench|jizzakh|gulistan|termez|chirchiq|navoi)/_bonus/:path*',
+  ],
 }
