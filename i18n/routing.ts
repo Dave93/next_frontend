@@ -1,14 +1,12 @@
 import { defineRouting } from 'next-intl/routing'
 
-// Wave 1: localePrefix 'never' — без URL префиксов локалей.
-// Causes: Next.js не позволяет [locale] (App) и [city] (Pages) сосуществовать
-// на одном URL уровне ("different slug names for the same dynamic path").
-// Локаль определяется через cookie/Accept-Language до миграции pages/[city]/.
-//
-// В Wave 5/6 после удаления pages/[city]/ переключаем на 'as-needed'
-// и переструктурируем app/ под [locale] сегмент для сохранения /uz/, /en/ URL'ов.
+// Prod parity: ru без префикса, uz/en — c префиксом (/uz, /en).
+// Без реструктуризации app/[city] → app/[locale]/[city] (огромный refactor)
+// мы реализуем это руками в proxy.ts: strip /uz, /en из pathname и
+// проставляем NEXT_LOCALE cookie. next-intl Link при `as-needed` сам
+// добавит префикс к ссылкам исходя из активной локали.
 export const routing = defineRouting({
   locales: ['ru', 'uz', 'en'],
   defaultLocale: 'ru',
-  localePrefix: 'never',
+  localePrefix: 'as-needed',
 })

@@ -1,22 +1,34 @@
 import { NextResponse, type NextRequest } from 'next/server'
 
-// Wave 7: next-intl middleware removed entirely.
-// With localePrefix:'never' the middleware still rewrites '/tashkent' →
-// '/ru/tashkent' internally, but our app structure is `app/[city]/...`
-// (NOT `app/[locale]/[city]/...`), so every rewrite produces 404.
-// Locale is now resolved per-request in i18n/request.ts via NEXT_LOCALE
-// cookie + Accept-Language header (handled by getRequestConfig).
-//
-// Future: switch to `localePrefix:'as-needed'` with `app/[locale]/[city]/...`
-// restructure if SEO needs `/uz/`, `/en/` URLs visible (separate wave).
+const NON_DEFAULT_LOCALES = ['uz', 'en'] as const
+const LOCALE_PREFIX_RE = /^\/(uz|en)(\/.*)?$/
+
 export function proxy(request: NextRequest) {
-  // Legacy /[city]/_bonus → /[city]/bonus (Wave 7 rename for Next folder convention)
-  if (request.nextUrl.pathname.includes('/_bonus')) {
-    const newPath = request.nextUrl.pathname.replace('/_bonus', '/bonus')
+  const { pathname } = request.nextUrl
+
+  // Locale prefix handling — strip /uz or /en, save NEXT_LOCALE cookie,
+  // rewrite to the city-only path so app/[city]/... matches.
+  const localeMatch = pathname.match(LOCALE_PREFIX_RE)
+  if (localeMatch) {
+    const locale = localeMatch[1] as (typeof NON_DEFAULT_LOCALES)[number]
+    const rest = localeMatch[2] || '/'
+    const url = request.nextUrl.clone()
+    url.pathname = rest
+    const response = NextResponse.rewrite(url)
+    response.cookies.set('NEXT_LOCALE', locale, {
+      path: '/',
+      maxAge: 60 * 60 * 24 * 365,
+    })
+    return response
+  }
+
+  // Legacy /[city]/_bonus → /[city]/bonus (Next folder convention)
+  if (pathname.includes('/_bonus')) {
+    const newPath = pathname.replace('/_bonus', '/bonus')
     return NextResponse.redirect(new URL(newPath, request.url))
   }
   // Legacy product redirect: /product/[id] → /[city]/product/[id]
-  const m = request.nextUrl.pathname.match(/^\/product\/(\d+)$/)
+  const m = pathname.match(/^\/product\/(\d+)$/)
   if (m) {
     const citySlug = request.cookies.get('city_slug')?.value || 'tashkent'
     return NextResponse.redirect(
@@ -24,7 +36,7 @@ export function proxy(request: NextRequest) {
     )
   }
   // Root → city redirect
-  if (request.nextUrl.pathname === '/') {
+  if (pathname === '/') {
     const citySlug = request.cookies.get('city_slug')?.value || 'tashkent'
     return NextResponse.redirect(new URL(`/${citySlug}`, request.url))
   }
@@ -35,6 +47,7 @@ export const config = {
   matcher: [
     '/',
     '/product/:id',
+    '/(uz|en)/:path*',
     '/(tashkent|samarkand|bukhara|namangan|fergana|andijan|qarshi|nukus|urgench|jizzakh|gulistan|termez|chirchiq|navoi)/_bonus/:path*',
   ],
 }

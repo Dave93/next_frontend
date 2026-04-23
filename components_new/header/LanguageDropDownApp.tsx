@@ -11,6 +11,7 @@ import {
 import { Ru, Uz, Us } from 'react-flags-select'
 import Cookies from 'js-cookie'
 import { useLocale } from 'next-intl'
+import { usePathname } from 'next/navigation'
 
 const flagComponents = {
   ru: Ru,
@@ -28,12 +29,17 @@ type Locale = 'ru' | 'uz' | 'en'
 
 const LanguageDropDownApp: FC = () => {
   const locale = useLocale() as Locale
+  const pathname = usePathname() || '/'
   const FlagComponent = flagComponents[locale]
 
   const changeLang = (e: React.MouseEvent, loc: Locale) => {
     e.preventDefault()
-    Cookies.set('NEXT_LOCALE', loc, { expires: 365 })
-    window.location.reload()
+    Cookies.set('NEXT_LOCALE', loc, { expires: 365, path: '/' })
+    // Strip any current locale prefix (/uz, /en) — pathname holds the
+    // public URL including prefix when applicable.
+    const cleanPath = pathname.replace(/^\/(uz|en)(\/|$)/, '/')
+    const target = loc === 'ru' ? cleanPath : `/${loc}${cleanPath}`
+    window.location.href = target || '/'
   }
 
   return (
