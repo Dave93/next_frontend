@@ -306,7 +306,8 @@ const SmallCartApp: FC<SmallCartProps> = ({ channelName }) => {
         {isEmpty && (
           <div className="flex flex-col items-center mt-2 text-center text-gray-400 text-sm">
             <Image src="/cart_empty.png" width={130} height={119} alt="" />
-            <div className="w-6/12">{'Корзина пуста'}</div>
+            <div>{'Корзина пуста'}</div>
+            <div>{'Выберите пиццу'}</div>
           </div>
         )}
         {!isEmpty && (

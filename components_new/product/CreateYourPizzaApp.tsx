@@ -540,7 +540,7 @@ const CreateYourPizzaApp: FC<CreatePizzaProps> = ({
         <div className="text-center z-10">
           <div className={isSmall ? 'hidden' : ''}>
             <div className="text-lg font-bold mb-2">
-              {'Создай свою пиццу'}
+              {'Соберите свою пиццу'}
             </div>
             <Image src="/createYourPizza.png" width={150} height={150} alt="" />
           </div>
@@ -549,7 +549,7 @@ const CreateYourPizzaApp: FC<CreatePizzaProps> = ({
               className="bg-gray-100 focus:outline-none font-bold outline-none px-6 py-2 rounded-full text-center text-yellow uppercase"
               onClick={openModal}
             >
-              {'Создать пиццу'}
+              {'Собрать пиццу'}
             </button>
           </div>
         </div>

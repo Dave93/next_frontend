@@ -525,14 +525,14 @@ const CreateYourPizzaMobileApp: FC<CreatePizzaProps> = ({
         </div>
         <div>
           <div className="text-lg font-bold mb-2">
-            {'Создай свою пиццу'}
+            {'Соберите свою пиццу'}
           </div>
           <div className="mt-10">
             <button
               className="bg-gray-100 focus:outline-none font-bold outline-none px-6 py-2 text-sm rounded-full text-center text-yellow uppercase"
               onClick={openModal}
             >
-              {'Создать пиццу'}
+              {'Собрать пиццу'}
             </button>
           </div>
         </div>
