@@ -1,21 +1,25 @@
 'use client'
 
 import { FC, Fragment } from 'react'
-import { Dialog, DialogPanel, Transition, TransitionChild } from '@headlessui/react'
+import {
+  Popover,
+  PopoverButton,
+  PopoverPanel,
+  Transition,
+} from '@headlessui/react'
 import { Link } from '../../i18n/navigation'
 import { useUI } from '@components/ui/context'
 import { useLocale } from 'next-intl'
-
-type Props = {
-  open: boolean
-  onClose: () => void
-}
 
 const labels: Record<string, Record<string, string>> = {
   about: { ru: 'О нас', uz: 'Biz haqimizda', en: 'About' },
   delivery: { ru: 'Доставка и оплата', uz: 'Yetkazib berish', en: 'Delivery' },
   contacts: { ru: 'Контакты', uz: 'Kontaktlar', en: 'Contacts' },
-  branch: { ru: 'Адреса ресторанов', uz: 'Restoran manzillari', en: 'Locations' },
+  branch: {
+    ru: 'Адреса ресторанов',
+    uz: 'Restoran manzillari',
+    en: 'Locations',
+  },
   sale: { ru: 'Акции', uz: 'Aksiyalar', en: 'Promo' },
   fran: { ru: 'Франшиза', uz: 'Franshiza', en: 'Franchise' },
   privacy: { ru: 'Конфиденциальность', uz: 'Maxfiylik', en: 'Privacy' },
@@ -33,76 +37,81 @@ const items = [
   { key: 'privacy', href: '/privacy' },
 ]
 
-const SideMenuApp: FC<Props> = ({ open, onClose }) => {
+const SideMenuApp: FC = () => {
   const { activeCity } = useUI()
   const locale = useLocale()
   const t = (key: string) => labels[key]?.[locale] || labels[key]?.ru || key
   const citySlug = activeCity?.slug || 'tashkent'
 
   return (
-    <Transition show={open} as={Fragment}>
-      <Dialog onClose={onClose} className="relative z-50">
-        <TransitionChild
-          as={Fragment}
-          enter="ease-out duration-200"
-          enterFrom="opacity-0"
-          enterTo="opacity-100"
-          leave="ease-in duration-150"
-          leaveFrom="opacity-100"
-          leaveTo="opacity-0"
-        >
-          <div
-            className="fixed inset-0 bg-black/40"
-            aria-hidden="true"
-          />
-        </TransitionChild>
-
-        <div className="fixed inset-0 flex justify-end">
-          <TransitionChild
-            as={Fragment}
-            enter="transform transition ease-out duration-300"
-            enterFrom="translate-x-full"
-            enterTo="translate-x-0"
-            leave="transform transition ease-in duration-200"
-            leaveFrom="translate-x-0"
-            leaveTo="translate-x-full"
+    <Popover className="relative ml-3">
+      {({ open, close }) => (
+        <>
+          <PopoverButton
+            aria-label="menu"
+            className={`flex items-center justify-center w-10 h-10 rounded-full transition-colors outline-none ${
+              open
+                ? 'bg-yellow-100 text-yellow-700'
+                : 'text-gray-700 hover:bg-gray-100'
+            }`}
           >
-            <DialogPanel className="w-full max-w-sm bg-white shadow-2xl flex flex-col h-full">
-              <div className="flex items-center justify-between px-5 py-4 border-b">
-                <span className="text-lg font-semibold">Меню</span>
-                <button
-                  type="button"
-                  onClick={onClose}
-                  aria-label="close"
-                  className="p-2 text-gray-500 hover:text-gray-800"
-                >
-                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                    <line x1="18" y1="6" x2="6" y2="18" />
-                    <line x1="6" y1="6" x2="18" y2="18" />
-                  </svg>
-                </button>
+            <svg
+              width="22"
+              height="22"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            >
+              {open ? (
+                <>
+                  <line x1="18" y1="6" x2="6" y2="18" />
+                  <line x1="6" y1="6" x2="18" y2="18" />
+                </>
+              ) : (
+                <>
+                  <line x1="3" y1="6" x2="21" y2="6" />
+                  <line x1="3" y1="12" x2="21" y2="12" />
+                  <line x1="3" y1="18" x2="21" y2="18" />
+                </>
+              )}
+            </svg>
+          </PopoverButton>
+
+          <Transition
+            as={Fragment}
+            enter="transition ease-out duration-150"
+            enterFrom="opacity-0 -translate-y-2 scale-95"
+            enterTo="opacity-100 translate-y-0 scale-100"
+            leave="transition ease-in duration-100"
+            leaveFrom="opacity-100 translate-y-0 scale-100"
+            leaveTo="opacity-0 -translate-y-2 scale-95"
+          >
+            <PopoverPanel className="absolute right-0 top-full mt-2 w-64 origin-top-right rounded-2xl bg-white shadow-xl ring-1 ring-black/5 py-2 z-50 focus:outline-none">
+              <div className="px-4 pt-2 pb-2 text-xs font-semibold uppercase tracking-wide text-gray-400">
+                Меню
               </div>
-              <nav className="flex-1 overflow-y-auto py-3">
-                <ul className="space-y-1">
-                  {items.map((item) => (
-                    <li key={item.key}>
-                      <Link
-                        href={`/${citySlug}${item.href}`}
-                        prefetch={false}
-                        onClick={onClose}
-                        className="block px-5 py-3 text-gray-800 hover:bg-yellow-50 hover:text-yellow-700 transition-colors"
-                      >
-                        {t(item.key)}
-                      </Link>
-                    </li>
-                  ))}
-                </ul>
-              </nav>
-            </DialogPanel>
-          </TransitionChild>
-        </div>
-      </Dialog>
-    </Transition>
+              <ul>
+                {items.map((item) => (
+                  <li key={item.key}>
+                    <Link
+                      href={`/${citySlug}${item.href}`}
+                      prefetch={false}
+                      onClick={() => close()}
+                      className="flex items-center px-4 py-2.5 text-sm text-gray-700 hover:bg-yellow-50 hover:text-yellow-700 transition-colors"
+                    >
+                      {t(item.key)}
+                    </Link>
+                  </li>
+                ))}
+              </ul>
+            </PopoverPanel>
+          </Transition>
+        </>
+      )}
+    </Popover>
   )
 }
 

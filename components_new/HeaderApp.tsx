@@ -1,6 +1,6 @@
 'use client'
 
-import { FC, useMemo, useState } from 'react'
+import { FC, useMemo } from 'react'
 import Image from 'next/image'
 import { Link } from '../i18n/navigation'
 import { useUI } from '@components/ui/context'
@@ -17,7 +17,6 @@ const addressLabels: Record<string, string> = {
 
 const HeaderApp: FC = () => {
   const { activeCity, cities, locationData, openSidebar } = useUI() as any
-  const [menuOpen, setMenuOpen] = useState(false)
 
   const chosenCity = useMemo(() => {
     if (activeCity) return activeCity
@@ -82,28 +81,7 @@ const HeaderApp: FC = () => {
               <div className="mx-2">
                 <SignInButtonApp />
               </div>
-              <button
-                type="button"
-                aria-label="menu"
-                onClick={() => setMenuOpen(true)}
-                className="ml-3 p-2 text-gray-700 hover:text-gray-900"
-              >
-                <svg
-                  width="22"
-                  height="22"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  strokeWidth="2"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                >
-                  <line x1="3" y1="6" x2="21" y2="6" />
-                  <line x1="3" y1="12" x2="21" y2="12" />
-                  <line x1="3" y1="18" x2="21" y2="18" />
-                </svg>
-              </button>
-              <SideMenuApp open={menuOpen} onClose={() => setMenuOpen(false)} />
+              <SideMenuApp />
             </div>
           </div>
         </div>
