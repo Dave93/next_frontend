@@ -6,6 +6,7 @@ import { Link } from '../i18n/navigation'
 import { useUI } from '@components/ui/context'
 import ChooseCityDropDownApp from './header/ChooseCityDropDownApp'
 import HeaderPhoneApp from './header/HeaderPhoneApp'
+import LanguageDropDownApp from './header/LanguageDropDownApp'
 import SignInButtonApp from './header/SignInButtonApp'
 import SideMenuApp from './header/SideMenuApp'
 
@@ -78,6 +79,9 @@ const HeaderApp: FC = () => {
             <div className="md:flex hidden items-center">
               <HeaderPhoneApp />
               <ChooseCityDropDownApp />
+              <div className="mx-2">
+                <LanguageDropDownApp />
+              </div>
               <div className="mx-2">
                 <SignInButtonApp />
               </div>
