@@ -54,7 +54,7 @@ const ProductItemNewApp: FC<ProductItem> = ({ product, channelName }) => {
     if (Array.isArray(p.variants) && p.variants.length > 0) {
       const enabled = p.variants.filter((v: any) => v.active)
       const pool = enabled.length > 0 ? enabled : p.variants
-      const defaultId = pool[pool.length - 1]?.id
+      const defaultId = (pool[1] ?? pool[0])?.id
       p.variants = p.variants.map((v: any) => ({
         ...v,
         active: v.id === defaultId,
@@ -429,6 +429,7 @@ const ProductItemNewApp: FC<ProductItem> = ({ product, channelName }) => {
     }
 
     if (modifier) {
+      modifier = modifier.filter((m: any) => +m.price > 0)
       modifier.sort(function (a: any, b: any) {
         if (+a.price > +b.price) {
           return 1
