@@ -301,7 +301,7 @@ const SmallCartMobile: FC = () => {
                 <div className="md:inline-flex my-8 items-start">
                   <div className="align-middle bg-white inline-block overflow-hidden md:px-40 px-6 py-10 rounded-2xl shadow-xl text-center transform transition-all max-w-2xl">
                     <DialogTitle as="h3" className="leading-6 text-3xl">
-                      {tr('auth')}
+                      {tr('Авторизация')}
                     </DialogTitle>
                     {submitError && (
                       <div className="bg-red-200 p-5 font-bold text-red-600 my-6">
@@ -310,7 +310,7 @@ const SmallCartMobile: FC = () => {
                     )}
                     {user && (
                       <div className="mt-10 bg-green-200 font-bold text-green-800 p-4">
-                        {tr('successfully_logged')} {user.user.name}!
+                        {tr('Вы успешно вошли в систему')} {user.user.name}!
                       </div>
                     )}
                     {!user && isShowPasswordForm && (
@@ -320,7 +320,7 @@ const SmallCartMobile: FC = () => {
                         >
                           <div className="mt-10">
                             <label className="text-sm text-gray-400 mb-2 block">
-                              {tr('sms_code')}
+                              {tr('СМС код')}
                             </label>
                             <OtpInput
                               value={otpCode}
@@ -349,7 +349,7 @@ const SmallCartMobile: FC = () => {
                                 className="text-xs text-yellow mt-3 outline-none focus:outline-none border-b border-yellow pb-0.5"
                                 onClick={(e) => getNewCode(e)}
                               >
-                                {tr('get_code_again')}
+                                {tr('Получить код снова')}
                               </button>
                             )}
                           </div>
@@ -385,7 +385,7 @@ const SmallCartMobile: FC = () => {
                                   ></path>
                                 </svg>
                               ) : (
-                                tr('signIn')
+                                tr('Войти')
                               )}
                             </button>
                           </div>
@@ -397,7 +397,7 @@ const SmallCartMobile: FC = () => {
                         <form onSubmit={handleSubmit(onSubmit)}>
                           <div className="mt-10">
                             <label className="text-sm text-gray-400 mb-2 block">
-                              {tr('personal_phone')}
+                              {tr('Номер телефона')}
                             </label>
                             <div className="relative">
                               <Controller
@@ -441,7 +441,7 @@ const SmallCartMobile: FC = () => {
                           {showUserName && (
                             <div className="mt-10">
                               <label className="text-sm text-gray-400 mb-2 block">
-                                {tr('your_name')}
+                                {tr('Ваше имя')}
                               </label>
                               <div className="relative">
                                 <input
@@ -492,7 +492,7 @@ const SmallCartMobile: FC = () => {
                                   ></path>
                                 </svg>
                               ) : (
-                                tr('get_code')
+                                tr('Получить код')
                               )}
                             </button>
                           </div>

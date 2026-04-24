@@ -11,6 +11,64 @@ msgstr ""
 msgid "2NIDWU"
 msgstr "О нас"
 
+#: components_new/auth/SignInModalApp.tsx:90
+msgid "MkmIOy"
+msgstr "Капча не готова, попробуйте ещё раз"
+
+#: components_new/auth/SignInModalApp.tsx:121
+msgid "T3C/O+"
+msgstr "Не удалось отправить код"
+
+#: components_new/auth/SignInModalApp.tsx:152
+msgid "I2djCx"
+msgstr "Неверный код"
+
+#: components_new/auth/SignInModalApp.tsx:223
+msgid "BgypuO"
+msgstr "Авторизация"
+
+#: components_new/auth/SignInModalApp.tsx:230
+#: components_new/contacts/ContactsApp.tsx:162
+#: components_new/profile/PersonalDataApp.tsx:134
+msgid "ANbLXk"
+msgstr "Номер телефона"
+
+#: components_new/auth/SignInModalApp.tsx:253
+#: components_new/contacts/ContactsApp.tsx:137
+#: components_new/profile/PersonalDataApp.tsx:115
+msgid "qXh0mH"
+msgstr "Имя"
+
+#: components_new/auth/SignInModalApp.tsx:260
+msgid "3dXnzB"
+msgstr "Если сообщение не пришло, позвоните нам по номеру"
+
+#: components_new/auth/SignInModalApp.tsx:284
+msgid "K6f7aa"
+msgstr "Получить код"
+
+#: components_new/auth/SignInModalApp.tsx:290
+msgid "XSNwUH"
+msgstr "Код подтверждения"
+
+#: components_new/auth/SignInModalApp.tsx:308
+msgid "AYsWBj"
+msgstr "Код отправлен на номер"
+
+#: components_new/auth/SignInModalApp.tsx:323
+#: components_new/header/SignInButtonApp.tsx:22
+#: components_new/header/SignInButtonApp.tsx:38
+msgid "oU4rxk"
+msgstr "Войти"
+
+#: components_new/auth/SignInModalApp.tsx:333
+msgid "kOs//D"
+msgstr "Отправить код повторно через"
+
+#: components_new/auth/SignInModalApp.tsx:334
+msgid "hPZJnP"
+msgstr "Отправить код повторно"
+
 #: components_new/cart/CartApp.tsx:536
 #: components_new/common/SmallCartApp.tsx:310
 msgid "Lj6qSg"
@@ -52,21 +110,14 @@ msgstr "Устроиться на работу"
 msgid "uV78Od"
 msgstr "Оставьте свой отзыв"
 
-#: components_new/contacts/ContactsApp.tsx:137
-msgid "qXh0mH"
-msgstr "Имя"
-
 #: components_new/contacts/ContactsApp.tsx:156
 #: components_new/contacts/ContactsApp.tsx:193
 #: components_new/contacts/ContactsApp.tsx:260
 msgid "oqiCOV"
 msgstr "Обязательное поле"
 
-#: components_new/contacts/ContactsApp.tsx:162
-msgid "ANbLXk"
-msgstr "Номер телефона"
-
 #: components_new/contacts/ContactsApp.tsx:200
+#: components_new/profile/PersonalDataApp.tsx:145
 msgid "a+WBaz"
 msgstr "Эл. почта"
 
@@ -117,6 +168,7 @@ msgid "Vj2nh2"
 msgstr "Адреса ресторанов"
 
 #: components_new/header/SideMenuApp.tsx:24
+#: components_new/news/NewsMenuTabsApp.tsx:27
 #: components_new/sale/SaleListApp.tsx:32
 #: components_new/sale/SaleListApp.tsx:41
 msgid "J36SDn"
@@ -125,11 +177,6 @@ msgstr "Акции"
 #: components_new/header/SideMenuApp.tsx:25
 msgid "gaIt7P"
 msgstr "Конфиденциальность"
-
-#: components_new/header/SignInButtonApp.tsx:22
-#: components_new/header/SignInButtonApp.tsx:38
-msgid "oU4rxk"
-msgstr "Войти"
 
 #: components_new/HeaderApp.tsx:26
 msgid "EiCEoo"
@@ -160,6 +207,7 @@ msgstr "Подробнее"
 
 #: components_new/news/NewsListApp.tsx:32
 #: components_new/news/NewsListApp.tsx:41
+#: components_new/news/NewsMenuTabsApp.tsx:21
 msgid "3j6hgF"
 msgstr "Новости"
 
@@ -194,6 +242,44 @@ msgstr "В корзину"
 #: components_new/product/ProductItemNewApp.tsx:1131
 msgid "AH6N5n"
 msgstr "Добавить к пицце"
+
+#: components_new/profile/OrdersApp.tsx:165
+#: components_new/profile/UserDataApp.tsx:19
+msgid "QZLNHg"
+msgstr "Мои заказы"
+
+#: components_new/profile/PersonalDataApp.tsx:112
+#: components_new/profile/UserDataApp.tsx:21
+msgid "SwgaFe"
+msgstr "Личные данные"
+
+#: components_new/profile/PersonalDataApp.tsx:165
+msgid "9jmoPv"
+msgstr "День рождения"
+
+#: components_new/profile/PersonalDataApp.tsx:178
+msgid "SMzCPW"
+msgstr "Сохранить"
+
+#: components_new/profile/UserDataApp.tsx:20
+msgid "mRPbIA"
+msgstr "Мои адреса"
+
+#: components_new/profile/UserDataApp.tsx:22
+msgid "xxMGAl"
+msgstr "Выйти"
+
+#: components_new/profile/UserDataApp.tsx:23
+msgid "x81v8p"
+msgstr "Бонусы"
+
+#: components_new/profile/UserDataApp.tsx:44
+msgid "AqaPc0"
+msgstr "Приветствуем Вас"
+
+#: components_new/profile/UserDataApp.tsx:47
+msgid "4bFAiB"
+msgstr "Это ваш личный кабинет. Здесь вы можете управлять своими заказами, редактировать личные данные и следить за избранными товарами"
 
 #: components_new/sale/SaleDetailApp.tsx:65
 msgid "dJ1A50"

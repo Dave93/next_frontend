@@ -11,6 +11,64 @@ msgstr ""
 msgid "2NIDWU"
 msgstr "Biz haqimizda"
 
+#: components_new/auth/SignInModalApp.tsx:90
+msgid "MkmIOy"
+msgstr "Kapcha tayyor emas, qayta urinib ko'ring"
+
+#: components_new/auth/SignInModalApp.tsx:121
+msgid "T3C/O+"
+msgstr "Kodni yuborib bo'lmadi"
+
+#: components_new/auth/SignInModalApp.tsx:152
+msgid "I2djCx"
+msgstr "Noto'g'ri kod"
+
+#: components_new/auth/SignInModalApp.tsx:223
+msgid "BgypuO"
+msgstr "Avtorizatsiya"
+
+#: components_new/auth/SignInModalApp.tsx:230
+#: components_new/contacts/ContactsApp.tsx:162
+#: components_new/profile/PersonalDataApp.tsx:134
+msgid "ANbLXk"
+msgstr "Telefon raqami"
+
+#: components_new/auth/SignInModalApp.tsx:253
+#: components_new/contacts/ContactsApp.tsx:137
+#: components_new/profile/PersonalDataApp.tsx:115
+msgid "qXh0mH"
+msgstr "Ism"
+
+#: components_new/auth/SignInModalApp.tsx:260
+msgid "3dXnzB"
+msgstr "Agar xabar kelmagan bo'lsa, bizga qo'ng'iroq qiling"
+
+#: components_new/auth/SignInModalApp.tsx:284
+msgid "K6f7aa"
+msgstr "Kod olish"
+
+#: components_new/auth/SignInModalApp.tsx:290
+msgid "XSNwUH"
+msgstr "Tasdiqlash kodi"
+
+#: components_new/auth/SignInModalApp.tsx:308
+msgid "AYsWBj"
+msgstr "Kod raqamga yuborildi"
+
+#: components_new/auth/SignInModalApp.tsx:323
+#: components_new/header/SignInButtonApp.tsx:22
+#: components_new/header/SignInButtonApp.tsx:38
+msgid "oU4rxk"
+msgstr "Kirish"
+
+#: components_new/auth/SignInModalApp.tsx:333
+msgid "kOs//D"
+msgstr "Kodni qayta yuborish vaqti"
+
+#: components_new/auth/SignInModalApp.tsx:334
+msgid "hPZJnP"
+msgstr "Kodni qayta yuborish"
+
 #: components_new/cart/CartApp.tsx:536
 #: components_new/common/SmallCartApp.tsx:310
 msgid "Lj6qSg"
@@ -52,21 +110,14 @@ msgstr "Ishga joylashish"
 msgid "uV78Od"
 msgstr "Sharhingizni qoldiring"
 
-#: components_new/contacts/ContactsApp.tsx:137
-msgid "qXh0mH"
-msgstr "Ism"
-
 #: components_new/contacts/ContactsApp.tsx:156
 #: components_new/contacts/ContactsApp.tsx:193
 #: components_new/contacts/ContactsApp.tsx:260
 msgid "oqiCOV"
 msgstr "Majburiy maydon"
 
-#: components_new/contacts/ContactsApp.tsx:162
-msgid "ANbLXk"
-msgstr "Telefon raqami"
-
 #: components_new/contacts/ContactsApp.tsx:200
+#: components_new/profile/PersonalDataApp.tsx:145
 msgid "a+WBaz"
 msgstr "Email"
 
@@ -114,9 +165,10 @@ msgstr "Sizning shahringiz"
 
 #: components_new/header/SideMenuApp.tsx:22
 msgid "Vj2nh2"
-msgstr ""
+msgstr "Restoran manzillari"
 
 #: components_new/header/SideMenuApp.tsx:24
+#: components_new/news/NewsMenuTabsApp.tsx:27
 #: components_new/sale/SaleListApp.tsx:32
 #: components_new/sale/SaleListApp.tsx:41
 msgid "J36SDn"
@@ -124,12 +176,7 @@ msgstr "Aksiyalar"
 
 #: components_new/header/SideMenuApp.tsx:25
 msgid "gaIt7P"
-msgstr ""
-
-#: components_new/header/SignInButtonApp.tsx:22
-#: components_new/header/SignInButtonApp.tsx:38
-msgid "oU4rxk"
-msgstr "Kirish"
+msgstr "Maxfiylik"
 
 #: components_new/HeaderApp.tsx:26
 msgid "EiCEoo"
@@ -160,6 +207,7 @@ msgstr "Batafsil"
 
 #: components_new/news/NewsListApp.tsx:32
 #: components_new/news/NewsListApp.tsx:41
+#: components_new/news/NewsMenuTabsApp.tsx:21
 msgid "3j6hgF"
 msgstr "Yangiliklar"
 
@@ -194,6 +242,44 @@ msgstr "Savatga"
 #: components_new/product/ProductItemNewApp.tsx:1131
 msgid "AH6N5n"
 msgstr "Pitsaga qo'shish"
+
+#: components_new/profile/OrdersApp.tsx:165
+#: components_new/profile/UserDataApp.tsx:19
+msgid "QZLNHg"
+msgstr "Mening buyurtmalarim"
+
+#: components_new/profile/PersonalDataApp.tsx:112
+#: components_new/profile/UserDataApp.tsx:21
+msgid "SwgaFe"
+msgstr "Shaxsiy ma'lumotlar"
+
+#: components_new/profile/PersonalDataApp.tsx:165
+msgid "9jmoPv"
+msgstr "Tug'ilgan kun"
+
+#: components_new/profile/PersonalDataApp.tsx:178
+msgid "SMzCPW"
+msgstr "Saqlash"
+
+#: components_new/profile/UserDataApp.tsx:20
+msgid "mRPbIA"
+msgstr "Mening manzillarim"
+
+#: components_new/profile/UserDataApp.tsx:22
+msgid "xxMGAl"
+msgstr "Chiqish"
+
+#: components_new/profile/UserDataApp.tsx:23
+msgid "x81v8p"
+msgstr "Bonuslar"
+
+#: components_new/profile/UserDataApp.tsx:44
+msgid "AqaPc0"
+msgstr "Xush kelibsiz"
+
+#: components_new/profile/UserDataApp.tsx:47
+msgid "4bFAiB"
+msgstr "Bu sizning shaxsiy kabinetingiz. Bu yerda siz buyurtmalaringizni boshqarishingiz, shaxsiy ma'lumotlarni tahrirlashingiz va sevimli mahsulotlaringizni kuzatishingiz mumkin"
 
 #: components_new/sale/SaleDetailApp.tsx:65
 msgid "dJ1A50"
