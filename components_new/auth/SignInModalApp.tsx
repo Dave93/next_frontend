@@ -18,12 +18,9 @@ const formatPhone = (raw: string) => {
   const digits = raw.replace(/\D/g, '').slice(0, 9)
   let out = ''
   if (digits.length > 0) out += digits.slice(0, 2)
-  if (digits.length >= 2) out += ' '
-  if (digits.length > 2) out += digits.slice(2, 5)
-  if (digits.length >= 5) out += ' '
-  if (digits.length > 5) out += digits.slice(5, 7)
-  if (digits.length >= 7) out += ' '
-  if (digits.length > 7) out += digits.slice(7, 9)
+  if (digits.length > 2) out += ' ' + digits.slice(2, 5)
+  if (digits.length > 5) out += ' ' + digits.slice(5, 7)
+  if (digits.length > 7) out += ' ' + digits.slice(7, 9)
   return out
 }
 
