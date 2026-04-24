@@ -50,7 +50,6 @@ let otpTimerRef: NodeJS.Timeout
 const SmallCartMobile: FC = () => {
   const { executeRecaptcha } = useGoogleReCaptcha()
   const t = useExtracted()
-  const tr = t
 
   const router = useRouter()
   let cartId: string | null = null
@@ -301,7 +300,7 @@ const SmallCartMobile: FC = () => {
                 <div className="md:inline-flex my-8 items-start">
                   <div className="align-middle bg-white inline-block overflow-hidden md:px-40 px-6 py-10 rounded-2xl shadow-xl text-center transform transition-all max-w-2xl">
                     <DialogTitle as="h3" className="leading-6 text-3xl">
-                      {tr('Авторизация')}
+                      {t('Авторизация')}
                     </DialogTitle>
                     {submitError && (
                       <div className="bg-red-200 p-5 font-bold text-red-600 my-6">
@@ -310,7 +309,7 @@ const SmallCartMobile: FC = () => {
                     )}
                     {user && (
                       <div className="mt-10 bg-green-200 font-bold text-green-800 p-4">
-                        {tr('Вы успешно вошли в систему')} {user.user.name}!
+                        {t('Вы успешно вошли в систему')} {user.user.name}!
                       </div>
                     )}
                     {!user && isShowPasswordForm && (
@@ -320,7 +319,7 @@ const SmallCartMobile: FC = () => {
                         >
                           <div className="mt-10">
                             <label className="text-sm text-gray-400 mb-2 block">
-                              {tr('СМС код')}
+                              {t('СМС код')}
                             </label>
                             <OtpInput
                               value={otpCode}
@@ -349,7 +348,7 @@ const SmallCartMobile: FC = () => {
                                 className="text-xs text-yellow mt-3 outline-none focus:outline-none border-b border-yellow pb-0.5"
                                 onClick={(e) => getNewCode(e)}
                               >
-                                {tr('Получить код снова')}
+                                {t('Получить код снова')}
                               </button>
                             )}
                           </div>
@@ -385,7 +384,7 @@ const SmallCartMobile: FC = () => {
                                   ></path>
                                 </svg>
                               ) : (
-                                tr('Войти')
+                                t('Войти')
                               )}
                             </button>
                           </div>
@@ -397,7 +396,7 @@ const SmallCartMobile: FC = () => {
                         <form onSubmit={handleSubmit(onSubmit)}>
                           <div className="mt-10">
                             <label className="text-sm text-gray-400 mb-2 block">
-                              {tr('Номер телефона')}
+                              {t('Номер телефона')}
                             </label>
                             <div className="relative">
                               <Controller
@@ -441,7 +440,7 @@ const SmallCartMobile: FC = () => {
                           {showUserName && (
                             <div className="mt-10">
                               <label className="text-sm text-gray-400 mb-2 block">
-                                {tr('Ваше имя')}
+                                {t('Ваше имя')}
                               </label>
                               <div className="relative">
                                 <input
@@ -492,7 +491,7 @@ const SmallCartMobile: FC = () => {
                                   ></path>
                                 </svg>
                               ) : (
-                                tr('Получить код')
+                                t('Получить код')
                               )}
                             </button>
                           </div>

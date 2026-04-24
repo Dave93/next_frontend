@@ -11,61 +11,65 @@ msgstr ""
 msgid "2NIDWU"
 msgstr "Biz haqimizda"
 
-#: components_new/auth/SignInModalApp.tsx:90
+#: components_new/auth/SignInModalApp.tsx:100
 msgid "MkmIOy"
 msgstr "Kapcha tayyor emas, qayta urinib ko'ring"
 
-#: components_new/auth/SignInModalApp.tsx:121
+#: components_new/auth/SignInModalApp.tsx:131
 msgid "T3C/O+"
 msgstr "Kodni yuborib bo'lmadi"
 
-#: components_new/auth/SignInModalApp.tsx:152
+#: components_new/auth/SignInModalApp.tsx:163
 msgid "I2djCx"
 msgstr "Noto'g'ri kod"
 
-#: components_new/auth/SignInModalApp.tsx:223
+#: components_new/auth/SignInModalApp.tsx:241
+#: components_new/common/SmallCartMobileApp.tsx:303
 msgid "BgypuO"
 msgstr "Avtorizatsiya"
 
-#: components_new/auth/SignInModalApp.tsx:230
+#: components_new/auth/SignInModalApp.tsx:245
+#: components_new/common/SmallCartMobileApp.tsx:399
 #: components_new/contacts/ContactsApp.tsx:162
 #: components_new/profile/PersonalDataApp.tsx:134
 msgid "ANbLXk"
 msgstr "Telefon raqami"
 
-#: components_new/auth/SignInModalApp.tsx:253
+#: components_new/auth/SignInModalApp.tsx:246
+msgid "XSNwUH"
+msgstr "Tasdiqlash kodi"
+
+#: components_new/auth/SignInModalApp.tsx:340
 #: components_new/contacts/ContactsApp.tsx:137
 #: components_new/profile/PersonalDataApp.tsx:115
 msgid "qXh0mH"
 msgstr "Ism"
 
-#: components_new/auth/SignInModalApp.tsx:260
+#: components_new/auth/SignInModalApp.tsx:349
 msgid "3dXnzB"
 msgstr "Agar xabar kelmagan bo'lsa, bizga qo'ng'iroq qiling"
 
-#: components_new/auth/SignInModalApp.tsx:284
+#: components_new/auth/SignInModalApp.tsx:372
+#: components_new/common/SmallCartMobileApp.tsx:494
 msgid "K6f7aa"
 msgstr "Kod olish"
 
-#: components_new/auth/SignInModalApp.tsx:290
-msgid "XSNwUH"
-msgstr "Tasdiqlash kodi"
-
-#: components_new/auth/SignInModalApp.tsx:308
+#: components_new/auth/SignInModalApp.tsx:397
 msgid "AYsWBj"
 msgstr "Kod raqamga yuborildi"
 
-#: components_new/auth/SignInModalApp.tsx:323
+#: components_new/auth/SignInModalApp.tsx:412
+#: components_new/common/SmallCartMobileApp.tsx:387
 #: components_new/header/SignInButtonApp.tsx:22
 #: components_new/header/SignInButtonApp.tsx:38
 msgid "oU4rxk"
 msgstr "Kirish"
 
-#: components_new/auth/SignInModalApp.tsx:333
+#: components_new/auth/SignInModalApp.tsx:422
 msgid "kOs//D"
 msgstr "Kodni qayta yuborish vaqti"
 
-#: components_new/auth/SignInModalApp.tsx:334
+#: components_new/auth/SignInModalApp.tsx:423
 msgid "hPZJnP"
 msgstr "Kodni qayta yuborish"
 
@@ -87,6 +91,22 @@ msgstr "Menyuga qaytish"
 #: components_new/mobile/MobileBottomNavApp.tsx:67
 msgid "Ukms9b"
 msgstr "Savat"
+
+#: components_new/common/SmallCartMobileApp.tsx:312
+msgid "wue03V"
+msgstr "Tizimga muvaffaqiyatli kirdingiz"
+
+#: components_new/common/SmallCartMobileApp.tsx:322
+msgid "eY7wBY"
+msgstr "SMS kod"
+
+#: components_new/common/SmallCartMobileApp.tsx:351
+msgid "14dq0g"
+msgstr "Kodni qayta olish"
+
+#: components_new/common/SmallCartMobileApp.tsx:443
+msgid "x1g9gC"
+msgstr "Ismingiz"
 
 #: components_new/contacts/ContactsApp.tsx:89
 msgid "r+N/QY"
