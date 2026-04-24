@@ -12,7 +12,7 @@ import SignInButtonApp from './header/SignInButtonApp'
 import SideMenuApp from './header/SideMenuApp'
 
 const HeaderApp: FC = () => {
-  const { activeCity, cities, locationData, openSidebar } = useUI() as any
+  const { activeCity, cities, locationData, openLocationTabs } = useUI() as any
   const t = useExtracted()
 
   const chosenCity = useMemo(() => {
@@ -46,7 +46,7 @@ const HeaderApp: FC = () => {
           <div className="hidden md:flex flex-1 justify-center px-6">
             <button
               type="button"
-              onClick={() => openSidebar?.()}
+              onClick={() => openLocationTabs?.()}
               className="flex items-center gap-2 bg-yellow rounded-full px-6 h-11 text-white font-medium shadow-sm hover:shadow transition"
               style={{ backgroundColor: '#FFC22A' }}
             >

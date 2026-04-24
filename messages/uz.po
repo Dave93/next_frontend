@@ -183,6 +183,59 @@ msgstr "Barcha huquqlar himoyalangan"
 msgid "6QS/OL"
 msgstr "Sizning shahringiz"
 
+#: components_new/header/LocationTabsModalApp.tsx:235
+msgid "3qtFxi"
+msgstr ""
+
+#: components_new/header/LocationTabsModalApp.tsx:249
+msgid "k9Dt2Z"
+msgstr ""
+
+#: components_new/header/LocationTabsModalApp.tsx:257
+#: components_new/HeaderApp.tsx:26
+msgid "EiCEoo"
+msgstr "Manzilni tanlang"
+
+#: components_new/header/LocationTabsModalApp.tsx:307
+msgid "qnmGg/"
+msgstr ""
+
+#: components_new/header/LocationTabsModalApp.tsx:358
+msgid "2lYwXC"
+msgstr ""
+
+#: components_new/header/LocationTabsModalApp.tsx:367
+msgid "PE9WEy"
+msgstr ""
+
+#: components_new/header/LocationTabsModalApp.tsx:379
+msgid "bIzegt"
+msgstr ""
+
+#: components_new/header/LocationTabsModalApp.tsx:403
+msgid "DtOC+U"
+msgstr ""
+
+#: components_new/header/LocationTabsModalApp.tsx:412
+msgid "KIMRoB"
+msgstr ""
+
+#: components_new/header/LocationTabsModalApp.tsx:421
+msgid "2ifljK"
+msgstr ""
+
+#: components_new/header/LocationTabsModalApp.tsx:434
+msgid "F83kk8"
+msgstr ""
+
+#: components_new/header/LocationTabsModalApp.tsx:443
+msgid "+RxnK3"
+msgstr ""
+
+#: components_new/header/LocationTabsModalApp.tsx:495
+msgid "XzVpjf"
+msgstr ""
+
 #: components_new/header/SideMenuApp.tsx:22
 msgid "Vj2nh2"
 msgstr "Restoran manzillari"
@@ -197,10 +250,6 @@ msgstr "Aksiyalar"
 #: components_new/header/SideMenuApp.tsx:25
 msgid "gaIt7P"
 msgstr "Maxfiylik"
-
-#: components_new/HeaderApp.tsx:26
-msgid "EiCEoo"
-msgstr "Manzilni tanlang"
 
 #: components_new/mobile/MobileBottomNavApp.tsx:52
 msgid "XnLtsK"
@@ -245,21 +294,21 @@ msgstr "O'z pitsangizni yarating"
 msgid "WRnc7y"
 msgstr "Pitsa yaratish"
 
-#: components_new/product/ProductItemNewApp.tsx:622
-#: components_new/product/ProductItemNewApp.tsx:673
+#: components_new/product/ProductItemNewApp.tsx:621
+#: components_new/product/ProductItemNewApp.tsx:672
 msgid "zXkVd5"
 msgstr "Qo'shish"
 
-#: components_new/product/ProductItemNewApp.tsx:778
+#: components_new/product/ProductItemNewApp.tsx:777
 msgid "kazY5+"
 msgstr "Mahsulot vaqtinchalik mavjud emas"
 
-#: components_new/product/ProductItemNewApp.tsx:968
-#: components_new/product/ProductItemNewApp.tsx:1215
+#: components_new/product/ProductItemNewApp.tsx:967
+#: components_new/product/ProductItemNewApp.tsx:1217
 msgid "JwQa2e"
 msgstr "Savatga"
 
-#: components_new/product/ProductItemNewApp.tsx:1131
+#: components_new/product/ProductItemNewApp.tsx:1133
 msgid "AH6N5n"
 msgstr "Pitsaga qo'shish"
 

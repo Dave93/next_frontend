@@ -183,6 +183,59 @@ msgstr "Все права защищены"
 msgid "6QS/OL"
 msgstr "Ваш город"
 
+#: components_new/header/LocationTabsModalApp.tsx:235
+msgid "3qtFxi"
+msgstr "Доставка"
+
+#: components_new/header/LocationTabsModalApp.tsx:249
+msgid "k9Dt2Z"
+msgstr "Самовывоз"
+
+#: components_new/header/LocationTabsModalApp.tsx:257
+#: components_new/HeaderApp.tsx:26
+msgid "EiCEoo"
+msgstr "Укажите свой адрес"
+
+#: components_new/header/LocationTabsModalApp.tsx:307
+msgid "qnmGg/"
+msgstr "Адрес:"
+
+#: components_new/header/LocationTabsModalApp.tsx:358
+msgid "2lYwXC"
+msgstr "Дом"
+
+#: components_new/header/LocationTabsModalApp.tsx:367
+msgid "PE9WEy"
+msgstr "Квартира"
+
+#: components_new/header/LocationTabsModalApp.tsx:379
+msgid "bIzegt"
+msgstr "Указать подъезд и домофон"
+
+#: components_new/header/LocationTabsModalApp.tsx:403
+msgid "DtOC+U"
+msgstr "Подъезд"
+
+#: components_new/header/LocationTabsModalApp.tsx:412
+msgid "KIMRoB"
+msgstr "Код от домофона"
+
+#: components_new/header/LocationTabsModalApp.tsx:421
+msgid "2ifljK"
+msgstr "Название адреса. Например, Дом Работа..."
+
+#: components_new/header/LocationTabsModalApp.tsx:434
+msgid "F83kk8"
+msgstr "Выберите ресторан"
+
+#: components_new/header/LocationTabsModalApp.tsx:443
+msgid "+RxnK3"
+msgstr "Загрузка..."
+
+#: components_new/header/LocationTabsModalApp.tsx:495
+msgid "XzVpjf"
+msgstr "Подтвердить"
+
 #: components_new/header/SideMenuApp.tsx:22
 msgid "Vj2nh2"
 msgstr "Адреса ресторанов"
@@ -197,10 +250,6 @@ msgstr "Акции"
 #: components_new/header/SideMenuApp.tsx:25
 msgid "gaIt7P"
 msgstr "Конфиденциальность"
-
-#: components_new/HeaderApp.tsx:26
-msgid "EiCEoo"
-msgstr "Укажите свой адрес"
 
 #: components_new/mobile/MobileBottomNavApp.tsx:52
 msgid "XnLtsK"
@@ -245,21 +294,21 @@ msgstr "Соберите свою пиццу"
 msgid "WRnc7y"
 msgstr "Собрать пиццу"
 
-#: components_new/product/ProductItemNewApp.tsx:622
-#: components_new/product/ProductItemNewApp.tsx:673
+#: components_new/product/ProductItemNewApp.tsx:621
+#: components_new/product/ProductItemNewApp.tsx:672
 msgid "zXkVd5"
 msgstr "Добавить"
 
-#: components_new/product/ProductItemNewApp.tsx:778
+#: components_new/product/ProductItemNewApp.tsx:777
 msgid "kazY5+"
 msgstr "Товар временно недоступен"
 
-#: components_new/product/ProductItemNewApp.tsx:968
-#: components_new/product/ProductItemNewApp.tsx:1215
+#: components_new/product/ProductItemNewApp.tsx:967
+#: components_new/product/ProductItemNewApp.tsx:1217
 msgid "JwQa2e"
 msgstr "В корзину"
 
-#: components_new/product/ProductItemNewApp.tsx:1131
+#: components_new/product/ProductItemNewApp.tsx:1133
 msgid "AH6N5n"
 msgstr "Добавить к пицце"
 
