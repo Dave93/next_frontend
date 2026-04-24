@@ -1,6 +1,7 @@
 'use client'
 
 import { FC, memo, useState, useEffect, useCallback, useRef } from 'react'
+import Image from 'next/image'
 import useEmblaCarousel from 'embla-carousel-react'
 import Autoplay from 'embla-carousel-autoplay'
 import axios from 'axios'
@@ -63,16 +64,17 @@ const SliderCarousel: FC<CarouselProps> = ({ sliders }) => {
                 <a href={item.link} className="block w-full">
                   {item.asset && (
                     <>
-                      <img
+                      <Image
                         src={item.asset[0].link}
                         className="hidden md:block w-full max-h-[400px] object-cover"
                         loading={index === 0 ? 'eager' : 'lazy'}
-                        fetchPriority={index === 0 ? 'high' : 'auto'}
+                        priority={index === 0}
                         width={1200}
                         height={400}
+                        sizes="(min-width: 768px) 1160px, 100vw"
                         alt=""
                       />
-                      <img
+                      <Image
                         src={
                           item.asset[1]
                             ? item.asset[1].link
@@ -80,9 +82,10 @@ const SliderCarousel: FC<CarouselProps> = ({ sliders }) => {
                         }
                         className="md:hidden w-full h-[44vw] object-cover"
                         loading={index === 0 ? 'eager' : 'lazy'}
-                        fetchPriority={index === 0 ? 'high' : 'auto'}
+                        priority={index === 0}
                         width={600}
                         height={264}
+                        sizes="100vw"
                         alt=""
                       />
                     </>
@@ -91,16 +94,17 @@ const SliderCarousel: FC<CarouselProps> = ({ sliders }) => {
               ) : (
                 item.asset && (
                   <>
-                    <img
+                    <Image
                       src={item.asset[0].link}
                       className="hidden md:block w-full max-h-[400px] object-cover"
                       loading={index === 0 ? 'eager' : 'lazy'}
-                      fetchPriority={index === 0 ? 'high' : 'auto'}
+                      priority={index === 0}
                       width={1200}
                       height={400}
+                      sizes="(min-width: 768px) 1160px, 100vw"
                       alt=""
                     />
-                    <img
+                    <Image
                       src={
                         item.asset[1]
                           ? item.asset[1].link
@@ -108,9 +112,10 @@ const SliderCarousel: FC<CarouselProps> = ({ sliders }) => {
                       }
                       className="md:hidden w-full h-[44vw] object-cover"
                       loading={index === 0 ? 'eager' : 'lazy'}
-                      fetchPriority={index === 0 ? 'high' : 'auto'}
+                      priority={index === 0}
                       width={600}
                       height={264}
+                      sizes="100vw"
                       alt=""
                     />
                   </>

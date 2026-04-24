@@ -28,7 +28,11 @@ const config: NextConfig = {
       { protocol: 'https', hostname: 'choparpizza.uz' },
       { protocol: 'https', hostname: 'api.choparpizza.uz' },
       { protocol: 'https', hostname: 'cdn.choparpizza.uz' },
+      { protocol: 'https', hostname: 'n.choparpizza.uz' },
     ],
+    deviceSizes: [360, 480, 640, 768, 1024, 1280, 1536],
+    imageSizes: [16, 32, 48, 64, 96, 120, 160, 250, 384],
+    minimumCacheTTL: 60 * 60 * 24 * 30,
   },
 }
 

@@ -8,6 +8,7 @@ import React, {
   useRef,
   useEffect,
 } from 'react'
+import Image from 'next/image'
 import { Link } from '../../i18n/navigation'
 import currency from 'currency.js'
 import {
@@ -67,9 +68,6 @@ const ProductItemNewApp: FC<ProductItem> = ({ product, channelName }) => {
 
   const [addedToCart, setAddedToCart] = useState(false)
   const [imageLoaded, setImageLoaded] = useState(false)
-  const imgRefCallback = (el: HTMLImageElement | null) => {
-    if (el?.complete && el.naturalWidth > 0) setImageLoaded(true)
-  }
 
   const hashids = useMemo(
     () => new Hashids('basket', 15, 'abcdefghijklmnopqrstuvwxyz1234567890'),
@@ -691,11 +689,11 @@ const ProductItemNewApp: FC<ProductItem> = ({ product, channelName }) => {
                   <div className="mx-auto w-[120px] h-[96px] rounded-lg bg-gray-100 animate-pulse" />
                 )}
                 {store.image ? (
-                  <img
-                    ref={imgRefCallback}
+                  <Image
                     src={store.image}
                     width={120}
                     height={96}
+                    sizes="120px"
                     alt={store?.attribute_data?.name[channelName][locale || 'ru']}
                     className={`mx-auto object-contain ${imageLoaded ? '' : 'absolute opacity-0'}`}
                     itemProp="image"
@@ -820,11 +818,11 @@ const ProductItemNewApp: FC<ProductItem> = ({ product, channelName }) => {
                 <div className="mx-auto w-[250px] h-[250px] rounded-full bg-gray-100 animate-pulse" />
               )}
               {store.image ? (
-                <img
-                  ref={imgRefCallback}
+                <Image
                   src={store.image}
                   width={250}
                   height={250}
+                  sizes="250px"
                   alt={store?.attribute_data?.name[channelName][locale || 'ru']}
                   className={`transform motion-safe:group-hover:scale-105 transition duration-500 object-cover ${imageLoaded ? '' : 'absolute opacity-0'}`}
                   itemProp="image"
@@ -1054,14 +1052,17 @@ const ProductItemNewApp: FC<ProductItem> = ({ product, channelName }) => {
                         <div className=" overflow-y-auto mt-6 overflow-hidden">
                           <div className=" mx-auto bg-cover flex relative mt-10">
                             {store.image ? (
-                              <img
+                              <Image
                                 src={store.image}
+                                width={500}
+                                height={500}
+                                sizes="(max-width: 768px) 90vw, 500px"
                                 alt={
                                   store?.attribute_data?.name[channelName][
                                     locale || 'ru'
                                   ]
                                 }
-                                className="mx-auto"
+                                className="mx-auto h-auto w-auto"
                               />
                             ) : (
                               <img
