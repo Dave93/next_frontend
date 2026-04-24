@@ -15,7 +15,19 @@ async function fetchAllProductsRaw(citySlug?: string) {
 
 async function fetchProductByIdRaw(id: string, citySlug?: string) {
   const all = await fetchAllProductsRaw(citySlug)
-  return all.find((p) => String((p as any).id) === String(id)) || null
+  const target = String(id)
+  for (const cat of all as any[]) {
+    if (String(cat?.id) === target) return cat
+    const items = Array.isArray(cat?.items) ? cat.items : []
+    for (const item of items) {
+      if (String(item?.id) === target) return item
+      const variants = Array.isArray(item?.variants) ? item.variants : []
+      for (const v of variants) {
+        if (String(v?.id) === target) return item
+      }
+    }
+  }
+  return null
 }
 
 export const fetchAllProducts = cache(fetchAllProductsRaw, ['products-all'], {
@@ -23,7 +35,11 @@ export const fetchAllProducts = cache(fetchAllProductsRaw, ['products-all'], {
   tags: ['products'],
 })
 
-export const fetchProductById = cache(fetchProductByIdRaw, ['product-by-id'], {
-  revalidate: 600,
-  tags: ['products'],
-})
+export const fetchProductById = cache(
+  fetchProductByIdRaw,
+  ['product-by-id-v2'],
+  {
+    revalidate: 600,
+    tags: ['products'],
+  }
+)
