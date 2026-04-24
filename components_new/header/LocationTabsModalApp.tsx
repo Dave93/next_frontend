@@ -12,6 +12,10 @@ import { XIcon } from '@heroicons/react/outline'
 import { useUI } from '@components/ui/context'
 import { useExtracted, useLocale } from 'next-intl'
 import axios from 'axios'
+import dynamic from 'next/dynamic'
+import MapErrorBoundary from './MapErrorBoundary'
+
+const LocationMap = dynamic(() => import('./LocationMap'), { ssr: false })
 
 const webAddress = process.env.NEXT_PUBLIC_API_URL
 
@@ -184,6 +188,29 @@ const LocationTabsModalApp: FC = () => {
     setCoords([parseFloat(s.coordinates.lat), parseFloat(s.coordinates.long)])
     setSuggestions([])
   }
+
+  const handleMapPick = async (lat: number, lon: number) => {
+    setCoords([lat, lon])
+    try {
+      const { data } = await axios.get(
+        `${webAddress}/api/geocode?lat=${lat}&lon=${lon}`
+      )
+      const item = Array.isArray(data) ? data[0] : data
+      const text =
+        item?.formatted || item?.title || item?.address || null
+      if (text) setAddress(text)
+    } catch {
+      // ignore — keep marker without text
+    }
+  }
+
+  const mapCenter = useMemo<[number, number]>(() => {
+    const ac: any = activeCity
+    const lat = parseFloat(ac?.lat ?? ac?.latitude ?? ac?.location?.lat)
+    const lon = parseFloat(ac?.lon ?? ac?.longitude ?? ac?.location?.lon)
+    if (!isNaN(lat) && !isNaN(lon)) return [lat, lon]
+    return [41.3111, 69.2797]
+  }, [activeCity])
 
   const handleSubmit = () => {
     if (tab === 'deliver') {
@@ -544,6 +571,28 @@ const LocationTabsModalApp: FC = () => {
                       />
                     </div>
                   )}
+
+                  <div className="mt-4">
+                    <MapErrorBoundary
+                      fallback={
+                        <div
+                          style={{
+                            height: 280,
+                            borderRadius: 16,
+                            border: '1px solid #E5E7EB',
+                            background: '#F3F4F6',
+                          }}
+                        />
+                      }
+                    >
+                      <LocationMap
+                        center={mapCenter}
+                        coords={coords}
+                        onPick={handleMapPick}
+                        height={280}
+                      />
+                    </MapErrorBoundary>
+                  </div>
                 </div>
               )}
 
