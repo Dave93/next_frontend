@@ -37,10 +37,10 @@ export default function LayoutWrapper({ children, pageProps }: Props) {
   }, [pageProps.currentCity, pageProps.cities, setActiveCity, setCitiesData])
 
   return (
-    <>
+    <div className="flex flex-col min-h-screen">
       <HeaderApp />
       <SmallCartMobileApp />
-      <main>{children}</main>
+      <main className="flex-1 w-full">{children}</main>
       <MobileBottomNavApp />
       <FooterApp
         categories={pageProps.categories}
@@ -50,6 +50,6 @@ export default function LayoutWrapper({ children, pageProps }: Props) {
         config={pageProps.config}
         locale={pageProps.locale}
       />
-    </>
+    </div>
   )
 }

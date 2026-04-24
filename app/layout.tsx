@@ -36,7 +36,7 @@ export default async function RootLayout({
       <head>
         <RestaurantJsonLd />
       </head>
-      <body className="loading">
+      <body className="loading min-h-screen flex flex-col">
         <noscript
           dangerouslySetInnerHTML={{
             __html: `<iframe src="https://www.googletagmanager.com/ns.html?id=GTM-TSJ79WZ" height="0" width="0" style="display:none;visibility:hidden"></iframe>`,
