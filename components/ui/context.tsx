@@ -86,6 +86,7 @@ export interface State {
   stopProducts: number[]
   addressId: number | null
   addressList: Address[] | null
+  productDrawerProduct: any | null
 }
 
 const initialState = {
@@ -107,6 +108,7 @@ const initialState = {
   stopProducts: [],
   addressId: null,
   addressList: null,
+  productDrawerProduct: null,
 }
 
 type Action =
@@ -194,6 +196,13 @@ type Action =
   | {
       type: 'SELECT_ADDRESS'
       value: AnyObject
+    }
+  | {
+      type: 'OPEN_PRODUCT_DRAWER'
+      value: any
+    }
+  | {
+      type: 'CLOSE_PRODUCT_DRAWER'
     }
 
 type MODAL_VIEWS =
@@ -384,6 +393,18 @@ function uiReducer(state: State, action: Action) {
         addressId: action.value.addressId,
       }
     }
+    case 'OPEN_PRODUCT_DRAWER': {
+      return {
+        ...state,
+        productDrawerProduct: action.value,
+      }
+    }
+    case 'CLOSE_PRODUCT_DRAWER': {
+      return {
+        ...state,
+        productDrawerProduct: null,
+      }
+    }
   }
 }
 
@@ -561,6 +582,16 @@ export const UIProvider: FC<UIProviderProps> = (props) => {
     [dispatch]
   )
 
+  const openProductDrawer = useCallback(
+    (value: any) => dispatch({ type: 'OPEN_PRODUCT_DRAWER', value }),
+    [dispatch]
+  )
+
+  const closeProductDrawer = useCallback(
+    () => dispatch({ type: 'CLOSE_PRODUCT_DRAWER' }),
+    [dispatch]
+  )
+
   const value = useMemo(
     () => ({
       ...state,
@@ -590,6 +621,8 @@ export const UIProvider: FC<UIProviderProps> = (props) => {
       setAddressId,
       setAddressList,
       selectAddress,
+      openProductDrawer,
+      closeProductDrawer,
     }),
     [state]
   )

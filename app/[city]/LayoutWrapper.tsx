@@ -12,6 +12,7 @@ import SmallCartMobileApp from '../../components_new/common/SmallCartMobileApp'
 import MobileBottomNavApp from '../../components_new/mobile/MobileBottomNavApp'
 import SignInModalApp from '../../components_new/auth/SignInModalApp'
 import LocationTabsModalApp from '../../components_new/header/LocationTabsModalApp'
+import ProductDrawerApp from '../../components_new/product/ProductDrawerApp'
 
 type Props = {
   children: React.ReactNode
@@ -56,6 +57,7 @@ export default function LayoutWrapper({ children, pageProps }: Props) {
       />
       <SignInModalApp />
       <LocationTabsModalApp />
+      <ProductDrawerApp />
     </div>
   )
 }
