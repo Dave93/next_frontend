@@ -38,14 +38,37 @@ const parseHHMM = (s: string | null | undefined): number | null => {
   return parseInt(m[1], 10) * 60 + parseInt(m[2], 10)
 }
 
-const isTerminalOpenNow = (open?: string | null, close?: string | null) => {
-  const o = parseHHMM(open)
-  const c = parseHHMM(close)
-  if (o == null || c == null) return true
-  const now = new Date()
-  const minutes = now.getHours() * 60 + now.getMinutes()
-  if (c >= o) return minutes >= o && minutes < c
-  return minutes >= o || minutes < c
+const tashkentMinutesNow = () => {
+  const tz = new Intl.DateTimeFormat('en-GB', {
+    timeZone: 'Asia/Tashkent',
+    hour: '2-digit',
+    minute: '2-digit',
+    hour12: false,
+  }).format(new Date())
+  const m = /(\d{2}):(\d{2})/.exec(tz)
+  if (!m) return new Date().getHours() * 60 + new Date().getMinutes()
+  return parseInt(m[1], 10) * 60 + parseInt(m[2], 10)
+}
+
+const extractScheduleFromDesc = (
+  desc: string | null | undefined
+): { open: number; close: number } | null => {
+  if (!desc) return null
+  const m = /(\d{1,2}[:.]\d{2})\s*[-–—]\s*(\d{1,2}[:.]\d{2})/.exec(desc)
+  if (!m) return null
+  const o = parseHHMM(m[1])
+  const c = parseHHMM(m[2])
+  if (o == null || c == null) return null
+  return { open: o, close: c }
+}
+
+const isTerminalOpenNow = (desc?: string | null) => {
+  const sched = extractScheduleFromDesc(desc)
+  if (!sched) return true
+  const now = tashkentMinutesNow()
+  if (sched.close >= sched.open)
+    return now >= sched.open && now < sched.close
+  return now >= sched.open || now < sched.close
 }
 
 const LocationTabsModalApp: FC = () => {
@@ -559,7 +582,7 @@ const LocationTabsModalApp: FC = () => {
                         p.desc ||
                         ''
                       const isActive = terminal?.id === p.id
-                      const open = isTerminalOpenNow(p.open_time, p.close_time)
+                      const open = isTerminalOpenNow(desc)
                       return (
                         <button
                           key={p.id}
