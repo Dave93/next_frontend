@@ -286,7 +286,7 @@ const LocationTabsModalApp: FC = () => {
           <DialogBackdrop className="fixed inset-0 bg-black/50" />
         </TransitionChild>
 
-        <div className="min-h-screen px-4 flex items-start justify-center pt-10">
+        <div className="min-h-screen px-3 md:px-4 flex items-start justify-center pt-4 md:pt-10">
           <TransitionChild
             as={Fragment}
             enter="ease-out duration-200"
@@ -297,13 +297,7 @@ const LocationTabsModalApp: FC = () => {
             leaveTo="opacity-0 translate-y-4"
           >
             <DialogPanel
-              className="relative bg-white shadow-xl"
-              style={{
-                width: '100%',
-                maxWidth: 1160,
-                padding: 20,
-                borderRadius: 8,
-              }}
+              className="relative bg-white shadow-xl w-full max-w-[1160px] p-3 md:p-5 rounded-lg"
             >
               <button
                 type="button"
@@ -315,16 +309,14 @@ const LocationTabsModalApp: FC = () => {
               </button>
 
               <div
-                className="flex rounded-full overflow-hidden mb-5"
-                style={{ background: GRAY_100, height: 51 }}
+                className="flex rounded-full overflow-hidden mb-4 md:mb-5 h-[44px] md:h-[51px]"
+                style={{ background: GRAY_100 }}
               >
                 <button
                   type="button"
                   onClick={() => setTab('deliver')}
-                  className="flex-1 rounded-full transition"
+                  className="flex-1 rounded-full transition text-base md:text-lg font-bold"
                   style={{
-                    fontSize: 18,
-                    fontWeight: 700,
                     background: tab === 'deliver' ? YELLOW : 'transparent',
                     color: tab === 'deliver' ? '#fff' : GRAY_400,
                   }}
@@ -334,10 +326,8 @@ const LocationTabsModalApp: FC = () => {
                 <button
                   type="button"
                   onClick={() => setTab('pickup')}
-                  className="flex-1 rounded-full transition"
+                  className="flex-1 rounded-full transition text-base md:text-lg font-bold"
                   style={{
-                    fontSize: 18,
-                    fontWeight: 700,
                     background: tab === 'pickup' ? YELLOW : 'transparent',
                     color: tab === 'pickup' ? '#fff' : GRAY_400,
                   }}
@@ -436,11 +426,7 @@ const LocationTabsModalApp: FC = () => {
                     {t('Адрес:')}
                   </div>
                   <div
-                    className="grid"
-                    style={{
-                      gridTemplateColumns: '630px 180px 270px',
-                      gap: 12,
-                    }}
+                    className="grid grid-cols-1 md:grid-cols-[630px_180px_270px] gap-3"
                   >
                     <div className="relative">
                       <input
@@ -452,11 +438,12 @@ const LocationTabsModalApp: FC = () => {
                           setTimeout(() => setIsFocused(false), 150)
                         }
                         placeholder={t('Адрес')}
-                        className="w-full outline-none rounded-full"
+                        className="w-full outline-none rounded-full px-[18px] md:px-8"
                         style={{
                           background: GRAY_100,
                           border: `1px solid ${GRAY_500}`,
-                          padding: '12px 32px',
+                          paddingTop: 12,
+                          paddingBottom: 12,
                           fontSize: 16,
                           height: 50,
                         }}
@@ -500,11 +487,12 @@ const LocationTabsModalApp: FC = () => {
                       value={house}
                       onChange={(e) => setHouse(e.target.value)}
                       placeholder={t('Дом')}
-                      className="outline-none rounded-full"
+                      className="outline-none rounded-full px-[18px] md:px-8"
                       style={{
                         background: GRAY_100,
                         border: `1px solid ${GRAY_500}`,
-                        padding: '12px 32px',
+                        paddingTop: 12,
+                        paddingBottom: 12,
                         fontSize: 16,
                         height: 50,
                       }}
@@ -514,11 +502,12 @@ const LocationTabsModalApp: FC = () => {
                       value={flat}
                       onChange={(e) => setFlat(e.target.value)}
                       placeholder={t('Квартира')}
-                      className="outline-none rounded-full"
+                      className="outline-none rounded-full px-[18px] md:px-8"
                       style={{
                         background: GRAY_100,
                         border: `1px solid ${GRAY_500}`,
-                        padding: '12px 32px',
+                        paddingTop: 12,
+                        paddingBottom: 12,
                         fontSize: 16,
                         height: 50,
                       }}
@@ -550,22 +539,19 @@ const LocationTabsModalApp: FC = () => {
 
                   {showExtras && (
                     <div
-                      className="grid mt-3"
-                      style={{
-                        gridTemplateColumns: '196px 196px 560px',
-                        gap: 12,
-                      }}
+                      className="grid mt-3 grid-cols-1 md:grid-cols-[196px_196px_560px] gap-3"
                     >
                       <input
                         type="text"
                         value={entrance}
                         onChange={(e) => setEntrance(e.target.value)}
                         placeholder={t('Подъезд')}
-                        className="outline-none rounded-full"
+                        className="outline-none rounded-full px-[18px] md:px-8"
                         style={{
                           background: GRAY_100,
                           border: `1px solid ${GRAY_500}`,
-                          padding: '12px 32px',
+                          paddingTop: 12,
+                          paddingBottom: 12,
                           fontSize: 16,
                           height: 50,
                         }}
@@ -575,11 +561,12 @@ const LocationTabsModalApp: FC = () => {
                         value={doorCode}
                         onChange={(e) => setDoorCode(e.target.value)}
                         placeholder={t('Код от домофона')}
-                        className="outline-none rounded-full"
+                        className="outline-none rounded-full px-[18px] md:px-8"
                         style={{
                           background: GRAY_100,
                           border: `1px solid ${GRAY_500}`,
-                          padding: '12px 32px',
+                          paddingTop: 12,
+                          paddingBottom: 12,
                           fontSize: 16,
                           height: 50,
                         }}
@@ -589,11 +576,12 @@ const LocationTabsModalApp: FC = () => {
                         value={label}
                         onChange={(e) => setLabel(e.target.value)}
                         placeholder={t('Название адреса. Например, Дом Работа...')}
-                        className="outline-none rounded-full"
+                        className="outline-none rounded-full px-[18px] md:px-8"
                         style={{
                           background: GRAY_100,
                           border: `1px solid ${GRAY_500}`,
-                          padding: '12px 32px',
+                          paddingTop: 12,
+                          paddingBottom: 12,
                           fontSize: 16,
                           height: 50,
                         }}
@@ -612,15 +600,11 @@ const LocationTabsModalApp: FC = () => {
                     {t('Выберите пиццерию:')}
                   </div>
                   <div
-                    className="grid"
-                    style={{
-                      gridTemplateColumns: 'repeat(4, 274px)',
-                      gap: 8,
-                    }}
+                    className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-[repeat(4,274px)] gap-2"
                   >
                     {pickupPoints.length === 0 && (
                       <div
-                        className="col-span-4 text-center py-8"
+                        className="col-span-1 sm:col-span-2 md:col-span-4 text-center py-8"
                         style={{ color: GRAY_400 }}
                       >
                         {t('Загрузка...')}
@@ -713,16 +697,13 @@ const LocationTabsModalApp: FC = () => {
                 </div>
               )}
 
-              <div className="flex justify-end mt-5">
+              <div className="flex justify-stretch md:justify-end mt-4 md:mt-5">
                 <button
                   type="button"
                   onClick={handleSubmit}
                   disabled={submitDisabled}
-                  className="rounded-full"
+                  className="rounded-full w-full md:w-auto py-3 md:py-3 px-6 md:px-12 text-base md:text-lg font-bold"
                   style={{
-                    padding: '12px 48px',
-                    fontSize: 18,
-                    fontWeight: 700,
                     color: '#fff',
                     background: submitDisabled ? '#D1D5DB' : YELLOW,
                     cursor: submitDisabled ? 'not-allowed' : 'pointer',
