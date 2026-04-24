@@ -1,19 +1,14 @@
 'use client'
 
-import { FC, useEffect, useMemo, useState } from 'react'
+import { FC } from 'react'
 import { Drawer } from 'vaul'
 import Image from 'next/image'
-import axios from 'axios'
-import Cookies from 'js-cookie'
 import currency from 'currency.js'
-import { useLocale } from 'next-intl'
-import { useExtracted } from 'next-intl'
-import { useCart } from '@framework/cart'
+import { useExtracted, useLocale } from 'next-intl'
 import { useUI } from '@components/ui/context'
 import getAssetUrl from '@utils/getAssetUrl'
-import { trackAddToCart } from '@lib/posthog-events'
+import { useProductBuilder } from './useProductBuilder'
 
-const webAddress = process.env.NEXT_PUBLIC_API_URL
 const YELLOW = '#FAAF04'
 
 const formatPrice = (val: number, locale: string) =>
@@ -21,112 +16,20 @@ const formatPrice = (val: number, locale: string) =>
     pattern: '# !',
     separator: ' ',
     decimal: '.',
-    symbol:
-      locale === 'uz' ? "so'm" : locale === 'en' ? 'sum' : 'сум',
+    symbol: locale === 'uz' ? "so'm" : locale === 'en' ? 'sum' : 'сум',
     precision: 0,
   }).format()
 
-const setCsrf = async () => {
-  let csrf = Cookies.get('X-XSRF-TOKEN')
-  if (!csrf) {
-    const csrfReq = await axios(`${webAddress}/api/keldi`, {
-      method: 'GET',
-      headers: { 'Content-Type': 'application/json' },
-      withCredentials: true,
-    })
-    csrf = Buffer.from(csrfReq.data.result, 'base64').toString('ascii')
-    Cookies.set('X-XSRF-TOKEN', csrf, {
-      expires: new Date(Date.now() + 10 * 60 * 1000),
-    })
-  }
-  axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest'
-  axios.defaults.headers.common['X-CSRF-TOKEN'] = csrf
-  axios.defaults.headers.common['XCSRF-TOKEN'] = csrf
-}
-
 const ProductDrawerApp: FC = () => {
   const ui = useUI() as any
-  const { productDrawerProduct, closeProductDrawer, locationData } = ui
+  const { productDrawerProduct, closeProductDrawer } = ui
   const t = useExtracted()
   const locale = useLocale()
-  const { mutate } = useCart()
   const open = !!productDrawerProduct
 
-  const [activeVariantId, setActiveVariantId] = useState<number | null>(null)
-  const [activeModifiers, setActiveModifiers] = useState<number[]>([])
-  const [isLoading, setIsLoading] = useState(false)
-
-  useEffect(() => {
-    if (!productDrawerProduct) {
-      setActiveVariantId(null)
-      setActiveModifiers([])
-      return
-    }
-    const variants = productDrawerProduct.variants || []
-    if (variants.length) {
-      const fromStore = variants.find((v: any) => v.active)?.id
-      const initial =
-        fromStore ?? variants[1]?.id ?? variants[0]?.id ?? null
-      setActiveVariantId(initial)
-    } else {
-      setActiveVariantId(null)
-    }
-    setActiveModifiers([])
-  }, [productDrawerProduct?.id])
-
-  const variants = productDrawerProduct?.variants || []
-  const activeVariant = useMemo(
-    () =>
-      variants.find((v: any) => v.id === activeVariantId) ||
-      variants[0] ||
-      null,
-    [variants, activeVariantId]
+  const builder = useProductBuilder(productDrawerProduct, () =>
+    closeProductDrawer()
   )
-
-  const modifiers = useMemo(() => {
-    if (!productDrawerProduct) return [] as any[]
-    let mods: any[] = []
-    if (variants.length && activeVariant?.modifiers) {
-      mods = activeVariant.modifiers
-      if (activeVariant.modifierProduct) {
-        const exists = mods.find(
-          (m: any) => m.id === activeVariant.modifierProduct.id
-        )
-        if (!exists) {
-          mods = [
-            ...mods,
-            {
-              id: activeVariant.modifierProduct.id,
-              name_ru: activeVariant.modifierProduct.name_ru,
-              name_uz: activeVariant.modifierProduct.name_uz,
-              name_en: activeVariant.modifierProduct.name_en,
-              price:
-                +activeVariant.modifierProduct.price - +activeVariant.price,
-              assets: activeVariant.modifierProduct.assets || [
-                { local: '/sausage_modifier.png' },
-              ],
-            },
-          ]
-        }
-      }
-    } else if (productDrawerProduct.modifiers) {
-      mods = productDrawerProduct.modifiers
-    }
-    return mods.filter((m: any) => +m.price > 0)
-  }, [productDrawerProduct, activeVariant])
-
-  const basePrice = useMemo(() => {
-    if (activeVariant?.price) return Number(activeVariant.price)
-    if (productDrawerProduct?.price) return Number(productDrawerProduct.price)
-    return 0
-  }, [activeVariant, productDrawerProduct])
-
-  const totalPrice = useMemo(() => {
-    const modSum = modifiers
-      .filter((m: any) => activeModifiers.includes(m.id))
-      .reduce((acc: number, m: any) => acc + Number(m.price || 0), 0)
-    return basePrice + modSum
-  }, [basePrice, modifiers, activeModifiers])
 
   const localizedName = (() => {
     if (!productDrawerProduct) return ''
@@ -152,124 +55,6 @@ const ProductDrawerApp: FC = () => {
       .replace(/\s+/g, ' ')
       .trim()
   })()
-
-  const toggleModifier = (modId: number) => {
-    if (!productDrawerProduct) return
-    const modifierProduct = activeVariant?.modifierProduct || null
-    if (activeModifiers.includes(modId)) {
-      const current = modifiers.find((m: any) => m.id === modId)
-      if (!current || current.price === 0) return
-      setActiveModifiers((prev) => prev.filter((id) => id !== modId))
-      return
-    }
-    let next = [...activeModifiers, modId]
-    if (modifierProduct) {
-      const sausage = modifiers.find((m: any) => m.id === modifierProduct.id)
-      const current = modifiers.find((m: any) => m.id === modId)
-      if (
-        sausage &&
-        current &&
-        next.includes(modifierProduct.id) &&
-        sausage.price < current.price
-      ) {
-        next = next.filter((id) => id !== sausage.id)
-      } else if (sausage && current && current.id === sausage.id) {
-        const richer = modifiers
-          .filter((m: any) => m.price > sausage.price)
-          .map((m: any) => m.id)
-        next = next.filter((id) => !richer.includes(id))
-        next.push(modId)
-      }
-    }
-    setActiveModifiers(next)
-  }
-
-  const handleAddToCart = async () => {
-    if (!productDrawerProduct) return
-    setIsLoading(true)
-    try {
-      await setCsrf()
-      const modifierProduct = activeVariant?.modifierProduct || null
-      let selectedProdId = activeVariant?.id ?? +productDrawerProduct.id
-      let selectedModifiers: any[] = modifiers
-        .filter((m: any) => activeModifiers.includes(m.id))
-        .map((m: any) => ({ id: m.id }))
-
-      if (modifierProduct && activeModifiers.includes(modifierProduct.id)) {
-        selectedProdId = modifierProduct.id
-        const otherPrices = modifiers
-          .filter(
-            (m: any) =>
-              m.id !== modifierProduct.id && activeModifiers.includes(m.id)
-          )
-          .map((m: any) => m.price)
-        selectedModifiers = (modifierProduct.modifiers || [])
-          .filter((m: any) => otherPrices.includes(m.price))
-          .map((m: any) => ({ id: m.id }))
-      }
-
-      const otpToken = Cookies.get('opt_token')
-      const basketId = localStorage.getItem('basketId')
-      const queryDeliveryType =
-        locationData?.deliveryType === 'pickup' ? '?delivery_type=pickup' : ''
-
-      const payload = {
-        variants: [
-          { id: selectedProdId, quantity: 1, modifiers: selectedModifiers },
-        ],
-      }
-      const headers = {
-        'Content-Type': 'application/json',
-        Authorization: `Bearer ${otpToken}`,
-      }
-
-      let basketData: any
-      if (basketId) {
-        const { data } = await axios.post(
-          `${webAddress}/api/baskets-lines${queryDeliveryType}`,
-          { basket_id: basketId, ...payload },
-          { headers, withCredentials: true }
-        )
-        basketData = data.data
-      } else {
-        const { data } = await axios.post(
-          `${webAddress}/api/baskets${queryDeliveryType}`,
-          payload,
-          { headers, withCredentials: true }
-        )
-        basketData = data.data
-        localStorage.setItem('basketId', basketData.encoded_id)
-      }
-
-      await mutate(
-        {
-          id: basketData.id,
-          createdAt: '',
-          currency: { code: basketData.currency },
-          taxesIncluded: basketData.tax_total,
-          lineItems: basketData.lines,
-          lineItemsSubtotalPrice: basketData.sub_total,
-          subtotalPrice: basketData.sub_total,
-          totalPrice: basketData.total,
-        },
-        false
-      )
-
-      trackAddToCart({
-        product_id: productDrawerProduct.id,
-        product_name: productDrawerProduct.name,
-        variant_id: selectedProdId,
-        quantity: 1,
-        price: basePrice / 100,
-      })
-
-      closeProductDrawer()
-    } catch (e) {
-      // swallow
-    } finally {
-      setIsLoading(false)
-    }
-  }
 
   const variantLabel = (v: any) =>
     locale === 'uz'
@@ -332,19 +117,16 @@ const ProductDrawerApp: FC = () => {
               )}
             </div>
 
-            {variants.length > 1 && (
+            {builder.variants.length > 1 && (
               <div className="px-5 mt-5">
                 <div className="bg-gray-100 rounded-full p-1 flex gap-1">
-                  {variants.map((v: any) => {
-                    const isActive = v.id === activeVariant?.id
+                  {builder.variants.map((v: any) => {
+                    const isActive = v.id === builder.activeVariant?.id
                     return (
                       <button
                         key={v.id}
                         type="button"
-                        onClick={() => {
-                          setActiveVariantId(v.id)
-                          setActiveModifiers([])
-                        }}
+                        onClick={() => builder.selectVariant(v.id)}
                         className="flex-1 h-10 rounded-full text-sm font-semibold transition-colors"
                         style={{
                           background: isActive ? '#fff' : 'transparent',
@@ -362,19 +144,19 @@ const ProductDrawerApp: FC = () => {
               </div>
             )}
 
-            {modifiers.length > 0 && (
+            {builder.modifiers.length > 0 && (
               <div className="px-5 mt-6">
                 <h3 className="text-base font-bold text-gray-900 mb-3">
                   {t('Добавить в пиццу')}
                 </h3>
                 <div className="grid grid-cols-2 gap-3">
-                  {modifiers.map((mod: any) => {
-                    const isActive = activeModifiers.includes(mod.id)
+                  {builder.modifiers.map((mod: any) => {
+                    const isActive = builder.activeModifiers.includes(mod.id)
                     return (
                       <button
                         key={mod.id}
                         type="button"
-                        onClick={() => toggleModifier(mod.id)}
+                        onClick={() => builder.toggleModifier(mod.id)}
                         className="relative bg-white rounded-2xl border text-left transition-all overflow-hidden"
                         style={{
                           borderColor: isActive ? YELLOW : '#E5E7EB',
@@ -434,15 +216,17 @@ const ProductDrawerApp: FC = () => {
           >
             <button
               type="button"
-              onClick={handleAddToCart}
-              disabled={isLoading}
+              onClick={builder.addToCart}
+              disabled={builder.isLoading}
               className="w-full h-14 rounded-full font-bold text-white flex items-center justify-between px-6 transition-opacity disabled:opacity-70"
               style={{ background: YELLOW }}
             >
               <span className="text-base">
-                {isLoading ? t('Загрузка...') : t('В корзину')}
+                {builder.isLoading ? t('Загрузка...') : t('В корзину')}
               </span>
-              <span className="text-base">{formatPrice(totalPrice, locale)}</span>
+              <span className="text-base">
+                {formatPrice(builder.totalPrice, locale)}
+              </span>
             </button>
           </div>
         </Drawer.Content>

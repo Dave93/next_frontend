@@ -235,7 +235,8 @@ msgid "NUZRDC"
 msgstr "Выберите пиццерию:"
 
 #: components_new/header/LocationTabsModalApp.tsx:638
-#: components_new/product/ProductDrawerApp.tsx:421
+#: components_new/product/ProductDetailApp.tsx:221
+#: components_new/product/ProductDrawerApp.tsx:225
 msgid "+RxnK3"
 msgstr "Загрузка..."
 
@@ -301,26 +302,28 @@ msgstr "Соберите свою пиццу"
 msgid "WRnc7y"
 msgstr "Собрать пиццу"
 
-#: components_new/product/ProductDrawerApp.tsx:346
+#: components_new/product/ProductDetailApp.tsx:148
+#: components_new/product/ProductDrawerApp.tsx:150
 msgid "F6q7sS"
 msgstr "Добавить в пиццу"
 
-#: components_new/product/ProductDrawerApp.tsx:421
-#: components_new/product/ProductItemNewApp.tsx:975
-#: components_new/product/ProductItemNewApp.tsx:1225
+#: components_new/product/ProductDetailApp.tsx:221
+#: components_new/product/ProductDrawerApp.tsx:225
+#: components_new/product/ProductItemNewApp.tsx:964
+#: components_new/product/ProductItemNewApp.tsx:1214
 msgid "JwQa2e"
 msgstr "В корзину"
 
-#: components_new/product/ProductItemNewApp.tsx:624
-#: components_new/product/ProductItemNewApp.tsx:675
+#: components_new/product/ProductItemNewApp.tsx:619
+#: components_new/product/ProductItemNewApp.tsx:670
 msgid "zXkVd5"
 msgstr "Добавить"
 
-#: components_new/product/ProductItemNewApp.tsx:780
+#: components_new/product/ProductItemNewApp.tsx:775
 msgid "kazY5+"
 msgstr "Товар временно недоступен"
 
-#: components_new/product/ProductItemNewApp.tsx:1141
+#: components_new/product/ProductItemNewApp.tsx:1130
 msgid "AH6N5n"
 msgstr "Добавить к пицце"
 
