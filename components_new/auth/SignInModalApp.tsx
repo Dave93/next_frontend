@@ -208,25 +208,29 @@ const SignInModalApp: FC = () => {
             leaveFrom="opacity-100 scale-100"
             leaveTo="opacity-0 scale-95"
           >
-            <DialogPanel className="relative w-full max-w-md rounded-2xl bg-white p-8 shadow-2xl">
+            <DialogPanel
+              className="relative w-full max-w-md rounded-2xl bg-white shadow-2xl"
+              style={{ padding: '32px' }}
+            >
               <button
                 type="button"
                 onClick={handleClose}
                 aria-label="close"
-                className="absolute top-4 right-4 text-gray-400 hover:text-gray-600"
+                className="absolute outline-none focus:outline-none p-1"
+                style={{ top: 16, right: 16 }}
               >
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#9CA3AF" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                   <line x1="18" y1="6" x2="6" y2="18" />
                   <line x1="6" y1="6" x2="18" y2="18" />
                 </svg>
               </button>
 
-              <div className="flex flex-col items-center mb-4">
+              <div className="flex flex-col items-center">
                 <div
-                  className="w-12 h-12 rounded-full flex items-center justify-center mb-3"
-                  style={{ backgroundColor: '#FFF4D6' }}
+                  className="w-16 h-16 rounded-full flex items-center justify-center mb-3"
+                  style={{ backgroundColor: 'rgba(250, 175, 4, 0.1)' }}
                 >
-                  <svg width="22" height="22" viewBox="0 0 24 24" fill="none">
+                  <svg width="28" height="28" viewBox="0 0 24 24" fill="none">
                     <path
                       d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"
                       stroke="#F9B004"
@@ -236,18 +240,25 @@ const SignInModalApp: FC = () => {
                     />
                   </svg>
                 </div>
-                <h3 className="text-xl font-bold text-gray-800">
+                <h3
+                  className="leading-6 text-2xl md:text-3xl font-bold mb-1 text-gray-900 text-center"
+                >
                   {t('Авторизация')}
                 </h3>
+                <p className="text-sm text-gray-400 mb-6 text-center">
+                  {step === 'phone'
+                    ? t('Номер телефона')
+                    : t('Код подтверждения')}
+                </p>
               </div>
 
               {step === 'phone' ? (
                 <form onSubmit={phoneForm.handleSubmit(onPhoneSubmit)}>
-                  <div className="text-xs text-center text-gray-400 mb-2">
-                    {t('Номер телефона')}
-                  </div>
-                  <div className="flex items-center border border-gray-200 rounded-full overflow-hidden">
-                    <span className="pl-5 pr-3 py-3 text-gray-700 border-r border-gray-200">
+                  <div
+                    className="flex items-center rounded-2xl px-4 py-3 transition-all duration-200 bg-gray-50"
+                    style={{ boxShadow: 'inset 0 0 0 1px #E5E7EB' }}
+                  >
+                    <span className="text-lg font-medium text-gray-700">
                       +998
                     </span>
                     <input
@@ -259,7 +270,8 @@ const SignInModalApp: FC = () => {
                       onChange={(e) =>
                         phoneForm.setValue('phone', e.target.value.replace(/\D/g, ''))
                       }
-                      className="flex-1 py-3 pl-3 pr-5 outline-none text-gray-700"
+                      className="flex-1 text-lg font-medium focus:outline-none focus:ring-0 outline-none border-none bg-transparent ml-3 placeholder-gray-300"
+                      style={{ padding: '8px 0' }}
                     />
                   </div>
 
@@ -268,19 +280,20 @@ const SignInModalApp: FC = () => {
                       type="text"
                       placeholder={t('Имя')}
                       {...phoneForm.register('name', { required: showName })}
-                      className="mt-3 w-full px-5 py-3 rounded-full border border-gray-200 focus:outline-none focus:border-yellow-400"
+                      className="mt-3 w-full px-4 py-3 rounded-2xl bg-gray-50 outline-none text-lg"
+                      style={{ boxShadow: 'inset 0 0 0 1px #E5E7EB' }}
                     />
                   )}
 
-                  <div className="text-center text-xs text-gray-400 mt-4 mb-5">
+                  <p className="text-center text-sm text-gray-400 mt-4 mb-6">
                     {t('Если сообщение не пришло, позвоните нам по номеру')} 71{' '}
                     <a
                       href="tel:+998712051111"
-                      className="text-gray-600 hover:text-gray-800"
+                      className="text-gray-500 hover:text-gray-700"
                     >
                       205 11 11
                     </a>
-                  </div>
+                  </p>
 
                   {submitError && (
                     <div className="mb-3 text-sm text-red-500 text-center">
@@ -291,10 +304,9 @@ const SignInModalApp: FC = () => {
                   <button
                     type="submit"
                     disabled={!phoneReady || isLoading}
-                    className="w-full h-12 rounded-full font-semibold text-white transition-colors"
+                    className="py-3.5 text-white font-bold text-lg text-center rounded-full w-full outline-none focus:outline-none transition-all duration-200 disabled:cursor-not-allowed"
                     style={{
-                      backgroundColor: phoneReady ? '#F9B004' : '#E5E7EB',
-                      color: phoneReady ? '#fff' : '#9CA3AF',
+                      backgroundColor: phoneReady ? '#F9B004' : '#D1D5DB',
                     }}
                   >
                     {isLoading ? '...' : t('Получить код')}
@@ -302,25 +314,28 @@ const SignInModalApp: FC = () => {
                 </form>
               ) : (
                 <form onSubmit={codeForm.handleSubmit(onCodeSubmit)}>
-                  <div className="text-xs text-center text-gray-400 mb-2">
-                    {t('Код подтверждения')}
+                  <div
+                    className="flex items-center justify-center rounded-2xl px-4 py-3 bg-gray-50"
+                    style={{ boxShadow: 'inset 0 0 0 1px #E5E7EB' }}
+                  >
+                    <input
+                      type="tel"
+                      inputMode="numeric"
+                      autoComplete="one-time-code"
+                      placeholder="X X X X"
+                      autoFocus
+                      value={formatCode(codeForm.watch('code') || '')}
+                      onChange={(e) =>
+                        codeForm.setValue('code', e.target.value.replace(/\D/g, ''))
+                      }
+                      className="flex-1 text-lg font-medium text-center bg-transparent outline-none placeholder-gray-300 tracking-widest"
+                      style={{ padding: '8px 0' }}
+                    />
                   </div>
-                  <input
-                    type="tel"
-                    inputMode="numeric"
-                    autoComplete="one-time-code"
-                    placeholder="X X X X"
-                    autoFocus
-                    value={formatCode(codeForm.watch('code') || '')}
-                    onChange={(e) =>
-                      codeForm.setValue('code', e.target.value.replace(/\D/g, ''))
-                    }
-                    className="w-full py-3 px-5 rounded-full border border-gray-200 outline-none focus:border-yellow-400 text-center text-lg tracking-widest"
-                  />
 
-                  <div className="text-center text-xs text-gray-400 mt-4 mb-5">
+                  <p className="text-center text-sm text-gray-400 mt-4 mb-6">
                     {t('Код отправлен на номер')} {savedPhone}
-                  </div>
+                  </p>
 
                   {submitError && (
                     <div className="mb-3 text-sm text-red-500 text-center">
@@ -331,7 +346,7 @@ const SignInModalApp: FC = () => {
                   <button
                     type="submit"
                     disabled={isLoading}
-                    className="w-full h-12 rounded-full font-semibold text-white"
+                    className="py-3.5 text-white font-bold text-lg text-center rounded-full w-full outline-none focus:outline-none transition-all duration-200"
                     style={{ backgroundColor: '#F9B004' }}
                   >
                     {isLoading ? '...' : t('Войти')}
