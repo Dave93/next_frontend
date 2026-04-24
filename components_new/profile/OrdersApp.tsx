@@ -10,7 +10,7 @@ import currency from 'currency.js'
 import axios from 'axios'
 import Cookies from 'js-cookie'
 import { useInfiniteQuery } from '@tanstack/react-query'
-import { useLocale } from 'next-intl'
+import { useLocale, useExtracted } from 'next-intl'
 
 let webAddress = process.env.NEXT_PUBLIC_API_URL
 
@@ -81,6 +81,7 @@ const inlineLabels: Record<string, Record<string, string>> = {
 
 const OrdersApp: FC = () => {
   const locale = useLocale()
+  const te = useExtracted()
   const { activeCity } = useUI()
 
   const t = (key: string) =>
@@ -161,7 +162,7 @@ const OrdersApp: FC = () => {
     <div className="pb-20 md:pb-5">
       {/* Desktop title */}
       <div className="hidden md:block mx-5 md:mx-0">
-        <div className="text-2xl mt-8 mb-5">История заказов</div>
+        <div className="text-2xl mt-8 mb-5">{te('Мои заказы')}</div>
       </div>
 
       {/* Empty state */}

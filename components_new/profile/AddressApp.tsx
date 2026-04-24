@@ -144,10 +144,9 @@ const AddressApp: FC = () => {
             ))}
           </>
         )}
-        {(!errorMessage && !addressList) ||
-          (addressList.length === 0 && (
-            <div className="text-center">Адреса не найдены</div>
-          ))}
+        {!errorMessage && (!addressList || addressList.length === 0) && (
+          <div className="text-center">Адреса не найдены</div>
+        )}
         {!errorMessage && (
           <button
             className="py-5 font-medium text-xl bg-green-500 rounded-2xl mt-12 text-white text-center w-full"
