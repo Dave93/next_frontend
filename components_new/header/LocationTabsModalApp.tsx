@@ -193,11 +193,15 @@ const LocationTabsModalApp: FC = () => {
     setCoords([lat, lon])
     try {
       const { data } = await axios.get(
-        `${webAddress}/api/geocode?lat=${lat}&lon=${lon}`
+        `/api/geocode?lat=${lat}&lon=${lon}`
       )
       const item = Array.isArray(data) ? data[0] : data
-      const text =
-        item?.formatted || item?.title || item?.address || null
+      if (!item) return
+      const houseComp = item.addressItems?.find(
+        (c: any) => c.kind === 'house'
+      )
+      if (houseComp?.name) setHouse(houseComp.name)
+      const text = item.formatted || item.title || null
       if (text) setAddress(text)
     } catch {
       // ignore — keep marker without text
