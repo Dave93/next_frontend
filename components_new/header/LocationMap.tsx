@@ -48,6 +48,35 @@ const LocationMap: FC<Props> = ({ center, coords, onPick, height = 280 }) => {
       map.on('click', (e: any) => {
         onPickRef.current(e.latlng.lat, e.latlng.lng)
       })
+
+      // "Locate me" button — top-right
+      const LocateControl = L.Control.extend({
+        options: { position: 'topright' },
+        onAdd() {
+          const btn = L.DomUtil.create(
+            'button',
+            'leaflet-bar leaflet-control'
+          )
+          btn.type = 'button'
+          btn.title = 'Определить мою локацию'
+          btn.style.cssText =
+            'width:34px;height:34px;display:flex;align-items:center;justify-content:center;background:#fff;border:none;cursor:pointer;'
+          btn.innerHTML =
+            '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#FAAF04" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3"/></svg>'
+          L.DomEvent.disableClickPropagation(btn)
+          btn.addEventListener('click', () => {
+            if (!navigator.geolocation) return
+            navigator.geolocation.getCurrentPosition(
+              (pos) =>
+                onPickRef.current(pos.coords.latitude, pos.coords.longitude),
+              () => {}
+            )
+          })
+          return btn
+        },
+      })
+      map.addControl(new LocateControl())
+
       mapRef.current = map
       setTimeout(() => map?.invalidateSize(), 50)
     }

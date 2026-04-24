@@ -341,6 +341,28 @@ const LocationTabsModalApp: FC = () => {
 
               {tab === 'deliver' && (
                 <div>
+                  <div className="mb-4">
+                    <MapErrorBoundary
+                      fallback={
+                        <div
+                          style={{
+                            height: 280,
+                            borderRadius: 16,
+                            border: '1px solid #E5E7EB',
+                            background: '#F3F4F6',
+                          }}
+                        />
+                      }
+                    >
+                      <LocationMap
+                        center={mapCenter}
+                        coords={coords}
+                        onPick={handleMapPick}
+                        height={280}
+                      />
+                    </MapErrorBoundary>
+                  </div>
+
                   <div className="flex items-center justify-between mb-2">
                     <span style={{ fontSize: 18, color: GRAY_400 }}>
                       {t('Укажите свой адрес')}
@@ -571,28 +593,6 @@ const LocationTabsModalApp: FC = () => {
                       />
                     </div>
                   )}
-
-                  <div className="mt-4">
-                    <MapErrorBoundary
-                      fallback={
-                        <div
-                          style={{
-                            height: 280,
-                            borderRadius: 16,
-                            border: '1px solid #E5E7EB',
-                            background: '#F3F4F6',
-                          }}
-                        />
-                      }
-                    >
-                      <LocationMap
-                        center={mapCenter}
-                        coords={coords}
-                        onPick={handleMapPick}
-                        height={280}
-                      />
-                    </MapErrorBoundary>
-                  </div>
                 </div>
               )}
 
