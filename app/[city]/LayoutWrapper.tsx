@@ -10,6 +10,7 @@ import HeaderApp from '../../components_new/HeaderApp'
 import FooterApp from '../../components_new/FooterApp'
 import SmallCartMobileApp from '../../components_new/common/SmallCartMobileApp'
 import MobileBottomNavApp from '../../components_new/mobile/MobileBottomNavApp'
+import SignInModalApp from '../../components_new/auth/SignInModalApp'
 
 type Props = {
   children: React.ReactNode
@@ -52,6 +53,7 @@ export default function LayoutWrapper({ children, pageProps }: Props) {
         config={pageProps.config}
         locale={pageProps.locale}
       />
+      <SignInModalApp />
     </div>
   )
 }
