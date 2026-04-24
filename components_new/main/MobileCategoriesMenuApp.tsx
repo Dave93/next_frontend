@@ -1,9 +1,7 @@
 'use client'
 import { FC, memo, useEffect, useRef, useState } from 'react'
 import { useLocale } from 'next-intl'
-import { usePathname, Link as NextLink } from '../../i18n/navigation'
 import defaultChannel from '@lib/defaultChannel'
-import { useUI } from '@components/ui/context'
 
 const scrollToSection = (id: string) => {
   const el = document.getElementById(id)
@@ -22,10 +20,7 @@ const MobileCategoriesMenu: FC<{ categories: any[] }> = ({
   categories = [],
 }) => {
   const locale = useLocale()
-  const pathname = usePathname()
-  const { activeCity } = useUI()
   const [channelName, setChannelName] = useState('chopar')
-  const isHome = pathname === '/[city]'
   const [activeId, setActiveId] = useState<number | null>(null)
   const scrollerRef = useRef<HTMLDivElement | null>(null)
   const itemRefs = useRef<Record<number, HTMLDivElement | null>>({})
@@ -37,7 +32,7 @@ const MobileCategoriesMenu: FC<{ categories: any[] }> = ({
   }, [])
 
   useEffect(() => {
-    if (!categories.length || !isHome) return
+    if (!categories.length) return
     const headerH =
       parseInt(
         getComputedStyle(document.documentElement).getPropertyValue(
@@ -72,7 +67,7 @@ const MobileCategoriesMenu: FC<{ categories: any[] }> = ({
       window.removeEventListener('scroll', update)
       window.removeEventListener('resize', update)
     }
-  }, [categories, isHome])
+  }, [categories])
 
   useEffect(() => {
     if (activeId == null) return
@@ -112,23 +107,9 @@ const MobileCategoriesMenu: FC<{ categories: any[] }> = ({
                   isActive ? 'text-yellow' : 'text-white'
                 } font-serif text-sm text-center cursor-pointer uppercase px-3 whitespace-nowrap`}
                 key={item.id}
-                onClick={
-                  isHome
-                    ? () => scrollToSection(`productSection_${item.id}`)
-                    : undefined
-                }
+                onClick={() => scrollToSection(`productSection_${item.id}`)}
               >
-                {isHome ? (
-                  <span>{name}</span>
-                ) : (
-                  <NextLink
-                    href={`/${activeCity?.slug || ''}#productSection_${item.id}`}
-                    prefetch={false}
-                    className={isActive ? 'text-yellow' : 'text-white'}
-                  >
-                    {name}
-                  </NextLink>
-                )}
+                {name}
               </div>
             )
           })}
