@@ -36,17 +36,12 @@ import { trackAddToCart } from '@lib/posthog-events'
 type ProductItem = {
   product: Product
   channelName: string
-  mode?: 'card' | 'drawer'
 }
 
 let webAddress = process.env.NEXT_PUBLIC_API_URL
 axios.defaults.withCredentials = true
 
-const ProductItemNewApp: FC<ProductItem> = ({
-  product,
-  channelName,
-  mode = 'card',
-}) => {
+const ProductItemNewApp: FC<ProductItem> = ({ product, channelName }) => {
   const t = useExtracted()
   const locale = useLocale()
   const params = useParams()
@@ -686,7 +681,7 @@ const ProductItemNewApp: FC<ProductItem> = ({
           itemType="https://schema.org/Product"
         >
           {/* Mobile compact vertical card */}
-          <div className={mode === 'drawer' ? 'hidden' : 'md:hidden p-3'}>
+          <div className="md:hidden p-3">
             <Link href={`/${citySlug}/product/${store.id}`} prefetch={false}>
               <div className="text-center mb-2 relative">
                 {!imageLoaded && store.image && (
@@ -814,13 +809,7 @@ const ProductItemNewApp: FC<ProductItem> = ({
             )}
           </div>
           {/* Desktop card */}
-          <div
-            className={
-              mode === 'drawer'
-                ? 'flex flex-col h-full'
-                : 'hidden md:flex md:flex-col md:h-full'
-            }
-          >
+          <div className="hidden md:flex md:flex-col md:h-full">
           <Link href={`/${citySlug}/product/${store.id}`} prefetch={false} className="cursor-pointer">
             <div className="text-center relative">
               {!imageLoaded && store.image && (

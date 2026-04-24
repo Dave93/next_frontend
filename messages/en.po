@@ -183,62 +183,63 @@ msgstr "All rights reserved"
 msgid "6QS/OL"
 msgstr "Your city"
 
-#: components_new/header/LocationTabsModalApp.tsx:332
-#: components_new/HeaderApp.tsx:106
+#: components_new/header/LocationTabsModalApp.tsx:337
+#: components_new/HeaderApp.tsx:127
 msgid "3qtFxi"
 msgstr "Delivery"
 
-#: components_new/header/LocationTabsModalApp.tsx:345
-#: components_new/HeaderApp.tsx:120
+#: components_new/header/LocationTabsModalApp.tsx:348
+#: components_new/HeaderApp.tsx:141
 msgid "k9Dt2Z"
 msgstr "Pickup"
 
-#: components_new/header/LocationTabsModalApp.tsx:375
-#: components_new/HeaderApp.tsx:26
+#: components_new/header/LocationTabsModalApp.tsx:378
+#: components_new/HeaderApp.tsx:46
 msgid "EiCEoo"
 msgstr "Enter your address"
 
-#: components_new/header/LocationTabsModalApp.tsx:436
+#: components_new/header/LocationTabsModalApp.tsx:439
 msgid "qnmGg/"
 msgstr "Address:"
 
-#: components_new/header/LocationTabsModalApp.tsx:454
+#: components_new/header/LocationTabsModalApp.tsx:458
 msgid "x1MUPc"
 msgstr "Address"
 
-#: components_new/header/LocationTabsModalApp.tsx:502
+#: components_new/header/LocationTabsModalApp.tsx:507
 msgid "2lYwXC"
 msgstr "House"
 
-#: components_new/header/LocationTabsModalApp.tsx:516
+#: components_new/header/LocationTabsModalApp.tsx:522
 msgid "PE9WEy"
 msgstr "Apartment"
 
-#: components_new/header/LocationTabsModalApp.tsx:534
+#: components_new/header/LocationTabsModalApp.tsx:541
 msgid "bIzegt"
 msgstr "Add entrance and intercom"
 
-#: components_new/header/LocationTabsModalApp.tsx:563
+#: components_new/header/LocationTabsModalApp.tsx:571
 msgid "DtOC+U"
 msgstr "Entrance"
 
-#: components_new/header/LocationTabsModalApp.tsx:577
+#: components_new/header/LocationTabsModalApp.tsx:586
 msgid "KIMRoB"
 msgstr "Intercom code"
 
-#: components_new/header/LocationTabsModalApp.tsx:591
+#: components_new/header/LocationTabsModalApp.tsx:601
 msgid "2ifljK"
 msgstr "Address name. For example, Home, Work..."
 
-#: components_new/header/LocationTabsModalApp.tsx:612
+#: components_new/header/LocationTabsModalApp.tsx:623
 msgid "NUZRDC"
 msgstr "Choose a restaurant:"
 
-#: components_new/header/LocationTabsModalApp.tsx:626
+#: components_new/header/LocationTabsModalApp.tsx:638
+#: components_new/product/ProductDrawerApp.tsx:421
 msgid "+RxnK3"
 msgstr "Loading..."
 
-#: components_new/header/LocationTabsModalApp.tsx:731
+#: components_new/header/LocationTabsModalApp.tsx:740
 msgid "XzVpjf"
 msgstr "Confirm"
 
@@ -300,21 +301,26 @@ msgstr "Build your pizza"
 msgid "WRnc7y"
 msgstr "Build pizza"
 
-#: components_new/product/ProductItemNewApp.tsx:621
-#: components_new/product/ProductItemNewApp.tsx:672
-msgid "zXkVd5"
-msgstr "Add"
+#: components_new/product/ProductDrawerApp.tsx:346
+msgid "F6q7sS"
+msgstr ""
 
-#: components_new/product/ProductItemNewApp.tsx:777
-msgid "kazY5+"
-msgstr "Item temporarily unavailable"
-
-#: components_new/product/ProductItemNewApp.tsx:967
-#: components_new/product/ProductItemNewApp.tsx:1217
+#: components_new/product/ProductDrawerApp.tsx:421
+#: components_new/product/ProductItemNewApp.tsx:975
+#: components_new/product/ProductItemNewApp.tsx:1225
 msgid "JwQa2e"
 msgstr "Add to cart"
 
-#: components_new/product/ProductItemNewApp.tsx:1133
+#: components_new/product/ProductItemNewApp.tsx:624
+#: components_new/product/ProductItemNewApp.tsx:675
+msgid "zXkVd5"
+msgstr "Add"
+
+#: components_new/product/ProductItemNewApp.tsx:780
+msgid "kazY5+"
+msgstr "Item temporarily unavailable"
+
+#: components_new/product/ProductItemNewApp.tsx:1141
 msgid "AH6N5n"
 msgstr "Add to pizza"
 
