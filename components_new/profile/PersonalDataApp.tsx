@@ -4,6 +4,7 @@ import { FC } from 'react'
 import { XIcon } from '@heroicons/react/outline'
 import { useForm } from 'react-hook-form'
 import { useUI } from '@components/ui/context'
+import { useExtracted } from 'next-intl'
 import axios from 'axios'
 import Cookies from 'js-cookie'
 import { ToastContainer, toast } from 'react-toastify'
@@ -13,6 +14,7 @@ axios.defaults.withCredentials = true
 
 const PersonalDataApp: FC = () => {
   const { user, setUserData } = useUI()
+  const t = useExtracted()
 
   type FormData = {
     name: string
@@ -107,10 +109,10 @@ const PersonalDataApp: FC = () => {
 
   return (
     <div className="md:w-full md:max-w-xs mx-5 md:mx-0 mb-5 pb-20 md:pb-5">
-      <div className="text-2xl mt-8 mb-5 hidden md:block">Личные данные</div>
+      <div className="text-2xl mt-8 mb-5 hidden md:block">{t('Личные данные')}</div>
       <form onSubmit={handleSubmit(onSubmit)}>
         <div className="mt-5 md:mt-10">
-          <label className="text-sm text-gray-400 mb-2 block">Имя</label>
+          <label className="text-sm text-gray-400 mb-2 block">{t('Имя')}</label>
           <div className="relative">
             <input
               type="text"
@@ -129,7 +131,7 @@ const PersonalDataApp: FC = () => {
           </div>
         </div>
         <div className="mt-5 md:mt-10">
-          <label className="text-sm text-gray-400 mb-2 block">Телефон</label>
+          <label className="text-sm text-gray-400 mb-2 block">{t('Номер телефона')}</label>
           <div className="relative">
             <input
               type="text"
@@ -140,7 +142,7 @@ const PersonalDataApp: FC = () => {
           </div>
         </div>
         <div className="mt-5 md:mt-10">
-          <label className="text-sm text-gray-400 mb-2 block">Email</label>
+          <label className="text-sm text-gray-400 mb-2 block">{t('Эл. почта')}</label>
           <div className="relative">
             <input
               type="email"
@@ -160,7 +162,7 @@ const PersonalDataApp: FC = () => {
         </div>
         <div className="mt-5 md:mt-10">
           <label className="text-sm text-gray-400 mb-2 block">
-            Дата рождения
+            {t('День рождения')}
           </label>
           <input
             type="date"
@@ -173,7 +175,7 @@ const PersonalDataApp: FC = () => {
             type="submit"
             className="text-white font-bold text-xl rounded-full bg-yellow w-full h-10"
           >
-            Сохранить
+            {t('Сохранить')}
           </button>
         </div>
       </form>
