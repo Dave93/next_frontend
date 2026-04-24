@@ -75,6 +75,18 @@ const isTerminalOpenNow = (desc?: string | null) => {
   return now >= sched.open || now < sched.close
 }
 
+const useIsMd = () => {
+  const [isMd, setIsMd] = useState(false)
+  useEffect(() => {
+    const mq = window.matchMedia('(min-width: 768px)')
+    const update = () => setIsMd(mq.matches)
+    update()
+    mq.addEventListener('change', update)
+    return () => mq.removeEventListener('change', update)
+  }, [])
+  return isMd
+}
+
 const LocationTabsModalApp: FC = () => {
   const ui = useUI() as any
   const {
@@ -89,6 +101,7 @@ const LocationTabsModalApp: FC = () => {
   } = ui
   const t = useExtracted()
   const locale = useLocale()
+  const isMd = useIsMd()
 
   const cityName = useMemo(() => {
     if (!activeCity) return ''
@@ -426,7 +439,12 @@ const LocationTabsModalApp: FC = () => {
                     {t('Адрес:')}
                   </div>
                   <div
-                    className="grid grid-cols-1 md:grid-cols-[630px_180px_270px] gap-3"
+                    className="grid gap-3"
+                    style={{
+                      gridTemplateColumns: isMd
+                        ? 'minmax(0, 2fr) minmax(0, 1fr) minmax(0, 1fr)'
+                        : '1fr',
+                    }}
                   >
                     <div className="relative">
                       <input
@@ -539,7 +557,12 @@ const LocationTabsModalApp: FC = () => {
 
                   {showExtras && (
                     <div
-                      className="grid mt-3 grid-cols-1 md:grid-cols-[196px_196px_560px] gap-3"
+                      className="grid mt-3 gap-3"
+                      style={{
+                        gridTemplateColumns: isMd
+                          ? 'minmax(0, 1fr) minmax(0, 1fr) minmax(0, 3fr)'
+                          : '1fr',
+                      }}
                     >
                       <input
                         type="text"
@@ -600,7 +623,12 @@ const LocationTabsModalApp: FC = () => {
                     {t('Выберите пиццерию:')}
                   </div>
                   <div
-                    className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-[repeat(4,274px)] gap-2"
+                    className="grid gap-2"
+                    style={{
+                      gridTemplateColumns: isMd
+                        ? 'repeat(4, minmax(0, 1fr))'
+                        : '1fr',
+                    }}
                   >
                     {pickupPoints.length === 0 && (
                       <div
