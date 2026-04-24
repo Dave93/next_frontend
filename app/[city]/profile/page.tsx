@@ -2,7 +2,6 @@ import type { Metadata } from 'next'
 import { notFound } from 'next/navigation'
 import { fetchSiteInfo } from '../../../lib/data/site-info'
 import UserDataApp from '../../../components_new/profile/UserDataApp'
-import BonusesApp from '../../../components_new/profile/BonusesApp'
 import MobileProfileMenuApp from '../../../components_new/mobile/MobileProfileMenuApp'
 import type { City } from '@commerce/types/cities'
 
@@ -40,13 +39,8 @@ export default async function ProfilePage({
   if (!cities.find((c) => c.slug === citySlug)) notFound()
   return (
     <>
-      <div className="hidden md:flex">
-        <div className="w-64">
-          <UserDataApp />
-        </div>
-        <div className="flex-1">
-          <BonusesApp />
-        </div>
+      <div className="hidden md:block">
+        <UserDataApp />
       </div>
       <div className="md:hidden">
         <MobileProfileMenuApp />

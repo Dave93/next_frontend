@@ -5,22 +5,23 @@ import menuItems from '@commerce/data/profileMenu'
 import { useUI } from '@components/ui/context'
 import { Link } from '../../i18n/navigation'
 import { usePathname, useRouter } from '../../i18n/navigation'
-import { useLocale } from 'next-intl'
-
-const langMap: Record<string, string> = {
-  profile_orders: 'История заказов',
-  profile_address: 'Адрес',
-  profile_account: 'Личные данные',
-  profile_logout: 'Выйти',
-  profile_bonuses: 'Бонусы',
-}
+import { useLocale, useExtracted } from 'next-intl'
 
 const UserDataApp: FC = () => {
   const locale = useLocale()
   const pathname = usePathname()
   const router = useRouter()
+  const t = useExtracted()
 
   const { user, setUserData, activeCity } = useUI()
+
+  const langMap: Record<string, string> = {
+    profile_orders: t('Мои заказы'),
+    profile_address: t('Мои адреса'),
+    profile_account: t('Личные данные'),
+    profile_logout: t('Выйти'),
+    profile_bonuses: t('Бонусы'),
+  }
 
   const items = menuItems.map((item) => ({
     ...item,
@@ -39,9 +40,13 @@ const UserDataApp: FC = () => {
   return (
     <div className="border-b justify-between md:flex pb-5 mx-5 md:mx-0">
       <div>
-        <div className="text-3xl mb-1">Привет, {user?.user?.name}!</div>
+        <div className="text-3xl mb-1">
+          {t('Приветствуем Вас')}, {user?.user?.name}!
+        </div>
         <div className="md:text-xs md:w-80 text-gray-400">
-          Управляйте своим профилем и заказами
+          {t(
+            'Это ваш личный кабинет. Здесь вы можете управлять своими заказами, редактировать личные данные и следить за избранными товарами'
+          )}
         </div>
       </div>
       <div className="flex items-end justify-between mt-5">
