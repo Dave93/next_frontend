@@ -64,7 +64,9 @@ const ProductDrawerApp: FC = () => {
     }
     const variants = productDrawerProduct.variants || []
     if (variants.length) {
-      const initial = variants[1]?.id ?? variants[0]?.id ?? null
+      const fromStore = variants.find((v: any) => v.active)?.id
+      const initial =
+        fromStore ?? variants[1]?.id ?? variants[0]?.id ?? null
       setActiveVariantId(initial)
     } else {
       setActiveVariantId(null)
