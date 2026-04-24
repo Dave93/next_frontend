@@ -40,7 +40,9 @@ export default function LayoutWrapper({ children, pageProps }: Props) {
     <div className="flex flex-col min-h-screen">
       <HeaderApp />
       <SmallCartMobileApp />
-      <main className="flex-1 w-full">{children}</main>
+      <main className="flex-1 w-full container mx-auto px-4 md:px-0">
+        {children}
+      </main>
       <MobileBottomNavApp />
       <FooterApp
         categories={pageProps.categories}
