@@ -18,8 +18,8 @@ import Cookies from 'js-cookie'
 const formatPhone = (raw: string) => {
   const digits = raw.replace(/\D/g, '').slice(0, 9)
   let out = ''
-  if (digits.length > 0) out += '(' + digits.slice(0, 2)
-  if (digits.length >= 2) out += ') '
+  if (digits.length > 0) out += digits.slice(0, 2)
+  if (digits.length >= 2) out += ' '
   if (digits.length > 2) out += digits.slice(2, 5)
   if (digits.length >= 5) out += ' '
   if (digits.length > 5) out += digits.slice(5, 7)
@@ -247,17 +247,19 @@ const SignInModalApp: FC = () => {
                     {t('Номер телефона')}
                   </div>
                   <div className="flex items-center border border-gray-200 rounded-full overflow-hidden">
-                    <span className="pl-5 pr-3 text-gray-700">+998</span>
+                    <span className="pl-5 pr-3 py-3 text-gray-700 border-r border-gray-200">
+                      +998
+                    </span>
                     <input
                       type="tel"
                       inputMode="numeric"
                       autoComplete="tel"
-                      placeholder="(XX) XXX XX XX"
+                      placeholder="XX XXX XX XX"
                       value={formatPhone(phoneForm.watch('phone') || '')}
                       onChange={(e) =>
                         phoneForm.setValue('phone', e.target.value.replace(/\D/g, ''))
                       }
-                      className="flex-1 py-3 pr-5 outline-none text-gray-700"
+                      className="flex-1 py-3 pl-3 pr-5 outline-none text-gray-700"
                     />
                   </div>
 
