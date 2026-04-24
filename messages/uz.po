@@ -185,11 +185,11 @@ msgstr "Sizning shahringiz"
 
 #: components_new/header/LocationTabsModalApp.tsx:256
 msgid "3qtFxi"
-msgstr ""
+msgstr "Yetkazib berish"
 
 #: components_new/header/LocationTabsModalApp.tsx:269
 msgid "k9Dt2Z"
-msgstr ""
+msgstr "Olib ketish"
 
 #: components_new/header/LocationTabsModalApp.tsx:277
 #: components_new/HeaderApp.tsx:26
@@ -199,55 +199,55 @@ msgstr "Manzilni tanlang"
 #: components_new/header/LocationTabsModalApp.tsx:338
 #: components_new/header/LocationTabsModalApp.tsx:613
 msgid "qnmGg/"
-msgstr ""
+msgstr "Manzil:"
 
 #: components_new/header/LocationTabsModalApp.tsx:356
 msgid "x1MUPc"
-msgstr ""
+msgstr "Manzil"
 
 #: components_new/header/LocationTabsModalApp.tsx:404
 msgid "2lYwXC"
-msgstr ""
+msgstr "Uy"
 
 #: components_new/header/LocationTabsModalApp.tsx:418
 msgid "PE9WEy"
-msgstr ""
+msgstr "Xonadon"
 
 #: components_new/header/LocationTabsModalApp.tsx:436
 msgid "bIzegt"
-msgstr ""
+msgstr "Kirish va domofonni ko'rsatish"
 
 #: components_new/header/LocationTabsModalApp.tsx:465
 msgid "DtOC+U"
-msgstr ""
+msgstr "Kirish"
 
 #: components_new/header/LocationTabsModalApp.tsx:479
 msgid "KIMRoB"
-msgstr ""
+msgstr "Domofon kodi"
 
 #: components_new/header/LocationTabsModalApp.tsx:493
 msgid "2ifljK"
-msgstr ""
+msgstr "Manzil nomi. Masalan, Uy, Ish..."
 
 #: components_new/header/LocationTabsModalApp.tsx:514
 msgid "NUZRDC"
-msgstr ""
+msgstr "Pitsxonani tanlang:"
 
 #: components_new/header/LocationTabsModalApp.tsx:530
 msgid "+RxnK3"
-msgstr ""
+msgstr "Yuklanmoqda..."
 
 #: components_new/header/LocationTabsModalApp.tsx:624
 msgid "ASf6EP"
-msgstr ""
+msgstr "Mo'ljal:"
 
 #: components_new/header/LocationTabsModalApp.tsx:635
 msgid "E+NPWc"
-msgstr ""
+msgstr "Ish vaqti:"
 
 #: components_new/header/LocationTabsModalApp.tsx:661
 msgid "XzVpjf"
-msgstr ""
+msgstr "Tasdiqlash"
 
 #: components_new/header/SideMenuApp.tsx:22
 msgid "Vj2nh2"

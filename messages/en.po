@@ -185,11 +185,11 @@ msgstr "Your city"
 
 #: components_new/header/LocationTabsModalApp.tsx:256
 msgid "3qtFxi"
-msgstr ""
+msgstr "Delivery"
 
 #: components_new/header/LocationTabsModalApp.tsx:269
 msgid "k9Dt2Z"
-msgstr ""
+msgstr "Pickup"
 
 #: components_new/header/LocationTabsModalApp.tsx:277
 #: components_new/HeaderApp.tsx:26
@@ -199,55 +199,55 @@ msgstr "Enter your address"
 #: components_new/header/LocationTabsModalApp.tsx:338
 #: components_new/header/LocationTabsModalApp.tsx:613
 msgid "qnmGg/"
-msgstr ""
+msgstr "Address:"
 
 #: components_new/header/LocationTabsModalApp.tsx:356
 msgid "x1MUPc"
-msgstr ""
+msgstr "Address"
 
 #: components_new/header/LocationTabsModalApp.tsx:404
 msgid "2lYwXC"
-msgstr ""
+msgstr "House"
 
 #: components_new/header/LocationTabsModalApp.tsx:418
 msgid "PE9WEy"
-msgstr ""
+msgstr "Apartment"
 
 #: components_new/header/LocationTabsModalApp.tsx:436
 msgid "bIzegt"
-msgstr ""
+msgstr "Add entrance and intercom"
 
 #: components_new/header/LocationTabsModalApp.tsx:465
 msgid "DtOC+U"
-msgstr ""
+msgstr "Entrance"
 
 #: components_new/header/LocationTabsModalApp.tsx:479
 msgid "KIMRoB"
-msgstr ""
+msgstr "Intercom code"
 
 #: components_new/header/LocationTabsModalApp.tsx:493
 msgid "2ifljK"
-msgstr ""
+msgstr "Address name. For example, Home, Work..."
 
 #: components_new/header/LocationTabsModalApp.tsx:514
 msgid "NUZRDC"
-msgstr ""
+msgstr "Choose a restaurant:"
 
 #: components_new/header/LocationTabsModalApp.tsx:530
 msgid "+RxnK3"
-msgstr ""
+msgstr "Loading..."
 
 #: components_new/header/LocationTabsModalApp.tsx:624
 msgid "ASf6EP"
-msgstr ""
+msgstr "Landmark:"
 
 #: components_new/header/LocationTabsModalApp.tsx:635
 msgid "E+NPWc"
-msgstr ""
+msgstr "Hours:"
 
 #: components_new/header/LocationTabsModalApp.tsx:661
 msgid "XzVpjf"
-msgstr ""
+msgstr "Confirm"
 
 #: components_new/header/SideMenuApp.tsx:22
 msgid "Vj2nh2"
