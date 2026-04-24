@@ -31,6 +31,23 @@ type Suggestion = {
 
 type Tab = 'deliver' | 'pickup'
 
+const parseHHMM = (s: string | null | undefined): number | null => {
+  if (!s) return null
+  const m = /^(\d{1,2})[:.](\d{2})/.exec(s.trim())
+  if (!m) return null
+  return parseInt(m[1], 10) * 60 + parseInt(m[2], 10)
+}
+
+const isTerminalOpenNow = (open?: string | null, close?: string | null) => {
+  const o = parseHHMM(open)
+  const c = parseHHMM(close)
+  if (o == null || c == null) return true
+  const now = new Date()
+  const minutes = now.getHours() * 60 + now.getMinutes()
+  if (c >= o) return minutes >= o && minutes < c
+  return minutes >= o || minutes < c
+}
+
 const LocationTabsModalApp: FC = () => {
   const ui = useUI() as any
   const {
@@ -70,7 +87,9 @@ const LocationTabsModalApp: FC = () => {
   const [entrance, setEntrance] = useState(locationData?.entrance || '')
   const [doorCode, setDoorCode] = useState(locationData?.door_code || '')
   const [label, setLabel] = useState(locationData?.label || '')
-  const [showExtras, setShowExtras] = useState(true)
+  const [showExtras, setShowExtras] = useState(
+    !!(locationData?.entrance || locationData?.door_code || locationData?.label)
+  )
   const [suggestions, setSuggestions] = useState<Suggestion[]>([])
   const [isFocused, setIsFocused] = useState(false)
   const [coords, setCoords] = useState<number[] | null>(
@@ -518,8 +537,6 @@ const LocationTabsModalApp: FC = () => {
                     style={{
                       gridTemplateColumns: 'repeat(4, 274px)',
                       gap: 8,
-                      maxHeight: 480,
-                      overflowY: 'auto',
                     }}
                   >
                     {pickupPoints.length === 0 && (
@@ -535,28 +552,21 @@ const LocationTabsModalApp: FC = () => {
                         (locale === 'uz' && p.name_uz) ||
                         (locale === 'en' && p.name_en) ||
                         p.name ||
-                        p.desc ||
                         ''
-                      const addressLine =
+                      const desc =
                         (locale === 'uz' && p.desc_uz) ||
                         (locale === 'en' && p.desc_en) ||
                         p.desc ||
                         ''
-                      const landmark =
-                        (locale === 'uz' && p.latrest_uz) ||
-                        (locale === 'en' && p.latrest_en) ||
-                        p.latrest ||
-                        ''
-                      const workTime = p.open_time
-                        ? `${p.open_time}-${p.close_time || ''}`
-                        : ''
                       const isActive = terminal?.id === p.id
+                      const open = isTerminalOpenNow(p.open_time, p.close_time)
                       return (
                         <button
                           key={p.id}
                           type="button"
-                          onClick={() => setTerminal(p)}
-                          className="text-left flex gap-2"
+                          onClick={() => open && setTerminal(p)}
+                          disabled={!open}
+                          className="text-left flex items-start gap-2"
                           style={{
                             border: `1px solid ${isActive ? YELLOW : GRAY_400}`,
                             borderRadius: 15,
@@ -564,6 +574,8 @@ const LocationTabsModalApp: FC = () => {
                             background: isActive
                               ? 'rgba(250, 175, 4, 0.08)'
                               : 'transparent',
+                            opacity: open ? 1 : 0.3,
+                            cursor: open ? 'pointer' : 'not-allowed',
                           }}
                         >
                           <span
@@ -602,37 +614,16 @@ const LocationTabsModalApp: FC = () => {
                             >
                               {name}
                             </div>
-                            {addressLine && (
+                            {desc && (
                               <div
                                 style={{
                                   fontSize: 12,
                                   color: GRAY_500,
                                   lineHeight: 1.3,
+                                  whiteSpace: 'pre-line',
                                 }}
                               >
-                                {t('Адрес:')} {addressLine}
-                              </div>
-                            )}
-                            {landmark && (
-                              <div
-                                style={{
-                                  fontSize: 12,
-                                  color: GRAY_500,
-                                  lineHeight: 1.3,
-                                }}
-                              >
-                                {t('Ориентир:')} {landmark}
-                              </div>
-                            )}
-                            {workTime && (
-                              <div
-                                style={{
-                                  fontSize: 12,
-                                  color: GRAY_500,
-                                  lineHeight: 1.3,
-                                }}
-                              >
-                                {t('Режим работы:')} {workTime}
+                                {desc}
                               </div>
                             )}
                           </div>

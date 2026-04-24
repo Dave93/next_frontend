@@ -183,69 +183,60 @@ msgstr "Barcha huquqlar himoyalangan"
 msgid "6QS/OL"
 msgstr "Sizning shahringiz"
 
-#: components_new/header/LocationTabsModalApp.tsx:256
+#: components_new/header/LocationTabsModalApp.tsx:275
 msgid "3qtFxi"
 msgstr "Yetkazib berish"
 
-#: components_new/header/LocationTabsModalApp.tsx:269
+#: components_new/header/LocationTabsModalApp.tsx:288
 msgid "k9Dt2Z"
 msgstr "Olib ketish"
 
-#: components_new/header/LocationTabsModalApp.tsx:277
+#: components_new/header/LocationTabsModalApp.tsx:296
 #: components_new/HeaderApp.tsx:26
 msgid "EiCEoo"
 msgstr "Manzilni tanlang"
 
-#: components_new/header/LocationTabsModalApp.tsx:338
-#: components_new/header/LocationTabsModalApp.tsx:613
+#: components_new/header/LocationTabsModalApp.tsx:357
 msgid "qnmGg/"
 msgstr "Manzil:"
 
-#: components_new/header/LocationTabsModalApp.tsx:356
+#: components_new/header/LocationTabsModalApp.tsx:375
 msgid "x1MUPc"
 msgstr "Manzil"
 
-#: components_new/header/LocationTabsModalApp.tsx:404
+#: components_new/header/LocationTabsModalApp.tsx:423
 msgid "2lYwXC"
 msgstr "Uy"
 
-#: components_new/header/LocationTabsModalApp.tsx:418
+#: components_new/header/LocationTabsModalApp.tsx:437
 msgid "PE9WEy"
 msgstr "Xonadon"
 
-#: components_new/header/LocationTabsModalApp.tsx:436
+#: components_new/header/LocationTabsModalApp.tsx:455
 msgid "bIzegt"
 msgstr "Kirish va domofonni ko'rsatish"
 
-#: components_new/header/LocationTabsModalApp.tsx:465
+#: components_new/header/LocationTabsModalApp.tsx:484
 msgid "DtOC+U"
 msgstr "Kirish"
 
-#: components_new/header/LocationTabsModalApp.tsx:479
+#: components_new/header/LocationTabsModalApp.tsx:498
 msgid "KIMRoB"
 msgstr "Domofon kodi"
 
-#: components_new/header/LocationTabsModalApp.tsx:493
+#: components_new/header/LocationTabsModalApp.tsx:512
 msgid "2ifljK"
 msgstr "Manzil nomi. Masalan, Uy, Ish..."
 
-#: components_new/header/LocationTabsModalApp.tsx:514
+#: components_new/header/LocationTabsModalApp.tsx:533
 msgid "NUZRDC"
 msgstr "Pitsxonani tanlang:"
 
-#: components_new/header/LocationTabsModalApp.tsx:530
+#: components_new/header/LocationTabsModalApp.tsx:547
 msgid "+RxnK3"
 msgstr "Yuklanmoqda..."
 
-#: components_new/header/LocationTabsModalApp.tsx:624
-msgid "ASf6EP"
-msgstr "Mo'ljal:"
-
-#: components_new/header/LocationTabsModalApp.tsx:635
-msgid "E+NPWc"
-msgstr "Ish vaqti:"
-
-#: components_new/header/LocationTabsModalApp.tsx:661
+#: components_new/header/LocationTabsModalApp.tsx:652
 msgid "XzVpjf"
 msgstr "Tasdiqlash"
 
