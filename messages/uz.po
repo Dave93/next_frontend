@@ -1,91 +1,204 @@
 msgid ""
 msgstr ""
-"Content-Type: text/plain; charset=UTF-8\n"
 "Language: uz\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: next-intl\n"
+"X-Crowdin-SourceKey: msgstr\n"
 
-msgid "Войти"
-msgstr "Kirish"
-
-msgid "Корзина"
-msgstr "Savat"
-
-msgid "Корзина пуста"
-msgstr "Savat bo'sh"
-
-msgid "Выберите пиццу"
-msgstr "Pitsa tanlang"
-
-msgid "Соберите свою пиццу"
-msgstr "O'z pitsangizni yarating"
-
-msgid "Собрать пиццу"
-msgstr "Pitsa yaratish"
-
-msgid "В КОРЗИНУ"
-msgstr "SAVATGA"
-
-msgid "В корзину"
-msgstr "Savatga"
-
-msgid "Вернуться в меню"
-msgstr "Menyuga qaytish"
-
-msgid "Укажите свой адрес"
-msgstr "Manzilni tanlang"
-
-msgid "Меню"
-msgstr "Menyu"
-
-msgid "Информация"
-msgstr "Ma'lumot"
-
-msgid "О нас"
+#: components_new/about/AboutApp.tsx:11
+#: components_new/header/SideMenuApp.tsx:20
+msgid "2NIDWU"
 msgstr "Biz haqimizda"
 
-msgid "Доставка и оплата"
-msgstr "Yetkazib berish va to'lov"
+#: components_new/cart/CartApp.tsx:536
+#: components_new/common/SmallCartApp.tsx:310
+msgid "Lj6qSg"
+msgstr "Savat bo'sh"
 
-msgid "Адреса ресторанов"
-msgstr "Restoran manzillari"
+#: components_new/cart/CartApp.tsx:537
+#: components_new/common/SmallCartApp.tsx:311
+msgid "V5Ibqh"
+msgstr "Pitsa tanlang"
 
-msgid "Контакты"
+#: components_new/cart/CartApp.tsx:542
+msgid "595aPR"
+msgstr "Menyuga qaytish"
+
+#: components_new/common/SmallCartApp.tsx:292
+#: components_new/mobile/MobileBottomNavApp.tsx:67
+msgid "Ukms9b"
+msgstr "Savat"
+
+#: components_new/contacts/ContactsApp.tsx:89
+msgid "r+N/QY"
+msgstr "Sharh muvaffaqiyatli yuborildi"
+
+#: components_new/contacts/ContactsApp.tsx:107
+#: components_new/header/SideMenuApp.tsx:23
+msgid "9daCY0"
 msgstr "Kontaktlar"
 
-msgid "Акции"
-msgstr "Aksiyalar"
-
-msgid "Конфиденциальность"
-msgstr "Maxfiylik"
-
-msgid "Присоединяйтесь к нашей команде"
-msgstr "Jamoamizga qo'shiling"
-
-msgid "График работы"
+#: components_new/contacts/ContactsApp.tsx:118
+#: components_new/FooterApp.tsx:165
+msgid "Hi9xQK"
 msgstr "Ish vaqti"
 
-msgid "с 10-00 до 03-00 ежедневно"
-msgstr "har kuni soat 10-00 dan 03-00 gacha"
+#: components_new/contacts/ContactsApp.tsx:126
+msgid "5uIz79"
+msgstr "Ishga joylashish"
 
-msgid "Подписывайтесь на нас:"
-msgstr "Bizga obuna bo'ling:"
+#: components_new/contacts/ContactsApp.tsx:134
+msgid "uV78Od"
+msgstr "Sharhingizni qoldiring"
 
-msgid "Все права защищены"
-msgstr "Barcha huquqlar himoyalangan"
+#: components_new/contacts/ContactsApp.tsx:137
+msgid "qXh0mH"
+msgstr "Ism"
 
-msgid "Вкус, который объединяет!"
+#: components_new/contacts/ContactsApp.tsx:156
+#: components_new/contacts/ContactsApp.tsx:193
+#: components_new/contacts/ContactsApp.tsx:260
+msgid "oqiCOV"
+msgstr "Majburiy maydon"
+
+#: components_new/contacts/ContactsApp.tsx:162
+msgid "ANbLXk"
+msgstr "Telefon raqami"
+
+#: components_new/contacts/ContactsApp.tsx:200
+msgid "a+WBaz"
+msgstr "Email"
+
+#: components_new/contacts/ContactsApp.tsx:220
+msgid "W44A3f"
+msgstr "Buyurtma raqami"
+
+#: components_new/contacts/ContactsApp.tsx:241
+msgid "Q08VOC"
+msgstr "Sharh"
+
+#: components_new/contacts/ContactsApp.tsx:313
+msgid "aXsJwD"
+msgstr "Yuborish"
+
+#: components_new/delivery/DeliveryApp.tsx:9
+#: components_new/header/SideMenuApp.tsx:21
+msgid "vku+vY"
+msgstr "Yetkazib berish va to'lov"
+
+#: components_new/FooterApp.tsx:73
+msgid "7HV2WI"
 msgstr "Birlashtiradigan ta'm!"
 
-msgid "Главная"
+#: components_new/FooterApp.tsx:114
+#: components_new/header/SideMenuApp.tsx:76
+msgid "YaMZGV"
+msgstr "Menyu"
+
+#: components_new/FooterApp.tsx:136
+msgid "T24pln"
+msgstr "Ma'lumot"
+
+#: components_new/FooterApp.tsx:169
+msgid "XBB9pZ"
+msgstr "Bizga obuna bo'ling:"
+
+#: components_new/FooterApp.tsx:193
+msgid "J76yQ6"
+msgstr "Barcha huquqlar himoyalangan"
+
+#: components_new/header/ChooseCityDropDownApp.tsx:71
+msgid "6QS/OL"
+msgstr "Sizning shahringiz"
+
+#: components_new/header/SideMenuApp.tsx:22
+msgid "Vj2nh2"
+msgstr ""
+
+#: components_new/header/SideMenuApp.tsx:24
+#: components_new/sale/SaleListApp.tsx:32
+#: components_new/sale/SaleListApp.tsx:41
+msgid "J36SDn"
+msgstr "Aksiyalar"
+
+#: components_new/header/SideMenuApp.tsx:25
+msgid "gaIt7P"
+msgstr ""
+
+#: components_new/header/SignInButtonApp.tsx:22
+#: components_new/header/SignInButtonApp.tsx:38
+msgid "oU4rxk"
+msgstr "Kirish"
+
+#: components_new/HeaderApp.tsx:26
+msgid "EiCEoo"
+msgstr "Manzilni tanlang"
+
+#: components_new/mobile/MobileBottomNavApp.tsx:52
+msgid "XnLtsK"
 msgstr "Bosh sahifa"
 
-msgid "Заказы"
+#: components_new/mobile/MobileBottomNavApp.tsx:59
+msgid "/qjQzi"
 msgstr "Buyurtmalar"
 
-msgid "Настройки"
+#: components_new/mobile/MobileBottomNavApp.tsx:74
+msgid "THaf0F"
 msgstr "Sozlamalar"
 
-msgid "Доставка"
-msgstr "Yetkazib berish"
+#: components_new/news/NewsDetailApp.tsx:66
+msgid "WkFJkT"
+msgstr "Tavsiya etiladigan yangiliklar"
 
-msgid "Самовывоз"
-msgstr "Olib ketish"
+#: components_new/news/NewsDetailApp.tsx:92
+#: components_new/news/NewsListApp.tsx:69
+#: components_new/sale/SaleDetailApp.tsx:90
+#: components_new/sale/SaleListApp.tsx:69
+msgid "HV2zHm"
+msgstr "Batafsil"
+
+#: components_new/news/NewsListApp.tsx:32
+#: components_new/news/NewsListApp.tsx:41
+msgid "3j6hgF"
+msgstr "Yangiliklar"
+
+#: components_new/news/NewsListApp.tsx:34
+msgid "aP09v9"
+msgstr "Hozircha yangiliklar yo'q"
+
+#: components_new/product/CreateYourPizzaApp.tsx:544
+#: components_new/product/CreateYourPizzaMobileApp.tsx:529
+msgid "FVZBEe"
+msgstr "O'z pitsangizni yarating"
+
+#: components_new/product/CreateYourPizzaApp.tsx:553
+#: components_new/product/CreateYourPizzaMobileApp.tsx:536
+msgid "WRnc7y"
+msgstr "Pitsa yaratish"
+
+#: components_new/product/ProductItemNewApp.tsx:622
+#: components_new/product/ProductItemNewApp.tsx:673
+msgid "zXkVd5"
+msgstr "Qo'shish"
+
+#: components_new/product/ProductItemNewApp.tsx:778
+msgid "kazY5+"
+msgstr "Mahsulot vaqtinchalik mavjud emas"
+
+#: components_new/product/ProductItemNewApp.tsx:968
+#: components_new/product/ProductItemNewApp.tsx:1215
+msgid "JwQa2e"
+msgstr "Savatga"
+
+#: components_new/product/ProductItemNewApp.tsx:1131
+msgid "AH6N5n"
+msgstr "Pitsaga qo'shish"
+
+#: components_new/sale/SaleDetailApp.tsx:65
+msgid "dJ1A50"
+msgstr "Tavsiya etiladigan aksiyalar"
+
+#: components_new/sale/SaleListApp.tsx:34
+msgid "vyfu0r"
+msgstr "Hozircha aksiyalar yo'q"

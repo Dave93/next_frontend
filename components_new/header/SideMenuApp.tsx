@@ -11,19 +11,19 @@ import { Link } from '../../i18n/navigation'
 import { useUI } from '@components/ui/context'
 import { useExtracted } from 'next-intl'
 
-const items = [
-  { ru: 'О нас', href: '/about' },
-  { ru: 'Доставка и оплата', href: '/delivery' },
-  { ru: 'Адреса ресторанов', href: '/branch' },
-  { ru: 'Контакты', href: '/contacts' },
-  { ru: 'Акции', href: '/sale' },
-  { ru: 'Конфиденциальность', href: '/privacy' },
-]
-
 const SideMenuApp: FC = () => {
   const { activeCity } = useUI()
   const t = useExtracted()
   const citySlug = activeCity?.slug || 'tashkent'
+
+  const items = [
+    { label: t('О нас'), href: '/about' },
+    { label: t('Доставка и оплата'), href: '/delivery' },
+    { label: t('Адреса ресторанов'), href: '/branch' },
+    { label: t('Контакты'), href: '/contacts' },
+    { label: t('Акции'), href: '/sale' },
+    { label: t('Конфиденциальность'), href: '/privacy' },
+  ]
 
   return (
     <Popover className="relative ml-3">
@@ -77,14 +77,14 @@ const SideMenuApp: FC = () => {
               </div>
               <ul>
                 {items.map((item) => (
-                  <li key={item.ru}>
+                  <li key={item.href}>
                     <Link
                       href={`/${citySlug}${item.href}`}
                       prefetch={false}
                       onClick={() => close()}
                       className="flex items-center px-4 py-2.5 text-sm text-gray-700 hover:bg-yellow-50 hover:text-yellow-700 transition-colors"
                     >
-                      {t(item.ru)}
+                      {item.label}
                     </Link>
                   </li>
                 ))}

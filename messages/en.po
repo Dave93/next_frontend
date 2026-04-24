@@ -1,91 +1,204 @@
 msgid ""
 msgstr ""
-"Content-Type: text/plain; charset=UTF-8\n"
 "Language: en\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: next-intl\n"
+"X-Crowdin-SourceKey: msgstr\n"
 
-msgid "Войти"
-msgstr "Sign in"
-
-msgid "Корзина"
-msgstr "Cart"
-
-msgid "Корзина пуста"
-msgstr "Cart is empty"
-
-msgid "Выберите пиццу"
-msgstr "Choose a pizza"
-
-msgid "Соберите свою пиццу"
-msgstr "Build your pizza"
-
-msgid "Собрать пиццу"
-msgstr "Build pizza"
-
-msgid "В КОРЗИНУ"
-msgstr "ADD TO CART"
-
-msgid "В корзину"
-msgstr "Add to cart"
-
-msgid "Вернуться в меню"
-msgstr "Back to menu"
-
-msgid "Укажите свой адрес"
-msgstr "Enter your address"
-
-msgid "Меню"
-msgstr "Menu"
-
-msgid "Информация"
-msgstr "Information"
-
-msgid "О нас"
+#: components_new/about/AboutApp.tsx:11
+#: components_new/header/SideMenuApp.tsx:20
+msgid "2NIDWU"
 msgstr "About"
 
-msgid "Доставка и оплата"
-msgstr "Delivery and payment"
+#: components_new/cart/CartApp.tsx:536
+#: components_new/common/SmallCartApp.tsx:310
+msgid "Lj6qSg"
+msgstr "Cart is empty"
 
-msgid "Адреса ресторанов"
-msgstr "Restaurant locations"
+#: components_new/cart/CartApp.tsx:537
+#: components_new/common/SmallCartApp.tsx:311
+msgid "V5Ibqh"
+msgstr "Choose a pizza"
 
-msgid "Контакты"
+#: components_new/cart/CartApp.tsx:542
+msgid "595aPR"
+msgstr "Back to menu"
+
+#: components_new/common/SmallCartApp.tsx:292
+#: components_new/mobile/MobileBottomNavApp.tsx:67
+msgid "Ukms9b"
+msgstr "Cart"
+
+#: components_new/contacts/ContactsApp.tsx:89
+msgid "r+N/QY"
+msgstr "Feedback sent successfully"
+
+#: components_new/contacts/ContactsApp.tsx:107
+#: components_new/header/SideMenuApp.tsx:23
+msgid "9daCY0"
 msgstr "Contacts"
 
-msgid "Акции"
-msgstr "Promo"
-
-msgid "Конфиденциальность"
-msgstr "Privacy"
-
-msgid "Присоединяйтесь к нашей команде"
-msgstr "Join our team"
-
-msgid "График работы"
+#: components_new/contacts/ContactsApp.tsx:118
+#: components_new/FooterApp.tsx:165
+msgid "Hi9xQK"
 msgstr "Hours"
 
-msgid "с 10-00 до 03-00 ежедневно"
-msgstr "from 10:00 till 03:00 daily"
+#: components_new/contacts/ContactsApp.tsx:126
+msgid "5uIz79"
+msgstr "Get a job"
 
-msgid "Подписывайтесь на нас:"
-msgstr "Follow us:"
+#: components_new/contacts/ContactsApp.tsx:134
+msgid "uV78Od"
+msgstr "Leave your feedback"
 
-msgid "Все права защищены"
-msgstr "All rights reserved"
+#: components_new/contacts/ContactsApp.tsx:137
+msgid "qXh0mH"
+msgstr "Name"
 
-msgid "Вкус, который объединяет!"
+#: components_new/contacts/ContactsApp.tsx:156
+#: components_new/contacts/ContactsApp.tsx:193
+#: components_new/contacts/ContactsApp.tsx:260
+msgid "oqiCOV"
+msgstr "Required field"
+
+#: components_new/contacts/ContactsApp.tsx:162
+msgid "ANbLXk"
+msgstr "Phone number"
+
+#: components_new/contacts/ContactsApp.tsx:200
+msgid "a+WBaz"
+msgstr "Email"
+
+#: components_new/contacts/ContactsApp.tsx:220
+msgid "W44A3f"
+msgstr "Order number"
+
+#: components_new/contacts/ContactsApp.tsx:241
+msgid "Q08VOC"
+msgstr "Feedback"
+
+#: components_new/contacts/ContactsApp.tsx:313
+msgid "aXsJwD"
+msgstr "Send"
+
+#: components_new/delivery/DeliveryApp.tsx:9
+#: components_new/header/SideMenuApp.tsx:21
+msgid "vku+vY"
+msgstr "Delivery and payment"
+
+#: components_new/FooterApp.tsx:73
+msgid "7HV2WI"
 msgstr "Flavor that brings us together!"
 
-msgid "Главная"
+#: components_new/FooterApp.tsx:114
+#: components_new/header/SideMenuApp.tsx:76
+msgid "YaMZGV"
+msgstr "Menu"
+
+#: components_new/FooterApp.tsx:136
+msgid "T24pln"
+msgstr "Information"
+
+#: components_new/FooterApp.tsx:169
+msgid "XBB9pZ"
+msgstr "Follow us:"
+
+#: components_new/FooterApp.tsx:193
+msgid "J76yQ6"
+msgstr "All rights reserved"
+
+#: components_new/header/ChooseCityDropDownApp.tsx:71
+msgid "6QS/OL"
+msgstr "Your city"
+
+#: components_new/header/SideMenuApp.tsx:22
+msgid "Vj2nh2"
+msgstr ""
+
+#: components_new/header/SideMenuApp.tsx:24
+#: components_new/sale/SaleListApp.tsx:32
+#: components_new/sale/SaleListApp.tsx:41
+msgid "J36SDn"
+msgstr "Promotions"
+
+#: components_new/header/SideMenuApp.tsx:25
+msgid "gaIt7P"
+msgstr ""
+
+#: components_new/header/SignInButtonApp.tsx:22
+#: components_new/header/SignInButtonApp.tsx:38
+msgid "oU4rxk"
+msgstr "Sign in"
+
+#: components_new/HeaderApp.tsx:26
+msgid "EiCEoo"
+msgstr "Enter your address"
+
+#: components_new/mobile/MobileBottomNavApp.tsx:52
+msgid "XnLtsK"
 msgstr "Home"
 
-msgid "Заказы"
+#: components_new/mobile/MobileBottomNavApp.tsx:59
+msgid "/qjQzi"
 msgstr "Orders"
 
-msgid "Настройки"
+#: components_new/mobile/MobileBottomNavApp.tsx:74
+msgid "THaf0F"
 msgstr "Settings"
 
-msgid "Доставка"
-msgstr "Delivery"
+#: components_new/news/NewsDetailApp.tsx:66
+msgid "WkFJkT"
+msgstr "Recommended news"
 
-msgid "Самовывоз"
-msgstr "Pickup"
+#: components_new/news/NewsDetailApp.tsx:92
+#: components_new/news/NewsListApp.tsx:69
+#: components_new/sale/SaleDetailApp.tsx:90
+#: components_new/sale/SaleListApp.tsx:69
+msgid "HV2zHm"
+msgstr "Read more"
+
+#: components_new/news/NewsListApp.tsx:32
+#: components_new/news/NewsListApp.tsx:41
+msgid "3j6hgF"
+msgstr "News"
+
+#: components_new/news/NewsListApp.tsx:34
+msgid "aP09v9"
+msgstr "No news yet"
+
+#: components_new/product/CreateYourPizzaApp.tsx:544
+#: components_new/product/CreateYourPizzaMobileApp.tsx:529
+msgid "FVZBEe"
+msgstr "Build your pizza"
+
+#: components_new/product/CreateYourPizzaApp.tsx:553
+#: components_new/product/CreateYourPizzaMobileApp.tsx:536
+msgid "WRnc7y"
+msgstr "Build pizza"
+
+#: components_new/product/ProductItemNewApp.tsx:622
+#: components_new/product/ProductItemNewApp.tsx:673
+msgid "zXkVd5"
+msgstr "Add"
+
+#: components_new/product/ProductItemNewApp.tsx:778
+msgid "kazY5+"
+msgstr "Item temporarily unavailable"
+
+#: components_new/product/ProductItemNewApp.tsx:968
+#: components_new/product/ProductItemNewApp.tsx:1215
+msgid "JwQa2e"
+msgstr "Add to cart"
+
+#: components_new/product/ProductItemNewApp.tsx:1131
+msgid "AH6N5n"
+msgstr "Add to pizza"
+
+#: components_new/sale/SaleDetailApp.tsx:65
+msgid "dJ1A50"
+msgstr "Recommended promo"
+
+#: components_new/sale/SaleListApp.tsx:34
+msgid "vyfu0r"
+msgstr "No promotions yet"

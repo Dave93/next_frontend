@@ -1,91 +1,204 @@
 msgid ""
 msgstr ""
-"Content-Type: text/plain; charset=UTF-8\n"
 "Language: ru\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: next-intl\n"
+"X-Crowdin-SourceKey: msgstr\n"
 
-msgid "Войти"
-msgstr "Войти"
-
-msgid "Корзина"
-msgstr "Корзина"
-
-msgid "Корзина пуста"
-msgstr "Корзина пуста"
-
-msgid "Выберите пиццу"
-msgstr "Выберите пиццу"
-
-msgid "Соберите свою пиццу"
-msgstr "Соберите свою пиццу"
-
-msgid "Собрать пиццу"
-msgstr "Собрать пиццу"
-
-msgid "В КОРЗИНУ"
-msgstr "В КОРЗИНУ"
-
-msgid "В корзину"
-msgstr "В корзину"
-
-msgid "Вернуться в меню"
-msgstr "Вернуться в меню"
-
-msgid "Укажите свой адрес"
-msgstr "Укажите свой адрес"
-
-msgid "Меню"
-msgstr "Меню"
-
-msgid "Информация"
-msgstr "Информация"
-
-msgid "О нас"
+#: components_new/about/AboutApp.tsx:11
+#: components_new/header/SideMenuApp.tsx:20
+msgid "2NIDWU"
 msgstr "О нас"
 
-msgid "Доставка и оплата"
-msgstr "Доставка и оплата"
+#: components_new/cart/CartApp.tsx:536
+#: components_new/common/SmallCartApp.tsx:310
+msgid "Lj6qSg"
+msgstr "Корзина пуста"
 
-msgid "Адреса ресторанов"
-msgstr "Адреса ресторанов"
+#: components_new/cart/CartApp.tsx:537
+#: components_new/common/SmallCartApp.tsx:311
+msgid "V5Ibqh"
+msgstr "Выберите пиццу"
 
-msgid "Контакты"
+#: components_new/cart/CartApp.tsx:542
+msgid "595aPR"
+msgstr "Вернуться в меню"
+
+#: components_new/common/SmallCartApp.tsx:292
+#: components_new/mobile/MobileBottomNavApp.tsx:67
+msgid "Ukms9b"
+msgstr "Корзина"
+
+#: components_new/contacts/ContactsApp.tsx:89
+msgid "r+N/QY"
+msgstr "Отзыв успешно отправлен"
+
+#: components_new/contacts/ContactsApp.tsx:107
+#: components_new/header/SideMenuApp.tsx:23
+msgid "9daCY0"
 msgstr "Контакты"
 
-msgid "Акции"
-msgstr "Акции"
-
-msgid "Конфиденциальность"
-msgstr "Конфиденциальность"
-
-msgid "Присоединяйтесь к нашей команде"
-msgstr "Присоединяйтесь к нашей команде"
-
-msgid "График работы"
+#: components_new/contacts/ContactsApp.tsx:118
+#: components_new/FooterApp.tsx:165
+msgid "Hi9xQK"
 msgstr "График работы"
 
-msgid "с 10-00 до 03-00 ежедневно"
-msgstr "с 10-00 до 03-00 ежедневно"
+#: components_new/contacts/ContactsApp.tsx:126
+msgid "5uIz79"
+msgstr "Устроиться на работу"
 
-msgid "Подписывайтесь на нас:"
-msgstr "Подписывайтесь на нас:"
+#: components_new/contacts/ContactsApp.tsx:134
+msgid "uV78Od"
+msgstr "Оставьте свой отзыв"
 
-msgid "Все права защищены"
-msgstr "Все права защищены"
+#: components_new/contacts/ContactsApp.tsx:137
+msgid "qXh0mH"
+msgstr "Имя"
 
-msgid "Вкус, который объединяет!"
+#: components_new/contacts/ContactsApp.tsx:156
+#: components_new/contacts/ContactsApp.tsx:193
+#: components_new/contacts/ContactsApp.tsx:260
+msgid "oqiCOV"
+msgstr "Обязательное поле"
+
+#: components_new/contacts/ContactsApp.tsx:162
+msgid "ANbLXk"
+msgstr "Номер телефона"
+
+#: components_new/contacts/ContactsApp.tsx:200
+msgid "a+WBaz"
+msgstr "Эл. почта"
+
+#: components_new/contacts/ContactsApp.tsx:220
+msgid "W44A3f"
+msgstr "Номер заказа"
+
+#: components_new/contacts/ContactsApp.tsx:241
+msgid "Q08VOC"
+msgstr "Отзыв"
+
+#: components_new/contacts/ContactsApp.tsx:313
+msgid "aXsJwD"
+msgstr "Отправить"
+
+#: components_new/delivery/DeliveryApp.tsx:9
+#: components_new/header/SideMenuApp.tsx:21
+msgid "vku+vY"
+msgstr "Доставка и оплата"
+
+#: components_new/FooterApp.tsx:73
+msgid "7HV2WI"
 msgstr "Вкус, который объединяет!"
 
-msgid "Главная"
+#: components_new/FooterApp.tsx:114
+#: components_new/header/SideMenuApp.tsx:76
+msgid "YaMZGV"
+msgstr "Меню"
+
+#: components_new/FooterApp.tsx:136
+msgid "T24pln"
+msgstr "Информация"
+
+#: components_new/FooterApp.tsx:169
+msgid "XBB9pZ"
+msgstr "Подписывайтесь на нас:"
+
+#: components_new/FooterApp.tsx:193
+msgid "J76yQ6"
+msgstr "Все права защищены"
+
+#: components_new/header/ChooseCityDropDownApp.tsx:71
+msgid "6QS/OL"
+msgstr "Ваш город"
+
+#: components_new/header/SideMenuApp.tsx:22
+msgid "Vj2nh2"
+msgstr "Адреса ресторанов"
+
+#: components_new/header/SideMenuApp.tsx:24
+#: components_new/sale/SaleListApp.tsx:32
+#: components_new/sale/SaleListApp.tsx:41
+msgid "J36SDn"
+msgstr "Акции"
+
+#: components_new/header/SideMenuApp.tsx:25
+msgid "gaIt7P"
+msgstr "Конфиденциальность"
+
+#: components_new/header/SignInButtonApp.tsx:22
+#: components_new/header/SignInButtonApp.tsx:38
+msgid "oU4rxk"
+msgstr "Войти"
+
+#: components_new/HeaderApp.tsx:26
+msgid "EiCEoo"
+msgstr "Укажите свой адрес"
+
+#: components_new/mobile/MobileBottomNavApp.tsx:52
+msgid "XnLtsK"
 msgstr "Главная"
 
-msgid "Заказы"
+#: components_new/mobile/MobileBottomNavApp.tsx:59
+msgid "/qjQzi"
 msgstr "Заказы"
 
-msgid "Настройки"
+#: components_new/mobile/MobileBottomNavApp.tsx:74
+msgid "THaf0F"
 msgstr "Настройки"
 
-msgid "Доставка"
-msgstr "Доставка"
+#: components_new/news/NewsDetailApp.tsx:66
+msgid "WkFJkT"
+msgstr "Рекомендованные новости"
 
-msgid "Самовывоз"
-msgstr "Самовывоз"
+#: components_new/news/NewsDetailApp.tsx:92
+#: components_new/news/NewsListApp.tsx:69
+#: components_new/sale/SaleDetailApp.tsx:90
+#: components_new/sale/SaleListApp.tsx:69
+msgid "HV2zHm"
+msgstr "Подробнее"
+
+#: components_new/news/NewsListApp.tsx:32
+#: components_new/news/NewsListApp.tsx:41
+msgid "3j6hgF"
+msgstr "Новости"
+
+#: components_new/news/NewsListApp.tsx:34
+msgid "aP09v9"
+msgstr "Пока новостей нет"
+
+#: components_new/product/CreateYourPizzaApp.tsx:544
+#: components_new/product/CreateYourPizzaMobileApp.tsx:529
+msgid "FVZBEe"
+msgstr "Соберите свою пиццу"
+
+#: components_new/product/CreateYourPizzaApp.tsx:553
+#: components_new/product/CreateYourPizzaMobileApp.tsx:536
+msgid "WRnc7y"
+msgstr "Собрать пиццу"
+
+#: components_new/product/ProductItemNewApp.tsx:622
+#: components_new/product/ProductItemNewApp.tsx:673
+msgid "zXkVd5"
+msgstr "Добавить"
+
+#: components_new/product/ProductItemNewApp.tsx:778
+msgid "kazY5+"
+msgstr "Товар временно недоступен"
+
+#: components_new/product/ProductItemNewApp.tsx:968
+#: components_new/product/ProductItemNewApp.tsx:1215
+msgid "JwQa2e"
+msgstr "В корзину"
+
+#: components_new/product/ProductItemNewApp.tsx:1131
+msgid "AH6N5n"
+msgstr "Добавить к пицце"
+
+#: components_new/sale/SaleDetailApp.tsx:65
+msgid "dJ1A50"
+msgstr "Рекомендованные акции"
+
+#: components_new/sale/SaleListApp.tsx:34
+msgid "vyfu0r"
+msgstr "Пока акций нет"
