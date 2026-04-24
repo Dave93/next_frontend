@@ -80,6 +80,7 @@ export interface State {
   activeCity: City | null
   showSignInModal: boolean
   showLocationTabs: boolean
+  locationTabsInitialTab: 'deliver' | 'pickup' | null
   showMobileLocationTabs: boolean
   locationTabsClosable: boolean
   stopProducts: number[]
@@ -100,6 +101,7 @@ const initialState = {
   activeCity: activeCity,
   showSignInModal: false,
   showLocationTabs: false,
+  locationTabsInitialTab: null,
   showMobileLocationTabs: false,
   locationTabsClosable: false,
   stopProducts: [],
@@ -162,6 +164,7 @@ type Action =
     }
   | {
       type: 'SHOW_LOCATION_TABS'
+      value?: 'deliver' | 'pickup' | null
     }
   | {
       type: 'CLOSE_LOCATION_TABS'
@@ -329,6 +332,7 @@ function uiReducer(state: State, action: Action) {
       return {
         ...state,
         showLocationTabs: true,
+        locationTabsInitialTab: action.value || null,
       }
     }
     case 'CLOSE_LOCATION_TABS': {
@@ -512,7 +516,8 @@ export const UIProvider: FC<UIProviderProps> = (props) => {
   )
 
   const openLocationTabs = useCallback(
-    () => dispatch({ type: 'SHOW_LOCATION_TABS' }),
+    (initialTab?: 'deliver' | 'pickup' | null) =>
+      dispatch({ type: 'SHOW_LOCATION_TABS', value: initialTab ?? null }),
     [dispatch]
   )
 

@@ -183,60 +183,62 @@ msgstr "Все права защищены"
 msgid "6QS/OL"
 msgstr "Ваш город"
 
-#: components_new/header/LocationTabsModalApp.tsx:275
+#: components_new/header/LocationTabsModalApp.tsx:332
+#: components_new/HeaderApp.tsx:106
 msgid "3qtFxi"
 msgstr "Доставка"
 
-#: components_new/header/LocationTabsModalApp.tsx:288
+#: components_new/header/LocationTabsModalApp.tsx:345
+#: components_new/HeaderApp.tsx:120
 msgid "k9Dt2Z"
 msgstr "Самовывоз"
 
-#: components_new/header/LocationTabsModalApp.tsx:296
+#: components_new/header/LocationTabsModalApp.tsx:375
 #: components_new/HeaderApp.tsx:26
 msgid "EiCEoo"
 msgstr "Укажите свой адрес"
 
-#: components_new/header/LocationTabsModalApp.tsx:357
+#: components_new/header/LocationTabsModalApp.tsx:436
 msgid "qnmGg/"
 msgstr "Адрес:"
 
-#: components_new/header/LocationTabsModalApp.tsx:375
+#: components_new/header/LocationTabsModalApp.tsx:454
 msgid "x1MUPc"
 msgstr "Адрес"
 
-#: components_new/header/LocationTabsModalApp.tsx:423
+#: components_new/header/LocationTabsModalApp.tsx:502
 msgid "2lYwXC"
 msgstr "Дом"
 
-#: components_new/header/LocationTabsModalApp.tsx:437
+#: components_new/header/LocationTabsModalApp.tsx:516
 msgid "PE9WEy"
 msgstr "Квартира"
 
-#: components_new/header/LocationTabsModalApp.tsx:455
+#: components_new/header/LocationTabsModalApp.tsx:534
 msgid "bIzegt"
 msgstr "Указать подъезд и домофон"
 
-#: components_new/header/LocationTabsModalApp.tsx:484
+#: components_new/header/LocationTabsModalApp.tsx:563
 msgid "DtOC+U"
 msgstr "Подъезд"
 
-#: components_new/header/LocationTabsModalApp.tsx:498
+#: components_new/header/LocationTabsModalApp.tsx:577
 msgid "KIMRoB"
 msgstr "Код от домофона"
 
-#: components_new/header/LocationTabsModalApp.tsx:512
+#: components_new/header/LocationTabsModalApp.tsx:591
 msgid "2ifljK"
 msgstr "Название адреса. Например, Дом Работа..."
 
-#: components_new/header/LocationTabsModalApp.tsx:533
+#: components_new/header/LocationTabsModalApp.tsx:612
 msgid "NUZRDC"
 msgstr "Выберите пиццерию:"
 
-#: components_new/header/LocationTabsModalApp.tsx:547
+#: components_new/header/LocationTabsModalApp.tsx:626
 msgid "+RxnK3"
 msgstr "Загрузка..."
 
-#: components_new/header/LocationTabsModalApp.tsx:652
+#: components_new/header/LocationTabsModalApp.tsx:731
 msgid "XzVpjf"
 msgstr "Подтвердить"
 

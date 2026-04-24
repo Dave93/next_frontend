@@ -79,6 +79,7 @@ const LocationTabsModalApp: FC = () => {
   const ui = useUI() as any
   const {
     showLocationTabs,
+    locationTabsInitialTab,
     closeLocationTabs,
     setLocationData,
     locationData,
@@ -130,7 +131,9 @@ const LocationTabsModalApp: FC = () => {
 
   useEffect(() => {
     if (!showLocationTabs) return
-    setTab(locationData?.deliveryType || 'deliver')
+    setTab(
+      locationTabsInitialTab || locationData?.deliveryType || 'deliver'
+    )
     setAddress(locationData?.address || defaultAddress)
     setHouse(locationData?.house || '')
     setFlat(locationData?.flat || '')
@@ -139,7 +142,7 @@ const LocationTabsModalApp: FC = () => {
     setLabel(locationData?.label || '')
     setCoords(locationData?.location || null)
     setTerminal(locationData?.terminalData || null)
-  }, [showLocationTabs, locationData, defaultAddress])
+  }, [showLocationTabs, locationData, defaultAddress, locationTabsInitialTab])
 
   useEffect(() => {
     if (tab !== 'pickup' || !activeCity?.id) return

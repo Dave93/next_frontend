@@ -183,60 +183,62 @@ msgstr "All rights reserved"
 msgid "6QS/OL"
 msgstr "Your city"
 
-#: components_new/header/LocationTabsModalApp.tsx:275
+#: components_new/header/LocationTabsModalApp.tsx:332
+#: components_new/HeaderApp.tsx:106
 msgid "3qtFxi"
 msgstr "Delivery"
 
-#: components_new/header/LocationTabsModalApp.tsx:288
+#: components_new/header/LocationTabsModalApp.tsx:345
+#: components_new/HeaderApp.tsx:120
 msgid "k9Dt2Z"
 msgstr "Pickup"
 
-#: components_new/header/LocationTabsModalApp.tsx:296
+#: components_new/header/LocationTabsModalApp.tsx:375
 #: components_new/HeaderApp.tsx:26
 msgid "EiCEoo"
 msgstr "Enter your address"
 
-#: components_new/header/LocationTabsModalApp.tsx:357
+#: components_new/header/LocationTabsModalApp.tsx:436
 msgid "qnmGg/"
 msgstr "Address:"
 
-#: components_new/header/LocationTabsModalApp.tsx:375
+#: components_new/header/LocationTabsModalApp.tsx:454
 msgid "x1MUPc"
 msgstr "Address"
 
-#: components_new/header/LocationTabsModalApp.tsx:423
+#: components_new/header/LocationTabsModalApp.tsx:502
 msgid "2lYwXC"
 msgstr "House"
 
-#: components_new/header/LocationTabsModalApp.tsx:437
+#: components_new/header/LocationTabsModalApp.tsx:516
 msgid "PE9WEy"
 msgstr "Apartment"
 
-#: components_new/header/LocationTabsModalApp.tsx:455
+#: components_new/header/LocationTabsModalApp.tsx:534
 msgid "bIzegt"
 msgstr "Add entrance and intercom"
 
-#: components_new/header/LocationTabsModalApp.tsx:484
+#: components_new/header/LocationTabsModalApp.tsx:563
 msgid "DtOC+U"
 msgstr "Entrance"
 
-#: components_new/header/LocationTabsModalApp.tsx:498
+#: components_new/header/LocationTabsModalApp.tsx:577
 msgid "KIMRoB"
 msgstr "Intercom code"
 
-#: components_new/header/LocationTabsModalApp.tsx:512
+#: components_new/header/LocationTabsModalApp.tsx:591
 msgid "2ifljK"
 msgstr "Address name. For example, Home, Work..."
 
-#: components_new/header/LocationTabsModalApp.tsx:533
+#: components_new/header/LocationTabsModalApp.tsx:612
 msgid "NUZRDC"
 msgstr "Choose a restaurant:"
 
-#: components_new/header/LocationTabsModalApp.tsx:547
+#: components_new/header/LocationTabsModalApp.tsx:626
 msgid "+RxnK3"
 msgstr "Loading..."
 
-#: components_new/header/LocationTabsModalApp.tsx:652
+#: components_new/header/LocationTabsModalApp.tsx:731
 msgid "XzVpjf"
 msgstr "Confirm"
 

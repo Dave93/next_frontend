@@ -26,14 +26,20 @@ const HeaderApp: FC = () => {
     return t('Укажите свой адрес')
   }, [locationData, t])
 
+  const deliveryType = locationData?.deliveryType
+  const ACTIVE_BG = 'rgba(250, 175, 4, 0.08)'
+  const ACTIVE_BORDER = '#FAAF04'
+  const INACTIVE_BG = '#F3F4F6'
+  const INACTIVE_BORDER = 'transparent'
+
   return (
     <header
-      className="py-[15px] items-center md:flex bg-white mb-3"
+      className="bg-white mb-3 md:py-[15px] md:items-center md:flex md:static sticky top-0 z-30"
       id="header"
     >
-      <div className="container mx-auto">
-        <div className="flex justify-between items-center">
-          <div className="w-32 md:w-48 ml-4 md:ml-0">
+      <div className="container mx-auto px-3 md:px-0">
+        <div className="flex justify-between items-center py-3 md:py-0">
+          <div className="w-32 md:w-48">
             <Link href={`/${chosenCity?.slug || ''}`} prefetch={false}>
               <Image
                 src="/assets/main_logo.svg"
@@ -78,10 +84,41 @@ const HeaderApp: FC = () => {
               </div>
               <SideMenuApp />
             </div>
-            <div className="md:hidden mr-4">
+            <div className="md:hidden">
               <ChooseCityDropDownApp />
             </div>
           </div>
+        </div>
+
+        <div className="md:hidden grid grid-cols-2 gap-2 pb-3">
+          <button
+            type="button"
+            onClick={() => openLocationTabs?.('deliver')}
+            className="rounded-full text-sm font-medium py-3 transition"
+            style={{
+              background: deliveryType === 'deliver' ? ACTIVE_BG : INACTIVE_BG,
+              border: `1px solid ${
+                deliveryType === 'deliver' ? ACTIVE_BORDER : INACTIVE_BORDER
+              }`,
+              color: deliveryType === 'deliver' ? ACTIVE_BORDER : '#1f2937',
+            }}
+          >
+            {t('Доставка')}
+          </button>
+          <button
+            type="button"
+            onClick={() => openLocationTabs?.('pickup')}
+            className="rounded-full text-sm font-medium py-3 transition"
+            style={{
+              background: deliveryType === 'pickup' ? ACTIVE_BG : INACTIVE_BG,
+              border: `1px solid ${
+                deliveryType === 'pickup' ? ACTIVE_BORDER : INACTIVE_BORDER
+              }`,
+              color: deliveryType === 'pickup' ? ACTIVE_BORDER : '#1f2937',
+            }}
+          >
+            {t('Самовывоз')}
+          </button>
         </div>
       </div>
     </header>
