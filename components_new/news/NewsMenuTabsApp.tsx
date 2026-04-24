@@ -9,33 +9,28 @@ type Props = {
   citySlug: string
 }
 
-const TABS: Array<{
-  href: string
-  icon: string
-  activeIcon: string
-  label: string
-}> = [
-  {
-    href: '/news',
-    icon: '/bonuses.png',
-    activeIcon: '/activeBonuses.png',
-    label: 'Новости',
-  },
-  {
-    href: '/sale',
-    icon: '/order.svg',
-    activeIcon: '/activeOrder.svg',
-    label: 'Акции',
-  },
-]
-
 const NewsMenuTabsApp: FC<Props> = ({ citySlug }) => {
   const t = useExtracted()
   const pathname = usePathname() || ''
 
+  const tabs = [
+    {
+      href: '/news',
+      icon: '/bonuses.png',
+      activeIcon: '/activeBonuses.png',
+      label: t('Новости'),
+    },
+    {
+      href: '/sale',
+      icon: '/order.svg',
+      activeIcon: '/activeOrder.svg',
+      label: t('Акции'),
+    },
+  ]
+
   return (
     <div className="flex items-center justify-center md:my-10 space-x-6 py-6 md:py-0">
-      {TABS.map((item) => {
+      {tabs.map((item) => {
         const href = `/${citySlug}${item.href}`
         const isActive = pathname.indexOf(item.href) >= 0
         return (
@@ -46,7 +41,7 @@ const NewsMenuTabsApp: FC<Props> = ({ citySlug }) => {
               prefetch={false}
               className={`${isActive ? 'text-yellow' : 'text-gray-400'} ml-1 text-sm`}
             >
-              {t(item.label)}
+              {item.label}
             </Link>
           </div>
         )
