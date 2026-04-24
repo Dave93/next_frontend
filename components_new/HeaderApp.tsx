@@ -1,6 +1,6 @@
 'use client'
 
-import { FC, useMemo } from 'react'
+import { FC, useEffect, useMemo, useRef } from 'react'
 import Image from 'next/image'
 import { useExtracted } from 'next-intl'
 import { Link } from '../i18n/navigation'
@@ -14,6 +14,26 @@ import SideMenuApp from './header/SideMenuApp'
 const HeaderApp: FC = () => {
   const { activeCity, cities, locationData, openLocationTabs } = useUI() as any
   const t = useExtracted()
+  const headerRef = useRef<HTMLElement | null>(null)
+
+  useEffect(() => {
+    const el = headerRef.current
+    if (!el) return
+    const update = () => {
+      document.documentElement.style.setProperty(
+        '--header-h',
+        `${el.offsetHeight}px`
+      )
+    }
+    update()
+    const ro = new ResizeObserver(update)
+    ro.observe(el)
+    window.addEventListener('resize', update)
+    return () => {
+      ro.disconnect()
+      window.removeEventListener('resize', update)
+    }
+  }, [])
 
   const chosenCity = useMemo(() => {
     if (activeCity) return activeCity
@@ -34,7 +54,8 @@ const HeaderApp: FC = () => {
 
   return (
     <header
-      className="bg-white mb-3 md:py-[15px] md:items-center md:flex md:static sticky top-0 z-30"
+      ref={headerRef}
+      className="bg-white mb-3 md:py-[15px] md:items-center md:flex sticky top-0 z-30"
       id="header"
     >
       <div className="container mx-auto px-3 md:px-0">

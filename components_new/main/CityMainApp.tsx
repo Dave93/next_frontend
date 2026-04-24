@@ -148,13 +148,12 @@ const CityMainApp: FC<Props> = ({
       </div>
       <MainSliderApp initialSliders={sliders} />
       <div id="header" />
-      <div className="hidden md:block">
-        <CategoriesMenuApp categories={categories} channelName={channelName} />
-      </div>
-      <div className="md:hidden">
-        <MobileCategoriesMenuApp categories={categories} />
-      </div>
       <div className="container mx-auto">
+        <CategoriesMenuApp
+          categories={categories}
+          channelName={channelName}
+        />
+        <MobileCategoriesMenuApp categories={categories} />
         <h1 className="py-1 md:text-4xl text-2xl w-max mt-4 mb-10 md:my-10 m-auto">
           {heading}
         </h1>

@@ -1,7 +1,6 @@
 'use client'
-import { FC, memo, useEffect, useState } from 'react'
+import { FC, memo } from 'react'
 import { useLocale } from 'next-intl'
-import Image from 'next/image'
 import { Link } from 'react-scroll'
 
 const CategoriesMenu: FC<{ categories: any[]; channelName: string }> = ({
@@ -10,74 +9,36 @@ const CategoriesMenu: FC<{ categories: any[]; channelName: string }> = ({
 }) => {
   const locale = useLocale()
 
-  const [fixed, changeState] = useState(false)
-
-  const categoriesFixing = () => {
-    window.scrollY > 450 ? changeState(true) : changeState(false)
-  }
-
-  useEffect(() => {
-    if (typeof window !== 'undefined') {
-      window.addEventListener('scroll', categoriesFixing)
-    }
-  }, [])
+  if (!categories.length) return null
 
   return (
     <div
-      className={`${
-        fixed
-          ? 'fixed left-0 m-auto right-0 top-0 z-30 bg-secondary w-full shadow-lg'
-          : ''
-      }`}
+      className="hidden md:block sticky z-20 bg-secondary shadow-lg"
+      style={{ top: 'var(--header-h, 0px)' }}
+      id="categoriesMenuSticky"
     >
-      <div className="container flex items-center m-auto overflow-x-scroll sm:overflow-x-hidden md:overflow-x-visible">
-        {fixed && (
-          <>
-            {/* @ts-ignore */}
-            <Link to="header" spy={true} smooth={true}>
-              <span className="md:flex mr-16 cursor-pointer hidden">
-                <Image
-                  src="/assets/categories_logo.png"
-                  width={44}
-                  height={44}
-                  unoptimized={true}
-                  alt="categories_logo"
-                />
-              </span>
-            </Link>
-          </>
-        )}
-        <div
-          className={`${
-            fixed
-              ? ' flex h-14 items-center justify-evenly md:w-full'
-              : 'bg-white flex h-14 items-center justify-between md:px-36 md:rounded-xl shadow-lg md:w-full'
-          } `}
-        >
-          {categories.map((item: any) => {
-            return (
-              <div
-                className={`${
-                  fixed ? 'text-white' : 'text-secondary'
-                } font-serif text-base text-center  cursor-pointer uppercase min-w-max px-4`}
-                key={item.id}
+      <div className="container flex items-center m-auto overflow-x-auto md:overflow-x-visible">
+        <div className="flex h-14 items-center justify-evenly w-full">
+          {categories.map((item: any) => (
+            <div
+              className="text-white font-serif text-base text-center cursor-pointer uppercase min-w-max px-4"
+              key={item.id}
+            >
+              {/* @ts-ignore */}
+              <Link
+                to={`productSection_${item.id}`}
+                spy={true}
+                smooth={true}
+                hashSpy
+                activeClass="text-yellow"
+                offset={-160}
               >
-                {/* @ts-ignore */}
-                <Link
-                  to={`productSection_${item.id}`}
-                  spy={true}
-                  smooth={true}
-                  hashSpy
-                  activeClass="text-yellow"
-                  offset={-100}
-                >
-                  <span>
-                    {item?.attribute_data?.name[channelName][locale || 'ru']}
-                  </span>
-                </Link>
-              </div>
-            )
-          })}
+                <span>
+                  {item?.attribute_data?.name[channelName][locale || 'ru']}
+                </span>
+              </Link>
+            </div>
+          ))}
         </div>
       </div>
     </div>
