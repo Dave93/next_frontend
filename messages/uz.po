@@ -305,7 +305,7 @@ msgstr "Pitsa yaratish"
 #: components_new/product/ProductDetailApp.tsx:148
 #: components_new/product/ProductDrawerApp.tsx:150
 msgid "F6q7sS"
-msgstr ""
+msgstr "Pitsaga qo'shish"
 
 #: components_new/product/ProductDetailApp.tsx:221
 #: components_new/product/ProductDrawerApp.tsx:225
