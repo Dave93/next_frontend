@@ -19,6 +19,7 @@ export async function generateMetadata({
         ru: `${base}/${city}/privacy`,
         uz: `${base}/uz/${city}/privacy`,
         en: `${base}/en/${city}/privacy`,
+        'x-default': `${base}/${city}/privacy`,
       },
     },
     robots: {

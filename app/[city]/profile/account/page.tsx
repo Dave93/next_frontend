@@ -23,6 +23,7 @@ export async function generateMetadata({
         ru: `${base}/${city}/profile/account`,
         uz: `${base}/uz/${city}/profile/account`,
         en: `${base}/en/${city}/profile/account`,
+        'x-default': `${base}/${city}/profile/account`,
       },
     },
     robots: { index: false, follow: false },

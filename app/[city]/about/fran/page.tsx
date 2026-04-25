@@ -19,6 +19,7 @@ export async function generateMetadata({
         ru: `${base}/${city}/about/fran`,
         uz: `${base}/uz/${city}/about/fran`,
         en: `${base}/en/${city}/about/fran`,
+        'x-default': `${base}/${city}/about/fran`,
       },
     },
   }

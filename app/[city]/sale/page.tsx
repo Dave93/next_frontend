@@ -26,6 +26,7 @@ export async function generateMetadata({
         ru: `${base}/${city}/sale`,
         uz: `${base}/uz/${city}/sale`,
         en: `${base}/en/${city}/sale`,
+        'x-default': `${base}/${city}/sale`,
       },
     },
   }

@@ -20,6 +20,7 @@ export async function generateMetadata({
         ru: `${base}/${city}/order/success`,
         uz: `${base}/uz/${city}/order/success`,
         en: `${base}/en/${city}/order/success`,
+        'x-default': `${base}/${city}/order/success`,
       },
     },
     robots: { index: false, follow: false },

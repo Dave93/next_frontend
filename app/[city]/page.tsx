@@ -26,6 +26,7 @@ export async function generateMetadata({
         ru: `${base}/${city}`,
         uz: `${base}/uz/${city}`,
         en: `${base}/en/${city}`,
+        'x-default': `${base}/${city}`,
       },
     },
     openGraph: {
