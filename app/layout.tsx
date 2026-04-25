@@ -8,11 +8,9 @@ import SiteJsonLd from '@components_new/seo/SiteJsonLd'
 
 import 'tailwindcss/tailwind.css'
 import '@assets/chrome-bug.css'
-import 'keen-slider/keen-slider.min.css'
 import '@assets/fonts.css'
 import '@assets/simplebar.css'
 import 'react-toastify/dist/ReactToastify.css'
-import '@egjs/flicking-plugins/dist/arrow.css'
 import '@components_new/header/DatePicker.css'
 
 export const metadata: Metadata = {
