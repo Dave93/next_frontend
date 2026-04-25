@@ -7,7 +7,6 @@ import CategoriesMenuApp from './CategoriesMenuApp'
 import MobileCategoriesMenuApp from './MobileCategoriesMenuApp'
 import ProductItemNewApp from '../product/ProductItemNewApp'
 import ProductListSectionTitle from '../product/ProductListSectionTitle'
-import MobSetLocationApp from '../header/MobSetLocationApp'
 import ThreePizzaApp from './ThreePizzaApp'
 import SmallCartApp from '../common/SmallCartApp'
 import { useLocale } from 'next-intl'
@@ -143,9 +142,6 @@ const CityMainApp: FC<Props> = ({
 
   return (
     <>
-      <div className="md:hidden">
-        <MobSetLocationApp />
-      </div>
       <MainSliderApp initialSliders={sliders} />
       <div id="header" />
       <div className="container mx-auto">
