@@ -75,11 +75,13 @@ msgstr "Resend code"
 
 #: components_new/cart/CartApp.tsx:536
 #: components_new/common/SmallCartApp.tsx:310
+#: components_new/header/HeaderMiniCartApp.tsx:258
 msgid "Lj6qSg"
 msgstr "Cart is empty"
 
 #: components_new/cart/CartApp.tsx:537
 #: components_new/common/SmallCartApp.tsx:311
+#: components_new/header/HeaderMiniCartApp.tsx:261
 msgid "V5Ibqh"
 msgstr "Choose a pizza"
 
@@ -88,6 +90,7 @@ msgid "595aPR"
 msgstr "Back to menu"
 
 #: components_new/common/SmallCartApp.tsx:292
+#: components_new/header/HeaderMiniCartApp.tsx:226
 #: components_new/mobile/MobileBottomNavApp.tsx:67
 msgid "Ukms9b"
 msgstr "Cart"
@@ -183,6 +186,14 @@ msgstr "All rights reserved"
 msgid "6QS/OL"
 msgstr "Your city"
 
+#: components_new/header/HeaderMiniCartApp.tsx:354
+msgid "2wkbQf"
+msgstr "Order total"
+
+#: components_new/header/HeaderMiniCartApp.tsx:366
+msgid "+urzAu"
+msgstr "Place order"
+
 #: components_new/header/LocationTabsModalApp.tsx:337
 #: components_new/HeaderApp.tsx:127
 msgid "3qtFxi"
@@ -235,7 +246,7 @@ msgid "NUZRDC"
 msgstr "Choose a restaurant:"
 
 #: components_new/header/LocationTabsModalApp.tsx:638
-#: components_new/product/ProductDetailApp.tsx:221
+#: components_new/product/ProductDetailApp.tsx:274
 #: components_new/product/ProductDrawerApp.tsx:225
 msgid "+RxnK3"
 msgstr "Loading..."
@@ -305,9 +316,9 @@ msgstr "Build pizza"
 #: components_new/product/ProductDetailApp.tsx:148
 #: components_new/product/ProductDrawerApp.tsx:150
 msgid "F6q7sS"
-msgstr "Add to pizza"
+msgstr ""
 
-#: components_new/product/ProductDetailApp.tsx:221
+#: components_new/product/ProductDetailApp.tsx:274
 #: components_new/product/ProductDrawerApp.tsx:225
 #: components_new/product/ProductItemNewApp.tsx:964
 #: components_new/product/ProductItemNewApp.tsx:1214

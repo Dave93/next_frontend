@@ -6,6 +6,7 @@ import { useExtracted } from 'next-intl'
 import { Link } from '../i18n/navigation'
 import { useUI } from '@components/ui/context'
 import ChooseCityDropDownApp from './header/ChooseCityDropDownApp'
+import HeaderMiniCartApp from './header/HeaderMiniCartApp'
 import HeaderPhoneApp from './header/HeaderPhoneApp'
 import LanguageDropDownApp from './header/LanguageDropDownApp'
 import SignInButtonApp from './header/SignInButtonApp'
@@ -103,6 +104,7 @@ const HeaderApp: FC = () => {
               <div className="mx-2">
                 <SignInButtonApp />
               </div>
+              <HeaderMiniCartApp />
               <SideMenuApp />
             </div>
             <div className="md:hidden">
