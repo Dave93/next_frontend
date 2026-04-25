@@ -21,7 +21,6 @@ const webAddress = process.env.NEXT_PUBLIC_API_URL
 axios.defaults.withCredentials = true
 
 const YELLOW = '#FAAF04'
-const YELLOW_SOFT = '#FFF6DE'
 
 const hashids = new Hashids(
   'basket',
@@ -517,30 +516,43 @@ export default function CartApp(_props: CartAppProps) {
     <div className="container mx-auto px-3 md:px-0 py-4 md:py-8">
       {!isWorkTime && (
         <div
-          className="mb-4 md:mb-6 rounded-2xl px-5 py-3 flex items-start gap-3"
-          style={{ background: YELLOW_SOFT }}
+          className="mb-4 md:mb-6 rounded-2xl px-5 md:px-6 py-4 md:py-5 flex items-start gap-4 shadow-lg ring-1 ring-red-300/40"
+          style={{
+            background:
+              'linear-gradient(135deg, #FEE2E2 0%, #FECACA 50%, #FCA5A5 100%)',
+          }}
+          role="alert"
         >
-          <svg
-            className="flex-shrink-0 mt-0.5"
-            width="20"
-            height="20"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke={YELLOW}
-            strokeWidth="2"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-          >
-            <circle cx="12" cy="12" r="10" />
-            <polyline points="12 6 12 12 16 14" />
-          </svg>
-          <div className="text-sm text-gray-800">
-            <span className="font-semibold">
+          <div className="flex-shrink-0 w-11 h-11 md:w-12 md:h-12 rounded-full bg-white/70 flex items-center justify-center shadow-sm">
+            <svg
+              width="24"
+              height="24"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="#DC2626"
+              strokeWidth="2.2"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            >
+              <circle cx="12" cy="12" r="10" />
+              <line x1="12" y1="8" x2="12" y2="13" />
+              <line x1="12" y1="16.5" x2="12.01" y2="16.5" />
+            </svg>
+          </div>
+          <div className="flex-1 min-w-0">
+            <div className="text-base md:text-lg font-extrabold text-red-800 leading-tight">
               {t('Сейчас не время работы')}
-            </span>
-            {workTimeLabel && (
-              <span className="text-gray-600 ml-1">{workTimeLabel}</span>
-            )}
+            </div>
+            <div className="mt-1 text-sm md:text-base text-red-900/80 leading-snug">
+              {t(
+                'Оформить заказ можно будет в рабочие часы. Корзина сохранится.'
+              )}
+              {workTimeLabel && (
+                <span className="block mt-1.5 font-semibold text-red-900">
+                  {t('Рабочие часы')}: {workTimeLabel}
+                </span>
+              )}
+            </div>
           </div>
         </div>
       )}

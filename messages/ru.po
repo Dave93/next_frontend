@@ -95,75 +95,83 @@ msgid "V5Ibqh"
 msgstr "Выберите пиццу"
 
 #: components_new/cart/CartApp.tsx:509
-#: components_new/cart/CartApp.tsx:840
+#: components_new/cart/CartApp.tsx:853
 msgid "595aPR"
 msgstr "Вернуться в меню"
 
-#: components_new/cart/CartApp.tsx:539
+#: components_new/cart/CartApp.tsx:545
 msgid "xXuBfJ"
 msgstr "Сейчас не время работы"
 
-#: components_new/cart/CartApp.tsx:554
+#: components_new/cart/CartApp.tsx:548
+msgid "5i7QXD"
+msgstr "Оформить заказ можно будет в рабочие часы. Корзина сохранится."
+
+#: components_new/cart/CartApp.tsx:553
+msgid "1nDsuM"
+msgstr "Рабочие часы"
+
+#: components_new/cart/CartApp.tsx:567
 #: components_new/common/SmallCartApp.tsx:292
 #: components_new/header/HeaderMiniCartApp.tsx:226
 #: components_new/mobile/MobileBottomNavApp.tsx:67
 msgid "Ukms9b"
 msgstr "Корзина"
 
-#: components_new/cart/CartApp.tsx:584
+#: components_new/cart/CartApp.tsx:597
 msgid "npyYek"
 msgstr "Очистить"
 
-#: components_new/cart/CartApp.tsx:635
+#: components_new/cart/CartApp.tsx:648
 msgid "6CPoX6"
 msgstr "Бонус"
 
-#: components_new/cart/CartApp.tsx:643
+#: components_new/cart/CartApp.tsx:656
 msgid "QZlQya"
 msgstr "Акция"
 
-#: components_new/cart/CartApp.tsx:713
+#: components_new/cart/CartApp.tsx:726
 msgid "mHUlgT"
 msgstr "Вам может понравиться"
 
-#: components_new/cart/CartApp.tsx:758
+#: components_new/cart/CartApp.tsx:771
 msgid "G5xn1F"
 msgstr "Ваш заказ"
 
-#: components_new/cart/CartApp.tsx:763
+#: components_new/cart/CartApp.tsx:776
 msgid "f0SWKw"
 msgstr "Товары"
 
-#: components_new/cart/CartApp.tsx:771
+#: components_new/cart/CartApp.tsx:784
 msgid "gXcQyF"
 msgstr "Скидка"
 
-#: components_new/cart/CartApp.tsx:778
+#: components_new/cart/CartApp.tsx:791
 #: components_new/header/LocationTabsModalApp.tsx:337
 #: components_new/HeaderApp.tsx:129
 msgid "3qtFxi"
 msgstr "Доставка"
 
-#: components_new/cart/CartApp.tsx:781
+#: components_new/cart/CartApp.tsx:794
 #: components_new/header/LocationTabsModalApp.tsx:348
 #: components_new/HeaderApp.tsx:143
 msgid "k9Dt2Z"
 msgstr "Самовывоз"
 
-#: components_new/cart/CartApp.tsx:782
+#: components_new/cart/CartApp.tsx:795
 msgid "WIL1SZ"
 msgstr "Уточняется"
 
-#: components_new/cart/CartApp.tsx:788
+#: components_new/cart/CartApp.tsx:801
 msgid "x5G3yc"
 msgstr "Итого"
 
-#: components_new/cart/CartApp.tsx:802
+#: components_new/cart/CartApp.tsx:815
 #: components_new/header/HeaderMiniCartApp.tsx:366
 msgid "+urzAu"
 msgstr "Оформить заказ"
 
-#: components_new/cart/CartApp.tsx:844
+#: components_new/cart/CartApp.tsx:857
 msgid "J4PSYQ"
 msgstr "Обрабатывая ваши данные, вы соглашаетесь с нашими условиями использования"
 

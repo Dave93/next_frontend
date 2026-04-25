@@ -95,75 +95,83 @@ msgid "V5Ibqh"
 msgstr "Pitsa tanlang"
 
 #: components_new/cart/CartApp.tsx:509
-#: components_new/cart/CartApp.tsx:840
+#: components_new/cart/CartApp.tsx:853
 msgid "595aPR"
 msgstr "Menyuga qaytish"
 
-#: components_new/cart/CartApp.tsx:539
+#: components_new/cart/CartApp.tsx:545
 msgid "xXuBfJ"
 msgstr "Hozir ish vaqti emas"
 
-#: components_new/cart/CartApp.tsx:554
+#: components_new/cart/CartApp.tsx:548
+msgid "5i7QXD"
+msgstr "Buyurtmani ish vaqtida berish mumkin bo'ladi. Savatcha saqlanadi."
+
+#: components_new/cart/CartApp.tsx:553
+msgid "1nDsuM"
+msgstr "Ish vaqti"
+
+#: components_new/cart/CartApp.tsx:567
 #: components_new/common/SmallCartApp.tsx:292
 #: components_new/header/HeaderMiniCartApp.tsx:226
 #: components_new/mobile/MobileBottomNavApp.tsx:67
 msgid "Ukms9b"
 msgstr "Savat"
 
-#: components_new/cart/CartApp.tsx:584
+#: components_new/cart/CartApp.tsx:597
 msgid "npyYek"
 msgstr "Tozalash"
 
-#: components_new/cart/CartApp.tsx:635
+#: components_new/cart/CartApp.tsx:648
 msgid "6CPoX6"
 msgstr "Bonus"
 
-#: components_new/cart/CartApp.tsx:643
+#: components_new/cart/CartApp.tsx:656
 msgid "QZlQya"
 msgstr "Aksiya"
 
-#: components_new/cart/CartApp.tsx:713
+#: components_new/cart/CartApp.tsx:726
 msgid "mHUlgT"
 msgstr "Sizga yoqishi mumkin"
 
-#: components_new/cart/CartApp.tsx:758
+#: components_new/cart/CartApp.tsx:771
 msgid "G5xn1F"
 msgstr "Buyurtmangiz"
 
-#: components_new/cart/CartApp.tsx:763
+#: components_new/cart/CartApp.tsx:776
 msgid "f0SWKw"
 msgstr "Mahsulotlar"
 
-#: components_new/cart/CartApp.tsx:771
+#: components_new/cart/CartApp.tsx:784
 msgid "gXcQyF"
 msgstr "Chegirma"
 
-#: components_new/cart/CartApp.tsx:778
+#: components_new/cart/CartApp.tsx:791
 #: components_new/header/LocationTabsModalApp.tsx:337
 #: components_new/HeaderApp.tsx:129
 msgid "3qtFxi"
 msgstr "Yetkazib berish"
 
-#: components_new/cart/CartApp.tsx:781
+#: components_new/cart/CartApp.tsx:794
 #: components_new/header/LocationTabsModalApp.tsx:348
 #: components_new/HeaderApp.tsx:143
 msgid "k9Dt2Z"
 msgstr "Olib ketish"
 
-#: components_new/cart/CartApp.tsx:782
+#: components_new/cart/CartApp.tsx:795
 msgid "WIL1SZ"
 msgstr "To'lov bosqichida hisoblanadi"
 
-#: components_new/cart/CartApp.tsx:788
+#: components_new/cart/CartApp.tsx:801
 msgid "x5G3yc"
 msgstr "Jami"
 
-#: components_new/cart/CartApp.tsx:802
+#: components_new/cart/CartApp.tsx:815
 #: components_new/header/HeaderMiniCartApp.tsx:366
 msgid "+urzAu"
 msgstr "Buyurtma berish"
 
-#: components_new/cart/CartApp.tsx:844
+#: components_new/cart/CartApp.tsx:857
 msgid "J4PSYQ"
 msgstr "Ma'lumotlaringizni qayta ishlash orqali siz foydalanish shartlarimizga rozi bo'lasiz"
 
