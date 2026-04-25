@@ -2,7 +2,9 @@ import type { Metadata } from 'next'
 import { getLocale } from 'next-intl/server'
 import DeliveryApp from '../../../components_new/delivery/DeliveryApp'
 import BreadcrumbsJsonLd from '../../../components_new/seo/BreadcrumbsJsonLd'
+import FaqJsonLd from '../../../components_new/seo/FaqJsonLd'
 import { crumbLabel, localizedPath } from '../../../lib/seo/alternates'
+import { DELIVERY_FAQ } from '../../../lib/seo/faq'
 
 type Params = { city: string }
 
@@ -46,6 +48,7 @@ export default async function DeliveryPage({
           },
         ]}
       />
+      <FaqJsonLd items={DELIVERY_FAQ[loc]} />
       <DeliveryApp />
     </>
   )
