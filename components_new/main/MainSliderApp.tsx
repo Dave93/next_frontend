@@ -69,10 +69,15 @@ const SliderCarousel: FC<CarouselProps> = ({ sliders }) => {
                         className="hidden md:block w-full max-h-[400px] object-cover"
                         loading={index === 0 ? 'eager' : 'lazy'}
                         priority={index === 0}
+                        fetchPriority={index === 0 ? 'high' : 'auto'}
                         width={1200}
                         height={400}
                         sizes="(min-width: 768px) 1160px, 100vw"
-                        alt=""
+                        alt={
+                          (item as any).title ||
+                          (item as any).name ||
+                          'Chopar Pizza promo banner'
+                        }
                       />
                       <Image
                         src={
@@ -83,10 +88,15 @@ const SliderCarousel: FC<CarouselProps> = ({ sliders }) => {
                         className="md:hidden w-full h-[44vw] object-cover"
                         loading={index === 0 ? 'eager' : 'lazy'}
                         priority={index === 0}
+                        fetchPriority={index === 0 ? 'high' : 'auto'}
                         width={600}
                         height={264}
                         sizes="100vw"
-                        alt=""
+                        alt={
+                          (item as any).title ||
+                          (item as any).name ||
+                          'Chopar Pizza promo banner'
+                        }
                       />
                     </>
                   )}
