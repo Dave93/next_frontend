@@ -3,6 +3,7 @@ import { notFound } from 'next/navigation'
 import { fetchSiteInfo } from '../../../../lib/data/site-info'
 import UserDataApp from '../../../../components_new/profile/UserDataApp'
 import AddressApp from '../../../../components_new/profile/AddressApp'
+import { getMetaLocale, tr } from '../../../../lib/seo/meta-i18n'
 import type { City } from '@commerce/types/cities'
 
 type Params = { city: string }
@@ -14,8 +15,9 @@ export async function generateMetadata({
 }): Promise<Metadata> {
   const { city } = await params
   const base = 'https://choparpizza.uz'
+  const locale = await getMetaLocale()
   return {
-    title: 'Мои адреса',
+    title: tr('myAddresses', locale),
     alternates: {
       canonical: `${base}/${city}/profile/address`,
       languages: {

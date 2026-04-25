@@ -3,6 +3,7 @@ import { getLocale } from 'next-intl/server'
 import AboutApp from '../../../components_new/about/AboutApp'
 import BreadcrumbsJsonLd from '../../../components_new/seo/BreadcrumbsJsonLd'
 import { crumbLabel, localizedPath } from '../../../lib/seo/alternates'
+import { getMetaLocale, tr } from '../../../lib/seo/meta-i18n'
 
 type Params = { city: string }
 
@@ -13,9 +14,10 @@ export async function generateMetadata({
 }): Promise<Metadata> {
   const { city } = await params
   const base = 'https://choparpizza.uz'
+  const locale = await getMetaLocale()
   return {
-    title: 'О компании',
-    description: 'История бренда Chopar Pizza',
+    title: tr('about', locale),
+    description: tr('aboutDesc', locale),
     alternates: {
       canonical: `${base}/${city}/about`,
       languages: {

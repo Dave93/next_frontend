@@ -5,6 +5,7 @@ import BreadcrumbsJsonLd from '../../../components_new/seo/BreadcrumbsJsonLd'
 import FaqJsonLd from '../../../components_new/seo/FaqJsonLd'
 import { crumbLabel, localizedPath } from '../../../lib/seo/alternates'
 import { DELIVERY_FAQ } from '../../../lib/seo/faq'
+import { getMetaLocale, tr } from '../../../lib/seo/meta-i18n'
 
 type Params = { city: string }
 
@@ -15,9 +16,10 @@ export async function generateMetadata({
 }): Promise<Metadata> {
   const { city } = await params
   const base = 'https://choparpizza.uz'
+  const locale = await getMetaLocale()
   return {
-    title: 'Доставка и оплата',
-    description: 'Как сделать заказ, инструкция и дополнительная информация',
+    title: tr('deliveryAndPayment', locale),
+    description: tr('deliveryAndPaymentDesc', locale),
     alternates: {
       canonical: `${base}/${city}/delivery`,
       languages: {

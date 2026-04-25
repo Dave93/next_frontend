@@ -1,6 +1,7 @@
 import type { Metadata } from 'next'
 import { notFound } from 'next/navigation'
 import { fetchSiteInfo } from '../../../../lib/data/site-info'
+import { getMetaLocale, tr } from '../../../../lib/seo/meta-i18n'
 import type { City } from '@commerce/types/cities'
 
 type Params = { city: string }
@@ -12,8 +13,9 @@ export async function generateMetadata({
 }): Promise<Metadata> {
   const { city } = await params
   const base = 'https://choparpizza.uz'
+  const locale = await getMetaLocale()
   return {
-    title: 'Заказ оформлен',
+    title: tr('orderPlaced', locale),
     alternates: {
       canonical: `${base}/${city}/order/success`,
       languages: {

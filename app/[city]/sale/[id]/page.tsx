@@ -23,11 +23,17 @@ export async function generateMetadata({
   const cities = (siteInfo as any).cities as City[]
   const currentCity = cities.find((c) => c.slug === city)
   const sale = currentCity ? await fetchSaleById(id, currentCity.id) : null
+  const fallbackTitle =
+    locale === 'uz'
+      ? 'Chopar Pizza aksiyasi'
+      : locale === 'en'
+      ? 'Chopar Pizza Promotion'
+      : 'Акция Chopar Pizza'
   const title =
     (locale === 'uz' && (sale as any)?.title_uz) ||
     (locale === 'en' && (sale as any)?.title_en) ||
     (sale as any)?.title ||
-    'Акция Chopar Pizza'
+    fallbackTitle
   const rawDesc =
     (locale === 'uz' && (sale as any)?.description_uz) ||
     (locale === 'en' && (sale as any)?.description_en) ||
@@ -41,10 +47,7 @@ export async function generateMetadata({
       .trim()
       .slice(0, 160) || undefined
   return {
-    title: {
-      absolute:
-        title === 'Акция Chopar Pizza' ? title : `${title} | Chopar Pizza`,
-    },
+    title,
     description,
     alternates: {
       canonical: `${base}/${city}/sale/${id}`,

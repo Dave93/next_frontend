@@ -2,6 +2,7 @@ import type { Metadata } from 'next'
 import { notFound } from 'next/navigation'
 import { fetchSiteInfo } from '../../../../lib/data/site-info'
 import BonusStartApp from '../../../../components_new/bonus/BonusStartApp'
+import { getMetaLocale, tr } from '../../../../lib/seo/meta-i18n'
 import type { City } from '@commerce/types/cities'
 
 type Params = { city: string }
@@ -13,8 +14,9 @@ export async function generateMetadata({
 }): Promise<Metadata> {
   const { city } = await params
   const base = 'https://choparpizza.uz'
+  const locale = await getMetaLocale()
   return {
-    title: 'Начать бонусную программу',
+    title: tr('startBonus', locale),
     alternates: {
       canonical: `${base}/${city}/_bonus/start`,
       languages: {

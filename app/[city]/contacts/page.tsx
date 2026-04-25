@@ -4,6 +4,7 @@ import { fetchPublicConfig } from '../../../lib/data/configs'
 import ContactsApp from '../../../components_new/contacts/ContactsApp'
 import BreadcrumbsJsonLd from '../../../components_new/seo/BreadcrumbsJsonLd'
 import { crumbLabel, localizedPath } from '../../../lib/seo/alternates'
+import { getMetaLocale, tr } from '../../../lib/seo/meta-i18n'
 
 type Params = { city: string }
 
@@ -14,9 +15,10 @@ export async function generateMetadata({
 }): Promise<Metadata> {
   const { city } = await params
   const base = 'https://choparpizza.uz'
+  const locale = await getMetaLocale()
   return {
-    title: 'Наши контакты',
-    description: 'Контакты и график работы Chopar Pizza',
+    title: tr('contacts', locale),
+    description: tr('contactsDesc', locale),
     alternates: {
       canonical: `${base}/${city}/contacts`,
       languages: {

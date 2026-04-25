@@ -1,5 +1,6 @@
 import type { Metadata } from 'next'
 import PrivacyApp from '../../../components_new/privacy/PrivacyApp'
+import { getMetaLocale, tr } from '../../../lib/seo/meta-i18n'
 
 type Params = { city: string }
 
@@ -10,9 +11,10 @@ export async function generateMetadata({
 }): Promise<Metadata> {
   const { city } = await params
   const base = 'https://choparpizza.uz'
+  const locale = await getMetaLocale()
   return {
-    title: 'Политика конфиденциальности',
-    description: 'Политика конфиденциальности Chopar Pizza',
+    title: tr('privacy', locale),
+    description: tr('privacyDesc', locale),
     alternates: {
       canonical: `${base}/${city}/privacy`,
       languages: {

@@ -1,5 +1,6 @@
 import type { Metadata } from 'next'
 import FranApp from '../../../../components_new/fran/FranApp'
+import { getMetaLocale, tr } from '../../../../lib/seo/meta-i18n'
 
 type Params = { city: string }
 
@@ -10,9 +11,10 @@ export async function generateMetadata({
 }): Promise<Metadata> {
   const { city } = await params
   const base = 'https://choparpizza.uz'
+  const locale = await getMetaLocale()
   return {
-    title: 'Франшиза',
-    description: 'Льготные условия франчайзинга — открой свою пиццерию Chopar',
+    title: tr('franchise', locale),
+    description: tr('franchiseDesc', locale),
     alternates: {
       canonical: `${base}/${city}/about/fran`,
       languages: {

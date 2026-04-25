@@ -13,34 +13,42 @@ import '@assets/simplebar.css'
 // sonner ships its own CSS
 import '@components_new/header/DatePicker.css'
 
-export const metadata: Metadata = {
-  metadataBase: new URL('https://choparpizza.uz'),
-  title: {
-    default: 'Chopar Pizza',
-    template: '%s | Chopar Pizza',
-  },
-  description:
-    'Доставка пиццы с тандырным тестом в Ташкенте. Халяль. Бесплатная доставка.',
-  applicationName: 'Chopar Pizza',
-  manifest: '/manifest.json',
-  formatDetection: { telephone: true, address: false, email: false },
-  appleWebApp: {
-    capable: true,
-    title: 'Chopar Pizza',
-    statusBarStyle: 'default',
-  },
-  verification: {
-    google: process.env.NEXT_PUBLIC_SEO_GOOGLE_VERIFICATION || undefined,
-    yandex: process.env.NEXT_PUBLIC_SEO_YANDEX_VERIFICATION || undefined,
-    other: {
-      'mailru-verification':
-        process.env.NEXT_PUBLIC_SEO_MAILRU_VERIFICATION || '',
-      'msvalidate.01':
-        process.env.NEXT_PUBLIC_SEO_BING_VERIFICATION || '',
-      'facebook-domain-verification':
-        process.env.NEXT_PUBLIC_SEO_FB_VERIFICATION || '',
+const ROOT_DESC: Record<string, string> = {
+  ru: 'Доставка пиццы с тандырным тестом в Ташкенте. Халяль. Бесплатная доставка.',
+  uz: "Toshkentda tandir xamirli pitsa yetkazib berish. Halol. Bepul yetkazib berish.",
+  en: 'Pizza delivery with tandoor dough in Tashkent. Halal. Free delivery.',
+}
+
+export async function generateMetadata(): Promise<Metadata> {
+  const locale = await getLocale()
+  return {
+    metadataBase: new URL('https://choparpizza.uz'),
+    title: {
+      default: 'Chopar Pizza',
+      template: '%s | Chopar Pizza',
     },
-  },
+    description: ROOT_DESC[locale] || ROOT_DESC.ru,
+    applicationName: 'Chopar Pizza',
+    manifest: '/manifest.json',
+    formatDetection: { telephone: true, address: false, email: false },
+    appleWebApp: {
+      capable: true,
+      title: 'Chopar Pizza',
+      statusBarStyle: 'default',
+    },
+    verification: {
+      google: process.env.NEXT_PUBLIC_SEO_GOOGLE_VERIFICATION || undefined,
+      yandex: process.env.NEXT_PUBLIC_SEO_YANDEX_VERIFICATION || undefined,
+      other: {
+        'mailru-verification':
+          process.env.NEXT_PUBLIC_SEO_MAILRU_VERIFICATION || '',
+        'msvalidate.01':
+          process.env.NEXT_PUBLIC_SEO_BING_VERIFICATION || '',
+        'facebook-domain-verification':
+          process.env.NEXT_PUBLIC_SEO_FB_VERIFICATION || '',
+      },
+    },
+  }
 }
 
 export const viewport: Viewport = {

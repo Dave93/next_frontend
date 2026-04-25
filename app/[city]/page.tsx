@@ -6,6 +6,7 @@ import { fetchAllProducts } from '../../lib/data/products'
 import { fetchSliders } from '../../lib/data/sliders'
 import CityMainApp from '../../components_new/main/CityMainApp'
 import MenuJsonLd from '../../components_new/seo/MenuJsonLd'
+import { cityNameInLocative, getMetaLocale, tr } from '../../lib/seo/meta-i18n'
 import type { City } from '@commerce/types/cities'
 
 type Params = { city: string }
@@ -17,10 +18,11 @@ export async function generateMetadata({
 }): Promise<Metadata> {
   const { city } = await params
   const base = 'https://choparpizza.uz'
+  const locale = await getMetaLocale()
+  const cityLoc = cityNameInLocative(city, locale)
   return {
-    title: 'Заказать пиццу с доставкой в Ташкенте',
-    description:
-      'Бесплатная доставка пиццы в Ташкенте, заказать можно на нашем сайте или через телеграм бот @Chopar_bot',
+    title: tr('homeTitle', locale, { city: cityLoc }),
+    description: tr('homeDesc', locale, { city: cityLoc }),
     alternates: {
       canonical: `${base}/${city}`,
       languages: {

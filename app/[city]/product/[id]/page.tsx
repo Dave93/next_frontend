@@ -37,9 +37,21 @@ export async function generateMetadata({
       .replace(/\s+/g, ' ')
       .trim()
       .slice(0, 160) || undefined
+  const orderSuffix =
+    locale === 'uz'
+      ? 'yetkazib berish bilan buyurtma qiling'
+      : locale === 'en'
+      ? 'order with delivery'
+      : 'заказать с доставкой'
+  const productFallback =
+    locale === 'uz'
+      ? 'Chopar Pizza — Mahsulot'
+      : locale === 'en'
+      ? 'Chopar Pizza — Product'
+      : 'Chopar Pizza — Продукт'
   const title = name
-    ? `${name} — заказать с доставкой | Chopar Pizza`
-    : 'Chopar Pizza — Продукт'
+    ? `${name} — ${orderSuffix} | Chopar Pizza`
+    : productFallback
   return {
     title: { absolute: title },
     description,

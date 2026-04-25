@@ -5,6 +5,7 @@ import { fetchSiteInfo } from '../../../lib/data/site-info'
 import { fetchNewsList } from '../../../lib/data/news'
 import NewsListApp from '../../../components_new/news/NewsListApp'
 import NewsMenuTabsApp from '../../../components_new/news/NewsMenuTabsApp'
+import { getMetaLocale, tr } from '../../../lib/seo/meta-i18n'
 import type { City } from '@commerce/types/cities'
 
 type Params = { city: string }
@@ -16,9 +17,10 @@ export async function generateMetadata({
 }): Promise<Metadata> {
   const { city } = await params
   const base = 'https://choparpizza.uz'
+  const locale = await getMetaLocale()
   return {
-    title: 'Новости',
-    description: 'Свежие новости и события Chopar Pizza',
+    title: tr('news', locale),
+    description: tr('newsDesc', locale),
     alternates: {
       canonical: `${base}/${city}/news`,
       languages: {
