@@ -59,6 +59,7 @@ msgid "AYsWBj"
 msgstr "Kod raqamga yuborildi"
 
 #: components_new/auth/SignInModalApp.tsx:412
+#: components_new/cart/CartApp.tsx:482
 #: components_new/common/SmallCartMobileApp.tsx:387
 #: components_new/header/SignInButtonApp.tsx:22
 #: components_new/header/SignInButtonApp.tsx:38
@@ -73,27 +74,98 @@ msgstr "Kodni qayta yuborish vaqti"
 msgid "hPZJnP"
 msgstr "Kodni qayta yuborish"
 
-#: components_new/cart/CartApp.tsx:536
+#: components_new/cart/CartApp.tsx:472
+msgid "dW/7Kf"
+msgstr "Hisobingizga kiring"
+
+#: components_new/cart/CartApp.tsx:475
+msgid "uhOXf0"
+msgstr "Buyurtma berish uchun shaxsiy kabinetga kirish kerak"
+
+#: components_new/cart/CartApp.tsx:501
 #: components_new/common/SmallCartApp.tsx:310
 #: components_new/header/HeaderMiniCartApp.tsx:258
 msgid "Lj6qSg"
 msgstr "Savat bo'sh"
 
-#: components_new/cart/CartApp.tsx:537
+#: components_new/cart/CartApp.tsx:503
 #: components_new/common/SmallCartApp.tsx:311
 #: components_new/header/HeaderMiniCartApp.tsx:261
 msgid "V5Ibqh"
 msgstr "Pitsa tanlang"
 
-#: components_new/cart/CartApp.tsx:542
+#: components_new/cart/CartApp.tsx:509
+#: components_new/cart/CartApp.tsx:840
 msgid "595aPR"
 msgstr "Menyuga qaytish"
 
+#: components_new/cart/CartApp.tsx:539
+msgid "xXuBfJ"
+msgstr "Hozir ish vaqti emas"
+
+#: components_new/cart/CartApp.tsx:554
 #: components_new/common/SmallCartApp.tsx:292
 #: components_new/header/HeaderMiniCartApp.tsx:226
 #: components_new/mobile/MobileBottomNavApp.tsx:67
 msgid "Ukms9b"
 msgstr "Savat"
+
+#: components_new/cart/CartApp.tsx:584
+msgid "npyYek"
+msgstr "Tozalash"
+
+#: components_new/cart/CartApp.tsx:635
+msgid "6CPoX6"
+msgstr "Bonus"
+
+#: components_new/cart/CartApp.tsx:643
+msgid "QZlQya"
+msgstr "Aksiya"
+
+#: components_new/cart/CartApp.tsx:713
+msgid "mHUlgT"
+msgstr "Sizga yoqishi mumkin"
+
+#: components_new/cart/CartApp.tsx:758
+msgid "G5xn1F"
+msgstr "Buyurtmangiz"
+
+#: components_new/cart/CartApp.tsx:763
+msgid "f0SWKw"
+msgstr "Mahsulotlar"
+
+#: components_new/cart/CartApp.tsx:771
+msgid "gXcQyF"
+msgstr "Chegirma"
+
+#: components_new/cart/CartApp.tsx:778
+#: components_new/header/LocationTabsModalApp.tsx:337
+#: components_new/HeaderApp.tsx:129
+msgid "3qtFxi"
+msgstr "Yetkazib berish"
+
+#: components_new/cart/CartApp.tsx:781
+#: components_new/header/LocationTabsModalApp.tsx:348
+#: components_new/HeaderApp.tsx:143
+msgid "k9Dt2Z"
+msgstr "Olib ketish"
+
+#: components_new/cart/CartApp.tsx:782
+msgid "WIL1SZ"
+msgstr "To'lov bosqichida hisoblanadi"
+
+#: components_new/cart/CartApp.tsx:788
+msgid "x5G3yc"
+msgstr "Jami"
+
+#: components_new/cart/CartApp.tsx:802
+#: components_new/header/HeaderMiniCartApp.tsx:366
+msgid "+urzAu"
+msgstr "Buyurtma berish"
+
+#: components_new/cart/CartApp.tsx:844
+msgid "J4PSYQ"
+msgstr "Ma'lumotlaringizni qayta ishlash orqali siz foydalanish shartlarimizga rozi bo'lasiz"
 
 #: components_new/common/SmallCartMobileApp.tsx:312
 msgid "wue03V"
@@ -190,22 +262,8 @@ msgstr "Sizning shahringiz"
 msgid "2wkbQf"
 msgstr "Buyurtma summasi"
 
-#: components_new/header/HeaderMiniCartApp.tsx:366
-msgid "+urzAu"
-msgstr "Buyurtma berish"
-
-#: components_new/header/LocationTabsModalApp.tsx:337
-#: components_new/HeaderApp.tsx:127
-msgid "3qtFxi"
-msgstr "Yetkazib berish"
-
-#: components_new/header/LocationTabsModalApp.tsx:348
-#: components_new/HeaderApp.tsx:141
-msgid "k9Dt2Z"
-msgstr "Olib ketish"
-
 #: components_new/header/LocationTabsModalApp.tsx:378
-#: components_new/HeaderApp.tsx:46
+#: components_new/HeaderApp.tsx:47
 msgid "EiCEoo"
 msgstr "Manzilni tanlang"
 

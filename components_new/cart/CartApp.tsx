@@ -1,9 +1,7 @@
 'use client'
 
-import { createRef, useEffect, useMemo, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import useCart from '@framework/cart/use-cart'
-import { XIcon, MinusIcon, PlusIcon, TrashIcon } from '@heroicons/react/solid'
-import { useForm } from 'react-hook-form'
 import { useLocale, useExtracted } from 'next-intl'
 import { useRouter } from '../../i18n/navigation'
 import Hashids from 'hashids'
@@ -13,77 +11,81 @@ import defaultChannel from '@lib/defaultChannel'
 import currency from 'currency.js'
 import getAssetUrl from '@utils/getAssetUrl'
 import { useUI } from '@components/ui/context'
-import Slider from 'react-slick'
-import 'slick-carousel/slick/slick.css'
-import 'slick-carousel/slick/slick-theme.css'
-import { trackCheckoutStarted, trackCartViewed, trackRemoveFromCart } from '@lib/posthog-events'
-import MobileOrdersApp from '../order/MobileOrdersApp'
+import {
+  trackCheckoutStarted,
+  trackCartViewed,
+  trackRemoveFromCart,
+} from '@lib/posthog-events'
 
-let webAddress = process.env.NEXT_PUBLIC_API_URL
+const webAddress = process.env.NEXT_PUBLIC_API_URL
 axios.defaults.withCredentials = true
+
+const YELLOW = '#FAAF04'
+const YELLOW_SOFT = '#FFF6DE'
+
+const hashids = new Hashids(
+  'basket',
+  15,
+  'abcdefghijklmnopqrstuvwxyz1234567890'
+)
 
 interface CartAppProps {
   products?: any[]
 }
 
-export default function CartApp({ products }: CartAppProps) {
+export default function CartApp(_props: CartAppProps) {
   const [channelName, setChannelName] = useState('chopar')
-  const [biRecommendations, setBiRecommendations] = useState({
+  const [biRecommendations, setBiRecommendations] = useState<any>({
     relatedItems: [],
     topItems: [],
   })
-  const [isLoadingBiRecommendations, setIsLoadingBiRecommendations] =
-    useState(false)
-  const [defaultIndex, setDefaultIndex] = useState(1)
-  const sliderRef = createRef<any>()
 
   const getChannel = async () => {
     const channelData = await defaultChannel()
     setChannelName(channelData.name)
   }
 
-  const { activeCity, locationData, user, openSignInModal } = useUI()
+  const { activeCity, locationData, user, openSignInModal } = useUI() as any
   useEffect(() => {
     getChannel()
   }, [])
 
   const locale = useLocale()
   const t = useExtracted()
-  const cartId = typeof window !== 'undefined' ? localStorage.getItem('basketId') : null
+  const router = useRouter()
 
-  const { data, isLoading, isEmpty, mutate } = useCart()
+  const cartId =
+    typeof window !== 'undefined' ? localStorage.getItem('basketId') : null
+
+  const { data, isEmpty, mutate } = useCart()
 
   const [isCartLoading, setIsCartLoading] = useState(false)
   const [loadingLineId, setLoadingLineId] = useState<string | null>(null)
   const [addingItemId, setAddingItemId] = useState<number | null>(null)
+  const [configData, setConfigData] = useState<any>({})
 
-  const { register, handleSubmit } = useForm()
-  const onSubmit = (data: Object) => console.log(JSON.stringify(data))
-
-  const router = useRouter()
-
-  const hashids = new Hashids(
-    'basket',
-    15,
-    'abcdefghijklmnopqrstuvwxyz1234567890'
-  )
-  const [configData, setConfigData] = useState({} as any)
+  const formatPrice = (val: number) =>
+    currency(val, {
+      pattern: '# !',
+      separator: ' ',
+      decimal: '.',
+      symbol: locale === 'uz' ? "so'm" : locale === 'en' ? 'sum' : 'сум',
+      precision: 0,
+    }).format()
 
   const fetchConfig = async () => {
-    let configData
+    let cfg
     if (!sessionStorage.getItem('configData')) {
-      let { data } = await axios.get(`${webAddress}/api/configs/public`)
-      configData = data.data
+      const { data } = await axios.get(`${webAddress}/api/configs/public`)
+      cfg = data.data
       sessionStorage.setItem('configData', data.data)
     } else {
-      configData = sessionStorage.getItem('configData')
+      cfg = sessionStorage.getItem('configData')
     }
-
     try {
-      configData = Buffer.from(configData, 'base64')
-      configData = configData.toString('ascii')
-      configData = JSON.parse(configData)
-      setConfigData(configData)
+      cfg = Buffer.from(cfg, 'base64').toString('ascii')
+      cfg = JSON.parse(cfg)
+      setConfigData(cfg)
     } catch (e) {}
   }
 
@@ -92,18 +94,12 @@ export default function CartApp({ products }: CartAppProps) {
     if (!csrf) {
       const csrfReq = await axios(`${webAddress}/api/keldi`, {
         method: 'GET',
-        headers: {
-          'Content-Type': 'application/json',
-          crossDomain: true,
-        },
+        headers: { 'Content-Type': 'application/json' },
         withCredentials: true,
       })
-      let { data: res } = csrfReq
-      csrf = Buffer.from(res.result, 'base64').toString('ascii')
-
-      var inTenMinutes = new Date(new Date().getTime() + 10 * 60 * 1000)
+      csrf = Buffer.from(csrfReq.data.result, 'base64').toString('ascii')
       Cookies.set('X-XSRF-TOKEN', csrf, {
-        expires: inTenMinutes,
+        expires: new Date(Date.now() + 10 * 60 * 1000),
       })
     }
     axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest'
@@ -111,24 +107,18 @@ export default function CartApp({ products }: CartAppProps) {
     axios.defaults.headers.common['XCSRF-TOKEN'] = csrf
   }
 
-  const destroyLine = async (lineId: string) => {
-    setLoadingLineId(lineId)
-
-    const itemBeingRemoved = data?.lineItems?.find((l: any) => l.id == lineId)
-
-    await setCredentials()
-    const { data: deleteResult } = await axios.delete(
-      `${webAddress}/api/basket-lines/${hashids.encode(lineId)}`
+  const refetchBasket = async () => {
+    if (!cartId) {
+      await mutate()
+      return
+    }
+    const additionalQuery =
+      locationData?.deliveryType === 'pickup' ? '?delivery_type=pickup' : ''
+    const { data: basket } = await axios.get(
+      `${webAddress}/api/baskets/${cartId}${additionalQuery}`
     )
-    if (cartId) {
-      let additionalQuery = ''
-      if (locationData && locationData.deliveryType == 'pickup') {
-        additionalQuery = `?delivery_type=pickup`
-      }
-      let { data: basket } = await axios.get(
-        `${webAddress}/api/baskets/${cartId}${additionalQuery}`
-      )
-      const basketResult = {
+    await mutate(
+      {
         id: basket.data.id,
         createdAt: '',
         currency: { code: basket.data.currency },
@@ -139,177 +129,91 @@ export default function CartApp({ products }: CartAppProps) {
         totalPrice: basket.data.total,
         discountTotal: basket.data.discount_total,
         discountValue: basket.data.discount_value,
-      }
+      },
+      false
+    )
+  }
 
-      await mutate(basketResult, false)
-
+  const destroyLine = async (lineId: string) => {
+    setLoadingLineId(lineId)
+    const itemBeingRemoved = data?.lineItems?.find((l: any) => l.id == lineId)
+    await setCredentials()
+    await axios.delete(
+      `${webAddress}/api/basket-lines/${hashids.encode(lineId)}`
+    )
+    await refetchBasket()
+    if (itemBeingRemoved) {
       trackRemoveFromCart({
         product_id: itemBeingRemoved?.variant?.product_id || lineId,
         product_name: itemBeingRemoved?.variant?.name || '',
-        cart_total: basketResult.totalPrice / 100,
-        cart_items_count: basketResult.lineItems.length,
+        cart_total: (data?.totalPrice || 0) / 100,
+        cart_items_count: (data?.lineItems?.length || 0) - 1,
       })
-
-      setLoadingLineId(null)
     }
+    setLoadingLineId(null)
   }
 
   const decreaseQuantity = async (line: any) => {
     if (line.quantity == 1) {
+      destroyLine(line.id)
       return
     }
     setLoadingLineId(line.id)
     await setCredentials()
-    const { data: basket } = await axios.put(
+    await axios.put(
       `${webAddress}/api/v1/basket-lines/${hashids.encode(line.id)}/remove`,
-      {
-        quantity: 1,
-      }
+      { quantity: 1 }
     )
-
-    if (cartId) {
-      let { data: basket } = await axios.get(
-        `${webAddress}/api/baskets/${cartId}`
-      )
-      const basketResult = {
-        id: basket.data.id,
-        createdAt: '',
-        currency: { code: basket.data.currency },
-        taxesIncluded: basket.data.tax_total,
-        lineItems: basket.data.lines,
-        lineItemsSubtotalPrice: basket.data.sub_total,
-        subtotalPrice: basket.data.sub_total,
-        totalPrice: basket.data.total,
-      }
-
-      await mutate(basketResult, false)
-      setLoadingLineId(null)
-    }
+    await refetchBasket()
+    setLoadingLineId(null)
   }
 
   const increaseQuantity = async (lineId: string) => {
     setLoadingLineId(lineId)
     await setCredentials()
-    const { data: basket } = await axios.post(
+    await axios.post(
       `${webAddress}/api/v1/basket-lines/${hashids.encode(lineId)}/add`,
-      {
-        quantity: 1,
-      }
+      { quantity: 1 }
     )
-
-    if (cartId) {
-      let additionalQuery = ''
-      if (locationData && locationData.deliveryType == 'pickup') {
-        additionalQuery = `?delivery_type=pickup`
-      }
-      let { data: basket } = await axios.get(
-        `${webAddress}/api/baskets/${cartId}${additionalQuery}`
-      )
-      const basketResult = {
-        id: basket.data.id,
-        createdAt: '',
-        currency: { code: basket.data.currency },
-        taxesIncluded: basket.data.tax_total,
-        lineItems: basket.data.lines,
-        lineItemsSubtotalPrice: basket.data.sub_total,
-        subtotalPrice: basket.data.sub_total,
-        totalPrice: basket.data.total,
-        discountTotal: basket.data.discount_total,
-        discountValue: basket.data.discount_value,
-      }
-
-      await mutate(basketResult, false)
-      setLoadingLineId(null)
-    }
+    await refetchBasket()
+    setLoadingLineId(null)
   }
 
   const addToBasket = async (selectedProdId: number) => {
     setAddingItemId(selectedProdId)
     await setCredentials()
-
-    let basketId = localStorage.getItem('basketId')
+    const basketId = localStorage.getItem('basketId')
     const otpToken = Cookies.get('opt_token')
-
-    let basketResult = {}
-
-    if (basketId) {
-      let additionalQuery = ''
-      if (locationData && locationData.deliveryType == 'pickup') {
-        additionalQuery = `?delivery_type=pickup`
-      }
-      const { data: basketData } = await axios.post(
-        `${webAddress}/api/baskets-lines${additionalQuery}`,
+    const additionalQuery =
+      locationData?.deliveryType === 'pickup' ? '?delivery_type=pickup' : ''
+    const headers = {
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${otpToken}`,
+    }
+    const payload = {
+      variants: [
         {
-          basket_id: basketId,
-          variants: [
-            {
-              id: selectedProdId,
-              quantity: 1,
-              modifiers: null,
-              additionalSale: true,
-            },
-          ],
+          id: selectedProdId,
+          quantity: 1,
+          modifiers: null,
+          additionalSale: true,
         },
-        {
-          headers: {
-            'Content-Type': 'application/json',
-            Authorization: `Bearer ${otpToken}`,
-          },
-          withCredentials: true,
-        }
+      ],
+    }
+    if (basketId) {
+      await axios.post(
+        `${webAddress}/api/baskets-lines${additionalQuery}`,
+        { basket_id: basketId, ...payload },
+        { headers, withCredentials: true }
       )
-      basketResult = {
-        id: basketData.data.id,
-        createdAt: '',
-        currency: { code: basketData.data.currency },
-        taxesIncluded: basketData.data.tax_total,
-        lineItems: basketData.data.lines,
-        lineItemsSubtotalPrice: basketData.data.sub_total,
-        subtotalPrice: basketData.data.sub_total,
-        totalPrice: basketData.data.total,
-        discountTotal: basketData.data.discount_total,
-        discountValue: basketData.data.discount_value,
-      }
     } else {
-      let additionalQuery = ''
-      if (locationData && locationData.deliveryType == 'pickup') {
-        additionalQuery = `?delivery_type=pickup`
-      }
       const { data: basketData } = await axios.post(
         `${webAddress}/api/baskets${additionalQuery}`,
-        {
-          variants: [
-            {
-              id: selectedProdId,
-              quantity: 1,
-              modifiers: null,
-              additionalSale: true,
-            },
-          ],
-        },
-        {
-          headers: {
-            'Content-Type': 'application/json',
-            Authorization: `Bearer ${otpToken}`,
-          },
-          withCredentials: true,
-        }
+        payload,
+        { headers, withCredentials: true }
       )
       localStorage.setItem('basketId', basketData.data.encoded_id)
-      basketResult = {
-        id: basketData.data.id,
-        createdAt: '',
-        currency: { code: basketData.data.currency },
-        taxesIncluded: basketData.data.tax_total,
-        lineItems: basketData.data.lines,
-        lineItemsSubtotalPrice: basketData.data.sub_total,
-        subtotalPrice: basketData.data.sub_total,
-        totalPrice: basketData.data.total,
-        discountTotal: basketData.data.discount_total,
-        discountValue: basketData.data.discount_value,
-      }
     }
-
     await mutate()
     setAddingItemId(null)
   }
@@ -321,90 +225,69 @@ export default function CartApp({ products }: CartAppProps) {
         const val = obj[key]
         key = encodeURIComponent(key)
         const prefix = parentPrefix ? `${parentPrefix}[${key}]` : key
-
         if (val == null || typeof val === 'function') {
           prev.push(`${prefix}=`)
           return prev
         }
-
         if (['number', 'boolean', 'string'].includes(typeof val)) {
           prev.push(`${prefix}=${encodeURIComponent(val)}`)
           return prev
         }
-
         prev.push(Object.keys(val).reduce(reducer(val, prefix), []).join('&'))
         return prev
       }
-
     return Object.keys(initialObj).reduce(reducer(initialObj), []).join('&')
   }
 
   const loadBiRecommendations = async () => {
-    if (!isEmpty) {
-      let productIds: string[] = []
-      data.lineItems.map((item: any) => {
-        productIds.push(item.variant.product_id.toString())
-      })
-      setIsLoadingBiRecommendations(true)
-      let queryString = objectToQueryString({
-        productIds,
-      })
+    if (isEmpty) return
+    const productIds: string[] = []
+    data.lineItems.forEach((item: any) => {
+      productIds.push(item.variant.product_id.toString())
+    })
+    const queryString = objectToQueryString({ productIds })
+    try {
       const {
         data: { data: recommendations },
       } = await axios.get(
         `${webAddress}/api/baskets/bi_related/?${queryString}`
       )
-      setIsLoadingBiRecommendations(false)
-      if (recommendations.relatedItems) {
-        setBiRecommendations(recommendations)
-      }
-    }
+      if (recommendations.relatedItems) setBiRecommendations(recommendations)
+    } catch (e) {}
   }
 
   const goToCheckout = (e: any) => {
     e.preventDefault()
-
     trackCheckoutStarted({
       cart_items_count: data?.lineItems?.length || 0,
-      cart_total: data?.totalPrice / 100 || 0,
+      cart_total: (data?.totalPrice || 0) / 100,
       city: activeCity?.slug,
       delivery_type: locationData?.deliveryType,
     })
-
     router.push(`/${activeCity?.slug}/order/`)
   }
 
   const clearBasket = async () => {
-    if (cartId) {
-      setIsCartLoading(true)
-      await axios.get(
-        `${webAddress}/api/baskets/${cartId}/clear`
-      )
-      await mutate()
-      setIsCartLoading(false)
-    }
+    if (!cartId) return
+    setIsCartLoading(true)
+    await axios.get(`${webAddress}/api/baskets/${cartId}/clear`)
+    await mutate()
+    setIsCartLoading(false)
   }
 
   const readonlyItems = useMemo(() => {
-    let res: number[] = []
-
+    const res: number[] = []
     if (!isEmpty) {
-      data?.lineItems.map((lineItem: any) => {
-        if (lineItem.bonus_id) {
-          res.push(lineItem.id)
-        }
-
-        if (lineItem.sale_id) {
-          res.push(lineItem.id)
-        }
+      data?.lineItems.forEach((lineItem: any) => {
+        if (lineItem.bonus_id) res.push(lineItem.id)
+        if (lineItem.sale_id) res.push(lineItem.id)
       })
     }
     return res
-  }, [data])
+  }, [data, isEmpty])
 
   useEffect(() => {
     fetchConfig()
-    return
   }, [])
 
   useEffect(() => {
@@ -424,737 +307,547 @@ export default function CartApp({ products }: CartAppProps) {
   }, [data?.lineItems?.length])
 
   const isWorkTime = useMemo(() => {
-    let currentHour = new Date().getHours()
-    if (
+    if (!configData?.workTimeStart && !configData?.workTimeEnd) return true
+    const currentHour = new Date().getHours()
+    return (
       configData.workTimeStart <= currentHour ||
       configData.workTimeEnd > currentHour
     )
-      return true
-    return false
   }, [configData])
 
-  if (!isWorkTime) {
-    return (
-      <div className="bg-white flex py-20 text-xl text-yellow font-bold px-10">
-        <div>
-          {'Сейчас не время работы'}{' '}
-          {locale == 'uz'
-            ? configData.workTimeUz
-            : locale == 'ru'
-            ? configData.workTimeRu
-            : locale == 'en'
-            ? configData.workTimeEn
-            : ''}
+  const workTimeLabel =
+    locale === 'uz'
+      ? configData?.workTimeUz
+      : locale === 'en'
+        ? configData?.workTimeEn
+        : configData?.workTimeRu
+
+  const totalQty = useMemo(() => {
+    if (isEmpty) return 0
+    return data.lineItems.reduce(
+      (a: number, b: any) => a + (b.quantity || 0),
+      0
+    )
+  }, [data, isEmpty])
+
+  const lineName = (line: any) => {
+    const product = line?.variant?.product
+    const attr = product?.attribute_data?.name?.[channelName]
+    const main = attr?.[locale] || attr?.['ru'] || product?.name || ''
+    if (line.child && line.child.length === 1) {
+      const extras = line.child
+        .filter(
+          (v: any) => product?.box_id !== v?.variant?.product?.id
+        )
+        .map((v: any) => {
+          const a = v?.variant?.product?.attribute_data?.name?.[channelName]
+          return a?.[locale] || a?.['ru'] || ''
+        })
+        .filter(Boolean)
+        .join(' + ')
+      return extras ? `${main} + ${extras}` : main
+    }
+    return main
+  }
+
+  const recName = (item: any) => {
+    const a = item?.attribute_data?.name?.[channelName]
+    return a?.[locale] || a?.['ru'] || item?.name || ''
+  }
+
+  const renderLineImage = (line: any) => {
+    const child = line?.child
+    if (
+      child &&
+      child.length &&
+      child[0]?.variant?.product?.id !== line?.variant?.product?.box_id
+    ) {
+      if (child.length > 1) {
+        return (
+          <div className="w-16 h-16 relative rounded-2xl bg-gray-50 overflow-hidden flex-shrink-0">
+            <img
+              src={getAssetUrl(line?.variant?.product?.assets)}
+              className="absolute inset-0 m-auto w-10 h-10 object-contain rounded-full"
+              alt=""
+            />
+            {child.map((c: any, i: number) => (
+              <img
+                key={i}
+                src={getAssetUrl(c?.variant?.product?.assets)}
+                className="absolute w-8 h-8 object-contain rounded-full bg-white"
+                style={{
+                  right: i * 6,
+                  bottom: i * 4,
+                }}
+                alt=""
+              />
+            ))}
+          </div>
+        )
+      }
+      return (
+        <div className="w-16 h-16 flex rounded-2xl bg-gray-50 overflow-hidden flex-shrink-0">
+          <div className="w-1/2 relative overflow-hidden">
+            <img
+              src={getAssetUrl(line?.variant?.product?.assets)}
+              className="absolute h-full max-w-none left-0"
+              alt=""
+            />
+          </div>
+          <div className="w-1/2 relative overflow-hidden">
+            <img
+              src={getAssetUrl(child[0]?.variant?.product?.assets)}
+              className="absolute h-full max-w-none right-0"
+              alt=""
+            />
+          </div>
         </div>
+      )
+    }
+    return (
+      <div className="w-16 h-16 rounded-2xl bg-gray-50 flex items-center justify-center overflow-hidden flex-shrink-0">
+        <img
+          src={getAssetUrl(line?.variant?.product?.assets)}
+          className="max-w-full max-h-full object-contain"
+          alt=""
+        />
       </div>
     )
   }
 
-  const settings = {
-    infinite: false,
-    centerPadding: '40px',
-    arrows: true,
-    slidesToShow: 6,
-    swipeToSlide: true,
-    speed: 500,
-    slidesToScroll: 1,
-    responsive: [
-      {
-        breakpoint: 1024,
-        settings: {
-          slidesToShow: 3,
-          slidesToScroll: 3,
-        },
-      },
-      {
-        breakpoint: 600,
-        settings: {
-          slidesToShow: 3,
-          slidesToScroll: 1,
-          arrows: false,
-          dots: true,
-        },
-      },
-      {
-        breakpoint: 480,
-        settings: {
-          slidesToShow: 3,
-          slidesToScroll: 1,
-          arrows: false,
-          dots: true,
-        },
-      },
-    ],
-  }
-
-  if (!user) {
+  const Stepper = ({ line }: { line: any }) => {
+    const isLineBusy = loadingLineId === line.id
     return (
-      <div className="flex flex-col items-center justify-center py-20 px-4">
-        <svg xmlns="http://www.w3.org/2000/svg" className="w-16 h-16 text-gray-300 mb-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
-          <path strokeLinecap="round" strokeLinejoin="round" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 100 4 2 2 0 000-4z" />
-        </svg>
-        <p className="text-gray-500 text-lg mb-4">{'Корзина пуста'}</p>
+      <div
+        className="flex items-center rounded-full h-9"
+        style={{ background: YELLOW, padding: '0 3px' }}
+      >
         <button
-          className="bg-yellow text-white font-bold py-3 px-10 rounded-full"
-          onClick={openSignInModal}
+          type="button"
+          onClick={() => decreaseQuantity(line)}
+          disabled={isLineBusy}
+          aria-label="dec"
+          className="w-8 h-8 rounded-full bg-white flex items-center justify-center text-base font-bold disabled:opacity-60"
+          style={{ color: YELLOW }}
         >
-          {'Войти'}
+          −
+        </button>
+        <span className="text-white font-bold text-sm px-3 min-w-[28px] text-center">
+          {isLineBusy ? '…' : line.quantity}
+        </span>
+        <button
+          type="button"
+          onClick={() => increaseQuantity(line.id)}
+          disabled={isLineBusy}
+          aria-label="inc"
+          className="w-8 h-8 rounded-full bg-white flex items-center justify-center text-base font-bold disabled:opacity-60"
+          style={{ color: YELLOW }}
+        >
+          +
         </button>
       </div>
     )
   }
 
-  return (
-    <>
-      {isCartLoading && (
-        <div className="h-full w-full absolute flex items-center justify-around bg-gray-300 top-0 bg-opacity-60 left-0 rounded-[15px]">
-          <svg
-            className="animate-spin text-yellow h-14"
-            xmlns="http://www.w3.org/2000/svg"
-            fill="none"
-            viewBox="0 0 24 24"
-          >
-            <circle
-              className="opacity-25"
-              cx="12"
-              cy="12"
-              r="10"
-              stroke="currentColor"
-              strokeWidth="4"
-            ></circle>
-            <path
-              className="opacity-75"
-              fill="currentColor"
-              d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
-            ></path>
-          </svg>
-        </div>
-      )}
-      {isEmpty && (
-        <div className="flex flex-col items-center justify-center text-center text-gray-400 text-sm min-h-[60vh]">
-          <img src="/cart_empty.png" width={130} height={119} />
-          <div className="mt-3">{t('Корзина пуста')}</div>
-          <div>{t('Выберите пиццу')}</div>
+  if (!user) {
+    return (
+      <div className="container mx-auto px-3 md:px-0 py-8 md:py-16">
+        <div className="bg-white rounded-3xl shadow-sm p-8 md:p-16 max-w-2xl mx-auto text-center">
+          <div className="w-24 h-24 rounded-full bg-gray-50 mx-auto mb-6 flex items-center justify-center">
+            <svg
+              width="44"
+              height="44"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="#9CA3AF"
+              strokeWidth="1.8"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            >
+              <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
+              <circle cx="12" cy="7" r="4" />
+            </svg>
+          </div>
+          <h1 className="text-2xl md:text-3xl font-extrabold text-gray-900 mb-2">
+            {t('Войдите в аккаунт')}
+          </h1>
+          <p className="text-gray-500 mb-6">
+            {t('Чтобы оформить заказ, нужно войти в личный кабинет')}
+          </p>
           <button
-            className="bg-yellow text-white p-3 mt-4 rounded-full hidden md:block"
-            onClick={() => router.push(`/${activeCity?.slug}`)}
+            onClick={openSignInModal}
+            className="rounded-full font-bold text-white px-10 h-12 transition-opacity hover:opacity-90 uppercase text-sm"
+            style={{ background: YELLOW }}
+          >
+            {t('Войти')}
+          </button>
+        </div>
+      </div>
+    )
+  }
+
+  if (isEmpty) {
+    return (
+      <div className="container mx-auto px-3 md:px-0 py-8 md:py-16">
+        <div className="bg-white rounded-3xl shadow-sm p-8 md:p-16 max-w-2xl mx-auto text-center">
+          <img
+            src="/cart_empty.png"
+            width={160}
+            height={146}
+            className="mx-auto mb-6"
+            alt=""
+          />
+          <h1 className="text-2xl md:text-3xl font-extrabold text-gray-900 mb-2">
+            {t('Корзина пуста')}
+          </h1>
+          <p className="text-gray-500 mb-6">{t('Выберите пиццу')}</p>
+          <button
+            onClick={() => router.push(`/${activeCity?.slug || 'tashkent'}`)}
+            className="rounded-full font-bold text-white px-10 h-12 transition-opacity hover:opacity-90 uppercase text-sm"
+            style={{ background: YELLOW }}
           >
             {t('Вернуться в меню')}
           </button>
         </div>
-      )}
-      {/* Mobile: cart + checkout combined */}
-      {!isEmpty && (
-        <div className="md:hidden bg-gray-50 pb-28">
-          {/* Cart items section */}
-          <div className="bg-white mx-3 mt-3 rounded-2xl overflow-hidden shadow-sm">
-            {/* Cart header */}
-            <div className="flex justify-between items-center px-4 py-3 border-b border-gray-100">
-              <div className="text-base font-bold">
-                {'Корзина'}{' '}
-                <span style={{ color: '#F9B004' }}>
-                  ({data?.lineItems
-                    .map((item: any) => item.quantity)
-                    .reduce((a: number, b: number) => a + b, 0)})
-                </span>
-              </div>
-              <button
-                className="text-gray-400 text-xs flex items-center gap-1"
-                onClick={clearBasket}
-              >
-                {'Очистить'} <TrashIcon className="w-4 h-4" />
-              </button>
-            </div>
-            {/* Items */}
-            {data?.lineItems
-              .map((lineItem: any) => (
-                <div key={lineItem.id} className="flex gap-3 px-4 py-3 border-b border-gray-50 relative">
-                  {loadingLineId === lineItem.id && (
-                    <div className="absolute inset-0 flex items-center justify-center bg-white bg-opacity-70 z-10">
-                      <svg className="animate-spin h-5 w-5 text-yellow" viewBox="0 0 24 24">
-                        <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" fill="none" />
-                        <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" />
-                      </svg>
-                    </div>
-                  )}
-                  {lineItem.child &&
-                  lineItem.child.length === 1 &&
-                  lineItem.child[0].variant?.product?.id !==
-                    lineItem?.variant?.product?.box_id ? (
-                    <div className="w-16 h-16 flex rounded-full overflow-hidden flex-shrink-0">
-                      <div className="w-1/2 relative overflow-hidden">
-                        <img
-                          src={getAssetUrl(lineItem?.variant?.product?.assets)}
-                          className="absolute h-full max-w-none left-0"
-                        />
-                      </div>
-                      <div className="w-1/2 relative overflow-hidden">
-                        <img
-                          src={getAssetUrl(lineItem?.child[0].variant?.product?.assets)}
-                          className="absolute h-full max-w-none right-0"
-                        />
-                      </div>
-                    </div>
-                  ) : (
-                    <img
-                      src={getAssetUrl(lineItem?.variant?.product?.assets)}
-                      className="w-16 h-16 object-contain rounded-xl flex-shrink-0"
-                    />
-                  )}
-                  <div className="flex-1 min-w-0">
-                    <div className="text-sm font-semibold leading-tight">
-                      {lineItem.child && lineItem.child.length == 1
-                        ? `${lineItem?.variant?.product?.attribute_data?.name[channelName][locale || 'ru']} + ${lineItem?.child
-                            .filter((v: any) => lineItem?.variant?.product?.box_id != v?.variant?.product?.id)
-                            .map((v: any) => v?.variant?.product?.attribute_data?.name[channelName][locale || 'ru'])
-                            .join(' + ')}`
-                        : lineItem?.variant?.product?.attribute_data?.name[channelName][locale || 'ru']}
-                    </div>
-                    {lineItem.modifiers?.filter((mod: any) => mod.price > 0).length > 0 && (
-                      <div className="flex flex-wrap gap-1 mt-0.5">
-                        {lineItem.modifiers.filter((mod: any) => mod.price > 0).map((mod: any) => (
-                          <span key={mod.id} className="text-[10px] text-gray-400">
-                            + {locale == 'uz' ? mod.name_uz : locale == 'en' ? mod.name_en : mod.name}
-                          </span>
-                        ))}
-                      </div>
-                    )}
-                    <div className="flex items-center justify-between mt-2">
-                      <div className="text-sm font-bold">
-                        {currency(lineItem.total, {
-                          pattern: '# !',
-                          separator: ' ',
-                          decimal: '.',
-                          symbol: `${locale == 'uz' ? "so'm" : locale == 'ru' ? 'сум' : 'sum'}`,
-                          precision: 0,
-                        }).format()}
-                      </div>
-                      <div className="flex items-center gap-2">
-                        {!readonlyItems.includes(lineItem.id) && (
-                          <div className="flex items-center bg-gray-100 rounded-full">
-                            <button
-                              className="w-8 h-8 flex items-center justify-center"
-                              onClick={() => decreaseQuantity(lineItem)}
-                            >
-                              <MinusIcon className="w-4 h-4 text-gray-500" />
-                            </button>
-                            <span className="text-sm font-bold min-w-[20px] text-center">
-                              {lineItem.quantity}
-                            </span>
-                            <button
-                              className="w-8 h-8 flex items-center justify-center"
-                              onClick={() => increaseQuantity(lineItem.id)}
-                            >
-                              <PlusIcon className="w-4 h-4 text-gray-500" />
-                            </button>
-                          </div>
-                        )}
-                        {!readonlyItems.includes(lineItem.id) && (
-                          <button onClick={() => destroyLine(lineItem.id)} className="p-1">
-                            <TrashIcon className="w-4 h-4 text-gray-300" />
-                          </button>
-                        )}
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              ))
-              .reverse()}
-          </div>
+      </div>
+    )
+  }
 
-          {/* Recommendations */}
-          {biRecommendations.relatedItems.length > 0 && (
-            <div className="mt-4 px-4">
-              <div className="text-base font-bold mb-3">
-                {'Похожие товары'}
-              </div>
-              <div className="flex gap-3 overflow-x-auto pb-3 -mx-4 px-4 scrollbar-hide">
-                {biRecommendations.relatedItems.map((item: any) => (
-                  <div key={item.id} className="flex-shrink-0 w-28 bg-white rounded-2xl p-2 shadow-sm">
-                    <img
-                      src={item.image || '/no_photo.svg'}
-                      className="w-full h-16 object-contain mb-1"
-                      alt={item?.attribute_data?.name[channelName][locale || 'ru']}
-                    />
-                    <div className="text-[10px] font-semibold text-center leading-tight h-6 overflow-hidden">
-                      {item?.attribute_data?.name[channelName][locale || 'ru']}
-                    </div>
-                    <button
-                      className="w-full mt-1 text-white text-[10px] font-bold py-1.5 rounded-full flex items-center justify-center"
-                      style={{ backgroundColor: '#F9B004' }}
-                      onClick={() => addToBasket(item.id)}
-                      disabled={addingItemId === item.id}
-                    >
-                      {addingItemId === item.id ? (
-                        <svg className="animate-spin h-3 w-3 text-white" viewBox="0 0 24 24">
-                          <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" fill="none" />
-                          <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" />
-                        </svg>
-                      ) : (
-                        currency(parseInt(item.price, 0) || 0, {
-                          pattern: '# !',
-                          separator: ' ',
-                          decimal: '.',
-                          symbol: `${locale == 'uz' ? "so'm" : locale == 'ru' ? 'сум' : 'sum'}`,
-                          precision: 0,
-                        }).format()
-                      )}
-                    </button>
-                  </div>
-                ))}
-              </div>
-            </div>
-          )}
-          {biRecommendations.topItems.length > 0 && (
-            <div className="mt-4 px-4">
-              <div className="text-base font-bold mb-3">
-                {'Популярные продукты'}
-              </div>
-              <div className="flex gap-3 overflow-x-auto pb-3 -mx-4 px-4 scrollbar-hide">
-                {biRecommendations.topItems.map((item: any) => (
-                  <div key={item.id} className="flex-shrink-0 w-28 bg-white rounded-2xl p-2 shadow-sm">
-                    <img
-                      src={item.image || '/no_photo.svg'}
-                      className="w-full h-16 object-contain mb-1"
-                      alt={item?.attribute_data?.name[channelName][locale || 'ru']}
-                    />
-                    <div className="text-[10px] font-semibold text-center leading-tight h-6 overflow-hidden">
-                      {item?.attribute_data?.name[channelName][locale || 'ru']}
-                    </div>
-                    <button
-                      className="w-full mt-1 text-white text-[10px] font-bold py-1.5 rounded-full flex items-center justify-center"
-                      style={{ backgroundColor: '#F9B004' }}
-                      onClick={() => addToBasket(item.id)}
-                      disabled={addingItemId === item.id}
-                    >
-                      {addingItemId === item.id ? (
-                        <svg className="animate-spin h-3 w-3 text-white" viewBox="0 0 24 24">
-                          <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" fill="none" />
-                          <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" />
-                        </svg>
-                      ) : (
-                        currency(parseInt(item.price, 0) || 0, {
-                          pattern: '# !',
-                          separator: ' ',
-                          decimal: '.',
-                          symbol: `${locale == 'uz' ? "so'm" : locale == 'ru' ? 'сум' : 'sum'}`,
-                          precision: 0,
-                        }).format()
-                      )}
-                    </button>
-                  </div>
-                ))}
-              </div>
-            </div>
-          )}
-
-          {/* Checkout section */}
-          <MobileOrdersApp channelName={channelName} />
-
-          {/* Privacy notice */}
-          <div className="px-4 py-3 text-[11px] text-gray-400">
-            {'Обрабатывая ваши данные, вы соглашаетесь с нашими'}{' '}
-            <a href="/privacy" className="text-yellow" target="_blank">
-              {'условиями использования'}
-            </a>
+  return (
+    <div className="container mx-auto px-3 md:px-0 py-4 md:py-8">
+      {!isWorkTime && (
+        <div
+          className="mb-4 md:mb-6 rounded-2xl px-5 py-3 flex items-start gap-3"
+          style={{ background: YELLOW_SOFT }}
+        >
+          <svg
+            className="flex-shrink-0 mt-0.5"
+            width="20"
+            height="20"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke={YELLOW}
+            strokeWidth="2"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+          >
+            <circle cx="12" cy="12" r="10" />
+            <polyline points="12 6 12 12 16 14" />
+          </svg>
+          <div className="text-sm text-gray-800">
+            <span className="font-semibold">
+              {t('Сейчас не время работы')}
+            </span>
+            {workTimeLabel && (
+              <span className="text-gray-600 ml-1">{workTimeLabel}</span>
+            )}
           </div>
         </div>
       )}
-      {/* Desktop Cart */}
-      {!isEmpty && (
-        <div className="hidden md:flex justify-between gap-4">
-          <div className="md:w-9/12">
-            <div className="md:p-10 p-4 md:rounded-2xl bg-white md:mb-3">
-              <div className="flex justify-between items-center">
-                <div className="text-lg font-bold">
-                  {'Корзина'}{' '}
-                  {data?.lineItems.length > 0 && (
-                    <span className="font-bold text-[18px] text-yellow">
-                      (
-                      {data.lineItems
-                        .map((item: any) => item.quantity)
-                        .reduce((a: number, b: number) => a + b, 0)}
-                      )
-                    </span>
-                  )}
-                </div>
-                <div
-                  className="text-gray-400 text-sm flex cursor-pointer"
-                  onClick={clearBasket}
-                >
-                  {'Очистить'} <TrashIcon className=" w-5 h-5 ml-1" />
-                </div>
+
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 md:gap-6">
+        <div className="lg:col-span-2 space-y-4 md:space-y-6">
+          <div className="bg-white rounded-3xl shadow-sm overflow-hidden">
+            <div className="flex items-center justify-between px-5 md:px-7 py-4 border-b border-gray-100">
+              <div className="flex items-baseline gap-2">
+                <h1 className="text-xl md:text-2xl font-extrabold text-gray-900">
+                  {t('Корзина')}
+                </h1>
+                {totalQty > 0 && (
+                  <span
+                    className="text-base md:text-lg font-bold"
+                    style={{ color: YELLOW }}
+                  >
+                    ({totalQty})
+                  </span>
+                )}
               </div>
-              <div className="mt-10 space-y-3">
-                {data &&
-                  data?.lineItems
-                    .map((lineItem: any) => (
-                      <div
-                        className="border-b pb-4 mb-1"
-                        key={lineItem.id}
-                      >
-                        {/* Desktop layout */}
-                        <div className="hidden md:flex md:items-center md:gap-4 relative">
-                        {loadingLineId === lineItem.id && (
-                          <div className="absolute inset-0 flex items-center justify-center bg-white bg-opacity-70 z-10 rounded-lg">
-                            <svg className="animate-spin h-6 w-6 text-yellow" viewBox="0 0 24 24">
-                              <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" fill="none" />
-                              <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" />
-                            </svg>
-                          </div>
-                        )}
-                          {/* Image */}
-                          {lineItem.child &&
-                          lineItem.child.length &&
-                          lineItem.child[0].variant?.product?.id !=
-                            lineItem?.variant?.product?.box_id ? (
-                            lineItem.child.length > 1 ? (
-                              <div className="h-14 w-14 flex relative flex-shrink-0">
-                                <img
-                                  src={getAssetUrl(lineItem?.variant?.product?.assets)}
-                                  width={40}
-                                  height={40}
-                                  className="rounded-full absolute left-0"
-                                  alt=""
-                                />
-                                {lineItem.child.map(
-                                  (child: any, index: number) => (
-                                    <img
-                                      key={`three_child_${index}`}
-                                      src={getAssetUrl(child.variant?.product?.assets)}
-                                      width={40}
-                                      height={40}
-                                      className="rounded-full absolute"
-                                      style={{ left: (index + 1) * 10 }}
-                                      alt=""
-                                    />
-                                  )
-                                )}
-                              </div>
-                            ) : (
-                              <div className="w-16 h-16 flex rounded-full overflow-hidden flex-shrink-0">
-                                <div className="w-1/2 relative overflow-hidden">
-                                  <img
-                                    src={getAssetUrl(lineItem?.variant?.product?.assets)}
-                                    className="absolute h-full max-w-none left-0"
-                                    alt=""
-                                  />
-                                </div>
-                                <div className="w-1/2 relative overflow-hidden">
-                                  <img
-                                    src={getAssetUrl(lineItem?.child[0].variant?.product?.assets)}
-                                    className="absolute h-full max-w-none right-0"
-                                    alt=""
-                                  />
-                                </div>
-                              </div>
-                            )
-                          ) : (
-                            <div className="w-16 h-16 flex-shrink-0">
-                              <img
-                                src={getAssetUrl(lineItem?.variant?.product?.assets)}
-                                className="w-full h-full object-contain rounded-full"
-                                alt=""
-                              />
+              <button
+                type="button"
+                onClick={clearBasket}
+                disabled={isCartLoading}
+                className="text-sm text-gray-400 hover:text-red-500 transition-colors flex items-center gap-1.5 disabled:opacity-50"
+              >
+                <svg
+                  width="16"
+                  height="16"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="2"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                >
+                  <polyline points="3 6 5 6 21 6" />
+                  <path d="M19 6l-2 14a2 2 0 0 1-2 2H9a2 2 0 0 1-2-2L5 6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2" />
+                </svg>
+                {t('Очистить')}
+              </button>
+            </div>
+
+            <div className="divide-y divide-gray-100">
+              {data?.lineItems
+                .map((line: any) => {
+                  const isLineBusy = loadingLineId === line.id
+                  const mods = (line.modifiers || []).filter(
+                    (m: any) => m.price > 0
+                  )
+                  return (
+                    <div
+                      key={line.id}
+                      className="px-5 md:px-7 py-4 flex items-start gap-3 md:gap-4 relative"
+                    >
+                      {isLineBusy && (
+                        <div className="absolute inset-0 flex items-center justify-center bg-white/70 z-10">
+                          <svg
+                            className="animate-spin h-5 w-5"
+                            style={{ color: YELLOW }}
+                            viewBox="0 0 24 24"
+                          >
+                            <circle
+                              className="opacity-25"
+                              cx="12"
+                              cy="12"
+                              r="10"
+                              stroke="currentColor"
+                              strokeWidth="4"
+                              fill="none"
+                            />
+                            <path
+                              className="opacity-75"
+                              fill="currentColor"
+                              d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"
+                            />
+                          </svg>
+                        </div>
+                      )}
+                      {renderLineImage(line)}
+                      <div className="flex-1 min-w-0">
+                        <div className="flex items-start justify-between gap-2">
+                          <div className="min-w-0">
+                            <div className="text-sm md:text-base font-bold text-gray-900 leading-tight">
+                              {lineName(line)}
+                              {line.bonus_id && (
+                                <span
+                                  className="ml-2 text-xs font-bold"
+                                  style={{ color: YELLOW }}
+                                >
+                                  ({t('Бонус')})
+                                </span>
+                              )}
+                              {line.sale_id && (
+                                <span
+                                  className="ml-2 text-xs font-bold"
+                                  style={{ color: YELLOW }}
+                                >
+                                  ({t('Акция')})
+                                </span>
+                              )}
                             </div>
-                          )}
-                          {/* Name + modifiers */}
-                          <div className="flex-1 min-w-0">
-                            <div className="text-base font-bold truncate">
-                              {lineItem.child && lineItem.child.length == 1
-                                ? `${lineItem?.variant?.product?.attribute_data?.name[channelName][locale || 'ru']} + ${lineItem?.child
-                                    .filter((v: any) => lineItem?.variant?.product?.box_id != v?.variant?.product?.id)
-                                    .map((v: any) => v?.variant?.product?.attribute_data?.name[channelName][locale || 'ru'])
-                                    .join(' + ')}`
-                                : lineItem?.variant?.product?.attribute_data?.name[channelName][locale || 'ru']}
-                              {lineItem.bonus_id && <span className="text-yellow ml-1">({'Бонус'})</span>}
-                              {lineItem.sale_id && <span className="text-yellow ml-1">({'Акция'})</span>}
-                            </div>
-                            {lineItem.modifiers?.filter((mod: any) => mod.price > 0).length > 0 && (
-                              <div className="flex flex-wrap gap-1 mt-1">
-                                {lineItem.modifiers.filter((mod: any) => mod.price > 0).map((mod: any) => (
-                                  <span className="bg-yellow rounded-full px-2 py-0.5 text-xs text-white" key={mod.id}>
-                                    {locale == 'uz' ? mod.name_uz : locale == 'en' ? mod.name_en : mod.name}
+                            {mods.length > 0 && (
+                              <div className="flex flex-wrap gap-1.5 mt-1.5">
+                                {mods.map((m: any) => (
+                                  <span
+                                    key={m.id}
+                                    className="text-[11px] px-2 py-0.5 rounded-full bg-gray-100 text-gray-600 font-medium"
+                                  >
+                                    +{' '}
+                                    {locale === 'uz'
+                                      ? m.name_uz
+                                      : locale === 'en'
+                                        ? m.name_en
+                                        : m.name}
                                   </span>
                                 ))}
                               </div>
                             )}
                           </div>
-                          {/* Counter */}
-                          {!readonlyItems.includes(lineItem.id) && (
-                            <div className="w-24 h-8 bg-yellow rounded-full flex items-center text-white flex-shrink-0">
-                              <button className="w-8 h-8 flex items-center justify-center" onClick={() => decreaseQuantity(lineItem)}>
-                                <MinusIcon className="w-4 h-4" />
-                              </button>
-                              <span className="flex-grow text-center text-sm font-bold">{lineItem.quantity}</span>
-                              <button className="w-8 h-8 flex items-center justify-center" onClick={() => increaseQuantity(lineItem.id)}>
-                                <PlusIcon className="w-4 h-4" />
-                              </button>
-                            </div>
-                          )}
-                          {/* Price */}
-                          <div className="text-lg font-bold w-36 text-right flex-shrink-0">
-                            {currency(lineItem.total, {
-                              pattern: '# !',
-                              separator: ' ',
-                              decimal: '.',
-                              symbol: `${locale == 'uz' ? "so'm" : locale == 'ru' ? 'сум' : 'sum'}`,
-                              precision: 0,
-                            }).format()}
-                          </div>
-                          {/* Delete */}
-                          {!readonlyItems.includes(lineItem.id) && (
-                            <XIcon
-                              className="cursor-pointer h-5 w-5 text-gray-400 hover:text-red-500 flex-shrink-0"
-                              onClick={() => destroyLine(lineItem.id)}
-                            />
+                          {!readonlyItems.includes(line.id) && (
+                            <button
+                              type="button"
+                              onClick={() => destroyLine(line.id)}
+                              disabled={isLineBusy}
+                              aria-label="remove"
+                              className="text-gray-300 hover:text-red-500 transition-colors disabled:opacity-50 flex-shrink-0"
+                            >
+                              <svg
+                                width="18"
+                                height="18"
+                                viewBox="0 0 24 24"
+                                fill="none"
+                                stroke="currentColor"
+                                strokeWidth="2"
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
+                              >
+                                <line x1="18" y1="6" x2="6" y2="18" />
+                                <line x1="6" y1="6" x2="18" y2="18" />
+                              </svg>
+                            </button>
                           )}
                         </div>
-                      </div>
-                    ))
-                    .reverse()}
-              </div>
-            </div>
-            {biRecommendations.relatedItems.length > 0 && (
-              <div className="md:p-10 p-5 md:rounded-2xl bg-white md:my-3">
-                <div className="text-lg font-bold">
-                  {'Похожие товары'}
-                </div>
-                <div className="mt-5">
-                  {/* @ts-ignore */}
-                  <Slider {...settings}>
-                    {biRecommendations.relatedItems.map((item: any) => (
-                      <div className="border border-gray-300 rounded-2xl md:px-5 px-1 py-2 text-center flex flex-col">
-                        <div className="flex-grow flex items-center flex-col justify-center">
-                          {item.image ? (
-                            <img
-                              src={item.image}
-                              width={130}
-                              height={130}
-                              alt={
-                                item?.attribute_data?.name[channelName][
-                                  locale || 'ru'
-                                ]
-                              }
-                              className="transform motion-safe:group-hover:scale-105 transition duration-500 h-20"
-                            />
+                        <div className="mt-3 flex items-center justify-between gap-2">
+                          {!readonlyItems.includes(line.id) ? (
+                            <Stepper line={line} />
                           ) : (
-                            <img
-                              src="/no_photo.svg"
-                              width={130}
-                              height={130}
-                              alt={
-                                item?.attribute_data?.name[channelName][
-                                  locale || 'ru'
-                                ]
-                              }
-                              className="rounded-full transform motion-safe:group-hover:scale-105 transition duration-500"
-                            />
+                            <span className="text-xs text-gray-400">
+                              {line.quantity} ×
+                            </span>
                           )}
-                          <div className="text-lg leading-5 font-bold mb-3 md:h-12 h-16">
-                            {
-                              item?.attribute_data?.name[channelName][
-                                locale || 'ru'
-                              ]
-                            }
+                          <div className="text-base md:text-lg font-extrabold text-gray-900 whitespace-nowrap">
+                            {formatPrice(line.total)}
                           </div>
                         </div>
-                        <div
-                          className={`rounded-full bg-yellow text-white font-normal cursor-pointer py-1 flex items-center justify-center transition-opacity ${
-                            addingItemId === item.id ? 'opacity-50 pointer-events-none' : ''
-                          }`}
-                          onClick={() => addToBasket(item.id)}
-                        >
-                          {addingItemId === item.id ? (
-                            <svg className="animate-spin h-5 w-5 text-white" viewBox="0 0 24 24">
-                              <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" fill="none" />
-                              <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" />
-                            </svg>
-                          ) : (
-                            currency(parseInt(item.price, 0) || 0, {
-                              pattern: '# !',
-                              separator: ' ',
-                              decimal: '.',
-                              symbol: `${
-                                locale == 'uz'
-                                  ? "so'm"
-                                  : locale == 'ru'
-                                  ? 'сум'
-                                  : locale == 'en'
-                                  ? 'sum'
-                                  : ''
-                              }`,
-                              precision: 0,
-                            }).format()
-                          )}
-                        </div>
                       </div>
-                    ))}
-                  </Slider>
-                </div>
-              </div>
-            )}
-            {biRecommendations.topItems.length > 0 && (
-              <div className="md:p-10 p-5 md:rounded-2xl bg-white md:my-3">
-                <div className="text-lg font-bold">{'Топ продуктов'}</div>
-                <div className="mt-5">
-                  {/* @ts-ignore */}
-                  <Slider {...settings}>
-                    {biRecommendations.topItems.map((item: any) => (
-                      <div className="border border-gray-300 rounded-2xl md:px-5 px-1 py-2 text-center flex flex-col">
-                        <div className="flex-grow flex items-center flex-col justify-center">
-                          {item.image ? (
-                            <img
-                              src={item.image}
-                              width={130}
-                              height={130}
-                              alt={
-                                item?.attribute_data?.name[channelName][
-                                  locale || 'ru'
-                                ]
-                              }
-                              className="transform motion-safe:group-hover:scale-105 transition duration-500 h-20"
-                            />
-                          ) : (
-                            <img
-                              src="/no_photo.svg"
-                              width={130}
-                              height={130}
-                              alt={
-                                item?.attribute_data?.name[channelName][
-                                  locale || 'ru'
-                                ]
-                              }
-                              className="rounded-full transform motion-safe:group-hover:scale-105 transition duration-500"
-                            />
-                          )}
-                          <div className="text-lg leading-5 font-bold mb-3 md:h-12 h-16">
-                            {
-                              item?.attribute_data?.name[channelName][
-                                locale || 'ru'
-                              ]
-                            }
-                          </div>
-                        </div>
-                        <div
-                          className={`rounded-full bg-yellow text-white font-normal cursor-pointer py-1 flex items-center justify-center transition-opacity ${
-                            addingItemId === item.id ? 'opacity-50 pointer-events-none' : ''
-                          }`}
-                          onClick={() => addToBasket(item.id)}
-                        >
-                          {addingItemId === item.id ? (
-                            <svg className="animate-spin h-5 w-5 text-white" viewBox="0 0 24 24">
-                              <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" fill="none" />
-                              <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" />
-                            </svg>
-                          ) : (
-                            currency(parseInt(item.price, 0) || 0, {
-                              pattern: '# !',
-                              separator: ' ',
-                              decimal: '.',
-                              symbol: `${
-                                locale == 'uz'
-                                  ? "so'm"
-                                  : locale == 'ru'
-                                  ? 'сум'
-                                  : locale == 'en'
-                                  ? 'sum'
-                                  : ''
-                              }`,
-                              precision: 0,
-                            }).format()
-                          )}
-                        </div>
-                      </div>
-                    ))}
-                  </Slider>
-                </div>
-              </div>
-            )}
-          </div>
-          <div className="hidden md:block">
-            <div className="py-9 px-3 rounded-2xl bg-white sticky top-5">
-              <div className="border-b items-center justify-between pb-2">
-                <div className="flex font-bold items-center justify-between md:justify-end">
-                  <div className="text-lg text-gray-400">
-                    {'Стоимость заказа'}
-                  </div>
-                  <div className="ml-7 text-2xl">
-                    {currency(data.totalPrice, {
-                      pattern: '# !',
-                      separator: ' ',
-                      decimal: '.',
-                      symbol: `${
-                        locale == 'uz'
-                          ? "so'm"
-                          : locale == 'ru'
-                          ? 'сум'
-                          : locale == 'en'
-                          ? 'sum'
-                          : ''
-                      }`,
-                      precision: 0,
-                    }).format()}
-                  </div>
-                </div>
-              </div>
-              <div className="mt-4 space-y-4">
-                <button
-                  className="text-xl text-white bg-yellow flex h-8 items-center justify-evenly rounded-full w-full"
-                  onClick={goToCheckout}
-                >
-                  {'Оформить заказ'} <img src="/right.png" />
-                </button>
-                <button
-                  className="text-xl text-gray-400 bg-gray-100 flex h-8 items-center rounded-full justify-evenly w-full"
-                  onClick={(e) => {
-                    e.preventDefault()
-                    router.push(`/${activeCity?.slug}`)
-                  }}
-                >
-                  <img src="/left.png" /> {'Вернуться в меню'}
-                </button>
-              </div>
+                    </div>
+                  )
+                })
+                .reverse()}
             </div>
           </div>
+
+          {(biRecommendations.relatedItems?.length > 0 ||
+            biRecommendations.topItems?.length > 0) && (
+            <div className="bg-white rounded-3xl shadow-sm p-5 md:p-7">
+              <h2 className="text-lg md:text-xl font-extrabold text-gray-900 mb-4">
+                {t('Вам может понравиться')}
+              </h2>
+              <div className="-mx-5 md:-mx-7 px-5 md:px-7 overflow-x-auto pb-2">
+                <div className="flex gap-3 md:gap-4">
+                  {(biRecommendations.relatedItems?.length
+                    ? biRecommendations.relatedItems
+                    : biRecommendations.topItems
+                  ).map((item: any) => (
+                    <div
+                      key={item.id}
+                      className="flex-shrink-0 w-[140px] md:w-[160px] bg-white border border-gray-100 rounded-2xl p-3 flex flex-col items-center text-center"
+                    >
+                      <div className="w-full h-20 md:h-24 flex items-center justify-center mb-2">
+                        <img
+                          src={item.image || '/no_photo.svg'}
+                          className="max-w-full max-h-full object-contain"
+                          alt={recName(item)}
+                          loading="lazy"
+                        />
+                      </div>
+                      <div className="text-xs md:text-sm font-semibold text-gray-800 leading-tight line-clamp-2 min-h-[32px] mb-2">
+                        {recName(item)}
+                      </div>
+                      <button
+                        type="button"
+                        onClick={() => addToBasket(item.id)}
+                        disabled={addingItemId === item.id}
+                        className="w-full h-9 rounded-full text-xs font-bold text-white flex items-center justify-center disabled:opacity-60"
+                        style={{ background: YELLOW }}
+                      >
+                        {addingItemId === item.id
+                          ? '…'
+                          : `+ ${formatPrice(parseInt(item.price, 10) || 0)}`}
+                      </button>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </div>
+          )}
         </div>
-      )}
-      <style global jsx>{`
-        .slick-prev:before,
-        .slick-next:before {
-          color: #faaf04;
-        }
-        .slick-prev:before {
-          font-size: 33px;
-          margin-left: -48px;
-        }
 
-        .slick-next:before {
-          font-size: 33px;
-          margin-left: 24px;
-        }
+        <aside className="lg:col-span-1">
+          <div className="bg-white rounded-3xl shadow-sm p-5 md:p-7 lg:sticky lg:top-24">
+            <h2 className="text-lg md:text-xl font-extrabold text-gray-900 mb-4">
+              {t('Ваш заказ')}
+            </h2>
+            <div className="space-y-2.5 text-sm">
+              <div className="flex items-center justify-between">
+                <span className="text-gray-500">
+                  {t('Товары')} ({totalQty})
+                </span>
+                <span className="font-semibold text-gray-900">
+                  {formatPrice(data?.lineItemsSubtotalPrice || data?.totalPrice || 0)}
+                </span>
+              </div>
+              {data?.discountValue > 0 && (
+                <div className="flex items-center justify-between">
+                  <span className="text-gray-500">{t('Скидка')}</span>
+                  <span className="font-semibold" style={{ color: YELLOW }}>
+                    − {formatPrice(data.discountValue)}
+                  </span>
+                </div>
+              )}
+              <div className="flex items-center justify-between">
+                <span className="text-gray-500">{t('Доставка')}</span>
+                <span className="text-gray-400">
+                  {locationData?.deliveryType === 'pickup'
+                    ? t('Самовывоз')
+                    : t('Уточняется')}
+                </span>
+              </div>
+            </div>
+            <div className="mt-5 pt-5 border-t border-gray-100 flex items-baseline justify-between">
+              <span className="text-base font-semibold text-gray-700">
+                {t('Итого')}
+              </span>
+              <span className="text-2xl md:text-3xl font-extrabold text-gray-900">
+                {formatPrice(data?.totalPrice || 0)}
+              </span>
+            </div>
 
-        .slick-track {
-          display: flex;
-        }
-        .slick-track .slick-slide {
-          display: flex;
-          height: auto;
-          align-items: center;
-          justify-content: center;
-        }
-        .slick-track .slick-slide > div {
-          height: 100%;
-        }
-        /* the slides */
-        .slick-slide {
-          margin: 0 5px;
-        }
-        /* the parent */
-        .slick-list {
-          margin: 0 -10px;
-        }
-      `}</style>
-    </>
+            <button
+              type="button"
+              onClick={goToCheckout}
+              disabled={!isWorkTime}
+              className="mt-5 w-full h-12 md:h-14 rounded-full font-bold text-white text-sm md:text-base uppercase tracking-wide flex items-center justify-center transition-opacity hover:opacity-90 disabled:opacity-60 disabled:cursor-not-allowed"
+              style={{ background: YELLOW }}
+            >
+              {t('Оформить заказ')}
+              <svg
+                className="ml-2"
+                width="18"
+                height="18"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2.4"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              >
+                <line x1="5" y1="12" x2="19" y2="12" />
+                <polyline points="12 5 19 12 12 19" />
+              </svg>
+            </button>
+
+            <button
+              type="button"
+              onClick={() =>
+                router.push(`/${activeCity?.slug || 'tashkent'}`)
+              }
+              className="mt-3 w-full h-11 rounded-full font-semibold text-gray-600 bg-gray-100 hover:bg-gray-200 transition-colors text-sm flex items-center justify-center"
+            >
+              <svg
+                className="mr-2"
+                width="16"
+                height="16"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2.4"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              >
+                <line x1="19" y1="12" x2="5" y2="12" />
+                <polyline points="12 19 5 12 12 5" />
+              </svg>
+              {t('Вернуться в меню')}
+            </button>
+
+            <div className="mt-4 text-[11px] text-gray-400 leading-relaxed">
+              {t(
+                'Обрабатывая ваши данные, вы соглашаетесь с нашими условиями использования'
+              )}
+            </div>
+          </div>
+        </aside>
+      </div>
+    </div>
   )
 }
