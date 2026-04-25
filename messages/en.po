@@ -147,13 +147,13 @@ msgid "gXcQyF"
 msgstr "Discount"
 
 #: components_new/cart/CartApp.tsx:790
-#: components_new/header/LocationPickerCore.tsx:313
+#: components_new/header/LocationPickerCore.tsx:350
 #: components_new/HeaderApp.tsx:131
 msgid "3qtFxi"
 msgstr "Delivery"
 
 #: components_new/cart/CartApp.tsx:793
-#: components_new/header/LocationPickerCore.tsx:324
+#: components_new/header/LocationPickerCore.tsx:361
 #: components_new/HeaderApp.tsx:145
 msgid "k9Dt2Z"
 msgstr "Pickup"
@@ -270,54 +270,58 @@ msgstr "Your city"
 msgid "2wkbQf"
 msgstr "Order total"
 
-#: components_new/header/LocationPickerCore.tsx:354
+#: components_new/header/LocationPickerCore.tsx:391
 #: components_new/HeaderApp.tsx:47
 msgid "EiCEoo"
 msgstr "Enter your address"
 
-#: components_new/header/LocationPickerCore.tsx:412
+#: components_new/header/LocationPickerCore.tsx:449
 msgid "qnmGg/"
 msgstr "Address:"
 
-#: components_new/header/LocationPickerCore.tsx:429
+#: components_new/header/LocationPickerCore.tsx:466
 msgid "x1MUPc"
 msgstr "Address"
 
-#: components_new/header/LocationPickerCore.tsx:478
+#: components_new/header/LocationPickerCore.tsx:515
 msgid "2lYwXC"
 msgstr "House"
 
-#: components_new/header/LocationPickerCore.tsx:493
+#: components_new/header/LocationPickerCore.tsx:530
 msgid "PE9WEy"
 msgstr "Apartment"
 
-#: components_new/header/LocationPickerCore.tsx:512
+#: components_new/header/LocationPickerCore.tsx:549
 msgid "bIzegt"
 msgstr "Add entrance and intercom"
 
-#: components_new/header/LocationPickerCore.tsx:542
+#: components_new/header/LocationPickerCore.tsx:579
 msgid "DtOC+U"
 msgstr "Entrance"
 
-#: components_new/header/LocationPickerCore.tsx:557
+#: components_new/header/LocationPickerCore.tsx:594
 msgid "KIMRoB"
 msgstr "Intercom code"
 
-#: components_new/header/LocationPickerCore.tsx:572
+#: components_new/header/LocationPickerCore.tsx:609
 msgid "2ifljK"
 msgstr "Address name. For example, Home, Work..."
 
-#: components_new/header/LocationPickerCore.tsx:591
+#: components_new/header/LocationPickerCore.tsx:659
+msgid "f/Ues8"
+msgstr ""
+
+#: components_new/header/LocationPickerCore.tsx:700
 msgid "NUZRDC"
 msgstr "Choose a restaurant:"
 
-#: components_new/header/LocationPickerCore.tsx:606
+#: components_new/header/LocationPickerCore.tsx:715
 #: components_new/product/ProductDetailApp.tsx:274
 #: components_new/product/ProductDrawerApp.tsx:225
 msgid "+RxnK3"
 msgstr "Loading..."
 
-#: components_new/header/LocationPickerCore.tsx:706
+#: components_new/header/LocationPickerCore.tsx:816
 msgid "XzVpjf"
 msgstr "Confirm"
 

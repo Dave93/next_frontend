@@ -1239,7 +1239,8 @@ const OrdersApp: FC<OrdersProps> = ({ channelName, isMobile = false }) => {
 
       // PostHog: order_failed (server error)
       trackOrderFailed({
-        error_message: e.response?.data?.error?.message || e.message || 'Unknown error',
+        error_message:
+          e.response?.data?.error?.message || e.message || 'Unknown error',
       })
 
       setIsSavingOrder(false)
@@ -1438,46 +1439,49 @@ const OrdersApp: FC<OrdersProps> = ({ channelName, isMobile = false }) => {
   return (
     <div className="orders-root mx-5 md:mx-0 pt-1 md:pt-0 pb-1">
       {/* Contacts - hidden on mobile when logged in */}
-      <div className={`w-full bg-white my-5 rounded-2xl ${user ? 'hidden md:block' : ''}`}>
-        <div className="p-10">
-          <div className="text-lg mb-5 font-bold">
-            {tr('order_your_contacts')}
-          </div>
-          <form
-            onSubmit={handleSubmit(onSubmit)}
-            className="grid gap-2 md:grid-cols-4"
-          >
-            <div className="col-span-2">
-              <label className="text-sm text-gray-400 mb-2 block">
-                {tr('personal_data_name')}
-              </label>
-              <div className="relative">
-                <input
-                  type="text"
-                  {...register('name', { required: true })}
-                  className="focus:outline-none outline-none px-6 py-3 rounded-full text-sm w-full bg-gray-100 text-gray-400"
-                />
-                {authName && (
-                  <button
-                    className="absolute focus:outline-none inset-y-0 outline-none right-4 text-gray-400"
-                    onClick={() => resetField('name')}
-                  >
-                    <XIcon className="cursor-pointer h-5 text-gray-400 w-5" />
-                  </button>
-                )}
-              </div>
-              {errors.name && (
-                <div className="text-sm text-center text-red-600">
-                  {tr('required')}
-                </div>
+      <div
+        className={`w-full bg-white my-5 rounded-2xl ${
+          user ? 'hidden md:block' : ''
+        }`}
+      >
+        <div className="text-lg mb-5 font-bold">
+          {tr('order_your_contacts')}
+        </div>
+        <form
+          onSubmit={handleSubmit(onSubmit)}
+          className="grid gap-2 md:grid-cols-4"
+        >
+          <div className="col-span-2">
+            <label className="text-sm text-gray-400 mb-2 block">
+              {tr('personal_data_name')}
+            </label>
+            <div className="relative">
+              <input
+                type="text"
+                {...register('name', { required: true })}
+                className="focus:outline-none outline-none px-6 py-3 rounded-full text-sm w-full bg-gray-100 text-gray-400"
+              />
+              {authName && (
+                <button
+                  className="absolute focus:outline-none inset-y-0 outline-none right-4 text-gray-400"
+                  onClick={() => resetField('name')}
+                >
+                  <XIcon className="cursor-pointer h-5 text-gray-400 w-5" />
+                </button>
               )}
             </div>
-            <div className="col-span-2">
-              <label className="text-sm text-gray-400 mb-2 block">
-                {tr('personal_phone')}
-              </label>
-              <div className="relative">
-                {/* <input
+            {errors.name && (
+              <div className="text-sm text-center text-red-600">
+                {tr('required')}
+              </div>
+            )}
+          </div>
+          <div className="col-span-2">
+            <label className="text-sm text-gray-400 mb-2 block">
+              {tr('personal_phone')}
+            </label>
+            <div className="relative">
+              {/* <input
                   type="text"
                   {...register('phone', {
                     required: true,
@@ -1485,93 +1489,92 @@ const OrdersApp: FC<OrdersProps> = ({ channelName, isMobile = false }) => {
                   })}
                   className="focus:outline-none outline-none px-6 py-3 rounded-full text-sm w-full bg-gray-100 text-gray-400 "
                 /> */}
-                <Controller
-                  render={({ field: { onChange, value } }) => (
-                    <Input
-                      defaultCountry="UZ"
-                      country="UZ"
-                      international
-                      withCountryCallingCode
-                      value={value}
-                      className="focus:outline-none outline-none px-6 py-3 rounded-full text-sm w-full bg-gray-100 text-gray-400"
-                      onChange={(e: any) => onChange(e)}
-                    />
-                  )}
-                  rules={{
-                    required: true,
-                  }}
-                  key="phone"
-                  name="phone"
-                  control={control}
-                />
-
-                {authPhone && (
-                  <button
-                    className="absolute focus:outline-none inset-y-0 outline-none right-4 text-gray-400"
-                    onClick={() => resetField('phone')}
-                  >
-                    <XIcon className="cursor-pointer h-5 text-gray-400 w-5" />
-                  </button>
+              <Controller
+                render={({ field: { onChange, value } }) => (
+                  <Input
+                    defaultCountry="UZ"
+                    country="UZ"
+                    international
+                    withCountryCallingCode
+                    value={value}
+                    className="focus:outline-none outline-none px-6 py-3 rounded-full text-sm w-full bg-gray-100 text-gray-400"
+                    onChange={(e: any) => onChange(e)}
+                  />
                 )}
-              </div>
+                rules={{
+                  required: true,
+                }}
+                key="phone"
+                name="phone"
+                control={control}
+              />
 
-              {errors.phone && (
-                <div className="text-sm text-center text-red-600">
-                  {tr('required')}
-                </div>
+              {authPhone && (
+                <button
+                  className="absolute focus:outline-none inset-y-0 outline-none right-4 text-gray-400"
+                  onClick={() => resetField('phone')}
+                >
+                  <XIcon className="cursor-pointer h-5 text-gray-400 w-5" />
+                </button>
               )}
             </div>
-            <div className="col-span-2">
-              <label className="text-sm text-gray-400 mb-2 block">
-                {tr('personal_email')}
-              </label>
-              <div className="relative">
-                <input
-                  type="email"
-                  {...register('email')}
-                  className="focus:outline-none outline-none px-6 py-3 rounded-full text-sm w-full bg-gray-100 text-gray-400 "
-                />
-                {authEmail && (
-                  <button
-                    className="absolute focus:outline-none inset-y-0 outline-none right-4 text-gray-400"
-                    onClick={() => resetField('email')}
-                  >
-                    <XIcon className="cursor-pointer h-5 text-gray-400 w-5" />
-                  </button>
-                )}
+
+            {errors.phone && (
+              <div className="text-sm text-center text-red-600">
+                {tr('required')}
               </div>
+            )}
+          </div>
+          <div className="col-span-2">
+            <label className="text-sm text-gray-400 mb-2 block">
+              {tr('personal_email')}
+            </label>
+            <div className="relative">
+              <input
+                type="email"
+                {...register('email')}
+                className="focus:outline-none outline-none px-6 py-3 rounded-full text-sm w-full bg-gray-100 text-gray-400 "
+              />
+              {authEmail && (
+                <button
+                  className="absolute focus:outline-none inset-y-0 outline-none right-4 text-gray-400"
+                  onClick={() => resetField('email')}
+                >
+                  <XIcon className="cursor-pointer h-5 text-gray-400 w-5" />
+                </button>
+              )}
             </div>
-            <div className="col-span-2">
-              <div className="text-sm text-gray-400 mb-2 block">
-                {tr('additional_phone')}
-              </div>
-              <div className="relative">
-                <Input
-                  defaultCountry="UZ"
-                  country="UZ"
-                  international
-                  withCountryCallingCode
-                  value={additionalPhone}
-                  className="focus:outline-none outline-none px-6 py-3 rounded-full text-sm w-full bg-gray-100 text-gray-400 "
-                  onChange={(e: any) => {
-                    setValue('additional_phone', e)
-                  }}
-                />
-                {additionalPhone && (
-                  <button
-                    className="absolute focus:outline-none inset-y-0 outline-none right-4 text-gray-400"
-                    onClick={() => resetField('additional_phone')}
-                  >
-                    <XIcon className="cursor-pointer h-5 text-gray-400 w-5" />
-                  </button>
-                )}
-              </div>
+          </div>
+          <div className="col-span-2">
+            <div className="text-sm text-gray-400 mb-2 block">
+              {tr('additional_phone')}
             </div>
-          </form>
-        </div>
+            <div className="relative">
+              <Input
+                defaultCountry="UZ"
+                country="UZ"
+                international
+                withCountryCallingCode
+                value={additionalPhone}
+                className="focus:outline-none outline-none px-6 py-3 rounded-full text-sm w-full bg-gray-100 text-gray-400 "
+                onChange={(e: any) => {
+                  setValue('additional_phone', e)
+                }}
+              />
+              {additionalPhone && (
+                <button
+                  className="absolute focus:outline-none inset-y-0 outline-none right-4 text-gray-400"
+                  onClick={() => resetField('additional_phone')}
+                >
+                  <XIcon className="cursor-pointer h-5 text-gray-400 w-5" />
+                </button>
+              )}
+            </div>
+          </div>
+        </form>
       </div>
       {/* Address Selection */}
-      <div className="mb-5 order-delivery-section">
+      <div className="my-5 order-delivery-section">
         {isMobile ? (
           <AddressSelectionMobile
             register={register}
@@ -1619,7 +1622,11 @@ const OrdersApp: FC<OrdersProps> = ({ channelName, isMobile = false }) => {
             selection now lives inside AddressSelectionApp's LocationPickerCore. */}
       </div>
       {/* time of delivery - hide for pickup */}
-      <div className={`w-full bg-white mb-5 rounded-2xl p-10 order-delivery-time ${tabIndex === 'pickup' ? 'hidden' : ''}`}>
+      <div
+        className={`w-full bg-white my-5 rounded-2xl order-delivery-time ${
+          tabIndex === 'pickup' ? 'hidden' : ''
+        }`}
+      >
         <div className="text-lg mb-5 font-bold">
           {tr('order_time_of_delivery')}
         </div>
@@ -1688,7 +1695,7 @@ const OrdersApp: FC<OrdersProps> = ({ channelName, isMobile = false }) => {
         )}
       </div>
       {/* pay */}
-      <div className="w-full bg-white mb-5 rounded-2xl p-10 relative">
+      <div className="w-full bg-white my-5 rounded-2xl relative">
         {!locationData?.terminal_id && (
           <div className="absolute h-full bg-opacity-60 bg-gray-100 z-20 items-center flex justify-around left-0 bottom-0 right-0">
             <div className="text-yellow font-bold text-2xl text-center">
@@ -1786,7 +1793,9 @@ const OrdersApp: FC<OrdersProps> = ({ channelName, isMobile = false }) => {
                 payType === 'deposit'
                   ? 'border-yellow bg-yellow-50'
                   : 'border-gray-200 hover:border-gray-300 bg-white'
-              } ${deposit < totalPrice ? 'cursor-not-allowed' : 'cursor-pointer'}`}
+              } ${
+                deposit < totalPrice ? 'cursor-not-allowed' : 'cursor-pointer'
+              }`}
               onClick={(e) => {
                 if (deposit < totalPrice) {
                   e.preventDefault()
@@ -1818,7 +1827,9 @@ const OrdersApp: FC<OrdersProps> = ({ channelName, isMobile = false }) => {
                 strokeWidth="1.7"
                 strokeLinecap="round"
                 strokeLinejoin="round"
-                className={payType === 'deposit' ? 'text-yellow' : 'text-gray-500'}
+                className={
+                  payType === 'deposit' ? 'text-yellow' : 'text-gray-500'
+                }
               >
                 <path d="M21 12a9 9 0 1 1-9-9" />
                 <path d="M21 4v5h-5" />
@@ -1981,7 +1992,11 @@ const OrdersApp: FC<OrdersProps> = ({ channelName, isMobile = false }) => {
         </Disclosure>
       </div>
       {/* order list */}
-      <div className={`w-full bg-white mb-5 rounded-2xl p-10 order-summary-section ${isMobile ? 'hidden' : ''}`}>
+      <div
+        className={`w-full bg-white my-5 rounded-2xl order-summary-section ${
+          isMobile ? 'hidden' : ''
+        }`}
+      >
         <div className="text-lg mb-5 font-bold">{tr('order_order_list')}</div>
         {!isEmpty &&
           data &&
@@ -2008,7 +2023,9 @@ const OrdersApp: FC<OrdersProps> = ({ channelName, isMobile = false }) => {
                   </div>
                   <div className="w-1/2 relative overflow-hidden">
                     <img
-                      src={getAssetUrl(lineItem?.child[0].variant?.product?.assets)}
+                      src={getAssetUrl(
+                        lineItem?.child[0].variant?.product?.assets
+                      )}
                       className="absolute h-full max-w-none right-0"
                       alt=""
                     />
@@ -2121,7 +2138,11 @@ const OrdersApp: FC<OrdersProps> = ({ channelName, isMobile = false }) => {
           ))}
         {!isEmpty && (
           <div>
-            <div className={`flex justify-between items-center mt-8 ${isMobile ? 'hidden' : ''}`}>
+            <div
+              className={`flex justify-between items-center mt-8 ${
+                isMobile ? 'hidden' : ''
+              }`}
+            >
               <div>
                 <div className="font-bold text-xl mb-2">
                   {tr('basket_order_price')}
@@ -2207,7 +2228,7 @@ const OrdersApp: FC<OrdersProps> = ({ channelName, isMobile = false }) => {
           </div>
         </div>
       )}
-      <div className={`w-full bg-white mb-5 rounded-2xl p-10 order-confirm-section`}>
+      <div className={`w-full bg-white my-5 rounded-2xl order-confirm-section`}>
         <div className={`${isMobile ? 'hidden' : 'md:flex'}`}>
           {!!user?.user?.sms_sub != true ||
             (!!user?.user?.email_sub != true && (
@@ -2240,7 +2261,11 @@ const OrdersApp: FC<OrdersProps> = ({ channelName, isMobile = false }) => {
             </label>
           )}
         </div>
-        <div className={`mt-5 text-gray-400 text-sm md:flex border-b pb-8 ${isMobile ? 'hidden' : ''}`}>
+        <div
+          className={`mt-5 text-gray-400 text-sm md:flex border-b pb-8 ${
+            isMobile ? 'hidden' : ''
+          }`}
+        >
           {tr('processing_of_your_personal_data')}
           <a
             href="/privacy"
@@ -2317,7 +2342,8 @@ const OrdersApp: FC<OrdersProps> = ({ channelName, isMobile = false }) => {
               router.push(`/${activeCity?.slug}/cart/`)
             }}
           >
-            <Image src="/left.png" alt="" width={20} height={20} /> {tr('back_to_basket')}
+            <Image src="/left.png" alt="" width={20} height={20} />{' '}
+            {tr('back_to_basket')}
           </button>
           <button
             className={`md:text-xl text-white bg-yellow flex h-12 items-center justify-evenly rounded-full md:w-80 w-full ${
@@ -2352,16 +2378,21 @@ const OrdersApp: FC<OrdersProps> = ({ channelName, isMobile = false }) => {
                 {tr('checkout')}
                 {isMobile && totalPrice > 0 && (
                   <span className="ml-1">
-                    · {currency(totalPrice, {
+                    ·{' '}
+                    {currency(totalPrice, {
                       pattern: '# !',
                       separator: ' ',
                       decimal: '.',
-                      symbol: `${locale == 'uz' ? "so'm" : locale == 'ru' ? 'сум' : 'sum'}`,
+                      symbol: `${
+                        locale == 'uz' ? "so'm" : locale == 'ru' ? 'сум' : 'sum'
+                      }`,
                       precision: 0,
                     }).format()}
                   </span>
                 )}
-                {!isMobile && <Image src="/right.png" alt="" width={20} height={20} />}
+                {!isMobile && (
+                  <Image src="/right.png" alt="" width={20} height={20} />
+                )}
               </>
             )}
           </button>

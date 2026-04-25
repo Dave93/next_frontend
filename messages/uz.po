@@ -147,13 +147,13 @@ msgid "gXcQyF"
 msgstr "Chegirma"
 
 #: components_new/cart/CartApp.tsx:790
-#: components_new/header/LocationPickerCore.tsx:313
+#: components_new/header/LocationPickerCore.tsx:350
 #: components_new/HeaderApp.tsx:131
 msgid "3qtFxi"
 msgstr "Yetkazib berish"
 
 #: components_new/cart/CartApp.tsx:793
-#: components_new/header/LocationPickerCore.tsx:324
+#: components_new/header/LocationPickerCore.tsx:361
 #: components_new/HeaderApp.tsx:145
 msgid "k9Dt2Z"
 msgstr "Olib ketish"
@@ -270,54 +270,58 @@ msgstr "Sizning shahringiz"
 msgid "2wkbQf"
 msgstr "Buyurtma summasi"
 
-#: components_new/header/LocationPickerCore.tsx:354
+#: components_new/header/LocationPickerCore.tsx:391
 #: components_new/HeaderApp.tsx:47
 msgid "EiCEoo"
 msgstr "Manzilni tanlang"
 
-#: components_new/header/LocationPickerCore.tsx:412
+#: components_new/header/LocationPickerCore.tsx:449
 msgid "qnmGg/"
 msgstr "Manzil:"
 
-#: components_new/header/LocationPickerCore.tsx:429
+#: components_new/header/LocationPickerCore.tsx:466
 msgid "x1MUPc"
 msgstr "Manzil"
 
-#: components_new/header/LocationPickerCore.tsx:478
+#: components_new/header/LocationPickerCore.tsx:515
 msgid "2lYwXC"
 msgstr "Uy"
 
-#: components_new/header/LocationPickerCore.tsx:493
+#: components_new/header/LocationPickerCore.tsx:530
 msgid "PE9WEy"
 msgstr "Xonadon"
 
-#: components_new/header/LocationPickerCore.tsx:512
+#: components_new/header/LocationPickerCore.tsx:549
 msgid "bIzegt"
 msgstr "Kirish va domofonni ko'rsatish"
 
-#: components_new/header/LocationPickerCore.tsx:542
+#: components_new/header/LocationPickerCore.tsx:579
 msgid "DtOC+U"
 msgstr "Kirish"
 
-#: components_new/header/LocationPickerCore.tsx:557
+#: components_new/header/LocationPickerCore.tsx:594
 msgid "KIMRoB"
 msgstr "Domofon kodi"
 
-#: components_new/header/LocationPickerCore.tsx:572
+#: components_new/header/LocationPickerCore.tsx:609
 msgid "2ifljK"
 msgstr "Manzil nomi. Masalan, Uy, Ish..."
 
-#: components_new/header/LocationPickerCore.tsx:591
+#: components_new/header/LocationPickerCore.tsx:659
+msgid "f/Ues8"
+msgstr ""
+
+#: components_new/header/LocationPickerCore.tsx:700
 msgid "NUZRDC"
 msgstr "Pitsxonani tanlang:"
 
-#: components_new/header/LocationPickerCore.tsx:606
+#: components_new/header/LocationPickerCore.tsx:715
 #: components_new/product/ProductDetailApp.tsx:274
 #: components_new/product/ProductDrawerApp.tsx:225
 msgid "+RxnK3"
 msgstr "Yuklanmoqda..."
 
-#: components_new/header/LocationPickerCore.tsx:706
+#: components_new/header/LocationPickerCore.tsx:816
 msgid "XzVpjf"
 msgstr "Tasdiqlash"
 

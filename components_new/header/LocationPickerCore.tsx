@@ -619,6 +619,78 @@ const LocationPickerCore: FC<Props> = ({
               />
             </div>
           )}
+
+          {/* Resolved branch badge: shows the restaurant the order will
+              be dispatched from once OrdersApp's auto-search pinned one
+              to locationData.terminalData. Trust signal — the user sees
+              who's preparing the order before paying. */}
+          {locationData?.terminal_id && locationData?.terminalData && (
+            <div
+              className="mt-3 flex items-start gap-2 rounded-2xl"
+              style={{
+                background: 'rgba(250, 175, 4, 0.08)',
+                border: `1px solid ${YELLOW}`,
+                padding: '10px 14px',
+              }}
+            >
+              <svg
+                width="20"
+                height="20"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke={YELLOW}
+                strokeWidth="2"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                style={{ flexShrink: 0, marginTop: 2 }}
+              >
+                <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z" />
+                <circle cx="12" cy="10" r="3" />
+              </svg>
+              <div style={{ minWidth: 0, flex: 1 }}>
+                <div
+                  style={{
+                    fontSize: 12,
+                    color: GRAY_500,
+                    lineHeight: 1.2,
+                    marginBottom: 2,
+                  }}
+                >
+                  {t('Ближайший ресторан')}
+                </div>
+                <div
+                  style={{
+                    fontSize: 15,
+                    fontWeight: 700,
+                    color: '#1F2937',
+                    lineHeight: 1.25,
+                  }}
+                >
+                  {(locale === 'uz' && locationData.terminalData.name_uz) ||
+                    (locale === 'en' && locationData.terminalData.name_en) ||
+                    locationData.terminalData.name}
+                </div>
+                {(locationData.terminalData.desc ||
+                  locationData.terminalData.desc_uz ||
+                  locationData.terminalData.desc_en) && (
+                  <div
+                    style={{
+                      fontSize: 12,
+                      color: GRAY_500,
+                      lineHeight: 1.3,
+                      marginTop: 2,
+                    }}
+                  >
+                    {(locale === 'uz' &&
+                      locationData.terminalData.desc_uz) ||
+                      (locale === 'en' &&
+                        locationData.terminalData.desc_en) ||
+                      locationData.terminalData.desc}
+                  </div>
+                )}
+              </div>
+            </div>
+          )}
         </div>
       )}
 
