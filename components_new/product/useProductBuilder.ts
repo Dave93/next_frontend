@@ -3,11 +3,17 @@
 import { useEffect, useMemo, useState } from 'react'
 import axios from 'axios'
 import Cookies from 'js-cookie'
+import Hashids from 'hashids'
 import { useCart } from '@framework/cart'
 import { useUI } from '@components/ui/context'
 import { trackAddToCart } from '@lib/posthog-events'
 
 const webAddress = process.env.NEXT_PUBLIC_API_URL
+const hashids = new Hashids(
+  'basket',
+  15,
+  'abcdefghijklmnopqrstuvwxyz1234567890'
+)
 
 const setCsrf = async () => {
   let csrf = Cookies.get('X-XSRF-TOKEN')
@@ -34,7 +40,7 @@ export function useProductBuilder(
   onAdded?: () => void
 ) {
   const { locationData } = useUI() as any
-  const { mutate } = useCart()
+  const { data: cartData, mutate } = useCart()
 
   const [activeVariantId, setActiveVariantId] = useState<number | null>(null)
   const [activeModifiers, setActiveModifiers] = useState<number[]>([])
@@ -111,6 +117,64 @@ export function useProductBuilder(
       .reduce((acc: number, m: any) => acc + Number(m.price || 0), 0)
     return basePrice + modSum
   }, [basePrice, modifiers, activeModifiers])
+
+  const effectiveProductId = useMemo(() => {
+    if (!product) return null
+    const modifierProduct = activeVariant?.modifierProduct
+    if (
+      modifierProduct &&
+      activeModifiers.includes(modifierProduct.id)
+    ) {
+      return String(modifierProduct.id)
+    }
+    if (activeVariant) return String(activeVariant.id)
+    return String(product.id)
+  }, [product, activeVariant, activeModifiers])
+
+  const cartLineItem = useMemo(() => {
+    if (!effectiveProductId || !cartData?.lineItems?.length) return null
+    return cartData.lineItems.find((item: any) => {
+      return (
+        String(item.variant?.id) === effectiveProductId ||
+        String(item.variant?.product?.id) === effectiveProductId ||
+        String(item.variant?.product_id) === effectiveProductId
+      )
+    })
+  }, [cartData, effectiveProductId])
+
+  const cartQuantity: number = (cartLineItem as any)?.quantity || 0
+
+  const changeQuantity = async (delta: number) => {
+    if (!cartLineItem) return
+    setIsLoading(true)
+    try {
+      await setCsrf()
+      const lineIdEncoded = hashids.encode((cartLineItem as any).id)
+      if (delta > 0) {
+        await axios.post(
+          `${webAddress}/api/v1/basket-lines/${lineIdEncoded}/add`,
+          { quantity: 1 },
+          { withCredentials: true }
+        )
+      } else {
+        if ((cartLineItem as any).quantity <= 1) {
+          await axios.delete(
+            `${webAddress}/api/basket-lines/${lineIdEncoded}`,
+            { withCredentials: true }
+          )
+        } else {
+          await axios.put(
+            `${webAddress}/api/v1/basket-lines/${lineIdEncoded}/remove`,
+            { quantity: 1 },
+            { withCredentials: true }
+          )
+        }
+      }
+      await mutate()
+    } finally {
+      setIsLoading(false)
+    }
+  }
 
   const selectVariant = (id: number) => {
     setActiveVariantId(id)
@@ -247,5 +311,7 @@ export function useProductBuilder(
     totalPrice,
     isLoading,
     addToCart,
+    cartQuantity,
+    changeQuantity,
   }
 }
