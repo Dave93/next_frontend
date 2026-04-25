@@ -1,15 +1,16 @@
-import { getExtracted } from 'next-intl/server'
-
-const DELIVERY_BODY_HTML = `<p>                 <span>Доставка ежедневно с 10:00 до 03:00</span>               </p>               <p>                 <span>Номер доставки: <a href="tel:+998712051111">+998712051111</a>        </span></p><p>                 <span>Оплата наличными, оплата картой, онлайн оплата</span>               </p>               <p>                 <span>&nbsp;</span>               </p>               <p>                 <span>Как сделать заказ в Chopar Pizza&nbsp;</span>               </p>               <p>                 <span>                   Достаточно просто выбрать заинтересовавшие вас блюда из меню и                   добавить их в корзину (нажимайте на кнопку с ценой рядом с                   каждым блюдом — оно будет добавлено в Ваш заказ), затем                   щёлкнуть по изображению корзины в правом верхнем углу сайта и                   далее следовать простым инструкциям по заполнению формы                   заказа.                 </span>               </p>               <p>                 <span>&nbsp;</span>               </p>               <p>                 <span>                   Для доставки по Ташкенту минимальная сумма заказа составляет                   44 000 сум, среднее время доставки 60 минут.                 </span>               </p>               <p>                 <span>&nbsp;</span>               </p>               <p>                 <strong>                   <span>Оплата наличными</span>                 </strong>               </p>               <p>                 <span>                   Для выбора оплаты товара наличными на странице заказа                   необходимо выбрать пункт "Наличными при получении". Вы сможете                   оплатить товар в нашем пункте самовывоза или при доставке                   курьером, оплата осуществляется наличными курьеру в руки.                 </span>               </p>               <p>                 <span>&nbsp;</span>               </p>               <p>                 <strong>                   <span>Оплата картой</span>                 </strong>               </p>               <p>                 <span>                   Для выбора оплаты товара картой при получении, на странице                   заказа необходимо выбрать пункт "Картой при получении". Вы                   сможете оплатить товар в нашем пункте самовывоза или при                   доставке курьером, оплата курьеру осуществляется с помощью                   переносного терминала оплаты.                 </span>               </p>               <p>                 <span>&nbsp;</span>               </p>               <p>                 <strong>                   <span>Онлайн оплата</span>                 </strong>               </p>               <p>                 <span>                   Для выбора оплаты товара картой, на странице заказа необходимо                   выбрать пункт: онлайн оплата Payme, Click.                 </span>               </p>`
+import { getExtracted, getLocale } from 'next-intl/server'
+import { getDeliveryBody, type StaticLocale } from './deliveryContent'
 
 export default async function DeliveryApp() {
   const t = await getExtracted()
+  const locale = (await getLocale()) as StaticLocale
+  const body = getDeliveryBody(locale)
   return (
     <div className="mx-5 md:mx-0">
-      <div className="text-3xl mb-1">{t('Доставка и оплата')}</div>
+      <h1 className="text-3xl mb-1 font-bold">{t('Доставка и оплата')}</h1>
       <div className="border-b-2 w-24 border-yellow mb-10"></div>
-      <div className="md:grid gap-10 mb-8">
-        <div dangerouslySetInnerHTML={{ __html: DELIVERY_BODY_HTML }} />
+      <div className="md:grid gap-10 mb-8 prose max-w-none leading-relaxed">
+        <div dangerouslySetInnerHTML={{ __html: body }} />
       </div>
     </div>
   )

@@ -3,7 +3,10 @@ const PRIVACY_BODY_HTML = `<div><p align="center">     <strong>Политика 
 export default function PrivacyApp() {
   return (
     <div className="mx-5 md:mx-0 max-w-none">
-      <div dangerouslySetInnerHTML={{ __html: PRIVACY_BODY_HTML }} />
+      <div
+        lang="ru"
+        dangerouslySetInnerHTML={{ __html: PRIVACY_BODY_HTML }}
+      />
     </div>
   )
 }

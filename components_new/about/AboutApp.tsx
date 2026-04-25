@@ -1,17 +1,16 @@
-'use client'
+import { getExtracted, getLocale } from 'next-intl/server'
+import { getAboutBody, type StaticLocale } from './aboutContent'
 
-import { useExtracted } from 'next-intl'
-
-const ABOUT_BODY_HTML = `<div><strong>ВКУС, КОТОРЫЙ ОБЪЕДИНЯЕТ </strong> <p>     Наливные пунцовые помидоры и душистый лук, первосортная говядина и конина,     лучшие специи, разливающиеся вкусами лета и солнца — с 2015 года команда     Chopar блистательно доказывает, что в руках профессионалов традиционные     восточные продукты способны перевоплощаться в пиццу, которая покоряет     сердца истовых гурманов. </p> <p>     В переводе с узбекского Chopar — «гонец». Вот уже восемь лет сеть пиццерий     Chopar подтверждает этот статус не только скоростью доставки пиццы с     восточным акцентом из печи прямо к дверям вашего дома, но и уверенно     чувствует себя в роли гонца, который приносит добрые вести и вкусы на стыке     восточных ценностей, европейских гастрономических традиций и     ультрасовременных технологий. </p> <p>     Бренд Chopar Pizza — представляет потребителям     собственное видение формата пиццерий — кафе, в которых традиционное     итальянское блюдо превращается в королевские почести, приготовленные из     даров южной природы и щедро приправленные восточным гостеприимством. </p></div>`
-
-export default function AboutApp() {
-  const t = useExtracted()
+export default async function AboutApp() {
+  const t = await getExtracted()
+  const locale = (await getLocale()) as StaticLocale
+  const body = getAboutBody(locale)
   return (
     <div className="mx-5 md:mx-0">
-      <div className="text-3xl mb-1">{t('О нас')}</div>
+      <h1 className="text-3xl mb-1 font-bold">{t('О нас')}</h1>
       <div className="border-b-2 w-24 border-yellow mb-10"></div>
-      <div className="md:grid gap-10 mb-8">
-        <div dangerouslySetInnerHTML={{ __html: ABOUT_BODY_HTML }}></div>
+      <div className="md:grid gap-10 mb-8 prose max-w-none leading-relaxed">
+        <div dangerouslySetInnerHTML={{ __html: body }} />
       </div>
     </div>
   )
