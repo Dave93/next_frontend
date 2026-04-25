@@ -1,3 +1,12 @@
+import { SEO_BASE_URL } from '@lib/seo/alternates'
+import JsonLd from './JsonLd'
+
+const SOCIAL = [
+  'https://www.instagram.com/choparpizza/',
+  'https://www.facebook.com/choparpizza',
+  'https://t.me/Chopar_bot',
+]
+
 export default function RestaurantJsonLd() {
   const data = {
     '@context': 'https://schema.org',
@@ -5,10 +14,15 @@ export default function RestaurantJsonLd() {
     name: 'Chopar Pizza',
     description:
       'Доставка пиццы с тандырным тестом в Ташкенте. Халяль. Бесплатная доставка.',
-    url: 'https://choparpizza.uz',
+    url: SEO_BASE_URL,
     telephone: '+998712051111',
     servesCuisine: ['Pizza', 'Italian', 'Uzbek'],
     priceRange: '$$',
+    paymentAccepted: ['Cash', 'Credit Card', 'Uzcard', 'Humo', 'Visa', 'MasterCard'],
+    currenciesAccepted: 'UZS',
+    acceptsReservations: false,
+    image: `${SEO_BASE_URL}/icon512x.png`,
+    logo: `${SEO_BASE_URL}/icon512x.png`,
     address: {
       '@type': 'PostalAddress',
       addressLocality: 'Ташкент',
@@ -33,22 +47,21 @@ export default function RestaurantJsonLd() {
       opens: '10:00',
       closes: '03:00',
     },
-    sameAs: [
-      'https://www.instagram.com/choparpizza/',
-      'https://www.facebook.com/choparpizza',
-      'https://t.me/Chopar_bot',
-    ],
-    image: 'https://choparpizza.uz/icon512x.png',
-    hasMenu: {
-      '@type': 'Menu',
-      url: 'https://choparpizza.uz/tashkent',
+    sameAs: SOCIAL,
+    hasMenu: `${SEO_BASE_URL}/tashkent`,
+    potentialAction: {
+      '@type': 'OrderAction',
+      target: {
+        '@type': 'EntryPoint',
+        urlTemplate: `${SEO_BASE_URL}/tashkent/cart`,
+        actionPlatform: [
+          'http://schema.org/DesktopWebPlatform',
+          'http://schema.org/MobileWebPlatform',
+        ],
+      },
+      deliveryMethod: ['http://purl.org/goodrelations/v1#DeliveryModeOwnFleet'],
     },
   }
 
-  return (
-    <script
-      type="application/ld+json"
-      dangerouslySetInnerHTML={{ __html: JSON.stringify(data) }}
-    />
-  )
+  return <JsonLd data={data} />
 }

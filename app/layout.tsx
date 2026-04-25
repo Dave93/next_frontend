@@ -4,6 +4,7 @@ import { NextIntlClientProvider } from 'next-intl'
 import { getLocale, getMessages } from 'next-intl/server'
 import Providers from './providers'
 import RestaurantJsonLd from '@components_new/seo/RestaurantJsonLd'
+import SiteJsonLd from '@components_new/seo/SiteJsonLd'
 
 import 'tailwindcss/tailwind.css'
 import '@assets/chrome-bug.css'
@@ -52,6 +53,7 @@ export default async function RootLayout({
     <html lang={locale}>
       <head>
         <RestaurantJsonLd />
+        <SiteJsonLd />
       </head>
       <body className="loading min-h-screen flex flex-col">
         <noscript

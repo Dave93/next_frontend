@@ -5,6 +5,7 @@ import { fetchSiteInfo } from '../../lib/data/site-info'
 import { fetchAllProducts } from '../../lib/data/products'
 import { fetchSliders } from '../../lib/data/sliders'
 import CityMainApp from '../../components_new/main/CityMainApp'
+import MenuJsonLd from '../../components_new/seo/MenuJsonLd'
 import type { City } from '@commerce/types/cities'
 
 type Params = { city: string }
@@ -63,11 +64,18 @@ export default async function CityHomePage({
   ])
 
   return (
-    <CityMainApp
-      products={products}
-      categories={(siteInfo as any).categories || []}
-      sliders={sliders}
-      channelName="chopar"
-    />
+    <>
+      <MenuJsonLd
+        citySlug={citySlug}
+        locale={locale}
+        categories={products as any[]}
+      />
+      <CityMainApp
+        products={products}
+        categories={(siteInfo as any).categories || []}
+        sliders={sliders}
+        channelName="chopar"
+      />
+    </>
   )
 }
