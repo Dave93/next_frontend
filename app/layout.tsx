@@ -1,4 +1,4 @@
-import type { Metadata } from 'next'
+import type { Metadata, Viewport } from 'next'
 import Script from 'next/script'
 import { NextIntlClientProvider } from 'next-intl'
 import { getLocale, getMessages } from 'next-intl/server'
@@ -15,12 +15,29 @@ import '@egjs/flicking-plugins/dist/arrow.css'
 import '@components_new/header/DatePicker.css'
 
 export const metadata: Metadata = {
+  metadataBase: new URL('https://choparpizza.uz'),
   title: {
     default: 'Chopar Pizza',
     template: '%s | Chopar Pizza',
   },
   description:
     'Доставка пиццы с тандырным тестом в Ташкенте. Халяль. Бесплатная доставка.',
+  applicationName: 'Chopar Pizza',
+  manifest: '/manifest.json',
+  formatDetection: { telephone: true, address: false, email: false },
+  appleWebApp: {
+    capable: true,
+    title: 'Chopar Pizza',
+    statusBarStyle: 'default',
+  },
+}
+
+export const viewport: Viewport = {
+  themeColor: '#FAAF04',
+  width: 'device-width',
+  initialScale: 1,
+  maximumScale: 5,
+  colorScheme: 'light',
 }
 
 export default async function RootLayout({

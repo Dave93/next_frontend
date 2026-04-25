@@ -1,25 +1,40 @@
 {
-  "short_name": "Chopar",
+  "id": "/",
   "name": "Chopar Pizza",
-  "description": "",
+  "short_name": "Chopar",
+  "description": "Доставка пиццы с тандырным тестом в Ташкенте. Халяль. Бесплатная доставка.",
+  "lang": "ru",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#FFFFFF",
+  "theme_color": "#FAAF04",
+  "categories": ["food", "shopping", "lifestyle"],
   "icons": [
     {
       "src": "/icon192x.png",
       "type": "image/png",
       "sizes": "192x192",
-      "purpose": "any maskable"
+      "purpose": "any"
+    },
+    {
+      "src": "/icon192x.png",
+      "type": "image/png",
+      "sizes": "192x192",
+      "purpose": "maskable"
     },
     {
       "src": "/icon512x.png",
       "type": "image/png",
       "sizes": "512x512",
-      "purpose": "any maskable"
+      "purpose": "any"
+    },
+    {
+      "src": "/icon512x.png",
+      "type": "image/png",
+      "sizes": "512x512",
+      "purpose": "maskable"
     }
-  ],
-  "start_url": "/",
-  "background_color": "#FFFFFF",
-  "display": "standalone",
-  "scope": "/",
-  "theme_color": "#6850ff",
-  "orientation": "portrait"
+  ]
 }
