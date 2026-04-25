@@ -26,7 +26,7 @@ const SideMenuApp: FC = () => {
   ]
 
   return (
-    <Popover className="relative ml-3">
+    <Popover className="relative md:ml-3">
       {({ open, close }) => (
         <>
           <PopoverButton

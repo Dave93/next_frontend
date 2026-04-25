@@ -107,7 +107,7 @@ const HeaderApp: FC = () => {
               <HeaderMiniCartApp />
               <SideMenuApp />
             </div>
-            <div className="md:hidden flex items-center gap-1">
+            <div className="md:hidden flex items-center gap-0.5 -mr-2">
               <ChooseCityDropDownApp />
               <LanguageDropDownApp />
               <SideMenuApp />

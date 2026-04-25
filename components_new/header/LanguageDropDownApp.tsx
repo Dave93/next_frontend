@@ -49,9 +49,9 @@ const LanguageDropDownApp: FC = () => {
   return (
     <Menu as="div" className="relative inline-block text-left">
       <div>
-        <MenuButton className="inline-flex justify-center w-full px-4 py-2 text-lg font-medium text-secondary bg-white rounded-md hover:bg-gray-50 focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75 items-center">
+        <MenuButton className="inline-flex justify-center h-10 px-3 text-sm md:text-lg font-medium text-secondary bg-white rounded-md hover:bg-gray-100 focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75 items-center gap-1.5">
           <FlagComponent />
-          <span className="ml-1.5">{localeLabel[locale]}</span>
+          <span>{localeLabel[locale]}</span>
         </MenuButton>
       </div>
       <Transition

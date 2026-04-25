@@ -48,7 +48,7 @@ const ChooseCityDropDownApp: FC = () => {
       {({ open }) => (
         <>
           <div>
-            <MenuButton className="bg-white focus:outline-none font-medium inline-flex justify-center outline-none text-secondary text-2xl w-full">
+            <MenuButton className="bg-white focus:outline-none font-medium inline-flex items-center justify-center h-10 px-3 outline-none text-secondary text-base md:text-2xl">
               {locale === 'uz' ? chosenCity?.name_uz : ''}
               {locale === 'ru' ? chosenCity?.name : ''}
               {locale === 'en' ? chosenCity?.name_en : ''}
