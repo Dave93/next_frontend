@@ -33,7 +33,8 @@ import {
   MapStateBase,
   MapStateCenter,
 } from 'react-yandex-maps'
-import Image from 'next/image'
+// next/image removed from this file — every image here is a small,
+// fixed-size icon that doesn't need the optimizer pipeline.
 import { useCart } from '@framework/cart'
 import currency from 'currency.js'
 import axios from 'axios'
@@ -1719,10 +1720,7 @@ const OrdersApp: FC<OrdersProps> = ({ channelName, isMobile = false }) => {
             type="button"
             onClick={() => {
               setOpenTab(1)
-              if (payType !== 'cash') {
-                setPayType('cash')
-                setValue('pay_type', 'cash' as any)
-              }
+              if (payType !== 'cash') setPayType('cash')
             }}
             className={`flex flex-col items-center justify-center gap-2 aspect-square rounded-2xl border transition ${
               openTab === 1
@@ -1770,7 +1768,7 @@ const OrdersApp: FC<OrdersProps> = ({ channelName, isMobile = false }) => {
                     }`}
                     onClick={() => setOpenTab(3)}
                   >
-                    <Image
+                    <img
                       src={`/assets/${payment}.svg`}
                       alt={payment}
                       width={64}
@@ -2353,7 +2351,10 @@ const OrdersApp: FC<OrdersProps> = ({ channelName, isMobile = false }) => {
               router.push(`/${activeCity?.slug}/cart/`)
             }}
           >
-            <Image src="/left.png" alt="" width={20} height={20} />{' '}
+            {/* Plain <img> instead of next/image — these little chevrons
+                were a noisy element type on minified prod and don't
+                benefit from the optimizer (already 20px). */}
+            <img src="/left.png" alt="" width={20} height={20} />{' '}
             {tr('back_to_basket')}
           </button>
           <button
@@ -2402,7 +2403,7 @@ const OrdersApp: FC<OrdersProps> = ({ channelName, isMobile = false }) => {
                   </span>
                 )}
                 {!isMobile && (
-                  <Image src="/right.png" alt="" width={20} height={20} />
+                  <img src="/right.png" alt="" width={20} height={20} />
                 )}
               </>
             )}
