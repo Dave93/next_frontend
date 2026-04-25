@@ -191,7 +191,11 @@ export default function BonusStartApp({
                   <div className="lg:ml-10 md:-top-24 absolute lg:-top-28 lg:w-56 md:w-auto -top-24">
                     <img
                       src={shuffle ? '/surprise/box.png' : sh.image}
-                      alt=""
+                      alt={
+                        sh?.attribute_data?.name?.[channelName]?.[
+                          locale || 'ru'
+                        ] || 'Бонус'
+                      }
                     />
                   </div>
                   {!shuffle && (
@@ -248,7 +252,15 @@ export default function BonusStartApp({
                       ]
                     }
                   </DialogTitle>
-                  <img className="m-auto w-48" src={chosenCard?.image} alt="" />
+                  <img
+                    className="m-auto w-48"
+                    src={chosenCard?.image}
+                    alt={
+                      chosenCard?.attribute_data?.name?.[channelName]?.[
+                        locale || 'ru'
+                      ] || 'Бонус'
+                    }
+                  />
                   <div className="md:w-72 m-auto">
                     <span className="text-yellow">
                       {'Поздравляем'}!

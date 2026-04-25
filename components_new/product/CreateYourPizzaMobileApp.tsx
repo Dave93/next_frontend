@@ -521,7 +521,12 @@ const CreateYourPizzaMobileApp: FC<CreatePizzaProps> = ({
       <div className="gap-4 grid grid-cols-2 py-4 md:py-0 items-center justify-between md:flex md:flex-col">
         <div className="text-center">
           <div>
-            <Image src="/createYourPizza.png" width={250} height={250} alt="" />
+            <Image
+              src="/createYourPizza.png"
+              width={250}
+              height={250}
+              alt="Соберите свою пиццу"
+            />
           </div>
         </div>
         <div>

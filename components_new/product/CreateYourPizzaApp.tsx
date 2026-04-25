@@ -543,7 +543,12 @@ const CreateYourPizzaApp: FC<CreatePizzaProps> = ({
             <div className="text-lg font-bold mb-2">
               {t('Соберите свою пиццу')}
             </div>
-            <Image src="/createYourPizza.png" width={150} height={150} alt="" />
+            <Image
+              src="/createYourPizza.png"
+              width={150}
+              height={150}
+              alt="Соберите свою пиццу"
+            />
           </div>
           <div className={isSmall ? '' : 'mt-5'}>
             <button
