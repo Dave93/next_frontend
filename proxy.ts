@@ -6,15 +6,20 @@ const LOCALE_PREFIX_RE = /^\/(uz|en)(\/.*)?$/
 export function proxy(request: NextRequest) {
   const { pathname } = request.nextUrl
 
-  // Locale prefix handling — strip /uz or /en, save NEXT_LOCALE cookie,
-  // rewrite to the city-only path so app/[city]/... matches.
+  // Locale prefix handling — strip /uz or /en, save NEXT_LOCALE cookie
+  // AND propagate the locale through a request header so the server
+  // request config can read it without depending on cookie state.
   const localeMatch = pathname.match(LOCALE_PREFIX_RE)
   if (localeMatch) {
     const locale = localeMatch[1] as (typeof NON_DEFAULT_LOCALES)[number]
     const rest = localeMatch[2] || '/'
     const url = request.nextUrl.clone()
     url.pathname = rest
-    const response = NextResponse.rewrite(url)
+    const requestHeaders = new Headers(request.headers)
+    requestHeaders.set('x-next-locale', locale)
+    const response = NextResponse.rewrite(url, {
+      request: { headers: requestHeaders },
+    })
     response.cookies.set('NEXT_LOCALE', locale, {
       path: '/',
       maxAge: 60 * 60 * 24 * 365,

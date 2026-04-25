@@ -1,25 +1,26 @@
 import { getRequestConfig } from 'next-intl/server'
 import { hasLocale } from 'next-intl'
-import { cookies, headers } from 'next/headers'
+import { headers } from 'next/headers'
 import { promises as fs } from 'fs'
 import path from 'path'
 import { po } from 'gettext-parser'
 import { routing } from './routing'
 
-// With proxy.ts no longer running next-intl middleware (Wave 7), locale
-// must be resolved here from cookie / Accept-Language header.
+// Locale resolution priority:
+// 1. x-next-locale request header — set by proxy.ts when URL has /uz or /en
+//    prefix. This is the authoritative source for prefixed routes.
+// 2. routing.defaultLocale (ru) — every other URL, including direct visits to
+//    /tashkent or /tashkent/about, must serve ru content (prod parity).
+//
+// We deliberately ignore Accept-Language and the NEXT_LOCALE cookie for
+// server-side detection: relying on either causes /tashkent to render in uz
+// or en for users whose browser language is not Russian, breaking the
+// "ru is default and prefix-less" contract.
 async function detectLocale(): Promise<'ru' | 'uz' | 'en'> {
-  const cookieStore = await cookies()
-  const fromCookie = cookieStore.get('NEXT_LOCALE')?.value
-  if (hasLocale(routing.locales, fromCookie)) return fromCookie as any
-
   const headerStore = await headers()
-  const accept = headerStore.get('accept-language') || ''
-  for (const lang of accept.split(',')) {
-    const code = lang.split(';')[0].trim().slice(0, 2).toLowerCase()
-    if (hasLocale(routing.locales, code)) return code as any
-  }
-  return routing.defaultLocale as any
+  const fromHeader = headerStore.get('x-next-locale')
+  if (hasLocale(routing.locales, fromHeader)) return fromHeader as any
+  return routing.defaultLocale as 'ru' | 'uz' | 'en'
 }
 
 export default getRequestConfig(async ({ requestLocale }) => {
