@@ -40,11 +40,9 @@ export default async function ProfileOrdersPage({
   if (!cities.find((c) => c.slug === citySlug)) notFound()
   return (
     <>
-      <div className="hidden md:flex">
-        <div className="w-64">
-          <UserDataApp />
-        </div>
-        <div className="flex-1">
+      <div className="hidden md:block">
+        <UserDataApp />
+        <div className="mt-8">
           <ProfileOrdersApp />
         </div>
       </div>
