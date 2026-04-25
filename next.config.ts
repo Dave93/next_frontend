@@ -18,6 +18,10 @@ const withNextIntl = createNextIntlPlugin({
 
 const config: NextConfig = {
   output: 'standalone',
+  // Temporary: surface real component names in production stack traces so
+  // we can locate the React #130 path on /order. Costs ~1–2 MB of .map
+  // files served alongside JS but doesn't affect runtime perf.
+  productionBrowserSourceMaps: true,
   // i18n/request.ts reads messages/*.po via fs.readFile at request time;
   // standalone tracing doesn't pick them up, so include them explicitly.
   outputFileTracingIncludes: {

@@ -1,6 +1,7 @@
 'use client'
 
 import dynamic from 'next/dynamic'
+import CheckoutErrorBoundary from './CheckoutErrorBoundary'
 
 // Forms depend on auth/cart state; render on the client only to mirror
 // the legacy pages-router behaviour.
@@ -20,12 +21,14 @@ export default function OrderCheckoutClient({
 }) {
   return (
     <>
-      <div className="md:hidden">
-        <MobileOrdersApp channelName={channelName} />
-      </div>
-      <div className="hidden md:block checkout-desktop-compact">
-        <OrdersApp channelName={channelName} />
-      </div>
+      <CheckoutErrorBoundary>
+        <div className="md:hidden">
+          <MobileOrdersApp channelName={channelName} />
+        </div>
+          <div className="hidden md:block checkout-desktop-compact">
+          <OrdersApp channelName={channelName} />
+        </div>
+      </CheckoutErrorBoundary>
       {/* Desktop compaction (mobile already has its own MobileOrdersApp CSS).
           Only collapses the airy 20px vertical gaps between cards — fonts
           and inner padding stay at their original values. */}
