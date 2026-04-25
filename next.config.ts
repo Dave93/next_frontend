@@ -18,6 +18,11 @@ const withNextIntl = createNextIntlPlugin({
 
 const config: NextConfig = {
   output: 'standalone',
+  // i18n/request.ts reads messages/*.po via fs.readFile at request time;
+  // standalone tracing doesn't pick them up, so include them explicitly.
+  outputFileTracingIncludes: {
+    '/**/*': ['./messages/**/*.po'],
+  },
   env: {
     NEXT_PUBLIC_API_URL: process.env.API_URL,
   },
