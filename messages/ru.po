@@ -6,7 +6,7 @@ msgstr ""
 "X-Generator: next-intl\n"
 "X-Crowdin-SourceKey: msgstr\n"
 
-#: components_new/about/AboutApp.tsx:11
+#: components_new/about/AboutApp.tsx:10
 #: components_new/header/SideMenuApp.tsx:20
 msgid "2NIDWU"
 msgstr "О нас"
@@ -235,7 +235,7 @@ msgstr "Отзыв"
 msgid "aXsJwD"
 msgstr "Отправить"
 
-#: components_new/delivery/DeliveryApp.tsx:9
+#: components_new/delivery/DeliveryApp.tsx:10
 #: components_new/header/SideMenuApp.tsx:21
 msgid "vku+vY"
 msgstr "Доставка и оплата"
@@ -325,7 +325,7 @@ msgid "Vj2nh2"
 msgstr "Адреса ресторанов"
 
 #: components_new/header/SideMenuApp.tsx:24
-#: components_new/news/NewsMenuTabsApp.tsx:27
+#: components_new/news/NewsMenuTabsApp.tsx:28
 #: components_new/sale/SaleListApp.tsx:32
 #: components_new/sale/SaleListApp.tsx:41
 msgid "J36SDn"
@@ -367,11 +367,11 @@ msgstr "Заказы"
 msgid "THaf0F"
 msgstr "Настройки"
 
-#: components_new/news/NewsDetailApp.tsx:66
+#: components_new/news/NewsDetailApp.tsx:71
 msgid "WkFJkT"
 msgstr "Рекомендованные новости"
 
-#: components_new/news/NewsDetailApp.tsx:92
+#: components_new/news/NewsDetailApp.tsx:97
 #: components_new/news/NewsListApp.tsx:69
 #: components_new/sale/SaleDetailApp.tsx:90
 #: components_new/sale/SaleListApp.tsx:69
@@ -380,7 +380,7 @@ msgstr "Подробнее"
 
 #: components_new/news/NewsListApp.tsx:32
 #: components_new/news/NewsListApp.tsx:41
-#: components_new/news/NewsMenuTabsApp.tsx:21
+#: components_new/news/NewsMenuTabsApp.tsx:22
 msgid "3j6hgF"
 msgstr "Новости"
 
@@ -389,12 +389,12 @@ msgid "aP09v9"
 msgstr "Пока новостей нет"
 
 #: components_new/product/CreateYourPizzaApp.tsx:544
-#: components_new/product/CreateYourPizzaMobileApp.tsx:529
+#: components_new/product/CreateYourPizzaMobileApp.tsx:534
 msgid "FVZBEe"
 msgstr "Соберите свою пиццу"
 
-#: components_new/product/CreateYourPizzaApp.tsx:553
-#: components_new/product/CreateYourPizzaMobileApp.tsx:536
+#: components_new/product/CreateYourPizzaApp.tsx:558
+#: components_new/product/CreateYourPizzaMobileApp.tsx:541
 msgid "WRnc7y"
 msgstr "Собрать пиццу"
 

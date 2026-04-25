@@ -3,7 +3,6 @@ import { notFound } from 'next/navigation'
 import { fetchSiteInfo } from '../../../../lib/data/site-info'
 import UserDataApp from '../../../../components_new/profile/UserDataApp'
 import ProfileOrdersApp from '../../../../components_new/profile/OrdersApp'
-import MobileProfileMenuApp from '../../../../components_new/mobile/MobileProfileMenuApp'
 import type { City } from '@commerce/types/cities'
 
 type Params = { city: string }
@@ -43,12 +42,10 @@ export default async function ProfileOrdersPage({
     <>
       <div className="hidden md:block">
         <UserDataApp />
-        <div className="mt-8">
-          <ProfileOrdersApp />
-        </div>
       </div>
-      <div className="md:hidden">
-        <MobileProfileMenuApp />
+      <div className="mt-4 md:mt-8 mx-3 md:mx-0">
+        <h1 className="text-2xl mb-4 md:hidden font-bold">Мои заказы</h1>
+        <ProfileOrdersApp />
       </div>
     </>
   )
