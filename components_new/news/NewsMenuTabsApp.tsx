@@ -1,6 +1,7 @@
 'use client'
 
 import { FC, memo } from 'react'
+import Image from 'next/image'
 import { usePathname } from 'next/navigation'
 import { Link } from '../../i18n/navigation'
 import { useExtracted } from 'next-intl'
@@ -35,7 +36,12 @@ const NewsMenuTabsApp: FC<Props> = ({ citySlug }) => {
         const isActive = pathname.indexOf(item.href) >= 0
         return (
           <div key={item.href} className="flex items-center md:ml-10">
-            <img src={isActive ? item.activeIcon : item.icon} alt="" />
+            <Image
+              src={isActive ? item.activeIcon : item.icon}
+              alt=""
+              width={24}
+              height={24}
+            />
             <Link
               href={href}
               prefetch={false}

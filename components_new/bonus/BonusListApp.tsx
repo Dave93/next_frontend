@@ -112,7 +112,12 @@ export default function BonusListApp(_props: BonusListAppProps) {
         </div>
 
         <div className="ml-auto">
-          <img src="/surpriseMainLogo.png" alt="Бонусы Chopar Pizza" width="550" />
+          <Image
+            src="/surpriseMainLogo.png"
+            alt="Бонусы Chopar Pizza"
+            width={550}
+            height={350}
+          />
         </div>
         <button
           onClick={() => {

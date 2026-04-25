@@ -612,7 +612,14 @@ const OrderAcceptApp: FC<OrderDetailProps> = ({
             onClick={() => router.push(`/${activeCity.slug}` as any)}
           >
             <span>На главную</span>
-            <img src="/right.png" className="w-4 h-4 md:w-auto md:h-auto" alt="" />
+            <img
+              src="/right.png"
+              className="w-4 h-4 md:w-auto md:h-auto"
+              alt=""
+              width={20}
+              height={20}
+              loading="lazy"
+            />
           </button>
         </div>
       </div>

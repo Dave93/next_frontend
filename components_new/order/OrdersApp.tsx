@@ -1991,7 +1991,12 @@ const OrdersApp: FC<OrdersProps> = ({ channelName, isMobile = false }) => {
                     } border cursor-pointer`}
                     key={payment}
                   >
-                    <img src={`/assets/${payment}.svg`} />
+                    <Image
+                      src={`/assets/${payment}.svg`}
+                      alt={payment}
+                      width={56}
+                      height={36}
+                    />
                     <input
                       type="radio"
                       {...register('pay_type', { required: openTab === 3 })}
@@ -2412,7 +2417,7 @@ const OrdersApp: FC<OrdersProps> = ({ channelName, isMobile = false }) => {
               router.push(`/${activeCity?.slug}/cart/`)
             }}
           >
-            <img src="/left.png" /> {tr('back_to_basket')}
+            <Image src="/left.png" alt="" width={20} height={20} /> {tr('back_to_basket')}
           </button>
           <button
             className={`md:text-xl text-white bg-yellow flex h-12 items-center justify-evenly rounded-full md:w-80 w-full ${
@@ -2456,7 +2461,7 @@ const OrdersApp: FC<OrdersProps> = ({ channelName, isMobile = false }) => {
                     }).format()}
                   </span>
                 )}
-                {!isMobile && <img src="/right.png" />}
+                {!isMobile && <Image src="/right.png" alt="" width={20} height={20} />}
               </>
             )}
           </button>
