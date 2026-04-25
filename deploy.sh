@@ -59,7 +59,11 @@ ok "Dependencies installed"
 
 # ─── Step 3: Build (clean) ──────────────────────────────────────────────────
 log "Step 3/5: Building Next.js (standalone output)"
-rm -rf .next
+# pm2 keeps file handles open in .next/standalone/, so a hard `rm -rf .next`
+# can fail mid-tree with "Directory not empty". Wipe everything except the
+# live standalone subtree — `next build` regenerates what we keep.
+find .next -mindepth 1 -maxdepth 1 ! -name standalone -exec rm -rf {} + 2>/dev/null || true
+rm -rf .next/standalone/.next/cache 2>/dev/null || true
 "$BUN" run build
 
 [ -d ".next/standalone" ] || { err "standalone build missing — check next.config.ts has output: 'standalone'"; exit 1; }
