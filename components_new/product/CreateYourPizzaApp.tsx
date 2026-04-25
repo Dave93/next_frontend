@@ -1,0 +1,995 @@
+'use client'
+
+import { memo, FC, useState, useRef, useMemo, useEffect } from 'react'
+import Image from 'next/image'
+import {
+  Dialog,
+  DialogBackdrop,
+  Transition,
+  TransitionChild,
+} from '@headlessui/react'
+import { XIcon, CheckIcon } from '@heroicons/react/outline'
+import { useLocale, useExtracted } from 'next-intl'
+import currency from 'currency.js'
+import axios from 'axios'
+import Cookies from 'js-cookie'
+import { useCart } from '@framework/cart'
+import { useUI } from '@components/ui/context'
+import { DateTime } from 'luxon'
+import getAssetUrl from '@utils/getAssetUrl'
+
+type CreatePizzaProps = {
+  sec: any
+  channelName: string
+  isSmall?: boolean
+}
+
+let webAddress = process.env.NEXT_PUBLIC_API_URL
+axios.defaults.withCredentials = true
+
+const CreateYourPizzaApp: FC<CreatePizzaProps> = ({
+  sec,
+  channelName,
+  isSmall,
+}) => {
+  const locale = useLocale()
+  const t = useExtracted()
+  let [isOpen, setIsOpen] = useState(false)
+  let completeButtonRef = useRef(null)
+  const { stopProducts, locationData } = useUI()
+  const { mutate } = useCart()
+  const [isLoadingBasket, setIsLoadingBasket] = useState(false)
+  const [activeModifiers, setActiveModifeirs] = useState([] as number[])
+  const [activeCustomName, setActiveCustomName] = useState('')
+  const [leftSelectedProduct, setLeftSelectedProduct] = useState(null as any)
+  const [rightSelectedProduct, setRightSelectedProduct] = useState(null as any)
+  const [configData, setConfigData] = useState({} as any)
+
+  const fetchConfig = async () => {
+    let configData
+    if (!sessionStorage.getItem('configData')) {
+      let { data } = await axios.get(`${webAddress}/api/configs/public`)
+      configData = data.data
+      sessionStorage.setItem('configData', data.data)
+    } else {
+      configData = sessionStorage.getItem('configData')
+    }
+
+    try {
+      configData = Buffer.from(configData, 'base64')
+      configData = configData.toString('ascii')
+      configData = JSON.parse(configData)
+      setConfigData(configData)
+    } catch (e) {}
+  }
+
+  function closeModal() {
+    setIsOpen(false)
+  }
+
+  function openModal() {
+    setIsOpen(true)
+  }
+
+  const changeCustomName = (name: string) => {
+    setActiveCustomName(name)
+    setActiveModifeirs([])
+  }
+
+  const setCredentials = async () => {
+    let csrf = Cookies.get('X-XSRF-TOKEN')
+    if (!csrf) {
+      const csrfReq = await axios(`${webAddress}/api/keldi`, {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+          crossDomain: true,
+        },
+        withCredentials: true,
+      })
+      let { data: res } = csrfReq
+      csrf = Buffer.from(res.result, 'base64').toString('ascii')
+
+      var inTenMinutes = new Date(new Date().getTime() + 10 * 60 * 1000)
+      Cookies.set('X-XSRF-TOKEN', csrf, {
+        expires: inTenMinutes,
+      })
+    }
+    axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest'
+    axios.defaults.headers.common['X-CSRF-TOKEN'] = csrf
+    axios.defaults.headers.common['XCSRF-TOKEN'] = csrf
+  }
+
+  const addToBasket = async () => {
+    setIsLoadingBasket(true)
+    await setCredentials()
+    let modifierProduct: any = null
+    let selectedModifiers: any[] = [...activeModifiers]
+    let allModifiers = [...modifiers]
+    selectedModifiers = allModifiers
+      .filter((m: any) => selectedModifiers.includes(m.id))
+      .map((m: any) => ({ id: m.id }))
+
+    let leftProduct = leftSelectedProduct.variants.find((v: any) => {
+      if (locale == 'uz') {
+        return v?.custom_name_uz == activeCustomName
+      } else if (locale == 'ru') {
+        return v?.custom_name == activeCustomName
+      } else if (locale == 'en') {
+        return v?.custom_name_en == activeCustomName
+      }
+    })
+
+    let rightProduct = rightSelectedProduct.variants.find((v: any) => {
+      if (locale == 'uz') {
+        return v?.custom_name_uz == activeCustomName
+      } else if (locale == 'ru') {
+        return v?.custom_name == activeCustomName
+      } else if (locale == 'en') {
+        return v?.custom_name_en == activeCustomName
+      }
+    })
+
+    if (leftProduct.modifierProduct) {
+      modifierProduct = leftProduct.modifierProduct
+    }
+
+    if (selectedModifiers.length && modifierProduct) {
+      if ([...activeModifiers].includes(modifierProduct.id)) {
+        leftProduct = modifierProduct
+        if (rightProduct.modifierProduct) {
+          rightProduct = rightProduct.modifierProduct
+        }
+        let currentProductModifiersPrices = [
+          ...modifiers
+            .filter(
+              (mod: any) =>
+                mod.id != modifierProduct.id &&
+                [...activeModifiers].includes(mod.id)
+            )
+            .map((mod: any) => mod.price),
+        ]
+        if (currentProductModifiersPrices.length) {
+          selectedModifiers = modifierProduct.modifiers
+            .filter((mod: any) =>
+              currentProductModifiersPrices.includes(mod.price)
+            )
+            .map((m: any) => ({ id: m.id }))
+        } else {
+          selectedModifiers = []
+        }
+      }
+    }
+
+    let basketId = localStorage.getItem('basketId')
+    const otpToken = Cookies.get('opt_token')
+
+    let basketResult = {}
+
+    if (basketId) {
+      const { data: basketData } = await axios.post(
+        `${webAddress}/api/baskets-lines`,
+        {
+          basket_id: basketId,
+          variants: [
+            {
+              id: leftProduct.id,
+              quantity: 1,
+              modifiers: selectedModifiers,
+              child: {
+                id: rightProduct.id,
+                quantity: 1,
+                modifiers: [],
+              },
+            },
+          ],
+        },
+        {
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${otpToken}`,
+          },
+          withCredentials: true,
+        }
+      )
+      basketResult = {
+        id: basketData.data.id,
+        createdAt: '',
+        currency: { code: basketData.data.currency },
+        taxesIncluded: basketData.data.tax_total,
+        lineItems: basketData.data.lines,
+        lineItemsSubtotalPrice: basketData.data.sub_total,
+        subtotalPrice: basketData.data.sub_total,
+        totalPrice: basketData.data.total,
+      }
+    } else {
+      let additionalQuery = ''
+      if (locationData && locationData.deliveryType == 'pickup') {
+        additionalQuery = `?delivery_type=pickup`
+      }
+      const { data: basketData } = await axios.post(
+        `${webAddress}/api/baskets${additionalQuery}`,
+        {
+          variants: [
+            {
+              id: leftProduct.id,
+              quantity: 1,
+              modifiers: selectedModifiers,
+              child: {
+                id: rightProduct.id,
+                quantity: 1,
+                modifiers: [],
+              },
+            },
+          ],
+        },
+        {
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${otpToken}`,
+          },
+          withCredentials: true,
+        }
+      )
+      localStorage.setItem('basketId', basketData.data.encoded_id)
+      basketResult = {
+        id: basketData.data.id,
+        createdAt: '',
+        currency: { code: basketData.data.currency },
+        taxesIncluded: basketData.data.tax_total,
+        lineItems: basketData.data.lines,
+        lineItemsSubtotalPrice: basketData.data.sub_total,
+        subtotalPrice: basketData.data.sub_total,
+        totalPrice: basketData.data.total,
+      }
+    }
+
+    await mutate(basketResult, false)
+    setIsLoadingBasket(false)
+    setLeftSelectedProduct(null)
+    setRightSelectedProduct(null)
+    closeModal()
+  }
+
+  const addModifier = (id: number) => {
+    let modifierProduct: any = null
+    let activeVariant: any = null
+
+    leftSelectedProduct.variants.map((vars: any) => {
+      if (locale == 'uz') {
+        if (vars?.custom_name_uz == activeCustomName) {
+          activeVariant = vars
+        }
+      } else if (locale == 'ru') {
+        if (vars?.custom_name == activeCustomName) {
+          activeVariant = vars
+        }
+      } else if (locale == 'en') {
+        if (vars?.custom_name_en == activeCustomName) {
+          activeVariant = vars
+        }
+      }
+    })
+    if (activeVariant.modifierProduct) {
+      modifierProduct = activeVariant.modifierProduct
+    }
+    if (activeModifiers.includes(id)) {
+      let currentModifier: any = modifiers.find((mod: any) => mod.id == id)
+      if (!currentModifier) return
+      if (currentModifier.price == 0) return
+      let resultModifiers = [
+        ...activeModifiers.filter((modId) => modId != id),
+      ].filter((id) => id)
+      setActiveModifeirs(resultModifiers)
+    } else {
+      let currentModifier: any = modifiers.find((mod: any) => mod.id == id)
+      if (currentModifier.price == 0) {
+        setActiveModifeirs([id])
+      } else {
+        let selectedModifiers = [...activeModifiers, id]
+
+        if (modifierProduct) {
+          let sausage = modifiers.find(
+            (mod: any) => mod.id == modifierProduct.id
+          )
+          if (
+            selectedModifiers.includes(modifierProduct.id) &&
+            sausage.price < currentModifier.price
+          ) {
+            selectedModifiers = [
+              ...selectedModifiers.filter((modId: any) => modId != sausage.id),
+            ]
+          } else if (currentModifier.id == sausage.id) {
+            let richerModifier = modifiers
+              .filter((mod: any) => mod.price > sausage.price)
+              .map((mod: any) => mod.id)
+            selectedModifiers = [
+              ...selectedModifiers.filter(
+                (modId: any) => !richerModifier.includes(modId)
+              ),
+              id,
+            ]
+          }
+        }
+        setActiveModifeirs(selectedModifiers)
+      }
+    }
+  }
+
+  const setSelectedProduct = (item: any, side: string = 'left') => {
+    if (side == 'left') {
+      setLeftSelectedProduct(item)
+    } else {
+      setRightSelectedProduct(item)
+    }
+  }
+
+  const customNames: string[] = useMemo(() => {
+    const names: any = {}
+    sec.items.map((item: any) => {
+      item.variants.map((vars: any) => {
+        if (locale == 'uz') {
+          names[vars?.custom_name_uz] = vars?.custom_name_uz
+        } else if (locale == 'ru') {
+          names[vars?.custom_name] = vars?.custom_name
+        } else if (locale == 'en') {
+          names[vars?.custom_name_en] = vars?.custom_name_en
+        }
+      })
+    })
+    return Object.values(names)
+  }, [sec, locale])
+
+  const readyProductList: any[] = useMemo(() => {
+    return sec.items.map((item: any) => {
+      let res = item
+
+      res.isInStop = false
+      item.variants.map((vars: any) => {
+        if (locale == 'uz') {
+          if (vars?.custom_name_uz == activeCustomName) {
+            res.price = vars.price
+            if (stopProducts.includes(vars.product_id)) {
+              res.isInStop = true
+            }
+          }
+        } else if (locale == 'ru') {
+          if (vars?.custom_name == activeCustomName) {
+            res.price = vars.price
+            if (stopProducts.includes(vars.product_id)) {
+              res.isInStop = true
+            }
+          }
+        } else if (locale == 'en') {
+          if (vars?.custom_name_en == activeCustomName) {
+            res.price = vars.price
+            if (stopProducts.includes(vars.product_id)) {
+              res.isInStop = true
+            }
+          }
+        }
+      })
+
+      res.beforePrice = 0
+
+      if (
+        locationData &&
+        configData.discount_end_date &&
+        locationData.deliveryType == 'pickup' &&
+        locationData.terminal_id &&
+        configData.discount_catalog_sections
+          .split(',')
+          .map((i: string) => +i)
+          .includes(res.category_id)
+      ) {
+        if (DateTime.now().toFormat('E') != configData.discount_disable_day) {
+          if (
+            DateTime.now() <= DateTime.fromSQL(configData.discount_end_date)
+          ) {
+            if (configData.discount_value) {
+              res.beforePrice = res.price
+              res.price = res.price * ((100 - configData.discount_value) / 100)
+            }
+          }
+        }
+      }
+
+      return res
+    })
+  }, [sec, activeCustomName, locationData, configData])
+
+  const modifiers = useMemo(() => {
+    if (!leftSelectedProduct || !rightSelectedProduct || !activeCustomName) {
+      return []
+    }
+    let leftModifiers: any[] = []
+
+    leftSelectedProduct.variants.map((vars: any) => {
+      if (locale == 'uz') {
+        if (vars?.custom_name_uz == activeCustomName) {
+          leftModifiers = vars.modifiers
+        }
+      } else if (locale == 'ru') {
+        if (vars?.custom_name == activeCustomName) {
+          leftModifiers = vars.modifiers
+        }
+      } else if (locale == 'en') {
+        if (vars?.custom_name_en == activeCustomName) {
+          leftModifiers = vars.modifiers
+        }
+      }
+    })
+
+    let activeVariant: any = null
+    leftSelectedProduct.variants.map((vars: any) => {
+      if (locale == 'uz') {
+        if (vars?.custom_name_uz == activeCustomName) {
+          activeVariant = vars
+        }
+      } else if (locale == 'ru') {
+        if (vars?.custom_name == activeCustomName) {
+          activeVariant = vars
+        }
+      } else if (locale == 'en') {
+        if (vars?.custom_name_en == activeCustomName) {
+          activeVariant = vars
+        }
+      }
+    })
+    let rightActiveVariant: any = null
+    rightSelectedProduct.variants.map((vars: any) => {
+      if (locale == 'uz') {
+        if (vars?.custom_name_uz == activeCustomName) {
+          rightActiveVariant = vars
+        }
+      } else if (locale == 'ru') {
+        if (vars?.custom_name == activeCustomName) {
+          rightActiveVariant = vars
+        }
+      } else if (locale == 'en') {
+        if (vars?.custom_name_en == activeCustomName) {
+          rightActiveVariant = vars
+        }
+      }
+    })
+
+    if (activeVariant && activeVariant.modifierProduct) {
+      let isExistSausage = leftModifiers.find(
+        (mod: any) => mod.id == activeVariant.modifierProduct.id
+      )
+      if (!isExistSausage) {
+        leftModifiers.push({
+          id: activeVariant.modifierProduct.id,
+          name: 'Сосисочный борт',
+          name_uz: "Sosiskali bo'rt",
+          name_en: 'Sausage border',
+          price:
+            +activeVariant.modifierProduct.price -
+            +activeVariant.price +
+            (+rightActiveVariant?.modifierProduct?.price -
+              +rightActiveVariant?.price),
+          assets: [
+            {
+              local: '/sausage_modifier.png',
+            },
+          ],
+        })
+      }
+    }
+
+    if (leftModifiers) {
+      leftModifiers.sort(function (a: any, b: any) {
+        if (+a.price > +b.price) {
+          return 1
+        }
+        if (+a.price < +b.price) {
+          return -1
+        }
+        return 0
+      })
+    }
+    return leftModifiers
+  }, [leftSelectedProduct, rightSelectedProduct, activeCustomName])
+
+  const totalSummary = useMemo(() => {
+    let res = 0
+    if (leftSelectedProduct) {
+      res += +leftSelectedProduct.price
+    }
+
+    if (rightSelectedProduct) {
+      res += +rightSelectedProduct.price
+    }
+
+    if (modifiers.length > 0) {
+      const selectedModifiers: any[] = [
+        ...modifiers.filter((mod: any) => activeModifiers.includes(mod.id)),
+      ]
+      selectedModifiers.map((mod: any) => {
+        res += +mod.price
+      })
+    }
+
+    return res
+  }, [
+    leftSelectedProduct,
+    rightSelectedProduct,
+    activeCustomName,
+    activeModifiers,
+  ])
+
+  useEffect(() => {
+    fetchConfig()
+    setActiveCustomName(customNames[0])
+  }, [customNames])
+
+  return (
+    <>
+      <div className="gap-4 grid grid-cols-2 py-4 md:py-0 items-center justify-between md:flex md:flex-col">
+        <img
+          src="/barbekyu.webp"
+          alt=""
+          className={`${isSmall ? 'absolute' : 'hidden'} -left-12 w-1/3 -top-8`}
+        />
+        <img
+          src="/bayram.webp"
+          alt=""
+          className={`${
+            isSmall ? 'absolute' : 'hidden'
+          } -right-12 w-1/3 -bottom-8`}
+        />
+        <div className="text-center z-10">
+          <div className={isSmall ? 'hidden' : ''}>
+            <div className="text-lg font-bold mb-2">
+              {t('Соберите свою пиццу')}
+            </div>
+            <Image
+              src="/createYourPizza.png"
+              width={150}
+              height={150}
+              alt="Соберите свою пиццу"
+            />
+          </div>
+          <div className={isSmall ? '' : 'mt-5'}>
+            <button
+              className="bg-gray-100 focus:outline-none font-bold outline-none px-6 py-2 rounded-full text-center text-yellow uppercase"
+              onClick={openModal}
+            >
+              {t('Собрать пиццу')}
+            </button>
+          </div>
+        </div>
+      </div>
+      <Transition show={isOpen}>
+        <Dialog
+          initialFocus={completeButtonRef}
+          as="div"
+          className="fixed inset-0 z-30 overflow-y-auto"
+          onClose={closeModal}
+        >
+          <div className="flex items-end justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
+            <TransitionChild
+              enter="ease-out duration-300"
+              enterFrom="opacity-0"
+              enterTo="opacity-100"
+              leave="ease-in duration-200"
+              leaveFrom="opacity-100"
+              leaveTo="opacity-0"
+            >
+              <DialogBackdrop className="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity" />
+            </TransitionChild>
+
+            {/* This element is to trick the browser into centering the modal contents. */}
+            <span
+              className="hidden sm:inline-block sm:align-middle sm:h-screen"
+              aria-hidden="true"
+            >
+              &#8203;
+            </span>
+            <TransitionChild
+              enter="ease-out duration-300"
+              enterFrom="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
+              enterTo="opacity-100 translate-y-0 sm:scale-100"
+              leave="ease-in duration-200"
+              leaveFrom="opacity-100 translate-y-0 sm:scale-100"
+              leaveTo="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
+            >
+              <div className="inline-block align-bottom bg-white p-10 rounded-3xl text-left shadow-xl transform transition-all sm:my-8 sm:align-middle container sm:w-full">
+                <button
+                  className="absolute focus:outline-none outline-none -right-10 top-2"
+                  onClick={() => setIsOpen(false)}
+                >
+                  <XIcon className="cursor-pointer h-7 text-white w-7" />
+                </button>
+                <div className="grid grid-cols-12 gap-2 container">
+                  <div className="grid grid-cols-2 gap-2 text-center col-span-3 overflow-y-auto h-[720px]">
+                    {readyProductList &&
+                      readyProductList.map((item: any) => (
+                        <div
+                          key={item.id}
+                          className={`rounded-3xl bg-white relative p-2 shadow-xl border ${
+                            leftSelectedProduct &&
+                            leftSelectedProduct.id == item.id
+                              ? 'border-yellow'
+                              : 'border-transparent'
+                          }
+                            ${
+                              rightSelectedProduct &&
+                              rightSelectedProduct.id == item.id
+                                ? 'opacity-25'
+                                : 'cursor-pointer hover:border-yellow'
+                            }  ${item.isInStop ? 'opacity-25' : ''}`}
+                          onClick={() => {
+                            if (item.isInStop) {
+                              return
+                            }
+                            if (
+                              rightSelectedProduct &&
+                              rightSelectedProduct.id == item.id
+                            )
+                              return
+                            setSelectedProduct(item, 'left')
+                          }}
+                        >
+                          {leftSelectedProduct &&
+                            leftSelectedProduct.id == item.id && (
+                              <div className="absolute right-2 top-2">
+                                <CheckIcon className=" h-4 text-yellow border border-yellow rounded-full w-4" />
+                              </div>
+                            )}
+                          <img
+                            src={item.image}
+                            width="110"
+                            height="110"
+                            alt=""
+                            className="mx-auto"
+                          />
+                          <div className="uppercase">
+                            {
+                              item?.attribute_data?.name[channelName][
+                                locale || 'ru'
+                              ]
+                            }
+                          </div>
+                          <div className="text-gray-400 flex flex-col">
+                            {item.beforePrice > 0 && (
+                              <span className="line-through text-sm">
+                                {currency(item.beforePrice, {
+                                  pattern: '# !',
+                                  separator: ' ',
+                                  decimal: '.',
+                                  symbol: `${locale == 'uz' ? "so'm" : 'сум'}`,
+                                  precision: 0,
+                                }).format()}
+                              </span>
+                            )}
+                            <span>
+                              {currency(item.price, {
+                                pattern: '# !',
+                                separator: ' ',
+                                decimal: '.',
+                                symbol: `${locale == 'uz' ? "so'm" : 'сум'}`,
+                                precision: 0,
+                              }).format()}
+                            </span>
+                          </div>
+                        </div>
+                      ))}
+                  </div>
+                  <div className="bg-white rounded-3xl p-6 text-center col-span-6 shadow-xl">
+                    <div className="text-2xl">{'Пицца'} 50/50</div>
+                    <div className="text-gray-400 mb-5">
+                      {'Соедини свои два любимых вкуса'}
+                    </div>
+                    <div
+                      className="h-80 w-80 mx-auto bg-cover flex relative"
+                      style={{ backgroundImage: 'url(/createYourPizza.png)' }}
+                    >
+                      <div className="w-40 relative overflow-hidden">
+                        {leftSelectedProduct && (
+                          <img
+                            src={leftSelectedProduct.image}
+                            width="320"
+                            height="320"
+                            className="absolute h-full max-w-none"
+                            alt=""
+                          />
+                        )}
+                      </div>
+                      <div className="w-40 relative overflow-hidden">
+                        {rightSelectedProduct && (
+                          <img
+                            src={rightSelectedProduct.image}
+                            width="320"
+                            height="320"
+                            className="absolute h-full max-w-none right-0"
+                            alt=""
+                          />
+                        )}
+                      </div>
+                    </div>
+                    <div className="flex justify-center mt-5 space-x-4">
+                      {customNames.map((name: string) => (
+                        <button
+                          key={name}
+                          className={`${
+                            name == activeCustomName
+                              ? 'bg-yellow text-white'
+                              : 'bg-gray-200 text-gray-400'
+                          } rounded-3xl  px-5 py-2`}
+                          onClick={() => changeCustomName(name)}
+                        >
+                          {name}
+                        </button>
+                      ))}
+                    </div>
+                    <div className="flex space-x-4 mt-5">
+                      <div className="border rounded-3xl w-6/12 p-3 items-center flex justify-around">
+                        {leftSelectedProduct && (
+                          <div className="text-left">
+                            <div>
+                              {
+                                leftSelectedProduct?.attribute_data?.name[
+                                  channelName
+                                ][locale || 'ru']
+                              }
+                            </div>
+                            <div
+                              className="text-xs text-gray-400"
+                              dangerouslySetInnerHTML={{
+                                __html: leftSelectedProduct?.attribute_data
+                                  ?.description
+                                  ? leftSelectedProduct?.attribute_data
+                                      ?.description[channelName][locale || 'ru']
+                                  : '',
+                              }}
+                            ></div>
+                          </div>
+                        )}
+
+                        {!leftSelectedProduct && (
+                          <div className="flex">
+                            <div className="mr-6">
+                              <Image
+                                src="/choose_split_lazy.png"
+                                height={70}
+                                width={70}
+                                alt=""
+                              />
+                            </div>
+                            <div className="w-24 text-sm text-gray-400 text-left">
+                              {'Выберите левую половину'}
+                            </div>
+                          </div>
+                        )}
+                      </div>
+                      <div className="border rounded-3xl w-6/12 p-3 items-center flex justify-around">
+                        {rightSelectedProduct && (
+                          <div className="text-left">
+                            <div>
+                              {
+                                rightSelectedProduct?.attribute_data?.name[
+                                  channelName
+                                ][locale || 'ru']
+                              }
+                            </div>
+                            <div
+                              className="text-xs text-gray-400"
+                              dangerouslySetInnerHTML={{
+                                __html: rightSelectedProduct?.attribute_data
+                                  ?.description
+                                  ? rightSelectedProduct?.attribute_data
+                                      ?.description[channelName][locale || 'ru']
+                                  : '',
+                              }}
+                            ></div>
+                          </div>
+                        )}
+                        {!rightSelectedProduct && (
+                          <div className="flex">
+                            <div className="mr-6">
+                              <Image
+                                src="/choose_split_lazy.png"
+                                height={70}
+                                width={70}
+                                alt=""
+                              />
+                            </div>
+                            <div className="w-24 text-sm text-gray-400 text-left">
+                              {'Выберите правую половину'}
+                            </div>
+                          </div>
+                        )}
+                      </div>
+                    </div>
+                    {modifiers.length > 0 && (
+                      <div>
+                        <div className="my-2">
+                          <span className="font-bold uppercase">
+                            {'Добавить к пицце'}
+                          </span>
+                        </div>
+                        <div className="flex space-x-2">
+                          {modifiers.map((mod: any) => (
+                            <div
+                              key={mod.id}
+                              className={`border ${
+                                activeModifiers.includes(mod.id) ||
+                                (!activeModifiers.length && mod.price == 0)
+                                  ? 'border-yellow'
+                                  : 'border-gray-300'
+                              } flex w-24 flex-col justify-between overflow-hidden rounded-[15px] cursor-pointer`}
+                              onClick={() => addModifier(mod.id)}
+                            >
+                              <div className="flex-grow pt-2 px-2 flex justify-center">
+                                <img
+                                  src={getAssetUrl(mod.assets)}
+                                  width={80}
+                                  height={80}
+                                  alt={mod.name}
+                                />
+                              </div>
+                              <div className="px-2 text-center text-xs pb-1">
+                                {locale == 'uz' ? mod.name_uz : ''}
+                                {locale == 'ru' ? mod.name_ru : ''}
+                                {locale == 'en' ? mod.name_en : ''}
+                              </div>
+                              <div
+                                className={`${
+                                  activeModifiers.includes(mod.id) ||
+                                  (!activeModifiers.length && mod.price == 0)
+                                    ? 'bg-yellow'
+                                    : 'bg-gray-300'
+                                } font-bold px-4 py-2 text-center text-white text-xs`}
+                              >
+                                {currency(mod.price, {
+                                  pattern: '# !',
+                                  separator: ' ',
+                                  decimal: '.',
+                                  symbol: `${locale == 'uz' ? "so'm" : 'сум'}`,
+                                  precision: 0,
+                                }).format()}
+                              </div>
+                            </div>
+                          ))}
+                        </div>
+                      </div>
+                    )}
+                    {!leftSelectedProduct && !rightSelectedProduct ? (
+                      <button
+                        className="bg-gray-300 w-full rounded-3xl cursor-not-allowed px-10 py-2 text-white mt-7"
+                        ref={completeButtonRef}
+                      >
+                        {'В корзину'}
+                      </button>
+                    ) : (
+                      <button
+                        className="bg-yellow w-full rounded-3xl px-10 py-2 text-white mt-7 flex items-center justify-around"
+                        ref={completeButtonRef}
+                        onClick={addToBasket}
+                      >
+                        {isLoadingBasket ? (
+                          <svg
+                            className="animate-spin h-5 w-5 text-white flex-grow text-center"
+                            xmlns="http://www.w3.org/2000/svg"
+                            fill="none"
+                            viewBox="0 0 24 24"
+                          >
+                            <circle
+                              className="opacity-25"
+                              cx="12"
+                              cy="12"
+                              r="10"
+                              stroke="currentColor"
+                              strokeWidth="4"
+                            ></circle>
+                            <path
+                              className="opacity-75"
+                              fill="currentColor"
+                              d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+                            ></path>
+                          </svg>
+                        ) : (
+                          <span>
+                            {'В корзину'}{' '}
+                            {currency(totalSummary, {
+                              pattern: '# !',
+                              separator: ' ',
+                              decimal: '.',
+                              symbol: `${locale == 'uz' ? "so'm" : 'сум'}`,
+                              precision: 0,
+                            }).format()}
+                          </span>
+                        )}
+                      </button>
+                    )}
+                  </div>
+                  <div className="grid grid-cols-2 gap-2 text-center col-span-3 overflow-y-auto h-[720px]">
+                    {readyProductList &&
+                      readyProductList.map((item: any) => (
+                        <div
+                          key={item.id}
+                          className={`rounded-3xl bg-white p-2 shadow-xl border relative  ${
+                            rightSelectedProduct &&
+                            rightSelectedProduct.id == item.id
+                              ? 'border-yellow'
+                              : 'border-transparent'
+                          }
+                            ${
+                              leftSelectedProduct &&
+                              leftSelectedProduct.id == item.id
+                                ? 'opacity-25'
+                                : 'cursor-pointer hover:border-yellow'
+                            }
+                              ${item.isInStop ? 'opacity-25' : ''}
+                            `}
+                          onClick={() => {
+                            if (item.isInStop) {
+                              return
+                            }
+                            if (
+                              leftSelectedProduct &&
+                              leftSelectedProduct.id == item.id
+                            )
+                              return
+                            setSelectedProduct(item, 'right')
+                          }}
+                        >
+                          {rightSelectedProduct &&
+                            rightSelectedProduct.id == item.id && (
+                              <div className="absolute right-2 top-2">
+                                <CheckIcon className=" h-4 text-yellow border border-yellow rounded-full w-4" />
+                              </div>
+                            )}
+                          <img
+                            src={item.image}
+                            width="110"
+                            height="110"
+                            alt=""
+                            className="mx-auto"
+                          />
+                          <div className="uppercase">
+                            {
+                              item?.attribute_data?.name[channelName][
+                                locale || 'ru'
+                              ]
+                            }
+                          </div>
+                          <div className="text-gray-400 flex flex-col">
+                            {item.beforePrice > 0 && (
+                              <span className="line-through text-sm">
+                                {currency(item.beforePrice, {
+                                  pattern: '# !',
+                                  separator: ' ',
+                                  decimal: '.',
+                                  symbol: `${locale == 'uz' ? "so'm" : 'сум'}`,
+                                  precision: 0,
+                                }).format()}
+                              </span>
+                            )}
+                            <span>
+                              {currency(item.price, {
+                                pattern: '# !',
+                                separator: ' ',
+                                decimal: '.',
+                                symbol: `${locale == 'uz' ? "so'm" : ''}
+                                      ${locale == 'ru' ? 'сум' : ''}
+                                      ${locale == 'en' ? 'sum' : ''}`,
+                                precision: 0,
+                              }).format()}
+                            </span>
+                          </div>
+                        </div>
+                      ))}
+                  </div>
+                </div>
+              </div>
+            </TransitionChild>
+          </div>
+        </Dialog>
+      </Transition>
+    </>
+  )
+}
+
+export default memo(CreateYourPizzaApp)

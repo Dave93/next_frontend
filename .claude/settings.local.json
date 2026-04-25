@@ -51,7 +51,21 @@
       "Bash(grep -E \"\\\\.\\(tsx?|jsx?\\)$\")",
       "Bash(grep -n \"{/\\\\* \\\\|^\\\\s*</div>\\\\s*$\" \"C:\\\\projects\\\\next_frontend\\\\components_new\\\\order\\\\Orders.tsx\")",
       "WebSearch",
-      "Bash(node -e ':*)"
+      "Bash(node -e ':*)",
+      "Bash(rm -rf .next/* .next/.*)",
+      "Bash(rm -rf .next)",
+      "Bash(bun run *)",
+      "Bash(echo \"EXIT_CODE=$?\")",
+      "Read(//tmp/**)",
+      "Bash(rm -rf .next/*)",
+      "Bash(rm -f components/common/FacebookPixel.tsx)",
+      "Bash(rmdir components/common)",
+      "Bash(rm -f components_new/branch/Branch.tsx)",
+      "Bash(rm -f components_new/Header.tsx)",
+      "Bash(rm -f components_new/mobile/MobileLayout.tsx components_new/mobile/MobileHeader.tsx components_new/mobile/MobileBottomNav.tsx)",
+      "Bash(rm -f components_new/NavBar.js components_new/reportError.js components_new/theme.js components_new/Search.js components_new/stubs/react-loading-skeleton.js components_new/product/SuggestedProducts.js components_new/product/ProductItem.js components_new/product/AddToCartConfirmation.js components_new/product/TextProductOption.js components_new/search/SearchMobile.js components_new/search/SearchDesktop.js components_new/search/Search.js components_new/cart/RemoveDialog.js components_new/cart/CartItem.js components_new/cart/CartLeftSide.js components_new/main/Swiper.js components_new/main/CategoriesMenu.tsx components_new/main/MobileCategoriesMenu.tsx components_new/main/MainSlider.tsx components_new/main/ThreePizza.tsx components_new/header/HeaderPhone.tsx components_new/header/LanguageDropDown.tsx components_new/header/MobLanguageDropDown.tsx components_new/header/HeaderMenu.tsx components_new/header/SetLocation.tsx components_new/header/LocationTabs.tsx components_new/header/MobLocationTabs..tsx components_new/header/MobChooseCityDropDown.tsx components_new/header/SignInModal.tsx components_new/header/UserProfileDropDown.tsx components_new/header/AuthModal.js components_new/header/MobSetLocation.tsx components_new/header/SignInButton.tsx components_new/header/ChooseCityDropDown.tsx components_new/profile/UserData.tsx components_new/profile/PersonalData.tsx components_new/profile/Address.tsx components_new/profile/Bonuses.tsx components_new/profile/Orders.tsx components_new/news/NewsItem.tsx components_new/news/NewsDetail.tsx components_new/sale/SaleItem.tsx components_new/order/OrderAccept.tsx components_new/order/OrderTracking.tsx components_new/order/Orders.tsx components_new/contacts/Contacts.tsx components_new/branch/Branch.tsx components_new/fran/Fran.tsx components_new/product/ProductItemNew.tsx components_new/product/ProductOptionSelector.tsx components_new/product/CreateYourPizza.tsx components_new/product/CreateYourPizzaMobile.tsx components_new/common/SmallCart.tsx components_new/common/SmallCartMobile.tsx)",
+      "Bash(rm -f components_new/product/CreateYourPizzaCommon.tsx)",
+      "Bash(rm -f lib/posthog.tsx)"
     ],
     "deny": []
   }

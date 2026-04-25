@@ -1,0 +1,457 @@
+msgid ""
+msgstr ""
+"Language: en\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: next-intl\n"
+"X-Crowdin-SourceKey: msgstr\n"
+
+#: components_new/about/AboutApp.tsx:11
+#: components_new/header/SideMenuApp.tsx:20
+msgid "2NIDWU"
+msgstr "About"
+
+#: components_new/auth/SignInModalApp.tsx:100
+msgid "MkmIOy"
+msgstr "Captcha is not ready, please try again"
+
+#: components_new/auth/SignInModalApp.tsx:131
+msgid "T3C/O+"
+msgstr "Failed to send code"
+
+#: components_new/auth/SignInModalApp.tsx:163
+msgid "I2djCx"
+msgstr "Invalid code"
+
+#: components_new/auth/SignInModalApp.tsx:241
+#: components_new/common/SmallCartMobileApp.tsx:303
+msgid "BgypuO"
+msgstr "Authorization"
+
+#: components_new/auth/SignInModalApp.tsx:245
+#: components_new/common/SmallCartMobileApp.tsx:399
+#: components_new/contacts/ContactsApp.tsx:162
+#: components_new/profile/PersonalDataApp.tsx:136
+msgid "ANbLXk"
+msgstr "Phone number"
+
+#: components_new/auth/SignInModalApp.tsx:246
+msgid "XSNwUH"
+msgstr "Confirmation code"
+
+#: components_new/auth/SignInModalApp.tsx:340
+#: components_new/contacts/ContactsApp.tsx:137
+#: components_new/profile/PersonalDataApp.tsx:117
+msgid "qXh0mH"
+msgstr "Name"
+
+#: components_new/auth/SignInModalApp.tsx:349
+msgid "3dXnzB"
+msgstr "If the message did not arrive, call us at"
+
+#: components_new/auth/SignInModalApp.tsx:372
+#: components_new/common/SmallCartMobileApp.tsx:494
+msgid "K6f7aa"
+msgstr "Get code"
+
+#: components_new/auth/SignInModalApp.tsx:397
+msgid "AYsWBj"
+msgstr "Code sent to number"
+
+#: components_new/auth/SignInModalApp.tsx:412
+#: components_new/cart/CartApp.tsx:481
+#: components_new/common/SmallCartMobileApp.tsx:387
+#: components_new/header/SignInButtonApp.tsx:48
+msgid "oU4rxk"
+msgstr "Sign in"
+
+#: components_new/auth/SignInModalApp.tsx:422
+msgid "kOs//D"
+msgstr "Resend code in"
+
+#: components_new/auth/SignInModalApp.tsx:423
+msgid "hPZJnP"
+msgstr "Resend code"
+
+#: components_new/cart/CartApp.tsx:471
+msgid "dW/7Kf"
+msgstr "Sign in to your account"
+
+#: components_new/cart/CartApp.tsx:474
+msgid "uhOXf0"
+msgstr "Please sign in to place an order"
+
+#: components_new/cart/CartApp.tsx:500
+#: components_new/common/SmallCartApp.tsx:310
+#: components_new/header/HeaderMiniCartApp.tsx:258
+msgid "Lj6qSg"
+msgstr "Cart is empty"
+
+#: components_new/cart/CartApp.tsx:502
+#: components_new/common/SmallCartApp.tsx:311
+#: components_new/header/HeaderMiniCartApp.tsx:261
+msgid "V5Ibqh"
+msgstr "Choose a pizza"
+
+#: components_new/cart/CartApp.tsx:508
+#: components_new/cart/CartApp.tsx:852
+msgid "595aPR"
+msgstr "Back to menu"
+
+#: components_new/cart/CartApp.tsx:544
+msgid "xXuBfJ"
+msgstr "We are closed right now"
+
+#: components_new/cart/CartApp.tsx:547
+msgid "5i7QXD"
+msgstr "You can place an order during business hours. Your cart will be saved."
+
+#: components_new/cart/CartApp.tsx:552
+msgid "1nDsuM"
+msgstr "Business hours"
+
+#: components_new/cart/CartApp.tsx:566
+#: components_new/common/SmallCartApp.tsx:292
+#: components_new/header/HeaderMiniCartApp.tsx:226
+#: components_new/mobile/MobileBottomNavApp.tsx:67
+msgid "Ukms9b"
+msgstr "Cart"
+
+#: components_new/cart/CartApp.tsx:596
+msgid "npyYek"
+msgstr "Clear"
+
+#: components_new/cart/CartApp.tsx:647
+msgid "6CPoX6"
+msgstr "Bonus"
+
+#: components_new/cart/CartApp.tsx:655
+msgid "QZlQya"
+msgstr "Promo"
+
+#: components_new/cart/CartApp.tsx:725
+msgid "mHUlgT"
+msgstr "You may also like"
+
+#: components_new/cart/CartApp.tsx:770
+msgid "G5xn1F"
+msgstr "Your order"
+
+#: components_new/cart/CartApp.tsx:775
+msgid "f0SWKw"
+msgstr "Items"
+
+#: components_new/cart/CartApp.tsx:783
+msgid "gXcQyF"
+msgstr "Discount"
+
+#: components_new/cart/CartApp.tsx:790
+#: components_new/header/LocationTabsModalApp.tsx:337
+#: components_new/HeaderApp.tsx:129
+msgid "3qtFxi"
+msgstr "Delivery"
+
+#: components_new/cart/CartApp.tsx:793
+#: components_new/header/LocationTabsModalApp.tsx:348
+#: components_new/HeaderApp.tsx:143
+msgid "k9Dt2Z"
+msgstr "Pickup"
+
+#: components_new/cart/CartApp.tsx:794
+msgid "WIL1SZ"
+msgstr "Calculated at checkout"
+
+#: components_new/cart/CartApp.tsx:800
+msgid "x5G3yc"
+msgstr "Total"
+
+#: components_new/cart/CartApp.tsx:814
+#: components_new/header/HeaderMiniCartApp.tsx:366
+msgid "+urzAu"
+msgstr "Place order"
+
+#: components_new/cart/CartApp.tsx:856
+msgid "J4PSYQ"
+msgstr "By submitting your data, you agree to our terms of use"
+
+#: components_new/common/SmallCartMobileApp.tsx:312
+msgid "wue03V"
+msgstr "Successfully logged in"
+
+#: components_new/common/SmallCartMobileApp.tsx:322
+msgid "eY7wBY"
+msgstr "SMS code"
+
+#: components_new/common/SmallCartMobileApp.tsx:351
+msgid "14dq0g"
+msgstr "Get code again"
+
+#: components_new/common/SmallCartMobileApp.tsx:443
+msgid "x1g9gC"
+msgstr "Your name"
+
+#: components_new/contacts/ContactsApp.tsx:89
+msgid "r+N/QY"
+msgstr "Feedback sent successfully"
+
+#: components_new/contacts/ContactsApp.tsx:107
+#: components_new/header/SideMenuApp.tsx:23
+msgid "9daCY0"
+msgstr "Contacts"
+
+#: components_new/contacts/ContactsApp.tsx:118
+#: components_new/FooterApp.tsx:165
+msgid "Hi9xQK"
+msgstr "Hours"
+
+#: components_new/contacts/ContactsApp.tsx:126
+msgid "5uIz79"
+msgstr "Get a job"
+
+#: components_new/contacts/ContactsApp.tsx:134
+msgid "uV78Od"
+msgstr "Leave your feedback"
+
+#: components_new/contacts/ContactsApp.tsx:156
+#: components_new/contacts/ContactsApp.tsx:193
+#: components_new/contacts/ContactsApp.tsx:260
+msgid "oqiCOV"
+msgstr "Required field"
+
+#: components_new/contacts/ContactsApp.tsx:200
+#: components_new/profile/PersonalDataApp.tsx:147
+msgid "a+WBaz"
+msgstr "Email"
+
+#: components_new/contacts/ContactsApp.tsx:220
+msgid "W44A3f"
+msgstr "Order number"
+
+#: components_new/contacts/ContactsApp.tsx:241
+msgid "Q08VOC"
+msgstr "Feedback"
+
+#: components_new/contacts/ContactsApp.tsx:313
+msgid "aXsJwD"
+msgstr "Send"
+
+#: components_new/delivery/DeliveryApp.tsx:9
+#: components_new/header/SideMenuApp.tsx:21
+msgid "vku+vY"
+msgstr "Delivery and payment"
+
+#: components_new/FooterApp.tsx:73
+msgid "7HV2WI"
+msgstr "Flavor that brings us together!"
+
+#: components_new/FooterApp.tsx:114
+#: components_new/header/SideMenuApp.tsx:76
+msgid "YaMZGV"
+msgstr "Menu"
+
+#: components_new/FooterApp.tsx:136
+msgid "T24pln"
+msgstr "Information"
+
+#: components_new/FooterApp.tsx:169
+msgid "XBB9pZ"
+msgstr "Follow us:"
+
+#: components_new/FooterApp.tsx:193
+msgid "J76yQ6"
+msgstr "All rights reserved"
+
+#: components_new/header/ChooseCityDropDownApp.tsx:71
+msgid "6QS/OL"
+msgstr "Your city"
+
+#: components_new/header/HeaderMiniCartApp.tsx:354
+msgid "2wkbQf"
+msgstr "Order total"
+
+#: components_new/header/LocationTabsModalApp.tsx:378
+#: components_new/HeaderApp.tsx:47
+msgid "EiCEoo"
+msgstr "Enter your address"
+
+#: components_new/header/LocationTabsModalApp.tsx:439
+msgid "qnmGg/"
+msgstr "Address:"
+
+#: components_new/header/LocationTabsModalApp.tsx:458
+msgid "x1MUPc"
+msgstr "Address"
+
+#: components_new/header/LocationTabsModalApp.tsx:507
+msgid "2lYwXC"
+msgstr "House"
+
+#: components_new/header/LocationTabsModalApp.tsx:522
+msgid "PE9WEy"
+msgstr "Apartment"
+
+#: components_new/header/LocationTabsModalApp.tsx:541
+msgid "bIzegt"
+msgstr "Add entrance and intercom"
+
+#: components_new/header/LocationTabsModalApp.tsx:571
+msgid "DtOC+U"
+msgstr "Entrance"
+
+#: components_new/header/LocationTabsModalApp.tsx:586
+msgid "KIMRoB"
+msgstr "Intercom code"
+
+#: components_new/header/LocationTabsModalApp.tsx:601
+msgid "2ifljK"
+msgstr "Address name. For example, Home, Work..."
+
+#: components_new/header/LocationTabsModalApp.tsx:623
+msgid "NUZRDC"
+msgstr "Choose a restaurant:"
+
+#: components_new/header/LocationTabsModalApp.tsx:638
+#: components_new/product/ProductDetailApp.tsx:274
+#: components_new/product/ProductDrawerApp.tsx:225
+msgid "+RxnK3"
+msgstr "Loading..."
+
+#: components_new/header/LocationTabsModalApp.tsx:740
+msgid "XzVpjf"
+msgstr "Confirm"
+
+#: components_new/header/SideMenuApp.tsx:22
+msgid "Vj2nh2"
+msgstr "Restaurant addresses"
+
+#: components_new/header/SideMenuApp.tsx:24
+#: components_new/news/NewsMenuTabsApp.tsx:27
+#: components_new/sale/SaleListApp.tsx:32
+#: components_new/sale/SaleListApp.tsx:41
+msgid "J36SDn"
+msgstr "Promotions"
+
+#: components_new/header/SideMenuApp.tsx:25
+msgid "gaIt7P"
+msgstr "Privacy"
+
+#: components_new/header/SignInButtonApp.tsx:55
+msgid "zPUJp6"
+msgstr "Personal account"
+
+#: components_new/header/SignInButtonApp.tsx:74
+#: components_new/profile/OrdersApp.tsx:165
+#: components_new/profile/UserDataApp.tsx:19
+msgid "QZLNHg"
+msgstr "My orders"
+
+#: components_new/header/SignInButtonApp.tsx:95
+#: components_new/profile/UserDataApp.tsx:20
+msgid "mRPbIA"
+msgstr "My addresses"
+
+#: components_new/header/SignInButtonApp.tsx:218
+#: components_new/profile/UserDataApp.tsx:22
+msgid "xxMGAl"
+msgstr "Sign out"
+
+#: components_new/mobile/MobileBottomNavApp.tsx:52
+msgid "XnLtsK"
+msgstr "Home"
+
+#: components_new/mobile/MobileBottomNavApp.tsx:59
+msgid "/qjQzi"
+msgstr "Orders"
+
+#: components_new/mobile/MobileBottomNavApp.tsx:74
+msgid "THaf0F"
+msgstr "Settings"
+
+#: components_new/news/NewsDetailApp.tsx:66
+msgid "WkFJkT"
+msgstr "Recommended news"
+
+#: components_new/news/NewsDetailApp.tsx:92
+#: components_new/news/NewsListApp.tsx:69
+#: components_new/sale/SaleDetailApp.tsx:90
+#: components_new/sale/SaleListApp.tsx:69
+msgid "HV2zHm"
+msgstr "Read more"
+
+#: components_new/news/NewsListApp.tsx:32
+#: components_new/news/NewsListApp.tsx:41
+#: components_new/news/NewsMenuTabsApp.tsx:21
+msgid "3j6hgF"
+msgstr "News"
+
+#: components_new/news/NewsListApp.tsx:34
+msgid "aP09v9"
+msgstr "No news yet"
+
+#: components_new/product/CreateYourPizzaApp.tsx:544
+#: components_new/product/CreateYourPizzaMobileApp.tsx:529
+msgid "FVZBEe"
+msgstr "Build your pizza"
+
+#: components_new/product/CreateYourPizzaApp.tsx:553
+#: components_new/product/CreateYourPizzaMobileApp.tsx:536
+msgid "WRnc7y"
+msgstr "Build pizza"
+
+#: components_new/product/ProductDetailApp.tsx:148
+#: components_new/product/ProductDrawerApp.tsx:150
+msgid "F6q7sS"
+msgstr ""
+
+#: components_new/product/ProductDetailApp.tsx:274
+#: components_new/product/ProductDrawerApp.tsx:225
+#: components_new/product/ProductItemNewApp.tsx:964
+#: components_new/product/ProductItemNewApp.tsx:1214
+msgid "JwQa2e"
+msgstr "Add to cart"
+
+#: components_new/product/ProductItemNewApp.tsx:619
+#: components_new/product/ProductItemNewApp.tsx:670
+msgid "zXkVd5"
+msgstr "Add"
+
+#: components_new/product/ProductItemNewApp.tsx:775
+msgid "kazY5+"
+msgstr "Item temporarily unavailable"
+
+#: components_new/product/ProductItemNewApp.tsx:1130
+msgid "AH6N5n"
+msgstr "Add to pizza"
+
+#: components_new/profile/PersonalDataApp.tsx:114
+#: components_new/profile/UserDataApp.tsx:21
+msgid "SwgaFe"
+msgstr "Personal data"
+
+#: components_new/profile/PersonalDataApp.tsx:167
+msgid "9jmoPv"
+msgstr "Birthday"
+
+#: components_new/profile/PersonalDataApp.tsx:185
+msgid "SMzCPW"
+msgstr "Save"
+
+#: components_new/profile/UserDataApp.tsx:23
+msgid "x81v8p"
+msgstr "Bonuses"
+
+#: components_new/profile/UserDataApp.tsx:44
+msgid "AqaPc0"
+msgstr "Welcome"
+
+#: components_new/profile/UserDataApp.tsx:47
+msgid "4bFAiB"
+msgstr "This is your personal account. Here you can manage your orders, edit personal data, and track your favorite items"
+
+#: components_new/sale/SaleDetailApp.tsx:65
+msgid "dJ1A50"
+msgstr "Recommended promo"
+
+#: components_new/sale/SaleListApp.tsx:34
+msgid "vyfu0r"
+msgstr "No promotions yet"
