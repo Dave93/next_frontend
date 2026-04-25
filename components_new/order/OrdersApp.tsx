@@ -1230,25 +1230,33 @@ const OrdersApp: FC<OrdersProps> = ({ channelName, isMobile = false }) => {
         })
       }, 500)
     } catch (e: any) {
-      // Defensive: backend may return non-axios shapes (timeout, network
-      // failure, 5xx without our error envelope). Never blow up the UI
-      // accessing nested fields.
+      // Resolve the user-facing message safely (axios HTTP error, plain
+      // Error, or anything else) without ever throwing inside the catch.
       const errMsg =
         e?.response?.data?.error?.message ||
         e?.response?.data?.message ||
         e?.message ||
         'Ошибка оформления заказа'
-      try {
-        toast.error(String(errMsg), {
-          position: toast.POSITION.BOTTOM_RIGHT,
-          hideProgressBar: true,
-        })
-      } catch {}
 
-      // PostHog: order_failed (server error)
-      trackOrderFailed({ error_message: errMsg })
-
+      // Reset the loading flag FIRST so the next render is consistent
+      // before we touch any side-effect APIs (toast, analytics).
       setIsSavingOrder(false)
+
+      // Defer toast + analytics to a microtask so a transient render
+      // mismatch in this re-render path can't cascade through them.
+      Promise.resolve().then(() => {
+        try {
+          // eslint-disable-next-line no-console
+          console.warn('[order] save failed:', errMsg, e)
+          if (typeof window !== 'undefined' && window.alert) {
+            window.alert(String(errMsg))
+          }
+          trackOrderFailed({ error_message: errMsg })
+        } catch (innerErr) {
+          // eslint-disable-next-line no-console
+          console.error('[order] error reporter crashed', innerErr)
+        }
+      })
     }
   }
 
