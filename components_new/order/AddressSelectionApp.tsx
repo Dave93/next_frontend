@@ -2,6 +2,7 @@
 
 import { FC, useMemo } from 'react'
 import { useLocale } from 'next-intl'
+import LocationPickerCore from '../header/LocationPickerCore'
 
 type Props = {
   register?: any
@@ -26,7 +27,11 @@ type Props = {
 }
 
 const labels: Record<string, Record<string, string>> = {
-  saved: { ru: 'Сохранённые адреса', uz: 'Saqlangan manzillar', en: 'Saved addresses' },
+  saved: {
+    ru: 'Сохранённые адреса',
+    uz: 'Saqlangan manzillar',
+    en: 'Saved addresses',
+  },
   empty: {
     ru: 'У вас пока нет сохранённых адресов',
     uz: "Sizda hali saqlangan manzillar yo'q",
@@ -45,6 +50,7 @@ const AddressSelectionApp: FC<Props> = ({
   addressId,
   onSelectAddress,
   onAddNewAddress,
+  tabIndex,
   isMobile = false,
 }) => {
   const locale = useLocale()
@@ -64,48 +70,59 @@ const AddressSelectionApp: FC<Props> = ({
     return parts.join(', ') || `#${addr.id}`
   }
 
+  const padding = isMobile ? 'p-4' : 'p-6'
+  const initialTab = tabIndex === 'pickup' ? 'pickup' : 'deliver'
+
   return (
-    <div className={isMobile ? 'bg-white p-4 rounded-2xl' : 'bg-white p-6 rounded-2xl'}>
-      <div className="font-bold text-[16px] text-gray-700 mb-3">
-        {t('saved')}
+    <div className="space-y-4">
+      {/* Inline picker — same UI as the header modal, just embedded. */}
+      <div className={`bg-white ${padding} rounded-2xl`}>
+        <LocationPickerCore inline initialTab={initialTab} />
       </div>
-      {list.length === 0 ? (
-        <div className="text-gray-400 text-sm mb-4">{t('empty')}</div>
-      ) : (
-        <ul className="space-y-2 mb-4">
-          {list.map((addr) => {
-            const active = addressId === addr.id
-            return (
-              <li key={addr.id}>
-                <button
-                  type="button"
-                  onClick={() => onSelectAddress(addr)}
-                  className={`w-full text-left px-3 py-2 rounded-lg border transition ${
-                    active
-                      ? 'border-yellow-500 bg-yellow-50 text-gray-900'
-                      : 'border-gray-200 hover:border-gray-300'
-                  }`}
-                >
-                  <span className="text-sm">{formatAddress(addr)}</span>
-                  {active && (
-                    <span className="ml-2 text-xs text-yellow-700">
-                      {t('selected')}
-                    </span>
-                  )}
-                </button>
-              </li>
-            )
-          })}
-        </ul>
-      )}
-      <button
-        type="button"
-        onClick={onAddNewAddress}
-        className="w-full text-white font-semibold rounded-full h-11 px-4"
-        style={{ backgroundColor: '#F9B004' }}
-      >
-        {t('add')}
-      </button>
+
+      {/* Saved addresses list */}
+      <div className={`bg-white ${padding} rounded-2xl`}>
+        <div className="font-bold text-[16px] text-gray-700 mb-3">
+          {t('saved')}
+        </div>
+        {list.length === 0 ? (
+          <div className="text-gray-400 text-sm mb-4">{t('empty')}</div>
+        ) : (
+          <ul className="space-y-2 mb-4">
+            {list.map((addr) => {
+              const active = addressId === addr.id
+              return (
+                <li key={addr.id}>
+                  <button
+                    type="button"
+                    onClick={() => onSelectAddress(addr)}
+                    className={`w-full text-left px-3 py-2 rounded-lg border transition ${
+                      active
+                        ? 'border-yellow-500 bg-yellow-50 text-gray-900'
+                        : 'border-gray-200 hover:border-gray-300'
+                    }`}
+                  >
+                    <span className="text-sm">{formatAddress(addr)}</span>
+                    {active && (
+                      <span className="ml-2 text-xs text-yellow-700">
+                        {t('selected')}
+                      </span>
+                    )}
+                  </button>
+                </li>
+              )
+            })}
+          </ul>
+        )}
+        <button
+          type="button"
+          onClick={onAddNewAddress}
+          className="w-full text-white font-semibold rounded-full h-11 px-4"
+          style={{ backgroundColor: '#F9B004' }}
+        >
+          {t('add')}
+        </button>
+      </div>
     </div>
   )
 }

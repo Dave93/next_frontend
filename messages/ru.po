@@ -15,61 +15,62 @@ msgstr "О нас"
 msgid "MkmIOy"
 msgstr "Капча не готова, попробуйте ещё раз"
 
-#: components_new/auth/SignInModalApp.tsx:131
+#: components_new/auth/SignInModalApp.tsx:132
 msgid "T3C/O+"
 msgstr "Не удалось отправить код"
 
 #: components_new/auth/SignInModalApp.tsx:163
+#: components_new/auth/SignInModalApp.tsx:171
 msgid "I2djCx"
 msgstr "Неверный код"
 
-#: components_new/auth/SignInModalApp.tsx:241
+#: components_new/auth/SignInModalApp.tsx:249
 #: components_new/common/SmallCartMobileApp.tsx:303
 msgid "BgypuO"
 msgstr "Авторизация"
 
-#: components_new/auth/SignInModalApp.tsx:245
+#: components_new/auth/SignInModalApp.tsx:253
 #: components_new/common/SmallCartMobileApp.tsx:399
 #: components_new/contacts/ContactsApp.tsx:162
 #: components_new/profile/PersonalDataApp.tsx:136
 msgid "ANbLXk"
 msgstr "Номер телефона"
 
-#: components_new/auth/SignInModalApp.tsx:246
+#: components_new/auth/SignInModalApp.tsx:254
 msgid "XSNwUH"
 msgstr "Код подтверждения"
 
-#: components_new/auth/SignInModalApp.tsx:340
+#: components_new/auth/SignInModalApp.tsx:348
 #: components_new/contacts/ContactsApp.tsx:137
 #: components_new/profile/PersonalDataApp.tsx:117
 msgid "qXh0mH"
 msgstr "Имя"
 
-#: components_new/auth/SignInModalApp.tsx:349
+#: components_new/auth/SignInModalApp.tsx:357
 msgid "3dXnzB"
 msgstr "Если сообщение не пришло, позвоните нам по номеру"
 
-#: components_new/auth/SignInModalApp.tsx:372
+#: components_new/auth/SignInModalApp.tsx:380
 #: components_new/common/SmallCartMobileApp.tsx:494
 msgid "K6f7aa"
 msgstr "Получить код"
 
-#: components_new/auth/SignInModalApp.tsx:397
+#: components_new/auth/SignInModalApp.tsx:411
 msgid "AYsWBj"
 msgstr "Код отправлен на номер"
 
-#: components_new/auth/SignInModalApp.tsx:412
+#: components_new/auth/SignInModalApp.tsx:426
 #: components_new/cart/CartApp.tsx:481
 #: components_new/common/SmallCartMobileApp.tsx:387
 #: components_new/header/SignInButtonApp.tsx:48
 msgid "oU4rxk"
 msgstr "Войти"
 
-#: components_new/auth/SignInModalApp.tsx:422
+#: components_new/auth/SignInModalApp.tsx:436
 msgid "kOs//D"
 msgstr "Отправить код повторно через"
 
-#: components_new/auth/SignInModalApp.tsx:423
+#: components_new/auth/SignInModalApp.tsx:437
 msgid "hPZJnP"
 msgstr "Отправить код повторно"
 
@@ -146,14 +147,14 @@ msgid "gXcQyF"
 msgstr "Скидка"
 
 #: components_new/cart/CartApp.tsx:790
-#: components_new/header/LocationTabsModalApp.tsx:337
-#: components_new/HeaderApp.tsx:129
+#: components_new/header/LocationPickerCore.tsx:313
+#: components_new/HeaderApp.tsx:131
 msgid "3qtFxi"
 msgstr "Доставка"
 
 #: components_new/cart/CartApp.tsx:793
-#: components_new/header/LocationTabsModalApp.tsx:348
-#: components_new/HeaderApp.tsx:143
+#: components_new/header/LocationPickerCore.tsx:324
+#: components_new/HeaderApp.tsx:145
 msgid "k9Dt2Z"
 msgstr "Самовывоз"
 
@@ -269,54 +270,54 @@ msgstr "Ваш город"
 msgid "2wkbQf"
 msgstr "Стоимость заказа"
 
-#: components_new/header/LocationTabsModalApp.tsx:378
+#: components_new/header/LocationPickerCore.tsx:354
 #: components_new/HeaderApp.tsx:47
 msgid "EiCEoo"
 msgstr "Укажите свой адрес"
 
-#: components_new/header/LocationTabsModalApp.tsx:439
+#: components_new/header/LocationPickerCore.tsx:412
 msgid "qnmGg/"
 msgstr "Адрес:"
 
-#: components_new/header/LocationTabsModalApp.tsx:458
+#: components_new/header/LocationPickerCore.tsx:429
 msgid "x1MUPc"
 msgstr "Адрес"
 
-#: components_new/header/LocationTabsModalApp.tsx:507
+#: components_new/header/LocationPickerCore.tsx:478
 msgid "2lYwXC"
 msgstr "Дом"
 
-#: components_new/header/LocationTabsModalApp.tsx:522
+#: components_new/header/LocationPickerCore.tsx:493
 msgid "PE9WEy"
 msgstr "Квартира"
 
-#: components_new/header/LocationTabsModalApp.tsx:541
+#: components_new/header/LocationPickerCore.tsx:512
 msgid "bIzegt"
 msgstr "Указать подъезд и домофон"
 
-#: components_new/header/LocationTabsModalApp.tsx:571
+#: components_new/header/LocationPickerCore.tsx:542
 msgid "DtOC+U"
 msgstr "Подъезд"
 
-#: components_new/header/LocationTabsModalApp.tsx:586
+#: components_new/header/LocationPickerCore.tsx:557
 msgid "KIMRoB"
 msgstr "Код от домофона"
 
-#: components_new/header/LocationTabsModalApp.tsx:601
+#: components_new/header/LocationPickerCore.tsx:572
 msgid "2ifljK"
 msgstr "Название адреса. Например, Дом Работа..."
 
-#: components_new/header/LocationTabsModalApp.tsx:623
+#: components_new/header/LocationPickerCore.tsx:591
 msgid "NUZRDC"
 msgstr "Выберите пиццерию:"
 
-#: components_new/header/LocationTabsModalApp.tsx:638
+#: components_new/header/LocationPickerCore.tsx:606
 #: components_new/product/ProductDetailApp.tsx:274
 #: components_new/product/ProductDrawerApp.tsx:225
 msgid "+RxnK3"
 msgstr "Загрузка..."
 
-#: components_new/header/LocationTabsModalApp.tsx:740
+#: components_new/header/LocationPickerCore.tsx:706
 msgid "XzVpjf"
 msgstr "Подтвердить"
 
