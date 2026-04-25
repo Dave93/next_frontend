@@ -101,6 +101,16 @@ type Props = {
    * the parent already provides a card.
    */
   inline?: boolean
+  /**
+   * Auto-write to locationData on every change instead of waiting for the
+   * "Подтвердить" button. Used on the checkout page so address/terminal
+   * picks instantly enable the rest of the form.
+   */
+  autoSubmit?: boolean
+  /**
+   * Compact card height (e.g. for sticky checkout sidebars).
+   */
+  mapHeight?: number
 }
 
 const LocationPickerCore: FC<Props> = ({
@@ -108,6 +118,8 @@ const LocationPickerCore: FC<Props> = ({
   resyncKey,
   onSaved,
   inline = false,
+  autoSubmit = false,
+  mapHeight = 280,
 }) => {
   const ui = useUI() as any
   const {
@@ -291,6 +303,28 @@ const LocationPickerCore: FC<Props> = ({
       ? !address.trim() || address.trim() === defaultAddress.trim()
       : !terminal
 
+  // Auto-save: every time the user touches a field or picks a terminal,
+  // write through to locationData so the rest of the checkout form
+  // (payment, submit gate, summary) reacts instantly. The first-render
+  // pass is skipped by guarding on submitDisabled.
+  useEffect(() => {
+    if (!autoSubmit) return
+    if (submitDisabled) return
+    handleSubmit()
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [
+    autoSubmit,
+    tab,
+    address,
+    house,
+    flat,
+    entrance,
+    doorCode,
+    label,
+    coords,
+    terminal,
+  ])
+
   const cityNameOf = (c: any) =>
     locale === 'uz'
       ? c.name_uz
@@ -347,7 +381,7 @@ const LocationPickerCore: FC<Props> = ({
                 center={mapCenter}
                 coords={coords}
                 onPick={handleMapPick}
-                height={280}
+                height={mapHeight}
               />
             </MapErrorBoundary>
           </div>
@@ -694,21 +728,23 @@ const LocationPickerCore: FC<Props> = ({
         </div>
       )}
 
-      <div className="flex justify-stretch md:justify-end mt-4 md:mt-5">
-        <button
-          type="button"
-          onClick={handleSubmit}
-          disabled={submitDisabled}
-          className="rounded-full w-full md:w-auto py-3 md:py-3 px-6 md:px-12 text-base md:text-lg font-bold"
-          style={{
-            color: '#fff',
-            background: submitDisabled ? '#D1D5DB' : YELLOW,
-            cursor: submitDisabled ? 'not-allowed' : 'pointer',
-          }}
-        >
-          {t('Подтвердить')}
-        </button>
-      </div>
+      {!autoSubmit && (
+        <div className="flex justify-stretch md:justify-end mt-4 md:mt-5">
+          <button
+            type="button"
+            onClick={handleSubmit}
+            disabled={submitDisabled}
+            className="rounded-full w-full md:w-auto py-3 md:py-3 px-6 md:px-12 text-base md:text-lg font-bold"
+            style={{
+              color: '#fff',
+              background: submitDisabled ? '#D1D5DB' : YELLOW,
+              cursor: submitDisabled ? 'not-allowed' : 'pointer',
+            }}
+          >
+            {t('Подтвердить')}
+          </button>
+        </div>
+      )}
     </div>
   )
 }

@@ -17,7 +17,9 @@ const MobileOrdersApp: FC<MobileOrdersAppProps> = ({ channelName }) => {
           margin-left: 0 !important;
           margin-right: 0 !important;
           padding-top: 0 !important;
-          padding-bottom: 0 !important;
+          /* Reserve space for the fixed bottom-CTA + bottom navigation
+             so the last section never sits under the floating button. */
+          padding-bottom: 130px !important;
           background: transparent !important;
         }
         .mobile-checkout-wrap {

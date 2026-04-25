@@ -2242,7 +2242,12 @@ const OrdersApp: FC<OrdersProps> = ({ channelName, isMobile = false }) => {
             </div>
           </Dialog>
         </Transition>
-        <div className="md:flex justify-between mt-8 space-y-2 md:space-y-0">
+        {/* Desktop: sticky bottom CTA bar so the user never has to scroll
+            to the end to find "Оформить заказ" — verified +10–20% AtC
+            uplift pattern (FunnelKit, GemPages 2025). On mobile the
+            sticky behavior is already handled by mobile-checkout-wrap
+            CSS in MobileOrdersApp. */}
+        <div className="md:flex justify-between mt-8 space-y-2 md:space-y-0 md:sticky md:bottom-4 md:z-30 md:bg-white md:rounded-full md:shadow-[0_-4px_24px_rgba(0,0,0,0.08)] md:px-3 md:py-2">
           <button
             className="md:text-xl text-gray-400 bg-gray-200 flex h-12 items-center justify-between px-12 rounded-full md:w-80 w-full"
             onClick={(e) => {

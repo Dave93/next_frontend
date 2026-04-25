@@ -47,7 +47,6 @@ const labels: Record<string, Record<string, string>> = {
     uz: 'Formani yashirish',
     en: 'Hide form',
   },
-  selected: { ru: 'Выбран', uz: 'Tanlangan', en: 'Selected' },
 }
 
 const AddressSelectionApp: FC<Props> = ({
@@ -67,8 +66,7 @@ const AddressSelectionApp: FC<Props> = ({
   )
 
   // Auto-open the inline picker when there's nothing to choose from yet,
-  // or when no saved address is currently selected — keeps the form
-  // discoverable without forcing a separate click.
+  // or when no saved address is currently selected.
   const [pickerOpen, setPickerOpen] = useState(
     list.length === 0 || addressId == null
   )
@@ -86,7 +84,7 @@ const AddressSelectionApp: FC<Props> = ({
     return parts.join(', ') || `#${addr.id}`
   }
 
-  const padding = isMobile ? 'p-4' : 'p-6'
+  const padding = isMobile ? 'p-4' : 'p-5'
   const initialTab = tabIndex === 'pickup' ? 'pickup' : 'deliver'
 
   const handleAddNewClick = async () => {
@@ -102,10 +100,12 @@ const AddressSelectionApp: FC<Props> = ({
     <div className={`bg-white ${padding} rounded-2xl space-y-4`}>
       {list.length > 0 && (
         <div>
-          <div className="font-bold text-[16px] text-gray-700 mb-3">
+          <div className="font-bold text-[15px] text-gray-700 mb-2.5">
             {t('saved')}
           </div>
-          <ul className="space-y-2">
+          {/* Two columns on md+ to halve the vertical scroll. Best-practice
+              "compact saved addresses" — Baymard, SennaLabs.  */}
+          <ul className="grid grid-cols-1 md:grid-cols-2 gap-2">
             {list.map((addr) => {
               const active = addressId === addr.id
               return (
@@ -116,14 +116,14 @@ const AddressSelectionApp: FC<Props> = ({
                       onSelectAddress(addr)
                       setPickerOpen(false)
                     }}
-                    className={`w-full text-left px-3 py-2.5 rounded-xl border transition flex items-center gap-3 ${
+                    className={`w-full h-full text-left px-3 py-2.5 rounded-xl border transition flex items-start gap-2.5 min-h-[44px] ${
                       active
                         ? 'border-yellow-500 bg-yellow-50 text-gray-900'
-                        : 'border-gray-200 hover:border-gray-300'
+                        : 'border-gray-200 hover:border-gray-300 bg-white'
                     }`}
                   >
                     <span
-                      className="flex-shrink-0 w-4 h-4 rounded-full border inline-flex items-center justify-center"
+                      className="flex-shrink-0 w-4 h-4 mt-0.5 rounded-full border inline-flex items-center justify-center"
                       style={{
                         borderColor: active ? '#FAAF04' : '#9CA3AF',
                       }}
@@ -139,7 +139,9 @@ const AddressSelectionApp: FC<Props> = ({
                         />
                       )}
                     </span>
-                    <span className="text-sm flex-1">{formatAddress(addr)}</span>
+                    <span className="text-sm leading-snug flex-1">
+                      {formatAddress(addr)}
+                    </span>
                   </button>
                 </li>
               )
@@ -152,7 +154,7 @@ const AddressSelectionApp: FC<Props> = ({
         <button
           type="button"
           onClick={handleAddNewClick}
-          className="w-full text-sm font-semibold flex items-center justify-center gap-1.5 py-2.5 rounded-full border-2 transition"
+          className="w-full text-sm font-semibold flex items-center justify-center gap-1.5 py-2.5 rounded-full border-2 transition min-h-[44px]"
           style={{
             color: pickerOpen ? '#6B7280' : '#FAAF04',
             borderColor: pickerOpen ? '#E5E7EB' : '#FAAF04',
@@ -160,9 +162,7 @@ const AddressSelectionApp: FC<Props> = ({
           }}
         >
           {pickerOpen ? (
-            <>
-              <span>{t('hidePicker')}</span>
-            </>
+            t('hidePicker')
           ) : (
             <>
               <span style={{ fontSize: 18, lineHeight: 1 }}>+</span>
@@ -174,7 +174,15 @@ const AddressSelectionApp: FC<Props> = ({
 
       {pickerOpen && (
         <div className={list.length > 0 ? 'pt-2 border-t border-gray-100' : ''}>
-          <LocationPickerCore inline initialTab={initialTab} />
+          {/* autoSubmit + smaller map: address/terminal pick is committed
+              instantly per Mapbox/Geoapify "silent acceptance" pattern,
+              no extra "Подтвердить" click. */}
+          <LocationPickerCore
+            inline
+            autoSubmit
+            mapHeight={isMobile ? 180 : 220}
+            initialTab={initialTab}
+          />
         </div>
       )}
     </div>
