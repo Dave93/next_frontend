@@ -31,7 +31,7 @@ msgstr "Authorization"
 #: components_new/auth/SignInModalApp.tsx:245
 #: components_new/common/SmallCartMobileApp.tsx:399
 #: components_new/contacts/ContactsApp.tsx:162
-#: components_new/profile/PersonalDataApp.tsx:134
+#: components_new/profile/PersonalDataApp.tsx:136
 msgid "ANbLXk"
 msgstr "Phone number"
 
@@ -41,7 +41,7 @@ msgstr "Confirmation code"
 
 #: components_new/auth/SignInModalApp.tsx:340
 #: components_new/contacts/ContactsApp.tsx:137
-#: components_new/profile/PersonalDataApp.tsx:115
+#: components_new/profile/PersonalDataApp.tsx:117
 msgid "qXh0mH"
 msgstr "Name"
 
@@ -219,7 +219,7 @@ msgid "oqiCOV"
 msgstr "Required field"
 
 #: components_new/contacts/ContactsApp.tsx:200
-#: components_new/profile/PersonalDataApp.tsx:145
+#: components_new/profile/PersonalDataApp.tsx:147
 msgid "a+WBaz"
 msgstr "Email"
 
@@ -350,12 +350,7 @@ msgstr "My orders"
 msgid "mRPbIA"
 msgstr "My addresses"
 
-#: components_new/header/SignInButtonApp.tsx:114
-#: components_new/profile/UserDataApp.tsx:23
-msgid "x81v8p"
-msgstr "Bonuses"
-
-#: components_new/header/SignInButtonApp.tsx:236
+#: components_new/header/SignInButtonApp.tsx:218
 #: components_new/profile/UserDataApp.tsx:22
 msgid "xxMGAl"
 msgstr "Sign out"
@@ -428,18 +423,22 @@ msgstr "Item temporarily unavailable"
 msgid "AH6N5n"
 msgstr "Add to pizza"
 
-#: components_new/profile/PersonalDataApp.tsx:112
+#: components_new/profile/PersonalDataApp.tsx:114
 #: components_new/profile/UserDataApp.tsx:21
 msgid "SwgaFe"
 msgstr "Personal data"
 
-#: components_new/profile/PersonalDataApp.tsx:165
+#: components_new/profile/PersonalDataApp.tsx:167
 msgid "9jmoPv"
 msgstr "Birthday"
 
-#: components_new/profile/PersonalDataApp.tsx:178
+#: components_new/profile/PersonalDataApp.tsx:185
 msgid "SMzCPW"
 msgstr "Save"
+
+#: components_new/profile/UserDataApp.tsx:23
+msgid "x81v8p"
+msgstr "Bonuses"
 
 #: components_new/profile/UserDataApp.tsx:44
 msgid "AqaPc0"

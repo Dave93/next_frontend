@@ -31,7 +31,7 @@ msgstr "Авторизация"
 #: components_new/auth/SignInModalApp.tsx:245
 #: components_new/common/SmallCartMobileApp.tsx:399
 #: components_new/contacts/ContactsApp.tsx:162
-#: components_new/profile/PersonalDataApp.tsx:134
+#: components_new/profile/PersonalDataApp.tsx:136
 msgid "ANbLXk"
 msgstr "Номер телефона"
 
@@ -41,7 +41,7 @@ msgstr "Код подтверждения"
 
 #: components_new/auth/SignInModalApp.tsx:340
 #: components_new/contacts/ContactsApp.tsx:137
-#: components_new/profile/PersonalDataApp.tsx:115
+#: components_new/profile/PersonalDataApp.tsx:117
 msgid "qXh0mH"
 msgstr "Имя"
 
@@ -219,7 +219,7 @@ msgid "oqiCOV"
 msgstr "Обязательное поле"
 
 #: components_new/contacts/ContactsApp.tsx:200
-#: components_new/profile/PersonalDataApp.tsx:145
+#: components_new/profile/PersonalDataApp.tsx:147
 msgid "a+WBaz"
 msgstr "Эл. почта"
 
@@ -350,12 +350,7 @@ msgstr "Мои заказы"
 msgid "mRPbIA"
 msgstr "Мои адреса"
 
-#: components_new/header/SignInButtonApp.tsx:114
-#: components_new/profile/UserDataApp.tsx:23
-msgid "x81v8p"
-msgstr "Бонусы"
-
-#: components_new/header/SignInButtonApp.tsx:236
+#: components_new/header/SignInButtonApp.tsx:218
 #: components_new/profile/UserDataApp.tsx:22
 msgid "xxMGAl"
 msgstr "Выйти"
@@ -428,18 +423,22 @@ msgstr "Товар временно недоступен"
 msgid "AH6N5n"
 msgstr "Добавить к пицце"
 
-#: components_new/profile/PersonalDataApp.tsx:112
+#: components_new/profile/PersonalDataApp.tsx:114
 #: components_new/profile/UserDataApp.tsx:21
 msgid "SwgaFe"
 msgstr "Личные данные"
 
-#: components_new/profile/PersonalDataApp.tsx:165
+#: components_new/profile/PersonalDataApp.tsx:167
 msgid "9jmoPv"
 msgstr "День рождения"
 
-#: components_new/profile/PersonalDataApp.tsx:178
+#: components_new/profile/PersonalDataApp.tsx:185
 msgid "SMzCPW"
 msgstr "Сохранить"
+
+#: components_new/profile/UserDataApp.tsx:23
+msgid "x81v8p"
+msgstr "Бонусы"
 
 #: components_new/profile/UserDataApp.tsx:44
 msgid "AqaPc0"

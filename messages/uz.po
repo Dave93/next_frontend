@@ -31,7 +31,7 @@ msgstr "Avtorizatsiya"
 #: components_new/auth/SignInModalApp.tsx:245
 #: components_new/common/SmallCartMobileApp.tsx:399
 #: components_new/contacts/ContactsApp.tsx:162
-#: components_new/profile/PersonalDataApp.tsx:134
+#: components_new/profile/PersonalDataApp.tsx:136
 msgid "ANbLXk"
 msgstr "Telefon raqami"
 
@@ -41,7 +41,7 @@ msgstr "Tasdiqlash kodi"
 
 #: components_new/auth/SignInModalApp.tsx:340
 #: components_new/contacts/ContactsApp.tsx:137
-#: components_new/profile/PersonalDataApp.tsx:115
+#: components_new/profile/PersonalDataApp.tsx:117
 msgid "qXh0mH"
 msgstr "Ism"
 
@@ -219,7 +219,7 @@ msgid "oqiCOV"
 msgstr "Majburiy maydon"
 
 #: components_new/contacts/ContactsApp.tsx:200
-#: components_new/profile/PersonalDataApp.tsx:145
+#: components_new/profile/PersonalDataApp.tsx:147
 msgid "a+WBaz"
 msgstr "Email"
 
@@ -350,12 +350,7 @@ msgstr "Mening buyurtmalarim"
 msgid "mRPbIA"
 msgstr "Mening manzillarim"
 
-#: components_new/header/SignInButtonApp.tsx:114
-#: components_new/profile/UserDataApp.tsx:23
-msgid "x81v8p"
-msgstr "Bonuslar"
-
-#: components_new/header/SignInButtonApp.tsx:236
+#: components_new/header/SignInButtonApp.tsx:218
 #: components_new/profile/UserDataApp.tsx:22
 msgid "xxMGAl"
 msgstr "Chiqish"
@@ -428,18 +423,22 @@ msgstr "Mahsulot vaqtinchalik mavjud emas"
 msgid "AH6N5n"
 msgstr "Pitsaga qo'shish"
 
-#: components_new/profile/PersonalDataApp.tsx:112
+#: components_new/profile/PersonalDataApp.tsx:114
 #: components_new/profile/UserDataApp.tsx:21
 msgid "SwgaFe"
 msgstr "Shaxsiy ma'lumotlar"
 
-#: components_new/profile/PersonalDataApp.tsx:165
+#: components_new/profile/PersonalDataApp.tsx:167
 msgid "9jmoPv"
 msgstr "Tug'ilgan kun"
 
-#: components_new/profile/PersonalDataApp.tsx:178
+#: components_new/profile/PersonalDataApp.tsx:185
 msgid "SMzCPW"
 msgstr "Saqlash"
+
+#: components_new/profile/UserDataApp.tsx:23
+msgid "x81v8p"
+msgstr "Bonuslar"
 
 #: components_new/profile/UserDataApp.tsx:44
 msgid "AqaPc0"
