@@ -4,10 +4,11 @@ import { FC } from 'react'
 import { XIcon } from '@heroicons/react/outline'
 import { useForm } from 'react-hook-form'
 import { useUI } from '@components/ui/context'
-import { useExtracted } from 'next-intl'
+import { useExtracted, useLocale } from 'next-intl'
 import axios from 'axios'
 import Cookies from 'js-cookie'
 import { ToastContainer, toast } from 'react-toastify'
+import DatePicker from '../ui/DatePicker'
 
 let webAddress = process.env.NEXT_PUBLIC_API_URL
 axios.defaults.withCredentials = true
@@ -15,6 +16,7 @@ axios.defaults.withCredentials = true
 const PersonalDataApp: FC = () => {
   const { user, setUserData } = useUI()
   const t = useExtracted()
+  const locale = useLocale()
 
   type FormData = {
     name: string
@@ -23,7 +25,7 @@ const PersonalDataApp: FC = () => {
     birth: string
   }
 
-  const { register, handleSubmit, reset, watch, getValues } =
+  const { register, handleSubmit, reset, watch, getValues, setValue } =
     useForm<FormData>({
       mode: 'onChange',
       defaultValues: {
@@ -164,10 +166,15 @@ const PersonalDataApp: FC = () => {
           <label className="text-sm text-gray-400 mb-2 block">
             {t('День рождения')}
           </label>
-          <input
-            type="date"
-            {...register('birth')}
-            className="border focus:outline-none outline-none px-6 py-3 rounded-full text-sm w-full bg-gray-200"
+          <input type="hidden" {...register('birth')} />
+          <DatePicker
+            value={watch('birth')}
+            onChange={(v) =>
+              setValue('birth', v, { shouldDirty: true, shouldTouch: true })
+            }
+            locale={locale}
+            fromYear={1930}
+            toYear={new Date().getFullYear()}
           />
         </div>
         <div className="mt-5 md:mt-10">
