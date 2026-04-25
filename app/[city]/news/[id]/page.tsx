@@ -6,6 +6,7 @@ import { fetchNewsById, fetchRelatedNews } from '../../../../lib/data/news'
 import NewsDetailApp from '../../../../components_new/news/NewsDetailApp'
 import NewsMenuTabsApp from '../../../../components_new/news/NewsMenuTabsApp'
 import BreadcrumbsJsonLd from '../../../../components_new/seo/BreadcrumbsJsonLd'
+import NewsArticleJsonLd from '../../../../components_new/seo/NewsArticleJsonLd'
 import { crumbLabel, localizedPath } from '../../../../lib/seo/alternates'
 import type { City } from '@commerce/types/cities'
 
@@ -107,6 +108,7 @@ export default async function NewsDetailPage({
           { name: newsTitle, url: localizedPath(loc, `/${citySlug}/news/${id}`) },
         ]}
       />
+      <NewsArticleJsonLd news={news} citySlug={citySlug} locale={loc} />
       <NewsMenuTabsApp citySlug={citySlug} />
       <NewsDetailApp
         news={news}

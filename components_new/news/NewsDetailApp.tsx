@@ -55,8 +55,13 @@ export default async function NewsDetailApp({
             </Link>
           </div>
           <div className="ml-16 w-[430px]">
-            <div className="text-2xl">{heroAlt}</div>
-            <div dangerouslySetInnerHTML={{ __html: heroDesc }} />
+            <h1 id="news-headline" className="text-2xl">
+              {heroAlt}
+            </h1>
+            <div
+              id="news-summary"
+              dangerouslySetInnerHTML={{ __html: heroDesc }}
+            />
           </div>
         </div>
       </div>
