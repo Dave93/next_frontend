@@ -276,6 +276,9 @@ const LocationPickerCore: FC<Props> = ({
         door_code: '',
         label: terminal.label || '',
         deliveryType: 'pickup',
+        // OrdersApp's payment / submit gates check locationData.terminal_id
+        // (snake_case). Keep terminalId too for any consumer using camelCase.
+        terminal_id: terminal.id,
         terminalId: terminal.id,
         terminalData: terminal,
       })
