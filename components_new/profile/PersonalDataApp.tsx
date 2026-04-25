@@ -7,7 +7,7 @@ import { useUI } from '@components/ui/context'
 import { useExtracted, useLocale } from 'next-intl'
 import axios from 'axios'
 import Cookies from 'js-cookie'
-import { ToastContainer, toast } from 'react-toastify'
+import { toast } from 'sonner'
 import DatePicker from '../ui/DatePicker'
 
 let webAddress = process.env.NEXT_PUBLIC_API_URL
@@ -79,10 +79,7 @@ const PersonalDataApp: FC = () => {
           withCredentials: true,
         }
       )
-      toast.success('Сохранено', {
-        position: toast.POSITION.BOTTOM_RIGHT,
-        hideProgressBar: true,
-      })
+      toast.success('Сохранено')
       setUserData({
         user: {
           ...user?.user,
@@ -93,10 +90,7 @@ const PersonalDataApp: FC = () => {
         },
       })
     } catch (e: any) {
-      toast.error(e.response?.data?.error?.message || 'Ошибка', {
-        position: toast.POSITION.BOTTOM_RIGHT,
-        hideProgressBar: true,
-      })
+      toast.error(e.response?.data?.error?.message || 'Ошибка')
     }
   }
 
@@ -186,8 +180,7 @@ const PersonalDataApp: FC = () => {
           </button>
         </div>
       </form>
-
-      <ToastContainer />
+      {/* Global Toaster lives in providers.tsx */}
     </div>
   )
 }

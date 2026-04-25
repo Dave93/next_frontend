@@ -3,7 +3,7 @@
 import { useEffect, useState } from 'react'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import { GoogleReCaptchaProvider } from 'react-google-recaptcha-v3'
-import { ToastContainer } from 'react-toastify'
+import { Toaster } from 'sonner'
 import { ManagedUIContext } from '@components/ui/context'
 import { CommerceProvider } from '@framework'
 import FacebookPixel from '../components_new/analytics/FacebookPixelApp'
@@ -41,7 +41,7 @@ export default function Providers({
             </QueryClientProvider>
           </ManagedUIContext>
         </CommerceProvider>
-        <ToastContainer />
+        <Toaster position="bottom-right" richColors closeButton />
       </GoogleReCaptchaProvider>
     </PostHogProvider>
   )

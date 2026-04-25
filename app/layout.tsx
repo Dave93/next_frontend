@@ -10,7 +10,7 @@ import 'tailwindcss/tailwind.css'
 import '@assets/chrome-bug.css'
 import '@assets/fonts.css'
 import '@assets/simplebar.css'
-import 'react-toastify/dist/ReactToastify.css'
+// sonner ships its own CSS
 import '@components_new/header/DatePicker.css'
 
 export const metadata: Metadata = {

@@ -13,7 +13,7 @@ import { useRouter } from '../../i18n/navigation'
 import Hashids from 'hashids'
 import { useUI } from '@components/ui/context'
 import getAssetUrl from '@utils/getAssetUrl'
-import { toast } from 'react-toastify'
+import { toast } from 'sonner'
 import SimpleBar from 'simplebar-react'
 import 'simplebar/dist/simplebar.min.css'
 
@@ -212,7 +212,7 @@ const SmallCartApp: FC<SmallCartProps> = ({ channelName }) => {
   const goToCheckout = (e: any) => {
     e.preventDefault()
     if (!isWorkTime) {
-      toast.warn(
+      toast.warning(
         `${'Сейчас не рабочее время'} ${
           locale == 'uz'
             ? configData.workTimeUz
@@ -221,11 +221,7 @@ const SmallCartApp: FC<SmallCartProps> = ({ channelName }) => {
             : locale == 'en'
             ? configData.workTimeEn
             : ''
-        }`,
-        {
-          position: toast.POSITION.BOTTOM_RIGHT,
-          hideProgressBar: true,
-        }
+        }`
       )
       return
     }

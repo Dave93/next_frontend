@@ -41,7 +41,7 @@ import axios from 'axios'
 import { debounce } from 'lodash'
 import Downshift from 'downshift'
 import Select from '@components_new/utils/Select'
-import { toast } from 'react-toastify'
+import { toast } from 'sonner'
 import Cookies from 'js-cookie'
 import { useRouter, usePathname } from '../../i18n/navigation'
 import { useLocale } from 'next-intl'
@@ -649,10 +649,7 @@ const OrdersApp: FC<OrdersProps> = ({ channelName, isMobile = false }) => {
     const coords = event.get('coords') || event.get('position')
     let polygon = objects.current.searchContaining(coords).get(0)
     if (!polygon) {
-      toast.warn(tr('point_delivery_not_available'), {
-        position: toast.POSITION.BOTTOM_RIGHT,
-        hideProgressBar: true,
-      })
+      toast.warning(tr('point_delivery_not_available'))
       return
     } else {
       let pickedCity = cities.find(
@@ -838,10 +835,7 @@ const OrdersApp: FC<OrdersProps> = ({ channelName, isMobile = false }) => {
 
   const choosePickupPoint = (point: any) => {
     if (!point.isWorking) {
-      toast.warn(tr('terminal_is_not_working'), {
-        position: toast.POSITION.BOTTOM_RIGHT,
-        hideProgressBar: true,
-      })
+      toast.warning(tr('terminal_is_not_working'))
       return
     }
     setActivePoint(point.id)
@@ -859,10 +853,7 @@ const OrdersApp: FC<OrdersProps> = ({ channelName, isMobile = false }) => {
     returnResult: boolean = false
   ) => {
     if (!locationData || !locationData.location) {
-      toast.warn(tr('no_address_specified'), {
-        position: toast.POSITION.BOTTOM_RIGHT,
-        hideProgressBar: true,
-      })
+      toast.warning(tr('no_address_specified'))
       // if returnResult is true, return object else return setLocationData
       return returnResult
         ? {
@@ -882,14 +873,10 @@ const OrdersApp: FC<OrdersProps> = ({ channelName, isMobile = false }) => {
     )
 
     if (terminalsData.data && !terminalsData.data.items.length) {
-      toast.warn(
+      toast.warning(
         terminalsData.data.message
           ? terminalsData.data.message
-          : tr('restaurant_not_found'),
-        {
-          position: toast.POSITION.BOTTOM_RIGHT,
-          hideProgressBar: true,
-        }
+          : tr('restaurant_not_found')
       )
 
       // if returnResult is true, return object else return setLocationData
@@ -907,10 +894,7 @@ const OrdersApp: FC<OrdersProps> = ({ channelName, isMobile = false }) => {
     } else {
       let currentTerminal = terminalsData.data.items[0]
       if (!currentTerminal.isWorking) {
-        toast.warn(tr('nearest_terminal_is_closed'), {
-          position: toast.POSITION.BOTTOM_RIGHT,
-          hideProgressBar: true,
-        })
+        toast.warning(tr('nearest_terminal_is_closed'))
         return returnResult
           ? {
               terminal_id: undefined,
@@ -997,10 +981,7 @@ const OrdersApp: FC<OrdersProps> = ({ channelName, isMobile = false }) => {
         basket_id: cartId,
       })
       if (!data.success) {
-        toast.error(data.message, {
-          position: toast.POSITION.BOTTOM_RIGHT,
-          hideProgressBar: true,
-        })
+        toast.error(data.message)
       } else {
         let success: any = Buffer.from(data.success, 'base64')
         success = success.toString()
@@ -1018,13 +999,8 @@ const OrdersApp: FC<OrdersProps> = ({ channelName, isMobile = false }) => {
         e?.response?.data?.message ||
         e?.message ||
         'Не удалось отправить код'
-      try {
-        toast.error(String(errMsg), {
-          position: toast.POSITION.BOTTOM_RIGHT,
-          hideProgressBar: true,
-        })
-      } catch {}
       setIsSavingOrder(false)
+      toast.error(String(errMsg))
     }
   }
 
@@ -1096,19 +1072,13 @@ const OrdersApp: FC<OrdersProps> = ({ channelName, isMobile = false }) => {
     }
 
     if (!locationData) {
-      toast.warn(tr('location_tabs_incorrect_data'), {
-        position: toast.POSITION.BOTTOM_RIGHT,
-        hideProgressBar: true,
-      })
+      toast.warning(tr('location_tabs_incorrect_data'))
       return
     } else if (
       locationData.deliveryType === 'deliver' &&
       (!locationData.location || !locationData.location.length)
     ) {
-      toast.warn(tr('location_tabs_incorrect_data'), {
-        position: toast.POSITION.BOTTOM_RIGHT,
-        hideProgressBar: true,
-      })
+      toast.warning(tr('location_tabs_incorrect_data'))
       return
     }
 
@@ -1148,10 +1118,7 @@ const OrdersApp: FC<OrdersProps> = ({ channelName, isMobile = false }) => {
               : locale == 'en'
               ? 'Enter the correct address'
               : ''
-          toast.error(erText, {
-            position: toast.POSITION.BOTTOM_RIGHT,
-            hideProgressBar: true,
-          })
+          toast.error(erText)
 
           // PostHog: order_failed (validation error)
           trackOrderFailed({
@@ -1230,33 +1197,14 @@ const OrdersApp: FC<OrdersProps> = ({ channelName, isMobile = false }) => {
         })
       }, 500)
     } catch (e: any) {
-      // Resolve the user-facing message safely (axios HTTP error, plain
-      // Error, or anything else) without ever throwing inside the catch.
       const errMsg =
         e?.response?.data?.error?.message ||
         e?.response?.data?.message ||
         e?.message ||
         'Ошибка оформления заказа'
-
-      // Reset the loading flag FIRST so the next render is consistent
-      // before we touch any side-effect APIs (toast, analytics).
       setIsSavingOrder(false)
-
-      // Defer toast + analytics to a microtask so a transient render
-      // mismatch in this re-render path can't cascade through them.
-      Promise.resolve().then(() => {
-        try {
-          // eslint-disable-next-line no-console
-          console.warn('[order] save failed:', errMsg, e)
-          if (typeof window !== 'undefined' && window.alert) {
-            window.alert(String(errMsg))
-          }
-          trackOrderFailed({ error_message: errMsg })
-        } catch (innerErr) {
-          // eslint-disable-next-line no-console
-          console.error('[order] error reporter crashed', innerErr)
-        }
-      })
+      toast.error(String(errMsg))
+      trackOrderFailed({ error_message: errMsg })
     }
   }
 
@@ -1280,17 +1228,11 @@ const OrdersApp: FC<OrdersProps> = ({ channelName, isMobile = false }) => {
   }
 
   if (errors.pay_type) {
-    toast.error(tr('payment_system_not_selected'), {
-      position: toast.POSITION.BOTTOM_RIGHT,
-      hideProgressBar: true,
-    })
+    toast.error(tr('payment_system_not_selected'))
   }
 
   if (errors.delivery_day || errors.delivery_time) {
-    toast.error(tr('delivery_time_not_specified'), {
-      position: toast.POSITION.BOTTOM_RIGHT,
-      hideProgressBar: true,
-    })
+    toast.error(tr('delivery_time_not_specified'))
   }
 
   const selectAddressLocal = async (address: Address) => {

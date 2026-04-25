@@ -29,7 +29,7 @@ import { XIcon, CheckIcon } from '@heroicons/react/solid'
 import styles from './ProductItemNew.module.css'
 import { useUI } from '@components/ui/context'
 import { DateTime } from 'luxon'
-import { toast } from 'react-toastify'
+import { toast } from 'sonner'
 import { trackAddToCart } from '@lib/posthog-events'
 // import SessionContext from 'react-storefront/session/SessionContext'
 
