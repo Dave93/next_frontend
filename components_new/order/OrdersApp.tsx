@@ -950,6 +950,26 @@ const OrdersApp: FC<OrdersProps> = ({ channelName, isMobile = false }) => {
     }
   }
 
+  // Auto-pick the nearest restaurant the moment the user drops a pin or
+  // selects an autocomplete suggestion in the inline picker. Without this,
+  // the payment selector stays disabled even after the address is filled in.
+  // Keyed on the coordinate string so we don't loop on every render.
+  const lastSearchedCoordsRef = useRef<string | null>(null)
+  useEffect(() => {
+    if (tabIndex !== 'deliver') return
+    const coords = locationData?.location
+    if (!coords || !coords[0] || !coords[1]) return
+    const key = `${coords[0]},${coords[1]}`
+    if (lastSearchedCoordsRef.current === key) return
+    if (locationData?.terminal_id) {
+      lastSearchedCoordsRef.current = key
+      return
+    }
+    lastSearchedCoordsRef.current = key
+    searchTerminal(locationData)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [locationData?.location, tabIndex])
+
   const handleOtpChange = (otp: string) => {
     setOtpCode(otp)
   }
