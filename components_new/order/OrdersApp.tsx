@@ -1438,12 +1438,10 @@ const OrdersApp: FC<OrdersProps> = ({ channelName, isMobile = false }) => {
 
   return (
     <div className="orders-root mx-5 md:mx-0 pt-1 md:pt-0 pb-1">
-      {/* Contacts - hidden on mobile when logged in */}
-      <div
-        className={`w-full bg-white my-5 rounded-2xl ${
-          user ? 'hidden md:block' : ''
-        }`}
-      >
+      {/* Contacts — always visible. Even logged-in users should be able
+          to verify / edit name, phone, and email before placing the order
+          (Baymard's "always show editable contact" rule). */}
+      <div className="w-full bg-white my-5 rounded-2xl">
         <div className="text-lg mb-5 font-bold">
           {tr('order_your_contacts')}
         </div>
@@ -1991,12 +1989,9 @@ const OrdersApp: FC<OrdersProps> = ({ channelName, isMobile = false }) => {
           )}
         </Disclosure>
       </div>
-      {/* order list */}
-      <div
-        className={`w-full bg-white my-5 rounded-2xl order-summary-section ${
-          isMobile ? 'hidden' : ''
-        }`}
-      >
+      {/* Order items — visible on every viewport. Hiding the line items
+          on mobile forced the customer to trust the cart from memory. */}
+      <div className="w-full bg-white my-5 rounded-2xl order-summary-section">
         <div className="text-lg mb-5 font-bold">{tr('order_order_list')}</div>
         {!isEmpty &&
           data &&
