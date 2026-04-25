@@ -17,18 +17,31 @@ import { useRouter } from '../../i18n/navigation'
 axios.defaults.withCredentials = true
 
 type OrderDetailProps = {
-  order: any
-  orderStatuses: any
+  order?: any
+  orderStatuses?: any
+  orderId?: string
 }
 
 let webAddress = process.env.NEXT_PUBLIC_API_URL
 
-const OrderAcceptApp: FC<OrderDetailProps> = ({ order, orderStatuses }) => {
+const OrderAcceptApp: FC<OrderDetailProps> = ({
+  order: initialOrder,
+  orderStatuses: initialOrderStatuses,
+  orderId,
+}) => {
   const router = useRouter()
   const locale = useLocale()
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [reviewsData, setReviewsData] = useState([])
-  const { user, activeCity } = useUI()
+  const [order, setOrder] = useState<any>(initialOrder || null)
+  const [orderStatuses, setOrderStatuses] = useState<any>(
+    initialOrderStatuses || {}
+  )
+  const [isLoadingOrder, setIsLoadingOrder] = useState<boolean>(
+    !initialOrder && !!orderId
+  )
+  const [orderLoadError, setOrderLoadError] = useState<string | null>(null)
+  const { user, activeCity } = useUI() as any
 
   type FormData = {
     review: string
@@ -96,7 +109,7 @@ const OrderAcceptApp: FC<OrderDetailProps> = ({ order, orderStatuses }) => {
   }
 
   const currentStatusIndex = Object.keys(orderStatuses).findIndex(
-    (status: string) => status == order.status
+    (status: string) => status == order?.status
   )
 
   // Check if order can be tracked
@@ -105,10 +118,70 @@ const OrderAcceptApp: FC<OrderDetailProps> = ({ order, orderStatuses }) => {
     order?.track_id &&
     (order?.status === 'cooked' || order?.status === 'delivering')
 
+  const fetchOrder = async () => {
+    if (!orderId) return
+    setIsLoadingOrder(true)
+    setOrderLoadError(null)
+    try {
+      await setCredentials()
+      const otpToken = Cookies.get('opt_token')
+      const headers: Record<string, string> = {
+        'Content-Type': 'application/json',
+      }
+      if (otpToken) headers.Authorization = `Bearer ${otpToken}`
+      const { data } = await axios.get(
+        `${webAddress}/api/orders?id=${encodeURIComponent(orderId)}`,
+        { headers, withCredentials: true }
+      )
+      const payload = data?.data ?? data
+      const orderData = Array.isArray(payload) ? payload[0] : payload
+      if (!orderData || !orderData.id) {
+        setOrderLoadError('not_found')
+        setOrder(null)
+      } else {
+        setOrder(orderData)
+      }
+    } catch (e: any) {
+      const status = e?.response?.status
+      if (status === 401 || status === 403) {
+        setOrderLoadError('unauthorized')
+      } else if (status === 404) {
+        setOrderLoadError('not_found')
+      } else {
+        setOrderLoadError('error')
+      }
+      setOrder(null)
+    } finally {
+      setIsLoadingOrder(false)
+    }
+  }
+
+  const fetchOrderStatuses = async () => {
+    try {
+      const { data } = await axios.get(
+        `${webAddress}/api/order_statuses/system`
+      )
+      if (data?.data) setOrderStatuses(data.data)
+    } catch {}
+  }
+
   useEffect(() => {
     getChannel()
-    fetchReviews()
+    if (!initialOrderStatuses || Object.keys(initialOrderStatuses).length === 0) {
+      fetchOrderStatuses()
+    }
+    if (!order && orderId) {
+      fetchOrder()
+    } else if (order) {
+      fetchReviews()
+    }
   }, [])
+
+  useEffect(() => {
+    if (order && order.id) {
+      fetchReviews()
+    }
+  }, [order?.id])
 
   // Inline status label helper (statuses come from orderStatuses keys)
   const statusLabels: Record<string, string> = {
@@ -122,6 +195,109 @@ const OrderAcceptApp: FC<OrderDetailProps> = ({ order, orderStatuses }) => {
   }
 
   const getStatusLabel = (status: string) => statusLabels[status] || status
+
+  const YELLOW = '#FAAF04'
+
+  if (isLoadingOrder) {
+    return (
+      <div className="container mx-auto px-3 md:px-0 py-12 md:py-20 flex items-center justify-center">
+        <svg
+          className="animate-spin h-10 w-10"
+          style={{ color: YELLOW }}
+          viewBox="0 0 24 24"
+        >
+          <circle
+            className="opacity-25"
+            cx="12"
+            cy="12"
+            r="10"
+            stroke="currentColor"
+            strokeWidth="4"
+            fill="none"
+          />
+          <path
+            className="opacity-75"
+            fill="currentColor"
+            d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"
+          />
+        </svg>
+      </div>
+    )
+  }
+
+  if (!order) {
+    const isUnauthorized = orderLoadError === 'unauthorized' || !user
+    return (
+      <div className="container mx-auto px-3 md:px-0 py-8 md:py-16">
+        <div className="bg-white rounded-3xl shadow-sm p-8 md:p-16 max-w-2xl mx-auto text-center">
+          <div className="w-24 h-24 rounded-full bg-gray-50 mx-auto mb-6 flex items-center justify-center">
+            <svg
+              width="44"
+              height="44"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="#9CA3AF"
+              strokeWidth="1.8"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            >
+              {isUnauthorized ? (
+                <>
+                  <rect x="3" y="11" width="18" height="11" rx="2" ry="2" />
+                  <path d="M7 11V7a5 5 0 0 1 10 0v4" />
+                </>
+              ) : (
+                <>
+                  <circle cx="12" cy="12" r="10" />
+                  <line x1="12" y1="8" x2="12" y2="12" />
+                  <line x1="12" y1="16" x2="12.01" y2="16" />
+                </>
+              )}
+            </svg>
+          </div>
+          <h1 className="text-2xl md:text-3xl font-extrabold text-gray-900 mb-2">
+            {isUnauthorized
+              ? 'Войдите в аккаунт'
+              : orderLoadError === 'not_found'
+                ? 'Заказ не найден'
+                : 'Не удалось загрузить заказ'}
+          </h1>
+          <p className="text-gray-500 mb-6">
+            {isUnauthorized
+              ? 'Чтобы открыть детали заказа, нужно войти в личный кабинет.'
+              : orderLoadError === 'not_found'
+                ? 'Проверьте ссылку или вернитесь к списку заказов.'
+                : 'Попробуйте обновить страницу. Если проблема повторится — напишите нам.'}
+          </p>
+          <div className="flex items-center justify-center gap-3">
+            {!isUnauthorized && orderId && (
+              <button
+                type="button"
+                onClick={fetchOrder}
+                className="rounded-full font-bold text-white px-8 h-12 transition-opacity hover:opacity-90 uppercase text-sm"
+                style={{ background: YELLOW }}
+              >
+                Повторить
+              </button>
+            )}
+            <button
+              type="button"
+              onClick={() =>
+                router.push(
+                  `/${activeCity?.slug || 'tashkent'}${
+                    isUnauthorized ? '' : '/profile/orders'
+                  }`
+                )
+              }
+              className="rounded-full font-semibold text-gray-700 bg-gray-100 hover:bg-gray-200 px-8 h-12 text-sm"
+            >
+              {isUnauthorized ? 'На главную' : 'К списку заказов'}
+            </button>
+          </div>
+        </div>
+      </div>
+    )
+  }
 
   return (
     <div>

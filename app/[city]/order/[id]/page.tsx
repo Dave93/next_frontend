@@ -1,7 +1,6 @@
 import type { Metadata } from 'next'
 import { notFound } from 'next/navigation'
 import { fetchSiteInfo } from '../../../../lib/data/site-info'
-import { fetchOrderById } from '../../../../lib/data/orders'
 import OrderAcceptApp from '../../../../components_new/order/OrderAcceptApp'
 import type { City } from '@commerce/types/cities'
 
@@ -37,7 +36,5 @@ export default async function OrderDetailPage({
   const siteInfo = await fetchSiteInfo()
   const cities = (siteInfo as any).cities as City[]
   if (!cities.find((c) => c.slug === citySlug)) notFound()
-  const order = await fetchOrderById(id)
-  if (!order) notFound()
-  return <OrderAcceptApp order={order} orderStatuses={[]} />
+  return <OrderAcceptApp orderId={id} />
 }
