@@ -2,6 +2,8 @@ import type { Metadata } from 'next'
 import { getLocale } from 'next-intl/server'
 import { fetchPublicConfig } from '../../../lib/data/configs'
 import ContactsApp from '../../../components_new/contacts/ContactsApp'
+import BreadcrumbsJsonLd from '../../../components_new/seo/BreadcrumbsJsonLd'
+import { crumbLabel, localizedPath } from '../../../lib/seo/alternates'
 
 type Params = { city: string }
 
@@ -26,7 +28,12 @@ export async function generateMetadata({
   }
 }
 
-export default async function ContactsPage() {
+export default async function ContactsPage({
+  params,
+}: {
+  params: Promise<Params>
+}) {
+  const { city: citySlug } = await params
   const [config, locale] = await Promise.all([
     fetchPublicConfig().catch(
       () => ({}) as Awaited<ReturnType<typeof fetchPublicConfig>>
@@ -41,5 +48,19 @@ export default async function ContactsPage() {
         ? config.workTimeEn
         : config.workTimeRu
 
-  return <ContactsApp workTime={workTime} />
+  const loc = locale as 'ru' | 'uz' | 'en'
+  return (
+    <>
+      <BreadcrumbsJsonLd
+        items={[
+          { name: crumbLabel(loc, 'home'), url: localizedPath(loc, `/${citySlug}`) },
+          {
+            name: crumbLabel(loc, 'contacts'),
+            url: localizedPath(loc, `/${citySlug}/contacts`),
+          },
+        ]}
+      />
+      <ContactsApp workTime={workTime} />
+    </>
+  )
 }

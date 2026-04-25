@@ -5,6 +5,8 @@ import { fetchSiteInfo } from '../../../../lib/data/site-info'
 import { fetchNewsById, fetchRelatedNews } from '../../../../lib/data/news'
 import NewsDetailApp from '../../../../components_new/news/NewsDetailApp'
 import NewsMenuTabsApp from '../../../../components_new/news/NewsMenuTabsApp'
+import BreadcrumbsJsonLd from '../../../../components_new/seo/BreadcrumbsJsonLd'
+import { crumbLabel, localizedPath } from '../../../../lib/seo/alternates'
 import type { City } from '@commerce/types/cities'
 
 type Params = { city: string; id: string }
@@ -48,8 +50,21 @@ export default async function NewsDetailPage({
 
   const relatedNews = await fetchRelatedNews(id, currentCity.id)
 
+  const loc = locale as 'ru' | 'uz' | 'en'
+  const newsTitle =
+    (loc === 'uz' && (news as any)?.title_uz) ||
+    (loc === 'en' && (news as any)?.title_en) ||
+    (news as any)?.title ||
+    ''
   return (
     <>
+      <BreadcrumbsJsonLd
+        items={[
+          { name: crumbLabel(loc, 'home'), url: localizedPath(loc, `/${citySlug}`) },
+          { name: crumbLabel(loc, 'news'), url: localizedPath(loc, `/${citySlug}/news`) },
+          { name: newsTitle, url: localizedPath(loc, `/${citySlug}/news/${id}`) },
+        ]}
+      />
       <NewsMenuTabsApp citySlug={citySlug} />
       <NewsDetailApp
         news={news}

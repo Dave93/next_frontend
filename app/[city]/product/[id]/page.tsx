@@ -5,6 +5,8 @@ import { fetchSiteInfo } from '../../../../lib/data/site-info'
 import { fetchProductById } from '../../../../lib/data/products'
 import ProductDetailApp from '../../../../components_new/product/ProductDetailApp'
 import ProductJsonLd from '../../../../components_new/seo/ProductJsonLd'
+import BreadcrumbsJsonLd from '../../../../components_new/seo/BreadcrumbsJsonLd'
+import { crumbLabel, localizedPath } from '../../../../lib/seo/alternates'
 import type { City } from '@commerce/types/cities'
 
 type Params = { city: string; id: string }
@@ -43,10 +45,27 @@ export default async function ProductDetailPage({
   const product = await fetchProductById(id, citySlug)
   if (!product) notFound()
 
-  const locale = await getLocale()
+  const locale = (await getLocale()) as 'ru' | 'uz' | 'en'
+  const productName =
+    product?.attribute_data?.name?.['chopar']?.[locale] ||
+    product?.attribute_data?.name?.['chopar']?.['ru'] ||
+    product?.name ||
+    ''
   return (
     <>
       <ProductJsonLd product={product} citySlug={citySlug} locale={locale} />
+      <BreadcrumbsJsonLd
+        items={[
+          {
+            name: crumbLabel(locale, 'home'),
+            url: localizedPath(locale, `/${citySlug}`),
+          },
+          {
+            name: productName,
+            url: localizedPath(locale, `/${citySlug}/product/${id}`),
+          },
+        ]}
+      />
       <ProductDetailApp product={product} channelName="chopar" />
     </>
   )

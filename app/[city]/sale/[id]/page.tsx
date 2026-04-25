@@ -5,6 +5,8 @@ import { fetchSiteInfo } from '../../../../lib/data/site-info'
 import { fetchSaleById, fetchRelatedSales } from '../../../../lib/data/sales'
 import SaleDetailApp from '../../../../components_new/sale/SaleDetailApp'
 import NewsMenuTabsApp from '../../../../components_new/news/NewsMenuTabsApp'
+import BreadcrumbsJsonLd from '../../../../components_new/seo/BreadcrumbsJsonLd'
+import { crumbLabel, localizedPath } from '../../../../lib/seo/alternates'
 import type { City } from '@commerce/types/cities'
 
 type Params = { city: string; id: string }
@@ -48,8 +50,21 @@ export default async function SaleDetailPage({
 
   const relatedSale = await fetchRelatedSales(id, currentCity.id, locale)
 
+  const loc = locale as 'ru' | 'uz' | 'en'
+  const saleTitle =
+    (loc === 'uz' && (sale as any)?.title_uz) ||
+    (loc === 'en' && (sale as any)?.title_en) ||
+    (sale as any)?.title ||
+    ''
   return (
     <>
+      <BreadcrumbsJsonLd
+        items={[
+          { name: crumbLabel(loc, 'home'), url: localizedPath(loc, `/${citySlug}`) },
+          { name: crumbLabel(loc, 'sale'), url: localizedPath(loc, `/${citySlug}/sale`) },
+          { name: saleTitle, url: localizedPath(loc, `/${citySlug}/sale/${id}`) },
+        ]}
+      />
       <NewsMenuTabsApp citySlug={citySlug} />
       <SaleDetailApp
         sale={sale}

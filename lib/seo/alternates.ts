@@ -27,3 +27,42 @@ export function buildAlternates(citySlug: string, suffix: string = '') {
     languages: buildLanguages(path),
   }
 }
+
+const RU_LABELS = {
+  home: 'Главная',
+  news: 'Новости',
+  sale: 'Акции',
+  about: 'О компании',
+  contacts: 'Контакты',
+  delivery: 'Доставка и оплата',
+  branch: 'Адреса ресторанов',
+  privacy: 'Конфиденциальность',
+}
+const UZ_LABELS = {
+  home: 'Bosh sahifa',
+  news: 'Yangiliklar',
+  sale: 'Aksiyalar',
+  about: 'Biz haqimizda',
+  contacts: 'Kontaktlar',
+  delivery: "Yetkazib berish va to'lov",
+  branch: 'Restoran manzillari',
+  privacy: 'Maxfiylik',
+}
+const EN_LABELS = {
+  home: 'Home',
+  news: 'News',
+  sale: 'Promotions',
+  about: 'About',
+  contacts: 'Contacts',
+  delivery: 'Delivery and payment',
+  branch: 'Restaurant addresses',
+  privacy: 'Privacy',
+}
+
+export type CrumbKey = keyof typeof RU_LABELS
+
+export function crumbLabel(locale: string, key: CrumbKey): string {
+  if (locale === 'uz') return UZ_LABELS[key]
+  if (locale === 'en') return EN_LABELS[key]
+  return RU_LABELS[key]
+}
