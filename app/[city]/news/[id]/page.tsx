@@ -18,15 +18,57 @@ export async function generateMetadata({
 }): Promise<Metadata> {
   const { city, id } = await params
   const base = 'https://choparpizza.uz'
+  const locale = (await getLocale()) as 'ru' | 'uz' | 'en'
+  const siteInfo = await fetchSiteInfo()
+  const cities = (siteInfo as any).cities as City[]
+  const currentCity = cities.find((c) => c.slug === city)
+  const news = currentCity ? await fetchNewsById(id, currentCity.id) : null
+  const title =
+    (locale === 'uz' && (news as any)?.title_uz) ||
+    (locale === 'en' && (news as any)?.title_en) ||
+    (news as any)?.title ||
+    'Новость Chopar Pizza'
+  const rawDesc =
+    (locale === 'uz' && (news as any)?.description_uz) ||
+    (locale === 'en' && (news as any)?.description_en) ||
+    (news as any)?.description ||
+    ''
+  const description =
+    String(rawDesc)
+      .replace(/<[^>]+>/g, ' ')
+      .replace(/&nbsp;/g, ' ')
+      .replace(/\s+/g, ' ')
+      .trim()
+      .slice(0, 160) || undefined
   return {
-    title: 'Новость Chopar Pizza',
+    title: {
+      absolute:
+        title === 'Новость Chopar Pizza' ? title : `${title} | Chopar Pizza`,
+    },
+    description,
     alternates: {
       canonical: `${base}/${city}/news/${id}`,
       languages: {
         ru: `${base}/${city}/news/${id}`,
         uz: `${base}/uz/${city}/news/${id}`,
         en: `${base}/en/${city}/news/${id}`,
+        'x-default': `${base}/${city}/news/${id}`,
       },
+    },
+    openGraph: {
+      title,
+      description,
+      url: `${base}/${city}/news/${id}`,
+      type: 'article',
+      images: (news as any)?.image
+        ? [{ url: (news as any).image, alt: title }]
+        : undefined,
+    },
+    twitter: {
+      card: 'summary_large_image',
+      title,
+      description,
+      images: (news as any)?.image ? [(news as any).image] : undefined,
     },
   }
 }

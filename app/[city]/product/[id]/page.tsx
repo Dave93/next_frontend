@@ -18,15 +18,54 @@ export async function generateMetadata({
 }): Promise<Metadata> {
   const { city, id } = await params
   const base = 'https://choparpizza.uz'
+  const locale = (await getLocale()) as 'ru' | 'uz' | 'en'
+  const product = await fetchProductById(id, city)
+  const name =
+    product?.attribute_data?.name?.['chopar']?.[locale] ||
+    product?.attribute_data?.name?.['chopar']?.['ru'] ||
+    product?.name ||
+    ''
+  const rawDesc =
+    product?.attribute_data?.description?.['chopar']?.[locale] ||
+    product?.attribute_data?.description?.['chopar']?.['ru'] ||
+    product?.description ||
+    ''
+  const description =
+    String(rawDesc)
+      .replace(/<[^>]+>/g, ' ')
+      .replace(/&nbsp;/g, ' ')
+      .replace(/\s+/g, ' ')
+      .trim()
+      .slice(0, 160) || undefined
+  const title = name
+    ? `${name} — заказать с доставкой | Chopar Pizza`
+    : 'Chopar Pizza — Продукт'
   return {
-    title: 'Chopar Pizza — Продукт',
+    title: { absolute: title },
+    description,
     alternates: {
       canonical: `${base}/${city}/product/${id}`,
       languages: {
         ru: `${base}/${city}/product/${id}`,
         uz: `${base}/uz/${city}/product/${id}`,
         en: `${base}/en/${city}/product/${id}`,
+        'x-default': `${base}/${city}/product/${id}`,
       },
+    },
+    openGraph: {
+      title: name || 'Chopar Pizza',
+      description,
+      url: `${base}/${city}/product/${id}`,
+      type: 'website',
+      images: product?.image
+        ? [{ url: product.image, alt: name }]
+        : undefined,
+    },
+    twitter: {
+      card: 'summary_large_image',
+      title: name || 'Chopar Pizza',
+      description,
+      images: product?.image ? [product.image] : undefined,
     },
   }
 }
