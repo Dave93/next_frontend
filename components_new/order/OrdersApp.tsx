@@ -1697,48 +1697,155 @@ const OrdersApp: FC<OrdersProps> = ({ channelName, isMobile = false }) => {
           </div>
         )}
         <div className="text-lg mb-5 font-bold">{tr('order_pay')}</div>
-        <div className="flex md:block">
+        {/* Flat payment grid — every method (cash + each enabled online
+            provider + deposit) is a single equal-sized card. No tabs,
+            no two-step pick. Per Baymard 2025 checkout research, an "all
+            methods visible" pattern lifts conversion versus tab-gated
+            ones because the user immediately sees the option they want. */}
+        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3">
+          {/* Cash card. Icon: a stylised wallet/banknote (no dollar sign,
+              no currency symbol — keeps it neutral so customers don't
+              think they're being charged in USD). */}
           <button
-            className={`${
-              openTab !== 1
-                ? 'text-gray-400 bg-gray-100'
-                : 'bg-yellow text-white'
-            } flex-1 font-bold  rounded-full outline-none focus:outline-none  h-11 md:w-44`}
-            onClick={() => setOpenTab(1)}
+            type="button"
+            onClick={() => {
+              setOpenTab(1)
+              if (payType !== 'cash') {
+                setPayType('cash')
+                setValue('pay_type', 'cash' as any)
+              }
+            }}
+            className={`flex flex-col items-center justify-center gap-2 aspect-square rounded-2xl border transition ${
+              openTab === 1
+                ? 'border-yellow bg-yellow-50'
+                : 'border-gray-200 hover:border-gray-300 bg-white'
+            }`}
           >
-            {tr('in_cash')}
+            <svg
+              width="44"
+              height="44"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="1.7"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              className={openTab === 1 ? 'text-yellow' : 'text-gray-500'}
+            >
+              <rect x="2.5" y="6.5" width="19" height="11" rx="2" />
+              <circle cx="12" cy="12" r="2.5" />
+              <path d="M6 9.5h.01M18 14.5h.01" />
+            </svg>
+            <span className="text-sm font-semibold text-gray-700">
+              {tr('in_cash')}
+            </span>
           </button>
-          {/* <button
-            className={`${
-              openTab !== 2
-                ? 'text-gray-400 bg-gray-100'
-                : 'bg-yellow text-white'
-            } flex-1 font-bold  rounded-full outline-none focus:outline-none  h-11 md:w-44 ml-5`}
-            onClick={() => setOpenTab(2)}
-          >
-            {tr('payment_type_card')}
-          </button> */}
-          <button
-            className={`${
-              openTab !== 3
-                ? 'text-gray-400 bg-gray-100'
-                : 'bg-yellow text-white'
-            } flex-1 font-bold  rounded-full outline-none focus:outline-none  h-11 md:w-44 ml-5`}
-            onClick={() => setOpenTab(3)}
-          >
-            {tr('online')}
-          </button>
+
+          {/* Online providers — only show those enabled for the selected
+              terminal, just like the legacy openTab=3 grid. */}
+          {locationData?.terminal_id &&
+            paymentTypes
+              .filter(
+                (payment: string) =>
+                  !!locationData?.terminalData?.[`${payment}_active`]
+              )
+              .map((payment: string) => {
+                const active = openTab === 3 && payType === payment
+                return (
+                  <label
+                    key={payment}
+                    className={`flex items-center justify-center aspect-square rounded-2xl border cursor-pointer transition ${
+                      active
+                        ? 'border-yellow bg-yellow-50'
+                        : 'border-gray-200 hover:border-gray-300 bg-white'
+                    }`}
+                    onClick={() => setOpenTab(3)}
+                  >
+                    <Image
+                      src={`/assets/${payment}.svg`}
+                      alt={payment}
+                      width={64}
+                      height={42}
+                    />
+                    <input
+                      type="radio"
+                      {...register('pay_type', { required: openTab === 3 })}
+                      defaultValue={payment}
+                      checked={payType === payment}
+                      onChange={onValueChange}
+                      className="hidden"
+                    />
+                  </label>
+                )
+              })}
+
+          {/* Deposit card — disabled visually when balance is insufficient. */}
+          {deposit > 0 && (
+            <div
+              className={`relative flex flex-col items-center justify-center gap-1 aspect-square rounded-2xl border transition ${
+                payType === 'deposit'
+                  ? 'border-yellow bg-yellow-50'
+                  : 'border-gray-200 hover:border-gray-300 bg-white'
+              } ${deposit < totalPrice ? 'cursor-not-allowed' : 'cursor-pointer'}`}
+              onClick={(e) => {
+                if (deposit < totalPrice) {
+                  e.preventDefault()
+                  return
+                }
+                setOpenTab(3)
+                setDepositPay()
+              }}
+            >
+              {deposit < totalPrice && (
+                <div className="absolute inset-0 rounded-2xl bg-gray-500/30 flex items-start justify-center pt-1.5 text-[11px] font-bold text-yellow">
+                  {tr('insufficient_funds')}
+                </div>
+              )}
+              <input
+                type="radio"
+                {...register('pay_type', { required: openTab === 3 })}
+                defaultValue="deposit"
+                checked={payType === 'deposit'}
+                onChange={onValueChange}
+                className="hidden"
+              />
+              <svg
+                width="36"
+                height="36"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="1.7"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                className={payType === 'deposit' ? 'text-yellow' : 'text-gray-500'}
+              >
+                <path d="M21 12a9 9 0 1 1-9-9" />
+                <path d="M21 4v5h-5" />
+                <path d="M9 12h6M9 16h4" />
+              </svg>
+              <div className="text-xs font-semibold text-gray-700">
+                {tr('deposit_label')}
+              </div>
+              <div className="text-xs text-gray-500">
+                {Intl.NumberFormat('ru').format(deposit)}
+              </div>
+            </div>
+          )}
         </div>
-        <div className="hidden" id="link1">
+
+        {/* Cash-only secondary input: "Change with" appears under the
+            grid when Наличными is selected. */}
+        {openTab === 1 && (
           <input
             type="number"
             {...register('change')}
             min="10000"
             step="1000"
-            className="borde focus:outline-none outline-none px-6 py-3 rounded-full text-sm md:w-80 w-full bg-gray-100 text-gray-400 mt-8"
+            className="focus:outline-none outline-none px-6 py-3 rounded-full text-sm md:w-80 w-full bg-gray-100 text-gray-400 mt-5"
             placeholder={tr('change')}
           />
-        </div>
+        )}
         {/* <div className={openTab === 2 ? 'block' : 'hidden'} id="link2"> */}
         {/* <div className="grid grid-cols-2 w-60 pt-8 items-center"> */}
         {/* <label
@@ -1829,73 +1936,8 @@ const OrdersApp: FC<OrdersProps> = ({ channelName, isMobile = false }) => {
             </div>
           </div> */}
         {/* </div> */}
-        <div className={openTab === 3 ? 'block' : 'hidden'} id="link3">
-          <div className="pt-8 items-center flex gap-1">
-            {locationData?.terminal_id &&
-              paymentTypes
-                .filter(
-                  (payment: string) =>
-                    !!locationData?.terminalData[`${payment}_active`]
-                )
-                .map((payment: string) => (
-                  <label
-                    className={`flex justify-around items-center w-24 h-24 p-3 rounded-2xl ${
-                      payType == payment ? 'border-yellow' : 'border-gray-200'
-                    } border cursor-pointer`}
-                    key={payment}
-                  >
-                    <Image
-                      src={`/assets/${payment}.svg`}
-                      alt={payment}
-                      width={56}
-                      height={36}
-                    />
-                    <input
-                      type="radio"
-                      {...register('pay_type', { required: openTab === 3 })}
-                      defaultValue={payment}
-                      checked={payType === payment}
-                      onChange={onValueChange}
-                      className="hidden"
-                    />
-                  </label>
-                ))}
-            {deposit > 0 && (
-              <div
-                className="bg-gray-100 flex items-center md:w-48 rounded-2xl p-4 cursor-pointer relative"
-                onClick={(e) =>
-                  deposit < totalPrice ? e.preventDefault() : setDepositPay()
-                }
-              >
-                {deposit < totalPrice && (
-                  <div className="absolute top-0 text-center left-0 right-0 text-primary w-full h-full bg-gray-500 bg-opacity-30 rounded-2xl flex items-start pt-1 text-xs justify-around font-bold">
-                    <div>{tr('insufficient_funds')}</div>
-                  </div>
-                )}
-                <div className="flex items-center">
-                  <input
-                    type="checkbox"
-                    className={`text-green-500 form-checkbox rounded-md w-5 h-5 mr-4`}
-                    defaultChecked={payType == 'deposit'}
-                    checked={payType == 'deposit'}
-                  />
-                  <input
-                    type="radio"
-                    {...register('pay_type', { required: openTab === 3 })}
-                    defaultValue="deposit"
-                    checked={payType === 'deposit'}
-                    onChange={onValueChange}
-                    className="hidden"
-                  />
-                  <div className="flex flex-col">
-                    <div>{tr('deposit_label')}</div>
-                    <div>{Intl.NumberFormat('ru').format(deposit)}</div>
-                  </div>
-                </div>
-              </div>
-            )}
-          </div>
-        </div>
+        {/* Legacy openTab=3 grid removed — every method now lives in the
+            single flat grid above. */}
 
         <Disclosure defaultOpen={true}>
           {({ open }) => (
