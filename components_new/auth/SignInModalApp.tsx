@@ -100,7 +100,8 @@ const SignInModalApp: FC = () => {
         setSubmitError(t('Капча не готова, попробуйте ещё раз'))
         return
       }
-      const captcha = await executeRecaptcha('send_otp')
+      // Backend verifies action='signIn' (LoginController::sendOTP); must match.
+      const captcha = await executeRecaptcha('signIn')
       await setCsrf()
       const fullPhone = `+998${phoneDigits}`
       const res = await axios.post(
