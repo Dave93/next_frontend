@@ -11,7 +11,7 @@ export async function generateMetadata({
   const { city } = await params
   const base = 'https://choparpizza.uz'
   return {
-    title: 'Франшиза Chopar Pizza',
+    title: 'Франшиза',
     description: 'Льготные условия франчайзинга — открой свою пиццерию Chopar',
     alternates: {
       canonical: `${base}/${city}/about/fran`,

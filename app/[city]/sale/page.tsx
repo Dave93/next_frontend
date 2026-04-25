@@ -17,7 +17,7 @@ export async function generateMetadata({
   const { city } = await params
   const base = 'https://choparpizza.uz'
   return {
-    title: 'Акции от Chopar Pizza',
+    title: 'Акции',
     description:
       'Акции и специальные предложения Chopar Pizza — скидки на пиццу, сеты и доставку',
     alternates: {

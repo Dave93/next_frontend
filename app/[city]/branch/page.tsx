@@ -14,7 +14,7 @@ export async function generateMetadata({
   const { city } = await params
   const base = 'https://choparpizza.uz'
   return {
-    title: 'Наши филиалы Chopar Pizza',
+    title: 'Наши филиалы',
     description: 'Адреса пиццерий Chopar Pizza с режимом работы и картой',
     alternates: {
       canonical: `${base}/${city}/branch`,

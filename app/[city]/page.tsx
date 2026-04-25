@@ -18,7 +18,7 @@ export async function generateMetadata({
   const { city } = await params
   const base = 'https://choparpizza.uz'
   return {
-    title: 'Заказать пиццу с доставкой в Ташкенте | Chopar Pizza',
+    title: 'Заказать пиццу с доставкой в Ташкенте',
     description:
       'Бесплатная доставка пиццы в Ташкенте, заказать можно на нашем сайте или через телеграм бот @Chopar_bot',
     alternates: {
