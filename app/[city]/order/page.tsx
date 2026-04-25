@@ -1,19 +1,8 @@
 import type { Metadata } from 'next'
 import { notFound } from 'next/navigation'
-import dynamic from 'next/dynamic'
 import { fetchSiteInfo } from '../../../lib/data/site-info'
+import OrderCheckoutClient from './OrderCheckoutClient'
 import type { City } from '@commerce/types/cities'
-
-// Checkout forms are auth-/cart-driven and break under SSR — keep them client-only,
-// matching the legacy pages router behaviour.
-const OrdersApp = dynamic(
-  () => import('../../../components_new/order/OrdersApp'),
-  { ssr: false }
-)
-const MobileOrdersApp = dynamic(
-  () => import('../../../components_new/order/MobileOrdersApp'),
-  { ssr: false }
-)
 
 type Params = { city: string }
 
@@ -49,15 +38,5 @@ export default async function OrderCheckoutPage({
   const cities = (siteInfo as any).cities as City[]
   if (!cities.find((c) => c.slug === citySlug)) notFound()
 
-  const channelName = 'chopar'
-  return (
-    <>
-      <div className="md:hidden">
-        <MobileOrdersApp channelName={channelName} />
-      </div>
-      <div className="hidden md:block">
-        <OrdersApp channelName={channelName} />
-      </div>
-    </>
-  )
+  return <OrderCheckoutClient channelName="chopar" />
 }
