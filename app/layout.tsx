@@ -31,6 +31,18 @@ export const metadata: Metadata = {
     title: 'Chopar Pizza',
     statusBarStyle: 'default',
   },
+  verification: {
+    google: process.env.NEXT_PUBLIC_SEO_GOOGLE_VERIFICATION || undefined,
+    yandex: process.env.NEXT_PUBLIC_SEO_YANDEX_VERIFICATION || undefined,
+    other: {
+      'mailru-verification':
+        process.env.NEXT_PUBLIC_SEO_MAILRU_VERIFICATION || '',
+      'msvalidate.01':
+        process.env.NEXT_PUBLIC_SEO_BING_VERIFICATION || '',
+      'facebook-domain-verification':
+        process.env.NEXT_PUBLIC_SEO_FB_VERIFICATION || '',
+    },
+  },
 }
 
 export const viewport: Viewport = {
