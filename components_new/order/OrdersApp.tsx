@@ -1,6 +1,6 @@
 'use client'
 
-import { XIcon, PlusIcon, BookmarkIcon } from '@heroicons/react/outline'
+import { XIcon } from '@heroicons/react/outline'
 import getAssetUrl from '@utils/getAssetUrl'
 import { useForm, Controller } from 'react-hook-form'
 import { useUI } from '@components/ui/context'
@@ -17,24 +17,14 @@ import React, {
 import {
   Dialog,
   DialogBackdrop,
-  DialogDescription,
   DialogTitle,
   Disclosure,
   DisclosureButton,
   DisclosurePanel,
-  Menu,
-  MenuButton,
-  MenuItem,
-  MenuItems,
   Transition,
   TransitionChild,
 } from '@headlessui/react'
-import {
-  CheckIcon,
-  ChevronDownIcon,
-  ChevronRightIcon,
-  LocationMarkerIcon,
-} from '@heroicons/react/solid'
+import { ChevronRightIcon } from '@heroicons/react/solid'
 import {
   YMaps,
   Map,
@@ -1022,10 +1012,17 @@ const OrdersApp: FC<OrdersProps> = ({ channelName, isMobile = false }) => {
       }
       setIsSavingOrder(false)
     } catch (e: any) {
-      toast.error(e.response.data.error.message, {
-        position: toast.POSITION.BOTTOM_RIGHT,
-        hideProgressBar: true,
-      })
+      const errMsg =
+        e?.response?.data?.error?.message ||
+        e?.response?.data?.message ||
+        e?.message ||
+        'Не удалось отправить код'
+      try {
+        toast.error(String(errMsg), {
+          position: toast.POSITION.BOTTOM_RIGHT,
+          hideProgressBar: true,
+        })
+      } catch {}
       setIsSavingOrder(false)
     }
   }
@@ -1232,16 +1229,23 @@ const OrdersApp: FC<OrdersProps> = ({ channelName, isMobile = false }) => {
         })
       }, 500)
     } catch (e: any) {
-      toast.error(e.response.data.error.message, {
-        position: toast.POSITION.BOTTOM_RIGHT,
-        hideProgressBar: true,
-      })
+      // Defensive: backend may return non-axios shapes (timeout, network
+      // failure, 5xx without our error envelope). Never blow up the UI
+      // accessing nested fields.
+      const errMsg =
+        e?.response?.data?.error?.message ||
+        e?.response?.data?.message ||
+        e?.message ||
+        'Ошибка оформления заказа'
+      try {
+        toast.error(String(errMsg), {
+          position: toast.POSITION.BOTTOM_RIGHT,
+          hideProgressBar: true,
+        })
+      } catch {}
 
       // PostHog: order_failed (server error)
-      trackOrderFailed({
-        error_message:
-          e.response?.data?.error?.message || e.message || 'Unknown error',
-      })
+      trackOrderFailed({ error_message: errMsg })
 
       setIsSavingOrder(false)
     }
@@ -2048,9 +2052,13 @@ const OrdersApp: FC<OrdersProps> = ({ channelName, isMobile = false }) => {
               >
                 {lineItem.child && lineItem.child.length == 1 ? (
                   `${
-                    lineItem?.variant?.product?.attribute_data?.name[
+                    lineItem?.variant?.product?.attribute_data?.name?.[
                       channelName
-                    ][locale || 'ru']
+                    ]?.[locale || 'ru'] ||
+                    lineItem?.variant?.product?.attribute_data?.name?.[
+                      channelName
+                    ]?.['ru'] ||
+                    ''
                   } + ${lineItem?.child
                     .filter(
                       (v: any) =>
@@ -2059,9 +2067,13 @@ const OrdersApp: FC<OrdersProps> = ({ channelName, isMobile = false }) => {
                     )
                     .map(
                       (v: any) =>
-                        v?.variant?.product?.attribute_data?.name[channelName][
-                          locale || 'ru'
-                        ]
+                        v?.variant?.product?.attribute_data?.name?.[
+                          channelName
+                        ]?.[locale || 'ru'] ||
+                        v?.variant?.product?.attribute_data?.name?.[
+                          channelName
+                        ]?.['ru'] ||
+                        ''
                     )
                     .join(' + ')}`
                 ) : (
@@ -2072,9 +2084,13 @@ const OrdersApp: FC<OrdersProps> = ({ channelName, isMobile = false }) => {
                   >
                     {isProductInStop.includes(lineItem.id)
                       ? tr('stop_product')
-                      : lineItem?.variant?.product?.attribute_data?.name[
+                      : lineItem?.variant?.product?.attribute_data?.name?.[
                           channelName
-                        ][locale || 'ru']}
+                        ]?.[locale || 'ru'] ||
+                        lineItem?.variant?.product?.attribute_data?.name?.[
+                          channelName
+                        ]?.['ru'] ||
+                        ''}
                   </div>
                 )}
                 {lineItem.bonus_id && (
@@ -2440,7 +2456,8 @@ const OrdersApp: FC<OrdersProps> = ({ channelName, isMobile = false }) => {
                         ? 'Confirm order'
                         : ''}
                     </DialogTitle>
-                    <DialogDescription>
+                    {/* DialogDescription is deprecated in @headlessui v2; use a plain p */}
+                    <p>
                       $
                       {locale == 'uz'
                         ? 'SMS-dan kodni kiriting'
@@ -2449,7 +2466,7 @@ const OrdersApp: FC<OrdersProps> = ({ channelName, isMobile = false }) => {
                         : locale == 'en'
                         ? 'Enter the code from the SMS'
                         : ''}
-                    </DialogDescription>
+                    </p>
                     <div>
                       <form onSubmit={handlePasswordSubmit(saveOrder)}>
                         <div className="mt-10">
