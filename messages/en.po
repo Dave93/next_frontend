@@ -32,7 +32,7 @@ msgstr "Authorization"
 #: components_new/auth/SignInModalApp.tsx:253
 #: components_new/common/SmallCartMobileApp.tsx:399
 #: components_new/contacts/ContactsApp.tsx:162
-#: components_new/profile/PersonalDataApp.tsx:136
+#: components_new/profile/PersonalDataApp.tsx:130
 msgid "ANbLXk"
 msgstr "Phone number"
 
@@ -42,7 +42,7 @@ msgstr "Confirmation code"
 
 #: components_new/auth/SignInModalApp.tsx:348
 #: components_new/contacts/ContactsApp.tsx:137
-#: components_new/profile/PersonalDataApp.tsx:117
+#: components_new/profile/PersonalDataApp.tsx:111
 msgid "qXh0mH"
 msgstr "Name"
 
@@ -83,13 +83,13 @@ msgid "uhOXf0"
 msgstr "Please sign in to place an order"
 
 #: components_new/cart/CartApp.tsx:500
-#: components_new/common/SmallCartApp.tsx:310
+#: components_new/common/SmallCartApp.tsx:306
 #: components_new/header/HeaderMiniCartApp.tsx:258
 msgid "Lj6qSg"
 msgstr "Cart is empty"
 
 #: components_new/cart/CartApp.tsx:502
-#: components_new/common/SmallCartApp.tsx:311
+#: components_new/common/SmallCartApp.tsx:307
 #: components_new/header/HeaderMiniCartApp.tsx:261
 msgid "V5Ibqh"
 msgstr "Choose a pizza"
@@ -112,7 +112,7 @@ msgid "1nDsuM"
 msgstr "Business hours"
 
 #: components_new/cart/CartApp.tsx:566
-#: components_new/common/SmallCartApp.tsx:292
+#: components_new/common/SmallCartApp.tsx:288
 #: components_new/header/HeaderMiniCartApp.tsx:226
 #: components_new/mobile/MobileBottomNavApp.tsx:67
 msgid "Ukms9b"
@@ -220,7 +220,7 @@ msgid "oqiCOV"
 msgstr "Required field"
 
 #: components_new/contacts/ContactsApp.tsx:200
-#: components_new/profile/PersonalDataApp.tsx:147
+#: components_new/profile/PersonalDataApp.tsx:141
 msgid "a+WBaz"
 msgstr "Email"
 
@@ -428,16 +428,16 @@ msgstr "Item temporarily unavailable"
 msgid "AH6N5n"
 msgstr "Add to pizza"
 
-#: components_new/profile/PersonalDataApp.tsx:114
+#: components_new/profile/PersonalDataApp.tsx:108
 #: components_new/profile/UserDataApp.tsx:21
 msgid "SwgaFe"
 msgstr "Personal data"
 
-#: components_new/profile/PersonalDataApp.tsx:167
+#: components_new/profile/PersonalDataApp.tsx:161
 msgid "9jmoPv"
 msgstr "Birthday"
 
-#: components_new/profile/PersonalDataApp.tsx:185
+#: components_new/profile/PersonalDataApp.tsx:179
 msgid "SMzCPW"
 msgstr "Save"
 

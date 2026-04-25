@@ -1098,38 +1098,6 @@ const OrdersApp: FC<OrdersProps> = ({ channelName, isMobile = false }) => {
       sourceType = 'mobile_web'
     }
     try {
-      if (locationData.deliveryType != 'pickup') {
-        const { address } = await getValues()
-
-        const failedAddresses = [
-          'Узбекистан, Ташкент,',
-          "O'zbekiston, Toshkent,",
-          'Узбекистан, Ташкент',
-          'Узбекистан',
-          'Узбекистан,',
-        ]
-
-        if (address && failedAddresses.includes(address)) {
-          const erText =
-            locale == 'ru'
-              ? 'Введите правильный адрес'
-              : locale == 'uz'
-              ? "To'g'ri manzilni kiriting"
-              : locale == 'en'
-              ? 'Enter the correct address'
-              : ''
-          toast.error(erText)
-
-          // PostHog: order_failed (validation error)
-          trackOrderFailed({
-            error_message: erText,
-          })
-
-          setIsSavingOrder(false)
-          return
-        }
-      }
-
       const { data } = await axios.post(
         `${webAddress}/api/orders`,
         {
