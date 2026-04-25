@@ -154,18 +154,18 @@ const SignInModalApp: FC = () => {
       )
       const { result } = res.data as any
       // Backend returns base64-encoded "false" (ZmFsc2U=) on a wrong OTP with HTTP 200.
-      // JSON.parse("false") yields the boolean false, so we must check before treating
-      // decoded as a user object — otherwise the modal would silently close.
+      // JSON.parse("false") yields the boolean false; on success it's an object with
+      // { user, user_token, ... } — we key off user_token to distinguish.
       const decoded = result
         ? JSON.parse(Buffer.from(result, 'base64').toString('ascii'))
         : null
-      if (!decoded || typeof decoded !== 'object' || !decoded.token) {
+      if (!decoded || typeof decoded !== 'object' || !decoded.user_token) {
         setSubmitError(t('Неверный код'))
         return
       }
       setUserData(decoded)
-      Cookies.set('opt_token', decoded.token)
-      localStorage.setItem('opt_token', decoded.token)
+      Cookies.set('opt_token', decoded.user_token)
+      localStorage.setItem('opt_token', decoded.user_token)
       handleClose()
     } catch (err: any) {
       setSubmitError(err?.response?.data?.error || t('Неверный код'))
