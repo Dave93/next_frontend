@@ -1,6 +1,6 @@
 'use client'
 
-import { useUI } from '@components/ui/context'
+import { useUIStore } from '../../lib/stores/ui-store'
 import { FC, useState, useEffect } from 'react'
 import { useQuery } from '@tanstack/react-query'
 import Cookies from 'js-cookie'
@@ -31,7 +31,7 @@ type OrderTrackingDetailProps = {
 let webAddress = process.env.NEXT_PUBLIC_API_URL
 
 const OrderTrackingApp: FC<OrderTrackingDetailProps> = ({ orderId }) => {
-  const { openSignInModal } = useUI()
+  const openSignInModal = useUIStore((s) => s.openSignInModal)
 
   const [shouldFetch, setShouldFetch] = useState(true)
   const { data, isError } = useQuery({

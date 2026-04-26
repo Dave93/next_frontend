@@ -1,6 +1,7 @@
 'use client'
 
-import { useUI } from '@components/ui/context'
+import { useUserStore } from '../../lib/stores/user-store'
+import { useLocationStore } from '../../lib/stores/location-store'
 import { memo, FC, useState, useEffect } from 'react'
 import { TruckIcon } from '@heroicons/react/solid'
 import { Link } from '../../i18n/navigation'
@@ -41,7 +42,8 @@ const OrderAcceptApp: FC<OrderDetailProps> = ({
     !initialOrder && !!orderId
   )
   const [orderLoadError, setOrderLoadError] = useState<string | null>(null)
-  const { user, activeCity } = useUI() as any
+  const user = useUserStore((s) => s.user) as any
+  const activeCity = useLocationStore((s) => s.activeCity) as any
 
   type FormData = {
     review: string

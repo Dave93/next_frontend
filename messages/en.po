@@ -32,7 +32,7 @@ msgstr "Authorization"
 #: components_new/auth/SignInModalApp.tsx:253
 #: components_new/common/SmallCartMobileApp.tsx:399
 #: components_new/contacts/ContactsApp.tsx:162
-#: components_new/profile/PersonalDataApp.tsx:130
+#: components_new/profile/PersonalDataApp.tsx:132
 msgid "ANbLXk"
 msgstr "Phone number"
 
@@ -42,7 +42,7 @@ msgstr "Confirmation code"
 
 #: components_new/auth/SignInModalApp.tsx:348
 #: components_new/contacts/ContactsApp.tsx:137
-#: components_new/profile/PersonalDataApp.tsx:111
+#: components_new/profile/PersonalDataApp.tsx:113
 msgid "qXh0mH"
 msgstr "Name"
 
@@ -62,7 +62,7 @@ msgstr "Code sent to number"
 #: components_new/auth/SignInModalApp.tsx:426
 #: components_new/cart/CartApp.tsx:481
 #: components_new/common/SmallCartMobileApp.tsx:387
-#: components_new/header/SignInButtonApp.tsx:48
+#: components_new/header/SignInButtonApp.tsx:54
 msgid "oU4rxk"
 msgstr "Sign in"
 
@@ -84,13 +84,13 @@ msgstr "Please sign in to place an order"
 
 #: components_new/cart/CartApp.tsx:500
 #: components_new/common/SmallCartApp.tsx:306
-#: components_new/header/HeaderMiniCartApp.tsx:258
+#: components_new/header/HeaderMiniCartApp.tsx:262
 msgid "Lj6qSg"
 msgstr "Cart is empty"
 
 #: components_new/cart/CartApp.tsx:502
 #: components_new/common/SmallCartApp.tsx:307
-#: components_new/header/HeaderMiniCartApp.tsx:261
+#: components_new/header/HeaderMiniCartApp.tsx:265
 msgid "V5Ibqh"
 msgstr "Choose a pizza"
 
@@ -113,8 +113,8 @@ msgstr "Business hours"
 
 #: components_new/cart/CartApp.tsx:566
 #: components_new/common/SmallCartApp.tsx:288
-#: components_new/header/HeaderMiniCartApp.tsx:226
-#: components_new/mobile/MobileBottomNavApp.tsx:67
+#: components_new/header/HeaderMiniCartApp.tsx:230
+#: components_new/mobile/MobileBottomNavApp.tsx:64
 msgid "Ukms9b"
 msgstr "Cart"
 
@@ -148,13 +148,13 @@ msgstr "Discount"
 
 #: components_new/cart/CartApp.tsx:790
 #: components_new/header/LocationPickerCore.tsx:350
-#: components_new/HeaderApp.tsx:131
+#: components_new/HeaderApp.tsx:135
 msgid "3qtFxi"
 msgstr "Delivery"
 
 #: components_new/cart/CartApp.tsx:793
 #: components_new/header/LocationPickerCore.tsx:361
-#: components_new/HeaderApp.tsx:145
+#: components_new/HeaderApp.tsx:149
 msgid "k9Dt2Z"
 msgstr "Pickup"
 
@@ -167,7 +167,7 @@ msgid "x5G3yc"
 msgstr "Total"
 
 #: components_new/cart/CartApp.tsx:814
-#: components_new/header/HeaderMiniCartApp.tsx:366
+#: components_new/header/HeaderMiniCartApp.tsx:370
 msgid "+urzAu"
 msgstr "Place order"
 
@@ -220,7 +220,7 @@ msgid "oqiCOV"
 msgstr "Required field"
 
 #: components_new/contacts/ContactsApp.tsx:200
-#: components_new/profile/PersonalDataApp.tsx:141
+#: components_new/profile/PersonalDataApp.tsx:143
 msgid "a+WBaz"
 msgstr "Email"
 
@@ -262,16 +262,16 @@ msgstr "Follow us:"
 msgid "J76yQ6"
 msgstr "All rights reserved"
 
-#: components_new/header/ChooseCityDropDownApp.tsx:71
+#: components_new/header/ChooseCityDropDownApp.tsx:74
 msgid "6QS/OL"
 msgstr "Your city"
 
-#: components_new/header/HeaderMiniCartApp.tsx:354
+#: components_new/header/HeaderMiniCartApp.tsx:358
 msgid "2wkbQf"
 msgstr "Order total"
 
 #: components_new/header/LocationPickerCore.tsx:391
-#: components_new/HeaderApp.tsx:47
+#: components_new/HeaderApp.tsx:51
 msgid "EiCEoo"
 msgstr "Enter your address"
 
@@ -340,35 +340,35 @@ msgstr "Promotions"
 msgid "gaIt7P"
 msgstr "Privacy"
 
-#: components_new/header/SignInButtonApp.tsx:55
+#: components_new/header/SignInButtonApp.tsx:61
 msgid "zPUJp6"
 msgstr "Personal account"
 
-#: components_new/header/SignInButtonApp.tsx:74
+#: components_new/header/SignInButtonApp.tsx:80
 #: components_new/profile/OrdersApp.tsx:165
-#: components_new/profile/UserDataApp.tsx:19
+#: components_new/profile/UserDataApp.tsx:24
 msgid "QZLNHg"
 msgstr "My orders"
 
-#: components_new/header/SignInButtonApp.tsx:95
-#: components_new/profile/UserDataApp.tsx:20
+#: components_new/header/SignInButtonApp.tsx:101
+#: components_new/profile/UserDataApp.tsx:25
 msgid "mRPbIA"
 msgstr "My addresses"
 
-#: components_new/header/SignInButtonApp.tsx:218
-#: components_new/profile/UserDataApp.tsx:22
+#: components_new/header/SignInButtonApp.tsx:224
+#: components_new/profile/UserDataApp.tsx:27
 msgid "xxMGAl"
 msgstr "Sign out"
 
-#: components_new/mobile/MobileBottomNavApp.tsx:52
+#: components_new/mobile/MobileBottomNavApp.tsx:49
 msgid "XnLtsK"
 msgstr "Home"
 
-#: components_new/mobile/MobileBottomNavApp.tsx:59
+#: components_new/mobile/MobileBottomNavApp.tsx:56
 msgid "/qjQzi"
 msgstr "Orders"
 
-#: components_new/mobile/MobileBottomNavApp.tsx:74
+#: components_new/mobile/MobileBottomNavApp.tsx:71
 msgid "THaf0F"
 msgstr "Settings"
 
@@ -428,28 +428,28 @@ msgstr "Item temporarily unavailable"
 msgid "AH6N5n"
 msgstr "Add to pizza"
 
-#: components_new/profile/PersonalDataApp.tsx:108
-#: components_new/profile/UserDataApp.tsx:21
+#: components_new/profile/PersonalDataApp.tsx:110
+#: components_new/profile/UserDataApp.tsx:26
 msgid "SwgaFe"
 msgstr "Personal data"
 
-#: components_new/profile/PersonalDataApp.tsx:161
+#: components_new/profile/PersonalDataApp.tsx:163
 msgid "9jmoPv"
 msgstr "Birthday"
 
-#: components_new/profile/PersonalDataApp.tsx:179
+#: components_new/profile/PersonalDataApp.tsx:181
 msgid "SMzCPW"
 msgstr "Save"
 
-#: components_new/profile/UserDataApp.tsx:23
+#: components_new/profile/UserDataApp.tsx:28
 msgid "x81v8p"
 msgstr "Bonuses"
 
-#: components_new/profile/UserDataApp.tsx:44
+#: components_new/profile/UserDataApp.tsx:49
 msgid "AqaPc0"
 msgstr "Welcome"
 
-#: components_new/profile/UserDataApp.tsx:47
+#: components_new/profile/UserDataApp.tsx:52
 msgid "4bFAiB"
 msgstr "This is your personal account. Here you can manage your orders, edit personal data, and track your favorite items"
 

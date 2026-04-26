@@ -1,7 +1,7 @@
 'use client'
 
 import { FC, memo } from 'react'
-import { useUI } from '@components/ui/context'
+import { useLocationStore } from '../../lib/stores/location-store'
 import { ShoppingCartIcon } from '@heroicons/react/outline'
 import { Link } from '../../i18n/navigation'
 import Hashids from 'hashids'
@@ -82,7 +82,7 @@ const inlineLabels: Record<string, Record<string, string>> = {
 const OrdersApp: FC = () => {
   const locale = useLocale()
   const te = useExtracted()
-  const { activeCity } = useUI()
+  const activeCity = useLocationStore((s) => s.activeCity)
 
   const t = (key: string) =>
     inlineLabels[key]?.[locale] || inlineLabels[key]?.ru || key

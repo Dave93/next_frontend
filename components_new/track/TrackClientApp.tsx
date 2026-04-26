@@ -15,7 +15,8 @@ import { renderToStaticMarkup } from 'react-dom/server'
 import { Bike, Car, Truck, Footprints } from 'lucide-react'
 import { FaPersonWalking } from 'react-icons/fa6'
 import styles from './Track.module.css'
-import { useUI } from '@components/ui'
+import { useUserStore } from '../../lib/stores/user-store'
+import { useLocationStore } from '../../lib/stores/location-store'
 
 // Import Leaflet CSS
 import 'leaflet/dist/leaflet.css'
@@ -134,7 +135,8 @@ export default function TrackClientApp({ orderId }: TrackClientAppProps) {
   const [courierPosition, setCourierPosition] = useState<
     [number, number] | null
   >(null)
-  const { user, activeCity } = useUI()
+  const user = useUserStore((s) => s.user) as any
+  const activeCity = useLocationStore((s) => s.activeCity)
   const { data, isLoading, isError, refetch } = useQuery({
     queryKey: ['track_order', orderId],
     queryFn: async () => {
@@ -150,7 +152,10 @@ export default function TrackClientApp({ orderId }: TrackClientAppProps) {
     enabled: shouldFetch && !!orderId,
   })
 
-  const defaultCenter: [number, number] = [activeCity?.lat, activeCity?.lon]
+  const defaultCenter: [number, number] = [
+    activeCity?.lat ?? 41.311081,
+    activeCity?.lon ?? 69.240562,
+  ]
 
   const mapCenter = useMemo(() => {
     if (trackingInfo?.from_location && trackingInfo?.to_location) {

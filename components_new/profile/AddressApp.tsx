@@ -4,6 +4,7 @@ import { memo, FC, useEffect, useState } from 'react'
 import { Address } from '@commerce/types/address'
 import { XIcon, PencilIcon } from '@heroicons/react/solid'
 import { useUI } from '@components/ui/context'
+import { useLocationStore } from '../../lib/stores/location-store'
 import Cookies from 'js-cookie'
 import axios from 'axios'
 import getAddressList from '@lib/load_addreses'
@@ -14,6 +15,7 @@ axios.defaults.withCredentials = true
 const AddressApp: FC = () => {
   const [errorMessage, setErrorMessage] = useState('')
 
+  const addressList = useLocationStore((s) => s.addressList) as any
   const {
     setAddressId,
     setLocationData,
@@ -21,8 +23,7 @@ const AddressApp: FC = () => {
     openLocationTabs,
     openMobileLocationTabs,
     setAddressList,
-    addressList,
-  } = useUI()
+  } = useUI() as any
 
   const loadAddresses = async () => {
     const addresses = await getAddressList()

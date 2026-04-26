@@ -4,7 +4,8 @@ import { FC, useEffect, useMemo, useRef } from 'react'
 import Image from 'next/image'
 import { useExtracted } from 'next-intl'
 import { Link } from '../i18n/navigation'
-import { useUI } from '@components/ui/context'
+import { useLocationStore } from '../lib/stores/location-store'
+import { useUIStore } from '../lib/stores/ui-store'
 import ChooseCityDropDownApp from './header/ChooseCityDropDownApp'
 import HeaderMiniCartApp from './header/HeaderMiniCartApp'
 import HeaderPhoneApp from './header/HeaderPhoneApp'
@@ -13,7 +14,10 @@ import SignInButtonApp from './header/SignInButtonApp'
 import SideMenuApp from './header/SideMenuApp'
 
 const HeaderApp: FC = () => {
-  const { activeCity, cities, locationData, openLocationTabs } = useUI() as any
+  const activeCity = useLocationStore((s) => s.activeCity) as any
+  const cities = useLocationStore((s) => s.cities) as any
+  const locationData = useLocationStore((s) => s.locationData) as any
+  const openLocationTabs = useUIStore((s) => s.openLocationModal)
   const t = useExtracted()
   const headerRef = useRef<HTMLElement | null>(null)
 

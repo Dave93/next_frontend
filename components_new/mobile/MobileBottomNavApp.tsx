@@ -16,8 +16,10 @@ import {
   ShoppingCartIcon as CartSolid,
   CogIcon as SettingsSolid,
 } from '@heroicons/react/solid'
-import { useUI } from '@components/ui/context'
-import useCart from '@framework/cart/use-cart'
+import { useUserStore } from '../../lib/stores/user-store'
+import { useUIStore } from '../../lib/stores/ui-store'
+import { useLocationStore } from '../../lib/stores/location-store'
+import { useCartStore, cartSelectors } from '../../lib/stores/cart-store'
 
 interface Tab {
   key: string
@@ -32,18 +34,13 @@ const MobileBottomNavApp: FC = () => {
   const pathname = usePathname() || '/'
   const params = useParams()
   const t = useExtracted()
-  const { activeCity, user, openSignInModal } = useUI()
+  const activeCity = useLocationStore((s) => s.activeCity)
+  const user = useUserStore((s) => s.user)
+  const openSignInModal = useUIStore((s) => s.openSignInModal)
   const citySlug =
     (params?.city as string) || activeCity?.slug || 'tashkent'
 
-  const { data: cartData } = useCart()
-  const cartCount = useMemo(() => {
-    if (!cartData?.lineItems?.length) return 0
-    return cartData.lineItems.reduce(
-      (sum: number, item: any) => sum + (item.quantity || 1),
-      0
-    )
-  }, [cartData])
+  const cartCount = useCartStore(cartSelectors.count)
 
   const tabs: Tab[] = useMemo(
     () => [

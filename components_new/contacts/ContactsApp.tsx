@@ -4,7 +4,7 @@ import { FC, memo, useState } from 'react'
 import { useForm, Controller } from 'react-hook-form'
 import { XIcon } from '@heroicons/react/outline'
 import Input from '../common/LazyPhoneInput'
-import { useUI } from '@components/ui/context'
+import { useUserStore } from '../../lib/stores/user-store'
 import { useExtracted } from 'next-intl'
 import Cookies from 'js-cookie'
 import axios from 'axios'
@@ -26,7 +26,7 @@ type Props = {
 
 const ContactsApp: FC<Props> = ({ workTime }) => {
   const t = useExtracted()
-  const { user } = useUI()
+  const user = useUserStore((s) => s.user) as any
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [successMessage, setSuccessMessage] = useState('')
 

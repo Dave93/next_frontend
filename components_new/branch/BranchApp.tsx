@@ -3,7 +3,7 @@
 import axios from 'axios'
 import { useEffect, useMemo, useState, FC } from 'react'
 import dynamic from 'next/dynamic'
-import { useUI } from '@components/ui/context'
+import { useLocationStore } from '../../lib/stores/location-store'
 import { useLocale } from 'next-intl'
 import SimpleBar from 'simplebar-react'
 import 'simplebar/dist/simplebar.min.css'
@@ -37,7 +37,7 @@ type Branch = {
 
 const BranchApp: FC = () => {
   const locale = useLocale()
-  const { activeCity } = useUI()
+  const activeCity = useLocationStore((s) => s.activeCity)
   const [zoom] = useState(11)
   const [branches, setBranches] = useState<Branch[]>([])
   const [activeBranch, setActiveBranch] = useState<Branch | null>(null)

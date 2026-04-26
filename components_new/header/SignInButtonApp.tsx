@@ -8,6 +8,9 @@ import {
   Transition,
 } from '@headlessui/react'
 import { useUI } from '@components/ui/context'
+import { useUserStore } from '../../lib/stores/user-store'
+import { useLocationStore } from '../../lib/stores/location-store'
+import { useUIStore } from '../../lib/stores/ui-store'
 import { useExtracted } from 'next-intl'
 import { Link, useRouter } from '../../i18n/navigation'
 
@@ -15,7 +18,10 @@ const YELLOW = '#FAAF04'
 
 const SignInButtonApp: FC = () => {
   const t = useExtracted()
-  const { user, setUserData, openSignInModal, activeCity } = useUI() as any
+  const user = useUserStore((s) => s.user) as any
+  const activeCity = useLocationStore((s) => s.activeCity) as any
+  const openSignInModal = useUIStore((s) => s.openSignInModal)
+  const { setUserData } = useUI() as any
   const router = useRouter()
   const [isClient, setIsClient] = useState(false)
 

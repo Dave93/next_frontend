@@ -5,7 +5,7 @@ import Image from 'next/image'
 import { useLocale } from 'next-intl'
 import { useRouter } from '../../i18n/navigation'
 import { Ru, Uz } from 'react-flags-select'
-import { useUI } from '@components/ui/context'
+import { useLocationStore } from '../../lib/stores/location-store'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import {
   faFacebook,
@@ -26,7 +26,8 @@ interface BonusListAppProps {
 export default function BonusListApp(_props: BonusListAppProps) {
   const router = useRouter()
   const locale = useLocale()
-  const { activeCity, cities } = useUI()
+  const activeCity = useLocationStore((s) => s.activeCity)
+  const cities = useLocationStore((s) => s.cities)
 
   const chosenCity = useMemo(() => {
     if (activeCity) {

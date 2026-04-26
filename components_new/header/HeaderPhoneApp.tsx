@@ -1,6 +1,6 @@
 'use client'
 
-import { useUI } from '@components/ui/context'
+import { useLocationStore } from '../../lib/stores/location-store'
 import { PhoneIcon } from '@heroicons/react/solid'
 import { FC, memo, useMemo } from 'react'
 
@@ -19,7 +19,8 @@ function formatUzPhone(phone: string): { uri: string; display: string } {
 }
 
 const HeaderPhoneApp: FC = () => {
-  const { activeCity, cities } = useUI()
+  const activeCity = useLocationStore((s) => s.activeCity)
+  const cities = useLocationStore((s) => s.cities)
 
   const chosenCity = useMemo(() => {
     if (activeCity) return activeCity

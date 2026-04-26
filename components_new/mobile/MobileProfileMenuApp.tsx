@@ -9,7 +9,9 @@ import {
   PhoneIcon,
   ChevronRightIcon,
 } from '@heroicons/react/outline'
-import { useUI } from '@components/ui/context'
+import { useUserStore } from '../../lib/stores/user-store'
+import { useLocationStore } from '../../lib/stores/location-store'
+import { useUIStore } from '../../lib/stores/ui-store'
 import { useLocale } from 'next-intl'
 import { usePathname } from '../../i18n/navigation'
 import Cookies from 'js-cookie'
@@ -52,7 +54,9 @@ const languages = [
 const MobileProfileMenuApp: FC = () => {
   const locale = useLocale()
   const pathname = usePathname()
-  const { user, activeCity, openSignInModal } = useUI()
+  const user = useUserStore((s) => s.user) as any
+  const activeCity = useLocationStore((s) => s.activeCity)
+  const openSignInModal = useUIStore((s) => s.openSignInModal)
   const citySlug = activeCity?.slug || ''
   const t = (key: string) => labels[key]?.[locale] || labels[key]?.ru || key
 

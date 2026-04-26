@@ -2,10 +2,11 @@
 import { memo, FC } from 'react'
 import Image from 'next/image'
 import { useUI } from '@components/ui'
+import { useLocationStore } from '../../lib/stores/location-store'
 
 const SetLocation: FC = () => {
-  const { locationData, openMobileLocationTabs, setLocationTabsClosable } =
-    useUI()
+  const locationData = useLocationStore((s) => s.locationData) as any
+  const { openMobileLocationTabs, setLocationTabsClosable } = useUI() as any
   return (
     <>
       <button

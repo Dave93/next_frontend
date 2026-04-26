@@ -10,7 +10,7 @@ import ProductListSectionTitle from '../product/ProductListSectionTitle'
 import ThreePizzaApp from './ThreePizzaApp'
 import SmallCartApp from '../common/SmallCartApp'
 import { useLocale } from 'next-intl'
-import { useUI } from '@components/ui/context'
+import { useLocationStore } from '../../lib/stores/location-store'
 
 // Pizza-50/50 builder is desktop+mobile via internal switch — load client-only.
 const HalfPizzaApp = dynamic(
@@ -45,7 +45,7 @@ const CityMainApp: FC<Props> = ({
   channelName,
 }) => {
   const locale = useLocale()
-  const { activeCity } = useUI()
+  const activeCity = useLocationStore((s) => s.activeCity)
 
   const heading = useMemo(() => {
     const slug = activeCity?.slug || 'tashkent'

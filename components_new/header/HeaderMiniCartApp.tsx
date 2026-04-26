@@ -13,7 +13,9 @@ import Hashids from 'hashids'
 import currency from 'currency.js'
 import { useLocale, useExtracted } from 'next-intl'
 import { useCart } from '@framework/cart'
-import { useUI } from '@components/ui/context'
+import { useUserStore } from '../../lib/stores/user-store'
+import { useLocationStore } from '../../lib/stores/location-store'
+import { useUIStore } from '../../lib/stores/ui-store'
 import { useRouter } from '../../i18n/navigation'
 import getAssetUrl from '@utils/getAssetUrl'
 
@@ -57,7 +59,9 @@ const HeaderMiniCartApp: FC = () => {
   const locale = useLocale()
   const t = useExtracted()
   const router = useRouter()
-  const { activeCity, user, openSignInModal } = useUI() as any
+  const activeCity = useLocationStore((s) => s.activeCity) as any
+  const user = useUserStore((s) => s.user) as any
+  const openSignInModal = useUIStore((s) => s.openSignInModal)
   const { data, mutate } = useCart()
   const [busy, setBusy] = useState<number | null>(null)
 

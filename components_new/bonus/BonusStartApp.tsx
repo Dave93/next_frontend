@@ -5,7 +5,7 @@ import Image from 'next/image'
 import { useLocale } from 'next-intl'
 import { useRouter } from '../../i18n/navigation'
 import { Ru, Uz } from 'react-flags-select'
-import { useUI } from '@components/ui/context'
+import { useLocationStore } from '../../lib/stores/location-store'
 import { Link } from '../../i18n/navigation'
 import { motion } from 'framer-motion'
 import { shuffle as lodashShuffle } from 'lodash'
@@ -42,7 +42,8 @@ export default function BonusStartApp({
   const router = useRouter()
   const locale = useLocale()
   const [channelName, setChannelName] = useState('chopar')
-  const { activeCity, cities } = useUI()
+  const activeCity = useLocationStore((s) => s.activeCity)
+  const cities = useLocationStore((s) => s.cities)
   const [shuffle, setShuffle] = useState(false)
   const [chosenCard, setChosenCard] = useState(null as any)
   const [isOpenCard, setIsOpenCard] = useState(false)

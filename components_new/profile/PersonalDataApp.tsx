@@ -4,6 +4,7 @@ import { FC } from 'react'
 import { XIcon } from '@heroicons/react/outline'
 import { useForm } from 'react-hook-form'
 import { useUI } from '@components/ui/context'
+import { useUserStore } from '../../lib/stores/user-store'
 import { useExtracted, useLocale } from 'next-intl'
 import axios from 'axios'
 import Cookies from 'js-cookie'
@@ -14,7 +15,8 @@ let webAddress = process.env.NEXT_PUBLIC_API_URL
 axios.defaults.withCredentials = true
 
 const PersonalDataApp: FC = () => {
-  const { user, setUserData } = useUI()
+  const user = useUserStore((s) => s.user) as any
+  const { setUserData } = useUI() as any
   const t = useExtracted()
   const locale = useLocale()
 

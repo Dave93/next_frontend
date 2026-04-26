@@ -8,11 +8,11 @@ import {
   Transition,
 } from '@headlessui/react'
 import { Link } from '../../i18n/navigation'
-import { useUI } from '@components/ui/context'
+import { useLocationStore } from '../../lib/stores/location-store'
 import { useExtracted } from 'next-intl'
 
 const SideMenuApp: FC = () => {
-  const { activeCity } = useUI()
+  const activeCity = useLocationStore((s) => s.activeCity)
   const t = useExtracted()
   const citySlug = activeCity?.slug || 'tashkent'
 

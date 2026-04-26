@@ -9,6 +9,7 @@ import {
   Transition,
 } from '@headlessui/react'
 import { useUI } from '@components/ui'
+import { useLocationStore } from '../../lib/stores/location-store'
 import type { City } from '@commerce/types/cities'
 import Cookies from 'js-cookie'
 import { useExtracted, useLocale } from 'next-intl'
@@ -19,7 +20,9 @@ const ChooseCityDropDownApp: FC = () => {
   const locale = useLocale()
   const router = useRouter()
   const pathname = usePathname()
-  const { cities, activeCity, setActiveCity } = useUI()
+  const cities = useLocationStore((s) => s.cities)
+  const activeCity = useLocationStore((s) => s.activeCity)
+  const { setActiveCity } = useUI() as any
 
   const chosenCity = useMemo(() => {
     if (activeCity) return activeCity

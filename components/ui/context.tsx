@@ -3,6 +3,9 @@ import React, { FC, useCallback, useMemo, useEffect } from 'react'
 import Cookies from 'js-cookie'
 import { Address } from '@commerce/types/address'
 import { identifyUser } from '@lib/posthog-events'
+import { useUserStore } from '../../lib/stores/user-store'
+import { useLocationStore } from '../../lib/stores/location-store'
+import { useUIStore } from '../../lib/stores/ui-store'
 
 let userData: any = null
 
@@ -452,6 +455,71 @@ export const UIProvider: FC<UIProviderProps> = (props) => {
       })
     }
   }, [state.user?.user_identity])
+
+  // ============================================================
+  // Dual-write: mirror legacy reducer state into Zustand stores so
+  // newly-migrated components can read from useUserStore/useLocationStore/
+  // useUIStore while existing 25+ useUI() consumers keep working unchanged.
+  // Once all consumers migrate, ManagedUIContext can be deleted.
+  // ============================================================
+
+  useEffect(() => {
+    useUserStore.getState().setUser((state.user as any)?.user || null)
+  }, [state.user])
+
+  useEffect(() => {
+    useLocationStore.getState().setLocationData(state.locationData as any)
+  }, [state.locationData])
+
+  useEffect(() => {
+    useLocationStore.getState().setActiveCity(state.activeCity)
+  }, [state.activeCity])
+
+  useEffect(() => {
+    useLocationStore.getState().setCities(state.cities || [])
+  }, [state.cities])
+
+  useEffect(() => {
+    useLocationStore.getState().setAddressId(state.addressId)
+  }, [state.addressId])
+
+  useEffect(() => {
+    useLocationStore.getState().setAddressList((state.addressList || []) as any)
+  }, [state.addressList])
+
+  useEffect(() => {
+    if (state.showSignInModal) {
+      useUIStore.getState().openSignInModal()
+    } else {
+      useUIStore.getState().closeSignInModal()
+    }
+  }, [state.showSignInModal])
+
+  useEffect(() => {
+    if (state.showLocationTabs) {
+      useUIStore
+        .getState()
+        .openLocationModal(state.locationTabsInitialTab as any)
+    } else {
+      useUIStore.getState().closeLocationModal()
+    }
+  }, [state.showLocationTabs, state.locationTabsInitialTab])
+
+  useEffect(() => {
+    if (state.productDrawerProduct) {
+      useUIStore.getState().openProductDrawer(state.productDrawerProduct)
+    } else {
+      useUIStore.getState().closeProductDrawer()
+    }
+  }, [state.productDrawerProduct])
+
+  useEffect(() => {
+    if (state.displaySidebar) {
+      useUIStore.getState().openSmallCart()
+    } else {
+      useUIStore.getState().closeSmallCart()
+    }
+  }, [state.displaySidebar])
 
   const openSidebar = useCallback(
     () => dispatch({ type: 'OPEN_SIDEBAR' }),
