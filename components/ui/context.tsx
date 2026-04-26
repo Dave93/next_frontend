@@ -463,8 +463,12 @@ export const UIProvider: FC<UIProviderProps> = (props) => {
   // Once all consumers migrate, ManagedUIContext can be deleted.
   // ============================================================
 
+  // Mirror the WHOLE legacy UserData wrapper into Zustand (with
+  // user_identity/user_contact/user_token + nested .user). Migrated
+  // components keep using user?.user?.name / user?.user_identity exactly
+  // as they did with legacy useUI().user — no shape change.
   useEffect(() => {
-    useUserStore.getState().setUser((state.user as any)?.user || null)
+    useUserStore.getState().setUser((state.user as any) || null)
   }, [state.user])
 
   useEffect(() => {

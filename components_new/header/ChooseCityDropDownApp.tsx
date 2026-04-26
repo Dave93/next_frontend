@@ -26,7 +26,7 @@ const ChooseCityDropDownApp: FC = () => {
 
   const chosenCity = useMemo(() => {
     if (activeCity) return activeCity
-    if (cities) return cities[0]
+    if (cities && cities.length > 0) return cities[0]
     return null
   }, [cities, activeCity])
 
