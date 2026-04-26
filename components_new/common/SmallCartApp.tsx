@@ -1,16 +1,18 @@
 'use client'
 
 import { FC, memo, useEffect, useMemo, useState } from 'react'
-import useCart from '@framework/cart/use-cart'
 import { useForm } from 'react-hook-form'
 import Image from 'next/image'
 import { XIcon, MinusIcon, PlusIcon } from '@heroicons/react/solid'
 import currency from 'currency.js'
 import axios from 'axios'
-import Cookies from 'js-cookie'
 import { useLocale, useExtracted } from 'next-intl'
 import { useRouter } from '../../i18n/navigation'
-import Hashids from 'hashids'
+import { useCartStore, cartSelectors } from '../../lib/stores/cart-store'
+import {
+  useUpdateCartQty,
+  useRemoveCartLine,
+} from '../../lib/hooks/useCartMutations'
 import { useUserStore } from '../../lib/stores/user-store'
 import { useLocationStore } from '../../lib/stores/location-store'
 import { useUIStore } from '../../lib/stores/ui-store'
@@ -30,30 +32,42 @@ const SmallCartApp: FC<SmallCartProps> = ({ channelName }) => {
   const locale = useLocale()
   const t = useExtracted()
   const router = useRouter()
-  let cartId: string | null = null
-  if (typeof window !== 'undefined') {
-    cartId = localStorage.getItem('basketId')
-  }
   const locationData = useLocationStore((s) => s.locationData) as any
   const user = useUserStore((s) => s.user) as any
   const activeCity = useLocationStore((s) => s.activeCity) as any
   const openSignInModal = useUIStore((s) => s.openSignInModal)
 
-  const { data, isEmpty, mutate } = useCart({
-    cartId,
-    locationData,
-  })
-
-  const [isCartLoading, setIsCartLoading] = useState(false)
+  const cartLines = useCartStore(cartSelectors.lines)
+  const updateQty = useUpdateCartQty()
+  const removeLine = useRemoveCartLine()
+  const data: any = useMemo(
+    () => ({
+      lineItems: cartLines.map(
+        (l) =>
+          l._raw || {
+            id: l.id,
+            quantity: l.qty,
+            total: l.qty * l.price,
+            variant: {
+              id: l.variantId,
+              product: { id: l.productId, name: l.name, image: l.image },
+            },
+          }
+      ),
+      totalPrice: cartLines.reduce(
+        (acc, l) => acc + Number(l._raw?.total ?? l.qty * l.price),
+        0
+      ),
+      discountTotal: 0,
+      discountValue: 0,
+    }),
+    [cartLines]
+  )
+  const isEmpty = cartLines.length === 0
+  const isCartLoading = updateQty.isPending || removeLine.isPending
 
   // useForm imported but its register/handleSubmit not used in current layout — keep import to avoid breaking later additions; if unused at TS check, drop.
   useForm()
-
-  const hashids = new Hashids(
-    'basket',
-    15,
-    'abcdefghijklmnopqrstuvwxyz1234567890'
-  )
   const [configData, setConfigData] = useState({} as any)
   const fetchConfig = async () => {
     let configData
@@ -73,135 +87,25 @@ const SmallCartApp: FC<SmallCartProps> = ({ channelName }) => {
     } catch (e) {}
   }
 
-  const setCredentials = async () => {
-    let csrf = Cookies.get('X-XSRF-TOKEN')
-    if (!csrf) {
-      const csrfReq = await axios(`${webAddress}/api/keldi`, {
-        method: 'GET',
-        headers: {
-          'Content-Type': 'application/json',
-          crossDomain: true,
-        },
-        withCredentials: true,
-      })
-      let { data: res } = csrfReq
-      csrf = Buffer.from(res.result, 'base64').toString('ascii')
-
-      var inTenMinutes = new Date(new Date().getTime() + 10 * 60 * 1000)
-      Cookies.set('X-XSRF-TOKEN', csrf, {
-        expires: inTenMinutes,
-      })
-    }
-    axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest'
-    axios.defaults.headers.common['X-CSRF-TOKEN'] = csrf
-    axios.defaults.headers.common['XCSRF-TOKEN'] = csrf
+  const destroyLine = (lineId: string) => {
+    removeLine.mutate({ lineId: Number(lineId) })
   }
 
-  const destroyLine = async (lineId: string) => {
-    setIsCartLoading(true)
-    await setCredentials()
-    await axios.delete(
-      `${webAddress}/api/basket-lines/${hashids.encode(lineId)}`
-    )
-    if (cartId) {
-      let additionalQuery = ''
-      if (locationData && locationData.deliveryType == 'pickup') {
-        additionalQuery = `?delivery_type=pickup`
-      }
-      let { data: basket } = await axios.get(
-        `${webAddress}/api/baskets/${cartId}${additionalQuery}`
-      )
-      const basketResult = {
-        id: basket.data.id,
-        createdAt: '',
-        currency: { code: basket.data.currency },
-        taxesIncluded: basket.data.tax_total,
-        lineItems: basket.data.lines,
-        lineItemsSubtotalPrice: basket.data.sub_total,
-        subtotalPrice: basket.data.sub_total,
-        totalPrice: basket.data.total,
-        discountTotal: basket.data.discount_total,
-        discountValue: basket.data.discount_value,
-      }
-
-      await mutate(basketResult, false)
-      setIsCartLoading(false)
-    }
+  const decreaseQuantity = (line: any) => {
+    if (Number(line.quantity || 0) <= 1) return
+    updateQty.mutate({
+      lineId: Number(line.id),
+      delta: -1,
+      currentQty: Number(line.quantity || 0),
+    })
   }
 
-  const decreaseQuantity = async (line: any) => {
-    if (line.quantity == 1) {
-      return
-    }
-    setIsCartLoading(true)
-    await setCredentials()
-    await axios.put(
-      `${webAddress}/api/v1/basket-lines/${hashids.encode(line.id)}/remove`,
-      {
-        quantity: 1,
-      }
-    )
-
-    if (cartId) {
-      let additionalQuery = ''
-      if (locationData && locationData.deliveryType == 'pickup') {
-        additionalQuery = `?delivery_type=pickup`
-      }
-      let { data: basket } = await axios.get(
-        `${webAddress}/api/baskets/${cartId}${additionalQuery}`
-      )
-      const basketResult = {
-        id: basket.data.id,
-        createdAt: '',
-        currency: { code: basket.data.currency },
-        taxesIncluded: basket.data.tax_total,
-        lineItems: basket.data.lines,
-        lineItemsSubtotalPrice: basket.data.sub_total,
-        subtotalPrice: basket.data.sub_total,
-        totalPrice: basket.data.total,
-        discountTotal: basket.data.discount_total,
-        discountValue: basket.data.discount_value,
-      }
-
-      await mutate(basketResult, false)
-      setIsCartLoading(false)
-    }
-  }
-
-  const increaseQuantity = async (lineId: string) => {
-    setIsCartLoading(true)
-    await setCredentials()
-    await axios.post(
-      `${webAddress}/api/v1/basket-lines/${hashids.encode(lineId)}/add`,
-      {
-        quantity: 1,
-      }
-    )
-
-    if (cartId) {
-      let additionalQuery = ''
-      if (locationData && locationData.deliveryType == 'pickup') {
-        additionalQuery = `?delivery_type=pickup`
-      }
-      let { data: basket } = await axios.get(
-        `${webAddress}/api/baskets/${cartId}${additionalQuery}`
-      )
-      const basketResult = {
-        id: basket.data.id,
-        createdAt: '',
-        currency: { code: basket.data.currency },
-        taxesIncluded: basket.data.tax_total,
-        lineItems: basket.data.lines,
-        lineItemsSubtotalPrice: basket.data.sub_total,
-        subtotalPrice: basket.data.sub_total,
-        totalPrice: basket.data.total,
-        discountTotal: basket.data.discount_total,
-        discountValue: basket.data.discount_value,
-      }
-
-      await mutate(basketResult, false)
-      setIsCartLoading(false)
-    }
+  const increaseQuantity = (lineId: string, currentQty: number) => {
+    updateQty.mutate({
+      lineId: Number(lineId),
+      delta: 1,
+      currentQty: Number(currentQty || 0),
+    })
   }
 
   const isWorkTime = useMemo(() => {
@@ -455,7 +359,12 @@ const SmallCartApp: FC<SmallCartProps> = ({ channelName }) => {
                               <div className="w-6 h-6 items-center flex justify-around">
                                 <PlusIcon
                                   className="cursor-pointer w-5 h-5"
-                                  onClick={() => increaseQuantity(lineItem.id)}
+                                  onClick={() =>
+                                    increaseQuantity(
+                                      lineItem.id,
+                                      lineItem.quantity
+                                    )
+                                  }
                                 />
                               </div>
                             </div>

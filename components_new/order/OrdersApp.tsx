@@ -37,7 +37,7 @@ import {
 } from 'react-yandex-maps'
 // next/image removed from this file — every image here is a small,
 // fixed-size icon that doesn't need the optimizer pipeline.
-import { useCart } from '@framework/cart'
+import { useCartStore, cartSelectors } from '../../lib/stores/cart-store'
 import currency from 'currency.js'
 import axios from 'axios'
 import { debounce } from 'lodash'
@@ -243,10 +243,26 @@ const OrdersApp: FC<OrdersProps> = ({ channelName, isMobile = false }) => {
   const [ymaps, setYmaps] = useState<any>(null)
   const [cutlery, setCutlery] = useState('Y')
   const objects = useRef<any>(null)
-  const { data, isLoading, isEmpty, mutate } = useCart({
-    cartId,
-    locationData,
-  })
+  const cartLines = useCartStore(cartSelectors.lines)
+  const cartData: any = useMemo(
+    () => ({
+      lineItems: cartLines.map(
+        (l) =>
+          l._raw || {
+            id: l.id,
+            quantity: l.qty,
+            total: l.qty * l.price,
+            variant: {
+              id: l.variantId,
+              product_id: l.productId,
+              product: { id: l.productId, name: l.name, image: l.image },
+            },
+          }
+      ),
+    }),
+    [cartLines]
+  )
+  const isEmpty = cartLines.length === 0
   const [deposit, setDeposit] = useState(0)
   let currentAddress = ''
   if (activeCity?.active) {
@@ -1139,19 +1155,7 @@ const OrdersApp: FC<OrdersProps> = ({ channelName, isMobile = false }) => {
         has_discount: (data.order.discount_total || 0) > 0,
       })
 
-      let basketData = {
-        id: '',
-        createdAt: '',
-        currency: { code: '' },
-        taxesIncluded: '',
-        lineItems: [],
-        lineItemsSubtotalPrice: '',
-        subtotalPrice: 0,
-        totalPrice: 0,
-        discountTotal: 0,
-        discountValue: 0,
-      }
-      await mutate(basketData, false)
+      useCartStore.getState().setFromServer(null, [])
       const orderHashids = new Hashids(
         'order',
         15,
@@ -1289,26 +1293,26 @@ const OrdersApp: FC<OrdersProps> = ({ channelName, isMobile = false }) => {
   const isProductInStop = useMemo(() => {
     let res: number[] = []
     if (!isEmpty) {
-      data.lineItems.map((item: any) => {
+      cartData.lineItems.map((item: any) => {
         if (stopProducts.includes(item.variant.product_id)) {
           res.push(item.id)
         }
       })
     }
     return res
-  }, [stopProducts, data])
+  }, [stopProducts, cartData])
 
   const totalPrice = useMemo(() => {
     let total = 0
     if (!isEmpty) {
-      data.lineItems.map((lineItem: any) => {
+      cartData.lineItems.map((lineItem: any) => {
         if (!stopProducts.includes(lineItem.variant.product_id)) {
           total += lineItem.total
         }
       })
     }
     return total
-  }, [stopProducts, data])
+  }, [stopProducts, cartData])
 
   if (!isWorkTime) {
     return (
@@ -1914,8 +1918,8 @@ const OrdersApp: FC<OrdersProps> = ({ channelName, isMobile = false }) => {
       <div className="w-full bg-white my-5 rounded-2xl order-summary-section">
         <div className="text-lg mb-5 font-bold">{tr('order_order_list')}</div>
         {!isEmpty &&
-          data &&
-          data?.lineItems.map((lineItem: any) => (
+          cartData &&
+          cartData?.lineItems.map((lineItem: any) => (
             <div
               className={`flex justify-between items-center border-b py-2`}
               key={lineItem.id}

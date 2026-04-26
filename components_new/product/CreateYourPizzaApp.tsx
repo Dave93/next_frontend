@@ -13,7 +13,7 @@ import { useLocale, useExtracted } from 'next-intl'
 import currency from 'currency.js'
 import axios from 'axios'
 import Cookies from 'js-cookie'
-import { useCart } from '@framework/cart'
+import { syncCartFromBasketResult } from '../../lib/data/cart-adapter'
 import { useLocationStore } from '../../lib/stores/location-store'
 import { useUIStore } from '../../lib/stores/ui-store'
 import { DateTime } from 'luxon'
@@ -39,7 +39,6 @@ const CreateYourPizzaApp: FC<CreatePizzaProps> = ({
   let completeButtonRef = useRef(null)
   const locationData = useLocationStore((s) => s.locationData) as any
   const stopProducts = useUIStore((s) => s.stopProducts)
-  const { mutate } = useCart()
   const [isLoadingBasket, setIsLoadingBasket] = useState(false)
   const [activeModifiers, setActiveModifeirs] = useState([] as number[])
   const [activeCustomName, setActiveCustomName] = useState('')
@@ -246,7 +245,7 @@ const CreateYourPizzaApp: FC<CreatePizzaProps> = ({
       }
     }
 
-    await mutate(basketResult, false)
+    syncCartFromBasketResult(basketResult)
     setIsLoadingBasket(false)
     setLeftSelectedProduct(null)
     setRightSelectedProduct(null)

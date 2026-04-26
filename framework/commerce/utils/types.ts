@@ -1,4 +1,7 @@
-import type { SWRConfiguration } from 'swr'
+// SWR removed in Wave 3.7 — local stub keeps the type structure intact
+// for the legacy commerce framework files (none of which are reachable
+// from the runtime app bundle).
+type SWRConfiguration<_Data = any, _Error = any> = any
 import type { CommerceError } from './errors'
 import type { ResponseState } from './use-data'
 

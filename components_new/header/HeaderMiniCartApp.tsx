@@ -12,7 +12,11 @@ import Cookies from 'js-cookie'
 import Hashids from 'hashids'
 import currency from 'currency.js'
 import { useLocale, useExtracted } from 'next-intl'
-import { useCart } from '@framework/cart'
+import { useCartStore, cartSelectors } from '../../lib/stores/cart-store'
+import {
+  useUpdateCartQty,
+  useRemoveCartLine,
+} from '../../lib/hooks/useCartMutations'
 import { useUserStore } from '../../lib/stores/user-store'
 import { useLocationStore } from '../../lib/stores/location-store'
 import { useUIStore } from '../../lib/stores/ui-store'
@@ -62,93 +66,35 @@ const HeaderMiniCartApp: FC = () => {
   const activeCity = useLocationStore((s) => s.activeCity) as any
   const user = useUserStore((s) => s.user) as any
   const openSignInModal = useUIStore((s) => s.openSignInModal)
-  const { data, mutate } = useCart()
-  const [busy, setBusy] = useState<number | null>(null)
-
-  const lineItems: any[] = (data as any)?.lineItems || []
-  const totalQty = lineItems.reduce(
-    (acc, l: any) => acc + (l?.quantity || 0),
-    0
+  const lines = useCartStore(cartSelectors.lines)
+  const totalQty = useCartStore(cartSelectors.count)
+  const totalPrice = useCartStore(cartSelectors.total)
+  const isEmpty = lines.length === 0
+  const updateQty = useUpdateCartQty()
+  const removeLine = useRemoveCartLine()
+  const busyId = updateQty.isPending || removeLine.isPending
+  // Backwards-compatible legacy line-item shape for existing JSX
+  // (variant.product.attribute_data.name[ch][locale], variant.product.assets, etc.)
+  const lineItems: any[] = lines.map(
+    (l) => l._raw || { id: l.id, quantity: l.qty, variant: { product: { name: l.name, image: l.image } } }
   )
-  const totalPrice = (data as any)?.totalPrice || 0
-  const isEmpty = lineItems.length === 0
 
-  const refetchBasket = async () => {
-    const cartId =
-      typeof window !== 'undefined' ? localStorage.getItem('basketId') : null
-    if (!cartId) {
-      await mutate()
-      return
-    }
-    const { data: basket } = await axios.get(
-      `${webAddress}/api/baskets/${cartId}`,
-      { withCredentials: true }
-    )
-    await mutate(
-      {
-        id: basket.data.id,
-        createdAt: '',
-        currency: { code: basket.data.currency },
-        taxesIncluded: basket.data.tax_total,
-        lineItems: basket.data.lines,
-        lineItemsSubtotalPrice: basket.data.sub_total,
-        subtotalPrice: basket.data.sub_total,
-        totalPrice: basket.data.total,
-      },
-      false
-    )
-  }
+  const inc = (line: any) =>
+    updateQty.mutate({
+      lineId: Number(line.id),
+      delta: 1,
+      currentQty: Number(line.quantity || 0),
+    })
 
-  const inc = async (line: any) => {
-    setBusy(line.id)
-    try {
-      await setCsrf()
-      await axios.post(
-        `${webAddress}/api/v1/basket-lines/${hashids.encode(line.id)}/add`,
-        { quantity: 1 },
-        { withCredentials: true }
-      )
-      await refetchBasket()
-    } finally {
-      setBusy(null)
-    }
-  }
+  const dec = (line: any) =>
+    updateQty.mutate({
+      lineId: Number(line.id),
+      delta: -1,
+      currentQty: Number(line.quantity || 0),
+    })
 
-  const dec = async (line: any) => {
-    setBusy(line.id)
-    try {
-      await setCsrf()
-      if (line.quantity <= 1) {
-        await axios.delete(
-          `${webAddress}/api/basket-lines/${hashids.encode(line.id)}`,
-          { withCredentials: true }
-        )
-      } else {
-        await axios.put(
-          `${webAddress}/api/v1/basket-lines/${hashids.encode(line.id)}/remove`,
-          { quantity: 1 },
-          { withCredentials: true }
-        )
-      }
-      await refetchBasket()
-    } finally {
-      setBusy(null)
-    }
-  }
-
-  const remove = async (line: any) => {
-    setBusy(line.id)
-    try {
-      await setCsrf()
-      await axios.delete(
-        `${webAddress}/api/basket-lines/${hashids.encode(line.id)}`,
-        { withCredentials: true }
-      )
-      await refetchBasket()
-    } finally {
-      setBusy(null)
-    }
-  }
+  const remove = (line: any) =>
+    removeLine.mutate({ lineId: Number(line.id) })
 
   const goToCheckout = (close: () => void) => {
     close()
@@ -269,7 +215,7 @@ const HeaderMiniCartApp: FC = () => {
                 <>
                   <div className="max-h-[360px] overflow-y-auto divide-y divide-gray-100">
                     {lineItems.map((line: any) => {
-                      const isLineBusy = busy === line.id
+                      const isLineBusy = busyId
                       return (
                         <div
                           key={line.id}

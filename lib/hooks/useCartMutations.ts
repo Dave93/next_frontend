@@ -16,7 +16,6 @@
  */
 
 import { useMutation } from '@tanstack/react-query'
-import { mutate as swrGlobalMutate } from 'swr'
 import { toast } from 'sonner'
 import axios from 'axios'
 import Cookies from 'js-cookie'
@@ -61,19 +60,14 @@ function authHeader(): Record<string, string> {
 
 function syncStore(cartData: any) {
   if (!cartData) return
-  const lines = adaptServerCartToLines(cartData)
-  const basketId = pickBasketIdFromCart(cartData)
+  // Some endpoints return { data: {...} } wrapper, others return body directly.
+  const body = cartData?.data?.id ? cartData.data : cartData
+  const adapted = body?.lines
+    ? { id: body.id, lineItems: body.lines }
+    : body
+  const lines = adaptServerCartToLines(adapted)
+  const basketId = pickBasketIdFromCart(adapted)
   useCartStore.getState().setFromServer(basketId, lines)
-  // Refresh legacy SWR cache so non-migrated consumers see new data too.
-  // SWR keys here come from framework/local/cart/use-cart fetcher arguments.
-  try {
-    swrGlobalMutate(
-      (key: any) =>
-        Array.isArray(key) && typeof key[0] === 'string' && key[0].startsWith('baskets/'),
-      undefined,
-      { revalidate: true }
-    )
-  } catch {}
 }
 
 // =====================================================================

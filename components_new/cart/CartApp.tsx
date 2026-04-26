@@ -1,15 +1,19 @@
 'use client'
 
 import { useEffect, useMemo, useState } from 'react'
-import useCart from '@framework/cart/use-cart'
 import { useLocale, useExtracted } from 'next-intl'
 import { useRouter } from '../../i18n/navigation'
-import Hashids from 'hashids'
 import axios from 'axios'
 import Cookies from 'js-cookie'
 import defaultChannel from '@lib/defaultChannel'
 import currency from 'currency.js'
 import getAssetUrl from '@utils/getAssetUrl'
+import { useCartStore, cartSelectors } from '../../lib/stores/cart-store'
+import {
+  useUpdateCartQty,
+  useRemoveCartLine,
+} from '../../lib/hooks/useCartMutations'
+import { syncCartFromBasketResult } from '../../lib/data/cart-adapter'
 import { useUserStore } from '../../lib/stores/user-store'
 import { useLocationStore } from '../../lib/stores/location-store'
 import { useUIStore } from '../../lib/stores/ui-store'
@@ -23,12 +27,6 @@ const webAddress = process.env.NEXT_PUBLIC_API_URL
 axios.defaults.withCredentials = true
 
 const YELLOW = '#FAAF04'
-
-const hashids = new Hashids(
-  'basket',
-  15,
-  'abcdefghijklmnopqrstuvwxyz1234567890'
-)
 
 interface CartAppProps {
   products?: any[]
@@ -61,7 +59,34 @@ export default function CartApp(_props: CartAppProps) {
   const cartId =
     typeof window !== 'undefined' ? localStorage.getItem('basketId') : null
 
-  const { data, isEmpty, mutate } = useCart()
+  const cartLines = useCartStore(cartSelectors.lines)
+  const updateQty = useUpdateCartQty()
+  const removeLineMut = useRemoveCartLine()
+  const data: any = useMemo(
+    () => ({
+      lineItems: cartLines.map(
+        (l) =>
+          l._raw || {
+            id: l.id,
+            quantity: l.qty,
+            total: l.qty * l.price,
+            variant: {
+              id: l.variantId,
+              product_id: l.productId,
+              product: { id: l.productId, name: l.name, image: l.image },
+            },
+          }
+      ),
+      totalPrice: cartLines.reduce(
+        (acc, l) => acc + Number(l._raw?.total ?? l.qty * l.price),
+        0
+      ),
+      discountTotal: 0,
+      discountValue: 0,
+    }),
+    [cartLines]
+  )
+  const isEmpty = cartLines.length === 0
 
   const [isCartLoading, setIsCartLoading] = useState(false)
   const [loadingLineId, setLoadingLineId] = useState<string | null>(null)
@@ -112,75 +137,68 @@ export default function CartApp(_props: CartAppProps) {
   }
 
   const refetchBasket = async () => {
-    if (!cartId) {
-      await mutate()
-      return
-    }
+    if (!cartId) return
     const additionalQuery =
       locationData?.deliveryType === 'pickup' ? '?delivery_type=pickup' : ''
     const { data: basket } = await axios.get(
       `${webAddress}/api/baskets/${cartId}${additionalQuery}`
     )
-    await mutate(
-      {
-        id: basket.data.id,
-        createdAt: '',
-        currency: { code: basket.data.currency },
-        taxesIncluded: basket.data.tax_total,
-        lineItems: basket.data.lines,
-        lineItemsSubtotalPrice: basket.data.sub_total,
-        subtotalPrice: basket.data.sub_total,
-        totalPrice: basket.data.total,
-        discountTotal: basket.data.discount_total,
-        discountValue: basket.data.discount_value,
-      },
-      false
-    )
+    syncCartFromBasketResult({
+      id: basket.data.id,
+      createdAt: '',
+      currency: { code: basket.data.currency },
+      taxesIncluded: basket.data.tax_total,
+      lineItems: basket.data.lines,
+      lineItemsSubtotalPrice: basket.data.sub_total,
+      subtotalPrice: basket.data.sub_total,
+      totalPrice: basket.data.total,
+      discountTotal: basket.data.discount_total,
+      discountValue: basket.data.discount_value,
+    })
   }
 
   const destroyLine = async (lineId: string) => {
     setLoadingLineId(lineId)
     const itemBeingRemoved = data?.lineItems?.find((l: any) => l.id == lineId)
-    await setCredentials()
-    await axios.delete(
-      `${webAddress}/api/basket-lines/${hashids.encode(lineId)}`
-    )
-    await refetchBasket()
-    if (itemBeingRemoved) {
-      trackRemoveFromCart({
-        product_id: itemBeingRemoved?.variant?.product_id || lineId,
-        product_name: itemBeingRemoved?.variant?.name || '',
-        cart_total: (data?.totalPrice || 0) / 100,
-        cart_items_count: (data?.lineItems?.length || 0) - 1,
-      })
+    try {
+      await removeLineMut.mutateAsync({ lineId: Number(lineId) })
+      if (itemBeingRemoved) {
+        trackRemoveFromCart({
+          product_id: itemBeingRemoved?.variant?.product_id || lineId,
+          product_name: itemBeingRemoved?.variant?.name || '',
+          cart_total: (data?.totalPrice || 0) / 100,
+          cart_items_count: (data?.lineItems?.length || 0) - 1,
+        })
+      }
+    } finally {
+      setLoadingLineId(null)
     }
-    setLoadingLineId(null)
   }
 
   const decreaseQuantity = async (line: any) => {
-    if (line.quantity == 1) {
-      destroyLine(line.id)
-      return
-    }
     setLoadingLineId(line.id)
-    await setCredentials()
-    await axios.put(
-      `${webAddress}/api/v1/basket-lines/${hashids.encode(line.id)}/remove`,
-      { quantity: 1 }
-    )
-    await refetchBasket()
-    setLoadingLineId(null)
+    try {
+      await updateQty.mutateAsync({
+        lineId: Number(line.id),
+        delta: -1,
+        currentQty: Number(line.quantity || 0),
+      })
+    } finally {
+      setLoadingLineId(null)
+    }
   }
 
-  const increaseQuantity = async (lineId: string) => {
+  const increaseQuantity = async (lineId: string, currentQty: number) => {
     setLoadingLineId(lineId)
-    await setCredentials()
-    await axios.post(
-      `${webAddress}/api/v1/basket-lines/${hashids.encode(lineId)}/add`,
-      { quantity: 1 }
-    )
-    await refetchBasket()
-    setLoadingLineId(null)
+    try {
+      await updateQty.mutateAsync({
+        lineId: Number(lineId),
+        delta: 1,
+        currentQty: Number(currentQty || 0),
+      })
+    } finally {
+      setLoadingLineId(null)
+    }
   }
 
   const addToBasket = async (selectedProdId: number) => {
@@ -218,7 +236,7 @@ export default function CartApp(_props: CartAppProps) {
       )
       localStorage.setItem('basketId', basketData.data.encoded_id)
     }
-    await mutate()
+    await refetchBasket()
     setAddingItemId(null)
   }
 
@@ -275,7 +293,7 @@ export default function CartApp(_props: CartAppProps) {
     if (!cartId) return
     setIsCartLoading(true)
     await axios.get(`${webAddress}/api/baskets/${cartId}/clear`)
-    await mutate()
+    await refetchBasket()
     setIsCartLoading(false)
   }
 
@@ -441,7 +459,7 @@ export default function CartApp(_props: CartAppProps) {
         </span>
         <button
           type="button"
-          onClick={() => increaseQuantity(line.id)}
+          onClick={() => increaseQuantity(line.id, line.quantity)}
           disabled={isLineBusy}
           aria-label="inc"
           className="w-8 h-8 rounded-full bg-white flex items-center justify-center text-base font-bold disabled:opacity-60"

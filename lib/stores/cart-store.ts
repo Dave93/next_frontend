@@ -42,6 +42,15 @@ export type CartLine = {
   price: number
   image?: string
   modifiers?: CartLineModifier[]
+  /**
+   * Raw lineItem from the backend (kept verbatim) — needed by legacy
+   * UI in SmallCartApp / CartApp / OrdersApp / HeaderMiniCartApp which
+   * reads nested fields like variant.product.attribute_data.name[ch][locale],
+   * variant.product.assets, child[0].variant.product.assets etc.
+   * Trim aggressively in a future pass once those JSX blocks are
+   * rewritten to consume the slim shape directly.
+   */
+  _raw?: any
 }
 
 type CartState = {

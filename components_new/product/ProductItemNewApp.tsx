@@ -22,9 +22,10 @@ import { useExtracted, useLocale } from 'next-intl'
 import { useParams } from 'next/navigation'
 import axios from 'axios'
 import Cookies from 'js-cookie'
-import Hashids from 'hashids'
 import getAssetUrl from '@utils/getAssetUrl'
-import { useCart } from '@framework/cart'
+import { useCartStore, cartSelectors } from '../../lib/stores/cart-store'
+import { useUpdateCartQty } from '../../lib/hooks/useCartMutations'
+import { syncCartFromBasketResult } from '../../lib/data/cart-adapter'
 import { XIcon, CheckIcon } from '@heroicons/react/solid'
 import styles from './ProductItemNew.module.css'
 import { useLocationStore } from '../../lib/stores/location-store'
@@ -65,33 +66,28 @@ const ProductItemNewApp: FC<ProductItem> = ({ product, channelName }) => {
   const locationData = useLocationStore((s) => s.locationData) as any
   const stopProducts = useUIStore((s) => s.stopProducts)
   const openProductDrawer = useUIStore((s) => s.openProductDrawer)
-  const { data: cartData, mutate } = useCart()
+  const cartLines = useCartStore(cartSelectors.lines)
+  const updateQtyMutation = useUpdateCartQty()
+  // Backwards-compat shape for legacy lookup (item.variant?.id, .product?.id)
+  const cartData: any = useMemo(
+    () => ({
+      lineItems: cartLines.map(
+        (l) => l._raw || { id: l.id, quantity: l.qty, variant: { id: l.variantId, product: { id: l.productId, name: l.name, image: l.image } } }
+      ),
+    }),
+    [cartLines]
+  )
 
   const [addedToCart, setAddedToCart] = useState(false)
   const [imageLoaded, setImageLoaded] = useState(false)
 
-  const hashids = useMemo(
-    () => new Hashids('basket', 15, 'abcdefghijklmnopqrstuvwxyz1234567890'),
-    []
-  )
-
-
-  const changeCartQuantity = async (delta: number) => {
+  const changeCartQuantity = (delta: number) => {
     if (!cartLineItem) return
-    setIsLoadingBasket(true)
-    await setCredentials()
-    const lineIdEncoded = hashids.encode(cartLineItem.id)
-    if (delta > 0) {
-      await axios.post(`${webAddress}/api/v1/basket-lines/${lineIdEncoded}/add`, { quantity: 1 })
-    } else {
-      if (cartLineItem.quantity <= 1) {
-        await axios.delete(`${webAddress}/api/basket-lines/${lineIdEncoded}`)
-      } else {
-        await axios.put(`${webAddress}/api/v1/basket-lines/${lineIdEncoded}/remove`, { quantity: 1 })
-      }
-    }
-    await mutate()
-    setIsLoadingBasket(false)
+    updateQtyMutation.mutate({
+      lineId: Number(cartLineItem.id),
+      delta: delta > 0 ? 1 : -1,
+      currentQty: Number(cartLineItem.quantity || 0),
+    })
   }
   const [isChoosingModifier, setIsChoosingModifier] = useState(false)
   const [activeModifiers, setActiveModifiers] = useState([] as number[])
@@ -366,7 +362,7 @@ const ProductItemNewApp: FC<ProductItem> = ({ product, channelName }) => {
       }
     }
 
-    await mutate(basketResult, false)
+    syncCartFromBasketResult(basketResult)
     setIsLoadingBasket(false)
 
     // PostHog: add_to_cart
