@@ -111,6 +111,16 @@ function toSlimModifier(raw: any, locale: Locale): SlimModifier {
   }
 }
 
+function variantSizeLabel(raw: any, locale: Locale): string {
+  // Variant labels are the size: "25 см" / "30 см" / "40 см".
+  // Prefer the per-locale custom_name_* fields (which hold ONLY the size),
+  // not attribute_data.name (which on some products embeds the full pizza
+  // name like "ПЕППЕРОНИ 25 см" — that duplicates the product title).
+  if (locale === 'uz' && raw.custom_name_uz) return raw.custom_name_uz
+  if (locale === 'en' && raw.custom_name_en) return raw.custom_name_en
+  return raw.custom_name || raw.custom_name_uz || raw.custom_name_en || ''
+}
+
 function toSlimVariant(raw: any, locale: Locale): SlimVariant {
   const mods: SlimModifier[] = Array.isArray(raw.modifiers)
     ? raw.modifiers.map((m: any) => toSlimModifier(m, locale))
@@ -118,8 +128,8 @@ function toSlimVariant(raw: any, locale: Locale): SlimVariant {
   return {
     id: raw.id,
     name:
+      variantSizeLabel(raw, locale) ||
       pickLocalized(raw.attribute_data?.name, locale) ||
-      raw.custom_name ||
       '',
     description: localizedDescription(raw.attribute_data, locale),
     price: num(raw.price) || 0,
