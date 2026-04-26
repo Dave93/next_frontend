@@ -9,6 +9,7 @@ import type { PublicConfig } from '../../lib/data/configs'
 import HeaderApp from '../../components_new/HeaderApp'
 import FooterApp from '../../components_new/FooterApp'
 import SmallCartMobileApp from '../../components_new/common/SmallCartMobileApp'
+import CartHydrator from '../../components_new/common/CartHydrator'
 import MobileBottomNavApp from '../../components_new/mobile/MobileBottomNavApp'
 import SignInModalApp from '../../components_new/auth/SignInModalApp'
 import LocationTabsModalApp from '../../components_new/header/LocationTabsModalApp'
@@ -41,6 +42,7 @@ export default function LayoutWrapper({ children, pageProps }: Props) {
 
   return (
     <div className="flex flex-col min-h-screen">
+      <CartHydrator />
       <HeaderApp />
       <SmallCartMobileApp />
       <main className="flex-1 w-full md:container md:mx-auto px-3 md:px-0">
