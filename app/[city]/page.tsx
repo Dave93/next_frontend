@@ -2,9 +2,9 @@ import type { Metadata } from 'next'
 import { notFound } from 'next/navigation'
 import { getLocale } from 'next-intl/server'
 import { fetchSiteInfo } from '../../lib/data/site-info'
-import { getCityMenu } from '../../lib/data/products'
+import { fetchAllProducts } from '../../lib/data/products'
 import { fetchSliders } from '../../lib/data/sliders'
-import CityMainServer from '../../components_new/main/server/CityMainServer'
+import CityMainApp from '../../components_new/main/CityMainApp'
 import MenuJsonLd from '../../components_new/seo/MenuJsonLd'
 import { cityNameInLocative, getMetaLocale, tr } from '../../lib/seo/meta-i18n'
 import type { City } from '@commerce/types/cities'
@@ -52,22 +52,29 @@ export default async function CityHomePage({
   params: Promise<Params>
 }) {
   const { city: citySlug } = await params
-  const locale = await getLocale()
-
-  const [siteInfo, sliders, menu] = await Promise.all([
+  const [siteInfo, locale] = await Promise.all([
     fetchSiteInfo(),
-    fetchSliders(locale),
-    getCityMenu(citySlug, locale),
+    getLocale(),
   ])
-
   const cities = (siteInfo as any).cities as City[]
-  if (!cities.find((c) => c.slug === citySlug)) notFound()
+  const currentCity = cities.find((c) => c.slug === citySlug)
+  if (!currentCity) notFound()
+
+  const [products, sliders] = await Promise.all([
+    fetchAllProducts(citySlug),
+    fetchSliders(locale),
+  ])
 
   return (
     <>
-      <MenuJsonLd menu={menu} />
-      <CityMainServer
-        menu={menu}
+      <MenuJsonLd
+        citySlug={citySlug}
+        locale={locale}
+        categories={products as any[]}
+      />
+      <CityMainApp
+        products={products}
+        categories={(siteInfo as any).categories || []}
         sliders={sliders}
         channelName="chopar"
       />

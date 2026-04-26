@@ -360,15 +360,6 @@ msgstr "My addresses"
 msgid "xxMGAl"
 msgstr "Sign out"
 
-#: components_new/main/islands/ProductCardActions.tsx:97
-#: components_new/product/ProductItemNewApp.tsx:775
-msgid "kazY5+"
-msgstr "Item temporarily unavailable"
-
-#: components_new/main/islands/ProductCardActions.tsx:141
-msgid "6DyGho"
-msgstr ""
-
 #: components_new/mobile/MobileBottomNavApp.tsx:52
 msgid "XnLtsK"
 msgstr "Home"
@@ -428,6 +419,10 @@ msgstr "Add to cart"
 #: components_new/product/ProductItemNewApp.tsx:670
 msgid "zXkVd5"
 msgstr "Add"
+
+#: components_new/product/ProductItemNewApp.tsx:775
+msgid "kazY5+"
+msgstr "Item temporarily unavailable"
 
 #: components_new/product/ProductItemNewApp.tsx:1130
 msgid "AH6N5n"

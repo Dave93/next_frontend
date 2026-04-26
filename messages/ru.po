@@ -360,15 +360,6 @@ msgstr "Мои адреса"
 msgid "xxMGAl"
 msgstr "Выйти"
 
-#: components_new/main/islands/ProductCardActions.tsx:97
-#: components_new/product/ProductItemNewApp.tsx:775
-msgid "kazY5+"
-msgstr "Товар временно недоступен"
-
-#: components_new/main/islands/ProductCardActions.tsx:141
-msgid "6DyGho"
-msgstr "Ошибка"
-
 #: components_new/mobile/MobileBottomNavApp.tsx:52
 msgid "XnLtsK"
 msgstr "Главная"
@@ -428,6 +419,10 @@ msgstr "В корзину"
 #: components_new/product/ProductItemNewApp.tsx:670
 msgid "zXkVd5"
 msgstr "Добавить"
+
+#: components_new/product/ProductItemNewApp.tsx:775
+msgid "kazY5+"
+msgstr "Товар временно недоступен"
 
 #: components_new/product/ProductItemNewApp.tsx:1130
 msgid "AH6N5n"

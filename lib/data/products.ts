@@ -1,7 +1,6 @@
 import 'server-only'
 import { unstable_cache as cache } from 'next/cache'
 import commerce from '@lib/api/commerce'
-import { toSlimMenu, type SlimMenu } from './menu-dto'
 
 async function fetchAllProductsRaw(citySlug?: string) {
   const config: any = {
@@ -12,14 +11,6 @@ async function fetchAllProductsRaw(citySlug?: string) {
     config,
   } as any)
   return ((result as any)?.products as any[]) || []
-}
-
-async function getCityMenuRaw(
-  citySlug: string,
-  locale: string
-): Promise<SlimMenu> {
-  const raw = await fetchAllProductsRaw(citySlug)
-  return toSlimMenu(raw, citySlug, locale)
 }
 
 async function fetchProductByIdRaw(id: string, citySlug?: string) {
@@ -52,8 +43,3 @@ export const fetchProductById = cache(
     tags: ['products'],
   }
 )
-
-export const getCityMenu = cache(getCityMenuRaw, ['city-menu-v1'], {
-  revalidate: 3600,
-  tags: ['menu', 'products'],
-})
