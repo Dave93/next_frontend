@@ -1,7 +1,7 @@
 'use client'
 
 import { useEffect } from 'react'
-import { useUI } from '@components/ui/context'
+import { useLocationStore } from '../../lib/stores/location-store'
 import type { City } from '@commerce/types/cities'
 import type { APILinkItem } from '@commerce/types/headerMenu'
 import type { SocialIcons } from '@commerce/types/socialIcons'
@@ -29,7 +29,8 @@ type Props = {
 }
 
 export default function LayoutWrapper({ children, pageProps }: Props) {
-  const { setActiveCity, setCitiesData } = useUI()
+  const setActiveCity = useLocationStore((s) => s.setActiveCity)
+  const setCitiesData = useLocationStore((s) => s.setCities)
 
   useEffect(() => {
     if (pageProps.currentCity) {

@@ -3,8 +3,8 @@
 import { memo, FC, useEffect, useState } from 'react'
 import { Address } from '@commerce/types/address'
 import { XIcon, PencilIcon } from '@heroicons/react/solid'
-import { useUI } from '@components/ui/context'
 import { useLocationStore } from '../../lib/stores/location-store'
+import { useUIStore } from '../../lib/stores/ui-store'
 import Cookies from 'js-cookie'
 import axios from 'axios'
 import getAddressList from '@lib/load_addreses'
@@ -16,14 +16,12 @@ const AddressApp: FC = () => {
   const [errorMessage, setErrorMessage] = useState('')
 
   const addressList = useLocationStore((s) => s.addressList) as any
-  const {
-    setAddressId,
-    setLocationData,
-    setLocationTabsClosable,
-    openLocationTabs,
-    openMobileLocationTabs,
-    setAddressList,
-  } = useUI() as any
+  const setAddressId = useLocationStore((s) => s.setAddressId)
+  const setLocationData = useLocationStore((s) => s.setLocationData) as any
+  const setAddressList = useLocationStore((s) => s.setAddressList) as any
+  const setLocationTabsClosable = useUIStore((s) => s.setLocationModalClosable)
+  const openLocationTabs = useUIStore((s) => s.openLocationModal)
+  const openMobileLocationTabs = useUIStore((s) => s.openMobileLocationModal)
 
   const loadAddresses = async () => {
     const addresses = await getAddressList()
@@ -39,9 +37,9 @@ const AddressApp: FC = () => {
     setAddressId(null)
     setLocationTabsClosable(true)
     if (window.innerWidth < 768) {
-      openMobileLocationTabs(true)
+      openMobileLocationTabs()
     } else {
-      openLocationTabs(true)
+      openLocationTabs()
     }
     loadAddresses()
   }
@@ -54,9 +52,9 @@ const AddressApp: FC = () => {
     setAddressId(address.id)
     setLocationTabsClosable(true)
     if (window.innerWidth < 768) {
-      openMobileLocationTabs(true)
+      openMobileLocationTabs()
     } else {
-      openLocationTabs(true)
+      openLocationTabs()
     }
   }
 

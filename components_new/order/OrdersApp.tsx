@@ -3,7 +3,6 @@
 import { XIcon } from '@heroicons/react/outline'
 import getAssetUrl from '@utils/getAssetUrl'
 import { useForm, Controller } from 'react-hook-form'
-import { useUI } from '@components/ui/context'
 import { useUserStore } from '../../lib/stores/user-store'
 import { useLocationStore } from '../../lib/stores/location-store'
 import { useUIStore } from '../../lib/stores/ui-store'
@@ -216,26 +215,21 @@ const OrdersApp: FC<OrdersProps> = ({ channelName, isMobile = false }) => {
     }
     return text
   }
-  // Reads via Zustand selectors, writes via legacy reducer (dual-write
-  // mirrors back). selectAddress / setStopProducts have no Zustand
-  // equivalent yet — kept on legacy.
   const user = useUserStore((s) => s.user) as any
+  const setUserData = useUserStore((s) => s.setUserData)
   const locationData = useLocationStore((s) => s.locationData) as any
+  const setLocationData = useLocationStore((s) => s.setLocationData) as any
   const cities = useLocationStore((s) => s.cities) as any
   const activeCity = useLocationStore((s) => s.activeCity) as any
+  const setActiveCity = useLocationStore((s) => s.setActiveCity)
   const addressId = useLocationStore((s) => s.addressId)
+  const setAddressId = useLocationStore((s) => s.setAddressId)
   const addressList = useLocationStore((s) => s.addressList) as any
+  const setAddressList = useLocationStore((s) => s.setAddressList) as any
+  const selectAddress = useLocationStore((s) => s.selectAddress) as any
+  const stopProducts = useUIStore((s) => s.stopProducts)
+  const setStopProducts = useUIStore((s) => s.setStopProducts)
   const openSignInModal = useUIStore((s) => s.openSignInModal)
-  const {
-    stopProducts,
-    setUserData,
-    setLocationData,
-    setActiveCity,
-    setAddressId,
-    setAddressList,
-    selectAddress,
-    setStopProducts,
-  } = useUI() as any
   let cartId: string | null = null
   if (typeof window !== 'undefined') {
     cartId = localStorage.getItem('basketId')

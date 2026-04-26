@@ -8,7 +8,6 @@ import {
   MenuItems,
   Transition,
 } from '@headlessui/react'
-import { useUI } from '@components/ui'
 import { useLocationStore } from '../../lib/stores/location-store'
 import type { City } from '@commerce/types/cities'
 import Cookies from 'js-cookie'
@@ -22,7 +21,7 @@ const ChooseCityDropDownApp: FC = () => {
   const pathname = usePathname()
   const cities = useLocationStore((s) => s.cities)
   const activeCity = useLocationStore((s) => s.activeCity)
-  const { setActiveCity } = useUI() as any
+  const setActiveCity = useLocationStore((s) => s.setActiveCity)
 
   const chosenCity = useMemo(() => {
     if (activeCity) return activeCity

@@ -13,4 +13,4 @@ export { default as Input } from './Input'
 export { default as Collapse } from './Collapse'
 export { default as Quantity } from './Quantity'
 export { default as Rating } from './Rating'
-export { useUI } from './context'
+// useUI removed — migrated to lib/stores/{user,location,ui,cart}-store.ts

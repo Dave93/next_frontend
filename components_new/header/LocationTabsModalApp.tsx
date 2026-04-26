@@ -9,16 +9,13 @@ import {
   TransitionChild,
 } from '@headlessui/react'
 import { XIcon } from '@heroicons/react/outline'
-import { useUI } from '@components/ui/context'
 import { useUIStore } from '../../lib/stores/ui-store'
 import LocationPickerCore from './LocationPickerCore'
 
 const LocationTabsModalApp: FC = () => {
-  // Reads via Zustand, write through legacy reducer (dual-write mirrors back)
   const showLocationTabs = useUIStore((s) => s.locationModalOpen)
   const locationTabsInitialTab = useUIStore((s) => s.locationModalInitialTab)
-  const ui = useUI() as any
-  const { closeLocationTabs } = ui
+  const closeLocationTabs = useUIStore((s) => s.closeLocationModal)
 
   // Bump on every open so LocationPickerCore re-syncs its inner state
   // from the latest locationData / initialTab.

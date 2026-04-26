@@ -10,9 +10,35 @@
 
 import { create } from 'zustand'
 import { persist, createJSONStorage } from 'zustand/middleware'
+import Cookies from 'js-cookie'
 import type { City } from '@commerce/types/cities'
 
 const SCHEMA_VERSION = 1
+
+// Mirror legacy ManagedUIContext cookie side-effects so removing the
+// reducer doesn't break OrdersApp / CartApp which still read these
+// cookies (yetkazish, activeCity, city_slug) on mount.
+function persistYetkazish(value: any | null) {
+  if (typeof window === 'undefined') return
+  try {
+    if (value == null) return
+    const encoded = Buffer.from(JSON.stringify(value)).toString('base64')
+    const expiresIn30Min = new Date(new Date().getTime() + 30 * 60 * 1000)
+    Cookies.set('yetkazish', encoded, { expires: expiresIn30Min })
+  } catch {}
+}
+
+function persistActiveCityCookies(city: any | null) {
+  if (typeof window === 'undefined') return
+  try {
+    if (!city) return
+    const encoded = Buffer.from(JSON.stringify(city)).toString('base64')
+    Cookies.set('activeCity', encoded, { expires: 365 })
+    if (city?.slug) {
+      Cookies.set('city_slug', city.slug, { expires: 365 })
+    }
+  } catch {}
+}
 
 export type DeliveryType = 'deliver' | 'pickup'
 
@@ -59,6 +85,8 @@ type LocationActions = {
   patchLocationData: (patch: Partial<LocationData>) => void
   setAddressId: (id: number | null) => void
   setAddressList: (list: Address[]) => void
+  /** Combined setter — equivalent to legacy SELECT_ADDRESS reducer action. */
+  selectAddress: (value: { locationData: LocationData; addressId: number | null }) => void
   reset: () => void
   setHasHydrated: (v: boolean) => void
 }
@@ -80,15 +108,25 @@ export const useLocationStore = create<LocationStore>()(
     (set, get) => ({
       ...INITIAL,
 
-      setActiveCity: (city) => set({ activeCity: city }),
+      setActiveCity: (city) => {
+        persistActiveCityCookies(city)
+        set({ activeCity: city })
+      },
       setCities: (cities) => set({ cities }),
-      setLocationData: (data) => set({ locationData: data }),
+      setLocationData: (data) => {
+        persistYetkazish(data)
+        set({ locationData: data })
+      },
       patchLocationData: (patch) => {
         const cur = get().locationData
         set({ locationData: cur ? { ...cur, ...patch } : (patch as LocationData) })
       },
       setAddressId: (id) => set({ addressId: id }),
       setAddressList: (list) => set({ addressList: list }),
+      selectAddress: ({ locationData, addressId }) => {
+        persistYetkazish(locationData)
+        set({ locationData, addressId })
+      },
       reset: () =>
         set({
           locationData: null,

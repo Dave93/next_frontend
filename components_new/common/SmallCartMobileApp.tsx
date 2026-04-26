@@ -15,7 +15,6 @@ import axios from 'axios'
 import Cookies from 'js-cookie'
 import { useExtracted } from 'next-intl'
 import { useRouter } from '../../i18n/navigation'
-import { useUI } from '@components/ui/context'
 import { useUserStore } from '../../lib/stores/user-store'
 import { useLocationStore } from '../../lib/stores/location-store'
 import { useUIStore } from '../../lib/stores/ui-store'
@@ -76,7 +75,7 @@ const SmallCartMobile: FC = () => {
   const user = useUserStore((s) => s.user) as any
   const activeCity = useLocationStore((s) => s.activeCity) as any
   const openSignInModal = useUIStore((s) => s.openSignInModal)
-  const { setUserData } = useUI() as any
+  const setUserData = useUserStore((s) => s.setUserData)
 
   const otpTime = useRef(0)
 

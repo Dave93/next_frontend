@@ -9,18 +9,37 @@
 
 import { create } from 'zustand'
 import { persist, createJSONStorage } from 'zustand/middleware'
+import Cookies from 'js-cookie'
 
 const SCHEMA_VERSION = 1
 
+// Mirror legacy ManagedUIContext side effects so removal of the legacy
+// reducer doesn't break anything else that still reads `mijoz` from
+// localStorage or `opt_token` from cookies.
+function persistLegacyUserSideEffects(value: any | null) {
+  if (typeof window === 'undefined') return
+  try {
+    if (value == null) {
+      localStorage.removeItem('mijoz')
+      localStorage.removeItem('opt_token')
+      Cookies.remove('opt_token')
+      return
+    }
+    const encoded = Buffer.from(JSON.stringify(value)).toString('base64')
+    localStorage.setItem('mijoz', encoded)
+  } catch {}
+}
+
 export type User = {
-  id: number
+  // All fields optional — legacy UserData wrapper shape varies
+  // (top-level may be the wrapper { user_identity, user_token, user: {...} }
+  // or the inner user object).
+  id?: number
   name?: string
   phone?: string
   email?: string
   birth?: string | null
-  // Bonus / loyalty
   bonus?: number
-  // Other backend fields
   [key: string]: any
 }
 
@@ -32,6 +51,8 @@ type UserState = {
 
 type UserActions = {
   setUser: (user: User | null) => void
+  /** Legacy alias preserving the SET_USER_DATA cookie/localStorage side effects. */
+  setUserData: (user: User | null) => void
   patchUser: (patch: Partial<User>) => void
   logout: () => void
   setHasHydrated: (v: boolean) => void
@@ -52,13 +73,21 @@ export const useUserStore = create<UserStore>()(
 
       setUser: (user) => set({ user }),
 
+      setUserData: (user) => {
+        persistLegacyUserSideEffects(user)
+        set({ user })
+      },
+
       patchUser: (patch) => {
         const cur = get().user
         if (!cur) return
         set({ user: { ...cur, ...patch } })
       },
 
-      logout: () => set({ user: null }),
+      logout: () => {
+        persistLegacyUserSideEffects(null)
+        set({ user: null })
+      },
 
       setHasHydrated: (v) => set({ hasHydrated: v }),
     }),

@@ -15,20 +15,16 @@
 
 import { FC, useEffect, useMemo } from 'react'
 import { useCart } from '@framework/cart'
-import { useUI } from '@components/ui/context'
 import { useCartStore } from '../../lib/stores/cart-store'
+import { useLocationStore } from '../../lib/stores/location-store'
 import {
   adaptServerCartToLines,
   pickBasketIdFromCart,
 } from '../../lib/data/cart-adapter'
 
 const CartHydrator: FC = () => {
-  // Read basketId from store (synced from legacy storage by useCart input)
   const persistedBasketId = useCartStore((s) => s.basketId)
-  // locationData still lives in legacy ManagedUIContext — read from there
-  // until Wave 3.2's location store migration. CartHydrator only needs it
-  // so the legacy useCart() can append `?delivery_type=pickup` correctly.
-  const { locationData } = useUI() as any
+  const locationData = useLocationStore((s) => s.locationData)
 
   // Compute basketId for legacy useCart — prefer persisted (Zustand, from
   // localStorage on mount) and fall back to legacy localStorage `basketId`

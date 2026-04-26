@@ -25,14 +25,14 @@ msgid "I2djCx"
 msgstr "Неверный код"
 
 #: components_new/auth/SignInModalApp.tsx:252
-#: components_new/common/SmallCartMobileApp.tsx:309
+#: components_new/common/SmallCartMobileApp.tsx:308
 msgid "BgypuO"
 msgstr "Авторизация"
 
 #: components_new/auth/SignInModalApp.tsx:256
-#: components_new/common/SmallCartMobileApp.tsx:405
+#: components_new/common/SmallCartMobileApp.tsx:404
 #: components_new/contacts/ContactsApp.tsx:162
-#: components_new/profile/PersonalDataApp.tsx:132
+#: components_new/profile/PersonalDataApp.tsx:131
 msgid "ANbLXk"
 msgstr "Номер телефона"
 
@@ -42,7 +42,7 @@ msgstr "Код подтверждения"
 
 #: components_new/auth/SignInModalApp.tsx:351
 #: components_new/contacts/ContactsApp.tsx:137
-#: components_new/profile/PersonalDataApp.tsx:113
+#: components_new/profile/PersonalDataApp.tsx:112
 msgid "qXh0mH"
 msgstr "Имя"
 
@@ -51,7 +51,7 @@ msgid "3dXnzB"
 msgstr "Если сообщение не пришло, позвоните нам по номеру"
 
 #: components_new/auth/SignInModalApp.tsx:383
-#: components_new/common/SmallCartMobileApp.tsx:500
+#: components_new/common/SmallCartMobileApp.tsx:499
 msgid "K6f7aa"
 msgstr "Получить код"
 
@@ -61,8 +61,8 @@ msgstr "Код отправлен на номер"
 
 #: components_new/auth/SignInModalApp.tsx:429
 #: components_new/cart/CartApp.tsx:486
-#: components_new/common/SmallCartMobileApp.tsx:393
-#: components_new/header/SignInButtonApp.tsx:54
+#: components_new/common/SmallCartMobileApp.tsx:392
+#: components_new/header/SignInButtonApp.tsx:53
 msgid "oU4rxk"
 msgstr "Войти"
 
@@ -147,13 +147,13 @@ msgid "gXcQyF"
 msgstr "Скидка"
 
 #: components_new/cart/CartApp.tsx:795
-#: components_new/header/LocationPickerCore.tsx:349
+#: components_new/header/LocationPickerCore.tsx:347
 #: components_new/HeaderApp.tsx:135
 msgid "3qtFxi"
 msgstr "Доставка"
 
 #: components_new/cart/CartApp.tsx:798
-#: components_new/header/LocationPickerCore.tsx:360
+#: components_new/header/LocationPickerCore.tsx:358
 #: components_new/HeaderApp.tsx:149
 msgid "k9Dt2Z"
 msgstr "Самовывоз"
@@ -175,19 +175,19 @@ msgstr "Оформить заказ"
 msgid "J4PSYQ"
 msgstr "Обрабатывая ваши данные, вы соглашаетесь с нашими условиями использования"
 
-#: components_new/common/SmallCartMobileApp.tsx:318
+#: components_new/common/SmallCartMobileApp.tsx:317
 msgid "wue03V"
 msgstr "Вы успешно вошли в систему"
 
-#: components_new/common/SmallCartMobileApp.tsx:328
+#: components_new/common/SmallCartMobileApp.tsx:327
 msgid "eY7wBY"
 msgstr "СМС код"
 
-#: components_new/common/SmallCartMobileApp.tsx:357
+#: components_new/common/SmallCartMobileApp.tsx:356
 msgid "14dq0g"
 msgstr "Получить код снова"
 
-#: components_new/common/SmallCartMobileApp.tsx:449
+#: components_new/common/SmallCartMobileApp.tsx:448
 msgid "x1g9gC"
 msgstr "Ваше имя"
 
@@ -220,7 +220,7 @@ msgid "oqiCOV"
 msgstr "Обязательное поле"
 
 #: components_new/contacts/ContactsApp.tsx:200
-#: components_new/profile/PersonalDataApp.tsx:143
+#: components_new/profile/PersonalDataApp.tsx:142
 msgid "a+WBaz"
 msgstr "Эл. почта"
 
@@ -262,7 +262,7 @@ msgstr "Подписывайтесь на нас:"
 msgid "J76yQ6"
 msgstr "Все права защищены"
 
-#: components_new/header/ChooseCityDropDownApp.tsx:74
+#: components_new/header/ChooseCityDropDownApp.tsx:73
 msgid "6QS/OL"
 msgstr "Ваш город"
 
@@ -270,58 +270,58 @@ msgstr "Ваш город"
 msgid "2wkbQf"
 msgstr "Стоимость заказа"
 
-#: components_new/header/LocationPickerCore.tsx:390
+#: components_new/header/LocationPickerCore.tsx:388
 #: components_new/HeaderApp.tsx:51
 msgid "EiCEoo"
 msgstr "Укажите свой адрес"
 
-#: components_new/header/LocationPickerCore.tsx:448
+#: components_new/header/LocationPickerCore.tsx:446
 msgid "qnmGg/"
 msgstr "Адрес:"
 
-#: components_new/header/LocationPickerCore.tsx:465
+#: components_new/header/LocationPickerCore.tsx:463
 msgid "x1MUPc"
 msgstr "Адрес"
 
-#: components_new/header/LocationPickerCore.tsx:514
+#: components_new/header/LocationPickerCore.tsx:512
 msgid "2lYwXC"
 msgstr "Дом"
 
-#: components_new/header/LocationPickerCore.tsx:529
+#: components_new/header/LocationPickerCore.tsx:527
 msgid "PE9WEy"
 msgstr "Квартира"
 
-#: components_new/header/LocationPickerCore.tsx:548
+#: components_new/header/LocationPickerCore.tsx:546
 msgid "bIzegt"
 msgstr "Указать подъезд и домофон"
 
-#: components_new/header/LocationPickerCore.tsx:578
+#: components_new/header/LocationPickerCore.tsx:576
 msgid "DtOC+U"
 msgstr "Подъезд"
 
-#: components_new/header/LocationPickerCore.tsx:593
+#: components_new/header/LocationPickerCore.tsx:591
 msgid "KIMRoB"
 msgstr "Код от домофона"
 
-#: components_new/header/LocationPickerCore.tsx:608
+#: components_new/header/LocationPickerCore.tsx:606
 msgid "2ifljK"
 msgstr "Название адреса. Например, Дом Работа..."
 
-#: components_new/header/LocationPickerCore.tsx:658
+#: components_new/header/LocationPickerCore.tsx:656
 msgid "f/Ues8"
 msgstr "Ближайший ресторан"
 
-#: components_new/header/LocationPickerCore.tsx:699
+#: components_new/header/LocationPickerCore.tsx:697
 msgid "NUZRDC"
 msgstr "Выберите пиццерию:"
 
-#: components_new/header/LocationPickerCore.tsx:714
+#: components_new/header/LocationPickerCore.tsx:712
 #: components_new/product/ProductDetailApp.tsx:274
-#: components_new/product/ProductDrawerApp.tsx:228
+#: components_new/product/ProductDrawerApp.tsx:225
 msgid "+RxnK3"
 msgstr "Загрузка..."
 
-#: components_new/header/LocationPickerCore.tsx:815
+#: components_new/header/LocationPickerCore.tsx:813
 msgid "XzVpjf"
 msgstr "Подтвердить"
 
@@ -340,23 +340,23 @@ msgstr "Акции"
 msgid "gaIt7P"
 msgstr "Конфиденциальность"
 
-#: components_new/header/SignInButtonApp.tsx:61
+#: components_new/header/SignInButtonApp.tsx:60
 msgid "zPUJp6"
 msgstr "Личный кабинет"
 
-#: components_new/header/SignInButtonApp.tsx:80
+#: components_new/header/SignInButtonApp.tsx:79
 #: components_new/profile/OrdersApp.tsx:165
-#: components_new/profile/UserDataApp.tsx:24
+#: components_new/profile/UserDataApp.tsx:22
 msgid "QZLNHg"
 msgstr "Мои заказы"
 
-#: components_new/header/SignInButtonApp.tsx:101
-#: components_new/profile/UserDataApp.tsx:25
+#: components_new/header/SignInButtonApp.tsx:100
+#: components_new/profile/UserDataApp.tsx:23
 msgid "mRPbIA"
 msgstr "Мои адреса"
 
-#: components_new/header/SignInButtonApp.tsx:224
-#: components_new/profile/UserDataApp.tsx:27
+#: components_new/header/SignInButtonApp.tsx:223
+#: components_new/profile/UserDataApp.tsx:25
 msgid "xxMGAl"
 msgstr "Выйти"
 
@@ -404,52 +404,52 @@ msgid "WRnc7y"
 msgstr "Собрать пиццу"
 
 #: components_new/product/ProductDetailApp.tsx:148
-#: components_new/product/ProductDrawerApp.tsx:153
+#: components_new/product/ProductDrawerApp.tsx:150
 msgid "F6q7sS"
 msgstr "Добавить в пиццу"
 
 #: components_new/product/ProductDetailApp.tsx:274
-#: components_new/product/ProductDrawerApp.tsx:228
-#: components_new/product/ProductItemNewApp.tsx:966
-#: components_new/product/ProductItemNewApp.tsx:1216
+#: components_new/product/ProductDrawerApp.tsx:225
+#: components_new/product/ProductItemNewApp.tsx:967
+#: components_new/product/ProductItemNewApp.tsx:1217
 msgid "JwQa2e"
 msgstr "В корзину"
 
-#: components_new/product/ProductItemNewApp.tsx:621
-#: components_new/product/ProductItemNewApp.tsx:672
+#: components_new/product/ProductItemNewApp.tsx:622
+#: components_new/product/ProductItemNewApp.tsx:673
 msgid "zXkVd5"
 msgstr "Добавить"
 
-#: components_new/product/ProductItemNewApp.tsx:777
+#: components_new/product/ProductItemNewApp.tsx:778
 msgid "kazY5+"
 msgstr "Товар временно недоступен"
 
-#: components_new/product/ProductItemNewApp.tsx:1132
+#: components_new/product/ProductItemNewApp.tsx:1133
 msgid "AH6N5n"
 msgstr "Добавить к пицце"
 
-#: components_new/profile/PersonalDataApp.tsx:110
-#: components_new/profile/UserDataApp.tsx:26
+#: components_new/profile/PersonalDataApp.tsx:109
+#: components_new/profile/UserDataApp.tsx:24
 msgid "SwgaFe"
 msgstr "Личные данные"
 
-#: components_new/profile/PersonalDataApp.tsx:163
+#: components_new/profile/PersonalDataApp.tsx:162
 msgid "9jmoPv"
 msgstr "День рождения"
 
-#: components_new/profile/PersonalDataApp.tsx:181
+#: components_new/profile/PersonalDataApp.tsx:180
 msgid "SMzCPW"
 msgstr "Сохранить"
 
-#: components_new/profile/UserDataApp.tsx:28
+#: components_new/profile/UserDataApp.tsx:26
 msgid "x81v8p"
 msgstr "Бонусы"
 
-#: components_new/profile/UserDataApp.tsx:49
+#: components_new/profile/UserDataApp.tsx:47
 msgid "AqaPc0"
 msgstr "Приветствуем Вас"
 
-#: components_new/profile/UserDataApp.tsx:52
+#: components_new/profile/UserDataApp.tsx:50
 msgid "4bFAiB"
 msgstr "Это ваш личный кабинет. Здесь вы можете управлять своими заказами, редактировать личные данные и следить за избранными товарами"
 

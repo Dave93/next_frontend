@@ -27,8 +27,8 @@ import getAssetUrl from '@utils/getAssetUrl'
 import { useCart } from '@framework/cart'
 import { XIcon, CheckIcon } from '@heroicons/react/solid'
 import styles from './ProductItemNew.module.css'
-import { useUI } from '@components/ui/context'
 import { useLocationStore } from '../../lib/stores/location-store'
+import { useUIStore } from '../../lib/stores/ui-store'
 import { DateTime } from 'luxon'
 import { toast } from 'sonner'
 import { trackAddToCart } from '@lib/posthog-events'
@@ -63,7 +63,8 @@ const ProductItemNewApp: FC<ProductItem> = ({ product, channelName }) => {
   })
   const [isLoadingBasket, setIsLoadingBasket] = useState(false)
   const locationData = useLocationStore((s) => s.locationData) as any
-  const { stopProducts, openProductDrawer } = useUI() as any
+  const stopProducts = useUIStore((s) => s.stopProducts)
+  const openProductDrawer = useUIStore((s) => s.openProductDrawer)
   const { data: cartData, mutate } = useCart()
 
   const [addedToCart, setAddedToCart] = useState(false)

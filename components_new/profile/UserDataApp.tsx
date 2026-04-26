@@ -2,7 +2,6 @@
 
 import { FC, memo } from 'react'
 import menuItems from '@commerce/data/profileMenu'
-import { useUI } from '@components/ui/context'
 import { useUserStore } from '../../lib/stores/user-store'
 import { useLocationStore } from '../../lib/stores/location-store'
 import { Link } from '../../i18n/navigation'
@@ -15,10 +14,9 @@ const UserDataApp: FC = () => {
   const router = useRouter()
   const t = useExtracted()
 
-  // Reads via Zustand, writes still via legacy useUI (dual-write keeps stores in sync).
   const user = useUserStore((s) => s.user) as any
   const activeCity = useLocationStore((s) => s.activeCity)
-  const { setUserData } = useUI() as any
+  const setUserData = useUserStore((s) => s.setUserData)
 
   const langMap: Record<string, string> = {
     profile_orders: t('Мои заказы'),
