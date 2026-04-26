@@ -53,9 +53,12 @@ async function fetchBasket(
     })
     return {
       id: basket.id,
-      // Preserve encoded_id so adaptServerCartToLines + pickBasketIdFromCart
-      // surface the hashid (Laravel write endpoints reject decoded numeric).
-      encoded_id: basket.encoded_id,
+      // GET /api/baskets/{encoded} response body OMITS encoded_id (only POST
+      // endpoints include it). Backfill it from the basketId we just used to
+      // make the request so pickBasketIdFromCart doesn't fall through to the
+      // decoded numeric basket.id and overwrite the store with a value the
+      // write endpoints will reject.
+      encoded_id: basket.encoded_id || basketId,
       lineItems: basket.lines || basket.lineItems || [],
       subtotalPrice: basket.sub_total ?? basket.subtotalPrice ?? 0,
       totalPrice: basket.total ?? basket.totalPrice ?? 0,
