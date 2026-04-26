@@ -305,7 +305,7 @@ const SmallCartApp: FC<SmallCartProps> = ({ channelName }) => {
                           </div>
                         )}
                         <div className="font-bold text-xs">
-                          {lineItem.child || lineItem.child.length > 1
+                          {lineItem.child && lineItem.child.length > 1
                             ? `${
                                 lineItem?.variant?.product?.attribute_data
                                   ?.name[channelName][locale || 'ru']
