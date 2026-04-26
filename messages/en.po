@@ -60,7 +60,7 @@ msgid "AYsWBj"
 msgstr "Code sent to number"
 
 #: components_new/auth/SignInModalApp.tsx:429
-#: components_new/cart/CartApp.tsx:504
+#: components_new/cart/CartApp.tsx:507
 #: components_new/common/SmallCartMobileApp.tsx:382
 #: components_new/header/SignInButtonApp.tsx:53
 msgid "oU4rxk"
@@ -74,104 +74,104 @@ msgstr "Resend code in"
 msgid "hPZJnP"
 msgstr "Resend code"
 
-#: components_new/cart/CartApp.tsx:494
+#: components_new/cart/CartApp.tsx:497
 msgid "dW/7Kf"
 msgstr "Sign in to your account"
 
-#: components_new/cart/CartApp.tsx:497
+#: components_new/cart/CartApp.tsx:500
 msgid "uhOXf0"
 msgstr "Please sign in to place an order"
 
-#: components_new/cart/CartApp.tsx:523
+#: components_new/cart/CartApp.tsx:526
 #: components_new/common/SmallCartApp.tsx:215
 #: components_new/header/HeaderMiniCartApp.tsx:208
 msgid "Lj6qSg"
 msgstr "Cart is empty"
 
-#: components_new/cart/CartApp.tsx:525
+#: components_new/cart/CartApp.tsx:528
 #: components_new/common/SmallCartApp.tsx:216
 #: components_new/header/HeaderMiniCartApp.tsx:211
 msgid "V5Ibqh"
 msgstr "Choose a pizza"
 
-#: components_new/cart/CartApp.tsx:531
-#: components_new/cart/CartApp.tsx:875
+#: components_new/cart/CartApp.tsx:534
+#: components_new/cart/CartApp.tsx:878
 msgid "595aPR"
 msgstr "Back to menu"
 
-#: components_new/cart/CartApp.tsx:567
+#: components_new/cart/CartApp.tsx:570
 msgid "xXuBfJ"
 msgstr "We are closed right now"
 
-#: components_new/cart/CartApp.tsx:570
+#: components_new/cart/CartApp.tsx:573
 msgid "5i7QXD"
 msgstr "You can place an order during business hours. Your cart will be saved."
 
-#: components_new/cart/CartApp.tsx:575
+#: components_new/cart/CartApp.tsx:578
 msgid "1nDsuM"
 msgstr "Business hours"
 
-#: components_new/cart/CartApp.tsx:589
+#: components_new/cart/CartApp.tsx:592
 #: components_new/common/SmallCartApp.tsx:197
 #: components_new/header/HeaderMiniCartApp.tsx:176
 #: components_new/mobile/MobileBottomNavApp.tsx:64
 msgid "Ukms9b"
 msgstr "Cart"
 
-#: components_new/cart/CartApp.tsx:619
+#: components_new/cart/CartApp.tsx:622
 msgid "npyYek"
 msgstr "Clear"
 
-#: components_new/cart/CartApp.tsx:670
+#: components_new/cart/CartApp.tsx:673
 msgid "6CPoX6"
 msgstr "Bonus"
 
-#: components_new/cart/CartApp.tsx:678
+#: components_new/cart/CartApp.tsx:681
 msgid "QZlQya"
 msgstr "Promo"
 
-#: components_new/cart/CartApp.tsx:748
+#: components_new/cart/CartApp.tsx:751
 msgid "mHUlgT"
 msgstr "You may also like"
 
-#: components_new/cart/CartApp.tsx:793
+#: components_new/cart/CartApp.tsx:796
 msgid "G5xn1F"
 msgstr "Your order"
 
-#: components_new/cart/CartApp.tsx:798
+#: components_new/cart/CartApp.tsx:801
 msgid "f0SWKw"
 msgstr "Items"
 
-#: components_new/cart/CartApp.tsx:806
+#: components_new/cart/CartApp.tsx:809
 msgid "gXcQyF"
 msgstr "Discount"
 
-#: components_new/cart/CartApp.tsx:813
+#: components_new/cart/CartApp.tsx:816
 #: components_new/header/LocationPickerCore.tsx:347
 #: components_new/HeaderApp.tsx:135
 msgid "3qtFxi"
 msgstr "Delivery"
 
-#: components_new/cart/CartApp.tsx:816
+#: components_new/cart/CartApp.tsx:819
 #: components_new/header/LocationPickerCore.tsx:358
 #: components_new/HeaderApp.tsx:149
 msgid "k9Dt2Z"
 msgstr "Pickup"
 
-#: components_new/cart/CartApp.tsx:817
+#: components_new/cart/CartApp.tsx:820
 msgid "WIL1SZ"
 msgstr "Calculated at checkout"
 
-#: components_new/cart/CartApp.tsx:823
+#: components_new/cart/CartApp.tsx:826
 msgid "x5G3yc"
 msgstr "Total"
 
-#: components_new/cart/CartApp.tsx:837
+#: components_new/cart/CartApp.tsx:840
 #: components_new/header/HeaderMiniCartApp.tsx:316
 msgid "+urzAu"
 msgstr "Place order"
 
-#: components_new/cart/CartApp.tsx:879
+#: components_new/cart/CartApp.tsx:882
 msgid "J4PSYQ"
 msgstr "By submitting your data, you agree to our terms of use"
 
@@ -393,13 +393,13 @@ msgstr "News"
 msgid "aP09v9"
 msgstr "No news yet"
 
-#: components_new/product/CreateYourPizzaApp.tsx:545
-#: components_new/product/CreateYourPizzaMobileApp.tsx:533
+#: components_new/product/CreateYourPizzaApp.tsx:485
+#: components_new/product/CreateYourPizzaMobileApp.tsx:471
 msgid "FVZBEe"
 msgstr "Build your pizza"
 
-#: components_new/product/CreateYourPizzaApp.tsx:559
-#: components_new/product/CreateYourPizzaMobileApp.tsx:540
+#: components_new/product/CreateYourPizzaApp.tsx:499
+#: components_new/product/CreateYourPizzaMobileApp.tsx:478
 msgid "WRnc7y"
 msgstr "Build pizza"
 
@@ -410,21 +410,21 @@ msgstr ""
 
 #: components_new/product/ProductDetailApp.tsx:274
 #: components_new/product/ProductDrawerApp.tsx:225
-#: components_new/product/ProductItemNewApp.tsx:963
-#: components_new/product/ProductItemNewApp.tsx:1213
+#: components_new/product/ProductItemNewApp.tsx:908
+#: components_new/product/ProductItemNewApp.tsx:1158
 msgid "JwQa2e"
 msgstr "Add to cart"
 
-#: components_new/product/ProductItemNewApp.tsx:618
-#: components_new/product/ProductItemNewApp.tsx:669
+#: components_new/product/ProductItemNewApp.tsx:563
+#: components_new/product/ProductItemNewApp.tsx:614
 msgid "zXkVd5"
 msgstr "Add"
 
-#: components_new/product/ProductItemNewApp.tsx:774
+#: components_new/product/ProductItemNewApp.tsx:719
 msgid "kazY5+"
 msgstr "Item temporarily unavailable"
 
-#: components_new/product/ProductItemNewApp.tsx:1129
+#: components_new/product/ProductItemNewApp.tsx:1074
 msgid "AH6N5n"
 msgstr "Add to pizza"
 

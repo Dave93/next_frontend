@@ -9,10 +9,8 @@ import {
 import { CheckIcon, XIcon } from '@heroicons/react/outline'
 import { useLocale } from 'next-intl'
 import { useLocationStore } from '../../lib/stores/location-store'
-import axios from 'axios'
 import Image from 'next/image'
-import Cookies from 'js-cookie'
-import { syncCartFromBasketResult } from '../../lib/data/cart-adapter'
+import { useAddToCart } from '../../lib/hooks/useCartMutations'
 import { Product } from '@commerce/types/product'
 
 type ThreePizzaProps = {
@@ -20,16 +18,14 @@ type ThreePizzaProps = {
   channelName: string
   isSmall?: boolean
 }
-let webAddress = process.env.NEXT_PUBLIC_API_URL
-axios.defaults.withCredentials = true
-
 const ThreePizza: FC<ThreePizzaProps> = ({ items, channelName }) => {
   let [isOpen, setIsOpen] = useState(false)
   let completeButtonRef = useRef(null)
   const locale = useLocale()
   const locationData = useLocationStore((s) => s.locationData) as any
   const [selected, setSelected] = useState([] as number[])
-  const [isLoadingBasket, setIsLoadingBasket] = useState(false)
+  const addMutation = useAddToCart()
+  const isLoadingBasket = addMutation.isPending
 
   const selectProduct = (id: number) => {
     if (selected.includes(id)) {
@@ -43,115 +39,57 @@ const ThreePizza: FC<ThreePizzaProps> = ({ items, channelName }) => {
     }
   }
 
-  const setCredentials = async () => {
-    let csrf = Cookies.get('X-XSRF-TOKEN')
-    if (!csrf) {
-      const csrfReq = await axios(`${webAddress}/api/keldi`, {
-        method: 'GET',
-        headers: {
-          'Content-Type': 'application/json',
-          crossDomain: true,
-        },
-        withCredentials: true,
-      })
-      let { data: res } = csrfReq
-      csrf = Buffer.from(res.result, 'base64').toString('ascii')
-
-      var inTenMinutes = new Date(new Date().getTime() + 10 * 60 * 1000)
-      Cookies.set('X-XSRF-TOKEN', csrf, {
-        expires: inTenMinutes,
-      })
-    }
-    axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest'
-    axios.defaults.headers.common['X-CSRF-TOKEN'] = csrf
-    axios.defaults.headers.common['XCSRF-TOKEN'] = csrf
-  }
-
-  const addToBasket = async () => {
+  const addToBasket = () => {
     if (selected.length < 3) {
       return
     }
-    setIsLoadingBasket(true)
-    await setCredentials()
 
-    let basketId = localStorage.getItem('basketId')
-    const otpToken = Cookies.get('opt_token')
+    const headProduct: any = items.find((i: any) => i.id === selected[0])
+    const childProducts: any[] = [selected[1], selected[2]]
+      .map((id) => items.find((i: any) => i.id === id))
+      .filter(Boolean)
+    const basePrice = Number(headProduct?.price ?? 0)
+    const optimisticId = -Date.now()
+    const productName =
+      headProduct?.attribute_data?.name?.[channelName]?.[locale || 'ru'] ||
+      headProduct?.name ||
+      ''
 
-    let basketResult = {}
-
-    if (basketId) {
-      const { data: basketData } = await axios.post(
-        `${webAddress}/api/baskets-lines`,
+    addMutation.mutate({
+      variants: [
         {
-          basket_id: basketId,
-          variants: [
-            {
-              id: selected[0],
-              quantity: 1,
-              modifiers: null,
-              three: [selected[1], selected[2]],
-            },
-          ],
+          id: selected[0],
+          quantity: 1,
+          modifiers: null,
+          three: [selected[1], selected[2]],
         },
-        {
-          headers: {
-            'Content-Type': 'application/json',
-            Authorization: `Bearer ${otpToken}`,
+      ],
+      deliveryType: locationData?.deliveryType,
+      optimisticLine: {
+        id: optimisticId,
+        productId: Number(headProduct?.id ?? selected[0]),
+        variantId: Number(selected[0]),
+        name: productName,
+        qty: 1,
+        price: basePrice,
+        image: headProduct?.image,
+        _raw: {
+          id: optimisticId,
+          quantity: 1,
+          total: basePrice,
+          variant: {
+            id: selected[0],
+            product_id: Number(headProduct?.id ?? selected[0]),
+            product: headProduct,
           },
-          withCredentials: true,
-        }
-      )
-      basketResult = {
-        id: basketData.data.id,
-        createdAt: '',
-        currency: { code: basketData.data.currency },
-        taxesIncluded: basketData.data.tax_total,
-        lineItems: basketData.data.lines,
-        lineItemsSubtotalPrice: basketData.data.sub_total,
-        subtotalPrice: basketData.data.sub_total,
-        totalPrice: basketData.data.total,
-      }
-    } else {
-      let additionalQuery = ''
-      if (locationData && locationData.deliveryType == 'pickup') {
-        additionalQuery = `?delivery_type=pickup`
-      }
-      const { data: basketData } = await axios.post(
-        `${webAddress}/api/baskets${additionalQuery}`,
-        {
-          variants: [
-            {
-              id: selected[0],
-              quantity: 1,
-              modifiers: null,
-              three: [selected[1], selected[2]],
-            },
-          ],
+          child: childProducts.map((p) => ({
+            variant: { id: p.id, product: p, product_id: p.id },
+          })),
         },
-        {
-          headers: {
-            'Content-Type': 'application/json',
-            Authorization: `Bearer ${otpToken}`,
-          },
-          withCredentials: true,
-        }
-      )
-      localStorage.setItem('basketId', basketData.data.encoded_id)
-      basketResult = {
-        id: basketData.data.id,
-        createdAt: '',
-        currency: { code: basketData.data.currency },
-        taxesIncluded: basketData.data.tax_total,
-        lineItems: basketData.data.lines,
-        lineItemsSubtotalPrice: basketData.data.sub_total,
-        subtotalPrice: basketData.data.sub_total,
-        totalPrice: basketData.data.total,
-      }
-    }
+      },
+    })
 
-    syncCartFromBasketResult(basketResult)
     setIsOpen(false)
-    setIsLoadingBasket(false)
   }
 
   return (

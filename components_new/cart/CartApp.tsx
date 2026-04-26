@@ -4,12 +4,12 @@ import { useEffect, useMemo, useState } from 'react'
 import { useLocale, useExtracted } from 'next-intl'
 import { useRouter } from '../../i18n/navigation'
 import axios from 'axios'
-import Cookies from 'js-cookie'
 import defaultChannel from '@lib/defaultChannel'
 import currency from 'currency.js'
 import getAssetUrl from '@utils/getAssetUrl'
 import { useCartStore, cartSelectors } from '../../lib/stores/cart-store'
 import {
+  useAddToCart,
   useUpdateCartQty,
   useRemoveCartLine,
 } from '../../lib/hooks/useCartMutations'
@@ -62,6 +62,7 @@ export default function CartApp(_props: CartAppProps) {
   const cartLines = useCartStore(cartSelectors.lines)
   const updateQty = useUpdateCartQty()
   const removeLineMut = useRemoveCartLine()
+  const addMutation = useAddToCart()
   const data: any = useMemo(
     () => ({
       lineItems: cartLines.map(
@@ -116,24 +117,6 @@ export default function CartApp(_props: CartAppProps) {
       cfg = JSON.parse(cfg)
       setConfigData(cfg)
     } catch (e) {}
-  }
-
-  const setCredentials = async () => {
-    let csrf = Cookies.get('X-XSRF-TOKEN')
-    if (!csrf) {
-      const csrfReq = await axios(`${webAddress}/api/keldi`, {
-        method: 'GET',
-        headers: { 'Content-Type': 'application/json' },
-        withCredentials: true,
-      })
-      csrf = Buffer.from(csrfReq.data.result, 'base64').toString('ascii')
-      Cookies.set('X-XSRF-TOKEN', csrf, {
-        expires: new Date(Date.now() + 10 * 60 * 1000),
-      })
-    }
-    axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest'
-    axios.defaults.headers.common['X-CSRF-TOKEN'] = csrf
-    axios.defaults.headers.common['XCSRF-TOKEN'] = csrf
   }
 
   const refetchBasket = async () => {
@@ -202,42 +185,55 @@ export default function CartApp(_props: CartAppProps) {
   }
 
   const addToBasket = async (selectedProdId: number) => {
+    const recItem: any =
+      biRecommendations?.relatedItems?.find(
+        (i: any) => Number(i.id) === Number(selectedProdId)
+      ) ||
+      biRecommendations?.topItems?.find(
+        (i: any) => Number(i.id) === Number(selectedProdId)
+      )
+    const optimisticId = -Date.now()
+    const productName =
+      recItem?.attribute_data?.name?.[channelName]?.[locale] ||
+      recItem?.name ||
+      ''
+    const basePrice = Number(recItem?.price ?? 0)
+
     setAddingItemId(selectedProdId)
-    await setCredentials()
-    const basketId = localStorage.getItem('basketId')
-    const otpToken = Cookies.get('opt_token')
-    const additionalQuery =
-      locationData?.deliveryType === 'pickup' ? '?delivery_type=pickup' : ''
-    const headers = {
-      'Content-Type': 'application/json',
-      Authorization: `Bearer ${otpToken}`,
-    }
-    const payload = {
-      variants: [
-        {
-          id: selectedProdId,
-          quantity: 1,
-          modifiers: null,
-          additionalSale: true,
+    try {
+      await addMutation.mutateAsync({
+        variants: [
+          {
+            id: selectedProdId,
+            quantity: 1,
+            modifiers: null,
+            additionalSale: true,
+          },
+        ],
+        deliveryType: locationData?.deliveryType,
+        optimisticLine: {
+          id: optimisticId,
+          productId: Number(recItem?.id ?? selectedProdId),
+          variantId: Number(selectedProdId),
+          name: productName,
+          qty: 1,
+          price: basePrice,
+          image: recItem?.image,
+          _raw: {
+            id: optimisticId,
+            quantity: 1,
+            total: basePrice,
+            variant: {
+              id: selectedProdId,
+              product_id: Number(recItem?.id ?? selectedProdId),
+              product: recItem,
+            },
+          },
         },
-      ],
+      })
+    } finally {
+      setAddingItemId(null)
     }
-    if (basketId) {
-      await axios.post(
-        `${webAddress}/api/baskets-lines${additionalQuery}`,
-        { basket_id: basketId, ...payload },
-        { headers, withCredentials: true }
-      )
-    } else {
-      const { data: basketData } = await axios.post(
-        `${webAddress}/api/baskets${additionalQuery}`,
-        payload,
-        { headers, withCredentials: true }
-      )
-      localStorage.setItem('basketId', basketData.data.encoded_id)
-    }
-    await refetchBasket()
-    setAddingItemId(null)
   }
 
   const objectToQueryString = (initialObj: Object) => {
@@ -292,9 +288,16 @@ export default function CartApp(_props: CartAppProps) {
   const clearBasket = async () => {
     if (!cartId) return
     setIsCartLoading(true)
-    await axios.get(`${webAddress}/api/baskets/${cartId}/clear`)
-    await refetchBasket()
-    setIsCartLoading(false)
+    const snapshot = useCartStore.getState().lines
+    useCartStore.getState().setFromServer(useCartStore.getState().basketId, [])
+    try {
+      await axios.get(`${webAddress}/api/baskets/${cartId}/clear`)
+      await refetchBasket()
+    } catch (e) {
+      useCartStore.getState().rollback(snapshot)
+    } finally {
+      setIsCartLoading(false)
+    }
   }
 
   const readonlyItems = useMemo(() => {

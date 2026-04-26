@@ -12,8 +12,7 @@ import { CheckIcon } from '@heroicons/react/outline'
 import { useLocale, useExtracted } from 'next-intl'
 import currency from 'currency.js'
 import axios from 'axios'
-import Cookies from 'js-cookie'
-import { syncCartFromBasketResult } from '../../lib/data/cart-adapter'
+import { useAddToCart } from '../../lib/hooks/useCartMutations'
 import { useLocationStore } from '../../lib/stores/location-store'
 import { DateTime } from 'luxon'
 import getAssetUrl from '@utils/getAssetUrl'
@@ -35,7 +34,8 @@ const CreateYourPizzaMobileApp: FC<CreatePizzaProps> = ({
   let [isOpen, setIsOpen] = useState(false)
   let completeButtonRef = useRef(null)
   const locationData = useLocationStore((s) => s.locationData) as any
-  const [isLoadingBasket, setIsLoadingBasket] = useState(false)
+  const addMutation = useAddToCart()
+  const isLoadingBasket = addMutation.isPending
   const [activeModifiers, setActiveModifeirs] = useState([] as number[])
   const [activeCustomName, setActiveCustomName] = useState('')
   const [leftSelectedProduct, setLeftSelectedProduct] = useState(null as any)
@@ -81,33 +81,7 @@ const CreateYourPizzaMobileApp: FC<CreatePizzaProps> = ({
     setIsSecondPage(true)
   }
 
-  const setCredentials = async () => {
-    let csrf = Cookies.get('X-XSRF-TOKEN')
-    if (!csrf) {
-      const csrfReq = await axios(`${webAddress}/api/keldi`, {
-        method: 'GET',
-        headers: {
-          'Content-Type': 'application/json',
-          crossDomain: true,
-        },
-        withCredentials: true,
-      })
-      let { data: res } = csrfReq
-      csrf = Buffer.from(res.result, 'base64').toString('ascii')
-
-      var inTenMinutes = new Date(new Date().getTime() + 10 * 60 * 1000)
-      Cookies.set('X-XSRF-TOKEN', csrf, {
-        expires: inTenMinutes,
-      })
-    }
-    axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest'
-    axios.defaults.headers.common['X-CSRF-TOKEN'] = csrf
-    axios.defaults.headers.common['XCSRF-TOKEN'] = csrf
-  }
-
-  const addToBasket = async () => {
-    setIsLoadingBasket(true)
-    await setCredentials()
+  const addToBasket = () => {
     let modifierProduct: any = null
     let selectedModifiers: any[] = [...activeModifiers]
     let allModifiers = [...modifiers]
@@ -168,93 +142,57 @@ const CreateYourPizzaMobileApp: FC<CreatePizzaProps> = ({
       }
     }
 
-    let basketId = localStorage.getItem('basketId')
-    const otpToken = Cookies.get('opt_token')
+    const optimisticId = -Date.now()
+    const basePrice = Number(leftProduct?.price ?? 0)
+    const productName =
+      leftSelectedProduct?.attribute_data?.name?.['chopar']?.[locale || 'ru'] ||
+      leftSelectedProduct?.name ||
+      ''
 
-    let basketResult = {}
-
-    if (basketId) {
-      const { data: basketData } = await axios.post(
-        `${webAddress}/api/baskets-lines`,
+    addMutation.mutate({
+      variants: [
         {
-          basket_id: basketId,
-          variants: [
+          id: leftProduct.id,
+          quantity: 1,
+          modifiers: selectedModifiers,
+          child: {
+            id: rightProduct.id,
+            quantity: 1,
+            modifiers: [],
+          },
+        } as any,
+      ],
+      deliveryType: locationData?.deliveryType,
+      optimisticLine: {
+        id: optimisticId,
+        productId: Number(leftSelectedProduct?.id ?? leftProduct.id),
+        variantId: Number(leftProduct.id),
+        name: productName,
+        qty: 1,
+        price: basePrice,
+        image: leftSelectedProduct?.image,
+        _raw: {
+          id: optimisticId,
+          quantity: 1,
+          total: basePrice,
+          variant: {
+            id: leftProduct.id,
+            product_id: Number(leftSelectedProduct?.id ?? leftProduct.id),
+            product: leftSelectedProduct,
+          },
+          child: [
             {
-              id: leftProduct.id,
-              quantity: 1,
-              modifiers: selectedModifiers,
-              child: {
+              variant: {
                 id: rightProduct.id,
-                quantity: 1,
-                modifiers: [],
+                product_id: Number(rightSelectedProduct?.id ?? rightProduct.id),
+                product: rightSelectedProduct,
               },
             },
           ],
         },
-        {
-          headers: {
-            'Content-Type': 'application/json',
-            Authorization: `Bearer ${otpToken}`,
-          },
-          withCredentials: true,
-        }
-      )
-      basketResult = {
-        id: basketData.data.id,
-        createdAt: '',
-        currency: { code: basketData.data.currency },
-        taxesIncluded: basketData.data.tax_total,
-        lineItems: basketData.data.lines,
-        lineItemsSubtotalPrice: basketData.data.sub_total,
-        subtotalPrice: basketData.data.sub_total,
-        totalPrice: basketData.data.total,
-      }
-    } else {
-      let additionalQuery = ''
-      if (locationData && locationData.deliveryType == 'pickup') {
-        additionalQuery = `?delivery_type=pickup`
-      }
-      const { data: basketData } = await axios.post(
-        `${webAddress}/api/baskets${additionalQuery}`,
-        {
-          variants: [
-            {
-              id: leftProduct.id,
-              quantity: 1,
-              modifiers: selectedModifiers,
-              child: {
-                id: rightProduct.id,
-                quantity: 1,
-                modifiers: [],
-              },
-            },
-          ],
-        },
-        {
-          headers: {
-            'Content-Type': 'application/json',
-            Authorization: `Bearer ${otpToken}`,
-          },
-          withCredentials: true,
-        }
-      )
-      localStorage.setItem('basketId', basketData.data.encoded_id)
-      basketResult = {
-        id: basketData.data.id,
-        createdAt: '',
-        currency: { code: basketData.data.currency },
-        taxesIncluded: basketData.data.tax_total,
-        lineItems: basketData.data.lines,
-        lineItemsSubtotalPrice: basketData.data.sub_total,
-        subtotalPrice: basketData.data.sub_total,
-        totalPrice: basketData.data.total,
-        discountTotal: basketData.data.discount_total,
-        discountValue: basketData.data.discount_value,
-      }
-    }
+      },
+    })
 
-    syncCartFromBasketResult(basketResult)
-    setIsLoadingBasket(false)
     setLeftSelectedProduct(null)
     setRightSelectedProduct(null)
     closeModal()

@@ -21,11 +21,12 @@ import { Product } from '@commerce/types/product'
 import { useExtracted, useLocale } from 'next-intl'
 import { useParams } from 'next/navigation'
 import axios from 'axios'
-import Cookies from 'js-cookie'
 import getAssetUrl from '@utils/getAssetUrl'
 import { useCartStore, cartSelectors } from '../../lib/stores/cart-store'
-import { useUpdateCartQty } from '../../lib/hooks/useCartMutations'
-import { syncCartFromBasketResult } from '../../lib/data/cart-adapter'
+import {
+  useAddToCart,
+  useUpdateCartQty,
+} from '../../lib/hooks/useCartMutations'
 import { XIcon, CheckIcon } from '@heroicons/react/solid'
 import styles from './ProductItemNew.module.css'
 import { useLocationStore } from '../../lib/stores/location-store'
@@ -62,12 +63,13 @@ const ProductItemNewApp: FC<ProductItem> = ({ product, channelName }) => {
     }
     return p
   })
-  const [isLoadingBasket, setIsLoadingBasket] = useState(false)
+  const isLoadingBasket = false
   const locationData = useLocationStore((s) => s.locationData) as any
   const stopProducts = useUIStore((s) => s.stopProducts)
   const openProductDrawer = useUIStore((s) => s.openProductDrawer)
   const cartLines = useCartStore(cartSelectors.lines)
   const updateQtyMutation = useUpdateCartQty()
+  const addMutation = useAddToCart()
   // Backwards-compat shape for legacy lookup (item.variant?.id, .product?.id)
   const cartData: any = useMemo(
     () => ({
@@ -210,34 +212,11 @@ const ProductItemNewApp: FC<ProductItem> = ({ product, channelName }) => {
     }
   }
 
-  const setCredentials = async () => {
-    let csrf = Cookies.get('X-XSRF-TOKEN')
-    if (!csrf) {
-      const csrfReq = await axios(`${webAddress}/api/keldi`, {
-        method: 'GET',
-        headers: {
-          'Content-Type': 'application/json',
-          crossDomain: true,
-        },
-        withCredentials: true,
-      })
-      let { data: res } = csrfReq
-      csrf = Buffer.from(res.result, 'base64').toString('ascii')
-      var inTenMinutes = new Date(new Date().getTime() + 10 * 60 * 1000)
-      Cookies.set('X-XSRF-TOKEN', csrf, {
-        expires: inTenMinutes,
-      })
-    }
-    axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest'
-    axios.defaults.headers.common['X-CSRF-TOKEN'] = csrf
-    axios.defaults.headers.common['XCSRF-TOKEN'] = csrf
-  }
+  const addToBasket = (mods: any = null) => {
+    if (isProductInStop) return
 
-  const addToBasket = async (mods: any = null) => {
     let modifierProduct: any = null
-    let selectedModifiers: any = null
-    setIsLoadingBasket(true)
-    await setCredentials()
+    let selectedModifiers: { id: number }[] = []
 
     if (!mods || !mods.length) {
       mods = activeModifiers
@@ -249,8 +228,9 @@ const ProductItemNewApp: FC<ProductItem> = ({ product, channelName }) => {
     }
 
     let selectedProdId = 0
+    let selectedVariant: any = null
     if (store.variants && store.variants.length) {
-      let selectedVariant = store.variants.find((v: any) => v.active == true)
+      selectedVariant = store.variants.find((v: any) => v.active == true)
       selectedProdId = selectedVariant.id
       if (selectedVariant.modifierProduct) {
         modifierProduct = selectedVariant.modifierProduct
@@ -259,14 +239,12 @@ const ProductItemNewApp: FC<ProductItem> = ({ product, channelName }) => {
       if (mods.length && modifierProduct) {
         if (mods.includes(modifierProduct.id)) {
           selectedProdId = modifierProduct.id
-          let currentProductModifiersPrices = [
-            ...modifiers
-              .filter(
-                (mod: any) =>
-                  mod.id != modifierProduct.id && mods.includes(mod.id)
-              )
-              .map((mod: any) => mod.price),
-          ]
+          const currentProductModifiersPrices = modifiers
+            .filter(
+              (mod: any) =>
+                mod.id != modifierProduct.id && mods.includes(mod.id)
+            )
+            .map((mod: any) => mod.price)
           selectedModifiers = modifierProduct.modifiers
             .filter((mod: any) =>
               currentProductModifiersPrices.includes(mod.price)
@@ -278,100 +256,67 @@ const ProductItemNewApp: FC<ProductItem> = ({ product, channelName }) => {
       selectedProdId = +store.id
     }
 
-    if (isProductInStop) {
-      setIsLoadingBasket(false)
-      return
-    }
+    const basePrice = Number(
+      selectedVariant?.price ?? store.price ?? 0
+    )
+    const optimisticId = -Date.now()
+    const optimisticModifiers = (modifiers || [])
+      .filter((m: any) => mods.includes(m.id))
+      .map((m: any) => ({
+        id: Number(m.id),
+        name: m.name || m.name_ru || '',
+        price: Number(m.price ?? 0),
+      }))
+    const productName =
+      store?.attribute_data?.name?.[channelName]?.[locale || 'ru'] ||
+      store?.name ||
+      ''
 
-    let basketId = localStorage.getItem('basketId')
-    const otpToken = Cookies.get('opt_token')
-
-    let basketResult = {}
-
-    if (basketId) {
-      let additionalQuery = ''
-      if (locationData && locationData.deliveryType == 'pickup') {
-        additionalQuery = `?delivery_type=pickup`
-      }
-      const { data: basketData } = await axios.post(
-        `${webAddress}/api/baskets-lines${additionalQuery}`,
+    addMutation.mutate({
+      variants: [
         {
-          basket_id: basketId,
-          variants: [
-            {
-              id: selectedProdId,
-              quantity: 1,
-              modifiers: selectedModifiers,
-            },
-          ],
+          id: selectedProdId,
+          quantity: 1,
+          modifiers: selectedModifiers,
         },
-        {
-          headers: {
-            'Content-Type': 'application/json',
-            Authorization: `Bearer ${otpToken}`,
+      ],
+      deliveryType: locationData?.deliveryType,
+      optimisticLine: {
+        id: optimisticId,
+        productId: Number(store.id),
+        variantId: selectedProdId,
+        name: productName,
+        qty: 1,
+        price: basePrice,
+        image: store.image,
+        modifiers: optimisticModifiers.length
+          ? optimisticModifiers
+          : undefined,
+        _raw: {
+          id: optimisticId,
+          quantity: 1,
+          total:
+            basePrice +
+            optimisticModifiers.reduce(
+              (acc: number, m: any) => acc + Number(m.price || 0),
+              0
+            ),
+          variant: {
+            id: selectedProdId,
+            product_id: Number(store.id),
+            product: store,
           },
-          withCredentials: true,
-        }
-      )
-      basketResult = {
-        id: basketData.data.id,
-        createdAt: '',
-        currency: { code: basketData.data.currency },
-        taxesIncluded: basketData.data.tax_total,
-        lineItems: basketData.data.lines,
-        lineItemsSubtotalPrice: basketData.data.sub_total,
-        subtotalPrice: basketData.data.sub_total,
-        totalPrice: basketData.data.total,
-      }
-    } else {
-      let additionalQuery = ''
-      if (locationData && locationData.deliveryType == 'pickup') {
-        additionalQuery = `?delivery_type=pickup`
-      }
-      const { data: basketData } = await axios.post(
-        `${webAddress}/api/baskets${additionalQuery}`,
-        {
-          variants: [
-            {
-              id: selectedProdId,
-              quantity: 1,
-              modifiers: selectedModifiers,
-            },
-          ],
+          modifiers: optimisticModifiers,
         },
-        {
-          headers: {
-            'Content-Type': 'application/json',
-            Authorization: `Bearer ${otpToken}`,
-          },
-          withCredentials: true,
-        }
-      )
-      localStorage.setItem('basketId', basketData.data.encoded_id)
-      basketResult = {
-        id: basketData.data.id,
-        createdAt: '',
-        currency: { code: basketData.data.currency },
-        taxesIncluded: basketData.data.tax_total,
-        lineItems: basketData.data.lines,
-        lineItemsSubtotalPrice: basketData.data.sub_total,
-        subtotalPrice: basketData.data.sub_total,
-        totalPrice: basketData.data.total,
-        discountTotal: basketData.data.discount_total,
-        discountValue: basketData.data.discount_value,
-      }
-    }
+      },
+    })
 
-    syncCartFromBasketResult(basketResult)
-    setIsLoadingBasket(false)
-
-    // PostHog: add_to_cart
     trackAddToCart({
       product_id: store.id,
       product_name: store.name,
       variant_id: selectedProdId,
       quantity: 1,
-      price: parseInt(store.price, 0) / 100,
+      price: basePrice / 100,
       city: citySlug,
     })
 
@@ -382,7 +327,7 @@ const ProductItemNewApp: FC<ProductItem> = ({ product, channelName }) => {
     setAddedToCart(true)
     setTimeout(() => setAddedToCart(false), 1500)
 
-    if (window.innerWidth < 768) {
+    if (typeof window !== 'undefined' && window.innerWidth < 768) {
       closeModal()
     }
   }

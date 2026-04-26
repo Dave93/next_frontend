@@ -1,33 +1,13 @@
 'use client'
 
 import { useEffect, useMemo, useState } from 'react'
-import axios from 'axios'
-import Cookies from 'js-cookie'
 import { useCartStore, cartSelectors } from '../../lib/stores/cart-store'
-import { useUpdateCartQty } from '../../lib/hooks/useCartMutations'
-import { syncCartFromBasketResult } from '../../lib/data/cart-adapter'
+import {
+  useAddToCart,
+  useUpdateCartQty,
+} from '../../lib/hooks/useCartMutations'
 import { useLocationStore } from '../../lib/stores/location-store'
 import { trackAddToCart } from '@lib/posthog-events'
-
-const webAddress = process.env.NEXT_PUBLIC_API_URL
-
-const setCsrf = async () => {
-  let csrf = Cookies.get('X-XSRF-TOKEN')
-  if (!csrf) {
-    const csrfReq = await axios(`${webAddress}/api/keldi`, {
-      method: 'GET',
-      headers: { 'Content-Type': 'application/json' },
-      withCredentials: true,
-    })
-    csrf = Buffer.from(csrfReq.data.result, 'base64').toString('ascii')
-    Cookies.set('X-XSRF-TOKEN', csrf, {
-      expires: new Date(Date.now() + 10 * 60 * 1000),
-    })
-  }
-  axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest'
-  axios.defaults.headers.common['X-CSRF-TOKEN'] = csrf
-  axios.defaults.headers.common['XCSRF-TOKEN'] = csrf
-}
 
 export type UseProductBuilder = ReturnType<typeof useProductBuilder>
 
@@ -38,6 +18,7 @@ export function useProductBuilder(
   const locationData = useLocationStore((s) => s.locationData) as any
   const cartLines = useCartStore(cartSelectors.lines)
   const updateQtyMutation = useUpdateCartQty()
+  const addMutation = useAddToCart()
   const cartData: any = useMemo(
     () => ({
       lineItems: cartLines.map(
@@ -57,7 +38,7 @@ export function useProductBuilder(
 
   const [activeVariantId, setActiveVariantId] = useState<number | null>(null)
   const [activeModifiers, setActiveModifiers] = useState<number[]>([])
-  const [isLoading, setIsLoading] = useState(false)
+  const isLoading = addMutation.isPending
 
   useEffect(() => {
     if (!product) {
@@ -202,88 +183,79 @@ export function useProductBuilder(
     setActiveModifiers(next)
   }
 
-  const addToCart = async () => {
+  const addToCart = () => {
     if (!product) return
-    setIsLoading(true)
-    try {
-      await setCsrf()
-      const modifierProduct = activeVariant?.modifierProduct || null
-      let selectedProdId = activeVariant?.id ?? +product.id
-      let selectedModifiers: any[] = modifiers
-        .filter((m: any) => activeModifiers.includes(m.id))
+
+    const modifierProduct = activeVariant?.modifierProduct || null
+    let selectedProdId = activeVariant?.id ?? +product.id
+    let selectedModifiers: { id: number }[] = modifiers
+      .filter((m: any) => activeModifiers.includes(m.id))
+      .map((m: any) => ({ id: m.id }))
+
+    if (modifierProduct && activeModifiers.includes(modifierProduct.id)) {
+      selectedProdId = modifierProduct.id
+      const otherPrices = modifiers
+        .filter(
+          (m: any) =>
+            m.id !== modifierProduct.id && activeModifiers.includes(m.id)
+        )
+        .map((m: any) => m.price)
+      selectedModifiers = (modifierProduct.modifiers || [])
+        .filter((m: any) => otherPrices.includes(m.price))
         .map((m: any) => ({ id: m.id }))
-
-      if (modifierProduct && activeModifiers.includes(modifierProduct.id)) {
-        selectedProdId = modifierProduct.id
-        const otherPrices = modifiers
-          .filter(
-            (m: any) =>
-              m.id !== modifierProduct.id && activeModifiers.includes(m.id)
-          )
-          .map((m: any) => m.price)
-        selectedModifiers = (modifierProduct.modifiers || [])
-          .filter((m: any) => otherPrices.includes(m.price))
-          .map((m: any) => ({ id: m.id }))
-      }
-
-      const otpToken = Cookies.get('opt_token')
-      const basketId = localStorage.getItem('basketId')
-      const queryDeliveryType =
-        locationData?.deliveryType === 'pickup' ? '?delivery_type=pickup' : ''
-
-      const payload = {
-        variants: [
-          { id: selectedProdId, quantity: 1, modifiers: selectedModifiers },
-        ],
-      }
-      const headers = {
-        'Content-Type': 'application/json',
-        Authorization: `Bearer ${otpToken}`,
-      }
-
-      let basketData: any
-      if (basketId) {
-        const { data } = await axios.post(
-          `${webAddress}/api/baskets-lines${queryDeliveryType}`,
-          { basket_id: basketId, ...payload },
-          { headers, withCredentials: true }
-        )
-        basketData = data.data
-      } else {
-        const { data } = await axios.post(
-          `${webAddress}/api/baskets${queryDeliveryType}`,
-          payload,
-          { headers, withCredentials: true }
-        )
-        basketData = data.data
-        localStorage.setItem('basketId', basketData.encoded_id)
-      }
-
-      syncCartFromBasketResult({
-        id: basketData.id,
-        createdAt: '',
-        currency: { code: basketData.currency },
-        taxesIncluded: basketData.tax_total,
-        lineItems: basketData.lines,
-        lineItemsSubtotalPrice: basketData.sub_total,
-        subtotalPrice: basketData.sub_total,
-        totalPrice: basketData.total,
-      })
-
-      trackAddToCart({
-        product_id: product.id,
-        product_name: product.name,
-        variant_id: selectedProdId,
-        quantity: 1,
-        price: basePrice / 100,
-      })
-
-      onAdded?.()
-    } catch (e) {
-      // swallow
-    } finally {
-      setIsLoading(false)
     }
+
+    const optimisticId = -Date.now()
+    const optimisticModifiers = modifiers
+      .filter((m: any) => activeModifiers.includes(m.id))
+      .map((m: any) => ({
+        id: Number(m.id),
+        name: m.name || m.name_ru || '',
+        price: Number(m.price ?? 0),
+      }))
+
+    addMutation.mutate({
+      variants: [
+        { id: selectedProdId, quantity: 1, modifiers: selectedModifiers },
+      ],
+      deliveryType: locationData?.deliveryType,
+      optimisticLine: {
+        id: optimisticId,
+        productId: Number(product.id),
+        variantId: selectedProdId,
+        name: product?.name || '',
+        qty: 1,
+        price: basePrice,
+        image: product?.image,
+        modifiers: optimisticModifiers.length ? optimisticModifiers : undefined,
+        _raw: {
+          id: optimisticId,
+          quantity: 1,
+          total:
+            basePrice +
+            optimisticModifiers.reduce(
+              (acc: number, m: any) => acc + Number(m.price || 0),
+              0
+            ),
+          variant: {
+            id: selectedProdId,
+            product_id: Number(product.id),
+            product,
+          },
+          modifiers: optimisticModifiers,
+        },
+      },
+    })
+
+    trackAddToCart({
+      product_id: product.id,
+      product_name: product.name,
+      variant_id: selectedProdId,
+      quantity: 1,
+      price: basePrice / 100,
+    })
+
+    onAdded?.()
   }
 
   return {

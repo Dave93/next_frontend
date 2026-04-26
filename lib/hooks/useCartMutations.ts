@@ -71,47 +71,68 @@ function syncStore(cartData: any) {
 }
 
 // =====================================================================
-// useAddToCart — POST /api/baskets-lines
+// useAddToCart — POST /api/baskets-lines (existing basket)
+//                 POST /api/baskets       (no basket yet)
+// Accepts the full `variants` payload so callers handle modifierProduct,
+// "three"-pizza, additionalSale, etc. without the hook needing to care.
 // =====================================================================
 
+type AddVariantInput = {
+  id: number
+  quantity?: number
+  modifiers?: Array<{ id: number }> | null
+  three?: number[]
+  additionalSale?: boolean
+}
+
 type AddInput = {
-  variantId: number
+  variants: AddVariantInput[]
   optimisticLine: CartLine
-  modifiers?: { id: number }[]
+  /** locationData.deliveryType — adds ?delivery_type=pickup */
+  deliveryType?: string | null
 }
 
 export function useAddToCart() {
   return useMutation({
     scope: { id: 'cart' },
-    mutationFn: async ({ variantId, modifiers }: AddInput) => {
+    mutationFn: async ({ variants, deliveryType }: AddInput) => {
       await ensureCsrf()
-      const basketId = useCartStore.getState().basketId
-      const { data } = await axios.post(
-        `${webAddress}/api/baskets-lines`,
-        {
-          variants: [
-            {
-              id: variantId,
-              quantity: 1,
-              modifiers: modifiers || [],
-            },
-          ],
-          basket_id: basketId,
-        },
-        {
-          headers: {
-            'Content-Type': 'application/json',
-            ...authHeader(),
-          },
-          withCredentials: true,
-        }
-      )
-      if (data?.id) {
-        // Mirror legacy localStorage key so legacy consumers still find it
-        try {
-          localStorage.setItem('basketId', JSON.stringify(data.id))
-        } catch {}
+      const basketId =
+        useCartStore.getState().basketId ||
+        (typeof window !== 'undefined'
+          ? (() => {
+              try {
+                const raw = localStorage.getItem('basketId')
+                if (!raw) return null
+                const parsed = JSON.parse(raw)
+                return parsed ? String(parsed) : null
+              } catch {
+                return null
+              }
+            })()
+          : null)
+      const qs = deliveryType === 'pickup' ? '?delivery_type=pickup' : ''
+      const headers = {
+        'Content-Type': 'application/json',
+        ...authHeader(),
       }
+      if (basketId) {
+        const { data } = await axios.post(
+          `${webAddress}/api/baskets-lines${qs}`,
+          { basket_id: basketId, variants },
+          { headers, withCredentials: true }
+        )
+        return data
+      }
+      const { data } = await axios.post(
+        `${webAddress}/api/baskets${qs}`,
+        { variants },
+        { headers, withCredentials: true }
+      )
+      try {
+        const encoded = data?.data?.encoded_id || data?.encoded_id
+        if (encoded) localStorage.setItem('basketId', JSON.stringify(encoded))
+      } catch {}
       return data
     },
     onMutate: ({ optimisticLine }) => {
