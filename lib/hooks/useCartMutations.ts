@@ -62,12 +62,19 @@ function syncStore(cartData: any) {
   if (!cartData) return
   // Some endpoints return { data: {...} } wrapper, others return body directly.
   const body = cartData?.data?.id ? cartData.data : cartData
+  // Preserve encoded_id alongside id so pickBasketIdFromCart can pick the
+  // hashid-encoded form (Laravel rejects decoded numeric basket ids).
   const adapted = body?.lines
-    ? { id: body.id, lineItems: body.lines }
+    ? { id: body.id, encoded_id: body.encoded_id, lineItems: body.lines }
     : body
   const lines = adaptServerCartToLines(adapted)
   const basketId = pickBasketIdFromCart(adapted)
   useCartStore.getState().setFromServer(basketId, lines)
+  if (basketId && typeof window !== 'undefined') {
+    try {
+      localStorage.setItem('basketId', JSON.stringify(basketId))
+    } catch {}
+  }
 }
 
 // =====================================================================
@@ -97,9 +104,12 @@ export function useAddToCart() {
     scope: { id: 'cart' },
     mutationFn: async ({ variants, deliveryType }: AddInput) => {
       await ensureCsrf()
-      const basketId =
-        useCartStore.getState().basketId ||
-        (typeof window !== 'undefined'
+      // localStorage 'basketId' is the canonical encoded hashid (Laravel
+      // rejects decoded numeric ids). Fall back to the store only when
+      // localStorage is missing so we don't accidentally send a decoded id
+      // from an older session.
+      const fromLocal =
+        typeof window !== 'undefined'
           ? (() => {
               try {
                 const raw = localStorage.getItem('basketId')
@@ -110,7 +120,12 @@ export function useAddToCart() {
                 return null
               }
             })()
-          : null)
+          : null
+      const storeId = useCartStore.getState().basketId
+      const basketId =
+        fromLocal ||
+        // only trust the store value if it doesn't look like a raw decoded id
+        (storeId && !/^\d+$/.test(storeId) ? storeId : null)
       const qs = deliveryType === 'pickup' ? '?delivery_type=pickup' : ''
       const headers = {
         'Content-Type': 'application/json',

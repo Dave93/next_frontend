@@ -42,6 +42,9 @@ async function fetchBasket(
     if (!basket?.id) return null
     return {
       id: basket.id,
+      // Preserve encoded_id so adaptServerCartToLines + pickBasketIdFromCart
+      // surface the hashid (Laravel write endpoints reject decoded numeric).
+      encoded_id: basket.encoded_id,
       lineItems: basket.lines || basket.lineItems || [],
       subtotalPrice: basket.sub_total ?? basket.subtotalPrice ?? 0,
       totalPrice: basket.total ?? basket.totalPrice ?? 0,
@@ -60,16 +63,25 @@ const CartHydrator: FC = () => {
   const deliveryType = locationData?.deliveryType ?? null
 
   // One-time legacy localStorage `basketId` bridge for sessions that
-  // predate Zustand persist.
+  // predate Zustand persist. Also self-heals when the persisted store has a
+  // decoded numeric id (which Laravel write endpoints reject) but legacy
+  // localStorage still has the encoded hashid.
   useEffect(() => {
     if (!hasHydrated) return
-    if (persistedBasketId) return
     if (typeof window === 'undefined') return
     try {
       const raw = localStorage.getItem('basketId')
       if (!raw) return
       const parsed = JSON.parse(raw)
-      if (parsed) useCartStore.getState().setBasketId(String(parsed))
+      if (!parsed) return
+      const legacy = String(parsed)
+      const persistedLooksDecoded =
+        persistedBasketId !== null &&
+        persistedBasketId !== undefined &&
+        /^\d+$/.test(persistedBasketId)
+      if (!persistedBasketId || persistedLooksDecoded) {
+        useCartStore.getState().setBasketId(legacy)
+      }
     } catch {}
   }, [hasHydrated, persistedBasketId])
 

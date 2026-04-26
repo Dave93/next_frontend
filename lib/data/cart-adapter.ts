@@ -72,6 +72,11 @@ export function adaptServerCartToLines(cartData: any): CartLine[] {
 
 export function pickBasketIdFromCart(cartData: any): string | null {
   if (!cartData) return null
+  // Laravel routes accept the hashid-encoded basket id; the decoded numeric
+  // id rejects with `validation.hashid_is_valid`. Prefer encoded_id whenever
+  // the server returned it.
+  const enc = cartData.encoded_id
+  if (typeof enc === 'string' && enc) return enc
   const id = cartData.id
   if (typeof id === 'string' && id) return id
   if (typeof id === 'number') return String(id)
