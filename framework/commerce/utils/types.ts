@@ -1,4 +1,6 @@
-import type { SWRConfiguration } from 'swr'
+// SWRConfiguration replaced with `any` after the SWR removal — types in
+// this legacy framework file are not used at runtime by anything we ship.
+type SWRConfiguration<_D = any, _E = any> = any
 import type { CommerceError } from './errors'
 import type { ResponseState } from './use-data'
 

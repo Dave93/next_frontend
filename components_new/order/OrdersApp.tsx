@@ -37,7 +37,8 @@ import {
 } from 'react-yandex-maps'
 // next/image removed from this file — every image here is a small,
 // fixed-size icon that doesn't need the optimizer pipeline.
-import { useCart } from '@framework/cart'
+import { useCartStore, cartSelectors } from '../../lib/stores/cart-store'
+import { syncCartFromBasketResult } from '../../lib/data/cart-adapter'
 import currency from 'currency.js'
 import axios from 'axios'
 import { debounce } from 'lodash'
@@ -243,10 +244,24 @@ const OrdersApp: FC<OrdersProps> = ({ channelName, isMobile = false }) => {
   const [ymaps, setYmaps] = useState<any>(null)
   const [cutlery, setCutlery] = useState('Y')
   const objects = useRef<any>(null)
-  const { data, isLoading, isEmpty, mutate } = useCart({
-    cartId,
-    locationData,
-  })
+  const cartLines = useCartStore(cartSelectors.lines)
+  const isEmpty = useCartStore(cartSelectors.isEmpty)
+  const cartTotalFromStore = useCartStore(cartSelectors.total)
+  // Backwards-compat shape for legacy JSX still reading data.lineItems / data.totalPrice etc.
+  const data: any = useMemo(
+    () => ({
+      id: useCartStore.getState().basketId || '',
+      lineItems: cartLines.map((l) => ({ ...l, quantity: l.qty })),
+      totalPrice: cartTotalFromStore,
+      subtotalPrice: cartTotalFromStore,
+      discountTotal: 0,
+      discountValue: 0,
+    }),
+    [cartLines, cartTotalFromStore]
+  )
+  const isLoading = false
+  const mutate = async (_payload?: any, _opts?: any) => {}
+  void mutate
   const [deposit, setDeposit] = useState(0)
   let currentAddress = ''
   if (activeCity?.active) {
@@ -1151,7 +1166,9 @@ const OrdersApp: FC<OrdersProps> = ({ channelName, isMobile = false }) => {
         discountTotal: 0,
         discountValue: 0,
       }
-      await mutate(basketData, false)
+      // Order placed → clear cart locally
+      useCartStore.getState().clear()
+      void basketData
       const orderHashids = new Hashids(
         'order',
         15,

@@ -24,7 +24,11 @@ import axios from 'axios'
 import Cookies from 'js-cookie'
 import Hashids from 'hashids'
 import getAssetUrl from '@utils/getAssetUrl'
-import { useCart } from '@framework/cart'
+import { useCartStore, cartSelectors } from '../../lib/stores/cart-store'
+import {
+  useUpdateCartQty,
+  useAddToCart,
+} from '../../lib/hooks/useCartMutations'
 import { XIcon, CheckIcon } from '@heroicons/react/solid'
 import styles from './ProductItemNew.module.css'
 import { useLocationStore } from '../../lib/stores/location-store'
@@ -65,7 +69,9 @@ const ProductItemNewApp: FC<ProductItem> = ({ product, channelName }) => {
   const locationData = useLocationStore((s) => s.locationData) as any
   const stopProducts = useUIStore((s) => s.stopProducts)
   const openProductDrawer = useUIStore((s) => s.openProductDrawer)
-  const { data: cartData, mutate } = useCart()
+  const cartLines = useCartStore(cartSelectors.lines)
+  const updateQtyMutation = useUpdateCartQty()
+  const addToCartMutation = useAddToCart()
 
   const [addedToCart, setAddedToCart] = useState(false)
   const [imageLoaded, setImageLoaded] = useState(false)
@@ -76,22 +82,15 @@ const ProductItemNewApp: FC<ProductItem> = ({ product, channelName }) => {
   )
 
 
-  const changeCartQuantity = async (delta: number) => {
+  // Optimistic +/- via useUpdateCartQty: instant UI response,
+  // automatic rollback + sonner toast on backend error.
+  const changeCartQuantity = (delta: number) => {
     if (!cartLineItem) return
-    setIsLoadingBasket(true)
-    await setCredentials()
-    const lineIdEncoded = hashids.encode(cartLineItem.id)
-    if (delta > 0) {
-      await axios.post(`${webAddress}/api/v1/basket-lines/${lineIdEncoded}/add`, { quantity: 1 })
-    } else {
-      if (cartLineItem.quantity <= 1) {
-        await axios.delete(`${webAddress}/api/basket-lines/${lineIdEncoded}`)
-      } else {
-        await axios.put(`${webAddress}/api/v1/basket-lines/${lineIdEncoded}/remove`, { quantity: 1 })
-      }
-    }
-    await mutate()
-    setIsLoadingBasket(false)
+    updateQtyMutation.mutate({
+      lineId: Number(cartLineItem.id),
+      delta: delta > 0 ? 1 : -1,
+      currentQty: Number(cartLineItem.qty || 0),
+    })
   }
   const [isChoosingModifier, setIsChoosingModifier] = useState(false)
   const [activeModifiers, setActiveModifiers] = useState([] as number[])
@@ -109,17 +108,17 @@ const ProductItemNewApp: FC<ProductItem> = ({ product, channelName }) => {
   }, [store, activeModifiers])
 
   const cartLineItem = useMemo(() => {
-    if (!cartData?.lineItems?.length) return null
-    return cartData.lineItems.find((item: any) => {
-      return (
-        String(item.variant?.id) === effectiveProductId ||
-        String(item.variant?.product?.id) === effectiveProductId ||
-        String(item.variant?.product_id) === effectiveProductId
-      )
-    })
-  }, [cartData, effectiveProductId])
+    if (!cartLines?.length) return null
+    return cartLines.find(
+      (l) =>
+        String(l.variantId) === effectiveProductId ||
+        String(l.productId) === effectiveProductId
+    )
+  }, [cartLines, effectiveProductId])
 
-  const cartQuantity = cartLineItem?.quantity || 0
+  const cartQuantity = cartLineItem?.qty || 0
+  const isLoadingBasketDerived =
+    isLoadingBasket || updateQtyMutation.isPending || addToCartMutation.isPending
 
   const [configData, setConfigData] = useState({} as any)
   let [isOpen, setIsOpen] = useState(false)
@@ -366,7 +365,29 @@ const ProductItemNewApp: FC<ProductItem> = ({ product, channelName }) => {
       }
     }
 
-    await mutate(basketResult, false)
+    // Sync Zustand cart-store directly from the backend response
+    const _basketAny = basketResult as any
+    if (_basketAny?.id) {
+      const lines = (_basketAny.lineItems || []).map((it: any) => ({
+        id: Number(it.id),
+        productId: Number(it.variant?.product?.id ?? it.variant?.product_id ?? 0),
+        variantId: typeof it.variant?.id === 'number' ? it.variant.id : undefined,
+        name: it.variant?.product?.name || it.name || '',
+        qty: Number(it.quantity ?? 0),
+        price: Number(it.variant?.price ?? it.price ?? 0),
+        image: it.variant?.product?.image || it.variant?.image,
+        modifiers: Array.isArray(it.modifiers)
+          ? it.modifiers.map((m: any) => ({
+              id: Number(m.id),
+              name: m.name || '',
+              price: Number(m.price ?? 0),
+            }))
+          : undefined,
+      }))
+      useCartStore
+        .getState()
+        .setFromServer(String(_basketAny.id), lines)
+    }
     setIsLoadingBasket(false)
 
     // PostHog: add_to_cart

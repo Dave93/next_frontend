@@ -4,7 +4,10 @@ import { useEffect, useMemo, useState } from 'react'
 import axios from 'axios'
 import Cookies from 'js-cookie'
 import Hashids from 'hashids'
-import { useCart } from '@framework/cart'
+import {
+  syncCartFromBasketResult,
+} from '../../lib/data/cart-adapter'
+import { useCartStore, cartSelectors } from '../../lib/stores/cart-store'
 import { useLocationStore } from '../../lib/stores/location-store'
 import { trackAddToCart } from '@lib/posthog-events'
 
@@ -40,7 +43,7 @@ export function useProductBuilder(
   onAdded?: () => void
 ) {
   const locationData = useLocationStore((s) => s.locationData) as any
-  const { data: cartData, mutate } = useCart()
+  const cartLines = useCartStore(cartSelectors.lines)
 
   const [activeVariantId, setActiveVariantId] = useState<number | null>(null)
   const [activeModifiers, setActiveModifiers] = useState<number[]>([])
@@ -132,17 +135,15 @@ export function useProductBuilder(
   }, [product, activeVariant, activeModifiers])
 
   const cartLineItem = useMemo(() => {
-    if (!effectiveProductId || !cartData?.lineItems?.length) return null
-    return cartData.lineItems.find((item: any) => {
-      return (
-        String(item.variant?.id) === effectiveProductId ||
-        String(item.variant?.product?.id) === effectiveProductId ||
-        String(item.variant?.product_id) === effectiveProductId
-      )
-    })
-  }, [cartData, effectiveProductId])
+    if (!effectiveProductId || !cartLines?.length) return null
+    return cartLines.find(
+      (l) =>
+        String(l.variantId) === effectiveProductId ||
+        String(l.productId) === effectiveProductId
+    )
+  }, [cartLines, effectiveProductId])
 
-  const cartQuantity: number = (cartLineItem as any)?.quantity || 0
+  const cartQuantity: number = (cartLineItem as any)?.qty || 0
 
   const changeQuantity = async (delta: number) => {
     if (!cartLineItem) return
@@ -170,7 +171,26 @@ export function useProductBuilder(
           )
         }
       }
-      await mutate()
+      // After axios qty change, refresh cart from backend so Zustand
+      // store stays in sync (CartHydrator's TanStack Query is the
+      // refresh source).
+      try {
+        const freshBasketId =
+          useCartStore.getState().basketId ||
+          (typeof window !== 'undefined'
+            ? JSON.parse(localStorage.getItem('basketId') || 'null')
+            : null)
+        if (freshBasketId) {
+          const { data } = await axios.get(
+            `${webAddress}/api/baskets/${freshBasketId}`,
+            { withCredentials: true }
+          )
+          syncCartFromBasketResult({
+            id: data.id,
+            lineItems: data.lines || [],
+          })
+        }
+      } catch {}
     } finally {
       setIsLoading(false)
     }
@@ -269,19 +289,10 @@ export function useProductBuilder(
         localStorage.setItem('basketId', basketData.encoded_id)
       }
 
-      await mutate(
-        {
-          id: basketData.id,
-          createdAt: '',
-          currency: { code: basketData.currency },
-          taxesIncluded: basketData.tax_total,
-          lineItems: basketData.lines,
-          lineItemsSubtotalPrice: basketData.sub_total,
-          subtotalPrice: basketData.sub_total,
-          totalPrice: basketData.total,
-        },
-        false
-      )
+      syncCartFromBasketResult({
+        id: basketData.id,
+        lineItems: basketData.lines,
+      })
 
       trackAddToCart({
         product_id: product.id,

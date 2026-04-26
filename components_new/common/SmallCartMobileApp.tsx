@@ -8,7 +8,6 @@ import {
   useState,
   useCallback,
 } from 'react'
-import useCart from '@framework/cart/use-cart'
 import { useForm, Controller, SubmitHandler } from 'react-hook-form'
 import { XIcon } from '@heroicons/react/solid'
 import axios from 'axios'
@@ -60,9 +59,10 @@ const SmallCartMobile: FC = () => {
   }
   const locationData = useLocationStore((s) => s.locationData) as any
 
-  // useCart called for SWR side-effects (cart cache hydration); destructured values
-  // can be wired into UI in Wave 7 polish.
-  useCart({ cartId, locationData })
+  // Cart hydration now handled by CartHydrator at layout root via
+  // TanStack Query — no per-component side-effect call needed.
+  void cartId
+  void locationData
 
   let [isShowPrivacy, setIsShowPrivacy] = useState(false)
   const [otpCode, setOtpCode] = useState('')

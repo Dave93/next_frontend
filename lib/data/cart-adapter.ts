@@ -76,3 +76,36 @@ export function pickBasketIdFromCart(cartData: any): string | null {
   if (typeof id === 'number') return String(id)
   return null
 }
+
+/**
+ * Legacy code post-axios mutation builds `basketResult` in the same
+ * shape that framework/local/cart fetcher returned. Use this to sync
+ * Zustand cart-store directly without going through the network again.
+ */
+export function syncCartFromBasketResult(basketResult: any): void {
+  const r = basketResult as any
+  if (!r?.id) return
+  const lines: CartLine[] = (r.lineItems || []).map((it: any) => ({
+    id: Number(it.id),
+    productId: Number(
+      it.variant?.product?.id ?? it.variant?.product_id ?? 0
+    ),
+    variantId:
+      typeof it.variant?.id === 'number' ? it.variant.id : undefined,
+    name: it.variant?.product?.name || it.name || '',
+    qty: Number(it.quantity ?? 0),
+    price: Number(it.variant?.price ?? it.price ?? 0),
+    image: it.variant?.product?.image || it.variant?.image,
+    modifiers: Array.isArray(it.modifiers)
+      ? it.modifiers.map((m: any) => ({
+          id: Number(m.id),
+          name: m.name || '',
+          price: Number(m.price ?? 0),
+        }))
+      : undefined,
+  }))
+  // Lazy import to avoid a circular dep with stores/cart-store at module load.
+  import('../stores/cart-store').then(({ useCartStore }) => {
+    useCartStore.getState().setFromServer(String(r.id), lines)
+  })
+}

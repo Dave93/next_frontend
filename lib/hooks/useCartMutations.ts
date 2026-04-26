@@ -15,8 +15,7 @@
  * (still reading via useCart()) get refreshed.
  */
 
-import { useMutation } from '@tanstack/react-query'
-import { mutate as swrGlobalMutate } from 'swr'
+import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { toast } from 'sonner'
 import axios from 'axios'
 import Cookies from 'js-cookie'
@@ -64,16 +63,6 @@ function syncStore(cartData: any) {
   const lines = adaptServerCartToLines(cartData)
   const basketId = pickBasketIdFromCart(cartData)
   useCartStore.getState().setFromServer(basketId, lines)
-  // Refresh legacy SWR cache so non-migrated consumers see new data too.
-  // SWR keys here come from framework/local/cart/use-cart fetcher arguments.
-  try {
-    swrGlobalMutate(
-      (key: any) =>
-        Array.isArray(key) && typeof key[0] === 'string' && key[0].startsWith('baskets/'),
-      undefined,
-      { revalidate: true }
-    )
-  } catch {}
 }
 
 // =====================================================================
