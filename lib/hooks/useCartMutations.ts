@@ -59,10 +59,7 @@ function authHeader(): Record<string, string> {
 }
 
 function syncStore(cartData: any) {
-  if (!cartData) {
-    console.log('[cart] syncStore: empty cartData, skip')
-    return
-  }
+  if (!cartData) return
   // Some endpoints return { data: {...} } wrapper, others return body directly.
   const body = cartData?.data?.id ? cartData.data : cartData
   // Preserve encoded_id alongside id so pickBasketIdFromCart can pick the
@@ -72,28 +69,51 @@ function syncStore(cartData: any) {
     : body
   const lines = adaptServerCartToLines(adapted)
   const basketId = pickBasketIdFromCart(adapted)
-  console.log('[cart] syncStore', {
-    serverDecodedId: body?.id,
-    serverEncodedId: body?.encoded_id,
-    pickedBasketId: basketId,
-    lineCount: lines.length,
-  })
   useCartStore.getState().setFromServer(basketId, lines)
   if (basketId && typeof window !== 'undefined') {
+    // Legacy code (BonusStartApp, OrdersApp, etc.) reads this with a raw
+    // localStorage.getItem and sends it straight to the API — no JSON.parse.
+    // Store as a raw string, not a JSON-quoted string.
     try {
-      // Legacy code (BonusStartApp, OrdersApp, etc.) reads this with a raw
-      // localStorage.getItem and sends it straight to the API — no JSON.parse.
-      // So we must store the raw string, not a JSON-quoted string.
       localStorage.setItem('basketId', String(basketId))
-      console.log('[cart] syncStore wrote localStorage.basketId =', basketId)
-    } catch (e) {
-      console.warn('[cart] syncStore localStorage write failed', e)
-    }
+    } catch {}
   }
 }
 
 function isLikelyEncodedHashid(v: string | null | undefined): v is string {
   return !!v && !/^\d+$/.test(v)
+}
+
+async function fetchFreshBasket(
+  basketId: string | null | undefined,
+  deliveryType: string | null | undefined
+): Promise<any | null> {
+  if (!basketId) return null
+  const qs = deliveryType === 'pickup' ? '?delivery_type=pickup' : ''
+  try {
+    const { data } = await axios.get(
+      `${webAddress}/api/baskets/${basketId}${qs}`,
+      { withCredentials: true }
+    )
+    const basket = data?.data || data
+    if (!basket?.id) return null
+    return {
+      data: {
+        id: basket.id,
+        // GET /api/baskets/{encoded} omits encoded_id in the body — backfill
+        // from the basketId we used to make the request so syncStore preserves
+        // the hashid in the store/localStorage.
+        encoded_id: basket.encoded_id || basketId,
+        lines: basket.lines || basket.lineItems || [],
+        sub_total: basket.sub_total ?? basket.subtotalPrice ?? 0,
+        total: basket.total ?? basket.totalPrice ?? 0,
+        discount_total: basket.discount_total ?? basket.discountTotal ?? 0,
+        discount_value: basket.discount_value ?? basket.discountValue ?? 0,
+      },
+    }
+  } catch {
+    return null
+  }
 }
 
 function readBasketIdFromLocalStorage(): string | null {
@@ -156,25 +176,12 @@ export function useAddToCart() {
         'Content-Type': 'application/json',
         ...authHeader(),
       }
-      console.log('[cart] add: candidates', {
-        fromLocal,
-        storeId,
-        chosenBasketId: basketId,
-        deliveryType,
-        variantIds: variants.map((v) => v.id),
-        endpoint: basketId ? '/api/baskets-lines' : '/api/baskets',
-      })
       if (basketId) {
         const { data } = await axios.post(
           `${webAddress}/api/baskets-lines${qs}`,
           { basket_id: basketId, variants },
           { headers, withCredentials: true }
         )
-        console.log('[cart] add: appended to existing basket', {
-          basket_id_sent: basketId,
-          serverResponseId: data?.data?.id,
-          serverEncodedId: data?.data?.encoded_id,
-        })
         return data
       }
       const { data } = await axios.post(
@@ -183,10 +190,6 @@ export function useAddToCart() {
         { headers, withCredentials: true }
       )
       const encoded = data?.data?.encoded_id || data?.encoded_id
-      console.log('[cart] add: created NEW basket', {
-        serverDecodedId: data?.data?.id,
-        serverEncodedId: encoded,
-      })
       if (encoded) {
         // Write to BOTH the Zustand store and localStorage immediately so
         // any subsequent click reads the encoded id even before onSuccess
@@ -194,33 +197,15 @@ export function useAddToCart() {
         useCartStore.getState().setBasketId(String(encoded))
         try {
           localStorage.setItem('basketId', String(encoded))
-          console.log(
-            '[cart] add: wrote basketId into store + localStorage =',
-            encoded
-          )
-        } catch (e) {
-          console.warn('[cart] add: localStorage write failed', e)
-        }
-      } else {
-        console.warn('[cart] add: server returned no encoded_id', data)
+        } catch {}
       }
       return data
     },
     onMutate: ({ optimisticLine }) => {
-      console.log('[cart] add onMutate: optimistic line', {
-        id: optimisticLine.id,
-        variantId: optimisticLine.variantId,
-        productId: optimisticLine.productId,
-        name: optimisticLine.name,
-      })
       const snapshot = useCartStore.getState().optimisticAdd(optimisticLine)
       return { snapshot }
     },
     onError: (err: any, _vars, ctx) => {
-      console.error('[cart] add onError', {
-        status: err?.response?.status,
-        data: err?.response?.data,
-      })
       if (ctx) useCartStore.getState().rollback(ctx.snapshot)
       const msg =
         err?.response?.data?.error?.message ||
@@ -228,10 +213,7 @@ export function useAddToCart() {
         'Не удалось добавить в корзину'
       toast.error(String(msg))
     },
-    onSuccess: (cartData) => {
-      console.log('[cart] add onSuccess')
-      syncStore(cartData)
-    },
+    onSuccess: (cartData) => syncStore(cartData),
   })
 }
 
@@ -252,30 +234,50 @@ export function useUpdateCartQty() {
     mutationFn: async ({ lineId, delta, currentQty }: QtyInput) => {
       await ensureCsrf()
       const lineIdEncoded = hashids.encode(lineId)
+      // The /api/v1/basket-lines/* endpoints respond with a HAL-style envelope
+      // (lines: { data: [...] }, variant: { data: {...} }, ...) that
+      // adaptServerCartToLines can't parse — without normalisation it returns
+      // [] and the cart visually empties. Issue the mutating call, then GET
+      // the basket via the canonical endpoint which returns the legacy shape.
       if (delta > 0) {
-        return axios
-          .post(
-            `${webAddress}/api/v1/basket-lines/${lineIdEncoded}/add`,
-            { quantity: 1 },
-            { headers: authHeader(), withCredentials: true }
-          )
-          .then((r) => r.data)
-      }
-      if (currentQty <= 1) {
-        return axios
-          .delete(`${webAddress}/api/basket-lines/${lineIdEncoded}`, {
-            headers: authHeader(),
-            withCredentials: true,
-          })
-          .then((r) => r.data)
-      }
-      return axios
-        .put(
-          `${webAddress}/api/v1/basket-lines/${lineIdEncoded}/remove`,
+        const { data: addResponse } = await axios.post(
+          `${webAddress}/api/v1/basket-lines/${lineIdEncoded}/add`,
           { quantity: 1 },
           { headers: authHeader(), withCredentials: true }
         )
-        .then((r) => r.data)
+        const basketId =
+          addResponse?.data?.id ||
+          useCartStore.getState().basketId ||
+          readBasketIdFromLocalStorage()
+        return (
+          (await fetchFreshBasket(basketId, null)) || addResponse
+        )
+      }
+      if (currentQty <= 1) {
+        const { data: delResponse } = await axios.delete(
+          `${webAddress}/api/basket-lines/${lineIdEncoded}`,
+          { headers: authHeader(), withCredentials: true }
+        )
+        const basketId =
+          delResponse?.data?.id ||
+          useCartStore.getState().basketId ||
+          readBasketIdFromLocalStorage()
+        return (
+          (await fetchFreshBasket(basketId, null)) || delResponse
+        )
+      }
+      const { data: removeResponse } = await axios.put(
+        `${webAddress}/api/v1/basket-lines/${lineIdEncoded}/remove`,
+        { quantity: 1 },
+        { headers: authHeader(), withCredentials: true }
+      )
+      const basketId =
+        removeResponse?.data?.id ||
+        useCartStore.getState().basketId ||
+        readBasketIdFromLocalStorage()
+      return (
+        (await fetchFreshBasket(basketId, null)) || removeResponse
+      )
     },
     onMutate: ({ lineId, delta, currentQty }) => {
       const newQty = Math.max(0, currentQty + delta)
@@ -312,7 +314,13 @@ export function useRemoveCartLine() {
         `${webAddress}/api/basket-lines/${lineIdEncoded}`,
         { headers: authHeader(), withCredentials: true }
       )
-      return data
+      // Same envelope problem as useUpdateCartQty — refetch the canonical
+      // basket so syncStore writes proper line shapes back into the store.
+      const basketId =
+        data?.data?.id ||
+        useCartStore.getState().basketId ||
+        readBasketIdFromLocalStorage()
+      return (await fetchFreshBasket(basketId, null)) || data
     },
     onMutate: ({ lineId }) => {
       const snapshot = useCartStore.getState().optimisticRemove(lineId)

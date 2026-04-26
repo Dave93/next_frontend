@@ -32,9 +32,6 @@ async function fetchBasket(
 ): Promise<any | null> {
   if (!basketId) return null
   const qs = deliveryType === 'pickup' ? '?delivery_type=pickup' : ''
-  console.log('[cart] hydrator GET', {
-    url: `/api/baskets/${basketId}${qs}`,
-  })
   try {
     const { data } = await axios.get(
       `${webAddress}/api/baskets/${basketId}${qs}`,
@@ -42,15 +39,7 @@ async function fetchBasket(
     )
     // Normalize backend wrapper shape ({ data: {...} } or {...}).
     const basket = data?.data || data
-    if (!basket?.id) {
-      console.warn('[cart] hydrator GET: no basket.id in response', data)
-      return null
-    }
-    console.log('[cart] hydrator GET ok', {
-      decodedId: basket.id,
-      encodedId: basket.encoded_id,
-      lineCount: (basket.lines || basket.lineItems || []).length,
-    })
+    if (!basket?.id) return null
     return {
       id: basket.id,
       // GET /api/baskets/{encoded} response body OMITS encoded_id (only POST
@@ -65,11 +54,7 @@ async function fetchBasket(
       discountTotal: basket.discount_total ?? basket.discountTotal ?? 0,
       discountValue: basket.discount_value ?? basket.discountValue ?? 0,
     }
-  } catch (e: any) {
-    console.warn('[cart] hydrator GET failed', {
-      status: e?.response?.status,
-      message: e?.message,
-    })
+  } catch {
     return null
   }
 }
@@ -105,20 +90,9 @@ const CartHydrator: FC = () => {
       }
       const isDecoded = (v: string | null | undefined) =>
         !!v && /^\d+$/.test(v)
-      console.log('[cart] hydrator effect', {
-        rawLocalStorage: raw,
-        parsedLegacy: legacy,
-        legacyIsDecoded: isDecoded(legacy),
-        persistedBasketId,
-        persistedIsDecoded: isDecoded(persistedBasketId),
-      })
       // Drop a stale decoded id from localStorage so future writes can't
       // pollute the store again.
       if (isDecoded(legacy)) {
-        console.warn(
-          '[cart] hydrator: decoded id in localStorage, clearing',
-          legacy
-        )
         legacy = null
         try {
           localStorage.removeItem('basketId')
@@ -128,23 +102,11 @@ const CartHydrator: FC = () => {
         legacy &&
         (!persistedBasketId || isDecoded(persistedBasketId))
       ) {
-        console.log(
-          '[cart] hydrator: seeding store basketId from legacy localStorage',
-          legacy
-        )
         useCartStore.getState().setBasketId(legacy)
       } else if (!legacy && isDecoded(persistedBasketId)) {
-        // No salvageable legacy value, and store has a useless decoded id —
-        // clear it so we POST /api/baskets fresh on next add.
-        console.warn(
-          '[cart] hydrator: clearing decoded persistedBasketId',
-          persistedBasketId
-        )
         useCartStore.getState().setBasketId(null)
       }
-    } catch (e) {
-      console.warn('[cart] hydrator effect failed', e)
-    }
+    } catch {}
   }, [hasHydrated, persistedBasketId])
 
   const queryBasketId =
