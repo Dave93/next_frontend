@@ -8,7 +8,7 @@ import {
 } from '@headlessui/react'
 import { CheckIcon, XIcon } from '@heroicons/react/outline'
 import { useLocale } from 'next-intl'
-import { useUI } from '@components/ui/context'
+import { useLocationStore } from '../../lib/stores/location-store'
 import axios from 'axios'
 import Image from 'next/image'
 import Cookies from 'js-cookie'
@@ -27,7 +27,7 @@ const ThreePizza: FC<ThreePizzaProps> = ({ items, channelName }) => {
   let [isOpen, setIsOpen] = useState(false)
   let completeButtonRef = useRef(null)
   const locale = useLocale()
-  const { locationData } = useUI()
+  const locationData = useLocationStore((s) => s.locationData) as any
   const [selected, setSelected] = useState([] as number[])
   const [isLoadingBasket, setIsLoadingBasket] = useState(false)
   const { mutate } = useCart()

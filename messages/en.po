@@ -25,12 +25,12 @@ msgid "I2djCx"
 msgstr "Invalid code"
 
 #: components_new/auth/SignInModalApp.tsx:249
-#: components_new/common/SmallCartMobileApp.tsx:303
+#: components_new/common/SmallCartMobileApp.tsx:309
 msgid "BgypuO"
 msgstr "Authorization"
 
 #: components_new/auth/SignInModalApp.tsx:253
-#: components_new/common/SmallCartMobileApp.tsx:399
+#: components_new/common/SmallCartMobileApp.tsx:405
 #: components_new/contacts/ContactsApp.tsx:162
 #: components_new/profile/PersonalDataApp.tsx:132
 msgid "ANbLXk"
@@ -51,7 +51,7 @@ msgid "3dXnzB"
 msgstr "If the message did not arrive, call us at"
 
 #: components_new/auth/SignInModalApp.tsx:380
-#: components_new/common/SmallCartMobileApp.tsx:494
+#: components_new/common/SmallCartMobileApp.tsx:500
 msgid "K6f7aa"
 msgstr "Get code"
 
@@ -61,7 +61,7 @@ msgstr "Code sent to number"
 
 #: components_new/auth/SignInModalApp.tsx:426
 #: components_new/cart/CartApp.tsx:481
-#: components_new/common/SmallCartMobileApp.tsx:387
+#: components_new/common/SmallCartMobileApp.tsx:393
 #: components_new/header/SignInButtonApp.tsx:54
 msgid "oU4rxk"
 msgstr "Sign in"
@@ -83,13 +83,13 @@ msgid "uhOXf0"
 msgstr "Please sign in to place an order"
 
 #: components_new/cart/CartApp.tsx:500
-#: components_new/common/SmallCartApp.tsx:306
+#: components_new/common/SmallCartApp.tsx:311
 #: components_new/header/HeaderMiniCartApp.tsx:262
 msgid "Lj6qSg"
 msgstr "Cart is empty"
 
 #: components_new/cart/CartApp.tsx:502
-#: components_new/common/SmallCartApp.tsx:307
+#: components_new/common/SmallCartApp.tsx:312
 #: components_new/header/HeaderMiniCartApp.tsx:265
 msgid "V5Ibqh"
 msgstr "Choose a pizza"
@@ -112,7 +112,7 @@ msgid "1nDsuM"
 msgstr "Business hours"
 
 #: components_new/cart/CartApp.tsx:566
-#: components_new/common/SmallCartApp.tsx:288
+#: components_new/common/SmallCartApp.tsx:293
 #: components_new/header/HeaderMiniCartApp.tsx:230
 #: components_new/mobile/MobileBottomNavApp.tsx:64
 msgid "Ukms9b"
@@ -175,19 +175,19 @@ msgstr "Place order"
 msgid "J4PSYQ"
 msgstr "By submitting your data, you agree to our terms of use"
 
-#: components_new/common/SmallCartMobileApp.tsx:312
+#: components_new/common/SmallCartMobileApp.tsx:318
 msgid "wue03V"
 msgstr "Successfully logged in"
 
-#: components_new/common/SmallCartMobileApp.tsx:322
+#: components_new/common/SmallCartMobileApp.tsx:328
 msgid "eY7wBY"
 msgstr "SMS code"
 
-#: components_new/common/SmallCartMobileApp.tsx:351
+#: components_new/common/SmallCartMobileApp.tsx:357
 msgid "14dq0g"
 msgstr "Get code again"
 
-#: components_new/common/SmallCartMobileApp.tsx:443
+#: components_new/common/SmallCartMobileApp.tsx:449
 msgid "x1g9gC"
 msgstr "Your name"
 

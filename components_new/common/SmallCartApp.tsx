@@ -11,7 +11,9 @@ import Cookies from 'js-cookie'
 import { useLocale, useExtracted } from 'next-intl'
 import { useRouter } from '../../i18n/navigation'
 import Hashids from 'hashids'
-import { useUI } from '@components/ui/context'
+import { useUserStore } from '../../lib/stores/user-store'
+import { useLocationStore } from '../../lib/stores/location-store'
+import { useUIStore } from '../../lib/stores/ui-store'
 import getAssetUrl from '@utils/getAssetUrl'
 import { toast } from 'sonner'
 import SimpleBar from 'simplebar-react'
@@ -32,7 +34,10 @@ const SmallCartApp: FC<SmallCartProps> = ({ channelName }) => {
   if (typeof window !== 'undefined') {
     cartId = localStorage.getItem('basketId')
   }
-  const { locationData, user, activeCity, openSignInModal } = useUI()
+  const locationData = useLocationStore((s) => s.locationData) as any
+  const user = useUserStore((s) => s.user) as any
+  const activeCity = useLocationStore((s) => s.activeCity) as any
+  const openSignInModal = useUIStore((s) => s.openSignInModal)
 
   const { data, isEmpty, mutate } = useCart({
     cartId,

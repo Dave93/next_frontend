@@ -16,6 +16,9 @@ import Cookies from 'js-cookie'
 import { useExtracted } from 'next-intl'
 import { useRouter } from '../../i18n/navigation'
 import { useUI } from '@components/ui/context'
+import { useUserStore } from '../../lib/stores/user-store'
+import { useLocationStore } from '../../lib/stores/location-store'
+import { useUIStore } from '../../lib/stores/ui-store'
 import {
   Dialog,
   DialogBackdrop,
@@ -56,7 +59,7 @@ const SmallCartMobile: FC = () => {
   if (typeof window !== 'undefined') {
     cartId = localStorage.getItem('basketId')
   }
-  const { locationData } = useUI()
+  const locationData = useLocationStore((s) => s.locationData) as any
 
   // useCart called for SWR side-effects (cart cache hydration); destructured values
   // can be wired into UI in Wave 7 polish.
@@ -70,7 +73,10 @@ const SmallCartMobile: FC = () => {
   const [showUserName, setShowUserName] = useState(false)
   const [showSignInModal, setShowSignInModal] = useState(false)
 
-  const { user, setUserData, openSignInModal, activeCity } = useUI()
+  const user = useUserStore((s) => s.user) as any
+  const activeCity = useLocationStore((s) => s.activeCity) as any
+  const openSignInModal = useUIStore((s) => s.openSignInModal)
+  const { setUserData } = useUI() as any
 
   const otpTime = useRef(0)
 
