@@ -24,7 +24,7 @@ import {
   TransitionChild,
 } from '@headlessui/react'
 import OtpInput from 'react-otp-input'
-import Input from 'react-phone-number-input/input'
+import Input from './LazyPhoneInput'
 import styles from './SmallCartMobile.module.css'
 import { useGoogleReCaptcha } from 'react-google-recaptcha-v3'
 

@@ -3,7 +3,7 @@
 import { FC, memo, useState } from 'react'
 import { useForm, Controller } from 'react-hook-form'
 import { XIcon } from '@heroicons/react/outline'
-import Input from 'react-phone-number-input/input'
+import Input from '../common/LazyPhoneInput'
 import { useUI } from '@components/ui/context'
 import { useExtracted } from 'next-intl'
 import Cookies from 'js-cookie'
