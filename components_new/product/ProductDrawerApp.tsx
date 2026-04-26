@@ -6,6 +6,7 @@ import Image from 'next/image'
 import currency from 'currency.js'
 import { useExtracted, useLocale } from 'next-intl'
 import { useUI } from '@components/ui/context'
+import { useUIStore } from '../../lib/stores/ui-store'
 import getAssetUrl from '@utils/getAssetUrl'
 import { useProductBuilder } from './useProductBuilder'
 
@@ -21,8 +22,10 @@ const formatPrice = (val: number, locale: string) =>
   }).format()
 
 const ProductDrawerApp: FC = () => {
+  // Read from Zustand, write through legacy reducer (dual-write mirrors back)
+  const productDrawerProduct = useUIStore((s) => s.productDrawerData)
   const ui = useUI() as any
-  const { productDrawerProduct, closeProductDrawer } = ui
+  const { closeProductDrawer } = ui
   const t = useExtracted()
   const locale = useLocale()
   const open = !!productDrawerProduct

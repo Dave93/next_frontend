@@ -10,7 +10,9 @@ import Cookies from 'js-cookie'
 import defaultChannel from '@lib/defaultChannel'
 import currency from 'currency.js'
 import getAssetUrl from '@utils/getAssetUrl'
-import { useUI } from '@components/ui/context'
+import { useUserStore } from '../../lib/stores/user-store'
+import { useLocationStore } from '../../lib/stores/location-store'
+import { useUIStore } from '../../lib/stores/ui-store'
 import {
   trackCheckoutStarted,
   trackCartViewed,
@@ -44,7 +46,10 @@ export default function CartApp(_props: CartAppProps) {
     setChannelName(channelData.name)
   }
 
-  const { activeCity, locationData, user, openSignInModal } = useUI() as any
+  const activeCity = useLocationStore((s) => s.activeCity) as any
+  const locationData = useLocationStore((s) => s.locationData) as any
+  const user = useUserStore((s) => s.user) as any
+  const openSignInModal = useUIStore((s) => s.openSignInModal)
   useEffect(() => {
     getChannel()
   }, [])

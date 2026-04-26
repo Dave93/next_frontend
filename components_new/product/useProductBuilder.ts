@@ -5,7 +5,7 @@ import axios from 'axios'
 import Cookies from 'js-cookie'
 import Hashids from 'hashids'
 import { useCart } from '@framework/cart'
-import { useUI } from '@components/ui/context'
+import { useLocationStore } from '../../lib/stores/location-store'
 import { trackAddToCart } from '@lib/posthog-events'
 
 const webAddress = process.env.NEXT_PUBLIC_API_URL
@@ -39,7 +39,7 @@ export function useProductBuilder(
   product: any | null,
   onAdded?: () => void
 ) {
-  const { locationData } = useUI() as any
+  const locationData = useLocationStore((s) => s.locationData) as any
   const { data: cartData, mutate } = useCart()
 
   const [activeVariantId, setActiveVariantId] = useState<number | null>(null)

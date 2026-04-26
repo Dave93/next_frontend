@@ -9,6 +9,7 @@ import {
   TransitionChild,
 } from '@headlessui/react'
 import { useUI } from '@components/ui/context'
+import { useUIStore } from '../../lib/stores/ui-store'
 import { useGoogleReCaptcha } from 'react-google-recaptcha-v3'
 import { useExtracted } from 'next-intl'
 import axios from 'axios'
@@ -40,7 +41,9 @@ const errorMessages: Record<string, string> = {
 }
 
 const SignInModalApp: FC = () => {
-  const { showSignInModal, closeSignInModal, setUserData } = useUI() as any
+  // Read open state from Zustand, write through legacy reducer
+  const showSignInModal = useUIStore((s) => s.signInModalOpen)
+  const { closeSignInModal, setUserData } = useUI() as any
   const { executeRecaptcha } = useGoogleReCaptcha()
   const t = useExtracted()
   const [step, setStep] = useState<'phone' | 'code'>('phone')

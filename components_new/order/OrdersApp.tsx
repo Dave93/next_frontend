@@ -4,6 +4,9 @@ import { XIcon } from '@heroicons/react/outline'
 import getAssetUrl from '@utils/getAssetUrl'
 import { useForm, Controller } from 'react-hook-form'
 import { useUI } from '@components/ui/context'
+import { useUserStore } from '../../lib/stores/user-store'
+import { useLocationStore } from '../../lib/stores/location-store'
+import { useUIStore } from '../../lib/stores/ui-store'
 import React, {
   Fragment,
   useState,
@@ -213,23 +216,26 @@ const OrdersApp: FC<OrdersProps> = ({ channelName, isMobile = false }) => {
     }
     return text
   }
+  // Reads via Zustand selectors, writes via legacy reducer (dual-write
+  // mirrors back). selectAddress / setStopProducts have no Zustand
+  // equivalent yet — kept on legacy.
+  const user = useUserStore((s) => s.user) as any
+  const locationData = useLocationStore((s) => s.locationData) as any
+  const cities = useLocationStore((s) => s.cities) as any
+  const activeCity = useLocationStore((s) => s.activeCity) as any
+  const addressId = useLocationStore((s) => s.addressId)
+  const addressList = useLocationStore((s) => s.addressList) as any
+  const openSignInModal = useUIStore((s) => s.openSignInModal)
   const {
-    user,
+    stopProducts,
     setUserData,
-    locationData,
     setLocationData,
-    cities,
-    activeCity,
     setActiveCity,
-    openSignInModal,
-    addressId,
     setAddressId,
     setAddressList,
-    addressList,
     selectAddress,
     setStopProducts,
-    stopProducts,
-  } = useUI()
+  } = useUI() as any
   let cartId: string | null = null
   if (typeof window !== 'undefined') {
     cartId = localStorage.getItem('basketId')

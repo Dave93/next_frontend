@@ -3,6 +3,7 @@
 import { FC, useEffect, useMemo, useRef, useState } from 'react'
 import { XIcon } from '@heroicons/react/outline'
 import { useUI } from '@components/ui/context'
+import { useLocationStore } from '../../lib/stores/location-store'
 import { useExtracted, useLocale } from 'next-intl'
 import axios from 'axios'
 import dynamic from 'next/dynamic'
@@ -121,14 +122,12 @@ const LocationPickerCore: FC<Props> = ({
   autoSubmit = false,
   mapHeight = 280,
 }) => {
+  // Reads via Zustand, writes through legacy useUI (dual-write mirrors back)
+  const locationData = useLocationStore((s) => s.locationData) as any
+  const activeCity = useLocationStore((s) => s.activeCity) as any
+  const cities = useLocationStore((s) => s.cities) as any
   const ui = useUI() as any
-  const {
-    setLocationData,
-    locationData,
-    activeCity,
-    cities,
-    setActiveCity,
-  } = ui
+  const { setLocationData, setActiveCity } = ui
   const t = useExtracted()
   const locale = useLocale()
   const isMd = useIsMd()

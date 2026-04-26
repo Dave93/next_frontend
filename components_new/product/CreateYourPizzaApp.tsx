@@ -15,6 +15,7 @@ import axios from 'axios'
 import Cookies from 'js-cookie'
 import { useCart } from '@framework/cart'
 import { useUI } from '@components/ui/context'
+import { useLocationStore } from '../../lib/stores/location-store'
 import { DateTime } from 'luxon'
 import getAssetUrl from '@utils/getAssetUrl'
 
@@ -36,7 +37,8 @@ const CreateYourPizzaApp: FC<CreatePizzaProps> = ({
   const t = useExtracted()
   let [isOpen, setIsOpen] = useState(false)
   let completeButtonRef = useRef(null)
-  const { stopProducts, locationData } = useUI()
+  const locationData = useLocationStore((s) => s.locationData) as any
+  const { stopProducts } = useUI() as any
   const { mutate } = useCart()
   const [isLoadingBasket, setIsLoadingBasket] = useState(false)
   const [activeModifiers, setActiveModifeirs] = useState([] as number[])
