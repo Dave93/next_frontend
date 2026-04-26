@@ -62,33 +62,60 @@ const CartHydrator: FC = () => {
   const locationData = useLocationStore((s) => s.locationData)
   const deliveryType = locationData?.deliveryType ?? null
 
-  // One-time legacy localStorage `basketId` bridge for sessions that
-  // predate Zustand persist. Also self-heals when the persisted store has a
-  // decoded numeric id (which Laravel write endpoints reject) but legacy
-  // localStorage still has the encoded hashid.
+  // One-time legacy localStorage `basketId` bridge for sessions that predate
+  // Zustand persist. Also self-heals when the persisted store has a decoded
+  // numeric id (Laravel write endpoints reject those) but localStorage still
+  // has the encoded hashid (or vice-versa). Drops decoded-numeric values from
+  // both layers because they cannot succeed against the API anyway.
   useEffect(() => {
     if (!hasHydrated) return
     if (typeof window === 'undefined') return
     try {
       const raw = localStorage.getItem('basketId')
-      if (!raw) return
-      const parsed = JSON.parse(raw)
-      if (!parsed) return
-      const legacy = String(parsed)
-      const persistedLooksDecoded =
-        persistedBasketId !== null &&
-        persistedBasketId !== undefined &&
-        /^\d+$/.test(persistedBasketId)
-      if (!persistedBasketId || persistedLooksDecoded) {
+      let legacy: string | null = null
+      if (raw) {
+        if (raw.startsWith('"')) {
+          try {
+            const parsed = JSON.parse(raw)
+            legacy = parsed ? String(parsed) : null
+          } catch {
+            legacy = raw.replace(/^"|"$/g, '') || null
+          }
+        } else {
+          legacy = raw
+        }
+      }
+      const isDecoded = (v: string | null | undefined) =>
+        !!v && /^\d+$/.test(v)
+      // Drop a stale decoded id from localStorage so future writes can't
+      // pollute the store again.
+      if (isDecoded(legacy)) {
+        legacy = null
+        try {
+          localStorage.removeItem('basketId')
+        } catch {}
+      }
+      if (
+        legacy &&
+        (!persistedBasketId || isDecoded(persistedBasketId))
+      ) {
         useCartStore.getState().setBasketId(legacy)
+      } else if (!legacy && isDecoded(persistedBasketId)) {
+        // No salvageable legacy value, and store has a useless decoded id —
+        // clear it so we POST /api/baskets fresh on next add.
+        useCartStore.getState().setBasketId(null)
       }
     } catch {}
   }, [hasHydrated, persistedBasketId])
 
+  const queryBasketId =
+    persistedBasketId && /^\d+$/.test(persistedBasketId)
+      ? null
+      : persistedBasketId
   const { data } = useQuery({
-    queryKey: ['cart', persistedBasketId, deliveryType],
-    queryFn: () => fetchBasket(persistedBasketId as string, deliveryType),
-    enabled: hasHydrated && !!persistedBasketId,
+    queryKey: ['cart', queryBasketId, deliveryType],
+    queryFn: () => fetchBasket(queryBasketId as string, deliveryType),
+    enabled: hasHydrated && !!queryBasketId,
     staleTime: 30_000,
     refetchOnWindowFocus: true,
   })
@@ -100,7 +127,7 @@ const CartHydrator: FC = () => {
     useCartStore.getState().setFromServer(basketId ?? null, lines)
     if (basketId) {
       try {
-        localStorage.setItem('basketId', JSON.stringify(basketId))
+        localStorage.setItem('basketId', String(basketId))
       } catch {}
     }
   }, [data, persistedBasketId])

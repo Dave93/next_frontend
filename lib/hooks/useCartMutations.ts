@@ -72,8 +72,35 @@ function syncStore(cartData: any) {
   useCartStore.getState().setFromServer(basketId, lines)
   if (basketId && typeof window !== 'undefined') {
     try {
-      localStorage.setItem('basketId', JSON.stringify(basketId))
+      // Legacy code (BonusStartApp, OrdersApp, etc.) reads this with a raw
+      // localStorage.getItem and sends it straight to the API — no JSON.parse.
+      // So we must store the raw string, not a JSON-quoted string.
+      localStorage.setItem('basketId', String(basketId))
     } catch {}
+  }
+}
+
+function isLikelyEncodedHashid(v: string | null | undefined): v is string {
+  return !!v && !/^\d+$/.test(v)
+}
+
+function readBasketIdFromLocalStorage(): string | null {
+  if (typeof window === 'undefined') return null
+  try {
+    const raw = localStorage.getItem('basketId')
+    if (!raw) return null
+    // Tolerate both raw "encoded" and legacy JSON.stringified '"encoded"'.
+    if (raw.startsWith('"')) {
+      try {
+        const parsed = JSON.parse(raw)
+        return parsed ? String(parsed) : null
+      } catch {
+        return raw.replace(/^"|"$/g, '') || null
+      }
+    }
+    return raw
+  } catch {
+    return null
   }
 }
 
@@ -104,28 +131,14 @@ export function useAddToCart() {
     scope: { id: 'cart' },
     mutationFn: async ({ variants, deliveryType }: AddInput) => {
       await ensureCsrf()
-      // localStorage 'basketId' is the canonical encoded hashid (Laravel
-      // rejects decoded numeric ids). Fall back to the store only when
-      // localStorage is missing so we don't accidentally send a decoded id
-      // from an older session.
-      const fromLocal =
-        typeof window !== 'undefined'
-          ? (() => {
-              try {
-                const raw = localStorage.getItem('basketId')
-                if (!raw) return null
-                const parsed = JSON.parse(raw)
-                return parsed ? String(parsed) : null
-              } catch {
-                return null
-              }
-            })()
-          : null
+      // Laravel rejects decoded numeric basket ids; only encoded hashids are
+      // accepted. Reject any candidate that looks like raw digits and fall
+      // through to creating a fresh basket via POST /api/baskets.
+      const fromLocal = readBasketIdFromLocalStorage()
       const storeId = useCartStore.getState().basketId
       const basketId =
-        fromLocal ||
-        // only trust the store value if it doesn't look like a raw decoded id
-        (storeId && !/^\d+$/.test(storeId) ? storeId : null)
+        (isLikelyEncodedHashid(fromLocal) ? fromLocal : null) ||
+        (isLikelyEncodedHashid(storeId) ? storeId : null)
       const qs = deliveryType === 'pickup' ? '?delivery_type=pickup' : ''
       const headers = {
         'Content-Type': 'application/json',
@@ -146,7 +159,7 @@ export function useAddToCart() {
       )
       try {
         const encoded = data?.data?.encoded_id || data?.encoded_id
-        if (encoded) localStorage.setItem('basketId', JSON.stringify(encoded))
+        if (encoded) localStorage.setItem('basketId', String(encoded))
       } catch {}
       return data
     },
