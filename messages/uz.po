@@ -360,6 +360,15 @@ msgstr "Mening manzillarim"
 msgid "xxMGAl"
 msgstr "Chiqish"
 
+#: components_new/main/islands/ProductCardActions.tsx:97
+#: components_new/product/ProductItemNewApp.tsx:775
+msgid "kazY5+"
+msgstr "Mahsulot vaqtinchalik mavjud emas"
+
+#: components_new/main/islands/ProductCardActions.tsx:141
+msgid "6DyGho"
+msgstr ""
+
 #: components_new/mobile/MobileBottomNavApp.tsx:52
 msgid "XnLtsK"
 msgstr "Bosh sahifa"
@@ -419,10 +428,6 @@ msgstr "Savatga"
 #: components_new/product/ProductItemNewApp.tsx:670
 msgid "zXkVd5"
 msgstr "Qo'shish"
-
-#: components_new/product/ProductItemNewApp.tsx:775
-msgid "kazY5+"
-msgstr "Mahsulot vaqtinchalik mavjud emas"
 
 #: components_new/product/ProductItemNewApp.tsx:1130
 msgid "AH6N5n"
