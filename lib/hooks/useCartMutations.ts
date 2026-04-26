@@ -59,7 +59,10 @@ function authHeader(): Record<string, string> {
 }
 
 function syncStore(cartData: any) {
-  if (!cartData) return
+  if (!cartData) {
+    console.log('[cart] syncStore: empty cartData, skip')
+    return
+  }
   // Some endpoints return { data: {...} } wrapper, others return body directly.
   const body = cartData?.data?.id ? cartData.data : cartData
   // Preserve encoded_id alongside id so pickBasketIdFromCart can pick the
@@ -69,6 +72,12 @@ function syncStore(cartData: any) {
     : body
   const lines = adaptServerCartToLines(adapted)
   const basketId = pickBasketIdFromCart(adapted)
+  console.log('[cart] syncStore', {
+    serverDecodedId: body?.id,
+    serverEncodedId: body?.encoded_id,
+    pickedBasketId: basketId,
+    lineCount: lines.length,
+  })
   useCartStore.getState().setFromServer(basketId, lines)
   if (basketId && typeof window !== 'undefined') {
     try {
@@ -76,7 +85,10 @@ function syncStore(cartData: any) {
       // localStorage.getItem and sends it straight to the API — no JSON.parse.
       // So we must store the raw string, not a JSON-quoted string.
       localStorage.setItem('basketId', String(basketId))
-    } catch {}
+      console.log('[cart] syncStore wrote localStorage.basketId =', basketId)
+    } catch (e) {
+      console.warn('[cart] syncStore localStorage write failed', e)
+    }
   }
 }
 
@@ -144,12 +156,25 @@ export function useAddToCart() {
         'Content-Type': 'application/json',
         ...authHeader(),
       }
+      console.log('[cart] add: candidates', {
+        fromLocal,
+        storeId,
+        chosenBasketId: basketId,
+        deliveryType,
+        variantIds: variants.map((v) => v.id),
+        endpoint: basketId ? '/api/baskets-lines' : '/api/baskets',
+      })
       if (basketId) {
         const { data } = await axios.post(
           `${webAddress}/api/baskets-lines${qs}`,
           { basket_id: basketId, variants },
           { headers, withCredentials: true }
         )
+        console.log('[cart] add: appended to existing basket', {
+          basket_id_sent: basketId,
+          serverResponseId: data?.data?.id,
+          serverEncodedId: data?.data?.encoded_id,
+        })
         return data
       }
       const { data } = await axios.post(
@@ -157,17 +182,45 @@ export function useAddToCart() {
         { variants },
         { headers, withCredentials: true }
       )
-      try {
-        const encoded = data?.data?.encoded_id || data?.encoded_id
-        if (encoded) localStorage.setItem('basketId', String(encoded))
-      } catch {}
+      const encoded = data?.data?.encoded_id || data?.encoded_id
+      console.log('[cart] add: created NEW basket', {
+        serverDecodedId: data?.data?.id,
+        serverEncodedId: encoded,
+      })
+      if (encoded) {
+        // Write to BOTH the Zustand store and localStorage immediately so
+        // any subsequent click reads the encoded id even before onSuccess
+        // / syncStore fires.
+        useCartStore.getState().setBasketId(String(encoded))
+        try {
+          localStorage.setItem('basketId', String(encoded))
+          console.log(
+            '[cart] add: wrote basketId into store + localStorage =',
+            encoded
+          )
+        } catch (e) {
+          console.warn('[cart] add: localStorage write failed', e)
+        }
+      } else {
+        console.warn('[cart] add: server returned no encoded_id', data)
+      }
       return data
     },
     onMutate: ({ optimisticLine }) => {
+      console.log('[cart] add onMutate: optimistic line', {
+        id: optimisticLine.id,
+        variantId: optimisticLine.variantId,
+        productId: optimisticLine.productId,
+        name: optimisticLine.name,
+      })
       const snapshot = useCartStore.getState().optimisticAdd(optimisticLine)
       return { snapshot }
     },
     onError: (err: any, _vars, ctx) => {
+      console.error('[cart] add onError', {
+        status: err?.response?.status,
+        data: err?.response?.data,
+      })
       if (ctx) useCartStore.getState().rollback(ctx.snapshot)
       const msg =
         err?.response?.data?.error?.message ||
@@ -175,7 +228,10 @@ export function useAddToCart() {
         'Не удалось добавить в корзину'
       toast.error(String(msg))
     },
-    onSuccess: (cartData) => syncStore(cartData),
+    onSuccess: (cartData) => {
+      console.log('[cart] add onSuccess')
+      syncStore(cartData)
+    },
   })
 }
 

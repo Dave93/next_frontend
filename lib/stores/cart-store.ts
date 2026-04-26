@@ -25,7 +25,9 @@ import { create } from 'zustand'
 import { persist, createJSONStorage } from 'zustand/middleware'
 import { immer } from 'zustand/middleware/immer'
 
-const SCHEMA_VERSION = 1
+// v2 — wipes any persisted store carrying a decoded numeric basketId from
+// pre-fix builds so the hydrator can re-seed from legacy localStorage cleanly.
+const SCHEMA_VERSION = 2
 
 export type CartLineModifier = {
   id: number
