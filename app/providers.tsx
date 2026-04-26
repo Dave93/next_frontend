@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import { GoogleReCaptchaProvider } from 'react-google-recaptcha-v3'
 import { Toaster } from 'sonner'
+import { CommerceProvider } from '@framework'
 import FacebookPixel from '../components_new/analytics/FacebookPixelApp'
 import { PostHogProvider } from '@lib/posthog-app'
 import StorePersistRehydrator from '../components_new/common/StorePersistRehydrator'
@@ -33,10 +34,12 @@ export default function Providers({
         language="RU"
       >
         <FacebookPixel />
-        <QueryClientProvider client={queryClient}>
-          <StorePersistRehydrator />
-          {children}
-        </QueryClientProvider>
+        <CommerceProvider locale="ru">
+          <QueryClientProvider client={queryClient}>
+            <StorePersistRehydrator />
+            {children}
+          </QueryClientProvider>
+        </CommerceProvider>
         <Toaster position="bottom-right" richColors closeButton />
       </GoogleReCaptchaProvider>
     </PostHogProvider>

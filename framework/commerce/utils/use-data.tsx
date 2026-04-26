@@ -1,22 +1,64 @@
-// SWR-based commerce hook stub. The real implementation was removed
-// when SWR was deleted from the project after Wave 3.7. Only types are
-// kept so existing legacy framework code (vendure/bigcommerce/etc.)
-// continues to type-check; nothing in the active app actually calls it.
+import useSWR, { SWRResponse } from 'swr'
+import type {
+  HookSWRInput,
+  HookFetchInput,
+  HookFetcherOptions,
+  HookFetcherFn,
+  Fetcher,
+  SwrOptions,
+  SWRHookSchemaBase,
+} from './types'
+import { CommerceError } from './errors'
 
-export type ResponseState<Result> = {
-  data?: Result
-  error?: Error
+export type ResponseState<Result> = SWRResponse<Result, CommerceError> & {
   isLoading: boolean
-  mutate: (...args: any[]) => any
 }
 
-export type UseData = (..._args: any[]) => ResponseState<any>
+export type UseData = <H extends SWRHookSchemaBase>(
+  options: {
+    fetchOptions: HookFetcherOptions
+    fetcher: HookFetcherFn<H>
+  },
+  input: HookFetchInput | HookSWRInput,
+  fetcherFn: Fetcher,
+  swrOptions?: SwrOptions<H['data'], H['fetcherInput']>
+) => ResponseState<H['data']>
 
-const useData: UseData = () => ({
-  data: undefined,
-  error: undefined,
-  isLoading: false,
-  mutate: () => Promise.resolve(undefined),
-})
+const useData: UseData = (options, input, fetcherFn, swrOptions) => {
+  const hookInput = Array.isArray(input) ? input : Object.entries(input)
+  const fetcher = async (key: any[]) => {
+    const [url, query, method, ...args] = key
+    try {
+      return await options.fetcher({
+        options: { url, query, method },
+        // Transform the input array into an object
+        input: args.reduce((obj: any, val: any, i: number) => {
+          obj[hookInput[i][0]!] = val
+          return obj
+        }, {}),
+        fetch: fetcherFn,
+      })
+    } catch (error) {
+      // SWR will not log errors, but any error that's not an instance
+      // of CommerceError is not welcomed by this hook
+      if (!(error instanceof CommerceError)) {
+        console.error(error)
+      }
+      throw error
+    }
+  }
+  const response = useSWR(
+    () => {
+      const opts = options.fetchOptions
+      return opts
+        ? [opts.url, opts.query, opts.method, ...hookInput.map((e) => e[1])]
+        : null
+    },
+    fetcher,
+    swrOptions as any
+  )
+
+  return response as typeof response & { isLoading: boolean }
+}
 
 export default useData

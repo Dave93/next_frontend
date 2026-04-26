@@ -1,8 +1,7 @@
 'use client'
 
 import { useEffect, useMemo, useState } from 'react'
-import { useCartStore, cartSelectors } from '../../lib/stores/cart-store'
-import { syncCartFromBasketResult } from '../../lib/data/cart-adapter'
+import useCart from '@framework/cart/use-cart'
 import { useLocale, useExtracted } from 'next-intl'
 import { useRouter } from '../../i18n/navigation'
 import Hashids from 'hashids'
@@ -62,25 +61,7 @@ export default function CartApp(_props: CartAppProps) {
   const cartId =
     typeof window !== 'undefined' ? localStorage.getItem('basketId') : null
 
-  const lines = useCartStore(cartSelectors.lines)
-  const isEmpty = useCartStore(cartSelectors.isEmpty)
-  const totalPriceFromStore = useCartStore(cartSelectors.total)
-  // Backwards-compatible `data` shape for legacy JSX still reading
-  // data.lineItems / data.totalPrice.
-  const data: any = useMemo(
-    () => ({
-      id: useCartStore.getState().basketId || '',
-      lineItems: lines.map((l) => ({ ...l, quantity: l.qty })),
-      totalPrice: totalPriceFromStore,
-      subtotalPrice: totalPriceFromStore,
-      discountTotal: 0,
-      discountValue: 0,
-    }),
-    [lines, totalPriceFromStore]
-  )
-  // No-op replacement for legacy mutate() — sync now flows via mutation
-  // hooks / syncCartFromBasketResult after axios.* calls.
-  const mutate = async (_payload?: any, _opts?: any) => {}
+  const { data, isEmpty, mutate } = useCart()
 
   const [isCartLoading, setIsCartLoading] = useState(false)
   const [loadingLineId, setLoadingLineId] = useState<string | null>(null)
@@ -131,16 +112,30 @@ export default function CartApp(_props: CartAppProps) {
   }
 
   const refetchBasket = async () => {
-    if (!cartId) return
+    if (!cartId) {
+      await mutate()
+      return
+    }
     const additionalQuery =
       locationData?.deliveryType === 'pickup' ? '?delivery_type=pickup' : ''
     const { data: basket } = await axios.get(
       `${webAddress}/api/baskets/${cartId}${additionalQuery}`
     )
-    syncCartFromBasketResult({
-      id: basket.data.id,
-      lineItems: basket.data.lines,
-    })
+    await mutate(
+      {
+        id: basket.data.id,
+        createdAt: '',
+        currency: { code: basket.data.currency },
+        taxesIncluded: basket.data.tax_total,
+        lineItems: basket.data.lines,
+        lineItemsSubtotalPrice: basket.data.sub_total,
+        subtotalPrice: basket.data.sub_total,
+        totalPrice: basket.data.total,
+        discountTotal: basket.data.discount_total,
+        discountValue: basket.data.discount_value,
+      },
+      false
+    )
   }
 
   const destroyLine = async (lineId: string) => {

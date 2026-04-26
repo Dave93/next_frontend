@@ -12,7 +12,7 @@ import { useLocationStore } from '../../lib/stores/location-store'
 import axios from 'axios'
 import Image from 'next/image'
 import Cookies from 'js-cookie'
-import { syncCartFromBasketResult } from '../../lib/data/cart-adapter'
+import { useCart } from '@framework/cart'
 import { Product } from '@commerce/types/product'
 
 type ThreePizzaProps = {
@@ -30,6 +30,7 @@ const ThreePizza: FC<ThreePizzaProps> = ({ items, channelName }) => {
   const locationData = useLocationStore((s) => s.locationData) as any
   const [selected, setSelected] = useState([] as number[])
   const [isLoadingBasket, setIsLoadingBasket] = useState(false)
+  const { mutate } = useCart()
 
   const selectProduct = (id: number) => {
     if (selected.includes(id)) {
@@ -149,7 +150,7 @@ const ThreePizza: FC<ThreePizzaProps> = ({ items, channelName }) => {
       }
     }
 
-    syncCartFromBasketResult(basketResult)
+    await mutate(basketResult, false)
     setIsOpen(false)
     setIsLoadingBasket(false)
   }

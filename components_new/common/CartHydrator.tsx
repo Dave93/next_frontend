@@ -1,25 +1,20 @@
 'use client'
 
 /**
- * Bridge component: subscribes to backend basket via TanStack Query and
- * mirrors result into the Zustand cart-store. Replaces the old SWR-based
- * useCart() bridge with a direct fetch.
+ * Bridge component: subscribes to the legacy SWR-backed useCart() and
+ * mirrors the result into the Zustand cart-store.
  *
- * On mount:
- * 1. Read basketId from Zustand (already rehydrated from localStorage by
- *    persist middleware on the client).
- * 2. If basketId exists → fetch /api/baskets/:basketId (with optional
- *    ?delivery_type=pickup), sync result into useCartStore.
- * 3. Re-runs whenever basketId or locationData.deliveryType changes.
+ * This lets new components read from the Zustand store (with selectors,
+ * optimistic helpers, persist) while existing components keep working
+ * unchanged. Mount once in LayoutWrapper.
  *
- * Mutation hooks in lib/hooks/useCartMutations.ts also call setFromServer
- * directly on success, so this hook is mainly for first-load + post-login
- * hydration + tab-focus refresh.
+ * Once all consumers migrate to useCartStore, useCart() can be deleted
+ * and this hydrator can fetch directly from /api/baskets/:id (and SWR
+ * + framework/cart can be removed entirely).
  */
 
-import { FC, useEffect } from 'react'
-import { useQuery } from '@tanstack/react-query'
-import axios from 'axios'
+import { FC, useEffect, useMemo } from 'react'
+import { useCart } from '@framework/cart'
 import { useCartStore } from '../../lib/stores/cart-store'
 import { useLocationStore } from '../../lib/stores/location-store'
 import {
@@ -27,66 +22,38 @@ import {
   pickBasketIdFromCart,
 } from '../../lib/data/cart-adapter'
 
-const webAddress = process.env.NEXT_PUBLIC_API_URL
-axios.defaults.withCredentials = true
-
-async function fetchBasket(
-  basketId: string,
-  deliveryType?: string | null
-): Promise<any | null> {
-  if (!basketId) return null
-  const qs =
-    deliveryType === 'pickup' ? '?delivery_type=pickup' : ''
-  try {
-    const { data } = await axios.get(
-      `${webAddress}/api/baskets/${basketId}${qs}`,
-      { withCredentials: true }
-    )
-    return data
-  } catch {
-    return null
-  }
-}
-
 const CartHydrator: FC = () => {
   const persistedBasketId = useCartStore((s) => s.basketId)
-  const hasHydrated = useCartStore((s) => s.hasHydrated)
   const locationData = useLocationStore((s) => s.locationData)
-  const deliveryType = locationData?.deliveryType ?? null
 
-  // Honour legacy localStorage `basketId` for users with a session that
-  // predates Zustand persist (one-time bridge).
-  useEffect(() => {
-    if (!hasHydrated) return
-    if (persistedBasketId) return
-    if (typeof window === 'undefined') return
+  // Compute basketId for legacy useCart — prefer persisted (Zustand, from
+  // localStorage on mount) and fall back to legacy localStorage `basketId`
+  // key during migration.
+  const cartId = useMemo(() => {
+    if (persistedBasketId) return persistedBasketId
+    if (typeof window === 'undefined') return null
     try {
       const raw = localStorage.getItem('basketId')
-      if (!raw) return
+      if (!raw) return null
       const parsed = JSON.parse(raw)
-      if (parsed) useCartStore.getState().setBasketId(String(parsed))
-    } catch {}
-  }, [hasHydrated, persistedBasketId])
+      return parsed ? String(parsed) : null
+    } catch {
+      return null
+    }
+  }, [persistedBasketId])
 
-  const { data } = useQuery({
-    queryKey: ['cart', persistedBasketId, deliveryType],
-    queryFn: () => fetchBasket(persistedBasketId as string, deliveryType),
-    enabled: hasHydrated && !!persistedBasketId,
-    staleTime: 30_000,
-    refetchOnWindowFocus: true,
+  const { data: cartData } = useCart({
+    cartId: cartId || undefined,
+    locationData: locationData || undefined,
   })
 
+  // Mirror legacy cart payload into Zustand whenever it changes.
   useEffect(() => {
-    if (!data) return
-    const lines = adaptServerCartToLines(data)
-    const basketId = pickBasketIdFromCart(data) || persistedBasketId
-    useCartStore.getState().setFromServer(basketId ?? null, lines)
-    if (basketId) {
-      try {
-        localStorage.setItem('basketId', JSON.stringify(basketId))
-      } catch {}
-    }
-  }, [data, persistedBasketId])
+    if (!cartData) return
+    const lines = adaptServerCartToLines(cartData)
+    const basketId = pickBasketIdFromCart(cartData)
+    useCartStore.getState().setFromServer(basketId, lines)
+  }, [cartData])
 
   return null
 }

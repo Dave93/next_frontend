@@ -12,11 +12,7 @@ import Cookies from 'js-cookie'
 import Hashids from 'hashids'
 import currency from 'currency.js'
 import { useLocale, useExtracted } from 'next-intl'
-import { useCartStore, cartSelectors } from '../../lib/stores/cart-store'
-import {
-  useUpdateCartQty,
-  useRemoveCartLine,
-} from '../../lib/hooks/useCartMutations'
+import { useCart } from '@framework/cart'
 import { useUserStore } from '../../lib/stores/user-store'
 import { useLocationStore } from '../../lib/stores/location-store'
 import { useUIStore } from '../../lib/stores/ui-store'
@@ -66,30 +62,93 @@ const HeaderMiniCartApp: FC = () => {
   const activeCity = useLocationStore((s) => s.activeCity) as any
   const user = useUserStore((s) => s.user) as any
   const openSignInModal = useUIStore((s) => s.openSignInModal)
-  const lines = useCartStore(cartSelectors.lines)
-  const totalQty = useCartStore(cartSelectors.count)
-  const totalPrice = useCartStore(cartSelectors.total)
-  const isEmpty = lines.length === 0
-  const updateQty = useUpdateCartQty()
-  const removeLine = useRemoveCartLine()
-  const busy = updateQty.isPending || removeLine.isPending
+  const { data, mutate } = useCart()
+  const [busy, setBusy] = useState<number | null>(null)
 
-  const inc = (line: any) =>
-    updateQty.mutate({
-      lineId: Number(line.id),
-      delta: 1,
-      currentQty: Number(line.qty || 0),
-    })
+  const lineItems: any[] = (data as any)?.lineItems || []
+  const totalQty = lineItems.reduce(
+    (acc, l: any) => acc + (l?.quantity || 0),
+    0
+  )
+  const totalPrice = (data as any)?.totalPrice || 0
+  const isEmpty = lineItems.length === 0
 
-  const dec = (line: any) =>
-    updateQty.mutate({
-      lineId: Number(line.id),
-      delta: -1,
-      currentQty: Number(line.qty || 0),
-    })
+  const refetchBasket = async () => {
+    const cartId =
+      typeof window !== 'undefined' ? localStorage.getItem('basketId') : null
+    if (!cartId) {
+      await mutate()
+      return
+    }
+    const { data: basket } = await axios.get(
+      `${webAddress}/api/baskets/${cartId}`,
+      { withCredentials: true }
+    )
+    await mutate(
+      {
+        id: basket.data.id,
+        createdAt: '',
+        currency: { code: basket.data.currency },
+        taxesIncluded: basket.data.tax_total,
+        lineItems: basket.data.lines,
+        lineItemsSubtotalPrice: basket.data.sub_total,
+        subtotalPrice: basket.data.sub_total,
+        totalPrice: basket.data.total,
+      },
+      false
+    )
+  }
 
-  const remove = (line: any) =>
-    removeLine.mutate({ lineId: Number(line.id) })
+  const inc = async (line: any) => {
+    setBusy(line.id)
+    try {
+      await setCsrf()
+      await axios.post(
+        `${webAddress}/api/v1/basket-lines/${hashids.encode(line.id)}/add`,
+        { quantity: 1 },
+        { withCredentials: true }
+      )
+      await refetchBasket()
+    } finally {
+      setBusy(null)
+    }
+  }
+
+  const dec = async (line: any) => {
+    setBusy(line.id)
+    try {
+      await setCsrf()
+      if (line.quantity <= 1) {
+        await axios.delete(
+          `${webAddress}/api/basket-lines/${hashids.encode(line.id)}`,
+          { withCredentials: true }
+        )
+      } else {
+        await axios.put(
+          `${webAddress}/api/v1/basket-lines/${hashids.encode(line.id)}/remove`,
+          { quantity: 1 },
+          { withCredentials: true }
+        )
+      }
+      await refetchBasket()
+    } finally {
+      setBusy(null)
+    }
+  }
+
+  const remove = async (line: any) => {
+    setBusy(line.id)
+    try {
+      await setCsrf()
+      await axios.delete(
+        `${webAddress}/api/basket-lines/${hashids.encode(line.id)}`,
+        { withCredentials: true }
+      )
+      await refetchBasket()
+    } finally {
+      setBusy(null)
+    }
+  }
 
   const goToCheckout = (close: () => void) => {
     close()
@@ -101,10 +160,23 @@ const HeaderMiniCartApp: FC = () => {
     }
   }
 
-  // SlimCartLine already carries localized name + image — fall back to
-  // legacy lookups only if those slots are empty.
-  const lineName = (line: any) => line?.name || ''
-  const lineImage = (line: any) => line?.image || '/no_photo.svg'
+  const lineName = (line: any) => {
+    const product = line?.variant?.product
+    const attr = product?.attribute_data?.name?.['chopar']
+    return (
+      attr?.[locale] ||
+      attr?.['ru'] ||
+      product?.name ||
+      line?.variant?.name ||
+      ''
+    )
+  }
+
+  const lineImage = (line: any) => {
+    const assets = line?.variant?.product?.assets
+    const url = getAssetUrl(assets)
+    return url || '/no_photo.svg'
+  }
 
   return (
     <Popover className="relative ml-2">
@@ -196,8 +268,8 @@ const HeaderMiniCartApp: FC = () => {
               ) : (
                 <>
                   <div className="max-h-[360px] overflow-y-auto divide-y divide-gray-100">
-                    {lines.map((line: any) => {
-                      const isLineBusy = busy
+                    {lineItems.map((line: any) => {
+                      const isLineBusy = busy === line.id
                       return (
                         <div
                           key={line.id}
@@ -257,7 +329,7 @@ const HeaderMiniCartApp: FC = () => {
                                   −
                                 </button>
                                 <span className="text-white font-bold text-xs px-2 min-w-[24px] text-center">
-                                  {isLineBusy ? '…' : line.qty}
+                                  {isLineBusy ? '…' : line.quantity}
                                 </span>
                                 <button
                                   type="button"

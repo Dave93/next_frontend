@@ -1,8 +1,7 @@
 'use client'
 
 import { FC, memo, useEffect, useMemo, useState } from 'react'
-import { useCartStore, cartSelectors } from '../../lib/stores/cart-store'
-import { syncCartFromBasketResult } from '../../lib/data/cart-adapter'
+import useCart from '@framework/cart/use-cart'
 import { useForm } from 'react-hook-form'
 import Image from 'next/image'
 import { XIcon, MinusIcon, PlusIcon } from '@heroicons/react/solid'
@@ -40,29 +39,10 @@ const SmallCartApp: FC<SmallCartProps> = ({ channelName }) => {
   const activeCity = useLocationStore((s) => s.activeCity) as any
   const openSignInModal = useUIStore((s) => s.openSignInModal)
 
-  const lines = useCartStore(cartSelectors.lines)
-  const isEmpty = useCartStore(cartSelectors.isEmpty)
-  // Backwards-compatible `data` for parts of legacy JSX still reading
-  // data.lineItems and data.totalPrice / data.discountTotal.
-  const data: any = useMemo(
-    () => ({
-      lineItems: lines.map((l) => ({
-        ...l,
-        quantity: l.qty,
-      })),
-      totalPrice: useCartStore.getState().lines.reduce(
-        (sum, l) =>
-          sum +
-          (l.price + (l.modifiers || []).reduce((a, m) => a + m.price, 0)) *
-            l.qty,
-        0
-      ),
-      subtotalPrice: 0,
-      discountTotal: 0,
-      discountValue: 0,
-    }),
-    [lines]
-  )
+  const { data, isEmpty, mutate } = useCart({
+    cartId,
+    locationData,
+  })
 
   const [isCartLoading, setIsCartLoading] = useState(false)
 
@@ -144,7 +124,7 @@ const SmallCartApp: FC<SmallCartProps> = ({ channelName }) => {
         discountValue: basket.data.discount_value,
       }
 
-      syncCartFromBasketResult(basketResult)
+      await mutate(basketResult, false)
       setIsCartLoading(false)
     }
   }
@@ -183,7 +163,7 @@ const SmallCartApp: FC<SmallCartProps> = ({ channelName }) => {
         discountValue: basket.data.discount_value,
       }
 
-      syncCartFromBasketResult(basketResult)
+      await mutate(basketResult, false)
       setIsCartLoading(false)
     }
   }
@@ -219,7 +199,7 @@ const SmallCartApp: FC<SmallCartProps> = ({ channelName }) => {
         discountValue: basket.data.discount_value,
       }
 
-      syncCartFromBasketResult(basketResult)
+      await mutate(basketResult, false)
       setIsCartLoading(false)
     }
   }
