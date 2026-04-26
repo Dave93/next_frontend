@@ -51,13 +51,12 @@ function legacyModifier(m: any): any {
     price: m.price,
     weight: m.weight ?? 0,
     groupId: m.groupId,
+    // getAssetUrl returns assets[0].local verbatim when present; the slim
+    // DTO already produced the full CDN URL in m.image, so pass it through
+    // that field instead of fabricating empty location/filename (which made
+    // getAssetUrl fall back to /no_photo.svg).
     assets: m.image
-      ? [
-          {
-            location: '',
-            filename: '',
-          },
-        ]
+      ? [{ local: m.image }]
       : [],
   }
 }
