@@ -18,9 +18,6 @@ const withNextIntl = createNextIntlPlugin({
 
 const config: NextConfig = {
   output: 'standalone',
-  // TEMP — production sourcemaps so prod-only stack traces are useful.
-  // Remove after debugging the variant-switch crash.
-  productionBrowserSourceMaps: true,
   // Next 16 opt-in: React Compiler auto-memoizes components.
   reactCompiler: true,
   // cacheComponents: true — enabled in Wave 1 after lib/data/* migrates to
