@@ -148,13 +148,13 @@ msgstr "Скидка"
 
 #: components_new/cart/CartApp.tsx:816
 #: components_new/header/LocationPickerCore.tsx:347
-#: components_new/HeaderApp.tsx:135
+#: components_new/HeaderApp.tsx:161
 msgid "3qtFxi"
 msgstr "Доставка"
 
 #: components_new/cart/CartApp.tsx:819
 #: components_new/header/LocationPickerCore.tsx:358
-#: components_new/HeaderApp.tsx:149
+#: components_new/HeaderApp.tsx:175
 msgid "k9Dt2Z"
 msgstr "Самовывоз"
 
@@ -247,6 +247,7 @@ msgstr "Вкус, который объединяет!"
 
 #: components_new/FooterApp.tsx:114
 #: components_new/header/SideMenuApp.tsx:76
+#: components_new/HeaderApp.tsx:101
 msgid "YaMZGV"
 msgstr "Меню"
 

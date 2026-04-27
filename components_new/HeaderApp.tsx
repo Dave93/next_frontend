@@ -64,17 +64,44 @@ const HeaderApp: FC = () => {
       id="header"
     >
       <div className="container mx-auto px-3 md:px-0">
-        <div className="flex justify-between items-center py-3 md:py-0">
-          <div className="w-32 md:w-48">
-            <Link href={`/${chosenCity?.slug || ''}`} prefetch={false}>
-              <Image
-                src="/assets/main_logo.svg"
-                width={188}
-                height={68}
-                alt="main_logo"
-              />
+        <div className="flex justify-between items-center py-3 md:py-0 gap-2 md:gap-4">
+          {/* Brand cluster: logo + explicit "Меню" link so it's obvious how
+              to return to the catalog from inner pages (the logo alone wasn't
+              discovered by users). */}
+          <div className="flex items-center gap-3 md:gap-5">
+            <div className="w-32 md:w-48">
+              <Link href={`/${chosenCity?.slug || ''}`} prefetch={false}>
+                <Image
+                  src="/assets/main_logo.svg"
+                  width={188}
+                  height={68}
+                  alt="main_logo"
+                />
+              </Link>
+            </div>
+            <Link
+              href={`/${chosenCity?.slug || ''}`}
+              prefetch={false}
+              className="hidden md:inline-flex items-center gap-1.5 text-sm font-semibold text-gray-700 hover:text-yellow transition-colors"
+            >
+              <svg
+                width="18"
+                height="18"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              >
+                <line x1="3" y1="6" x2="21" y2="6" />
+                <line x1="3" y1="12" x2="21" y2="12" />
+                <line x1="3" y1="18" x2="21" y2="18" />
+              </svg>
+              {t('Меню')}
             </Link>
           </div>
+          {/* Center: address / delivery type picker (primary action). */}
           <div className="hidden md:flex flex-1 justify-center px-6">
             <button
               type="button"
@@ -98,16 +125,15 @@ const HeaderApp: FC = () => {
               <span className="truncate max-w-[260px]">{addressLabel}</span>
             </button>
           </div>
+          {/* Right cluster — logical grouping:
+              locale (city, lang) → contact (phone) → user (sign-in)
+              → commerce (cart) → overflow (burger). */}
           <div className="flex items-center">
-            <div className="md:flex hidden items-center">
-              <HeaderPhoneApp />
+            <div className="md:flex hidden items-center gap-1">
               <ChooseCityDropDownApp />
-              <div className="mx-2">
-                <LanguageDropDownApp />
-              </div>
-              <div className="mx-2">
-                <SignInButtonApp />
-              </div>
+              <LanguageDropDownApp />
+              <HeaderPhoneApp />
+              <SignInButtonApp />
               <HeaderMiniCartApp />
               <SideMenuApp />
             </div>
