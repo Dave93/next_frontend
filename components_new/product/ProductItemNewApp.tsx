@@ -93,28 +93,39 @@ const ProductItemNewApp: FC<ProductItem> = ({ product, channelName }) => {
   const [isChoosingModifier, setIsChoosingModifier] = useState(false)
   const [activeModifiers, setActiveModifiers] = useState([] as number[])
 
-  const effectiveProductId = useMemo(() => {
-    const activeVariant = store.variants?.find((v: any) => v.active)
-    if (!activeVariant) return String(store.id)
-    if (
-      activeVariant.modifierProduct &&
-      activeModifiers.includes(activeVariant.modifierProduct.id)
-    ) {
-      return String(activeVariant.modifierProduct.id)
-    }
-    return String(activeVariant.id)
-  }, [store, activeModifiers])
-
+  const effectiveMatch = useMemo<{ kind: 'variant' | 'product'; id: string }>(
+    () => {
+      const activeVariant = store.variants?.find((v: any) => v.active)
+      if (!activeVariant) return { kind: 'product', id: String(store.id) }
+      if (
+        activeVariant.modifierProduct &&
+        activeModifiers.includes(activeVariant.modifierProduct.id)
+      ) {
+        return {
+          kind: 'product',
+          id: String(activeVariant.modifierProduct.id),
+        }
+      }
+      return { kind: 'variant', id: String(activeVariant.id) }
+    },
+    [store, activeModifiers]
+  )
   const cartLineItem = useMemo(() => {
     if (!cartData?.lineItems?.length) return null
     return cartData.lineItems.find((item: any) => {
+      if (effectiveMatch.kind === 'variant') {
+        return String(item.variant?.id) === effectiveMatch.id
+      }
+      // 'product' — сет / без вариантов / выбранный modifierProduct.
+      // Variant.id матчить НЕЛЬЗЯ: id вариантов и id продуктов в БД могут
+      // случайно пересекаться (collision id-неймспейсов), это и приводит
+      // к ложному «в корзине» на чужой карточке.
       return (
-        String(item.variant?.id) === effectiveProductId ||
-        String(item.variant?.product?.id) === effectiveProductId ||
-        String(item.variant?.product_id) === effectiveProductId
+        String(item.variant?.product?.id) === effectiveMatch.id ||
+        String(item.variant?.product_id) === effectiveMatch.id
       )
     })
-  }, [cartData, effectiveProductId])
+  }, [cartData, effectiveMatch])
 
   const cartQuantity = cartLineItem?.quantity || 0
 

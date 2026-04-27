@@ -1546,12 +1546,8 @@ const OrdersApp: FC<OrdersProps> = ({ channelName, isMobile = false }) => {
         {/* Legacy "Найти ближайший ресторан" pickup grid removed — terminal
             selection now lives inside AddressSelectionApp's LocationPickerCore. */}
       </div>
-      {/* time of delivery - hide for pickup */}
-      <div
-        className={`w-full bg-white my-5 rounded-2xl order-delivery-time ${
-          tabIndex === 'pickup' ? 'hidden' : ''
-        }`}
-      >
+      {/* time of delivery / pickup — applies to both flows */}
+      <div className="w-full bg-white my-5 rounded-2xl order-delivery-time">
         <div className="text-lg mb-5 font-bold">
           {tr('order_time_of_delivery')}
         </div>
