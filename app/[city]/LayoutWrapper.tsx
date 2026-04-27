@@ -46,7 +46,7 @@ export default function LayoutWrapper({ children, pageProps }: Props) {
       <CartHydrator />
       <HeaderApp />
       <SmallCartMobileApp />
-      <main className="flex-1 w-full md:container md:mx-auto px-3 md:px-0">
+      <main className="flex-1 w-full md:container md:mx-auto px-3 md:px-0 pb-[calc(56px+env(safe-area-inset-bottom)+16px)] md:pb-0">
         {children}
       </main>
       <MobileBottomNavApp />
