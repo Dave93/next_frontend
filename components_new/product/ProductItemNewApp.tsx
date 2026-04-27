@@ -147,20 +147,20 @@ const ProductItemNewApp: FC<ProductItem> = ({ product, channelName }) => {
   // openModal removed (was unused) — opening modal is handled inline by handleSubmit / modifier flow
 
   const updateOptionSelection = (valueId: string) => {
-    const prod = store
-    if (prod.variants) {
-      prod.variants = prod.variants.map((v: any) => {
-        if (v.id == valueId) {
-          v.active = true
-        } else {
-          v.active = false
-        }
-        return v
-      })
-    }
     setActiveModifiers([])
-    // console.log(prod)
-    updateStore({ ...prod })
+    updateStore((prev: any) => {
+      if (!prev?.variants) return prev
+      return {
+        ...prev,
+        // The variant objects come from a server-rendered payload and may be
+        // frozen by React 19's RSC pipeline — clone each one before flipping
+        // `active`, instead of mutating in place.
+        variants: prev.variants.map((v: any) => ({
+          ...v,
+          active: v.id == valueId,
+        })),
+      }
+    })
   }
 
   const addModifier = (modId: number) => {
