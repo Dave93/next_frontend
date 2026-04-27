@@ -410,21 +410,21 @@ msgstr "Pitsaga qo'shish"
 
 #: components_new/product/ProductDetailApp.tsx:274
 #: components_new/product/ProductDrawerApp.tsx:225
-#: components_new/product/ProductItemNewApp.tsx:908
-#: components_new/product/ProductItemNewApp.tsx:1158
+#: components_new/product/ProductItemNewApp.tsx:906
+#: components_new/product/ProductItemNewApp.tsx:1156
 msgid "JwQa2e"
 msgstr "Savatga"
 
-#: components_new/product/ProductItemNewApp.tsx:563
-#: components_new/product/ProductItemNewApp.tsx:614
+#: components_new/product/ProductItemNewApp.tsx:559
+#: components_new/product/ProductItemNewApp.tsx:610
 msgid "zXkVd5"
 msgstr "Qo'shish"
 
-#: components_new/product/ProductItemNewApp.tsx:719
+#: components_new/product/ProductItemNewApp.tsx:630
 msgid "kazY5+"
 msgstr "Mahsulot vaqtinchalik mavjud emas"
 
-#: components_new/product/ProductItemNewApp.tsx:1074
+#: components_new/product/ProductItemNewApp.tsx:1072
 msgid "AH6N5n"
 msgstr "Pitsaga qo'shish"
 

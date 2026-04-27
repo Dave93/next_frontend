@@ -27,7 +27,7 @@ import {
   useAddToCart,
   useUpdateCartQty,
 } from '../../lib/hooks/useCartMutations'
-import { XIcon, CheckIcon } from '@heroicons/react/solid'
+import { XIcon } from '@heroicons/react/solid'
 import styles from './ProductItemNew.module.css'
 import { useLocationStore } from '../../lib/stores/location-store'
 import { useUIStore } from '../../lib/stores/ui-store'
@@ -80,7 +80,6 @@ const ProductItemNewApp: FC<ProductItem> = ({ product, channelName }) => {
     [cartLines]
   )
 
-  const [addedToCart, setAddedToCart] = useState(false)
   const [imageLoaded, setImageLoaded] = useState(false)
 
   const changeCartQuantity = (delta: number) => {
@@ -323,9 +322,6 @@ const ProductItemNewApp: FC<ProductItem> = ({ product, channelName }) => {
     if (modifiers && modifiers.length) {
       setIsChoosingModifier(false)
     }
-
-    setAddedToCart(true)
-    setTimeout(() => setAddedToCart(false), 1500)
 
     if (typeof window !== 'undefined' && window.innerWidth < 768) {
       closeModal()
@@ -624,21 +620,35 @@ const ProductItemNewApp: FC<ProductItem> = ({ product, channelName }) => {
           itemScope
           itemType="https://schema.org/Product"
         >
-          {/* Mobile compact vertical card */}
-          <div className="md:hidden p-3">
-            <Link href={`/${citySlug}/product/${store.id}`} prefetch={false}>
-              <div className="text-center mb-2 relative">
+          {/* Mobile horizontal card (image-left, text-right, drawer on tap) */}
+          <div className="md:hidden">
+            <button
+              type="button"
+              className="w-full flex items-stretch gap-3 p-3 text-left"
+              onClick={() => {
+                if (isProductInStop) {
+                  toast.error(t('Товар временно недоступен'))
+                  return
+                }
+                openProductDrawer(store)
+              }}
+            >
+              <div className="w-[110px] h-[110px] flex-shrink-0 flex items-center justify-center">
                 {!imageLoaded && store.image && (
-                  <div className="mx-auto w-[120px] h-[96px] rounded-lg bg-gray-100 animate-pulse" />
+                  <div className="w-[110px] h-[110px] rounded-full bg-gray-100 animate-pulse" />
                 )}
                 {store.image ? (
                   <Image
                     src={store.image}
-                    width={120}
-                    height={96}
-                    sizes="120px"
-                    alt={store?.attribute_data?.name[channelName][locale || 'ru']}
-                    className={`mx-auto object-contain ${imageLoaded ? '' : 'absolute opacity-0'}`}
+                    width={110}
+                    height={110}
+                    sizes="110px"
+                    alt={
+                      store?.attribute_data?.name[channelName][locale || 'ru']
+                    }
+                    className={`object-contain ${
+                      imageLoaded ? '' : 'absolute opacity-0'
+                    }`}
                     itemProp="image"
                     loading="lazy"
                     onLoad={() => setImageLoaded(true)}
@@ -646,111 +656,99 @@ const ProductItemNewApp: FC<ProductItem> = ({ product, channelName }) => {
                 ) : (
                   <img
                     src="/no_photo.svg"
-                    width={120}
-                    height={96}
-                    alt={store?.attribute_data?.name[channelName][locale || 'ru']}
-                    className="mx-auto"
+                    width={110}
+                    height={110}
+                    alt={
+                      store?.attribute_data?.name[channelName][locale || 'ru']
+                    }
                     loading="lazy"
                   />
                 )}
               </div>
-              <div className="text-center text-sm font-semibold mb-1 truncate" itemProp="name">
-                {store?.attribute_data?.name[channelName][locale || 'ru']}
-              </div>
-            </Link>
-            {store.variants && store.variants.length > 1 && (
-              <div
-                className="flex gap-1 mb-2 justify-center"
-                onClick={(e) => e.stopPropagation()}
-              >
-                {store.variants.map((v: any) => (
-                  <button
-                    key={v.id}
-                    className={`px-2 py-0.5 rounded-full text-[10px] font-medium outline-none ${
-                      v.active
-                        ? 'bg-yellow text-white'
-                        : 'bg-gray-100 text-gray-500'
-                    }`}
-                    onClick={() => updateOptionSelection(v.id)}
+              <div className="flex-1 min-w-0 flex flex-col justify-between py-1">
+                <div>
+                  <div
+                    className="font-bold text-base text-gray-900 line-clamp-2"
+                    itemProp="name"
                   >
-                    {locale == 'uz'
-                      ? v?.custom_name_uz
-                      : locale == 'en'
-                      ? v?.custom_name_en
-                      : v?.custom_name}
-                  </button>
-                ))}
-              </div>
-            )}
-            {cartQuantity > 0 ? (
-              <div
-                className="w-full flex items-center justify-between rounded-full py-1 px-1"
-                style={{ backgroundColor: '#F9B004' }}
-                onClick={(e) => e.stopPropagation()}
-              >
-                <button
-                  className="w-8 h-8 rounded-full bg-white flex items-center justify-center text-lg font-bold"
-                  style={{ color: '#F9B004' }}
-                  disabled={isLoadingBasket}
-                  onClick={() => changeCartQuantity(-1)}
-                >
-                  −
-                </button>
-                <span className="text-white font-bold text-sm">
-                  {isLoadingBasket ? '...' : cartQuantity}
-                </span>
-                <button
-                  className="w-8 h-8 rounded-full bg-white flex items-center justify-center text-lg font-bold"
-                  style={{ color: '#F9B004' }}
-                  disabled={isLoadingBasket}
-                  onClick={() => changeCartQuantity(1)}
-                >
-                  +
-                </button>
-              </div>
-            ) : (
-              <button
-                className="w-full text-center py-2 rounded-full text-sm font-bold text-white flex items-center justify-center gap-1 transition-colors"
-                style={{ backgroundColor: addedToCart ? '#22c55e' : '#F9B004' }}
-                disabled={isLoadingBasket}
-                onClick={(e) => {
-                  e.stopPropagation()
-                  if (isProductInStop) {
-                    toast.error(t('Товар временно недоступен'))
-                    return
-                  }
-                  if (modifiers && modifiers.length) {
-                    openProductDrawer(store)
-                  } else {
-                    addToBasket()
-                  }
-                }}
-              >
-                {isLoadingBasket ? (
-                  <svg className="animate-spin h-5 w-5 text-white" viewBox="0 0 24 24">
-                    <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" fill="none" />
-                    <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" />
-                  </svg>
-                ) : addedToCart ? (
-                  <CheckIcon className="w-4 h-4" />
-                ) : (
-                  <>
-                    <svg xmlns="http://www.w3.org/2000/svg" className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-                      <path strokeLinecap="round" strokeLinejoin="round" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 100 4 2 2 0 000-4z" />
-                    </svg>
-                    <span className="text-xs">
+                    {store?.attribute_data?.name[channelName][locale || 'ru']}
+                  </div>
+                  {store?.attribute_data?.description?.[channelName]?.[
+                    locale || 'ru'
+                  ] && (
+                    <div
+                      className="mt-1 text-[12px] text-gray-500 line-clamp-2 product-desc-clamp"
+                      dangerouslySetInnerHTML={{
+                        __html:
+                          store.attribute_data.description[channelName][
+                            locale || 'ru'
+                          ],
+                      }}
+                      itemProp="description"
+                    />
+                  )}
+                </div>
+                <div className="mt-2">
+                  {cartQuantity > 0 ? (
+                    <div
+                      className="inline-flex items-center rounded-full px-1 py-0.5 gap-1"
+                      style={{ backgroundColor: '#F9B004' }}
+                      onClick={(e) => e.stopPropagation()}
+                    >
+                      <button
+                        type="button"
+                        className="w-7 h-7 rounded-full bg-white flex items-center justify-center text-base font-bold"
+                        style={{ color: '#F9B004' }}
+                        disabled={isLoadingBasket}
+                        onClick={() => changeCartQuantity(-1)}
+                      >
+                        −
+                      </button>
+                      <span className="text-white font-bold text-sm min-w-[20px] text-center">
+                        {cartQuantity}
+                      </span>
+                      <button
+                        type="button"
+                        className="w-7 h-7 rounded-full bg-white flex items-center justify-center text-base font-bold"
+                        style={{ color: '#F9B004' }}
+                        disabled={isLoadingBasket}
+                        onClick={() => changeCartQuantity(1)}
+                      >
+                        +
+                      </button>
+                    </div>
+                  ) : (
+                    <span
+                      className="inline-block px-4 py-1.5 rounded-full text-sm font-bold"
+                      style={{
+                        backgroundColor: '#FEF3C7',
+                        color: '#B45309',
+                      }}
+                    >
+                      {store.variants && store.variants.length > 1
+                        ? locale === 'uz'
+                          ? 'dan '
+                          : locale === 'en'
+                          ? 'from '
+                          : 'от '
+                        : ''}
                       {currency(prodPriceDesktop, {
                         pattern: '# !',
                         separator: ' ',
                         decimal: '.',
-                        symbol: `${locale == 'uz' ? "so'm" : ''} ${locale == 'ru' ? 'сум' : ''} ${locale == 'en' ? 'sum' : ''}`,
+                        symbol:
+                          locale === 'uz'
+                            ? "so'm"
+                            : locale === 'en'
+                            ? 'sum'
+                            : 'сум',
                         precision: 0,
                       }).format()}
                     </span>
-                  </>
-                )}
-              </button>
-            )}
+                  )}
+                </div>
+              </div>
+            </button>
           </div>
           {/* Desktop card */}
           <div className="hidden md:flex md:flex-col md:h-full">

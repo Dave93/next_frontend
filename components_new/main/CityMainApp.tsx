@@ -186,7 +186,7 @@ const CityMainApp: FC<Props> = ({
             {sections.map((section) => (
               <div key={section.id} id={`productSection_${section.id}`}>
                 <ProductListSectionTitle title={section.title} />
-                <div className="grid grid-cols-2 lg:grid-cols-3 md:grid-cols-2 gap-2.5 md:gap-3 px-4 md:px-0">
+                <div className="grid grid-cols-1 lg:grid-cols-3 md:grid-cols-2 gap-2.5 md:gap-3 px-4 md:px-0">
                   {section.items.map((product: any) => (
                     <ProductItemNewApp
                       key={product.id}
