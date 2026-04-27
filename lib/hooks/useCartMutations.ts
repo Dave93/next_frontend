@@ -69,6 +69,28 @@ function syncStore(cartData: any) {
     : body
   const lines = adaptServerCartToLines(adapted)
   const basketId = pickBasketIdFromCart(adapted)
+  if (typeof window !== 'undefined') {
+    // eslint-disable-next-line no-console
+    console.log('[CART-DBG] syncStore', {
+      basketId,
+      raw: (adapted?.lineItems || []).map((it: any) => ({
+        lineId: it?.id,
+        qty: it?.quantity,
+        variantId: it?.variant?.id,
+        productId: it?.variant?.product?.id,
+        variantProductId: it?.variant?.product_id,
+      })),
+      adaptedLines: lines.map((l) => ({
+        id: l.id,
+        productId: l.productId,
+        variantId: l.variantId,
+        qty: l.qty,
+        rawVariantId: l._raw?.variant?.id,
+        rawProductId: l._raw?.variant?.product?.id,
+        rawVariantProductId: l._raw?.variant?.product_id,
+      })),
+    })
+  }
   useCartStore.getState().setFromServer(basketId, lines)
   if (basketId && typeof window !== 'undefined') {
     // Legacy code (BonusStartApp, OrdersApp, etc.) reads this with a raw
