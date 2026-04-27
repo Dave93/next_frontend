@@ -114,7 +114,16 @@ const ProductItemNewApp: FC<ProductItem> = ({ product, channelName }) => {
     if (!cartData?.lineItems?.length) return null
     const matched = cartData.lineItems.find((item: any) => {
       if (effectiveMatch.kind === 'variant') {
-        return String(item.variant?.id) === effectiveMatch.id
+        // Бэкенд для разных эндпоинтов кладёт id варианта то в variant.id
+        // (оптимистичная линия), то в variant.product.id / variant.product_id
+        // (ответ /api/baskets-lines). Чтобы карточка не «мигала» при свапе
+        // optimistic → server, проверяем все три поля. Это безопасно: id
+        // варианта уникален в каталоге.
+        return (
+          String(item.variant?.id) === effectiveMatch.id ||
+          String(item.variant?.product?.id) === effectiveMatch.id ||
+          String(item.variant?.product_id) === effectiveMatch.id
+        )
       }
       // 'product' — сет / без вариантов / выбранный modifierProduct.
       // Variant.id матчить НЕЛЬЗЯ: id вариантов и id продуктов в БД могут
@@ -125,37 +134,8 @@ const ProductItemNewApp: FC<ProductItem> = ({ product, channelName }) => {
         String(item.variant?.product_id) === effectiveMatch.id
       )
     })
-    if (typeof window !== 'undefined') {
-      const cardLabel =
-        store?.attribute_data?.name?.[channelName]?.ru ||
-        store?.name ||
-        store?.id
-      const summary = {
-        card: { id: store?.id, label: cardLabel },
-        effectiveMatch,
-        lines: cartData.lineItems.map((it: any) => ({
-          lineId: it?.id,
-          variantId: it?.variant?.id,
-          productId: it?.variant?.product?.id,
-          variantProductId: it?.variant?.product_id,
-          qty: it?.quantity,
-        })),
-        matched: matched
-          ? {
-              lineId: matched.id,
-              variantId: matched.variant?.id,
-              productId: matched.variant?.product?.id,
-              variantProductId: matched.variant?.product_id,
-              qty: matched.quantity,
-            }
-          : null,
-      }
-      // Plain string so DevTools shows it inline without expand-clicks.
-      // eslint-disable-next-line no-console
-      console.log('[CART-DBG] match ' + JSON.stringify(summary))
-    }
     return matched
-  }, [cartData, effectiveMatch, store, channelName])
+  }, [cartData, effectiveMatch])
 
   const cartQuantity = cartLineItem?.quantity || 0
 
@@ -349,24 +329,6 @@ const ProductItemNewApp: FC<ProductItem> = ({ product, channelName }) => {
           modifiers: optimisticModifiers,
         },
       },
-    }
-    if (typeof window !== 'undefined') {
-      // eslint-disable-next-line no-console
-      console.log(
-        '[CART-DBG] add ' +
-          JSON.stringify({
-            card: { id: store?.id, name: productName },
-            selectedProdId,
-            optimistic: {
-              lineId: optimisticPayload.optimisticLine.id,
-              variantId: optimisticPayload.optimisticLine._raw.variant.id,
-              productId:
-                optimisticPayload.optimisticLine._raw.variant.product?.id,
-              variantProductId:
-                optimisticPayload.optimisticLine._raw.variant.product_id,
-            },
-          })
-      )
     }
     addMutation.mutate(optimisticPayload)
 
