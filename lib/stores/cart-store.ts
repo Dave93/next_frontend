@@ -124,6 +124,17 @@ export const useCartStore = create<CartStore>()(
           )
           if (existing) {
             existing.qty += line.qty
+            // Mirror qty into _raw so legacy JSX (which reads
+            // lineItem.quantity / lineItem.total from the raw shape)
+            // updates instantly without waiting for the server response.
+            if (existing._raw) {
+              existing._raw.quantity = existing.qty
+              const unit =
+                Number(existing._raw.unit_price) ||
+                Number(existing.price) ||
+                0
+              if (unit > 0) existing._raw.total = unit * existing.qty
+            }
           } else {
             s.lines.push(line)
           }
@@ -139,7 +150,15 @@ export const useCartStore = create<CartStore>()(
             s.lines = s.lines.filter((l) => l.id !== lineId)
           } else {
             const line = s.lines.find((l) => l.id === lineId)
-            if (line) line.qty = qty
+            if (line) {
+              line.qty = qty
+              if (line._raw) {
+                line._raw.quantity = qty
+                const unit =
+                  Number(line._raw.unit_price) || Number(line.price) || 0
+                if (unit > 0) line._raw.total = unit * qty
+              }
+            }
           }
           s.updatedAt = Date.now()
         })
