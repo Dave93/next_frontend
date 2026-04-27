@@ -82,22 +82,8 @@ const HeaderApp: FC = () => {
             <Link
               href={`/${chosenCity?.slug || ''}`}
               prefetch={false}
-              className="hidden md:inline-flex items-center gap-1.5 text-sm font-semibold text-gray-700 hover:text-yellow transition-colors"
+              className="hidden md:inline-flex items-center text-lg font-bold text-gray-800 hover:text-yellow transition-colors"
             >
-              <svg
-                width="18"
-                height="18"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="2"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-              >
-                <line x1="3" y1="6" x2="21" y2="6" />
-                <line x1="3" y1="12" x2="21" y2="12" />
-                <line x1="3" y1="18" x2="21" y2="18" />
-              </svg>
               {t('Меню')}
             </Link>
           </div>
