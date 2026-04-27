@@ -21,7 +21,7 @@ import { useUserStore } from '../../lib/stores/user-store'
 import { useLocationStore } from '../../lib/stores/location-store'
 import { useUIStore } from '../../lib/stores/ui-store'
 import { useRouter } from '../../i18n/navigation'
-import getAssetUrl from '@utils/getAssetUrl'
+import { pickProductImage } from '@utils/getAssetUrl'
 
 const webAddress = process.env.NEXT_PUBLIC_API_URL
 const YELLOW = '#FAAF04'
@@ -119,9 +119,7 @@ const HeaderMiniCartApp: FC = () => {
   }
 
   const lineImage = (line: any) => {
-    const assets = line?.variant?.product?.assets
-    const url = getAssetUrl(assets)
-    return url || '/no_photo.svg'
+    return pickProductImage(line?.variant?.product)
   }
 
   return (

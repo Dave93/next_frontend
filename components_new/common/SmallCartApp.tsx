@@ -16,7 +16,7 @@ import {
 import { useUserStore } from '../../lib/stores/user-store'
 import { useLocationStore } from '../../lib/stores/location-store'
 import { useUIStore } from '../../lib/stores/ui-store'
-import getAssetUrl from '@utils/getAssetUrl'
+import { pickProductImage } from '@utils/getAssetUrl'
 import { toast } from 'sonner'
 import SimpleBar from 'simplebar-react'
 import 'simplebar/dist/simplebar.min.css'
@@ -234,7 +234,7 @@ const SmallCartApp: FC<SmallCartProps> = ({ channelName }) => {
                                 <div>
                                   <img
                                     src={
-                                      getAssetUrl(lineItem?.variant?.product?.assets)
+                                      pickProductImage(lineItem?.variant?.product)
                                     }
                                     width="40"
                                     height="40"
@@ -254,7 +254,7 @@ const SmallCartApp: FC<SmallCartProps> = ({ channelName }) => {
                                   >
                                     <img
                                       src={
-                                        getAssetUrl(child.variant?.product?.assets)
+                                        pickProductImage(child.variant?.product)
                                       }
                                       width="40"
                                       height="40"
@@ -270,7 +270,7 @@ const SmallCartApp: FC<SmallCartProps> = ({ channelName }) => {
                               <div className="w-10 relative overflow-hidden">
                                 <img
                                   src={
-                                    getAssetUrl(lineItem?.variant?.product?.assets)
+                                    pickProductImage(lineItem?.variant?.product)
                                   }
                                   width="60"
                                   height="60"
@@ -281,7 +281,7 @@ const SmallCartApp: FC<SmallCartProps> = ({ channelName }) => {
                               <div className="w-10 relative overflow-hidden">
                                 <img
                                   src={
-                                    getAssetUrl(lineItem?.child[0].variant?.product?.assets)
+                                    pickProductImage(lineItem?.child[0].variant?.product)
                                   }
                                   width="60"
                                   height="60"
@@ -295,7 +295,7 @@ const SmallCartApp: FC<SmallCartProps> = ({ channelName }) => {
                           <div className="">
                             <img
                               src={
-                                getAssetUrl(lineItem?.variant?.product?.assets)
+                                pickProductImage(lineItem?.variant?.product)
                               }
                               width={60}
                               height={60}
