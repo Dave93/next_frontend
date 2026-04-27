@@ -1,3 +1,15 @@
 .fit {
   min-height: calc(100vh - 88px);
 }
+
+/* Mobile bottom-nav clearance: 56px nav height + iOS safe-area + 16px gutter.
+   Disabled at md+ where the nav is hidden. Tailwind 2.2.x doesn't support
+   arbitrary `pb-[calc(...)]` values, so this lives here as plain CSS. */
+.mobile-bottom-pad {
+  padding-bottom: calc(56px + env(safe-area-inset-bottom) + 16px);
+}
+@media (min-width: 768px) {
+  .mobile-bottom-pad {
+    padding-bottom: 0;
+  }
+}
