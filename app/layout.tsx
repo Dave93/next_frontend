@@ -10,12 +10,13 @@ import 'tailwindcss/tailwind.css'
 import '@assets/chrome-bug.css'
 import '@assets/fonts.css'
 import '@assets/simplebar.css'
+import '@assets/custom.css'
 // sonner ships its own CSS
 import '@components_new/header/DatePicker.css'
 
 const ROOT_DESC: Record<string, string> = {
   ru: 'Доставка пиццы с тандырным тестом в Ташкенте. Халяль. Бесплатная доставка.',
-  uz: "Toshkentda tandir xamirli pitsa yetkazib berish. Halol. Bepul yetkazib berish.",
+  uz: 'Toshkentda tandir xamirli pitsa yetkazib berish. Halol. Bepul yetkazib berish.',
   en: 'Pizza delivery with tandoor dough in Tashkent. Halal. Free delivery.',
 }
 
@@ -42,8 +43,7 @@ export async function generateMetadata(): Promise<Metadata> {
       other: {
         'mailru-verification':
           process.env.NEXT_PUBLIC_SEO_MAILRU_VERIFICATION || '',
-        'msvalidate.01':
-          process.env.NEXT_PUBLIC_SEO_BING_VERIFICATION || '',
+        'msvalidate.01': process.env.NEXT_PUBLIC_SEO_BING_VERIFICATION || '',
         'facebook-domain-verification':
           process.env.NEXT_PUBLIC_SEO_FB_VERIFICATION || '',
       },
