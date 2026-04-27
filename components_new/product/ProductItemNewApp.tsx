@@ -130,8 +130,7 @@ const ProductItemNewApp: FC<ProductItem> = ({ product, channelName }) => {
         store?.attribute_data?.name?.[channelName]?.ru ||
         store?.name ||
         store?.id
-      // eslint-disable-next-line no-console
-      console.log('[CART-DBG] match', {
+      const summary = {
         card: { id: store?.id, label: cardLabel },
         effectiveMatch,
         lines: cartData.lineItems.map((it: any) => ({
@@ -150,7 +149,10 @@ const ProductItemNewApp: FC<ProductItem> = ({ product, channelName }) => {
               qty: matched.quantity,
             }
           : null,
-      })
+      }
+      // Plain string so DevTools shows it inline without expand-clicks.
+      // eslint-disable-next-line no-console
+      console.log('[CART-DBG] match ' + JSON.stringify(summary))
     }
     return matched
   }, [cartData, effectiveMatch, store, channelName])
@@ -350,17 +352,21 @@ const ProductItemNewApp: FC<ProductItem> = ({ product, channelName }) => {
     }
     if (typeof window !== 'undefined') {
       // eslint-disable-next-line no-console
-      console.log('[CART-DBG] add', {
-        card: { id: store?.id, name: productName },
-        selectedProdId,
-        optimistic: {
-          lineId: optimisticPayload.optimisticLine.id,
-          variantId: optimisticPayload.optimisticLine._raw.variant.id,
-          productId: optimisticPayload.optimisticLine._raw.variant.product?.id,
-          variantProductId:
-            optimisticPayload.optimisticLine._raw.variant.product_id,
-        },
-      })
+      console.log(
+        '[CART-DBG] add ' +
+          JSON.stringify({
+            card: { id: store?.id, name: productName },
+            selectedProdId,
+            optimistic: {
+              lineId: optimisticPayload.optimisticLine.id,
+              variantId: optimisticPayload.optimisticLine._raw.variant.id,
+              productId:
+                optimisticPayload.optimisticLine._raw.variant.product?.id,
+              variantProductId:
+                optimisticPayload.optimisticLine._raw.variant.product_id,
+            },
+          })
+      )
     }
     addMutation.mutate(optimisticPayload)
 
