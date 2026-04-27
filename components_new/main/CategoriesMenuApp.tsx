@@ -24,6 +24,27 @@ const CategoriesMenu: FC<{ categories: any[]; channelName: string }> = ({
   const scrollerRef = useRef<HTMLDivElement | null>(null)
   const itemRefs = useRef<Record<number, HTMLDivElement | null>>({})
 
+  // Publish own height into a CSS var so the right-rail sticky sidebar in
+  // CityMainApp can offset itself past this nav (otherwise it slides under).
+  useEffect(() => {
+    const el = document.getElementById('categoriesMenuSticky')
+    if (!el) return
+    const apply = () => {
+      document.documentElement.style.setProperty(
+        '--cats-h',
+        `${el.offsetHeight}px`
+      )
+    }
+    apply()
+    const ro = new ResizeObserver(apply)
+    ro.observe(el)
+    window.addEventListener('resize', apply)
+    return () => {
+      ro.disconnect()
+      window.removeEventListener('resize', apply)
+    }
+  }, [categories.length])
+
   useEffect(() => {
     if (!categories.length) return
     const headerH =

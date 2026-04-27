@@ -203,7 +203,12 @@ const CityMainApp: FC<Props> = ({
               </div>
             ))}
           </div>
-          <div className="sticky top-16 max-h-screen hidden md:block space-y-4">
+          <div
+            className="sticky max-h-screen hidden md:block space-y-4"
+            style={{
+              top: 'calc(var(--header-h, 0px) + var(--cats-h, 0px) + 12px)',
+            }}
+          >
             {halfModeProds.map((sec: any) => (
               <div
                 key={sec.id}

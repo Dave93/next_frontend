@@ -68,7 +68,8 @@
       "Bash(rm -f lib/posthog.tsx)",
       "Bash(/usr/local/bin/bun tsc *)",
       "mcp__plugin_chrome-devtools-mcp_chrome-devtools__new_page",
-      "mcp__plugin_chrome-devtools-mcp_chrome-devtools__list_pages"
+      "mcp__plugin_chrome-devtools-mcp_chrome-devtools__list_pages",
+      "mcp__plugin_chrome-devtools-mcp_chrome-devtools__list_console_messages"
     ],
     "deny": []
   }
