@@ -637,7 +637,7 @@ const ProductItemNewApp: FC<ProductItem> = ({ product, channelName }) => {
         <div
           className={`${styles.gridItemOutline} ${
             isProductInStop ? 'opacity-25' : ''
-          } overflow-hidden bg-white rounded-[20px] md:rounded-[15px] hover:shadow-xl shadow-sm group md:py-3 md:px-3 flex flex-col h-full`}
+          } relative overflow-hidden group-hover:overflow-visible hover:overflow-visible group-hover:z-30 hover:z-30 bg-white rounded-[20px] md:rounded-[15px] hover:shadow-xl shadow-sm group md:py-3 md:px-3 flex flex-col h-full`}
           id={`prod-${store.id}`}
           itemScope
           itemType="https://schema.org/Product"
@@ -827,17 +827,35 @@ const ProductItemNewApp: FC<ProductItem> = ({ product, channelName }) => {
             {store.sizeDesc && (
               <div className="mt-2 text-gray-700 text-xs">{store.sizeDesc}</div>
             )}
-            <div
-              className="mt-1 flex-grow product-desc-clamp"
-              dangerouslySetInnerHTML={{
-                __html: store?.attribute_data?.description
-                  ? store?.attribute_data?.description[channelName][
-                      locale || 'ru'
-                    ]
-                  : '',
-              }}
-              itemProp="description"
-            ></div>
+            <div className="relative mt-1 flex-grow">
+              {/* Видимая (всегда обрезанная) строка — фиксированная
+                  высота, чтобы карточка не прыгала. */}
+              <div
+                className="product-desc-clamp"
+                dangerouslySetInnerHTML={{
+                  __html: store?.attribute_data?.description
+                    ? store?.attribute_data?.description[channelName][
+                        locale || 'ru'
+                      ]
+                    : '',
+                }}
+                itemProp="description"
+              />
+              {/* Полный текст — popover поверх обрезанного, появляется
+                  на hover карточки. position:absolute → не двигает
+                  layout соседних карточек в grid. */}
+              <div
+                className="pointer-events-none opacity-0 group-hover:opacity-100 transition-opacity duration-150 absolute z-30 left-0 right-0 top-0 -mx-2 -mt-2 px-3 py-2.5 bg-white rounded-xl shadow-xl ring-1 ring-gray-200 leading-snug text-gray-700"
+                aria-hidden="true"
+                dangerouslySetInnerHTML={{
+                  __html: store?.attribute_data?.description
+                    ? store?.attribute_data?.description[channelName][
+                        locale || 'ru'
+                      ]
+                    : '',
+                }}
+              />
+            </div>
             <div className="mt-auto">
               {store.variants && store.variants.length > 0 && (
                 <div className="flex mt-5 space-x-1 -mx-2">
