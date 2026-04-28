@@ -637,7 +637,7 @@ const ProductItemNewApp: FC<ProductItem> = ({ product, channelName }) => {
         <div
           className={`${styles.gridItemOutline} ${
             isProductInStop ? 'opacity-25' : ''
-          } relative overflow-hidden group-hover:overflow-visible hover:overflow-visible group-hover:z-30 hover:z-30 bg-white rounded-[20px] md:rounded-[15px] hover:shadow-xl shadow-sm group md:py-3 md:px-3 flex flex-col h-full`}
+          } relative overflow-hidden bg-white rounded-[20px] md:rounded-[15px] hover:shadow-xl shadow-sm group md:py-3 md:px-3 flex flex-col h-full`}
           id={`prod-${store.id}`}
           itemScope
           itemType="https://schema.org/Product"
@@ -811,10 +811,11 @@ const ProductItemNewApp: FC<ProductItem> = ({ product, channelName }) => {
               <div className="mt-2 text-gray-700 text-xs">{store.sizeDesc}</div>
             )}
             <div className="relative mt-1 flex-grow">
-              {/* Видимая (всегда обрезанная) строка — фиксированная
-                  высота, чтобы карточка не прыгала. */}
+              {/* Видимый, всегда обрезанный текст. Hover именно по нему
+                  (peer) — а не по всей карточке — чтобы tooltip не
+                  всплывал при наведении на размеры/кнопку В корзину. */}
               <div
-                className="product-desc-clamp"
+                className="peer product-desc-clamp cursor-help"
                 dangerouslySetInnerHTML={{
                   __html: store?.attribute_data?.description
                     ? store?.attribute_data?.description[channelName][
@@ -824,12 +825,12 @@ const ProductItemNewApp: FC<ProductItem> = ({ product, channelName }) => {
                 }}
                 itemProp="description"
               />
-              {/* Полный текст — tooltip-popover ПОД обрезанным текстом,
-                  появляется только на hover-устройствах (mouse), чтобы
-                  на тачскринах не перекрывать кнопки размеров и не
-                  «застревать» после первого тапа. */}
+              {/* Полный текст — tooltip ВВЕРХ от описания (bottom-full),
+                  всплывает поверх изображения, а не кнопок снизу.
+                  pointer-events-none, чтобы не блокировал клик по карточке.
+                  На тачскринах скрыт через @media (hover: none). */}
               <div
-                className="desc-tooltip pointer-events-none opacity-0 group-hover:opacity-100 transition-opacity duration-150 absolute z-30 left-0 right-0 top-full mt-1 px-3 py-2.5 bg-white rounded-xl shadow-xl ring-1 ring-gray-200 leading-snug text-gray-700"
+                className="desc-tooltip pointer-events-none opacity-0 peer-hover:opacity-100 transition-opacity duration-150 absolute z-40 left-0 right-0 bottom-full mb-1 max-h-32 overflow-hidden px-3 py-2.5 bg-white rounded-xl shadow-xl ring-1 ring-gray-200 leading-snug text-gray-700"
                 aria-hidden="true"
                 dangerouslySetInnerHTML={{
                   __html: store?.attribute_data?.description
