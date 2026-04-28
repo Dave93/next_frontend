@@ -9,6 +9,17 @@ export type SlimModifier = {
   groupId?: string
 }
 
+export type SlimModifierProduct = {
+  id: number
+  /** Absolute price of the modifier product — useProductBuilder subtracts
+   *  the variant's own price to get the delta shown to the user. */
+  price: number
+  name_ru?: string
+  name_uz?: string
+  name_en?: string
+  image?: string
+}
+
 export type SlimVariant = {
   id: number
   name: string
@@ -16,6 +27,10 @@ export type SlimVariant = {
   price: number
   weight?: number
   modifiers?: SlimModifier[]
+  /** «Сосисочный борт» / любой modifier-as-product, см. ProductsController
+   *  createCacheProducts(): products[i].modifierProduct = products[modifier_prod_id].
+   *  Без этого поля drawer/inline-карточка не подмешивают sausage-плитку. */
+  modifierProduct?: SlimModifierProduct
 }
 
 export type SlimProduct = {
@@ -121,6 +136,26 @@ function variantSizeLabel(raw: any, locale: Locale): string {
   return raw.custom_name || raw.custom_name_uz || raw.custom_name_en || ''
 }
 
+function toSlimModifierProduct(raw: any): SlimModifierProduct | undefined {
+  if (!raw || typeof raw !== 'object' || !raw.id) return undefined
+  const price = num(raw.price)
+  if (price === undefined) return undefined
+  const asset = Array.isArray(raw.assets) ? raw.assets[0] : null
+  const image =
+    asset?.local ||
+    (asset?.location && asset?.filename
+      ? `https://cdn.choparpizza.uz/storage/${asset.location}/${asset.filename}`
+      : undefined)
+  return {
+    id: raw.id,
+    price,
+    name_ru: raw.name_ru || undefined,
+    name_uz: raw.name_uz || undefined,
+    name_en: raw.name_en || undefined,
+    image,
+  }
+}
+
 function toSlimVariant(raw: any, locale: Locale): SlimVariant {
   const mods: SlimModifier[] = Array.isArray(raw.modifiers)
     ? raw.modifiers.map((m: any) => toSlimModifier(m, locale))
@@ -135,6 +170,7 @@ function toSlimVariant(raw: any, locale: Locale): SlimVariant {
     price: num(raw.price) || 0,
     weight: num(raw.weight),
     modifiers: mods.length ? mods : undefined,
+    modifierProduct: toSlimModifierProduct(raw.modifierProduct),
   }
 }
 

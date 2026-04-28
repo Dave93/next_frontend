@@ -77,18 +77,24 @@ export function useProductBuilder(
           (m: any) => m.id === activeVariant.modifierProduct.id
         )
         if (!exists) {
+          // SlimMenu payload exposes a ready URL via `image`; raw API
+          // payload exposes `assets[]`. Honour both so the sausage tile
+          // renders correctly in drawer/inline-card AND on /product/[id].
+          const mp = activeVariant.modifierProduct
+          const fallbackAssets = mp.assets
+            ? mp.assets
+            : mp.image
+              ? [{ local: mp.image }]
+              : [{ local: '/sausage_modifier.png' }]
           mods = [
             ...mods,
             {
-              id: activeVariant.modifierProduct.id,
-              name_ru: activeVariant.modifierProduct.name_ru,
-              name_uz: activeVariant.modifierProduct.name_uz,
-              name_en: activeVariant.modifierProduct.name_en,
-              price:
-                +activeVariant.modifierProduct.price - +activeVariant.price,
-              assets: activeVariant.modifierProduct.assets || [
-                { local: '/sausage_modifier.png' },
-              ],
+              id: mp.id,
+              name_ru: mp.name_ru,
+              name_uz: mp.name_uz,
+              name_en: mp.name_en,
+              price: +mp.price - +activeVariant.price,
+              assets: fallbackAssets,
             },
           ]
         }
