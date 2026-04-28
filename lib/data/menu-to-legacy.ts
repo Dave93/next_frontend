@@ -25,6 +25,20 @@ function descMap(text: string | undefined): any {
 }
 
 function legacyVariant(v: SlimVariant): any {
+  // Reconstruct the shape useProductBuilder / ProductItemNewApp expect
+  // for "Сосисочный борт": id, name_*, abs price, assets[].
+  const modifierProduct = v.modifierProduct
+    ? {
+        id: v.modifierProduct.id,
+        price: v.modifierProduct.price,
+        name_ru: v.modifierProduct.name_ru,
+        name_uz: v.modifierProduct.name_uz,
+        name_en: v.modifierProduct.name_en,
+        assets: v.modifierProduct.image
+          ? [{ local: v.modifierProduct.image }]
+          : undefined,
+      }
+    : undefined
   return {
     id: v.id,
     price: typeof v.price === 'number' ? v.price.toString() : v.price,
@@ -38,6 +52,7 @@ function legacyVariant(v: SlimVariant): any {
     custom_name_uz: v.name,
     custom_name_en: v.name,
     modifiers: (v.modifiers || []).map(legacyModifier),
+    modifierProduct,
   }
 }
 
