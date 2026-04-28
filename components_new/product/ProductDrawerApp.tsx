@@ -1,6 +1,6 @@
 'use client'
 
-import { FC } from 'react'
+import { FC, useEffect } from 'react'
 import { Drawer } from 'vaul'
 import Image from 'next/image'
 import currency from 'currency.js'
@@ -72,6 +72,35 @@ const ProductDrawerApp: FC = () => {
   }
 
   const productImage = productDrawerProduct?.image || null
+
+  // Перехватываем браузерный «Назад», когда drawer открыт. Без этого
+  // мобильные пользователи теряли весь сайт при попытке закрыть карточку
+  // системной кнопкой/жестом «back».
+  useEffect(() => {
+    if (typeof window === 'undefined') return
+    if (!open) return
+
+    window.history.pushState({ chopar_drawer: true }, '')
+    let consumed = false
+
+    const onPop = () => {
+      if (consumed) return
+      consumed = true
+      closeProductDrawer()
+    }
+    window.addEventListener('popstate', onPop)
+
+    return () => {
+      window.removeEventListener('popstate', onPop)
+      // Если drawer закрыли НЕ через back (overlay/×/В корзину), нужно
+      // самим снять sentinel-entry, чтобы следующий «back» вёл на
+      // реальную предыдущую страницу.
+      if (!consumed) {
+        consumed = true
+        window.history.back()
+      }
+    }
+  }, [open, closeProductDrawer])
 
   return (
     <Drawer.Root
