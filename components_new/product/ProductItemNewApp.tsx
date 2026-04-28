@@ -954,11 +954,21 @@ const ProductItemNewApp: FC<ProductItem> = ({ product, channelName }) => {
                 itemScope
                 itemType="https://schema.org/Offer"
               >
+                {/* schema.org/Offer needs numeric price + ISO currency.
+                    The visible spans are formatted strings ("98 000 сум")
+                    which Google rejects, hence the meta-tag mirror. */}
+                <meta itemProp="price" content={String(prodPriceDesktop)} />
+                <meta itemProp="priceCurrency" content="UZS" />
+                <meta
+                  itemProp="availability"
+                  content={
+                    isProductInStop
+                      ? 'https://schema.org/OutOfStock'
+                      : 'https://schema.org/InStock'
+                  }
+                />
                 {prodDiscountPriceDesktop > 0 && (
-                  <span
-                    className="text-sm bg-white block w-auto rounded-full text-xs text-left line-through px-0 py-0 text-gray-500"
-                    itemProp="price"
-                  >
+                  <span className="text-sm bg-white block w-auto rounded-full text-xs text-left line-through px-0 py-0 text-gray-500">
                     {currency(prodPriceDesktop + prodDiscountPriceDesktop, {
                       pattern: '# !',
                       separator: ' ',
