@@ -4,3 +4,12 @@
   -webkit-box-orient: vertical;
   overflow: hidden;
 }
+
+/* Hover-tooltip с полным описанием — только для устройств с реальным hover
+   (мышь/трекпад). На тачскринах первый tap считается hover'ом и popover
+   «застревает» поверх кнопок размеров. */
+@media (hover: none) {
+  .desc-tooltip {
+    display: none !important;
+  }
+}
