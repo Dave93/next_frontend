@@ -360,6 +360,27 @@ const ProductItemNewApp: FC<ProductItem> = ({ product, channelName }) => {
       const activeValue: any = store.variants.find(
         (item: any) => item.active == true
       )
+      if (typeof window !== 'undefined') {
+        // eslint-disable-next-line no-console
+        console.log(
+          '[MOD-DBG] ItemNew ' +
+            JSON.stringify({
+              productId: store?.id,
+              productName: store?.name || store?.attribute_data?.name?.chopar?.ru,
+              activeVariantId: activeValue?.id,
+              activeVariantName:
+                activeValue?.custom_name || activeValue?.name,
+              hasModifiers: !!activeValue?.modifiers,
+              modifiersCount: activeValue?.modifiers?.length || 0,
+              hasModifierProduct: !!activeValue?.modifierProduct,
+              modifierProductId: activeValue?.modifierProduct?.id,
+              modifierProductPrice: activeValue?.modifierProduct?.price,
+              activeVariantPrice: activeValue?.price,
+              storeKeys: Object.keys(store || {}).join(','),
+              variantKeys: Object.keys(activeValue || {}).join(','),
+            })
+        )
+      }
       if (activeValue && activeValue.modifiers) {
         modifier = activeValue.modifiers
         if (activeValue.modifierProduct) {

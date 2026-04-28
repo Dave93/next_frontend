@@ -69,6 +69,27 @@ export function useProductBuilder(
 
   const modifiers = useMemo(() => {
     if (!product) return [] as any[]
+    if (typeof window !== 'undefined') {
+      // eslint-disable-next-line no-console
+      console.log(
+        '[MOD-DBG] Builder ' +
+          JSON.stringify({
+            productId: product?.id,
+            variantsCount: variants.length,
+            activeVariantId: activeVariant?.id,
+            activeVariantName:
+              activeVariant?.name || activeVariant?.custom_name,
+            hasModifiers: !!activeVariant?.modifiers,
+            modifiersCount: activeVariant?.modifiers?.length || 0,
+            hasModifierProduct: !!activeVariant?.modifierProduct,
+            modifierProductId: activeVariant?.modifierProduct?.id,
+            modifierProductPrice: activeVariant?.modifierProduct?.price,
+            activeVariantPrice: activeVariant?.price,
+            productKeys: Object.keys(product || {}).join(','),
+            variantKeys: Object.keys(activeVariant || {}).join(','),
+          })
+      )
+    }
     let mods: any[] = []
     if (variants.length && activeVariant?.modifiers) {
       mods = activeVariant.modifiers
