@@ -77,15 +77,12 @@ export function useProductBuilder(
           (m: any) => m.id === activeVariant.modifierProduct.id
         )
         if (!exists) {
-          // SlimMenu payload exposes a ready URL via `image`; raw API
-          // payload exposes `assets[]`. Honour both so the sausage tile
-          // renders correctly in drawer/inline-card AND on /product/[id].
+          // The sausage-rim modifier-product carries the FULL
+          // pizza-with-rim image on the backend (high-res mp.image / CDN),
+          // which crops to a generic texture inside a 56×56 modifier tile.
+          // Use the static sausage icon so the rim is recognisable on
+          // drawer, list card AND /product/[id] — same visual everywhere.
           const mp = activeVariant.modifierProduct
-          const fallbackAssets = mp.assets
-            ? mp.assets
-            : mp.image
-              ? [{ local: mp.image }]
-              : [{ local: '/sausage_modifier.png' }]
           mods = [
             ...mods,
             {
@@ -94,7 +91,7 @@ export function useProductBuilder(
               name_uz: mp.name_uz,
               name_en: mp.name_en,
               price: +mp.price - +activeVariant.price,
-              assets: fallbackAssets,
+              assets: [{ local: '/sausage_modifier.png' }],
             },
           ]
         }
