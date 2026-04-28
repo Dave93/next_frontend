@@ -4,11 +4,3 @@
   -webkit-box-orient: vertical;
   overflow: hidden;
 }
-
-.product-desc-clamp:hover {
-  -webkit-line-clamp: unset;
-  overflow: visible;
-  position: relative;
-  z-index: 5;
-  background: white;
-}

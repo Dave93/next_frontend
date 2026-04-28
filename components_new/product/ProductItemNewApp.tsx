@@ -698,16 +698,33 @@ const ProductItemNewApp: FC<ProductItem> = ({ product, channelName }) => {
                   {store?.attribute_data?.description?.[channelName]?.[
                     locale || 'ru'
                   ] && (
-                    <div
-                      className="mt-1 text-[12px] text-gray-500 line-clamp-2 product-desc-clamp"
-                      dangerouslySetInnerHTML={{
-                        __html:
-                          store.attribute_data.description[channelName][
-                            locale || 'ru'
-                          ],
-                      }}
-                      itemProp="description"
-                    />
+                    <div className="relative mt-1">
+                      {/* Видимая (всегда обрезанная) строка — фиксированная
+                          высота, чтобы карточка не прыгала. */}
+                      <div
+                        className="text-[12px] text-gray-500 line-clamp-2 product-desc-clamp"
+                        dangerouslySetInnerHTML={{
+                          __html:
+                            store.attribute_data.description[channelName][
+                              locale || 'ru'
+                            ],
+                        }}
+                        itemProp="description"
+                      />
+                      {/* Полный текст — popover поверх обрезанного, появляется
+                          на hover карточки. position:absolute → не двигает
+                          layout соседних карточек в grid. */}
+                      <div
+                        className="pointer-events-none opacity-0 group-hover:opacity-100 transition-opacity duration-150 absolute z-30 left-0 right-0 top-0 -mx-2 -mt-2 px-3 py-2.5 bg-white rounded-xl shadow-xl ring-1 ring-gray-200 text-[12px] leading-snug text-gray-700"
+                        aria-hidden="true"
+                        dangerouslySetInnerHTML={{
+                          __html:
+                            store.attribute_data.description[channelName][
+                              locale || 'ru'
+                            ],
+                        }}
+                      />
+                    </div>
                   )}
                 </div>
                 <div className="mt-2">
