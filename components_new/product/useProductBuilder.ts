@@ -96,7 +96,10 @@ export function useProductBuilder(
     } else if (product.modifiers) {
       mods = product.modifiers
     }
-    return mods.filter((m: any) => +m.price > 0)
+    return mods
+      .filter((m: any) => +m.price > 0)
+      .slice()
+      .sort((a: any, b: any) => +a.price - +b.price)
   }, [product, activeVariant])
 
   const basePrice = useMemo(() => {
