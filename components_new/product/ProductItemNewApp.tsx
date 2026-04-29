@@ -22,11 +22,7 @@ import { useExtracted, useLocale } from 'next-intl'
 import { useParams } from 'next/navigation'
 import axios from 'axios'
 import getAssetUrl from '@utils/getAssetUrl'
-import { useCartStore, cartSelectors } from '../../lib/stores/cart-store'
-import {
-  useAddToCart,
-  useUpdateCartQty,
-} from '../../lib/hooks/useCartMutations'
+import { useAddToCart } from '../../lib/hooks/useCartMutations'
 import { XIcon } from '@heroicons/react/solid'
 import styles from './ProductItemNew.module.css'
 import { useLocationStore } from '../../lib/stores/location-store'
@@ -67,77 +63,12 @@ const ProductItemNewApp: FC<ProductItem> = ({ product, channelName }) => {
   const locationData = useLocationStore((s) => s.locationData) as any
   const stopProducts = useUIStore((s) => s.stopProducts)
   const openProductDrawer = useUIStore((s) => s.openProductDrawer)
-  const cartLines = useCartStore(cartSelectors.lines)
-  const updateQtyMutation = useUpdateCartQty()
   const addMutation = useAddToCart()
-  // Backwards-compat shape for legacy lookup (item.variant?.id, .product?.id)
-  const cartData: any = useMemo(
-    () => ({
-      lineItems: cartLines.map(
-        (l) => l._raw || { id: l.id, quantity: l.qty, variant: { id: l.variantId, product: { id: l.productId, name: l.name, image: l.image } } }
-      ),
-    }),
-    [cartLines]
-  )
 
   const [imageLoaded, setImageLoaded] = useState(false)
 
-  const changeCartQuantity = (delta: number) => {
-    if (!cartLineItem) return
-    updateQtyMutation.mutate({
-      lineId: Number(cartLineItem.id),
-      delta: delta > 0 ? 1 : -1,
-      currentQty: Number(cartLineItem.quantity || 0),
-    })
-  }
   const [isChoosingModifier, setIsChoosingModifier] = useState(false)
   const [activeModifiers, setActiveModifiers] = useState([] as number[])
-
-  const effectiveMatch = useMemo<{ kind: 'variant' | 'product'; id: string }>(
-    () => {
-      const activeVariant = store.variants?.find((v: any) => v.active)
-      if (!activeVariant) return { kind: 'product', id: String(store.id) }
-      if (
-        activeVariant.modifierProduct &&
-        activeModifiers.includes(activeVariant.modifierProduct.id)
-      ) {
-        return {
-          kind: 'product',
-          id: String(activeVariant.modifierProduct.id),
-        }
-      }
-      return { kind: 'variant', id: String(activeVariant.id) }
-    },
-    [store, activeModifiers]
-  )
-  const cartLineItem = useMemo(() => {
-    if (!cartData?.lineItems?.length) return null
-    const matched = cartData.lineItems.find((item: any) => {
-      if (effectiveMatch.kind === 'variant') {
-        // Бэкенд для разных эндпоинтов кладёт id варианта то в variant.id
-        // (оптимистичная линия), то в variant.product.id / variant.product_id
-        // (ответ /api/baskets-lines). Чтобы карточка не «мигала» при свапе
-        // optimistic → server, проверяем все три поля. Это безопасно: id
-        // варианта уникален в каталоге.
-        return (
-          String(item.variant?.id) === effectiveMatch.id ||
-          String(item.variant?.product?.id) === effectiveMatch.id ||
-          String(item.variant?.product_id) === effectiveMatch.id
-        )
-      }
-      // 'product' — сет / без вариантов / выбранный modifierProduct.
-      // Variant.id матчить НЕЛЬЗЯ: id вариантов и id продуктов в БД могут
-      // случайно пересекаться (collision id-неймспейсов), это и приводит
-      // к ложному «в корзине» на чужой карточке.
-      return (
-        String(item.variant?.product?.id) === effectiveMatch.id ||
-        String(item.variant?.product_id) === effectiveMatch.id
-      )
-    })
-    return matched
-  }, [cartData, effectiveMatch])
-
-  const cartQuantity = cartLineItem?.quantity || 0
 
   const [configData, setConfigData] = useState({} as any)
   let [isOpen, setIsOpen] = useState(false)
