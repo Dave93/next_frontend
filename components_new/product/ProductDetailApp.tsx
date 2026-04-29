@@ -6,7 +6,6 @@ import ProductDetailContent from './ProductDetailContent'
 
 type Props = {
   product: any
-  channelName: string
 }
 
 const ProductDetailApp: FC<Props> = ({ product }) => {

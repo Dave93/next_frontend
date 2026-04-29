@@ -117,7 +117,7 @@ export default async function ProductDetailPage({
           },
         ]}
       />
-      <ProductDetailApp product={product} channelName="chopar" />
+      <ProductDetailApp product={product} />
     </>
   )
 }
