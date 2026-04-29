@@ -17,6 +17,7 @@ const SideMenuApp: FC = () => {
   const citySlug = activeCity?.slug || 'tashkent'
 
   const items = [
+    { label: t('Меню'), href: '' },
     { label: t('О нас'), href: '/about' },
     { label: t('Доставка и оплата'), href: '/delivery' },
     { label: t('Адреса ресторанов'), href: '/branch' },
@@ -72,12 +73,9 @@ const SideMenuApp: FC = () => {
             leaveTo="opacity-0 -translate-y-2 scale-95"
           >
             <PopoverPanel className="absolute right-0 top-full mt-2 w-64 origin-top-right rounded-2xl bg-white shadow-xl ring-1 ring-black/5 py-2 z-50 focus:outline-none">
-              <div className="px-4 pt-2 pb-2 text-xs font-semibold uppercase tracking-wide text-gray-400">
-                {t('Меню')}
-              </div>
               <ul>
                 {items.map((item) => (
-                  <li key={item.href}>
+                  <li key={item.href || 'home'}>
                     <Link
                       href={`/${citySlug}${item.href}`}
                       prefetch={false}
