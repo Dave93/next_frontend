@@ -3,7 +3,7 @@
 import { FC, useEffect, useMemo, useRef } from 'react'
 import Image from 'next/image'
 import { useExtracted } from 'next-intl'
-import { Link } from '../i18n/navigation'
+import { Link, usePathname } from '../i18n/navigation'
 import { useLocationStore } from '../lib/stores/location-store'
 import { useUIStore } from '../lib/stores/ui-store'
 import ChooseCityDropDownApp from './header/ChooseCityDropDownApp'
@@ -52,6 +52,20 @@ const HeaderApp: FC = () => {
   }, [locationData, t])
 
   const deliveryType = locationData?.deliveryType
+  const pathname = usePathname()
+  // Mobile delivery/pickup tabs only make sense on flows where the
+  // user is about to pick or has just picked items: catalog, cart,
+  // checkout. Anywhere else (product detail, profile, news, branches…)
+  // they're visual noise — hide them.
+  const showDeliveryTabs = useMemo(() => {
+    if (!pathname) return false
+    const segments = pathname.split('/').filter(Boolean)
+    if (segments.length <= 1) return true // / or /[city]
+    if (segments.length === 2) {
+      return segments[1] === 'cart' || segments[1] === 'order'
+    }
+    return false
+  }, [pathname])
   const ACTIVE_BG = 'rgba(250, 175, 4, 0.08)'
   const ACTIVE_BORDER = '#FAAF04'
   const INACTIVE_BG = '#F3F4F6'
@@ -131,36 +145,40 @@ const HeaderApp: FC = () => {
           </div>
         </div>
 
-        <div className="md:hidden grid grid-cols-2 gap-2 pb-3">
-          <button
-            type="button"
-            onClick={() => openLocationTabs?.('deliver')}
-            className="rounded-full text-sm font-medium py-3 transition"
-            style={{
-              background: deliveryType === 'deliver' ? ACTIVE_BG : INACTIVE_BG,
-              border: `1px solid ${
-                deliveryType === 'deliver' ? ACTIVE_BORDER : INACTIVE_BORDER
-              }`,
-              color: deliveryType === 'deliver' ? ACTIVE_BORDER : '#1f2937',
-            }}
-          >
-            {t('Доставка')}
-          </button>
-          <button
-            type="button"
-            onClick={() => openLocationTabs?.('pickup')}
-            className="rounded-full text-sm font-medium py-3 transition"
-            style={{
-              background: deliveryType === 'pickup' ? ACTIVE_BG : INACTIVE_BG,
-              border: `1px solid ${
-                deliveryType === 'pickup' ? ACTIVE_BORDER : INACTIVE_BORDER
-              }`,
-              color: deliveryType === 'pickup' ? ACTIVE_BORDER : '#1f2937',
-            }}
-          >
-            {t('Самовывоз')}
-          </button>
-        </div>
+        {showDeliveryTabs && (
+          <div className="md:hidden grid grid-cols-2 gap-2 pb-3">
+            <button
+              type="button"
+              onClick={() => openLocationTabs?.('deliver')}
+              className="rounded-full text-sm font-medium py-3 transition"
+              style={{
+                background:
+                  deliveryType === 'deliver' ? ACTIVE_BG : INACTIVE_BG,
+                border: `1px solid ${
+                  deliveryType === 'deliver' ? ACTIVE_BORDER : INACTIVE_BORDER
+                }`,
+                color: deliveryType === 'deliver' ? ACTIVE_BORDER : '#1f2937',
+              }}
+            >
+              {t('Доставка')}
+            </button>
+            <button
+              type="button"
+              onClick={() => openLocationTabs?.('pickup')}
+              className="rounded-full text-sm font-medium py-3 transition"
+              style={{
+                background:
+                  deliveryType === 'pickup' ? ACTIVE_BG : INACTIVE_BG,
+                border: `1px solid ${
+                  deliveryType === 'pickup' ? ACTIVE_BORDER : INACTIVE_BORDER
+                }`,
+                color: deliveryType === 'pickup' ? ACTIVE_BORDER : '#1f2937',
+              }}
+            >
+              {t('Самовывоз')}
+            </button>
+          </div>
+        )}
       </div>
     </header>
   )
