@@ -15,9 +15,11 @@ export async function generateStaticParams() {
 
 export default async function CityLayout({
   children,
+  modal,
   params,
 }: {
   children: React.ReactNode
+  modal: React.ReactNode
   params: Promise<{ city: string }>
 }) {
   const { city: citySlug } = await params
@@ -43,6 +45,7 @@ export default async function CityLayout({
       }}
     >
       {children}
+      {modal}
     </LayoutWrapper>
   )
 }
