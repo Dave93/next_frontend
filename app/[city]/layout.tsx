@@ -34,6 +34,7 @@ export default async function CityLayout({
 
   return (
     <LayoutWrapper
+      modal={modal}
       pageProps={{
         cities,
         currentCity,
@@ -45,7 +46,6 @@ export default async function CityLayout({
       }}
     >
       {children}
-      {modal}
     </LayoutWrapper>
   )
 }

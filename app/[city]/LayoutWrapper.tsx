@@ -18,6 +18,7 @@ import ProductDrawerApp from '../../components_new/product/ProductDrawerApp'
 
 type Props = {
   children: React.ReactNode
+  modal?: React.ReactNode
   pageProps: {
     cities: City[]
     currentCity: City
@@ -29,7 +30,7 @@ type Props = {
   }
 }
 
-export default function LayoutWrapper({ children, pageProps }: Props) {
+export default function LayoutWrapper({ children, modal, pageProps }: Props) {
   const setActiveCity = useLocationStore((s) => s.setActiveCity)
   const setCitiesData = useLocationStore((s) => s.setCities)
 
@@ -63,6 +64,7 @@ export default function LayoutWrapper({ children, pageProps }: Props) {
       <SignInModalApp />
       <LocationTabsModalApp />
       <ProductDrawerApp />
+      {modal}
     </div>
   )
 }
