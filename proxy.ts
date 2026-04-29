@@ -13,6 +13,24 @@ export function proxy(request: NextRequest) {
   if (localeMatch) {
     const locale = localeMatch[1] as (typeof NON_DEFAULT_LOCALES)[number]
     const rest = localeMatch[2] || '/'
+
+    // Bare /uz or /en (or /uz/, /en/) — there's no city slug yet, so
+    // a rewrite to "/" would land on a route that doesn't exist (we
+    // don't have an app/page.tsx, only app/[city]/page.tsx). Redirect
+    // to /{locale}/{citySlug} instead so the catalog renders with the
+    // chosen locale preserved.
+    if (rest === '/' || rest === '') {
+      const citySlug = request.cookies.get('city_slug')?.value || 'tashkent'
+      const redirect = NextResponse.redirect(
+        new URL(`/${locale}/${citySlug}`, request.url)
+      )
+      redirect.cookies.set('NEXT_LOCALE', locale, {
+        path: '/',
+        maxAge: 60 * 60 * 24 * 365,
+      })
+      return redirect
+    }
+
     const url = request.nextUrl.clone()
     url.pathname = rest
     const requestHeaders = new Headers(request.headers)
@@ -52,6 +70,7 @@ export const config = {
   matcher: [
     '/',
     '/product/:id',
+    '/(uz|en)',
     '/(uz|en)/:path*',
     '/(tashkent|samarkand|bukhara|namangan|fergana|andijan|qarshi|nukus|urgench|jizzakh|gulistan|termez|chirchiq|navoi)/_bonus/:path*',
   ],
