@@ -209,6 +209,7 @@ const CityMainApp: FC<Props> = ({
               top: 'calc(var(--header-h, 0px) + var(--cats-h, 0px) + 12px)',
             }}
           >
+            <SmallCartApp channelName={channelName} />
             {halfModeProds.map((sec: any) => (
               <div
                 key={sec.id}
@@ -217,7 +218,6 @@ const CityMainApp: FC<Props> = ({
                 <HalfPizzaApp sec={sec} channelName={channelName} isSmall />
               </div>
             ))}
-            <SmallCartApp channelName={channelName} />
           </div>
         </div>
       </div>
