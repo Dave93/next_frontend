@@ -229,8 +229,33 @@ const HeaderMiniCartApp: FC = () => {
                           </div>
                           <div className="flex-1 min-w-0">
                             <div className="flex items-start gap-2">
-                              <div className="flex-1 text-sm font-semibold text-gray-900 line-clamp-2 leading-tight">
-                                {lineName(line)}
+                              <div className="flex-1 min-w-0">
+                                <div className="text-sm font-semibold text-gray-900 line-clamp-2 leading-tight">
+                                  {lineName(line)}
+                                </div>
+                                {(() => {
+                                  const mods = (line.modifiers || []).filter(
+                                    (m: any) => Number(m.price) > 0
+                                  )
+                                  if (!mods.length) return null
+                                  return (
+                                    <div className="flex flex-wrap gap-1 mt-1">
+                                      {mods.map((m: any) => (
+                                        <span
+                                          key={m.id}
+                                          className="text-[10px] px-1.5 py-0.5 rounded-full bg-gray-100 text-gray-600 font-medium"
+                                        >
+                                          +{' '}
+                                          {locale === 'uz'
+                                            ? m.name_uz
+                                            : locale === 'en'
+                                              ? m.name_en
+                                              : m.name_ru || m.name}
+                                        </span>
+                                      ))}
+                                    </div>
+                                  )
+                                })()}
                               </div>
                               <button
                                 type="button"

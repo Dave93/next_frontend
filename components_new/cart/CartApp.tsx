@@ -2,7 +2,7 @@
 
 import { useEffect, useMemo, useState } from 'react'
 import { useLocale, useExtracted } from 'next-intl'
-import { useRouter } from '../../i18n/navigation'
+import { Link, useRouter } from '../../i18n/navigation'
 import axios from 'axios'
 import defaultChannel from '@lib/defaultChannel'
 import currency from 'currency.js'
@@ -660,12 +660,46 @@ export default function CartApp(_props: CartAppProps) {
                           </svg>
                         </div>
                       )}
-                      {renderLineImage(line)}
+                      {(() => {
+                        const productId = line?.variant?.product?.id
+                        const citySlug = activeCity?.slug || 'tashkent'
+                        if (productId && !line.bonus_id && !line.sale_id) {
+                          return (
+                            <Link
+                              href={`/${citySlug}/product/${productId}`}
+                              prefetch={false}
+                              className="flex-shrink-0"
+                            >
+                              {renderLineImage(line)}
+                            </Link>
+                          )
+                        }
+                        return renderLineImage(line)
+                      })()}
                       <div className="flex-1 min-w-0">
                         <div className="flex items-start justify-between gap-2">
                           <div className="min-w-0">
                             <div className="text-sm md:text-base font-bold text-gray-900 leading-tight">
-                              {lineName(line)}
+                              {(() => {
+                                const productId = line?.variant?.product?.id
+                                const citySlug = activeCity?.slug || 'tashkent'
+                                if (
+                                  productId &&
+                                  !line.bonus_id &&
+                                  !line.sale_id
+                                ) {
+                                  return (
+                                    <Link
+                                      href={`/${citySlug}/product/${productId}`}
+                                      prefetch={false}
+                                      className="hover:underline"
+                                    >
+                                      {lineName(line)}
+                                    </Link>
+                                  )
+                                }
+                                return lineName(line)
+                              })()}
                               {line.bonus_id && (
                                 <span
                                   className="ml-2 text-xs font-bold"

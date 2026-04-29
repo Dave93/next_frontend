@@ -333,6 +333,29 @@ const SmallCartApp: FC<SmallCartProps> = ({ channelName }) => {
                               ({'Акция'})
                             </span>
                           )}
+                          {(() => {
+                            const mods = (lineItem.modifiers || []).filter(
+                              (m: any) => Number(m.price) > 0
+                            )
+                            if (!mods.length) return null
+                            return (
+                              <div className="flex flex-wrap gap-1 mt-1 font-normal">
+                                {mods.map((m: any) => (
+                                  <span
+                                    key={m.id}
+                                    className="text-[10px] px-1.5 py-0.5 rounded-full bg-gray-100 text-gray-600"
+                                  >
+                                    +{' '}
+                                    {locale === 'uz'
+                                      ? m.name_uz
+                                      : locale === 'en'
+                                        ? m.name_en
+                                        : m.name_ru || m.name}
+                                  </span>
+                                ))}
+                              </div>
+                            )
+                          })()}
                         </div>
                         {!readonlyItems.includes(lineItem.id) && (
                           <div>
