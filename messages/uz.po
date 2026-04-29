@@ -84,13 +84,13 @@ msgstr "Buyurtma berish uchun shaxsiy kabinetga kirish kerak"
 
 #: components_new/cart/CartApp.tsx:526
 #: components_new/common/SmallCartApp.tsx:215
-#: components_new/header/HeaderMiniCartApp.tsx:208
+#: components_new/header/HeaderMiniCartApp.tsx:206
 msgid "Lj6qSg"
 msgstr "Savat bo'sh"
 
 #: components_new/cart/CartApp.tsx:528
 #: components_new/common/SmallCartApp.tsx:216
-#: components_new/header/HeaderMiniCartApp.tsx:211
+#: components_new/header/HeaderMiniCartApp.tsx:209
 msgid "V5Ibqh"
 msgstr "Pitsa tanlang"
 
@@ -113,7 +113,7 @@ msgstr "Ish vaqti"
 
 #: components_new/cart/CartApp.tsx:592
 #: components_new/common/SmallCartApp.tsx:197
-#: components_new/header/HeaderMiniCartApp.tsx:176
+#: components_new/header/HeaderMiniCartApp.tsx:174
 #: components_new/mobile/MobileBottomNavApp.tsx:64
 msgid "Ukms9b"
 msgstr "Savat"
@@ -167,7 +167,7 @@ msgid "x5G3yc"
 msgstr "Jami"
 
 #: components_new/cart/CartApp.tsx:840
-#: components_new/header/HeaderMiniCartApp.tsx:316
+#: components_new/header/HeaderMiniCartApp.tsx:314
 msgid "+urzAu"
 msgstr "Buyurtma berish"
 
@@ -267,7 +267,7 @@ msgstr "Barcha huquqlar himoyalangan"
 msgid "6QS/OL"
 msgstr "Sizning shahringiz"
 
-#: components_new/header/HeaderMiniCartApp.tsx:304
+#: components_new/header/HeaderMiniCartApp.tsx:302
 msgid "2wkbQf"
 msgstr "Buyurtma summasi"
 
@@ -317,8 +317,8 @@ msgid "NUZRDC"
 msgstr "Pitsxonani tanlang:"
 
 #: components_new/header/LocationPickerCore.tsx:712
-#: components_new/product/ProductDetailApp.tsx:274
-#: components_new/product/ProductDrawerApp.tsx:225
+#: components_new/product/ProductDetailContent.tsx:250
+#: components_new/product/ProductDrawerApp.tsx:254
 msgid "+RxnK3"
 msgstr "Yuklanmoqda..."
 
@@ -404,30 +404,38 @@ msgstr "O'z pitsangizni yarating"
 msgid "WRnc7y"
 msgstr "Pitsa yaratish"
 
-#: components_new/product/ProductDetailApp.tsx:148
-#: components_new/product/ProductDrawerApp.tsx:150
+#: components_new/product/ProductDetailContent.tsx:124
+#: components_new/product/ProductDrawerApp.tsx:179
 msgid "F6q7sS"
 msgstr "Pitsaga qo'shish"
 
-#: components_new/product/ProductDetailApp.tsx:274
-#: components_new/product/ProductDrawerApp.tsx:225
-#: components_new/product/ProductItemNewApp.tsx:906
-#: components_new/product/ProductItemNewApp.tsx:1156
+#: components_new/product/ProductDetailContent.tsx:250
+#: components_new/product/ProductDrawerApp.tsx:254
+#: components_new/product/ProductItemNewApp.tsx:948
+#: components_new/product/ProductItemNewApp.tsx:1208
 msgid "JwQa2e"
 msgstr "Savatga"
 
-#: components_new/product/ProductItemNewApp.tsx:559
-#: components_new/product/ProductItemNewApp.tsx:610
+#: components_new/product/ProductItemNewApp.tsx:581
+#: components_new/product/ProductItemNewApp.tsx:632
 msgid "zXkVd5"
 msgstr "Qo'shish"
 
-#: components_new/product/ProductItemNewApp.tsx:630
+#: components_new/product/ProductItemNewApp.tsx:652
 msgid "kazY5+"
 msgstr "Mahsulot vaqtinchalik mavjud emas"
 
-#: components_new/product/ProductItemNewApp.tsx:1072
+#: components_new/product/ProductItemNewApp.tsx:1124
 msgid "AH6N5n"
 msgstr "Pitsaga qo'shish"
+
+#: components_new/product/ProductQuickModal.tsx:30
+msgid "kFZkhD"
+msgstr "Mahsulot savatga qo'shildi"
+
+#: components_new/product/ProductQuickModal.tsx:79
+msgid "CPPYs/"
+msgstr "Yopish"
 
 #: components_new/profile/PersonalDataApp.tsx:109
 #: components_new/profile/UserDataApp.tsx:24
