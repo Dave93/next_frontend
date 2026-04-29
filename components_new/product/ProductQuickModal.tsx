@@ -8,7 +8,7 @@ import {
   Transition,
   TransitionChild,
 } from '@headlessui/react'
-import { useExtracted } from 'next-intl'
+import { useExtracted, useLocale } from 'next-intl'
 import { useRouter } from '../../i18n/navigation'
 import { toast } from 'sonner'
 import ProductDetailContent from './ProductDetailContent'
@@ -19,6 +19,7 @@ type Props = {
 
 const ProductQuickModal: FC<Props> = ({ product }) => {
   const t = useExtracted()
+  const locale = useLocale()
   const router = useRouter()
   const closeButtonRef = useRef<HTMLButtonElement>(null)
 
@@ -33,8 +34,8 @@ const ProductQuickModal: FC<Props> = ({ product }) => {
 
   const localizedName = (() => {
     const attr =
-      product?.attribute_data?.name?.['chopar']?.['ru'] ||
-      product?.attribute_data?.name?.['chopar']?.['en']
+      product?.attribute_data?.name?.['chopar']?.[locale] ||
+      product?.attribute_data?.name?.['chopar']?.['ru']
     return attr || product?.name || ''
   })()
 
