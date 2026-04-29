@@ -11,8 +11,6 @@ import {
 import { Ru, Uz, Us } from 'react-flags-select'
 import Cookies from 'js-cookie'
 import { useLocale } from 'next-intl'
-import { useParams } from 'next/navigation'
-import { usePathname, useRouter } from '../../i18n/navigation'
 
 const flagComponents = {
   ru: Ru,
@@ -30,19 +28,28 @@ type Locale = 'ru' | 'uz' | 'en'
 
 const LanguageDropDownApp: FC = () => {
   const locale = useLocale() as Locale
-  const pathname = usePathname()
-  const router = useRouter()
-  const params = useParams()
   const FlagComponent = flagComponents[locale]
 
   const changeLang = (e: React.MouseEvent, loc: Locale) => {
     e.preventDefault()
+    if (loc === locale) return
     Cookies.set('NEXT_LOCALE', loc, { expires: 365, path: '/' })
-    // Cast: next-intl typing for replace's first arg expects a typed
-    // pathname literal; we pass the runtime path with current params.
-    router.replace(
-      { pathname: pathname as any, params: params as any } as any,
-      { locale: loc }
+
+    // Build the next URL ourselves and do a real navigation:
+    // - next-intl's router.replace({locale: 'ru'}) was producing /ru/...
+    //   even though ru is the default locale and per i18n/routing.ts
+    //   localePrefix='as-needed' it must NOT carry a prefix → 404.
+    // - Soft navigation also leaves the SSR HTML intact, so the page
+    //   stays in the old language until the user reloads.
+    // A hard navigation forces a fresh server render in the new locale.
+    const current = window.location.pathname
+    const stripped = current.replace(/^\/(uz|en)(?=\/|$)/, '') || '/'
+    const nextPath =
+      loc === 'ru'
+        ? stripped
+        : `/${loc}${stripped === '/' ? '' : stripped}`
+    window.location.assign(
+      nextPath + window.location.search + window.location.hash
     )
   }
 
