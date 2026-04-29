@@ -711,63 +711,33 @@ const ProductItemNewApp: FC<ProductItem> = ({ product, channelName }) => {
                   )}
                 </div>
                 <div className="mt-2">
-                  {cartQuantity > 0 ? (
-                    <div
-                      className="inline-flex items-center rounded-full px-1 py-0.5 gap-1"
-                      style={{ backgroundColor: '#F9B004' }}
-                      onClick={(e) => e.stopPropagation()}
-                    >
-                      <button
-                        type="button"
-                        className="w-7 h-7 rounded-full bg-white flex items-center justify-center text-base font-bold"
-                        style={{ color: '#F9B004' }}
-                        disabled={isLoadingBasket}
-                        onClick={() => changeCartQuantity(-1)}
-                      >
-                        −
-                      </button>
-                      <span className="text-white font-bold text-sm min-w-[20px] text-center">
-                        {cartQuantity}
-                      </span>
-                      <button
-                        type="button"
-                        className="w-7 h-7 rounded-full bg-white flex items-center justify-center text-base font-bold"
-                        style={{ color: '#F9B004' }}
-                        disabled={isLoadingBasket}
-                        onClick={() => changeCartQuantity(1)}
-                      >
-                        +
-                      </button>
-                    </div>
-                  ) : (
-                    <span
-                      className="inline-block px-4 py-1.5 rounded-full text-sm font-bold"
-                      style={{
-                        backgroundColor: '#FEF3C7',
-                        color: '#B45309',
-                      }}
-                    >
-                      {store.variants && store.variants.length > 1
-                        ? locale === 'uz'
-                          ? 'dan '
+                  <span
+                    className="inline-block px-4 py-1.5 rounded-full text-sm font-bold"
+                    style={{
+                      backgroundColor: '#FEF3C7',
+                      color: '#B45309',
+                    }}
+                  >
+                    {store.variants && store.variants.length > 1
+                      ? locale === 'uz'
+                        ? 'dan '
+                        : locale === 'en'
+                        ? 'from '
+                        : 'от '
+                      : ''}
+                    {currency(prodPriceDesktop, {
+                      pattern: '# !',
+                      separator: ' ',
+                      decimal: '.',
+                      symbol:
+                        locale === 'uz'
+                          ? "so'm"
                           : locale === 'en'
-                          ? 'from '
-                          : 'от '
-                        : ''}
-                      {currency(prodPriceDesktop, {
-                        pattern: '# !',
-                        separator: ' ',
-                        decimal: '.',
-                        symbol:
-                          locale === 'uz'
-                            ? "so'm"
-                            : locale === 'en'
-                            ? 'sum'
-                            : 'сум',
-                        precision: 0,
-                      }).format()}
-                    </span>
-                  )}
+                          ? 'sum'
+                          : 'сум',
+                      precision: 0,
+                    }).format()}
+                  </span>
                 </div>
               </div>
             </button>
@@ -881,74 +851,39 @@ const ProductItemNewApp: FC<ProductItem> = ({ product, channelName }) => {
               )}
             </div>
             <div className="mt-10 flex justify-between items-center text-sm">
-              {cartQuantity > 0 ? (
-                <div
-                  className={`flex items-center rounded-full py-0.5 px-0.5 w-32 transition-opacity ${
-                    isLoadingBasket ? 'opacity-50 pointer-events-none' : ''
-                  }`}
-                  style={{ backgroundColor: '#F9B004' }}
-                >
-                  <button
-                    className="w-8 h-8 rounded-full bg-white flex items-center justify-center text-lg font-bold"
-                    style={{ color: '#F9B004' }}
-                    disabled={isLoadingBasket}
-                    onClick={(e) => {
-                      e.stopPropagation()
-                      changeCartQuantity(-1)
-                    }}
+              <button
+                className="bg-yellow focus:outline-none w-32 justify-around font-bold outline-none py-2 rounded-full text-white uppercase inline-flex items-center"
+                onClick={(e) => {
+                  e.stopPropagation()
+                  handleSubmit(e)
+                }}
+                disabled={isLoadingBasket}
+              >
+                {isLoadingBasket ? (
+                  <svg
+                    className="animate-spin h-5 w-5 text-white flex-grow text-center"
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="none"
+                    viewBox="0 0 24 24"
                   >
-                    −
-                  </button>
-                  <span className="flex-1 text-center text-white font-bold">
-                    {cartQuantity}
-                  </span>
-                  <button
-                    className="w-8 h-8 rounded-full bg-white flex items-center justify-center text-lg font-bold"
-                    style={{ color: '#F9B004' }}
-                    disabled={isLoadingBasket}
-                    onClick={(e) => {
-                      e.stopPropagation()
-                      changeCartQuantity(1)
-                    }}
-                  >
-                    +
-                  </button>
-                </div>
-              ) : (
-                <button
-                  className="bg-yellow focus:outline-none w-32 justify-around font-bold outline-none py-2 rounded-full text-white uppercase inline-flex items-center"
-                  onClick={(e) => {
-                    e.stopPropagation()
-                    handleSubmit(e)
-                  }}
-                  disabled={isLoadingBasket}
-                >
-                  {isLoadingBasket ? (
-                    <svg
-                      className="animate-spin h-5 w-5 text-white flex-grow text-center"
-                      xmlns="http://www.w3.org/2000/svg"
-                      fill="none"
-                      viewBox="0 0 24 24"
-                    >
-                      <circle
-                        className="opacity-25"
-                        cx="12"
-                        cy="12"
-                        r="10"
-                        stroke="currentColor"
-                        strokeWidth="4"
-                      ></circle>
-                      <path
-                        className="opacity-75"
-                        fill="currentColor"
-                        d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
-                      ></path>
-                    </svg>
-                  ) : (
-                    t('В корзину')
-                  )}
-                </button>
-              )}
+                    <circle
+                      className="opacity-25"
+                      cx="12"
+                      cy="12"
+                      r="10"
+                      stroke="currentColor"
+                      strokeWidth="4"
+                    ></circle>
+                    <path
+                      className="opacity-75"
+                      fill="currentColor"
+                      d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+                    ></path>
+                  </svg>
+                ) : (
+                  t('В корзину')
+                )}
+              </button>
               <div
                 itemProp="offers"
                 itemScope

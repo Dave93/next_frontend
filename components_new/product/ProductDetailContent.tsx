@@ -187,69 +187,15 @@ const ProductDetailContent: FC<Props> = ({ product, onAdded }) => {
           <span className="text-xl md:text-2xl font-extrabold text-gray-900">
             {formatPrice(builder.totalPrice, locale)}
           </span>
-          {builder.cartQuantity > 0 ? (
-            <div className="flex items-center gap-3">
-              <div
-                className="flex items-center rounded-full h-12"
-                style={{ background: YELLOW, padding: '0 4px' }}
-              >
-                <button
-                  type="button"
-                  onClick={() => builder.changeQuantity(-1)}
-                  disabled={builder.isLoading}
-                  aria-label="decrement"
-                  className="w-10 h-10 rounded-full bg-white flex items-center justify-center text-xl font-bold disabled:opacity-60"
-                  style={{ color: YELLOW }}
-                >
-                  −
-                </button>
-                <span className="text-white font-bold text-base px-4 min-w-[36px] text-center">
-                  {builder.isLoading ? '…' : builder.cartQuantity}
-                </span>
-                <button
-                  type="button"
-                  onClick={() => builder.changeQuantity(1)}
-                  disabled={builder.isLoading}
-                  aria-label="increment"
-                  className="w-10 h-10 rounded-full bg-white flex items-center justify-center text-xl font-bold disabled:opacity-60"
-                  style={{ color: YELLOW }}
-                >
-                  +
-                </button>
-              </div>
-              <button
-                type="button"
-                onClick={builder.addToCart}
-                disabled={builder.isLoading}
-                aria-label="add another"
-                className="w-12 h-12 rounded-full flex items-center justify-center text-white disabled:opacity-70"
-                style={{ background: YELLOW }}
-              >
-                <svg
-                  width="20"
-                  height="20"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  strokeWidth="2"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                >
-                  <path d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 100 4 2 2 0 000-4z" />
-                </svg>
-              </button>
-            </div>
-          ) : (
-            <button
-              type="button"
-              onClick={builder.addToCart}
-              disabled={builder.isLoading}
-              className="rounded-full font-bold text-white px-8 h-12 transition-opacity disabled:opacity-70 uppercase text-sm"
-              style={{ background: YELLOW }}
-            >
-              {builder.isLoading ? t('Загрузка...') : t('В корзину')}
-            </button>
-          )}
+          <button
+            type="button"
+            onClick={builder.addToCart}
+            disabled={builder.isLoading}
+            className="rounded-full font-bold text-white px-8 h-12 transition-opacity disabled:opacity-70 uppercase text-sm"
+            style={{ background: YELLOW }}
+          >
+            {builder.isLoading ? t('Загрузка...') : t('В корзину')}
+          </button>
         </div>
       </div>
     </div>
