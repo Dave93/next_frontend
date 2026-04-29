@@ -1,6 +1,6 @@
 'use client'
 
-import { FC, Fragment, useRef } from 'react'
+import { FC, Fragment, useLayoutEffect, useRef } from 'react'
 import {
   Dialog,
   DialogPanel,
@@ -22,6 +22,30 @@ const ProductQuickModal: FC<Props> = ({ product }) => {
   const locale = useLocale()
   const router = useRouter()
   const closeButtonRef = useRef<HTMLButtonElement>(null)
+
+  // The @modal parallel slot is mounted at the bottom of LayoutWrapper's DOM tree,
+  // after <ProductDrawerApp />. When Headless UI focuses the close button via
+  // initialFocus, the browser's scrollIntoView algorithm scrolls the body to that
+  // DOM position even though the panel is position: fixed. We capture scrollY/X at
+  // mount and restore it after the next two ticks (rAF + 50 ms) to silently undo
+  // any focus-induced jump before the user notices it, while leaving HUI's keyboard
+  // focus handling completely intact.
+  useLayoutEffect(() => {
+    if (typeof window === 'undefined') return
+    const startX = window.scrollX
+    const startY = window.scrollY
+    const restoreIfMoved = () => {
+      if (Math.abs(window.scrollY - startY) > 4 || Math.abs(window.scrollX - startX) > 4) {
+        window.scrollTo({ top: startY, left: startX, behavior: 'auto' })
+      }
+    }
+    const rafId = requestAnimationFrame(restoreIfMoved)
+    const timerId = window.setTimeout(restoreIfMoved, 50)
+    return () => {
+      cancelAnimationFrame(rafId)
+      window.clearTimeout(timerId)
+    }
+  }, [])
 
   const close = () => {
     router.back()
