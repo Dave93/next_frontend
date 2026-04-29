@@ -2,6 +2,7 @@
 
 import { XIcon } from '@heroicons/react/outline'
 import getAssetUrl from '@utils/getAssetUrl'
+import { isWithinWorkHours } from '../../lib/utils/isWorkTime'
 import { useForm, Controller } from 'react-hook-form'
 import { useUserStore } from '../../lib/stores/user-store'
 import { useLocationStore } from '../../lib/stores/location-store'
@@ -1279,16 +1280,14 @@ const OrdersApp: FC<OrdersProps> = ({ channelName, isMobile = false }) => {
     }
   }
 
-  const isWorkTime = useMemo(() => {
-    let currentHour = new Date().getHours()
-    // let currentHour = 4
-    if (
-      configData.workTimeStart <= currentHour ||
-      configData.workTimeEnd > currentHour
-    )
-      return true
-    return false
-  }, [configData])
+  const isWorkTime = useMemo(
+    () =>
+      isWithinWorkHours(
+        configData.workTimeStart,
+        configData.workTimeEnd
+      ),
+    [configData]
+  )
 
   const isProductInStop = useMemo(() => {
     let res: number[] = []

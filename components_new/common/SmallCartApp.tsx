@@ -18,6 +18,7 @@ import { useLocationStore } from '../../lib/stores/location-store'
 import { useUIStore } from '../../lib/stores/ui-store'
 import { pickProductImage } from '@utils/getAssetUrl'
 import { toast } from 'sonner'
+import { isWithinWorkHours } from '../../lib/utils/isWorkTime'
 import SimpleBar from 'simplebar-react'
 import 'simplebar/dist/simplebar.min.css'
 
@@ -108,15 +109,14 @@ const SmallCartApp: FC<SmallCartProps> = ({ channelName }) => {
     })
   }
 
-  const isWorkTime = useMemo(() => {
-    let currentHour = new Date().getHours()
-    if (
-      configData.workTimeStart <= currentHour ||
-      configData.workTimeEnd > currentHour
-    )
-      return true
-    return false
-  }, [configData])
+  const isWorkTime = useMemo(
+    () =>
+      isWithinWorkHours(
+        configData.workTimeStart,
+        configData.workTimeEnd
+      ),
+    [configData]
+  )
 
   const goToCheckout = (e: any) => {
     e.preventDefault()

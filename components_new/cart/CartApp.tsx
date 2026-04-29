@@ -17,6 +17,7 @@ import { syncCartFromBasketResult } from '../../lib/data/cart-adapter'
 import { useUserStore } from '../../lib/stores/user-store'
 import { useLocationStore } from '../../lib/stores/location-store'
 import { useUIStore } from '../../lib/stores/ui-store'
+import { isWithinWorkHours } from '../../lib/utils/isWorkTime'
 import {
   trackCheckoutStarted,
   trackCartViewed,
@@ -331,14 +332,14 @@ export default function CartApp(_props: CartAppProps) {
     }
   }, [data?.lineItems?.length])
 
-  const isWorkTime = useMemo(() => {
-    if (!configData?.workTimeStart && !configData?.workTimeEnd) return true
-    const currentHour = new Date().getHours()
-    return (
-      configData.workTimeStart <= currentHour ||
-      configData.workTimeEnd > currentHour
-    )
-  }, [configData])
+  const isWorkTime = useMemo(
+    () =>
+      isWithinWorkHours(
+        configData?.workTimeStart,
+        configData?.workTimeEnd
+      ),
+    [configData]
+  )
 
   const workTimeLabel =
     locale === 'uz'
