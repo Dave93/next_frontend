@@ -1,3 +1,4 @@
+import { notFound } from 'next/navigation'
 import { fetchProductById } from '../../../../../lib/data/products'
 import ProductQuickModal from '../../../../../components_new/product/ProductQuickModal'
 
@@ -10,6 +11,6 @@ export default async function InterceptedProductPage({
 }) {
   const { city: citySlug, id } = await params
   const product = await fetchProductById(id, citySlug)
-  if (!product) return null
+  if (!product) notFound()
   return <ProductQuickModal product={product} />
 }
