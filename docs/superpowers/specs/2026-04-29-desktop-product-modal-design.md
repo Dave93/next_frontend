@@ -1,7 +1,7 @@
 # Desktop product quick-view modal — design spec
 
 **Date:** 2026-04-29
-**Status:** Approved (pending final review)
+**Status:** Implemented (deployed bbff85fe on 2026-04-29)
 **Owner:** Davron / Claude
 
 ## Goal
