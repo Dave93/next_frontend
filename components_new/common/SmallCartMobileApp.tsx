@@ -28,9 +28,48 @@ import OtpInput from 'react-otp-input'
 import Input from './LazyPhoneInput'
 import styles from './SmallCartMobile.module.css'
 import { useGoogleReCaptcha } from 'react-google-recaptcha-v3'
+import {
+  trackOtpSubmitClicked,
+  trackOtpRecaptchaStarted,
+  trackOtpRecaptchaSuccess,
+  trackOtpRecaptchaFailed,
+  trackOtpRequestSent,
+  trackOtpRequestResponded,
+  trackOtpRequestError,
+} from '@lib/posthog-events'
 
 // webAddress legacy const removed (was unused)
 axios.defaults.withCredentials = true
+
+// Same hard ceiling we use in SignInModalApp — iOS Safari can leave
+// grecaptcha.execute() pending forever after bfcache restore.
+const RECAPTCHA_TIMEOUT_MS = 8000
+
+const recaptchaWithTimeout = (
+  exec: () => Promise<string>
+): Promise<{ token: string } | { timeout: true }> => {
+  return new Promise((resolve) => {
+    let settled = false
+    const timer = setTimeout(() => {
+      if (settled) return
+      settled = true
+      resolve({ timeout: true })
+    }, RECAPTCHA_TIMEOUT_MS)
+    exec()
+      .then((token) => {
+        if (settled) return
+        settled = true
+        clearTimeout(timer)
+        resolve({ token })
+      })
+      .catch(() => {
+        if (settled) return
+        settled = true
+        clearTimeout(timer)
+        resolve({ token: '' })
+      })
+  })
+}
 
 interface Errors {
   [key: string]: string
@@ -68,6 +107,7 @@ const SmallCartMobile: FC = () => {
   const setUserData = useUserStore((s) => s.setUserData)
 
   const otpTime = useRef(0)
+  const sendAttempt = useRef(0)
 
   // openModal helper removed (was unused) — modal triggered by useUI elsewhere
 
@@ -121,11 +161,64 @@ const SmallCartMobile: FC = () => {
   void passwordFormState
   const onSubmit = useCallback(
     async (data: any) => {
+      sendAttempt.current += 1
+      const attempt = sendAttempt.current
+      const phoneForTrack = String(data?.phone || '')
+      trackOtpSubmitClicked({
+        phone: phoneForTrack,
+        is_loading: false,
+        attempt,
+      })
+
       if (!executeRecaptcha) {
+        trackOtpRecaptchaFailed({
+          phone: phoneForTrack,
+          attempt,
+          duration_ms: 0,
+          reason: 'not_ready',
+        })
         return
       }
 
-      const captcha = await executeRecaptcha('signIn')
+      trackOtpRecaptchaStarted({ phone: phoneForTrack, attempt })
+      const captchaStart = Date.now()
+      const captchaResult = await recaptchaWithTimeout(() =>
+        executeRecaptcha('signIn')
+      )
+      const captchaDuration = Date.now() - captchaStart
+
+      if ('timeout' in captchaResult) {
+        trackOtpRecaptchaFailed({
+          phone: phoneForTrack,
+          attempt,
+          duration_ms: captchaDuration,
+          reason: 'timeout',
+        })
+        setSubmitError(
+          t('Капча не загрузилась, обновите страницу и попробуйте снова')
+        )
+        return
+      }
+      const captcha = captchaResult.token
+      if (!captcha) {
+        trackOtpRecaptchaFailed({
+          phone: phoneForTrack,
+          attempt,
+          duration_ms: captchaDuration,
+          reason: 'empty_token',
+        })
+        setSubmitError(
+          t('Капча не загрузилась, обновите страницу и попробуйте снова')
+        )
+        return
+      }
+      trackOtpRecaptchaSuccess({
+        phone: phoneForTrack,
+        attempt,
+        duration_ms: captchaDuration,
+        token_length: captcha.length,
+      })
+
       setSubmitError('')
       const csrfReq = await axios(
         `${process.env.NEXT_PUBLIC_API_URL}/api/keldi`,
@@ -145,17 +238,33 @@ const SmallCartMobile: FC = () => {
       axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest'
       axios.defaults.headers.common['X-CSRF-TOKEN'] = csrf
       axios.defaults.headers.common['XCSRF-TOKEN'] = csrf
-      let ress = await axios.post(
-        `${process.env.NEXT_PUBLIC_API_URL}/api/send_otp`,
-        data,
-        {
-          headers: {
-            'Content-Type': 'application/json',
-            wtf: captcha,
-          },
-          withCredentials: true,
-        }
-      )
+
+      trackOtpRequestSent({ phone: phoneForTrack, attempt })
+      const requestStart = Date.now()
+      let ress
+      try {
+        ress = await axios.post(
+          `${process.env.NEXT_PUBLIC_API_URL}/api/send_otp`,
+          data,
+          {
+            headers: {
+              'Content-Type': 'application/json',
+              wtf: captcha,
+            },
+            withCredentials: true,
+          }
+        )
+      } catch (err: any) {
+        trackOtpRequestError({
+          phone: phoneForTrack,
+          attempt,
+          duration_ms: Date.now() - requestStart,
+          status: err?.response?.status,
+          error_message: err?.message,
+        })
+        return
+      }
+      const requestDuration = Date.now() - requestStart
 
       let {
         data: { error: otpError, data: result, success },
@@ -168,11 +277,27 @@ const SmallCartMobile: FC = () => {
       } = ress
 
       if (otpError) {
+        trackOtpRequestResponded({
+          phone: phoneForTrack,
+          attempt,
+          duration_ms: requestDuration,
+          outcome:
+            otpError === 'name_field_is_required'
+              ? 'name_required'
+              : 'other_error',
+          backend_error: otpError,
+        })
         setSubmitError(errors[otpError])
         if (otpError == 'name_field_is_required') {
           setShowUserName(true)
         }
       } else if (success) {
+        trackOtpRequestResponded({
+          phone: phoneForTrack,
+          attempt,
+          duration_ms: requestDuration,
+          outcome: 'success',
+        })
         success = Buffer.from(success, 'base64')
         success = success.toString()
         success = JSON.parse(success)
@@ -184,7 +309,7 @@ const SmallCartMobile: FC = () => {
         setIsShowPasswordForm(true)
       }
     },
-    [executeRecaptcha]
+    [executeRecaptcha, t]
   )
 
   const submitPasswordForm: SubmitHandler<AnyObject> = async (_data) => {

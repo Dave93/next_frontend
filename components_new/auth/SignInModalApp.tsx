@@ -14,6 +14,52 @@ import { useGoogleReCaptcha } from 'react-google-recaptcha-v3'
 import { useExtracted } from 'next-intl'
 import axios from 'axios'
 import Cookies from 'js-cookie'
+import {
+  trackOtpSubmitClicked,
+  trackOtpRecaptchaStarted,
+  trackOtpRecaptchaSuccess,
+  trackOtpRecaptchaFailed,
+  trackOtpRequestSent,
+  trackOtpRequestResponded,
+  trackOtpRequestError,
+  trackOtpCodeSubmitClicked,
+  trackOtpVerified,
+  trackOtpVerifyFailed,
+} from '@lib/posthog-events'
+
+// iOS Safari sometimes leaves grecaptcha.execute() pending forever after
+// bfcache restore or on flaky networks. Without a hard ceiling the user
+// stares at a spinner, taps the button repeatedly, and PostHog records
+// "11 clicks, zero requests" while the backend sees nothing. 8s is long
+// enough to cover normal worst-case (~3-4s on 3G) and short enough that
+// the user can recover with a page reload.
+const RECAPTCHA_TIMEOUT_MS = 8000
+
+const recaptchaWithTimeout = (
+  exec: () => Promise<string>
+): Promise<{ token: string } | { timeout: true }> => {
+  return new Promise((resolve) => {
+    let settled = false
+    const timer = setTimeout(() => {
+      if (settled) return
+      settled = true
+      resolve({ timeout: true })
+    }, RECAPTCHA_TIMEOUT_MS)
+    exec()
+      .then((token) => {
+        if (settled) return
+        settled = true
+        clearTimeout(timer)
+        resolve({ token })
+      })
+      .catch(() => {
+        if (settled) return
+        settled = true
+        clearTimeout(timer)
+        resolve({ token: '' })
+      })
+  })
+}
 
 const formatPhone = (raw: string) => {
   const digits = raw.replace(/\D/g, '').slice(0, 9)
@@ -56,6 +102,8 @@ const SignInModalApp: FC = () => {
   const [name, setName] = useState('')
   const [code, setCode] = useState('')
   const otpTimer = useRef<any>(null)
+  const sendAttempt = useRef(0)
+  const codeStartTime = useRef(0)
 
   const phoneReady = phoneDigits.length === 9 && (!showName || !!name)
 
@@ -96,32 +144,116 @@ const SignInModalApp: FC = () => {
 
   const onPhoneSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
+    sendAttempt.current += 1
+    const attempt = sendAttempt.current
+    const fullPhone = `+998${phoneDigits}`
+    trackOtpSubmitClicked({
+      phone: fullPhone,
+      is_loading: isLoading,
+      attempt,
+    })
     setSubmitError('')
     setIsLoading(true)
     try {
       if (!executeRecaptcha) {
+        trackOtpRecaptchaFailed({
+          phone: fullPhone,
+          attempt,
+          duration_ms: 0,
+          reason: 'not_ready',
+        })
         setSubmitError(t('Капча не готова, попробуйте ещё раз'))
         return
       }
       // Backend verifies action='signIn' (LoginController::sendOTP); must match.
-      const captcha = await executeRecaptcha('signIn')
-      await setCsrf()
-      const fullPhone = `+998${phoneDigits}`
-      const res = await axios.post(
-        `${webAddress}/api/send_otp`,
-        { phone: fullPhone, name: name || undefined },
-        {
-          headers: { 'Content-Type': 'application/json', wtf: captcha },
-          withCredentials: true,
-        }
+      trackOtpRecaptchaStarted({ phone: fullPhone, attempt })
+      const captchaStart = Date.now()
+      const captchaResult = await recaptchaWithTimeout(() =>
+        executeRecaptcha('signIn')
       )
+      const captchaDuration = Date.now() - captchaStart
+
+      if ('timeout' in captchaResult) {
+        trackOtpRecaptchaFailed({
+          phone: fullPhone,
+          attempt,
+          duration_ms: captchaDuration,
+          reason: 'timeout',
+        })
+        setSubmitError(
+          t('Капча не загрузилась, обновите страницу и попробуйте снова')
+        )
+        return
+      }
+      const captcha = captchaResult.token
+      if (!captcha) {
+        trackOtpRecaptchaFailed({
+          phone: fullPhone,
+          attempt,
+          duration_ms: captchaDuration,
+          reason: 'empty_token',
+        })
+        setSubmitError(
+          t('Капча не загрузилась, обновите страницу и попробуйте снова')
+        )
+        return
+      }
+      trackOtpRecaptchaSuccess({
+        phone: fullPhone,
+        attempt,
+        duration_ms: captchaDuration,
+        token_length: captcha.length,
+      })
+
+      await setCsrf()
+      trackOtpRequestSent({ phone: fullPhone, attempt })
+      const requestStart = Date.now()
+      let res
+      try {
+        res = await axios.post(
+          `${webAddress}/api/send_otp`,
+          { phone: fullPhone, name: name || undefined },
+          {
+            headers: { 'Content-Type': 'application/json', wtf: captcha },
+            withCredentials: true,
+          }
+        )
+      } catch (err: any) {
+        const requestDuration = Date.now() - requestStart
+        trackOtpRequestError({
+          phone: fullPhone,
+          attempt,
+          duration_ms: requestDuration,
+          status: err?.response?.status,
+          error_message: err?.message,
+        })
+        setSubmitError(err?.message || t('Не удалось отправить код'))
+        return
+      }
+      const requestDuration = Date.now() - requestStart
       const { error: otpError, data: result, success } = res.data as any
       if (otpError) {
+        trackOtpRequestResponded({
+          phone: fullPhone,
+          attempt,
+          duration_ms: requestDuration,
+          outcome:
+            otpError === 'name_field_is_required'
+              ? 'name_required'
+              : 'other_error',
+          backend_error: otpError,
+        })
         if (otpError === 'name_field_is_required') setShowName(true)
         setSubmitError(errorMessages[otpError] || otpError)
         return
       }
       if (success) {
+        trackOtpRequestResponded({
+          phone: fullPhone,
+          attempt,
+          duration_ms: requestDuration,
+          outcome: 'success',
+        })
         const decoded = JSON.parse(
           Buffer.from(success, 'base64').toString('ascii')
         )
@@ -129,10 +261,9 @@ const SignInModalApp: FC = () => {
         localStorage.setItem('opt_token', decoded.user_token)
         setSavedPhone(fullPhone)
         startTimer(result?.time_to_answer || 60)
+        codeStartTime.current = Date.now()
         setStep('code')
       }
-    } catch (err: any) {
-      setSubmitError(err?.message || t('Не удалось отправить код'))
     } finally {
       setIsLoading(false)
     }
@@ -140,8 +271,10 @@ const SignInModalApp: FC = () => {
 
   const onCodeSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
+    trackOtpCodeSubmitClicked({ phone: savedPhone, code_length: code.length })
     setSubmitError('')
     setIsLoading(true)
+    const verifyStart = Date.now()
     try {
       const otpToken = Cookies.get('opt_token')
       const res = await axios.post(
@@ -155,6 +288,7 @@ const SignInModalApp: FC = () => {
           withCredentials: true,
         }
       )
+      const verifyDuration = Date.now() - verifyStart
       const { result } = res.data as any
       // Backend returns base64-encoded "false" (ZmFsc2U=) on a wrong OTP with HTTP 200.
       // JSON.parse("false") yields the boolean false; on success it's an object with
@@ -163,14 +297,30 @@ const SignInModalApp: FC = () => {
         ? JSON.parse(Buffer.from(result, 'base64').toString('ascii'))
         : null
       if (!decoded || typeof decoded !== 'object' || !decoded.user_token) {
+        trackOtpVerifyFailed({
+          phone: savedPhone,
+          duration_ms: verifyDuration,
+          reason: 'wrong_code',
+        })
         setSubmitError(t('Неверный код'))
         return
       }
+      trackOtpVerified({
+        phone: savedPhone,
+        duration_ms:
+          codeStartTime.current > 0 ? Date.now() - codeStartTime.current : 0,
+      })
       setUserData(decoded)
       Cookies.set('opt_token', decoded.user_token)
       localStorage.setItem('opt_token', decoded.user_token)
       handleClose()
     } catch (err: any) {
+      trackOtpVerifyFailed({
+        phone: savedPhone,
+        duration_ms: Date.now() - verifyStart,
+        reason: 'network_error',
+        error_message: err?.message,
+      })
       setSubmitError(err?.response?.data?.error || t('Неверный код'))
     } finally {
       setIsLoading(false)
@@ -186,6 +336,8 @@ const SignInModalApp: FC = () => {
     setCode('')
     setSavedPhone('')
     setSecondsLeft(0)
+    sendAttempt.current = 0
+    codeStartTime.current = 0
     if (otpTimer.current) clearInterval(otpTimer.current)
     closeSignInModal()
   }
