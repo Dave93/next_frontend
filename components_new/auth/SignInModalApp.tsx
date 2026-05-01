@@ -526,13 +526,18 @@ const SignInModalApp: FC = () => {
 
                   <button
                     type="submit"
-                    disabled={!phoneReady || isLoading}
+                    disabled={!phoneReady || isLoading || !executeRecaptcha}
                     className="py-3.5 text-white font-bold text-lg text-center rounded-full w-full outline-none focus:outline-none transition-all duration-200 disabled:cursor-not-allowed"
                     style={{
-                      backgroundColor: phoneReady ? '#F9B004' : '#D1D5DB',
+                      backgroundColor:
+                        phoneReady && executeRecaptcha ? '#F9B004' : '#D1D5DB',
                     }}
                   >
-                    {isLoading ? '...' : t('Получить код')}
+                    {isLoading
+                      ? '...'
+                      : !executeRecaptcha
+                      ? t('Загрузка защиты...')
+                      : t('Получить код')}
                   </button>
                 </form>
               ) : (

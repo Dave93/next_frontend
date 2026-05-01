@@ -124,6 +124,40 @@ const maskPhoneForTrack = (raw: string): string => {
   return '+' + digits.slice(0, 5) + '***' + digits.slice(-4)
 }
 
+// UZ mobile carrier code is the two digits right after country code 998.
+// Used to slice OTP-funnel by carrier in PostHog dashboards — the smsxabar
+// CSV showed Uzmobile and PerfectumMobile failing while others were 100%.
+// Mapping kept inline; if a prefix isn't recognized we still record the raw
+// digits so the dashboard can group on them.
+const UZ_CARRIER_BY_PREFIX: Record<string, string> = {
+  '33': 'Uzmobile',
+  '50': 'Uzmobile',
+  '55': 'Mobiuz',
+  '77': 'Humans',
+  '88': 'Mobiuz',
+  '90': 'Beeline',
+  '91': 'Beeline',
+  '93': 'Ucell',
+  '94': 'Ucell',
+  '95': 'Mobiuz',
+  '97': 'Mobiuz',
+  '98': 'Perfectum',
+  '99': 'Beeline',
+}
+
+const phoneCarrierMeta = (
+  raw: string
+): { phone_prefix: string; carrier: string } => {
+  const digits = (raw || '').replace(/\D/g, '')
+  if (digits.length < 9 || !digits.startsWith('998'))
+    return { phone_prefix: '', carrier: 'unknown' }
+  const prefix = digits.slice(3, 5)
+  return {
+    phone_prefix: prefix,
+    carrier: UZ_CARRIER_BY_PREFIX[prefix] || 'unknown',
+  }
+}
+
 export const trackOtpSubmitClicked = (data: {
   phone: string
   is_loading: boolean
@@ -131,6 +165,7 @@ export const trackOtpSubmitClicked = (data: {
 }) =>
   trackEvent('otp_submit_clicked', {
     phone_masked: maskPhoneForTrack(data.phone),
+    ...phoneCarrierMeta(data.phone),
     is_loading: data.is_loading,
     attempt: data.attempt,
   })
@@ -141,6 +176,7 @@ export const trackOtpRecaptchaStarted = (data: {
 }) =>
   trackEvent('otp_recaptcha_started', {
     phone_masked: maskPhoneForTrack(data.phone),
+    ...phoneCarrierMeta(data.phone),
     attempt: data.attempt,
   })
 
@@ -152,6 +188,7 @@ export const trackOtpRecaptchaSuccess = (data: {
 }) =>
   trackEvent('otp_recaptcha_success', {
     phone_masked: maskPhoneForTrack(data.phone),
+    ...phoneCarrierMeta(data.phone),
     attempt: data.attempt,
     duration_ms: data.duration_ms,
     token_length: data.token_length,
@@ -166,6 +203,7 @@ export const trackOtpRecaptchaFailed = (data: {
 }) =>
   trackEvent('otp_recaptcha_failed', {
     phone_masked: maskPhoneForTrack(data.phone),
+    ...phoneCarrierMeta(data.phone),
     attempt: data.attempt,
     duration_ms: data.duration_ms,
     reason: data.reason,
@@ -178,6 +216,7 @@ export const trackOtpRequestSent = (data: {
 }) =>
   trackEvent('otp_request_sent', {
     phone_masked: maskPhoneForTrack(data.phone),
+    ...phoneCarrierMeta(data.phone),
     attempt: data.attempt,
   })
 
@@ -190,6 +229,7 @@ export const trackOtpRequestResponded = (data: {
 }) =>
   trackEvent('otp_request_responded', {
     phone_masked: maskPhoneForTrack(data.phone),
+    ...phoneCarrierMeta(data.phone),
     attempt: data.attempt,
     duration_ms: data.duration_ms,
     outcome: data.outcome,
@@ -205,6 +245,7 @@ export const trackOtpRequestError = (data: {
 }) =>
   trackEvent('otp_request_error', {
     phone_masked: maskPhoneForTrack(data.phone),
+    ...phoneCarrierMeta(data.phone),
     attempt: data.attempt,
     duration_ms: data.duration_ms,
     status: data.status,
@@ -217,6 +258,7 @@ export const trackOtpCodeSubmitClicked = (data: {
 }) =>
   trackEvent('otp_code_submit_clicked', {
     phone_masked: maskPhoneForTrack(data.phone),
+    ...phoneCarrierMeta(data.phone),
     code_length: data.code_length,
   })
 
@@ -226,6 +268,7 @@ export const trackOtpVerified = (data: {
 }) =>
   trackEvent('otp_verified', {
     phone_masked: maskPhoneForTrack(data.phone),
+    ...phoneCarrierMeta(data.phone),
     duration_ms: data.duration_ms,
   })
 
@@ -237,6 +280,7 @@ export const trackOtpVerifyFailed = (data: {
 }) =>
   trackEvent('otp_verify_failed', {
     phone_masked: maskPhoneForTrack(data.phone),
+    ...phoneCarrierMeta(data.phone),
     duration_ms: data.duration_ms,
     reason: data.reason,
     error_message: data.error_message,
