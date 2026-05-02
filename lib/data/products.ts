@@ -17,8 +17,15 @@ async function fetchAllProductsRaw(citySlug?: string) {
 async function fetchProductByIdRaw(id: string, citySlug?: string) {
   const all = await fetchAllProductsRaw(citySlug)
   const target = String(id)
+  // Backend reuses ids between categories and products (e.g. category
+  // "Сеты" id=661 collides with product "FUSE TEA MANGO VA ANANAS" id=661,
+  // category "Снеки" id=660 with "FUSE TEA SHAFTOLI" id=660). When opening
+  // a product modal we must prefer the actual product over the category;
+  // otherwise the modal renders an empty category card with "0 сум" and
+  // a placeholder image. Search items/variants first; the category match
+  // is only a fallback for products that are themselves top-level
+  // (categoryless).
   for (const cat of all as any[]) {
-    if (String(cat?.id) === target) return cat
     const items = Array.isArray(cat?.items) ? cat.items : []
     for (const item of items) {
       if (String(item?.id) === target) return item
@@ -27,6 +34,10 @@ async function fetchProductByIdRaw(id: string, citySlug?: string) {
         if (String(v?.id) === target) return item
       }
     }
+  }
+  // Fallback: top-level entries that aren't real categories (no items list).
+  for (const cat of all as any[]) {
+    if (String(cat?.id) === target && !Array.isArray(cat?.items)) return cat
   }
   return null
 }
