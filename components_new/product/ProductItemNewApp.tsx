@@ -676,22 +676,26 @@ const ProductItemNewApp: FC<ProductItem> = ({ product, channelName }) => {
           {/* Desktop card */}
           <div className="hidden md:flex md:flex-col md:h-full">
           <Link href={`/${citySlug}/product/${store.id}`} prefetch={false} className="cursor-pointer">
-            {/* Источники у нас разной аспект-ratio (квадратные пиццы и
-                вертикальные бутылки 1:3 после server-side trim). Фикс-высота
-                + object-contain + object-bottom выравнивает фактический товар
-                по одной нижней линии независимо от формы исходника. */}
-            <div className="relative h-[250px] flex items-end justify-center">
+            {/* Bottom-aligned image box. Sources have wildly different aspect
+                ratios (square pizzas, vertical 1:3 bottles after server-side
+                trim, small juice boxes). Using `fill` instead of width/height
+                tells Next.js Image to preserve the source aspect ratio
+                (passing width={250}/height={250} made the optimizer stretch
+                everything into a 1:1 square — this was the actual root cause
+                of bottles looking distorted). object-contain keeps the whole
+                product visible; object-bottom plants every product on the
+                same baseline regardless of its native height. */}
+            <div className="relative h-[250px] w-full">
               {!imageLoaded && store.image && (
                 <div className="absolute inset-x-0 bottom-0 mx-auto w-[250px] h-[250px] rounded-full bg-gray-100 animate-pulse" />
               )}
               {store.image ? (
                 <Image
                   src={store.image}
-                  width={250}
-                  height={250}
-                  sizes="250px"
+                  fill
+                  sizes="(min-width: 1024px) 25vw, 50vw"
                   alt={store?.attribute_data?.name[channelName][locale || 'ru']}
-                  className={`max-h-full w-auto object-contain object-bottom transform motion-safe:group-hover:scale-105 transition duration-500 ${imageLoaded ? '' : 'absolute opacity-0'}`}
+                  className={`object-contain object-bottom transform motion-safe:group-hover:scale-105 transition duration-500 ${imageLoaded ? '' : 'opacity-0'}`}
                   itemProp="image"
                   loading="lazy"
                   onLoad={() => setImageLoaded(true)}
@@ -702,7 +706,7 @@ const ProductItemNewApp: FC<ProductItem> = ({ product, channelName }) => {
                   width={250}
                   height={250}
                   alt={store?.attribute_data?.name[channelName][locale || 'ru']}
-                  className="rounded-full transform motion-safe:group-hover:scale-105 transition duration-500"
+                  className="absolute inset-0 m-auto rounded-full transform motion-safe:group-hover:scale-105 transition duration-500"
                   loading="lazy"
                 />
               )}
