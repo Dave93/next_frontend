@@ -65,6 +65,10 @@ const ProductDetailContent: FC<Props> = ({ product, onAdded }) => {
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-10 p-4 md:p-10">
       <div className="flex items-center justify-center">
+        {/* После server-side trim фотки бутылок/коробок имеют aspect ~1:3.5;
+            без явного потолка по высоте картонные пакеты сока 1L растягивают
+            модалку на 1500+ px. Ограничиваем max-h, ширину масштабируем
+            пропорционально. */}
         {product.image ? (
           <Image
             src={product.image}
@@ -72,14 +76,14 @@ const ProductDetailContent: FC<Props> = ({ product, onAdded }) => {
             width={520}
             height={520}
             sizes="(max-width: 768px) 90vw, 520px"
-            className="w-full h-auto max-w-[520px] object-contain"
+            className="w-auto h-auto max-w-full max-h-[520px] object-contain"
             priority
           />
         ) : (
           <img
             src="/no_photo.svg"
             alt={localizedName}
-            className="w-full max-w-[520px] object-contain"
+            className="w-auto h-auto max-w-full max-h-[520px] object-contain"
           />
         )}
       </div>
