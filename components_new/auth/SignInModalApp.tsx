@@ -104,8 +104,52 @@ const SignInModalApp: FC = () => {
   const otpTimer = useRef<any>(null)
   const sendAttempt = useRef(0)
   const codeStartTime = useRef(0)
+  const phoneInputRef = useRef<HTMLInputElement>(null)
 
   const phoneReady = phoneDigits.length === 9 && (!showName || !!name)
+
+  const handlePhoneChange = useCallback(
+    (e: React.ChangeEvent<HTMLInputElement>) => {
+      const input = e.target
+      const selStart = input.selectionStart ?? input.value.length
+      const newValue = input.value
+      const oldFormatted = formatPhone(phoneDigits)
+
+      let newDigits = newValue.replace(/\D/g, '').slice(0, 9)
+      const digitsBeforeCursor = newValue
+        .slice(0, selStart)
+        .replace(/\D/g, '').length
+
+      // User deleted a separator (space): digits unchanged but value shorter.
+      // Remove the digit immediately before the cursor to honour the backspace intent.
+      if (newDigits === phoneDigits && newValue.length < oldFormatted.length) {
+        newDigits =
+          phoneDigits.slice(0, digitsBeforeCursor) +
+          phoneDigits.slice(digitsBeforeCursor + 1)
+      }
+
+      setPhoneDigits(newDigits)
+
+      // Restore cursor to the same logical digit position in the newly
+      // formatted string, which may have shifted due to added/removed spaces.
+      requestAnimationFrame(() => {
+        const ref = phoneInputRef.current
+        if (!ref) return
+        const formatted = ref.value
+        let digitsSeen = 0
+        let pos = formatted.length
+        for (let i = 0; i <= formatted.length; i++) {
+          if (digitsSeen === digitsBeforeCursor) {
+            pos = i
+            break
+          }
+          if (i < formatted.length && /\d/.test(formatted[i])) digitsSeen++
+        }
+        ref.setSelectionRange(pos, pos)
+      })
+    },
+    [phoneDigits]
+  )
 
   const startTimer = useCallback((sec: number) => {
     setSecondsLeft(sec)
@@ -439,16 +483,13 @@ const SignInModalApp: FC = () => {
                           +998
                         </span>
                         <input
+                          ref={phoneInputRef}
                           type="tel"
                           inputMode="numeric"
                           autoComplete="tel"
                           placeholder="XX XXX XX XX"
                           value={formatPhone(phoneDigits)}
-                          onChange={(e) =>
-                            setPhoneDigits(
-                              e.target.value.replace(/\D/g, '').slice(0, 9)
-                            )
-                          }
+                          onChange={handlePhoneChange}
                           className="flex-1 text-lg font-medium focus:outline-none focus:ring-0 outline-none border-none bg-transparent ml-3 placeholder-gray-300 text-gray-900"
                           style={{ padding: '8px 0' }}
                         />
