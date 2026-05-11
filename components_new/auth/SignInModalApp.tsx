@@ -257,7 +257,7 @@ const SignInModalApp: FC = () => {
         const decoded = JSON.parse(
           Buffer.from(success, 'base64').toString('ascii')
         )
-        Cookies.set('opt_token', decoded.user_token)
+        Cookies.set('opt_token', decoded.user_token, { expires: 30 })
         localStorage.setItem('opt_token', decoded.user_token)
         setSavedPhone(fullPhone)
         startTimer(result?.time_to_answer || 60)
@@ -311,7 +311,7 @@ const SignInModalApp: FC = () => {
           codeStartTime.current > 0 ? Date.now() - codeStartTime.current : 0,
       })
       setUserData(decoded)
-      Cookies.set('opt_token', decoded.user_token)
+      Cookies.set('opt_token', decoded.user_token, { expires: 30 })
       localStorage.setItem('opt_token', decoded.user_token)
       handleClose()
     } catch (err: any) {

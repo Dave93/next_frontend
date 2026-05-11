@@ -204,7 +204,7 @@ const CityMainApp: FC<Props> = ({
             ))}
           </div>
           <div
-            className="sticky max-h-screen hidden md:block space-y-4"
+            className="sticky max-h-screen hidden md:block space-y-4 pt-[88px]"
             style={{
               top: 'calc(var(--header-h, 0px) + var(--cats-h, 0px) + 12px)',
             }}

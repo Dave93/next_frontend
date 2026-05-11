@@ -301,7 +301,7 @@ const SmallCartMobile: FC = () => {
         success = Buffer.from(success, 'base64')
         success = success.toString()
         success = JSON.parse(success)
-        Cookies.set('opt_token', success.user_token)
+        Cookies.set('opt_token', success.user_token, { expires: 30 })
         localStorage.setItem('opt_token', success.user_token)
         otpTime.current = result?.time_to_answer
         setOtpShowCode(otpTime.current)
@@ -342,6 +342,10 @@ const SmallCartMobile: FC = () => {
     } else {
       clearInterval(otpTimerRef)
       setUserData(result)
+      if (result?.user_token) {
+        Cookies.set('opt_token', result.user_token, { expires: 30 })
+        localStorage.setItem('opt_token', result.user_token)
+      }
       setIsShowPasswordForm(false)
 
       router.push(`/${activeCity.slug}/cart/`)

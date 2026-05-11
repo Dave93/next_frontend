@@ -1003,7 +1003,7 @@ const OrdersApp: FC<OrdersProps> = ({ channelName, isMobile = false }) => {
         let success: any = Buffer.from(data.success, 'base64')
         success = success.toString()
         success = JSON.parse(success)
-        Cookies.set('opt_token', success.user_token)
+        Cookies.set('opt_token', success.user_token, { expires: 30 })
         otpTime.current = data?.time_to_answer
         setOtpShowCode(otpTime.current)
         startTimeout()
@@ -1101,7 +1101,7 @@ const OrdersApp: FC<OrdersProps> = ({ channelName, isMobile = false }) => {
 
     setIsSavingOrder(true)
     await setCredentials()
-    const otpToken = Cookies.get('opt_token')
+    const otpToken = Cookies.get('opt_token') || localStorage.getItem('opt_token')
 
     // if (!payType) {
     //   toast.error(tr('payment_system_not_selected'), {
