@@ -1,6 +1,6 @@
 'use client'
 
-import { useMemo, FC } from 'react'
+import { useMemo, FC, useRef, useState, useEffect } from 'react'
 import dynamic from 'next/dynamic'
 import MainSliderApp from './MainSliderApp'
 import CategoriesMenuApp from './CategoriesMenuApp'
@@ -46,6 +46,20 @@ const CityMainApp: FC<Props> = ({
 }) => {
   const locale = useLocale()
   const activeCity = useLocationStore((s) => s.activeCity)
+
+  const cartRef = useRef<HTMLDivElement>(null)
+  const [isStuck, setIsStuck] = useState(false)
+
+  useEffect(() => {
+    const check = () => {
+      const el = cartRef.current
+      if (!el) return
+      const top = parseFloat(getComputedStyle(el).top) || 0
+      setIsStuck(el.getBoundingClientRect().top <= top + 1)
+    }
+    window.addEventListener('scroll', check, { passive: true })
+    return () => window.removeEventListener('scroll', check)
+  }, [])
 
   const heading = useMemo(() => {
     const slug = activeCity?.slug || 'tashkent'
@@ -204,7 +218,8 @@ const CityMainApp: FC<Props> = ({
             ))}
           </div>
           <div
-            className="sticky self-start max-h-screen hidden md:block space-y-4 pt-[84px]"
+            ref={cartRef}
+            className={`sticky self-start max-h-screen hidden md:block space-y-4 transition-[padding] duration-150 ${isStuck ? 'pt-3' : 'pt-[80px]'}`}
             style={{
               top: 'calc(var(--header-h, 0px) + var(--cats-h, 0px) + 12px)',
             }}
