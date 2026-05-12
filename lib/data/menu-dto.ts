@@ -146,12 +146,21 @@ function toSlimModifierProduct(raw: any): SlimModifierProduct | undefined {
     (asset?.location && asset?.filename
       ? `https://cdn.choparpizza.uz/storage/${asset.location}/${asset.filename}`
       : undefined)
+  // modifierProduct is a full Product (ProductsController createCacheProducts:
+  // products[i].modifierProduct = products[modifier_prod_id]). Its names live
+  // in attribute_data.name.chopar.<locale>, not as flat name_* fields. Fall
+  // back to attribute_data and custom_name so «Сосисочный борт» renders.
+  const attrRu = pickLocalized(raw.attribute_data?.name, 'ru')
+  const attrUz = pickLocalized(raw.attribute_data?.name, 'uz')
+  const attrEn = pickLocalized(raw.attribute_data?.name, 'en')
   return {
     id: raw.id,
     price,
-    name_ru: raw.name_ru || undefined,
-    name_uz: raw.name_uz || undefined,
-    name_en: raw.name_en || undefined,
+    name_ru: raw.name_ru || attrRu || raw.custom_name || undefined,
+    name_uz:
+      raw.name_uz || attrUz || raw.custom_name_uz || raw.custom_name || undefined,
+    name_en:
+      raw.name_en || attrEn || raw.custom_name_en || raw.custom_name || undefined,
     image,
   }
 }
