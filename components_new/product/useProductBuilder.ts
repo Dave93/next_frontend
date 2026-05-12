@@ -82,14 +82,22 @@ export function useProductBuilder(
           // which crops to a generic texture inside a 56×56 modifier tile.
           // Use the static sausage icon so the rim is recognisable on
           // drawer, list card AND /product/[id] — same visual everywhere.
+          // Names: backend's name_* are null and attribute_data.name.chopar
+          // holds the full "ГРИБНАЯ Средняя+ СОСИСОЧНЫЙ БОРТ" title (wrong
+          // for a tile). Use the short rim label, matching the other sausage
+          // synthetic-modifier sites in the legacy product components.
           const mp = activeVariant.modifierProduct
+          const ruName = mp.name_ru || 'Сосисочный борт'
+          const uzName = mp.name_uz || "Sosiskali bo'rt"
+          const enName = mp.name_en || 'Sausage border'
           mods = [
             ...mods,
             {
               id: mp.id,
-              name_ru: mp.name_ru,
-              name_uz: mp.name_uz,
-              name_en: mp.name_en,
+              name: ruName,
+              name_ru: ruName,
+              name_uz: uzName,
+              name_en: enName,
               price: +mp.price - +activeVariant.price,
               assets: [{ local: '/sausage_modifier.png' }],
             },

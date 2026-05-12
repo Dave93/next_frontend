@@ -315,12 +315,18 @@ const CreateYourPizzaMobileApp: FC<CreatePizzaProps> = ({
         (mod: any) => mod.id == activeVariant.modifierProduct.id
       )
       if (!isExistSausage) {
+        const mp = activeVariant.modifierProduct
+        const ruName = mp.name_ru || 'Сосисочный борт'
+        const uzName = mp.name_uz || "Sosiskali bo'rt"
+        const enName = mp.name_en || 'Sausage border'
         leftModifiers.push({
-          id: activeVariant.modifierProduct.id,
-          name: 'Сосисочный борт',
-          name_uz: "Sosiskali bo'rt",
+          id: mp.id,
+          name: ruName,
+          name_ru: ruName,
+          name_uz: uzName,
+          name_en: enName,
           price:
-            +activeVariant.modifierProduct.price -
+            +mp.price -
             +activeVariant.price +
             (+rightActiveVariant?.modifierProduct.price -
               +rightActiveVariant?.price),

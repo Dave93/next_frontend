@@ -298,12 +298,17 @@ const ProductItemNewApp: FC<ProductItem> = ({ product, channelName }) => {
             (mod: any) => mod.id == activeValue.modifierProduct.id
           )
           if (!isExistSausage) {
+            const mp = activeValue.modifierProduct
+            const ruName = mp.name_ru || 'Сосисочный борт'
+            const uzName = mp.name_uz || "Sosiskali bo'rt"
+            const enName = mp.name_en || 'Sausage border'
             modifier.push({
-              id: activeValue.modifierProduct.id,
-              name: 'Сосисочный борт',
-              name_uz: "Sosiskali bo'rt",
-              name_en: 'Sausage border',
-              price: +activeValue.modifierProduct.price - +activeValue.price,
+              id: mp.id,
+              name: ruName,
+              name_ru: ruName,
+              name_uz: uzName,
+              name_en: enName,
+              price: +mp.price - +activeValue.price,
               assets: [
                 {
                   local: '/sausage_modifier.png',
