@@ -471,15 +471,16 @@ const LocationPickerCore: FC<Props> = ({
                   height: 50,
                 }}
               />
-              {address && (
+              {address && isFocused && (
                 <button
                   type="button"
+                  onMouseDown={(e) => e.preventDefault()}
                   onClick={() => {
                     setAddress('')
                     setSuggestions([])
                     setCoords(null)
                   }}
-                  className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600"
+                  className="absolute right-2 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 p-2"
                 >
                   <XIcon className="w-4 h-4" />
                 </button>
