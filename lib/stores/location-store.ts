@@ -109,7 +109,21 @@ export const useLocationStore = create<LocationStore>()(
       ...INITIAL,
 
       setActiveCity: (city) => {
+        const prev = get().activeCity
         persistActiveCityCookies(city)
+        // City actually changed → terminal, coords, saved address-id are
+        // city-scoped and become invalid. Clear them so the order page
+        // forces a fresh pick instead of silently failing on checkout.
+        // Keep address text so the user can re-confirm without retyping.
+        if (city && prev && prev.slug !== city.slug) {
+          const cur = get().locationData
+          const cleared = cur
+            ? { ...cur, terminal_id: null, terminalData: null, location: null }
+            : null
+          if (cleared) persistYetkazish(cleared)
+          set({ activeCity: city, locationData: cleared, addressId: null })
+          return
+        }
         set({ activeCity: city })
       },
       setCities: (cities) => set({ cities }),
