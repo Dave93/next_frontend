@@ -37,6 +37,10 @@ function legacyVariant(v: SlimVariant): any {
         assets: v.modifierProduct.image
           ? [{ local: v.modifierProduct.image }]
           : undefined,
+        // Required by ProductItemNewApp.addToBasket: when sausage-rim is
+        // picked alongside another addon, the addon id must be remapped
+        // (by price) to the rim-variant's modifier id before POST.
+        modifiers: v.modifierProduct.modifiers || [],
       }
     : undefined
   return {

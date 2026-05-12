@@ -9,6 +9,11 @@ export type SlimModifier = {
   groupId?: string
 }
 
+export type SlimModifierProductMod = {
+  id: number
+  price: number
+}
+
 export type SlimModifierProduct = {
   id: number
   /** Absolute price of the modifier product — useProductBuilder subtracts
@@ -18,6 +23,13 @@ export type SlimModifierProduct = {
   name_uz?: string
   name_en?: string
   image?: string
+  /** Modifier rows attached to the rim-variant of the same pizza. Needed
+   *  by the addToBasket flow: when the user picks sausage-rim + another
+   *  addon, the addon id must be remapped (by price) to the equivalent
+   *  modifier id on this rim-variant before the order POST. Without this,
+   *  ProductItemNewApp.addToBasket either crashes (no fallback) or
+   *  silently drops the secondary addon. */
+  modifiers?: SlimModifierProductMod[]
 }
 
 export type SlimVariant = {
@@ -150,6 +162,10 @@ function toSlimModifierProduct(raw: any): SlimModifierProduct | undefined {
   // the FULL pizza-with-rim title ("ГРИБНАЯ Средняя+ СОСИСОЧНЫЙ БОРТ") which
   // is wrong for a 56×56 modifier tile. Consumers fall back to a hardcoded
   // short «Сосисочный борт» label.
+  const rawMods = Array.isArray(raw.modifiers) ? raw.modifiers : []
+  const modifiers: SlimModifierProductMod[] = rawMods
+    .filter((m: any) => m && typeof m.id === 'number')
+    .map((m: any) => ({ id: m.id, price: Number(m.price) || 0 }))
   return {
     id: raw.id,
     price,
@@ -157,6 +173,7 @@ function toSlimModifierProduct(raw: any): SlimModifierProduct | undefined {
     name_uz: raw.name_uz || undefined,
     name_en: raw.name_en || undefined,
     image,
+    modifiers: modifiers.length ? modifiers : undefined,
   }
 }
 

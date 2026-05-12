@@ -125,7 +125,7 @@ const CreateYourPizzaApp: FC<CreatePizzaProps> = ({
             .map((mod: any) => mod.price),
         ]
         if (currentProductModifiersPrices.length) {
-          selectedModifiers = modifierProduct.modifiers
+          selectedModifiers = (modifierProduct.modifiers || [])
             .filter((mod: any) =>
               currentProductModifiersPrices.includes(mod.price)
             )
