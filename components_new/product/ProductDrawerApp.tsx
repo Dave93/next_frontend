@@ -144,6 +144,30 @@ const ProductDrawerApp: FC = () => {
                   {localizedDesc}
                 </p>
               )}
+              {builder.isInStop && (
+                <div className="mt-3 flex items-center gap-2 rounded-xl bg-red-50 border border-red-100 px-3 py-2 text-red-700">
+                  <svg
+                    width="18"
+                    height="18"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="2"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    aria-hidden="true"
+                  >
+                    <circle cx="12" cy="12" r="10" />
+                    <line x1="12" y1="8" x2="12" y2="12" />
+                    <line x1="12" y1="16" x2="12.01" y2="16" />
+                  </svg>
+                  <span className="text-sm font-semibold">
+                    {builder.variants.length > 1
+                      ? t('Выбранный размер временно недоступен')
+                      : t('Товар временно недоступен')}
+                  </span>
+                </div>
+              )}
             </div>
 
             {builder.variants.length > 1 && (
@@ -151,18 +175,24 @@ const ProductDrawerApp: FC = () => {
                 <div className="bg-gray-100 rounded-full p-1 flex gap-1">
                   {builder.variants.map((v: any) => {
                     const isActive = v.id === builder.activeVariant?.id
+                    const inStop = builder.isVariantInStop(v.id)
                     return (
                       <button
                         key={v.id}
                         type="button"
                         onClick={() => builder.selectVariant(v.id)}
-                        className="flex-1 h-10 rounded-full text-sm font-semibold transition-colors"
+                        className="flex-1 h-10 rounded-full text-sm font-semibold transition-colors relative"
                         style={{
                           background: isActive ? '#fff' : 'transparent',
-                          color: isActive ? '#111827' : '#6B7280',
+                          color: inStop
+                            ? '#9CA3AF'
+                            : isActive
+                              ? '#111827'
+                              : '#6B7280',
                           boxShadow: isActive
                             ? '0 1px 2px rgba(0,0,0,0.06)'
                             : 'none',
+                          textDecoration: inStop ? 'line-through' : 'none',
                         }}
                       >
                         {variantLabel(v)}
@@ -246,16 +276,25 @@ const ProductDrawerApp: FC = () => {
             <button
               type="button"
               onClick={builder.addToCart}
-              disabled={builder.isLoading}
-              className="w-full h-14 rounded-full font-bold text-white flex items-center justify-between px-6 transition-opacity disabled:opacity-70"
-              style={{ background: YELLOW }}
+              disabled={builder.isLoading || builder.isInStop}
+              className="w-full h-14 rounded-full font-bold text-white flex items-center justify-center px-6 transition-opacity disabled:cursor-not-allowed"
+              style={{
+                background: builder.isInStop ? '#9CA3AF' : YELLOW,
+                opacity: builder.isLoading && !builder.isInStop ? 0.7 : 1,
+              }}
             >
-              <span className="text-base">
-                {builder.isLoading ? t('Загрузка...') : t('В корзину')}
-              </span>
-              <span className="text-base">
-                {formatPrice(builder.totalPrice, locale)}
-              </span>
+              {builder.isInStop ? (
+                <span className="text-base">{t('Нет в наличии')}</span>
+              ) : (
+                <div className="w-full flex items-center justify-between">
+                  <span className="text-base">
+                    {builder.isLoading ? t('Загрузка...') : t('В корзину')}
+                  </span>
+                  <span className="text-base">
+                    {formatPrice(builder.totalPrice, locale)}
+                  </span>
+                </div>
+              )}
             </button>
           </div>
         </Drawer.Content>

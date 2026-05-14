@@ -571,12 +571,11 @@ const ProductItemNewApp: FC<ProductItem> = ({ product, channelName }) => {
         </div>
       ) : (
         <div
-          className={`${styles.gridItemOutline} ${
-            isProductInStop ? 'opacity-25' : ''
-          } relative overflow-hidden bg-white rounded-[20px] md:rounded-[15px] hover:shadow-xl shadow-sm group md:py-3 md:px-3 flex flex-col h-full`}
+          className={`${styles.gridItemOutline} relative overflow-hidden bg-white rounded-[20px] md:rounded-[15px] hover:shadow-xl shadow-sm group md:py-3 md:px-3 flex flex-col h-full`}
           id={`prod-${store.id}`}
           itemScope
           itemType="https://schema.org/Product"
+          aria-disabled={isProductInStop || undefined}
         >
           {/* Mobile horizontal card (image-left, text-right, drawer on tap) */}
           <div className="md:hidden">
@@ -591,7 +590,7 @@ const ProductItemNewApp: FC<ProductItem> = ({ product, channelName }) => {
                 openProductDrawer(store)
               }}
             >
-              <div className="w-[110px] h-[110px] flex-shrink-0 flex items-center justify-center">
+              <div className="w-[110px] h-[110px] flex-shrink-0 flex items-center justify-center relative">
                 {!imageLoaded && store.image && (
                   <div className="w-[110px] h-[110px] rounded-full bg-gray-100 animate-pulse" />
                 )}
@@ -606,7 +605,7 @@ const ProductItemNewApp: FC<ProductItem> = ({ product, channelName }) => {
                     }
                     className={`object-contain ${
                       imageLoaded ? '' : 'absolute opacity-0'
-                    }`}
+                    } ${isProductInStop ? 'grayscale opacity-60' : ''}`}
                     itemProp="image"
                     loading="lazy"
                     onLoad={() => setImageLoaded(true)}
@@ -619,8 +618,16 @@ const ProductItemNewApp: FC<ProductItem> = ({ product, channelName }) => {
                     alt={
                       store?.attribute_data?.name[channelName][locale || 'ru']
                     }
+                    className={isProductInStop ? 'grayscale opacity-60' : ''}
                     loading="lazy"
                   />
+                )}
+                {isProductInStop && (
+                  <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
+                    <span className="bg-white/95 text-red-600 text-[10px] font-bold uppercase tracking-wide px-2 py-1 rounded-full shadow-sm border border-red-100 whitespace-nowrap">
+                      {t('Нет в наличии')}
+                    </span>
+                  </div>
                 )}
               </div>
               <div className="flex-1 min-w-0 flex flex-col justify-between py-1">
@@ -647,33 +654,45 @@ const ProductItemNewApp: FC<ProductItem> = ({ product, channelName }) => {
                   )}
                 </div>
                 <div className="mt-2">
-                  <span
-                    className="inline-block px-4 py-1.5 rounded-full text-sm font-bold"
-                    style={{
-                      backgroundColor: '#FEF3C7',
-                      color: '#B45309',
-                    }}
-                  >
-                    {store.variants && store.variants.length > 1
-                      ? locale === 'uz'
-                        ? 'dan '
-                        : locale === 'en'
-                        ? 'from '
-                        : 'от '
-                      : ''}
-                    {currency(prodPriceDesktop, {
-                      pattern: '# !',
-                      separator: ' ',
-                      decimal: '.',
-                      symbol:
-                        locale === 'uz'
-                          ? "so'm"
+                  {isProductInStop ? (
+                    <span
+                      className="inline-block px-4 py-1.5 rounded-full text-sm font-bold"
+                      style={{
+                        backgroundColor: '#FEE2E2',
+                        color: '#B91C1C',
+                      }}
+                    >
+                      {t('Нет в наличии')}
+                    </span>
+                  ) : (
+                    <span
+                      className="inline-block px-4 py-1.5 rounded-full text-sm font-bold"
+                      style={{
+                        backgroundColor: '#FEF3C7',
+                        color: '#B45309',
+                      }}
+                    >
+                      {store.variants && store.variants.length > 1
+                        ? locale === 'uz'
+                          ? 'dan '
                           : locale === 'en'
-                          ? 'sum'
-                          : 'сум',
-                      precision: 0,
-                    }).format()}
-                  </span>
+                          ? 'from '
+                          : 'от '
+                        : ''}
+                      {currency(prodPriceDesktop, {
+                        pattern: '# !',
+                        separator: ' ',
+                        decimal: '.',
+                        symbol:
+                          locale === 'uz'
+                            ? "so'm"
+                            : locale === 'en'
+                            ? 'sum'
+                            : 'сум',
+                        precision: 0,
+                      }).format()}
+                    </span>
+                  )}
                 </div>
               </div>
             </button>
@@ -700,7 +719,7 @@ const ProductItemNewApp: FC<ProductItem> = ({ product, channelName }) => {
                   fill
                   sizes="(min-width: 1024px) 25vw, 50vw"
                   alt={store?.attribute_data?.name[channelName][locale || 'ru']}
-                  className={`object-contain object-bottom transform motion-safe:group-hover:scale-105 transition duration-500 ${imageLoaded ? '' : 'opacity-0'}`}
+                  className={`object-contain object-bottom transform motion-safe:group-hover:scale-105 transition duration-500 ${imageLoaded ? '' : 'opacity-0'} ${isProductInStop ? 'grayscale opacity-60' : ''}`}
                   itemProp="image"
                   loading="lazy"
                   onLoad={() => setImageLoaded(true)}
@@ -711,9 +730,16 @@ const ProductItemNewApp: FC<ProductItem> = ({ product, channelName }) => {
                   width={250}
                   height={250}
                   alt={store?.attribute_data?.name[channelName][locale || 'ru']}
-                  className="absolute inset-0 m-auto rounded-full transform motion-safe:group-hover:scale-105 transition duration-500"
+                  className={`absolute inset-0 m-auto rounded-full transform motion-safe:group-hover:scale-105 transition duration-500 ${isProductInStop ? 'grayscale opacity-60' : ''}`}
                   loading="lazy"
                 />
+              )}
+              {isProductInStop && (
+                <div className="absolute inset-0 flex items-start justify-center pt-3 pointer-events-none">
+                  <span className="bg-white/95 text-red-600 text-xs font-bold uppercase tracking-wide px-3 py-1.5 rounded-full shadow-md border border-red-100 whitespace-nowrap">
+                    {t('Нет в наличии')}
+                  </span>
+                </div>
               )}
             </div>
             <div className="font-serif mt-4 text-xl uppercase" itemProp="name">
@@ -758,20 +784,32 @@ const ProductItemNewApp: FC<ProductItem> = ({ product, channelName }) => {
             <div className="mt-auto">
               {store.variants && store.variants.length > 0 && (
                 <div className="flex mt-5 space-x-1 -mx-2">
-                  {store.variants.map((v: any) => (
+                  {store.variants.map((v: any) => {
+                    const variantInStop = stopProducts.includes(v.id)
+                    return (
                     <div className="w-full" key={v.id}>
                       <div
                         className={`w-full text-center cursor-pointer rounded-2xl outline-none ${
                           v.active
-                            ? 'bg-yellow text-white'
-                            : 'bg-gray-200 text-gray-400'
+                            ? variantInStop
+                              ? 'bg-gray-400 text-white'
+                              : 'bg-yellow text-white'
+                            : variantInStop
+                              ? 'bg-gray-100 text-gray-400'
+                              : 'bg-gray-200 text-gray-400'
                         }`}
                         onClick={(e) => {
                           e.stopPropagation()
                           updateOptionSelection(v.id)
                         }}
                       >
-                        <button className="outline-none focus:outline-none text-xs py-2">
+                        <button
+                          className="outline-none focus:outline-none text-xs py-2"
+                          style={{
+                            textDecoration:
+                              variantInStop && !v.active ? 'line-through' : 'none',
+                          }}
+                        >
                           {locale == 'ru'
                             ? v?.custom_name
                             : locale == 'uz'
@@ -790,20 +828,29 @@ const ProductItemNewApp: FC<ProductItem> = ({ product, channelName }) => {
                         {(locale == 'ru' ? 'гр ' : 'gr ') + v.weight}
                       </div> */}
                     </div>
-                  ))}
+                    )
+                  })}
                 </div>
               )}
             </div>
             <div className="mt-10 flex justify-between items-center text-sm">
               <button
-                className="bg-yellow focus:outline-none w-32 justify-around font-bold outline-none py-2 rounded-full text-white uppercase inline-flex items-center"
+                className={`focus:outline-none ${
+                  isProductInStop ? 'w-40 bg-gray-300' : 'w-32 bg-yellow'
+                } justify-around font-bold outline-none py-2 rounded-full text-white uppercase inline-flex items-center disabled:cursor-not-allowed`}
                 onClick={(e) => {
                   e.stopPropagation()
+                  if (isProductInStop) {
+                    toast.error(t('Товар временно недоступен'))
+                    return
+                  }
                   handleSubmit(e)
                 }}
-                disabled={isLoadingBasket}
+                disabled={isLoadingBasket || isProductInStop}
               >
-                {isLoadingBasket ? (
+                {isProductInStop ? (
+                  t('Нет в наличии')
+                ) : isLoadingBasket ? (
                   <svg
                     className="animate-spin h-5 w-5 text-white flex-grow text-center"
                     xmlns="http://www.w3.org/2000/svg"
@@ -859,7 +906,11 @@ const ProductItemNewApp: FC<ProductItem> = ({ product, channelName }) => {
                     }).format()}
                   </span>
                 )}
-                <span className="text-xl md:text-2xl font-bold bg-white block w-auto rounded-full text-right px-0 py-0 text-black whitespace-nowrap">
+                <span
+                  className={`text-xl md:text-2xl font-bold bg-white block w-auto rounded-full text-right px-0 py-0 whitespace-nowrap ${
+                    isProductInStop ? 'text-gray-400' : 'text-black'
+                  }`}
+                >
                   {currency(prodPriceDesktop, {
                     pattern: '# !',
                     separator: ' ',

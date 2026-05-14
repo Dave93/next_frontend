@@ -98,11 +98,37 @@ const ProductDetailContent: FC<Props> = ({ product, onAdded }) => {
           </p>
         )}
 
+        {builder.isInStop && (
+          <div className="mt-4 flex items-center gap-2 rounded-xl bg-red-50 border border-red-100 px-3 py-2 text-red-700">
+            <svg
+              width="20"
+              height="20"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              aria-hidden="true"
+            >
+              <circle cx="12" cy="12" r="10" />
+              <line x1="12" y1="8" x2="12" y2="12" />
+              <line x1="12" y1="16" x2="12.01" y2="16" />
+            </svg>
+            <span className="text-sm font-semibold">
+              {builder.variants.length > 1
+                ? t('Выбранный размер временно недоступен')
+                : t('Товар временно недоступен')}
+            </span>
+          </div>
+        )}
+
         {builder.variants.length > 1 && (
           <div className="mt-6">
             <div className="bg-gray-100 rounded-full p-1 flex gap-1">
               {builder.variants.map((v: any) => {
                 const isActive = v.id === builder.activeVariant?.id
+                const inStop = builder.isVariantInStop(v.id)
                 return (
                   <button
                     key={v.id}
@@ -110,8 +136,17 @@ const ProductDetailContent: FC<Props> = ({ product, onAdded }) => {
                     onClick={() => builder.selectVariant(v.id)}
                     className="flex-1 h-10 rounded-full text-sm font-semibold transition-colors"
                     style={{
-                      background: isActive ? YELLOW : 'transparent',
-                      color: isActive ? '#fff' : '#6B7280',
+                      background: isActive
+                        ? inStop
+                          ? '#9CA3AF'
+                          : YELLOW
+                        : 'transparent',
+                      color: isActive
+                        ? '#fff'
+                        : inStop
+                          ? '#9CA3AF'
+                          : '#6B7280',
+                      textDecoration: !isActive && inStop ? 'line-through' : 'none',
                     }}
                   >
                     {variantLabel(v)}
@@ -188,17 +223,27 @@ const ProductDetailContent: FC<Props> = ({ product, onAdded }) => {
         )}
 
         <div className="mt-6 md:mt-auto pt-4 flex items-center justify-between gap-4">
-          <span className="text-xl md:text-2xl font-extrabold text-gray-900">
+          <span
+            className="text-xl md:text-2xl font-extrabold"
+            style={{ color: builder.isInStop ? '#9CA3AF' : '#111827' }}
+          >
             {formatPrice(builder.totalPrice, locale)}
           </span>
           <button
             type="button"
             onClick={builder.addToCart}
-            disabled={builder.isLoading}
-            className="rounded-full font-bold text-white px-8 h-12 transition-opacity disabled:opacity-70 uppercase text-sm"
-            style={{ background: YELLOW }}
+            disabled={builder.isLoading || builder.isInStop}
+            className="rounded-full font-bold text-white px-8 h-12 transition-opacity disabled:cursor-not-allowed uppercase text-sm"
+            style={{
+              background: builder.isInStop ? '#9CA3AF' : YELLOW,
+              opacity: builder.isLoading && !builder.isInStop ? 0.7 : 1,
+            }}
           >
-            {builder.isLoading ? t('Загрузка...') : t('В корзину')}
+            {builder.isInStop
+              ? t('Нет в наличии')
+              : builder.isLoading
+                ? t('Загрузка...')
+                : t('В корзину')}
           </button>
         </div>
       </div>

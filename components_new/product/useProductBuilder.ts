@@ -7,6 +7,7 @@ import {
   useUpdateCartQty,
 } from '../../lib/hooks/useCartMutations'
 import { useLocationStore } from '../../lib/stores/location-store'
+import { useUIStore } from '../../lib/stores/ui-store'
 import { trackAddToCart } from '@lib/posthog-events'
 
 export type UseProductBuilder = ReturnType<typeof useProductBuilder>
@@ -16,6 +17,7 @@ export function useProductBuilder(
   onAdded?: () => void
 ) {
   const locationData = useLocationStore((s) => s.locationData) as any
+  const stopProducts = useUIStore((s) => s.stopProducts)
   const cartLines = useCartStore(cartSelectors.lines)
   const updateQtyMutation = useUpdateCartQty()
   const addMutation = useAddToCart()
@@ -126,6 +128,20 @@ export function useProductBuilder(
     return basePrice + modSum
   }, [basePrice, modifiers, activeModifiers])
 
+  const isVariantInStop = (variantId: number | string | null | undefined) => {
+    if (variantId == null) return false
+    return stopProducts.includes(Number(variantId))
+  }
+
+  const isInStop = useMemo(() => {
+    if (!product) return false
+    if (variants.length) {
+      if (!activeVariant) return false
+      return stopProducts.includes(Number(activeVariant.id))
+    }
+    return stopProducts.includes(Number(product.id))
+  }, [stopProducts, product, variants, activeVariant])
+
   const effectiveProductId = useMemo(() => {
     if (!product) return null
     const modifierProduct = activeVariant?.modifierProduct
@@ -199,6 +215,7 @@ export function useProductBuilder(
 
   const addToCart = () => {
     if (!product) return
+    if (isInStop) return
 
     const modifierProduct = activeVariant?.modifierProduct || null
     let selectedProdId = activeVariant?.id ?? +product.id
@@ -286,5 +303,7 @@ export function useProductBuilder(
     addToCart,
     cartQuantity,
     changeQuantity,
+    isInStop,
+    isVariantInStop,
   }
 }
