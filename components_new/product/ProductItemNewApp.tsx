@@ -735,7 +735,7 @@ const ProductItemNewApp: FC<ProductItem> = ({ product, channelName }) => {
                 />
               )}
               {isProductInStop && (
-                <div className="absolute inset-0 flex items-start justify-center pt-3 pointer-events-none">
+                <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
                   <span className="bg-white/95 text-red-600 text-xs font-bold uppercase tracking-wide px-3 py-1.5 rounded-full shadow-md border border-red-100 whitespace-nowrap">
                     {t('Нет в наличии')}
                   </span>
