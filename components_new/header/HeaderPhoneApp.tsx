@@ -34,15 +34,16 @@ const HeaderPhoneApp: FC = () => {
   )
 
   return (
-    <div className="flex items-center mx-3">
+    <div className="flex items-center mx-3 shrink-0">
       {formatted && (
-        <div className="space-x-1 flex items-center">
-          <PhoneIcon className="w-5 h-5 text-secondary" />
-          <div>
-            <a href={formatted.uri} className="text-secondary">
-              {formatted.display}
-            </a>
-          </div>
+        <div className="space-x-1 flex items-center whitespace-nowrap">
+          <PhoneIcon className="w-5 h-5 text-secondary shrink-0" />
+          <a
+            href={formatted.uri}
+            className="text-secondary whitespace-nowrap tabular-nums"
+          >
+            {formatted.display}
+          </a>
         </div>
       )}
     </div>
