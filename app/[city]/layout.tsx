@@ -1,7 +1,7 @@
 import { notFound } from 'next/navigation'
 import { getLocale } from 'next-intl/server'
 import { fetchSiteInfo } from '../../lib/data/site-info'
-import { fetchPublicConfig } from '../../lib/data/configs'
+import { storefrontConfig } from '../../lib/data/storefront-config'
 import LayoutWrapper from './LayoutWrapper'
 import type { City } from '@commerce/types/cities'
 
@@ -23,11 +23,11 @@ export default async function CityLayout({
   params: Promise<{ city: string }>
 }) {
   const { city: citySlug } = await params
-  const [siteInfo, config, locale] = await Promise.all([
+  const [siteInfo, locale] = await Promise.all([
     fetchSiteInfo(),
-    fetchPublicConfig().catch(() => ({}) as Awaited<ReturnType<typeof fetchPublicConfig>>),
     getLocale(),
   ])
+  const config = storefrontConfig
   const cities = (siteInfo as any).cities as City[]
   const currentCity = cities.find((c) => c.slug === citySlug)
   if (!currentCity) notFound()

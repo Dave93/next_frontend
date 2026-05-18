@@ -18,6 +18,7 @@ import { useUserStore } from '../../lib/stores/user-store'
 import { useLocationStore } from '../../lib/stores/location-store'
 import { useUIStore } from '../../lib/stores/ui-store'
 import { isWithinWorkHours } from '../../lib/utils/isWorkTime'
+import { storefrontConfig as configData } from '../../lib/data/storefront-config'
 import {
   trackCheckoutStarted,
   trackCartViewed,
@@ -93,7 +94,6 @@ export default function CartApp(_props: CartAppProps) {
   const [isCartLoading, setIsCartLoading] = useState(false)
   const [loadingLineId, setLoadingLineId] = useState<string | null>(null)
   const [addingItemId, setAddingItemId] = useState<number | null>(null)
-  const [configData, setConfigData] = useState<any>({})
 
   const formatPrice = (val: number) =>
     currency(val, {
@@ -103,22 +103,6 @@ export default function CartApp(_props: CartAppProps) {
       symbol: locale === 'uz' ? "so'm" : locale === 'en' ? 'sum' : 'сум',
       precision: 0,
     }).format()
-
-  const fetchConfig = async () => {
-    let cfg
-    if (!sessionStorage.getItem('configData')) {
-      const { data } = await axios.get(`${webAddress}/api/configs/public`)
-      cfg = data.data
-      sessionStorage.setItem('configData', data.data)
-    } else {
-      cfg = sessionStorage.getItem('configData')
-    }
-    try {
-      cfg = Buffer.from(cfg, 'base64').toString('ascii')
-      cfg = JSON.parse(cfg)
-      setConfigData(cfg)
-    } catch (e) {}
-  }
 
   const refetchBasket = async () => {
     if (!cartId) return
@@ -311,10 +295,6 @@ export default function CartApp(_props: CartAppProps) {
     }
     return res
   }, [data, isEmpty])
-
-  useEffect(() => {
-    fetchConfig()
-  }, [])
 
   useEffect(() => {
     if (data && data.lineItems && data.lineItems.length > 0) {

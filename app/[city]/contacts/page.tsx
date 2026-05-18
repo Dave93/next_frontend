@@ -1,6 +1,6 @@
 import type { Metadata } from 'next'
 import { getLocale } from 'next-intl/server'
-import { fetchPublicConfig } from '../../../lib/data/configs'
+import { storefrontConfig } from '../../../lib/data/storefront-config'
 import ContactsApp from '../../../components_new/contacts/ContactsApp'
 import BreadcrumbsJsonLd from '../../../components_new/seo/BreadcrumbsJsonLd'
 import { crumbLabel, localizedPath } from '../../../lib/seo/alternates'
@@ -37,12 +37,8 @@ export default async function ContactsPage({
   params: Promise<Params>
 }) {
   const { city: citySlug } = await params
-  const [config, locale] = await Promise.all([
-    fetchPublicConfig().catch(
-      () => ({}) as Awaited<ReturnType<typeof fetchPublicConfig>>
-    ),
-    getLocale(),
-  ])
+  const locale = await getLocale()
+  const config = storefrontConfig
 
   const workTime =
     locale === 'uz'

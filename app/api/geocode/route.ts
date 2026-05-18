@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
 import axios from 'axios'
+import { storefrontConfig } from '../../../lib/data/storefront-config'
 
 export async function GET(req: NextRequest) {
   const { searchParams } = new URL(req.url)
@@ -12,19 +13,17 @@ export async function GET(req: NextRequest) {
     return NextResponse.json([])
   }
 
-  let { data: configData } = await axios.get(
-    `${process.env.API_URL}/api/configs/public`
-  )
+  const yandexKeys = (storefrontConfig.yandexGeoKey ?? '')
+    .split(',')
+    .map((k) => k.trim())
+    .filter(Boolean)
 
-  try {
-    configData = Buffer.from(configData.data, 'base64')
-    configData = configData.toString('ascii')
-    configData = JSON.parse(configData)
-  } catch {}
+  if (yandexKeys.length === 0) {
+    return NextResponse.json([])
+  }
 
-  let yandexKey = configData.yandexGeoKey
-  yandexKey = yandexKey.split(',')
-  yandexKey = yandexKey[Math.floor(Math.random() * yandexKey.length)]
+  const yandexKey =
+    yandexKeys[Math.floor(Math.random() * yandexKeys.length)]
 
   let yandexUrl: string
   if (lat && lon) {

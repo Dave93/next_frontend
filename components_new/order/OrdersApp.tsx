@@ -54,6 +54,7 @@ import { DateTime } from 'luxon'
 import Input from '../common/LazyPhoneInput'
 import { City } from '@commerce/types/cities'
 import { chunk, sortBy } from 'lodash'
+import { storefrontConfig as configData } from '../../lib/data/storefront-config'
 import getAddressList from '@lib/load_addreses'
 import { Address } from '@commerce/types/address'
 import Hashids from 'hashids'
@@ -491,32 +492,14 @@ const OrdersApp: FC<OrdersProps> = ({ channelName, isMobile = false }) => {
       : activeCity?.map_zoom || 10) as number
   )
 
-  const [configData, setConfigData] = useState({} as any)
-
-  const fetchConfig = async () => {
-    let configData
-    if (!sessionStorage.getItem('configData')) {
-      let { data } = await axios.get(`${webAddress}/api/configs/public`)
-      configData = data.data
-      sessionStorage.setItem('configData', data.data)
-    } else {
-      configData = sessionStorage.getItem('configData')
-    }
-
-    try {
-      configData = Buffer.from(configData, 'base64')
-      configData = configData.toString('ascii')
-      configData = JSON.parse(configData)
-      setConfigData(configData)
-    } catch (e) {}
-
-    let yandexGeoKey = configData.yandexGeoKey
-    yandexGeoKey = yandexGeoKey.split(',')
-    // get random item from yandexGeoKey
-    yandexGeoKey = yandexGeoKey[Math.floor(Math.random() * yandexGeoKey.length)]
-
-    setYandexGeoKey(yandexGeoKey)
-  }
+  useEffect(() => {
+    const keys = (configData.yandexGeoKey ?? '')
+      .split(',')
+      .map((k) => k.trim())
+      .filter(Boolean)
+    if (keys.length === 0) return
+    setYandexGeoKey(keys[Math.floor(Math.random() * keys.length)])
+  }, [])
 
   const loadAddresses = async () => {
     const addresses = await getAddressList()
@@ -563,7 +546,6 @@ const OrdersApp: FC<OrdersProps> = ({ channelName, isMobile = false }) => {
   useEffect(() => {
     stopList()
     checkDeposit()
-    fetchConfig()
     loadAddresses()
     if (locationData && locationData.deliveryType == 'pickup') {
       loadPickupItems()

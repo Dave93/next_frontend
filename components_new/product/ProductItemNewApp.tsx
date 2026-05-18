@@ -29,6 +29,7 @@ import { useLocationStore } from '../../lib/stores/location-store'
 import { useUIStore } from '../../lib/stores/ui-store'
 import { DateTime } from 'luxon'
 import { toast } from 'sonner'
+import { storefrontConfig as configData } from '../../lib/data/storefront-config'
 import { trackAddToCart } from '@lib/posthog-events'
 // import SessionContext from 'react-storefront/session/SessionContext'
 
@@ -70,27 +71,8 @@ const ProductItemNewApp: FC<ProductItem> = ({ product, channelName }) => {
   const [isChoosingModifier, setIsChoosingModifier] = useState(false)
   const [activeModifiers, setActiveModifiers] = useState([] as number[])
 
-  const [configData, setConfigData] = useState({} as any)
   let [isOpen, setIsOpen] = useState(false)
   let completeButtonRef = useRef(null)
-
-  const fetchConfig = async () => {
-    let configData
-    if (!sessionStorage.getItem('configData')) {
-      let { data } = await axios.get(`${webAddress}/api/configs/public`)
-      configData = data.data
-      sessionStorage.setItem('configData', data.data)
-    } else {
-      configData = sessionStorage.getItem('configData')
-    }
-
-    try {
-      configData = Buffer.from(configData, 'base64')
-      configData = configData.toString('ascii')
-      configData = JSON.parse(configData)
-      setConfigData(configData)
-    } catch (e) {}
-  }
 
   function closeModal() {
     setIsOpen(false)
@@ -280,10 +262,6 @@ const ProductItemNewApp: FC<ProductItem> = ({ product, channelName }) => {
       closeModal()
     }
   }
-
-  useEffect(() => {
-    fetchConfig()
-  }, [])
 
   const modifiers = useMemo(() => {
     let modifier = null

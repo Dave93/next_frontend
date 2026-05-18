@@ -13,7 +13,7 @@ import {
 import type { APILinkItem } from '@commerce/types/headerMenu'
 import type { SocialIcons } from '@commerce/types/socialIcons'
 import type { City } from '@commerce/types/cities'
-import type { PublicConfig } from '../lib/data/configs'
+import type { PublicConfig } from '../lib/data/storefront-config'
 
 const socIcons: Record<string, IconDefinition> = {
   fb: faFacebook,

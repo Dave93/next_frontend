@@ -16,6 +16,7 @@ import { useAddToCart } from '../../lib/hooks/useCartMutations'
 import { useLocationStore } from '../../lib/stores/location-store'
 import { DateTime } from 'luxon'
 import getAssetUrl from '@utils/getAssetUrl'
+import { storefrontConfig as configData } from '../../lib/data/storefront-config'
 
 type CreatePizzaProps = {
   sec: any
@@ -41,25 +42,6 @@ const CreateYourPizzaMobileApp: FC<CreatePizzaProps> = ({
   const [leftSelectedProduct, setLeftSelectedProduct] = useState(null as any)
   const [rightSelectedProduct, setRightSelectedProduct] = useState(null as any)
   const [isSecondPage, setIsSecondPage] = useState(false)
-  const [configData, setConfigData] = useState({} as any)
-
-  const fetchConfig = async () => {
-    let configData
-    if (!sessionStorage.getItem('configData')) {
-      let { data } = await axios.get(`${webAddress}/api/configs/public`)
-      configData = data.data
-      sessionStorage.setItem('configData', data.data)
-    } else {
-      configData = sessionStorage.getItem('configData')
-    }
-
-    try {
-      configData = Buffer.from(configData, 'base64')
-      configData = configData.toString('ascii')
-      configData = JSON.parse(configData)
-      setConfigData(configData)
-    } catch (e) {}
-  }
 
   function closeModal() {
     setIsOpen(false)
@@ -446,7 +428,6 @@ const CreateYourPizzaMobileApp: FC<CreatePizzaProps> = ({
   }
 
   useEffect(() => {
-    fetchConfig()
     setActiveCustomName(customNames[0])
   }, [customNames])
 

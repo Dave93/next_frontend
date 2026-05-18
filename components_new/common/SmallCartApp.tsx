@@ -1,6 +1,6 @@
 'use client'
 
-import { FC, memo, useEffect, useMemo, useState } from 'react'
+import { FC, memo, useMemo } from 'react'
 import { useForm } from 'react-hook-form'
 import Image from 'next/image'
 import { XIcon, MinusIcon, PlusIcon } from '@heroicons/react/solid'
@@ -19,10 +19,10 @@ import { useUIStore } from '../../lib/stores/ui-store'
 import { pickProductImage } from '@utils/getAssetUrl'
 import { toast } from 'sonner'
 import { isWithinWorkHours } from '../../lib/utils/isWorkTime'
+import { storefrontConfig as configData } from '../../lib/data/storefront-config'
 import SimpleBar from 'simplebar-react'
 import 'simplebar/dist/simplebar.min.css'
 
-let webAddress = process.env.NEXT_PUBLIC_API_URL
 axios.defaults.withCredentials = true
 
 type SmallCartProps = {
@@ -33,7 +33,6 @@ const SmallCartApp: FC<SmallCartProps> = ({ channelName }) => {
   const locale = useLocale()
   const t = useExtracted()
   const router = useRouter()
-  const locationData = useLocationStore((s) => s.locationData) as any
   const user = useUserStore((s) => s.user) as any
   const activeCity = useLocationStore((s) => s.activeCity) as any
   const openSignInModal = useUIStore((s) => s.openSignInModal)
@@ -69,24 +68,6 @@ const SmallCartApp: FC<SmallCartProps> = ({ channelName }) => {
 
   // useForm imported but its register/handleSubmit not used in current layout — keep import to avoid breaking later additions; if unused at TS check, drop.
   useForm()
-  const [configData, setConfigData] = useState({} as any)
-  const fetchConfig = async () => {
-    let configData
-    if (!sessionStorage.getItem('configData')) {
-      let { data } = await axios.get(`${webAddress}/api/configs/public`)
-      configData = data.data
-      sessionStorage.setItem('configData', data.data)
-    } else {
-      configData = sessionStorage.getItem('configData')
-    }
-
-    try {
-      configData = Buffer.from(configData, 'base64')
-      configData = configData.toString('ascii')
-      configData = JSON.parse(configData)
-      setConfigData(configData)
-    } catch (e) {}
-  }
 
   const destroyLine = (lineId: string) => {
     removeLine.mutate({ lineId: Number(lineId) })
@@ -160,10 +141,6 @@ const SmallCartApp: FC<SmallCartProps> = ({ channelName }) => {
     return res
   }, [data])
 
-  useEffect(() => {
-    fetchConfig()
-    return
-  }, [locationData])
 
   return (
     <div className="mt-2 rounded-[15px] bg-white ">
