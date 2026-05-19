@@ -2,7 +2,7 @@
 
 import { XIcon } from '@heroicons/react/outline'
 import getAssetUrl from '@utils/getAssetUrl'
-import { isWithinWorkHours } from '../../lib/utils/isWorkTime'
+import { useIsWithinWorkHours } from '../../lib/utils/isWorkTime'
 import { useForm, Controller } from 'react-hook-form'
 import { useUserStore } from '../../lib/stores/user-store'
 import { useLocationStore } from '../../lib/stores/location-store'
@@ -1083,7 +1083,8 @@ const OrdersApp: FC<OrdersProps> = ({ channelName, isMobile = false }) => {
 
     setIsSavingOrder(true)
     await setCredentials()
-    const otpToken = Cookies.get('opt_token') || localStorage.getItem('opt_token')
+    const otpToken =
+      Cookies.get('opt_token') || localStorage.getItem('opt_token')
 
     // if (!payType) {
     //   toast.error(tr('payment_system_not_selected'), {
@@ -1262,13 +1263,9 @@ const OrdersApp: FC<OrdersProps> = ({ channelName, isMobile = false }) => {
     }
   }
 
-  const isWorkTime = useMemo(
-    () =>
-      isWithinWorkHours(
-        configData.workTimeStart,
-        configData.workTimeEnd
-      ),
-    [configData]
+  const isWorkTime = useIsWithinWorkHours(
+    configData.workTimeStart,
+    configData.workTimeEnd
   )
 
   const isProductInStop = useMemo(() => {

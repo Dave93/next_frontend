@@ -17,7 +17,7 @@ import { syncCartFromBasketResult } from '../../lib/data/cart-adapter'
 import { useUserStore } from '../../lib/stores/user-store'
 import { useLocationStore } from '../../lib/stores/location-store'
 import { useUIStore } from '../../lib/stores/ui-store'
-import { isWithinWorkHours } from '../../lib/utils/isWorkTime'
+import { useIsWithinWorkHours } from '../../lib/utils/isWorkTime'
 import { storefrontConfig as configData } from '../../lib/data/storefront-config'
 import {
   trackCheckoutStarted,
@@ -29,6 +29,8 @@ const webAddress = process.env.NEXT_PUBLIC_API_URL
 axios.defaults.withCredentials = true
 
 const YELLOW = '#FAAF04'
+const MIN_ORDER_PRICE =
+  Number(process.env.NEXT_PUBLIC_CHOPAR_ORDER_MIN_PRICE) || 44000
 
 interface CartAppProps {
   products?: any[]
@@ -259,8 +261,17 @@ export default function CartApp(_props: CartAppProps) {
     } catch (e) {}
   }
 
+  const subTotal = Number(
+    data?.lineItemsSubtotalPrice || data?.subtotalPrice || data?.totalPrice || 0
+  )
+  const isPickup = locationData?.deliveryType === 'pickup'
+  const isBelowMinOrder =
+    !isPickup && subTotal > 0 && subTotal < MIN_ORDER_PRICE
+  const missingForMinOrder = isBelowMinOrder ? MIN_ORDER_PRICE - subTotal : 0
+
   const goToCheckout = (e: any) => {
     e.preventDefault()
+    if (isBelowMinOrder) return
     trackCheckoutStarted({
       cart_items_count: data?.lineItems?.length || 0,
       cart_total: (data?.totalPrice || 0) / 100,
@@ -312,21 +323,17 @@ export default function CartApp(_props: CartAppProps) {
     }
   }, [data?.lineItems?.length])
 
-  const isWorkTime = useMemo(
-    () =>
-      isWithinWorkHours(
-        configData?.workTimeStart,
-        configData?.workTimeEnd
-      ),
-    [configData]
+  const isWorkTime = useIsWithinWorkHours(
+    configData?.workTimeStart,
+    configData?.workTimeEnd
   )
 
   const workTimeLabel =
     locale === 'uz'
       ? configData?.workTimeUz
       : locale === 'en'
-        ? configData?.workTimeEn
-        : configData?.workTimeRu
+      ? configData?.workTimeEn
+      : configData?.workTimeRu
 
   const totalQty = useMemo(() => {
     if (isEmpty) return 0
@@ -342,9 +349,7 @@ export default function CartApp(_props: CartAppProps) {
     const main = attr?.[locale] || attr?.['ru'] || product?.name || ''
     if (line.child && line.child.length === 1) {
       const extras = line.child
-        .filter(
-          (v: any) => product?.box_id !== v?.variant?.product?.id
-        )
+        .filter((v: any) => product?.box_id !== v?.variant?.product?.id)
         .map((v: any) => {
           const a = v?.variant?.product?.attribute_data?.name?.[channelName]
           return a?.[locale] || a?.['ru'] || ''
@@ -708,8 +713,8 @@ export default function CartApp(_props: CartAppProps) {
                                     {locale === 'uz'
                                       ? m.name_uz
                                       : locale === 'en'
-                                        ? m.name_en
-                                        : m.name}
+                                      ? m.name_en
+                                      : m.name}
                                   </span>
                                 ))}
                               </div>
@@ -816,7 +821,9 @@ export default function CartApp(_props: CartAppProps) {
                   {t('Товары')} ({totalQty})
                 </span>
                 <span className="font-semibold text-gray-900">
-                  {formatPrice(data?.lineItemsSubtotalPrice || data?.totalPrice || 0)}
+                  {formatPrice(
+                    data?.lineItemsSubtotalPrice || data?.totalPrice || 0
+                  )}
                 </span>
               </div>
               {data?.discountValue > 0 && (
@@ -845,10 +852,27 @@ export default function CartApp(_props: CartAppProps) {
               </span>
             </div>
 
+            {isBelowMinOrder && (
+              <div
+                role="alert"
+                className="mt-5 rounded-2xl bg-yellow-50 border border-yellow-300 text-yellow-900 px-4 py-3 text-sm"
+              >
+                {t('Минимальная сумма заказа для доставки')}{' '}
+                <span className="font-bold">
+                  {formatPrice(MIN_ORDER_PRICE)}
+                </span>
+                . {t('Добавьте ещё на')}{' '}
+                <span className="font-bold">
+                  {formatPrice(missingForMinOrder)}
+                </span>
+                .
+              </div>
+            )}
+
             <button
               type="button"
               onClick={goToCheckout}
-              disabled={!isWorkTime}
+              disabled={!isWorkTime || isBelowMinOrder}
               className="mt-5 w-full h-12 md:h-14 rounded-full font-bold text-white text-sm md:text-base uppercase tracking-wide flex items-center justify-center transition-opacity hover:opacity-90 disabled:opacity-60 disabled:cursor-not-allowed"
               style={{ background: YELLOW }}
             >
@@ -871,9 +895,7 @@ export default function CartApp(_props: CartAppProps) {
 
             <button
               type="button"
-              onClick={() =>
-                router.push(`/${activeCity?.slug || 'tashkent'}`)
-              }
+              onClick={() => router.push(`/${activeCity?.slug || 'tashkent'}`)}
               className="mt-3 w-full h-11 rounded-full font-semibold text-gray-600 bg-gray-100 hover:bg-gray-200 transition-colors text-sm flex items-center justify-center"
             >
               <svg

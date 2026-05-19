@@ -11,183 +11,202 @@ msgstr ""
 msgid "2NIDWU"
 msgstr "О нас"
 
-#: components_new/auth/SignInModalApp.tsx:103
+#: components_new/auth/SignInModalApp.tsx:209
 msgid "MkmIOy"
 msgstr "Капча не готова, попробуйте ещё раз"
 
-#: components_new/auth/SignInModalApp.tsx:135
+#: components_new/auth/SignInModalApp.tsx:228
+#: components_new/auth/SignInModalApp.tsx:241
+#: components_new/common/SmallCartMobileApp.tsx:198
+#: components_new/common/SmallCartMobileApp.tsx:211
+msgid "u2EW70"
+msgstr "Капча не загрузилась, обновите страницу и попробуйте снова"
+
+#: components_new/auth/SignInModalApp.tsx:274
 msgid "T3C/O+"
 msgstr "Не удалось отправить код"
 
-#: components_new/auth/SignInModalApp.tsx:166
-#: components_new/auth/SignInModalApp.tsx:174
+#: components_new/auth/SignInModalApp.tsx:349
+#: components_new/auth/SignInModalApp.tsx:368
 msgid "I2djCx"
 msgstr "Неверный код"
 
-#: components_new/auth/SignInModalApp.tsx:252
-#: components_new/common/SmallCartMobileApp.tsx:298
+#: components_new/auth/SignInModalApp.tsx:448
+#: components_new/common/SmallCartMobileApp.tsx:427
 msgid "BgypuO"
 msgstr "Авторизация"
 
-#: components_new/auth/SignInModalApp.tsx:256
-#: components_new/common/SmallCartMobileApp.tsx:394
+#: components_new/auth/SignInModalApp.tsx:452
+#: components_new/common/SmallCartMobileApp.tsx:523
 #: components_new/contacts/ContactsApp.tsx:162
 #: components_new/profile/PersonalDataApp.tsx:131
 msgid "ANbLXk"
 msgstr "Номер телефона"
 
-#: components_new/auth/SignInModalApp.tsx:257
+#: components_new/auth/SignInModalApp.tsx:453
 msgid "XSNwUH"
 msgstr "Код подтверждения"
 
-#: components_new/auth/SignInModalApp.tsx:351
+#: components_new/auth/SignInModalApp.tsx:544
 #: components_new/contacts/ContactsApp.tsx:137
 #: components_new/profile/PersonalDataApp.tsx:112
 msgid "qXh0mH"
 msgstr "Имя"
 
-#: components_new/auth/SignInModalApp.tsx:360
+#: components_new/auth/SignInModalApp.tsx:553
 msgid "3dXnzB"
 msgstr "Если сообщение не пришло, позвоните нам по номеру"
 
-#: components_new/auth/SignInModalApp.tsx:383
-#: components_new/common/SmallCartMobileApp.tsx:489
+#: components_new/auth/SignInModalApp.tsx:580
+msgid "dWsxTi"
+msgstr "Загрузка защиты..."
+
+#: components_new/auth/SignInModalApp.tsx:581
+#: components_new/common/SmallCartMobileApp.tsx:618
 msgid "K6f7aa"
 msgstr "Получить код"
 
-#: components_new/auth/SignInModalApp.tsx:414
+#: components_new/auth/SignInModalApp.tsx:612
 msgid "AYsWBj"
 msgstr "Код отправлен на номер"
 
-#: components_new/auth/SignInModalApp.tsx:429
-#: components_new/cart/CartApp.tsx:508
-#: components_new/common/SmallCartMobileApp.tsx:382
+#: components_new/auth/SignInModalApp.tsx:627
+#: components_new/cart/CartApp.tsx:494
+#: components_new/common/SmallCartMobileApp.tsx:511
 #: components_new/header/SignInButtonApp.tsx:53
 msgid "oU4rxk"
 msgstr "Войти"
 
-#: components_new/auth/SignInModalApp.tsx:439
+#: components_new/auth/SignInModalApp.tsx:637
 msgid "kOs//D"
 msgstr "Отправить код повторно через"
 
-#: components_new/auth/SignInModalApp.tsx:440
+#: components_new/auth/SignInModalApp.tsx:638
 msgid "hPZJnP"
 msgstr "Отправить код повторно"
 
-#: components_new/cart/CartApp.tsx:498
+#: components_new/cart/CartApp.tsx:484
 msgid "dW/7Kf"
 msgstr "Войдите в аккаунт"
 
-#: components_new/cart/CartApp.tsx:501
+#: components_new/cart/CartApp.tsx:487
 msgid "uhOXf0"
 msgstr "Чтобы оформить заказ, нужно войти в личный кабинет"
 
-#: components_new/cart/CartApp.tsx:527
-#: components_new/common/SmallCartApp.tsx:215
+#: components_new/cart/CartApp.tsx:513
+#: components_new/common/SmallCartApp.tsx:188
 #: components_new/header/HeaderMiniCartApp.tsx:206
 msgid "Lj6qSg"
 msgstr "Корзина пуста"
 
-#: components_new/cart/CartApp.tsx:529
-#: components_new/common/SmallCartApp.tsx:216
+#: components_new/cart/CartApp.tsx:515
+#: components_new/common/SmallCartApp.tsx:189
 #: components_new/header/HeaderMiniCartApp.tsx:209
 msgid "V5Ibqh"
 msgstr "Выберите пиццу"
 
-#: components_new/cart/CartApp.tsx:535
-#: components_new/cart/CartApp.tsx:913
+#: components_new/cart/CartApp.tsx:521
+#: components_new/cart/CartApp.tsx:912
 msgid "595aPR"
 msgstr "Вернуться в меню"
 
-#: components_new/cart/CartApp.tsx:571
+#: components_new/cart/CartApp.tsx:557
 msgid "xXuBfJ"
 msgstr "Сейчас не время работы"
 
-#: components_new/cart/CartApp.tsx:574
+#: components_new/cart/CartApp.tsx:560
 msgid "5i7QXD"
 msgstr "Оформить заказ можно будет в рабочие часы. Корзина сохранится."
 
-#: components_new/cart/CartApp.tsx:579
+#: components_new/cart/CartApp.tsx:565
 msgid "1nDsuM"
 msgstr "Рабочие часы"
 
-#: components_new/cart/CartApp.tsx:593
-#: components_new/common/SmallCartApp.tsx:197
+#: components_new/cart/CartApp.tsx:579
+#: components_new/common/SmallCartApp.tsx:170
 #: components_new/header/HeaderMiniCartApp.tsx:174
 #: components_new/mobile/MobileBottomNavApp.tsx:64
 msgid "Ukms9b"
 msgstr "Корзина"
 
-#: components_new/cart/CartApp.tsx:623
+#: components_new/cart/CartApp.tsx:609
 msgid "npyYek"
 msgstr "Очистить"
 
-#: components_new/cart/CartApp.tsx:708
+#: components_new/cart/CartApp.tsx:694
 msgid "6CPoX6"
 msgstr "Бонус"
 
-#: components_new/cart/CartApp.tsx:716
+#: components_new/cart/CartApp.tsx:702
 msgid "QZlQya"
 msgstr "Акция"
 
-#: components_new/cart/CartApp.tsx:786
+#: components_new/cart/CartApp.tsx:772
 msgid "mHUlgT"
 msgstr "Вам может понравиться"
 
-#: components_new/cart/CartApp.tsx:831
+#: components_new/cart/CartApp.tsx:817
 msgid "G5xn1F"
 msgstr "Ваш заказ"
 
-#: components_new/cart/CartApp.tsx:836
+#: components_new/cart/CartApp.tsx:822
 msgid "f0SWKw"
 msgstr "Товары"
 
-#: components_new/cart/CartApp.tsx:844
+#: components_new/cart/CartApp.tsx:830
 msgid "gXcQyF"
 msgstr "Скидка"
 
-#: components_new/cart/CartApp.tsx:851
+#: components_new/cart/CartApp.tsx:837
 #: components_new/header/LocationPickerCore.tsx:347
 #: components_new/HeaderApp.tsx:163
 msgid "3qtFxi"
 msgstr "Доставка"
 
-#: components_new/cart/CartApp.tsx:854
+#: components_new/cart/CartApp.tsx:840
 #: components_new/header/LocationPickerCore.tsx:358
 #: components_new/HeaderApp.tsx:178
 msgid "k9Dt2Z"
 msgstr "Самовывоз"
 
-#: components_new/cart/CartApp.tsx:855
+#: components_new/cart/CartApp.tsx:841
 msgid "WIL1SZ"
 msgstr "Уточняется"
 
-#: components_new/cart/CartApp.tsx:861
+#: components_new/cart/CartApp.tsx:847
 msgid "x5G3yc"
 msgstr "Итого"
 
-#: components_new/cart/CartApp.tsx:875
+#: components_new/cart/CartApp.tsx:859
+msgid "3xn84l"
+msgstr "Минимальная сумма заказа для доставки"
+
+#: components_new/cart/CartApp.tsx:861
+msgid "gG2YDs"
+msgstr "Добавьте ещё на"
+
+#: components_new/cart/CartApp.tsx:874
 #: components_new/header/HeaderMiniCartApp.tsx:339
 msgid "+urzAu"
 msgstr "Оформить заказ"
 
-#: components_new/cart/CartApp.tsx:917
+#: components_new/cart/CartApp.tsx:916
 msgid "J4PSYQ"
 msgstr "Обрабатывая ваши данные, вы соглашаетесь с нашими условиями использования"
 
-#: components_new/common/SmallCartMobileApp.tsx:307
+#: components_new/common/SmallCartMobileApp.tsx:436
 msgid "wue03V"
 msgstr "Вы успешно вошли в систему"
 
-#: components_new/common/SmallCartMobileApp.tsx:317
+#: components_new/common/SmallCartMobileApp.tsx:446
 msgid "eY7wBY"
 msgstr "СМС код"
 
-#: components_new/common/SmallCartMobileApp.tsx:346
+#: components_new/common/SmallCartMobileApp.tsx:475
 msgid "14dq0g"
 msgstr "Получить код снова"
 
-#: components_new/common/SmallCartMobileApp.tsx:438
+#: components_new/common/SmallCartMobileApp.tsx:567
 msgid "x1g9gC"
 msgstr "Ваше имя"
 
@@ -284,45 +303,45 @@ msgstr "Адрес:"
 msgid "x1MUPc"
 msgstr "Адрес"
 
-#: components_new/header/LocationPickerCore.tsx:512
+#: components_new/header/LocationPickerCore.tsx:513
 msgid "2lYwXC"
 msgstr "Дом"
 
-#: components_new/header/LocationPickerCore.tsx:527
+#: components_new/header/LocationPickerCore.tsx:528
 msgid "PE9WEy"
 msgstr "Квартира"
 
-#: components_new/header/LocationPickerCore.tsx:546
+#: components_new/header/LocationPickerCore.tsx:547
 msgid "bIzegt"
 msgstr "Указать подъезд и домофон"
 
-#: components_new/header/LocationPickerCore.tsx:576
+#: components_new/header/LocationPickerCore.tsx:577
 msgid "DtOC+U"
 msgstr "Подъезд"
 
-#: components_new/header/LocationPickerCore.tsx:591
+#: components_new/header/LocationPickerCore.tsx:592
 msgid "KIMRoB"
 msgstr "Код от домофона"
 
-#: components_new/header/LocationPickerCore.tsx:606
+#: components_new/header/LocationPickerCore.tsx:607
 msgid "2ifljK"
 msgstr "Название адреса. Например, Дом Работа..."
 
-#: components_new/header/LocationPickerCore.tsx:656
+#: components_new/header/LocationPickerCore.tsx:657
 msgid "f/Ues8"
 msgstr "Ближайший ресторан"
 
-#: components_new/header/LocationPickerCore.tsx:697
+#: components_new/header/LocationPickerCore.tsx:698
 msgid "NUZRDC"
 msgstr "Выберите пиццерию:"
 
-#: components_new/header/LocationPickerCore.tsx:712
-#: components_new/product/ProductDetailContent.tsx:197
-#: components_new/product/ProductDrawerApp.tsx:254
+#: components_new/header/LocationPickerCore.tsx:713
+#: components_new/product/ProductDetailContent.tsx:245
+#: components_new/product/ProductDrawerApp.tsx:291
 msgid "+RxnK3"
 msgstr "Загрузка..."
 
-#: components_new/header/LocationPickerCore.tsx:813
+#: components_new/header/LocationPickerCore.tsx:814
 msgid "XzVpjf"
 msgstr "Подтвердить"
 
@@ -394,38 +413,55 @@ msgstr "Новости"
 msgid "aP09v9"
 msgstr "Пока новостей нет"
 
-#: components_new/product/CreateYourPizzaApp.tsx:485
-#: components_new/product/CreateYourPizzaMobileApp.tsx:471
+#: components_new/product/CreateYourPizzaApp.tsx:471
+#: components_new/product/CreateYourPizzaMobileApp.tsx:458
 msgid "FVZBEe"
 msgstr "Соберите свою пиццу"
 
-#: components_new/product/CreateYourPizzaApp.tsx:499
-#: components_new/product/CreateYourPizzaMobileApp.tsx:478
+#: components_new/product/CreateYourPizzaApp.tsx:485
+#: components_new/product/CreateYourPizzaMobileApp.tsx:465
 msgid "WRnc7y"
 msgstr "Собрать пиццу"
 
-#: components_new/product/ProductDetailContent.tsx:124
-#: components_new/product/ProductDrawerApp.tsx:179
-msgid "F6q7sS"
-msgstr "Добавить в пиццу"
+#: components_new/product/ProductDetailContent.tsx:120
+#: components_new/product/ProductDrawerApp.tsx:166
+msgid "e3iM8G"
+msgstr "Выбранный размер временно недоступен"
 
-#: components_new/product/ProductDetailContent.tsx:197
-#: components_new/product/ProductDrawerApp.tsx:254
-#: components_new/product/ProductItemNewApp.tsx:815
-#: components_new/product/ProductItemNewApp.tsx:1074
-msgid "JwQa2e"
-msgstr "В корзину"
-
-#: components_new/product/ProductItemNewApp.tsx:512
-#: components_new/product/ProductItemNewApp.tsx:563
-msgid "zXkVd5"
-msgstr "Добавить"
-
-#: components_new/product/ProductItemNewApp.tsx:583
+#: components_new/product/ProductDetailContent.tsx:121
+#: components_new/product/ProductDrawerApp.tsx:167
+#: components_new/product/ProductItemNewApp.tsx:565
+#: components_new/product/ProductItemNewApp.tsx:822
 msgid "kazY5+"
 msgstr "Товар временно недоступен"
 
-#: components_new/product/ProductItemNewApp.tsx:990
+#: components_new/product/ProductDetailContent.tsx:163
+#: components_new/product/ProductDrawerApp.tsx:209
+msgid "F6q7sS"
+msgstr "Добавить в пиццу"
+
+#: components_new/product/ProductDetailContent.tsx:243
+#: components_new/product/ProductDrawerApp.tsx:287
+#: components_new/product/ProductItemNewApp.tsx:606
+#: components_new/product/ProductItemNewApp.tsx:643
+#: components_new/product/ProductItemNewApp.tsx:718
+#: components_new/product/ProductItemNewApp.tsx:830
+msgid "BNa/NS"
+msgstr "Нет в наличии"
+
+#: components_new/product/ProductDetailContent.tsx:246
+#: components_new/product/ProductDrawerApp.tsx:291
+#: components_new/product/ProductItemNewApp.tsx:853
+#: components_new/product/ProductItemNewApp.tsx:1116
+msgid "JwQa2e"
+msgstr "В корзину"
+
+#: components_new/product/ProductItemNewApp.tsx:495
+#: components_new/product/ProductItemNewApp.tsx:546
+msgid "zXkVd5"
+msgstr "Добавить"
+
+#: components_new/product/ProductItemNewApp.tsx:1032
 msgid "AH6N5n"
 msgstr "Добавить к пицце"
 

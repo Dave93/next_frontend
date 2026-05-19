@@ -11,183 +11,202 @@ msgstr ""
 msgid "2NIDWU"
 msgstr "About"
 
-#: components_new/auth/SignInModalApp.tsx:103
+#: components_new/auth/SignInModalApp.tsx:209
 msgid "MkmIOy"
 msgstr "Captcha is not ready, please try again"
 
-#: components_new/auth/SignInModalApp.tsx:135
+#: components_new/auth/SignInModalApp.tsx:228
+#: components_new/auth/SignInModalApp.tsx:241
+#: components_new/common/SmallCartMobileApp.tsx:198
+#: components_new/common/SmallCartMobileApp.tsx:211
+msgid "u2EW70"
+msgstr ""
+
+#: components_new/auth/SignInModalApp.tsx:274
 msgid "T3C/O+"
 msgstr "Failed to send code"
 
-#: components_new/auth/SignInModalApp.tsx:166
-#: components_new/auth/SignInModalApp.tsx:174
+#: components_new/auth/SignInModalApp.tsx:349
+#: components_new/auth/SignInModalApp.tsx:368
 msgid "I2djCx"
 msgstr "Invalid code"
 
-#: components_new/auth/SignInModalApp.tsx:252
-#: components_new/common/SmallCartMobileApp.tsx:298
+#: components_new/auth/SignInModalApp.tsx:448
+#: components_new/common/SmallCartMobileApp.tsx:427
 msgid "BgypuO"
 msgstr "Authorization"
 
-#: components_new/auth/SignInModalApp.tsx:256
-#: components_new/common/SmallCartMobileApp.tsx:394
+#: components_new/auth/SignInModalApp.tsx:452
+#: components_new/common/SmallCartMobileApp.tsx:523
 #: components_new/contacts/ContactsApp.tsx:162
 #: components_new/profile/PersonalDataApp.tsx:131
 msgid "ANbLXk"
 msgstr "Phone number"
 
-#: components_new/auth/SignInModalApp.tsx:257
+#: components_new/auth/SignInModalApp.tsx:453
 msgid "XSNwUH"
 msgstr "Confirmation code"
 
-#: components_new/auth/SignInModalApp.tsx:351
+#: components_new/auth/SignInModalApp.tsx:544
 #: components_new/contacts/ContactsApp.tsx:137
 #: components_new/profile/PersonalDataApp.tsx:112
 msgid "qXh0mH"
 msgstr "Name"
 
-#: components_new/auth/SignInModalApp.tsx:360
+#: components_new/auth/SignInModalApp.tsx:553
 msgid "3dXnzB"
 msgstr "If the message did not arrive, call us at"
 
-#: components_new/auth/SignInModalApp.tsx:383
-#: components_new/common/SmallCartMobileApp.tsx:489
+#: components_new/auth/SignInModalApp.tsx:580
+msgid "dWsxTi"
+msgstr ""
+
+#: components_new/auth/SignInModalApp.tsx:581
+#: components_new/common/SmallCartMobileApp.tsx:618
 msgid "K6f7aa"
 msgstr "Get code"
 
-#: components_new/auth/SignInModalApp.tsx:414
+#: components_new/auth/SignInModalApp.tsx:612
 msgid "AYsWBj"
 msgstr "Code sent to number"
 
-#: components_new/auth/SignInModalApp.tsx:429
-#: components_new/cart/CartApp.tsx:508
-#: components_new/common/SmallCartMobileApp.tsx:382
+#: components_new/auth/SignInModalApp.tsx:627
+#: components_new/cart/CartApp.tsx:494
+#: components_new/common/SmallCartMobileApp.tsx:511
 #: components_new/header/SignInButtonApp.tsx:53
 msgid "oU4rxk"
 msgstr "Sign in"
 
-#: components_new/auth/SignInModalApp.tsx:439
+#: components_new/auth/SignInModalApp.tsx:637
 msgid "kOs//D"
 msgstr "Resend code in"
 
-#: components_new/auth/SignInModalApp.tsx:440
+#: components_new/auth/SignInModalApp.tsx:638
 msgid "hPZJnP"
 msgstr "Resend code"
 
-#: components_new/cart/CartApp.tsx:498
+#: components_new/cart/CartApp.tsx:484
 msgid "dW/7Kf"
 msgstr "Sign in to your account"
 
-#: components_new/cart/CartApp.tsx:501
+#: components_new/cart/CartApp.tsx:487
 msgid "uhOXf0"
 msgstr "Please sign in to place an order"
 
-#: components_new/cart/CartApp.tsx:527
-#: components_new/common/SmallCartApp.tsx:215
+#: components_new/cart/CartApp.tsx:513
+#: components_new/common/SmallCartApp.tsx:188
 #: components_new/header/HeaderMiniCartApp.tsx:206
 msgid "Lj6qSg"
 msgstr "Cart is empty"
 
-#: components_new/cart/CartApp.tsx:529
-#: components_new/common/SmallCartApp.tsx:216
+#: components_new/cart/CartApp.tsx:515
+#: components_new/common/SmallCartApp.tsx:189
 #: components_new/header/HeaderMiniCartApp.tsx:209
 msgid "V5Ibqh"
 msgstr "Choose a pizza"
 
-#: components_new/cart/CartApp.tsx:535
-#: components_new/cart/CartApp.tsx:913
+#: components_new/cart/CartApp.tsx:521
+#: components_new/cart/CartApp.tsx:912
 msgid "595aPR"
 msgstr "Back to menu"
 
-#: components_new/cart/CartApp.tsx:571
+#: components_new/cart/CartApp.tsx:557
 msgid "xXuBfJ"
 msgstr "We are closed right now"
 
-#: components_new/cart/CartApp.tsx:574
+#: components_new/cart/CartApp.tsx:560
 msgid "5i7QXD"
 msgstr "You can place an order during business hours. Your cart will be saved."
 
-#: components_new/cart/CartApp.tsx:579
+#: components_new/cart/CartApp.tsx:565
 msgid "1nDsuM"
 msgstr "Business hours"
 
-#: components_new/cart/CartApp.tsx:593
-#: components_new/common/SmallCartApp.tsx:197
+#: components_new/cart/CartApp.tsx:579
+#: components_new/common/SmallCartApp.tsx:170
 #: components_new/header/HeaderMiniCartApp.tsx:174
 #: components_new/mobile/MobileBottomNavApp.tsx:64
 msgid "Ukms9b"
 msgstr "Cart"
 
-#: components_new/cart/CartApp.tsx:623
+#: components_new/cart/CartApp.tsx:609
 msgid "npyYek"
 msgstr "Clear"
 
-#: components_new/cart/CartApp.tsx:708
+#: components_new/cart/CartApp.tsx:694
 msgid "6CPoX6"
 msgstr "Bonus"
 
-#: components_new/cart/CartApp.tsx:716
+#: components_new/cart/CartApp.tsx:702
 msgid "QZlQya"
 msgstr "Promo"
 
-#: components_new/cart/CartApp.tsx:786
+#: components_new/cart/CartApp.tsx:772
 msgid "mHUlgT"
 msgstr "You may also like"
 
-#: components_new/cart/CartApp.tsx:831
+#: components_new/cart/CartApp.tsx:817
 msgid "G5xn1F"
 msgstr "Your order"
 
-#: components_new/cart/CartApp.tsx:836
+#: components_new/cart/CartApp.tsx:822
 msgid "f0SWKw"
 msgstr "Items"
 
-#: components_new/cart/CartApp.tsx:844
+#: components_new/cart/CartApp.tsx:830
 msgid "gXcQyF"
 msgstr "Discount"
 
-#: components_new/cart/CartApp.tsx:851
+#: components_new/cart/CartApp.tsx:837
 #: components_new/header/LocationPickerCore.tsx:347
 #: components_new/HeaderApp.tsx:163
 msgid "3qtFxi"
 msgstr "Delivery"
 
-#: components_new/cart/CartApp.tsx:854
+#: components_new/cart/CartApp.tsx:840
 #: components_new/header/LocationPickerCore.tsx:358
 #: components_new/HeaderApp.tsx:178
 msgid "k9Dt2Z"
 msgstr "Pickup"
 
-#: components_new/cart/CartApp.tsx:855
+#: components_new/cart/CartApp.tsx:841
 msgid "WIL1SZ"
 msgstr "Calculated at checkout"
 
-#: components_new/cart/CartApp.tsx:861
+#: components_new/cart/CartApp.tsx:847
 msgid "x5G3yc"
 msgstr "Total"
 
-#: components_new/cart/CartApp.tsx:875
+#: components_new/cart/CartApp.tsx:859
+msgid "3xn84l"
+msgstr "Minimum delivery order"
+
+#: components_new/cart/CartApp.tsx:861
+msgid "gG2YDs"
+msgstr "Add more for"
+
+#: components_new/cart/CartApp.tsx:874
 #: components_new/header/HeaderMiniCartApp.tsx:339
 msgid "+urzAu"
 msgstr "Place order"
 
-#: components_new/cart/CartApp.tsx:917
+#: components_new/cart/CartApp.tsx:916
 msgid "J4PSYQ"
 msgstr "By submitting your data, you agree to our terms of use"
 
-#: components_new/common/SmallCartMobileApp.tsx:307
+#: components_new/common/SmallCartMobileApp.tsx:436
 msgid "wue03V"
 msgstr "Successfully logged in"
 
-#: components_new/common/SmallCartMobileApp.tsx:317
+#: components_new/common/SmallCartMobileApp.tsx:446
 msgid "eY7wBY"
 msgstr "SMS code"
 
-#: components_new/common/SmallCartMobileApp.tsx:346
+#: components_new/common/SmallCartMobileApp.tsx:475
 msgid "14dq0g"
 msgstr "Get code again"
 
-#: components_new/common/SmallCartMobileApp.tsx:438
+#: components_new/common/SmallCartMobileApp.tsx:567
 msgid "x1g9gC"
 msgstr "Your name"
 
@@ -284,45 +303,45 @@ msgstr "Address:"
 msgid "x1MUPc"
 msgstr "Address"
 
-#: components_new/header/LocationPickerCore.tsx:512
+#: components_new/header/LocationPickerCore.tsx:513
 msgid "2lYwXC"
 msgstr "House"
 
-#: components_new/header/LocationPickerCore.tsx:527
+#: components_new/header/LocationPickerCore.tsx:528
 msgid "PE9WEy"
 msgstr "Apartment"
 
-#: components_new/header/LocationPickerCore.tsx:546
+#: components_new/header/LocationPickerCore.tsx:547
 msgid "bIzegt"
 msgstr "Add entrance and intercom"
 
-#: components_new/header/LocationPickerCore.tsx:576
+#: components_new/header/LocationPickerCore.tsx:577
 msgid "DtOC+U"
 msgstr "Entrance"
 
-#: components_new/header/LocationPickerCore.tsx:591
+#: components_new/header/LocationPickerCore.tsx:592
 msgid "KIMRoB"
 msgstr "Intercom code"
 
-#: components_new/header/LocationPickerCore.tsx:606
+#: components_new/header/LocationPickerCore.tsx:607
 msgid "2ifljK"
 msgstr "Address name. For example, Home, Work..."
 
-#: components_new/header/LocationPickerCore.tsx:656
+#: components_new/header/LocationPickerCore.tsx:657
 msgid "f/Ues8"
 msgstr ""
 
-#: components_new/header/LocationPickerCore.tsx:697
+#: components_new/header/LocationPickerCore.tsx:698
 msgid "NUZRDC"
 msgstr "Choose a restaurant:"
 
-#: components_new/header/LocationPickerCore.tsx:712
-#: components_new/product/ProductDetailContent.tsx:197
-#: components_new/product/ProductDrawerApp.tsx:254
+#: components_new/header/LocationPickerCore.tsx:713
+#: components_new/product/ProductDetailContent.tsx:245
+#: components_new/product/ProductDrawerApp.tsx:291
 msgid "+RxnK3"
 msgstr "Loading..."
 
-#: components_new/header/LocationPickerCore.tsx:813
+#: components_new/header/LocationPickerCore.tsx:814
 msgid "XzVpjf"
 msgstr "Confirm"
 
@@ -394,38 +413,55 @@ msgstr "News"
 msgid "aP09v9"
 msgstr "No news yet"
 
-#: components_new/product/CreateYourPizzaApp.tsx:485
-#: components_new/product/CreateYourPizzaMobileApp.tsx:471
+#: components_new/product/CreateYourPizzaApp.tsx:471
+#: components_new/product/CreateYourPizzaMobileApp.tsx:458
 msgid "FVZBEe"
 msgstr "Build your pizza"
 
-#: components_new/product/CreateYourPizzaApp.tsx:499
-#: components_new/product/CreateYourPizzaMobileApp.tsx:478
+#: components_new/product/CreateYourPizzaApp.tsx:485
+#: components_new/product/CreateYourPizzaMobileApp.tsx:465
 msgid "WRnc7y"
 msgstr "Build pizza"
 
-#: components_new/product/ProductDetailContent.tsx:124
-#: components_new/product/ProductDrawerApp.tsx:179
-msgid "F6q7sS"
+#: components_new/product/ProductDetailContent.tsx:120
+#: components_new/product/ProductDrawerApp.tsx:166
+msgid "e3iM8G"
 msgstr ""
 
-#: components_new/product/ProductDetailContent.tsx:197
-#: components_new/product/ProductDrawerApp.tsx:254
-#: components_new/product/ProductItemNewApp.tsx:815
-#: components_new/product/ProductItemNewApp.tsx:1074
-msgid "JwQa2e"
-msgstr "Add to cart"
-
-#: components_new/product/ProductItemNewApp.tsx:512
-#: components_new/product/ProductItemNewApp.tsx:563
-msgid "zXkVd5"
-msgstr "Add"
-
-#: components_new/product/ProductItemNewApp.tsx:583
+#: components_new/product/ProductDetailContent.tsx:121
+#: components_new/product/ProductDrawerApp.tsx:167
+#: components_new/product/ProductItemNewApp.tsx:565
+#: components_new/product/ProductItemNewApp.tsx:822
 msgid "kazY5+"
 msgstr "Item temporarily unavailable"
 
-#: components_new/product/ProductItemNewApp.tsx:990
+#: components_new/product/ProductDetailContent.tsx:163
+#: components_new/product/ProductDrawerApp.tsx:209
+msgid "F6q7sS"
+msgstr ""
+
+#: components_new/product/ProductDetailContent.tsx:243
+#: components_new/product/ProductDrawerApp.tsx:287
+#: components_new/product/ProductItemNewApp.tsx:606
+#: components_new/product/ProductItemNewApp.tsx:643
+#: components_new/product/ProductItemNewApp.tsx:718
+#: components_new/product/ProductItemNewApp.tsx:830
+msgid "BNa/NS"
+msgstr ""
+
+#: components_new/product/ProductDetailContent.tsx:246
+#: components_new/product/ProductDrawerApp.tsx:291
+#: components_new/product/ProductItemNewApp.tsx:853
+#: components_new/product/ProductItemNewApp.tsx:1116
+msgid "JwQa2e"
+msgstr "Add to cart"
+
+#: components_new/product/ProductItemNewApp.tsx:495
+#: components_new/product/ProductItemNewApp.tsx:546
+msgid "zXkVd5"
+msgstr "Add"
+
+#: components_new/product/ProductItemNewApp.tsx:1032
 msgid "AH6N5n"
 msgstr "Add to pizza"
 

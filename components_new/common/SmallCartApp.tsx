@@ -18,7 +18,7 @@ import { useLocationStore } from '../../lib/stores/location-store'
 import { useUIStore } from '../../lib/stores/ui-store'
 import { pickProductImage } from '@utils/getAssetUrl'
 import { toast } from 'sonner'
-import { isWithinWorkHours } from '../../lib/utils/isWorkTime'
+import { useIsWithinWorkHours } from '../../lib/utils/isWorkTime'
 import { storefrontConfig as configData } from '../../lib/data/storefront-config'
 import SimpleBar from 'simplebar-react'
 import 'simplebar/dist/simplebar.min.css'
@@ -90,13 +90,9 @@ const SmallCartApp: FC<SmallCartProps> = ({ channelName }) => {
     })
   }
 
-  const isWorkTime = useMemo(
-    () =>
-      isWithinWorkHours(
-        configData.workTimeStart,
-        configData.workTimeEnd
-      ),
-    [configData]
+  const isWorkTime = useIsWithinWorkHours(
+    configData.workTimeStart,
+    configData.workTimeEnd
   )
 
   const goToCheckout = (e: any) => {
@@ -118,9 +114,7 @@ const SmallCartApp: FC<SmallCartProps> = ({ channelName }) => {
     if (user) {
       router.push(`/${activeCity.slug}/cart/`)
     } else {
-      router.push(
-        `/${activeCity.slug}?backUrl=/${activeCity.slug}/cart/`
-      )
+      router.push(`/${activeCity.slug}?backUrl=/${activeCity.slug}/cart/`)
       openSignInModal()
     }
   }
@@ -140,7 +134,6 @@ const SmallCartApp: FC<SmallCartProps> = ({ channelName }) => {
     }
     return res
   }, [data])
-
 
   return (
     <div className="mt-2 rounded-[15px] bg-white ">
@@ -210,9 +203,9 @@ const SmallCartApp: FC<SmallCartProps> = ({ channelName }) => {
                               <div className="w-5 absolute left-0">
                                 <div>
                                   <img
-                                    src={
-                                      pickProductImage(lineItem?.variant?.product)
-                                    }
+                                    src={pickProductImage(
+                                      lineItem?.variant?.product
+                                    )}
                                     width="40"
                                     height="40"
                                     className="rounded-full"
@@ -230,9 +223,9 @@ const SmallCartApp: FC<SmallCartProps> = ({ channelName }) => {
                                     }}
                                   >
                                     <img
-                                      src={
-                                        pickProductImage(child.variant?.product)
-                                      }
+                                      src={pickProductImage(
+                                        child.variant?.product
+                                      )}
                                       width="40"
                                       height="40"
                                       className="rounded-full"
@@ -246,9 +239,9 @@ const SmallCartApp: FC<SmallCartProps> = ({ channelName }) => {
                             <div className="h-16 w-16 flex relative">
                               <div className="w-10 relative overflow-hidden">
                                 <img
-                                  src={
-                                    pickProductImage(lineItem?.variant?.product)
-                                  }
+                                  src={pickProductImage(
+                                    lineItem?.variant?.product
+                                  )}
                                   width="60"
                                   height="60"
                                   className="absolute h-full max-w-none"
@@ -257,9 +250,9 @@ const SmallCartApp: FC<SmallCartProps> = ({ channelName }) => {
                               </div>
                               <div className="w-10 relative overflow-hidden">
                                 <img
-                                  src={
-                                    pickProductImage(lineItem?.child[0].variant?.product)
-                                  }
+                                  src={pickProductImage(
+                                    lineItem?.child[0].variant?.product
+                                  )}
                                   width="60"
                                   height="60"
                                   className="absolute h-full max-w-none right-0"
@@ -271,9 +264,7 @@ const SmallCartApp: FC<SmallCartProps> = ({ channelName }) => {
                         ) : (
                           <div className="">
                             <img
-                              src={
-                                pickProductImage(lineItem?.variant?.product)
-                              }
+                              src={pickProductImage(lineItem?.variant?.product)}
                               width={60}
                               height={60}
                               className="rounded-full"
@@ -306,9 +297,7 @@ const SmallCartApp: FC<SmallCartProps> = ({ channelName }) => {
                             <span className="text-yellow">({'Бонус'})</span>
                           )}
                           {lineItem.sale_id && (
-                            <span className="text-yellow">
-                              ({'Акция'})
-                            </span>
+                            <span className="text-yellow">({'Акция'})</span>
                           )}
                           {(() => {
                             const mods = (lineItem.modifiers || []).filter(
@@ -326,8 +315,8 @@ const SmallCartApp: FC<SmallCartProps> = ({ channelName }) => {
                                     {locale === 'uz'
                                       ? m.name_uz
                                       : locale === 'en'
-                                        ? m.name_en
-                                        : m.name_ru || m.name}
+                                      ? m.name_en
+                                      : m.name_ru || m.name}
                                   </span>
                                 ))}
                               </div>
@@ -420,9 +409,7 @@ const SmallCartApp: FC<SmallCartProps> = ({ channelName }) => {
         )}
         {!isEmpty && (
           <div className="flex items-center justify-between">
-            <div className="text-sm text-gray-500">
-              {'Стоимость заказа'}
-            </div>
+            <div className="text-sm text-gray-500">{'Стоимость заказа'}</div>
             <div>
               {data.discountValue > 0 && (
                 <span className="text-xs line-through font-bold text-gray-500">
