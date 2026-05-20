@@ -48,7 +48,7 @@ const SliderCarousel: FC<CarouselProps> = ({ sliders }) => {
   const scrollTo = useCallback((i: number) => emblaApi?.scrollTo(i), [emblaApi])
 
   return (
-    <div className="relative rounded-2xl md:rounded-b-none mx-3 md:mx-auto mt-2 md:mt-0 overflow-hidden md:container">
+    <div className="relative rounded-2xl mx-3 md:mx-auto mt-2 md:mt-0 overflow-hidden md:container">
       <div className="overflow-hidden w-full" ref={emblaRef}>
         <div className="flex w-full touch-pan-y">
           {sliders.map((item: any, index: number) => (

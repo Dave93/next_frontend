@@ -99,7 +99,7 @@ const CategoriesMenu: FC<{ categories: any[]; channelName: string }> = ({
 
   return (
     <div
-      className="hidden md:block sticky z-20 bg-secondary shadow-lg rounded-b-2xl overflow-hidden"
+      className="hidden md:block sticky z-20 bg-secondary shadow-lg rounded-2xl overflow-hidden mt-3"
       style={{ top: 'var(--header-h, 0px)' }}
       id="categoriesMenuSticky"
     >
