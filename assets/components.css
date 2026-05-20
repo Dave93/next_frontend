@@ -13,3 +13,13 @@
     padding-bottom: 0;
   }
 }
+
+/* Desktop hero slide: lock each slide to the native banner aspect ratio
+   (1160 x 320 ≈ 29 / 8) so all slides render at the same height with no
+   cropping. Tailwind 2.2.x has no arbitrary aspect utilities. Mobile keeps
+   the explicit h-[44vw] on the image. */
+@media (min-width: 768px) {
+  .slider-slide {
+    aspect-ratio: 29 / 8;
+  }
+}

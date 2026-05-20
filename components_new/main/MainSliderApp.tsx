@@ -53,7 +53,7 @@ const SliderCarousel: FC<CarouselProps> = ({ sliders }) => {
         <div className="flex w-full touch-pan-y">
           {sliders.map((item: any, index: number) => (
             <div
-              className="relative rounded-[15px] overflow-hidden md:aspect-[29/8]"
+              className="slider-slide relative rounded-[15px] overflow-hidden"
               style={{ flex: '0 0 100%', minWidth: 0 }}
               key={item.id}
             >
