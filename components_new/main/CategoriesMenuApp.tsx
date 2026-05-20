@@ -11,7 +11,8 @@ const scrollToSection = (id: string) => {
     ) || 0
   const navH =
     document.getElementById('categoriesMenuSticky')?.offsetHeight || 56
-  const top = el.getBoundingClientRect().top + window.scrollY - headerH - navH - 8
+  const top =
+    el.getBoundingClientRect().top + window.scrollY - headerH - navH - 8
   window.scrollTo({ top, behavior: 'smooth' })
 }
 
@@ -58,7 +59,10 @@ const CategoriesMenu: FC<{ categories: any[]; channelName: string }> = ({
     const topOffset = headerH + navH + 8
 
     const sections: { id: number; el: HTMLElement }[] = categories
-      .map((c) => ({ id: c.id, el: document.getElementById(`productSection_${c.id}`) }))
+      .map((c) => ({
+        id: c.id,
+        el: document.getElementById(`productSection_${c.id}`),
+      }))
       .filter((s): s is { id: number; el: HTMLElement } => !!s.el)
 
     if (!sections.length) return
@@ -95,7 +99,7 @@ const CategoriesMenu: FC<{ categories: any[]; channelName: string }> = ({
 
   return (
     <div
-      className="hidden md:block sticky z-20 bg-secondary shadow-lg"
+      className="hidden md:block sticky z-20 bg-secondary shadow-lg rounded-b-2xl overflow-hidden"
       style={{ top: 'var(--header-h, 0px)' }}
       id="categoriesMenuSticky"
     >

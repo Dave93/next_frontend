@@ -45,13 +45,10 @@ const SliderCarousel: FC<CarouselProps> = ({ sliders }) => {
 
   const scrollPrev = useCallback(() => emblaApi?.scrollPrev(), [emblaApi])
   const scrollNext = useCallback(() => emblaApi?.scrollNext(), [emblaApi])
-  const scrollTo = useCallback(
-    (i: number) => emblaApi?.scrollTo(i),
-    [emblaApi]
-  )
+  const scrollTo = useCallback((i: number) => emblaApi?.scrollTo(i), [emblaApi])
 
   return (
-    <div className="relative rounded-2xl mx-3 md:mx-auto mt-2 md:mt-0 overflow-hidden md:container">
+    <div className="relative rounded-2xl md:rounded-b-none mx-3 md:mx-auto mt-2 md:mt-0 overflow-hidden md:container">
       <div className="overflow-hidden w-full" ref={emblaRef}>
         <div className="flex w-full touch-pan-y">
           {sliders.map((item: any, index: number) => (
@@ -116,9 +113,7 @@ const SliderCarousel: FC<CarouselProps> = ({ sliders }) => {
                     />
                     <Image
                       src={
-                        item.asset[1]
-                          ? item.asset[1].link
-                          : item.asset[0].link
+                        item.asset[1] ? item.asset[1].link : item.asset[0].link
                       }
                       className="md:hidden w-full h-[44vw] object-cover"
                       loading={index === 0 ? 'eager' : 'lazy'}
