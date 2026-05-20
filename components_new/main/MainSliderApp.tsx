@@ -53,7 +53,7 @@ const SliderCarousel: FC<CarouselProps> = ({ sliders }) => {
         <div className="flex w-full touch-pan-y">
           {sliders.map((item: any, index: number) => (
             <div
-              className="relative rounded-[15px] overflow-hidden"
+              className="relative rounded-[15px] overflow-hidden md:aspect-[29/8]"
               style={{ flex: '0 0 100%', minWidth: 0 }}
               key={item.id}
             >
@@ -63,7 +63,7 @@ const SliderCarousel: FC<CarouselProps> = ({ sliders }) => {
                     <>
                       <Image
                         src={item.asset[0].link}
-                        className="hidden md:block w-full h-[400px] object-cover"
+                        className="hidden md:block w-full h-full object-cover"
                         loading={index === 0 ? 'eager' : 'lazy'}
                         priority={index === 0}
                         fetchPriority={index === 0 ? 'high' : 'auto'}
@@ -103,7 +103,7 @@ const SliderCarousel: FC<CarouselProps> = ({ sliders }) => {
                   <>
                     <Image
                       src={item.asset[0].link}
-                      className="hidden md:block w-full h-[400px] object-cover"
+                      className="hidden md:block w-full h-full object-cover"
                       loading={index === 0 ? 'eager' : 'lazy'}
                       priority={index === 0}
                       width={1200}
