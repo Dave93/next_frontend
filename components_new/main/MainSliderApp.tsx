@@ -63,7 +63,7 @@ const SliderCarousel: FC<CarouselProps> = ({ sliders }) => {
                     <>
                       <Image
                         src={item.asset[0].link}
-                        className="hidden md:block w-full max-h-[400px] object-cover"
+                        className="hidden md:block w-full h-[400px] object-cover"
                         loading={index === 0 ? 'eager' : 'lazy'}
                         priority={index === 0}
                         fetchPriority={index === 0 ? 'high' : 'auto'}
@@ -103,7 +103,7 @@ const SliderCarousel: FC<CarouselProps> = ({ sliders }) => {
                   <>
                     <Image
                       src={item.asset[0].link}
-                      className="hidden md:block w-full max-h-[400px] object-cover"
+                      className="hidden md:block w-full h-[400px] object-cover"
                       loading={index === 0 ? 'eager' : 'lazy'}
                       priority={index === 0}
                       width={1200}
