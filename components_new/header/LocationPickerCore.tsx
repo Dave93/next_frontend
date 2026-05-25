@@ -701,13 +701,13 @@ const LocationPickerCore: FC<Props> = ({
             className="grid gap-2"
             style={{
               gridTemplateColumns: isMd
-                ? 'repeat(4, minmax(0, 1fr))'
+                ? 'repeat(3, minmax(0, 1fr))'
                 : '1fr',
             }}
           >
             {pickupPoints.length === 0 && (
               <div
-                className="col-span-1 sm:col-span-2 md:col-span-4 text-center py-8"
+                className="col-span-1 sm:col-span-2 md:col-span-3 text-center py-8"
                 style={{ color: GRAY_400 }}
               >
                 {t('Загрузка...')}

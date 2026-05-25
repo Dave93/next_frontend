@@ -1613,7 +1613,7 @@ const OrdersApp: FC<OrdersProps> = ({ channelName, isMobile = false }) => {
             no two-step pick. Per Baymard 2025 checkout research, an "all
             methods visible" pattern lifts conversion versus tab-gated
             ones because the user immediately sees the option they want. */}
-        <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
+        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3">
           {/* Cash card. Icon: a stylised wallet/banknote (no dollar sign,
               no currency symbol — keeps it neutral so customers don't
               think they're being charged in USD). */}
