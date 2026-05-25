@@ -1342,7 +1342,12 @@ const OrdersApp: FC<OrdersProps> = ({ channelName, isMobile = false }) => {
   }
 
   return (
-    <div className="orders-root mx-5 md:mx-0 pt-1 md:pt-0 pb-1">
+    <div className="orders-root mx-5 md:mx-0 md:max-w-6xl md:mx-auto pt-1 md:pt-0 pb-1">
+      {/* Dodo-style two-column desktop: form on the left, sticky order
+          summary on the right. Collapses to one column below md (where
+          MobileOrdersApp takes over anyway). */}
+      <div className="md:flex md:gap-6 md:items-start">
+        <div className="md:flex-1 min-w-0 order-form-col">
       {/* Contacts — always visible. Even logged-in users should be able
           to verify / edit name, phone, and email before placing the order
           (Baymard's "always show editable contact" rule). */}
@@ -1887,244 +1892,6 @@ const OrdersApp: FC<OrdersProps> = ({ channelName, isMobile = false }) => {
           )}
         </Disclosure>
       </div>
-      {/* Order items — visible on every viewport. Hiding the line items
-          on mobile forced the customer to trust the cart from memory. */}
-      <div className="w-full bg-white my-5 rounded-2xl order-summary-section">
-        <div className="flex items-center justify-between mb-4 max-w-3xl">
-          <div className="text-lg font-bold">{tr('order_order_list')}</div>
-          {!isEmpty && cartData && cartData.lineItems.length > 0 && (
-            <span className="inline-flex items-center justify-center min-w-[1.75rem] h-7 px-2 rounded-full bg-gray-100 text-sm font-bold text-gray-500">
-              {cartData.lineItems.length}
-            </span>
-          )}
-        </div>
-        {!isEmpty &&
-          cartData &&
-          cartData?.lineItems.map((lineItem: any) => (
-            <div
-              className={`flex items-center gap-4 border-b border-gray-100 py-4 max-w-3xl`}
-              key={lineItem.id}
-            >
-              {lineItem.child &&
-              lineItem.child.length &&
-              lineItem.child[0].variant?.product?.id !=
-                lineItem?.variant?.product?.box_id ? (
-                <div
-                  className={`${
-                    isProductInStop.includes(lineItem.id) ? 'opacity-25' : ''
-                  } w-16 h-16 md:w-20 md:h-20 flex rounded-2xl overflow-hidden flex-shrink-0 bg-gray-50`}
-                >
-                  <div className="w-1/2 relative overflow-hidden">
-                    <img
-                      src={getAssetUrl(lineItem?.variant?.product?.assets)}
-                      className="absolute h-full max-w-none left-0"
-                      alt=""
-                    />
-                  </div>
-                  <div className="w-1/2 relative overflow-hidden">
-                    <img
-                      src={getAssetUrl(
-                        lineItem?.child[0].variant?.product?.assets
-                      )}
-                      className="absolute h-full max-w-none right-0"
-                      alt=""
-                    />
-                  </div>
-                </div>
-              ) : (
-                <div
-                  className={`${
-                    isProductInStop.includes(lineItem.id) ? 'opacity-25' : ''
-                  } flex-shrink-0`}
-                >
-                  <img
-                    src={getAssetUrl(lineItem?.variant?.product?.assets)}
-                    width={80}
-                    height={80}
-                    className="w-16 h-16 md:w-20 md:h-20 rounded-2xl object-contain bg-gray-50 p-1.5"
-                    alt=""
-                  />
-                </div>
-              )}
-              <div
-                className={`${
-                  isProductInStop.includes(lineItem.id) ? 'opacity-25' : ''
-                } flex-1 min-w-0 font-semibold md:text-lg text-base text-left space-y-1.5`}
-              >
-                {lineItem.child && lineItem.child.length == 1 ? (
-                  `${
-                    lineItem?.variant?.product?.attribute_data?.name?.[
-                      channelName
-                    ]?.[locale || 'ru'] ||
-                    lineItem?.variant?.product?.attribute_data?.name?.[
-                      channelName
-                    ]?.['ru'] ||
-                    ''
-                  } + ${lineItem?.child
-                    .filter(
-                      (v: any) =>
-                        lineItem?.variant?.product?.box_id !=
-                        v?.variant?.product?.id
-                    )
-                    .map(
-                      (v: any) =>
-                        v?.variant?.product?.attribute_data?.name?.[
-                          channelName
-                        ]?.[locale || 'ru'] ||
-                        v?.variant?.product?.attribute_data?.name?.[
-                          channelName
-                        ]?.['ru'] ||
-                        ''
-                    )
-                    .join(' + ')}`
-                ) : (
-                  <div
-                    className={
-                      isProductInStop.includes(lineItem.id) ? 'opacity-25' : ''
-                    }
-                  >
-                    {isProductInStop.includes(lineItem.id)
-                      ? tr('stop_product')
-                      : lineItem?.variant?.product?.attribute_data?.name?.[
-                          channelName
-                        ]?.[locale || 'ru'] ||
-                        lineItem?.variant?.product?.attribute_data?.name?.[
-                          channelName
-                        ]?.['ru'] ||
-                        ''}
-                  </div>
-                )}
-                {(lineItem.bonus_id ||
-                  lineItem.sale_id ||
-                  (lineItem.modifiers &&
-                    lineItem.modifiers.some((mod: any) => mod.price > 0))) && (
-                  <div className="flex flex-wrap gap-1.5">
-                    {lineItem.bonus_id && (
-                      <span className="inline-flex items-center bg-yellow text-white rounded-full px-2.5 py-0.5 text-xs font-semibold">
-                        {tr('bonus')}
-                      </span>
-                    )}
-                    {lineItem.sale_id && (
-                      <span className="inline-flex items-center bg-yellow text-white rounded-full px-2.5 py-0.5 text-xs font-semibold">
-                        {tr('sale_label')}
-                      </span>
-                    )}
-                    {lineItem.modifiers &&
-                      lineItem.modifiers
-                        .filter((mod: any) => mod.price > 0)
-                        .map((mod: any) => (
-                          <span
-                            className="inline-flex items-center bg-gray-100 text-gray-600 rounded-full px-2.5 py-0.5 text-xs font-medium"
-                            key={mod.id}
-                          >
-                            {locale == 'uz'
-                              ? mod.name_uz
-                              : locale == 'ru'
-                              ? mod.name
-                              : locale == 'en'
-                              ? mod.name_en
-                              : ''}
-                          </span>
-                        ))}
-                  </div>
-                )}
-              </div>
-              {/* {isProductInStop.includes(lineItem.id) && (
-                <div className="absolute text-center left-0 right-0 md:text-yellow  text-opacity-100 text-2xl w-40 md:w-max m-auto leading-4">
-                  {tr('stop_product')}
-                </div>
-              )} */}
-
-              <div
-                className={`${
-                  isProductInStop.includes(lineItem.id) ? 'opacity-25' : ''
-                } flex flex-col items-end flex-shrink-0 text-right`}
-              >
-                {lineItem.total > 0 && (
-                  <span className="text-xs font-medium text-gray-400 mb-0.5">
-                    {lineItem.quantity} ×
-                  </span>
-                )}
-                <span className="md:text-lg text-base font-bold whitespace-nowrap">
-                  {currency(lineItem.total, {
-                    pattern: '# !',
-                    separator: ' ',
-                    decimal: '.',
-                    symbol: `${
-                      locale == 'uz'
-                        ? "so'm"
-                        : locale == 'ru'
-                        ? 'сум'
-                        : locale == 'en'
-                        ? 'sum'
-                        : ''
-                    }`,
-                    precision: 0,
-                  }).format()}
-                </span>
-              </div>
-            </div>
-          ))}
-        {!isEmpty && (
-          <div>
-            <div
-              className={`flex justify-between items-center mt-6 max-w-3xl ${
-                isMobile ? 'hidden' : ''
-              }`}
-            >
-              <div className="font-bold text-xl text-gray-500">
-                {tr('basket_order_price')}
-              </div>
-              <div className="text-2xl font-extrabold">
-                {currency(totalPrice, {
-                  pattern: '# !',
-                  separator: ' ',
-                  decimal: '.',
-                  symbol: `${
-                    locale == 'uz'
-                      ? "so'm"
-                      : locale == 'ru'
-                      ? 'сум'
-                      : locale == 'en'
-                      ? 'sum'
-                      : ''
-                  }`,
-                  precision: 0,
-                }).format()}
-              </div>
-            </div>
-            <div className="flex items-center mt-8 text-2xl">
-              <div className="font-bold">{tr('cutlery_and_napkins')}</div>
-              <label htmlFor="N" className="ml-12">
-                <div className="font-bold mx-2">{tr('no')}</div>
-              </label>
-              <input
-                type="radio"
-                value={'N'}
-                checked={cutlery === 'N'}
-                className={` ${
-                  cutlery ? 'text-yellow' : 'bg-gray-200'
-                } border-2 border-yellow form-checkbox rounded-md text-yellow outline-none focus:outline-none active:outline-none focus:border-yellow`}
-                onChange={cutleryHandler}
-                id="N"
-              />
-              <label htmlFor="Y">
-                <div className="font-bold mx-2">{tr('yes')}</div>
-              </label>
-              <input
-                type="radio"
-                value={'Y'}
-                checked={cutlery === 'Y'}
-                className={` ${
-                  cutlery ? 'text-yellow' : 'bg-gray-200'
-                } border-2 border-yellow form-checkbox rounded-md text-yellow outline-none focus:outline-none active:outline-none focus:border-yellow`}
-                onChange={cutleryHandler}
-                id="Y"
-              />
-            </div>
-          </div>
-        )}
-      </div>
       {/* Mobile cutlery */}
       {isMobile && !isEmpty && (
         <div className="bg-white px-4 py-3 flex items-center justify-between border-b border-gray-100">
@@ -2326,6 +2093,213 @@ const OrdersApp: FC<OrdersProps> = ({ channelName, isMobile = false }) => {
               </>
             )}
           </button>
+        </div>
+      </div>
+        </div>
+        <div className="w-full md:w-80 lg:w-96 md:flex-shrink-0 md:sticky md:top-4 order-summary-col">
+          <div className="w-full bg-white my-5 rounded-2xl order-summary-section">
+            <div className="text-lg font-bold mb-4">
+              {tr('order_order_list')}
+            </div>
+            {!isEmpty &&
+              cartData &&
+              cartData?.lineItems.map((lineItem: any) => (
+                <div
+                  className={`${
+                    isProductInStop.includes(lineItem.id) ? 'opacity-25 ' : ''
+                  }py-3 border-b border-gray-100`}
+                  key={lineItem.id}
+                >
+                  <div className="flex items-start justify-between gap-3">
+                    <div className="font-semibold text-base leading-snug min-w-0">
+                      {lineItem.child && lineItem.child.length == 1 ? (
+                        `${
+                          lineItem?.variant?.product?.attribute_data?.name?.[
+                            channelName
+                          ]?.[locale || 'ru'] ||
+                          lineItem?.variant?.product?.attribute_data?.name?.[
+                            channelName
+                          ]?.['ru'] ||
+                          ''
+                        } + ${lineItem?.child
+                          .filter(
+                            (v: any) =>
+                              lineItem?.variant?.product?.box_id !=
+                              v?.variant?.product?.id
+                          )
+                          .map(
+                            (v: any) =>
+                              v?.variant?.product?.attribute_data?.name?.[
+                                channelName
+                              ]?.[locale || 'ru'] ||
+                              v?.variant?.product?.attribute_data?.name?.[
+                                channelName
+                              ]?.['ru'] ||
+                              ''
+                          )
+                          .join(' + ')}`
+                      ) : isProductInStop.includes(lineItem.id) ? (
+                        tr('stop_product')
+                      ) : (
+                        lineItem?.variant?.product?.attribute_data?.name?.[
+                          channelName
+                        ]?.[locale || 'ru'] ||
+                        lineItem?.variant?.product?.attribute_data?.name?.[
+                          channelName
+                        ]?.['ru'] ||
+                        ''
+                      )}
+                    </div>
+                    <div className="flex flex-col items-end flex-shrink-0">
+                      {lineItem.total > 0 && lineItem.quantity > 1 && (
+                        <span className="text-xs font-medium text-gray-400 mb-0.5">
+                          {lineItem.quantity} ×
+                        </span>
+                      )}
+                      <span className="font-bold whitespace-nowrap">
+                        {currency(lineItem.total, {
+                          pattern: '# !',
+                          separator: ' ',
+                          decimal: '.',
+                          symbol: `${
+                            locale == 'uz'
+                              ? "so'm"
+                              : locale == 'ru'
+                              ? 'сум'
+                              : locale == 'en'
+                              ? 'sum'
+                              : ''
+                          }`,
+                          precision: 0,
+                        }).format()}
+                      </span>
+                    </div>
+                  </div>
+                  {(lineItem.bonus_id ||
+                    lineItem.sale_id ||
+                    (lineItem.modifiers &&
+                      lineItem.modifiers.some((m: any) => m.price > 0))) && (
+                    <div className="mt-1.5 flex flex-wrap gap-1.5">
+                      {lineItem.bonus_id && (
+                        <span className="inline-flex items-center bg-yellow text-white rounded-full px-2.5 py-0.5 text-xs font-semibold">
+                          {tr('bonus')}
+                        </span>
+                      )}
+                      {lineItem.sale_id && (
+                        <span className="inline-flex items-center bg-yellow text-white rounded-full px-2.5 py-0.5 text-xs font-semibold">
+                          {tr('sale_label')}
+                        </span>
+                      )}
+                      {lineItem.modifiers &&
+                        lineItem.modifiers
+                          .filter((m: any) => m.price > 0)
+                          .map((m: any) => (
+                            <span
+                              className="inline-flex items-center bg-gray-100 text-gray-600 rounded-full px-2.5 py-0.5 text-xs font-medium"
+                              key={m.id}
+                            >
+                              {locale == 'uz'
+                                ? m.name_uz
+                                : locale == 'ru'
+                                ? m.name
+                                : locale == 'en'
+                                ? m.name_en
+                                : ''}
+                            </span>
+                          ))}
+                    </div>
+                  )}
+                </div>
+              ))}
+            {!isEmpty && cartData && (
+              <>
+                <div className="flex items-center justify-between mt-4 text-sm text-gray-500">
+                  <span>
+                    {cartData.lineItems.length}{' '}
+                    {locale == 'uz'
+                      ? 'ta mahsulot'
+                      : locale == 'en'
+                      ? 'items'
+                      : 'товаров'}
+                  </span>
+                  <span className="font-medium text-gray-700 whitespace-nowrap">
+                    {currency(totalPrice, {
+                      pattern: '# !',
+                      separator: ' ',
+                      decimal: '.',
+                      symbol: `${
+                        locale == 'uz'
+                          ? "so'm"
+                          : locale == 'ru'
+                          ? 'сум'
+                          : locale == 'en'
+                          ? 'sum'
+                          : ''
+                      }`,
+                      precision: 0,
+                    }).format()}
+                  </span>
+                </div>
+                <div className="flex items-center justify-between mt-4 pt-4 border-t border-gray-100">
+                  <span className="font-bold text-lg">
+                    {tr('basket_order_price')}
+                  </span>
+                  <span className="font-extrabold text-xl whitespace-nowrap">
+                    {currency(totalPrice, {
+                      pattern: '# !',
+                      separator: ' ',
+                      decimal: '.',
+                      symbol: `${
+                        locale == 'uz'
+                          ? "so'm"
+                          : locale == 'ru'
+                          ? 'сум'
+                          : locale == 'en'
+                          ? 'sum'
+                          : ''
+                      }`,
+                      precision: 0,
+                    }).format()}
+                  </span>
+                </div>
+                <div className="flex items-center gap-3 mt-5">
+                  <span className="font-semibold">
+                    {tr('cutlery_and_napkins')}
+                  </span>
+                  <div className="flex items-center gap-3 ml-auto">
+                    <label
+                      htmlFor="N"
+                      className="flex items-center gap-1 cursor-pointer"
+                    >
+                      <input
+                        type="radio"
+                        value={'N'}
+                        checked={cutlery === 'N'}
+                        className="border-2 border-yellow form-checkbox rounded-md text-yellow outline-none focus:outline-none active:outline-none focus:border-yellow"
+                        onChange={cutleryHandler}
+                        id="N"
+                      />
+                      <span className="font-medium">{tr('no')}</span>
+                    </label>
+                    <label
+                      htmlFor="Y"
+                      className="flex items-center gap-1 cursor-pointer"
+                    >
+                      <input
+                        type="radio"
+                        value={'Y'}
+                        checked={cutlery === 'Y'}
+                        className="border-2 border-yellow form-checkbox rounded-md text-yellow outline-none focus:outline-none active:outline-none focus:border-yellow"
+                        onChange={cutleryHandler}
+                        id="Y"
+                      />
+                      <span className="font-medium">{tr('yes')}</span>
+                    </label>
+                  </div>
+                </div>
+              </>
+            )}
+          </div>
         </div>
       </div>
       <Transition appear show={isPhoneConfirmOpen}>
