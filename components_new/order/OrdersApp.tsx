@@ -1890,7 +1890,7 @@ const OrdersApp: FC<OrdersProps> = ({ channelName, isMobile = false }) => {
       {/* Order items — visible on every viewport. Hiding the line items
           on mobile forced the customer to trust the cart from memory. */}
       <div className="w-full bg-white my-5 rounded-2xl order-summary-section">
-        <div className="flex items-center justify-between mb-4">
+        <div className="flex items-center justify-between mb-4 max-w-3xl">
           <div className="text-lg font-bold">{tr('order_order_list')}</div>
           {!isEmpty && cartData && cartData.lineItems.length > 0 && (
             <span className="inline-flex items-center justify-center min-w-[1.75rem] h-7 px-2 rounded-full bg-gray-100 text-sm font-bold text-gray-500">
@@ -1902,7 +1902,7 @@ const OrdersApp: FC<OrdersProps> = ({ channelName, isMobile = false }) => {
           cartData &&
           cartData?.lineItems.map((lineItem: any) => (
             <div
-              className={`flex items-center gap-4 border-b border-gray-100 py-4`}
+              className={`flex items-center gap-4 border-b border-gray-100 py-4 max-w-3xl`}
               key={lineItem.id}
             >
               {lineItem.child &&
@@ -1912,7 +1912,7 @@ const OrdersApp: FC<OrdersProps> = ({ channelName, isMobile = false }) => {
                 <div
                   className={`${
                     isProductInStop.includes(lineItem.id) ? 'opacity-25' : ''
-                  } w-16 h-16 md:w-20 md:h-20 flex rounded-full overflow-hidden flex-shrink-0 bg-gray-50 ring-1 ring-gray-100`}
+                  } w-16 h-16 md:w-20 md:h-20 flex rounded-2xl overflow-hidden flex-shrink-0 bg-gray-50`}
                 >
                   <div className="w-1/2 relative overflow-hidden">
                     <img
@@ -1941,7 +1941,7 @@ const OrdersApp: FC<OrdersProps> = ({ channelName, isMobile = false }) => {
                     src={getAssetUrl(lineItem?.variant?.product?.assets)}
                     width={80}
                     height={80}
-                    className="w-16 h-16 md:w-20 md:h-20 rounded-full object-cover bg-gray-50 ring-1 ring-gray-100"
+                    className="w-16 h-16 md:w-20 md:h-20 rounded-2xl object-contain bg-gray-50 p-1.5"
                     alt=""
                   />
                 </div>
@@ -2068,7 +2068,7 @@ const OrdersApp: FC<OrdersProps> = ({ channelName, isMobile = false }) => {
         {!isEmpty && (
           <div>
             <div
-              className={`flex justify-between items-center mt-6 ${
+              className={`flex justify-between items-center mt-6 max-w-3xl ${
                 isMobile ? 'hidden' : ''
               }`}
             >
