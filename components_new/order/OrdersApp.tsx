@@ -2097,7 +2097,7 @@ const OrdersApp: FC<OrdersProps> = ({ channelName, isMobile = false }) => {
       </div>
         </div>
         <div className="w-full md:w-80 lg:w-96 md:flex-shrink-0 md:sticky md:top-28 order-summary-col">
-          <div className="w-full bg-white my-5 rounded-2xl order-summary-section">
+          <div className="w-full bg-white my-5 rounded-2xl border border-gray-100 shadow-md p-5 md:p-6 order-summary-section">
             <div className="text-lg font-bold mb-4">
               {tr('order_order_list')}
             </div>
