@@ -1890,12 +1890,19 @@ const OrdersApp: FC<OrdersProps> = ({ channelName, isMobile = false }) => {
       {/* Order items — visible on every viewport. Hiding the line items
           on mobile forced the customer to trust the cart from memory. */}
       <div className="w-full bg-white my-5 rounded-2xl order-summary-section">
-        <div className="text-lg mb-5 font-bold">{tr('order_order_list')}</div>
+        <div className="flex items-center justify-between mb-4">
+          <div className="text-lg font-bold">{tr('order_order_list')}</div>
+          {!isEmpty && cartData && cartData.lineItems.length > 0 && (
+            <span className="inline-flex items-center justify-center min-w-[1.75rem] h-7 px-2 rounded-full bg-gray-100 text-sm font-bold text-gray-500">
+              {cartData.lineItems.length}
+            </span>
+          )}
+        </div>
         {!isEmpty &&
           cartData &&
           cartData?.lineItems.map((lineItem: any) => (
             <div
-              className={`flex justify-between items-center border-b py-2`}
+              className={`flex items-center gap-4 border-b border-gray-100 py-4`}
               key={lineItem.id}
             >
               {lineItem.child &&
@@ -1905,7 +1912,7 @@ const OrdersApp: FC<OrdersProps> = ({ channelName, isMobile = false }) => {
                 <div
                   className={`${
                     isProductInStop.includes(lineItem.id) ? 'opacity-25' : ''
-                  } w-20 h-20 flex rounded-full overflow-hidden flex-shrink-0`}
+                  } w-16 h-16 md:w-20 md:h-20 flex rounded-full overflow-hidden flex-shrink-0 bg-gray-50 ring-1 ring-gray-100`}
                 >
                   <div className="w-1/2 relative overflow-hidden">
                     <img
@@ -1928,13 +1935,13 @@ const OrdersApp: FC<OrdersProps> = ({ channelName, isMobile = false }) => {
                 <div
                   className={`${
                     isProductInStop.includes(lineItem.id) ? 'opacity-25' : ''
-                  } flex items-center`}
+                  } flex-shrink-0`}
                 >
                   <img
                     src={getAssetUrl(lineItem?.variant?.product?.assets)}
                     width={80}
                     height={80}
-                    className="rounded-full object-cover"
+                    className="w-16 h-16 md:w-20 md:h-20 rounded-full object-cover bg-gray-50 ring-1 ring-gray-100"
                     alt=""
                   />
                 </div>
@@ -1942,7 +1949,7 @@ const OrdersApp: FC<OrdersProps> = ({ channelName, isMobile = false }) => {
               <div
                 className={`${
                   isProductInStop.includes(lineItem.id) ? 'opacity-25' : ''
-                }font-bold md:text-xl text-base space-y-2 text-center  w-1/3`}
+                } flex-1 min-w-0 font-semibold md:text-lg text-base text-left space-y-1.5`}
               >
                 {lineItem.child && lineItem.child.length == 1 ? (
                   `${
@@ -1987,29 +1994,40 @@ const OrdersApp: FC<OrdersProps> = ({ channelName, isMobile = false }) => {
                         ''}
                   </div>
                 )}
-                {lineItem.bonus_id && (
-                  <span className="text-yellow">({tr('bonus')})</span>
+                {(lineItem.bonus_id ||
+                  lineItem.sale_id ||
+                  (lineItem.modifiers &&
+                    lineItem.modifiers.some((mod: any) => mod.price > 0))) && (
+                  <div className="flex flex-wrap gap-1.5">
+                    {lineItem.bonus_id && (
+                      <span className="inline-flex items-center bg-yellow text-white rounded-full px-2.5 py-0.5 text-xs font-semibold">
+                        {tr('bonus')}
+                      </span>
+                    )}
+                    {lineItem.sale_id && (
+                      <span className="inline-flex items-center bg-yellow text-white rounded-full px-2.5 py-0.5 text-xs font-semibold">
+                        {tr('sale_label')}
+                      </span>
+                    )}
+                    {lineItem.modifiers &&
+                      lineItem.modifiers
+                        .filter((mod: any) => mod.price > 0)
+                        .map((mod: any) => (
+                          <span
+                            className="inline-flex items-center bg-gray-100 text-gray-600 rounded-full px-2.5 py-0.5 text-xs font-medium"
+                            key={mod.id}
+                          >
+                            {locale == 'uz'
+                              ? mod.name_uz
+                              : locale == 'ru'
+                              ? mod.name
+                              : locale == 'en'
+                              ? mod.name_en
+                              : ''}
+                          </span>
+                        ))}
+                  </div>
                 )}
-                {lineItem.sale_id && (
-                  <span className="text-yellow">({tr('sale_label')})</span>
-                )}
-                {lineItem.modifiers &&
-                  lineItem.modifiers
-                    .filter((mod: any) => mod.price > 0)
-                    .map((mod: any) => (
-                      <div
-                        className="bg-yellow rounded-full px-2 py-1  text-xs text-white"
-                        key={mod.id}
-                      >
-                        {locale == 'uz'
-                          ? mod.name_uz
-                          : locale == 'ru'
-                          ? mod.name
-                          : locale == 'en'
-                          ? mod.name_en
-                          : ''}
-                      </div>
-                    ))}
               </div>
               {/* {isProductInStop.includes(lineItem.id) && (
                 <div className="absolute text-center left-0 right-0 md:text-yellow  text-opacity-100 text-2xl w-40 md:w-max m-auto leading-4">
@@ -2020,10 +2038,15 @@ const OrdersApp: FC<OrdersProps> = ({ channelName, isMobile = false }) => {
               <div
                 className={`${
                   isProductInStop.includes(lineItem.id) ? 'opacity-25' : ''
-                } md:text-xl text-base`}
+                } flex flex-col items-end flex-shrink-0 text-right`}
               >
-                {(lineItem.total > 0 ? lineItem.quantity + ' X ' : '') +
-                  currency(lineItem.total, {
+                {lineItem.total > 0 && (
+                  <span className="text-xs font-medium text-gray-400 mb-0.5">
+                    {lineItem.quantity} ×
+                  </span>
+                )}
+                <span className="md:text-lg text-base font-bold whitespace-nowrap">
+                  {currency(lineItem.total, {
                     pattern: '# !',
                     separator: ' ',
                     decimal: '.',
@@ -2038,22 +2061,21 @@ const OrdersApp: FC<OrdersProps> = ({ channelName, isMobile = false }) => {
                     }`,
                     precision: 0,
                   }).format()}
+                </span>
               </div>
             </div>
           ))}
         {!isEmpty && (
           <div>
             <div
-              className={`flex justify-between items-center mt-8 ${
+              className={`flex justify-between items-center mt-6 ${
                 isMobile ? 'hidden' : ''
               }`}
             >
-              <div>
-                <div className="font-bold text-xl mb-2">
-                  {tr('basket_order_price')}
-                </div>
+              <div className="font-bold text-xl text-gray-500">
+                {tr('basket_order_price')}
               </div>
-              <div className="text-2xl font-bold">
+              <div className="text-2xl font-extrabold">
                 {currency(totalPrice, {
                   pattern: '# !',
                   separator: ' ',
