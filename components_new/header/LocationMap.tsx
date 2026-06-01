@@ -123,6 +123,8 @@ const LocationMap: FC<Props> = ({ center, coords, onPick, height = 280 }) => {
         overflow: 'hidden',
         border: '1px solid #E5E7EB',
         background: '#F3F4F6',
+        position: 'relative',
+        zIndex: 0,
       }}
     />
   )
