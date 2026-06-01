@@ -262,12 +262,12 @@ const SmallCartApp: FC<SmallCartProps> = ({ channelName }) => {
                             </div>
                           )
                         ) : (
-                          <div className="">
+                          <div className="w-14 h-14 flex items-center justify-center overflow-hidden">
                             <img
                               src={pickProductImage(lineItem?.variant?.product)}
                               width={60}
                               height={60}
-                              className="rounded-full"
+                              className="max-w-full max-h-full object-contain"
                               alt=""
                             />
                           </div>
