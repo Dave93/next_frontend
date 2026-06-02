@@ -3,31 +3,21 @@ import { getLocale } from 'next-intl/server'
 import { storefrontConfig } from '../../../lib/data/storefront-config'
 import ContactsApp from '../../../components_new/contacts/ContactsApp'
 import BreadcrumbsJsonLd from '../../../components_new/seo/BreadcrumbsJsonLd'
-import { crumbLabel, localizedPath } from '../../../lib/seo/alternates'
+import {
+  crumbLabel,
+  localizedPath,
+  staticPageAlternates,
+} from '../../../lib/seo/alternates'
 import { getMetaLocale, tr } from '../../../lib/seo/meta-i18n'
 
 type Params = { city: string }
 
-export async function generateMetadata({
-  params,
-}: {
-  params: Promise<Params>
-}): Promise<Metadata> {
-  const { city } = await params
-  const base = 'https://choparpizza.uz'
+export async function generateMetadata(): Promise<Metadata> {
   const locale = await getMetaLocale()
   return {
     title: tr('contacts', locale),
     description: tr('contactsDesc', locale),
-    alternates: {
-      canonical: `${base}/${city}/contacts`,
-      languages: {
-        ru: `${base}/${city}/contacts`,
-        uz: `${base}/uz/${city}/contacts`,
-        en: `${base}/en/${city}/contacts`,
-        'x-default': `${base}/${city}/contacts`,
-      },
-    },
+    alternates: staticPageAlternates('/contacts'),
   }
 }
 

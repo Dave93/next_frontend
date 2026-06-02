@@ -28,6 +28,19 @@ export function buildAlternates(citySlug: string, suffix: string = '') {
   }
 }
 
+// The default city slug. `/` and bare `/uz`, `/en` redirect here (see proxy.ts).
+export const CANONICAL_CITY = 'tashkent'
+
+// City-independent informational pages (about, contacts, privacy, delivery,
+// about/fran) render byte-identical content under every /[city]/ slug. Letting
+// each self-canonicalize produced N near-duplicate URLs that competed in search
+// and split brand authority (the SEO audit saw a brand query land on
+// /en/kokand/about instead of the homepage). Pin them all to the default city
+// so there is one indexable URL per page.
+export function staticPageAlternates(suffix: string = '') {
+  return buildAlternates(CANONICAL_CITY, suffix)
+}
+
 const RU_LABELS = {
   home: 'Главная',
   news: 'Новости',
