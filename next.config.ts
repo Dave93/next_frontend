@@ -31,26 +31,13 @@ const config: NextConfig = {
   env: {
     NEXT_PUBLIC_API_URL: process.env.API_URL,
   },
+  // Security headers (HSTS, CSP, X-Frame-Options, Referrer-Policy,
+  // Permissions-Policy, X-DNS-Prefetch-Control, etc.) are owned solely by nginx
+  // at the edge — see /etc/nginx/sites-enabled/choparpizza.uz. Setting them here
+  // too produced duplicate response headers (and conflicting HSTS values) that
+  // the SEO audit flagged. Keep the single source of truth in nginx.
   async headers() {
     return [
-      {
-        source: '/:path*',
-        headers: [
-          {
-            key: 'Strict-Transport-Security',
-            value: 'max-age=63072000; includeSubDomains; preload',
-          },
-          { key: 'X-Content-Type-Options', value: 'nosniff' },
-          { key: 'X-Frame-Options', value: 'SAMEORIGIN' },
-          { key: 'Referrer-Policy', value: 'strict-origin-when-cross-origin' },
-          {
-            key: 'Permissions-Policy',
-            value:
-              'camera=(), microphone=(), geolocation=(self), interest-cohort=()',
-          },
-          { key: 'X-DNS-Prefetch-Control', value: 'on' },
-        ],
-      },
       {
         source: '/_next/static/:path*',
         headers: [
