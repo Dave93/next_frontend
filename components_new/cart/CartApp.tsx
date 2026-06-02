@@ -36,6 +36,65 @@ interface CartAppProps {
   products?: any[]
 }
 
+function CartSkeleton() {
+  return (
+    <div className="container mx-auto px-3 md:px-0 py-4 md:py-8 animate-pulse">
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 md:gap-6">
+        <div className="lg:col-span-2 space-y-4 md:space-y-6">
+          <div className="bg-white rounded-3xl shadow-sm overflow-hidden">
+            <div className="flex items-center justify-between px-5 md:px-7 py-4 border-b border-gray-100">
+              <div className="h-7 w-32 bg-gray-200 rounded-lg" />
+              <div className="h-4 w-20 bg-gray-100 rounded" />
+            </div>
+            <div className="divide-y divide-gray-100">
+              {[0, 1, 2].map((i) => (
+                <div
+                  key={i}
+                  className="px-5 md:px-7 py-4 flex items-start gap-3 md:gap-4"
+                >
+                  <div className="w-16 h-16 rounded-2xl bg-gray-200 flex-shrink-0" />
+                  <div className="flex-1 min-w-0">
+                    <div className="flex items-start justify-between gap-2">
+                      <div className="h-4 w-40 bg-gray-200 rounded" />
+                      <div className="h-4 w-4 bg-gray-100 rounded" />
+                    </div>
+                    <div className="mt-4 flex items-center justify-between gap-2">
+                      <div className="h-9 w-28 bg-gray-200 rounded-full" />
+                      <div className="h-5 w-24 bg-gray-200 rounded" />
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+
+        <aside className="lg:col-span-1">
+          <div className="bg-white rounded-3xl shadow-sm p-5 md:p-7 lg:sticky lg:top-24">
+            <div className="h-6 w-32 bg-gray-200 rounded mb-5" />
+            <div className="space-y-3">
+              <div className="flex items-center justify-between">
+                <div className="h-4 w-24 bg-gray-100 rounded" />
+                <div className="h-4 w-20 bg-gray-200 rounded" />
+              </div>
+              <div className="flex items-center justify-between">
+                <div className="h-4 w-20 bg-gray-100 rounded" />
+                <div className="h-4 w-16 bg-gray-100 rounded" />
+              </div>
+            </div>
+            <div className="mt-5 pt-5 border-t border-gray-100 flex items-center justify-between">
+              <div className="h-5 w-16 bg-gray-200 rounded" />
+              <div className="h-8 w-32 bg-gray-200 rounded" />
+            </div>
+            <div className="mt-5 h-12 md:h-14 w-full bg-gray-200 rounded-full" />
+            <div className="mt-3 h-11 w-full bg-gray-100 rounded-full" />
+          </div>
+        </aside>
+      </div>
+    </div>
+  )
+}
+
 export default function CartApp(_props: CartAppProps) {
   const [channelName, setChannelName] = useState('chopar')
   const [biRecommendations, setBiRecommendations] = useState<any>({
@@ -51,6 +110,8 @@ export default function CartApp(_props: CartAppProps) {
   const activeCity = useLocationStore((s) => s.activeCity) as any
   const locationData = useLocationStore((s) => s.locationData) as any
   const user = useUserStore((s) => s.user) as any
+  const userHydrated = useUserStore((s) => s.hasHydrated)
+  const cartHydrated = useCartStore(cartSelectors.hasHydrated)
   const openSignInModal = useUIStore((s) => s.openSignInModal)
   useEffect(() => {
     getChannel()
@@ -458,6 +519,13 @@ export default function CartApp(_props: CartAppProps) {
         </button>
       </div>
     )
+  }
+
+  // Until both persisted stores rehydrate from localStorage, `user` and the
+  // cart lines are still null/empty — rendering the login or empty-cart screen
+  // here would flash before hydration. Show a skeleton instead.
+  if (!userHydrated || !cartHydrated) {
+    return <CartSkeleton />
   }
 
   if (!user) {
