@@ -29,8 +29,6 @@ const webAddress = process.env.NEXT_PUBLIC_API_URL
 axios.defaults.withCredentials = true
 
 const YELLOW = '#FAAF04'
-const MIN_ORDER_PRICE =
-  Number(process.env.NEXT_PUBLIC_CHOPAR_ORDER_MIN_PRICE) || 44000
 
 interface CartAppProps {
   products?: any[]
@@ -328,17 +326,12 @@ export default function CartApp(_props: CartAppProps) {
     } catch (e) {}
   }
 
-  const subTotal = Number(
-    data?.lineItemsSubtotalPrice || data?.subtotalPrice || data?.totalPrice || 0
-  )
-  const isPickup = locationData?.deliveryType === 'pickup'
-  const isBelowMinOrder =
-    !isPickup && subTotal > 0 && subTotal < MIN_ORDER_PRICE
-  const missingForMinOrder = isBelowMinOrder ? MIN_ORDER_PRICE - subTotal : 0
-
+  // Min-order is NOT enforced here: it only applies to delivery, and the
+  // delivery-vs-pickup choice is made on the checkout page. Blocking in the
+  // cart wrongly stopped pickup orders (and orders where the type wasn't
+  // chosen yet). The gate now lives in OrdersApp.
   const goToCheckout = (e: any) => {
     e.preventDefault()
-    if (isBelowMinOrder) return
     trackCheckoutStarted({
       cart_items_count: data?.lineItems?.length || 0,
       cart_total: (data?.totalPrice || 0) / 100,
@@ -923,27 +916,10 @@ export default function CartApp(_props: CartAppProps) {
               </span>
             </div>
 
-            {isBelowMinOrder && (
-              <div
-                role="alert"
-                className="mt-5 rounded-2xl bg-yellow-50 border border-yellow-300 text-yellow-900 px-4 py-3 text-sm"
-              >
-                {t('Минимальная сумма заказа для доставки')}{' '}
-                <span className="font-bold">
-                  {formatPrice(MIN_ORDER_PRICE)}
-                </span>
-                . {t('Добавьте ещё на')}{' '}
-                <span className="font-bold">
-                  {formatPrice(missingForMinOrder)}
-                </span>
-                .
-              </div>
-            )}
-
             <button
               type="button"
               onClick={goToCheckout}
-              disabled={!isWorkTime || isBelowMinOrder}
+              disabled={!isWorkTime}
               className="mt-5 w-full h-12 md:h-14 rounded-full font-bold text-white text-sm md:text-base uppercase tracking-wide flex items-center justify-center transition-opacity hover:opacity-90 disabled:opacity-60 disabled:cursor-not-allowed"
               style={{ background: YELLOW }}
             >

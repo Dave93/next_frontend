@@ -1292,6 +1292,25 @@ const OrdersApp: FC<OrdersProps> = ({ channelName, isMobile = false }) => {
     return total
   }, [stopProducts, cartData])
 
+  // Minimum-order gate lives here (not in the cart) because it only applies
+  // to delivery — and the delivery-vs-pickup choice is made on this page.
+  // Pickup orders have no minimum.
+  const MIN_ORDER_PRICE =
+    Number(process.env.NEXT_PUBLIC_CHOPAR_ORDER_MIN_PRICE) || 44000
+  const isBelowMinOrderDelivery =
+    tabIndex === 'deliver' && totalPrice > 0 && totalPrice < MIN_ORDER_PRICE
+  const missingForMinOrder = isBelowMinOrderDelivery
+    ? MIN_ORDER_PRICE - totalPrice
+    : 0
+  const fmtMinSum = (v: number) =>
+    currency(v, {
+      pattern: '# !',
+      separator: ' ',
+      decimal: '.',
+      symbol: locale === 'uz' ? "so'm" : locale === 'en' ? 'sum' : 'сум',
+      precision: 0,
+    }).format()
+
   if (!isWorkTime) {
     return (
       <div className="bg-white flex py-20 text-xl text-yellow font-bold px-10">
@@ -2028,6 +2047,24 @@ const OrdersApp: FC<OrdersProps> = ({ channelName, isMobile = false }) => {
             uplift pattern (FunnelKit, GemPages 2025). On mobile the
             sticky behavior is already handled by mobile-checkout-wrap
             CSS in MobileOrdersApp. */}
+        {isBelowMinOrderDelivery && (
+          <div
+            role="alert"
+            className="mt-6 md:mt-8 rounded-2xl bg-yellow-50 border border-yellow-300 text-yellow-900 px-4 py-3 text-sm"
+          >
+            {locale === 'uz'
+              ? `Yetkazib berish uchun minimal buyurtma summasi ${fmtMinSum(
+                  MIN_ORDER_PRICE
+                )}. Yana ${fmtMinSum(missingForMinOrder)} qo'shing.`
+              : locale === 'en'
+              ? `Minimum order amount for delivery ${fmtMinSum(
+                  MIN_ORDER_PRICE
+                )}. Add ${fmtMinSum(missingForMinOrder)} more.`
+              : `Минимальная сумма заказа для доставки ${fmtMinSum(
+                  MIN_ORDER_PRICE
+                )}. Добавьте ещё на ${fmtMinSum(missingForMinOrder)}.`}
+          </div>
+        )}
         <div className="md:flex justify-between mt-8 space-y-2 md:space-y-0 md:sticky md:bottom-4 md:z-30 md:bg-white md:rounded-full md:shadow-[0_-4px_24px_rgba(0,0,0,0.08)] md:px-3 md:py-2">
           <button
             className="md:text-xl text-gray-400 bg-gray-200 flex h-12 items-center justify-between px-12 rounded-full md:w-80 w-full"
@@ -2044,9 +2081,15 @@ const OrdersApp: FC<OrdersProps> = ({ channelName, isMobile = false }) => {
           </button>
           <button
             className={`md:text-xl text-white bg-yellow flex h-12 items-center justify-evenly rounded-full md:w-80 w-full ${
-              !locationData?.terminal_id ? 'opacity-25 cursor-not-allowed' : ''
+              !locationData?.terminal_id || isBelowMinOrderDelivery
+                ? 'opacity-25 cursor-not-allowed'
+                : ''
             }`}
-            disabled={!locationData?.terminal_id || isSavingOrder}
+            disabled={
+              !locationData?.terminal_id ||
+              isSavingOrder ||
+              isBelowMinOrderDelivery
+            }
             onClick={handleSubmit(saveOrder)}
           >
             {isSavingOrder ? (
