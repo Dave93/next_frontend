@@ -20,6 +20,7 @@ import { toast } from 'sonner'
 import axios from 'axios'
 import Cookies from 'js-cookie'
 import Hashids from 'hashids'
+import { getOptToken } from '../auth/optToken'
 import { useCartStore, type CartLine } from '../stores/cart-store'
 import {
   adaptServerCartToLines,
@@ -54,7 +55,7 @@ async function ensureCsrf(): Promise<void> {
 }
 
 function authHeader(): Record<string, string> {
-  const otpToken = Cookies.get('opt_token')
+  const otpToken = getOptToken()
   return otpToken ? { Authorization: `Bearer ${otpToken}` } : {}
 }
 

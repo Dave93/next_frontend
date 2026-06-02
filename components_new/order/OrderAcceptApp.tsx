@@ -11,6 +11,7 @@ import defaultChannel from '@lib/defaultChannel'
 import { DateTime } from 'luxon'
 import Cookies from 'js-cookie'
 import axios from 'axios'
+import { getOptToken } from '../../lib/auth/optToken'
 import getAssetUrl from '@utils/getAssetUrl'
 import { useLocale } from 'next-intl'
 import { useRouter } from '../../i18n/navigation'
@@ -126,7 +127,7 @@ const OrderAcceptApp: FC<OrderDetailProps> = ({
     setOrderLoadError(null)
     try {
       await setCredentials()
-      const otpToken = Cookies.get('opt_token')
+      const otpToken = getOptToken()
       const headers: Record<string, string> = {
         'Content-Type': 'application/json',
       }
@@ -228,7 +229,9 @@ const OrderAcceptApp: FC<OrderDetailProps> = ({
   }
 
   if (!order) {
-    const isUnauthorized = orderLoadError === 'unauthorized' || !user
+    // Only treat a real 401/403 as "log in" — not a pre-hydration `!user`,
+    // which would wrongly flash the login screen while the store rehydrates.
+    const isUnauthorized = orderLoadError === 'unauthorized'
     return (
       <div className="container mx-auto px-3 md:px-0 py-8 md:py-16">
         <div className="bg-white rounded-3xl shadow-sm p-8 md:p-16 max-w-2xl mx-auto text-center">

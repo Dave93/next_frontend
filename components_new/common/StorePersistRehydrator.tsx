@@ -17,9 +17,15 @@ import { useEffect } from 'react'
 import Cookies from 'js-cookie'
 import { useUserStore } from '../../lib/stores/user-store'
 import { useLocationStore } from '../../lib/stores/location-store'
+import { syncOptTokenCookie } from '../../lib/auth/optToken'
 
 const StorePersistRehydrator = () => {
   useEffect(() => {
+    // opt_token: restore the cookie from its localStorage mirror if the
+    // 30-day cookie lapsed but the token is still present. Keeps authed API
+    // calls (order details, etc.) working when the user appears logged in.
+    syncOptTokenCookie()
+
     // mijoz → user
     try {
       const raw = localStorage.getItem('mijoz')
