@@ -156,6 +156,12 @@ type AddInput = {
   optimisticLine: CartLine
   /** locationData.deliveryType — adds ?delivery_type=pickup */
   deliveryType?: string | null
+  /**
+   * Opt out of optimistic UI (default true). The cart page passes false so
+   * the row waits for the server response instead of flashing an optimistic
+   * value that the server may then correct.
+   */
+  optimistic?: boolean
 }
 
 export function useAddToCart() {
@@ -201,12 +207,13 @@ export function useAddToCart() {
       }
       return data
     },
-    onMutate: ({ optimisticLine }) => {
+    onMutate: ({ optimisticLine, optimistic }) => {
+      if (optimistic === false) return {}
       const snapshot = useCartStore.getState().optimisticAdd(optimisticLine)
       return { snapshot }
     },
     onError: (err: any, _vars, ctx) => {
-      if (ctx) useCartStore.getState().rollback(ctx.snapshot)
+      if (ctx?.snapshot) useCartStore.getState().rollback(ctx.snapshot)
       const msg =
         err?.response?.data?.error?.message ||
         err?.response?.data?.message ||
@@ -226,6 +233,8 @@ type QtyInput = {
   delta: 1 | -1
   /** Current qty before delta — needed to decide between PUT remove vs DELETE. */
   currentQty: number
+  /** Opt out of optimistic UI (default true). Cart page passes false. */
+  optimistic?: boolean
 }
 
 export function useUpdateCartQty() {
@@ -279,7 +288,8 @@ export function useUpdateCartQty() {
         (await fetchFreshBasket(basketId, null)) || removeResponse
       )
     },
-    onMutate: ({ lineId, delta, currentQty }) => {
+    onMutate: ({ lineId, delta, currentQty, optimistic }) => {
+      if (optimistic === false) return {}
       const newQty = Math.max(0, currentQty + delta)
       const snapshot = useCartStore
         .getState()
@@ -287,7 +297,7 @@ export function useUpdateCartQty() {
       return { snapshot }
     },
     onError: (err: any, _vars, ctx) => {
-      if (ctx) useCartStore.getState().rollback(ctx.snapshot)
+      if (ctx?.snapshot) useCartStore.getState().rollback(ctx.snapshot)
       const msg =
         err?.response?.data?.error?.message ||
         err?.response?.data?.message ||
@@ -302,7 +312,11 @@ export function useUpdateCartQty() {
 // useRemoveCartLine — DELETE /api/basket-lines/:id
 // =====================================================================
 
-type RemoveInput = { lineId: number }
+type RemoveInput = {
+  lineId: number
+  /** Opt out of optimistic UI (default true). Cart page passes false. */
+  optimistic?: boolean
+}
 
 export function useRemoveCartLine() {
   return useMutation({
@@ -322,12 +336,13 @@ export function useRemoveCartLine() {
         readBasketIdFromLocalStorage()
       return (await fetchFreshBasket(basketId, null)) || data
     },
-    onMutate: ({ lineId }) => {
+    onMutate: ({ lineId, optimistic }) => {
+      if (optimistic === false) return {}
       const snapshot = useCartStore.getState().optimisticRemove(lineId)
       return { snapshot }
     },
     onError: (err: any, _vars, ctx) => {
-      if (ctx) useCartStore.getState().rollback(ctx.snapshot)
+      if (ctx?.snapshot) useCartStore.getState().rollback(ctx.snapshot)
       toast.error('Не удалось удалить из корзины')
     },
     onSuccess: (cartData) => syncStore(cartData),

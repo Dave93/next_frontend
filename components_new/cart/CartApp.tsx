@@ -192,7 +192,10 @@ export default function CartApp(_props: CartAppProps) {
     setLoadingLineId(lineId)
     const itemBeingRemoved = data?.lineItems?.find((l: any) => l.id == lineId)
     try {
-      await removeLineMut.mutateAsync({ lineId: Number(lineId) })
+      await removeLineMut.mutateAsync({
+        lineId: Number(lineId),
+        optimistic: false,
+      })
       if (itemBeingRemoved) {
         trackRemoveFromCart({
           product_id: itemBeingRemoved?.variant?.product_id || lineId,
@@ -213,6 +216,7 @@ export default function CartApp(_props: CartAppProps) {
         lineId: Number(line.id),
         delta: -1,
         currentQty: Number(line.quantity || 0),
+        optimistic: false,
       })
     } finally {
       setLoadingLineId(null)
@@ -226,6 +230,7 @@ export default function CartApp(_props: CartAppProps) {
         lineId: Number(lineId),
         delta: 1,
         currentQty: Number(currentQty || 0),
+        optimistic: false,
       })
     } finally {
       setLoadingLineId(null)
@@ -259,6 +264,7 @@ export default function CartApp(_props: CartAppProps) {
           },
         ],
         deliveryType: locationData?.deliveryType,
+        optimistic: false,
         optimisticLine: {
           id: optimisticId,
           productId: Number(recItem?.id ?? selectedProdId),
@@ -345,13 +351,10 @@ export default function CartApp(_props: CartAppProps) {
   const clearBasket = async () => {
     if (!cartId) return
     setIsCartLoading(true)
-    const snapshot = useCartStore.getState().lines
-    useCartStore.getState().setFromServer(useCartStore.getState().basketId, [])
     try {
       await axios.get(`${webAddress}/api/baskets/${cartId}/clear`)
       await refetchBasket()
     } catch (e) {
-      useCartStore.getState().rollback(snapshot)
     } finally {
       setIsCartLoading(false)
     }
