@@ -34,13 +34,29 @@ export function PostHogProvider({
       return
     }
 
-    posthog.init(POSTHOG_KEY, {
-      api_host: POSTHOG_HOST,
-      capture_pageview: false,
-      capture_pageleave: true,
-      persistence: 'localStorage',
-      autocapture: true,
-    })
+    // Defer init until the main thread is idle — posthog-js init + autocapture
+    // listeners cost ~260ms of main-thread work that otherwise lands during
+    // hydration and inflates INP. PostHogPageView's mount-time capture runs
+    // before init (no-op while unloaded), so we emit the initial $pageview here
+    // once posthog is ready to avoid losing it.
+    const start = () => {
+      posthog.init(POSTHOG_KEY, {
+        api_host: POSTHOG_HOST,
+        capture_pageview: false,
+        capture_pageleave: true,
+        persistence: 'localStorage',
+        autocapture: true,
+      })
+      posthog.capture('$pageview', { $current_url: window.location.href })
+    }
+
+    const ric = window.requestIdleCallback
+    if (ric) {
+      const id = ric(start, { timeout: 4000 })
+      return () => window.cancelIdleCallback?.(id)
+    }
+    const t = window.setTimeout(start, 2500)
+    return () => window.clearTimeout(t)
   }, [])
 
   return (
