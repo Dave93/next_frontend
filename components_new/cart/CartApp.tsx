@@ -898,14 +898,6 @@ export default function CartApp(_props: CartAppProps) {
                   </span>
                 </div>
               )}
-              <div className="flex items-center justify-between">
-                <span className="text-gray-500">{t('Доставка')}</span>
-                <span className="text-gray-400">
-                  {locationData?.deliveryType === 'pickup'
-                    ? t('Самовывоз')
-                    : t('Уточняется')}
-                </span>
-              </div>
             </div>
             <div className="mt-5 pt-5 border-t border-gray-100 flex items-baseline justify-between">
               <span className="text-base font-semibold text-gray-700">
