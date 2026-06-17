@@ -264,7 +264,7 @@ const ProductItemNewApp: FC<ProductItem> = ({ product, channelName }) => {
   }
 
   const modifiers = useMemo(() => {
-    let modifier = null
+    let modifier: any = null
     if (store.variants && store.variants.length) {
       const activeValue: any = store.variants.find(
         (item: any) => item.active == true
