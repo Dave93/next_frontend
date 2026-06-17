@@ -18,6 +18,9 @@ const withNextIntl = createNextIntlPlugin({
 
 const config: NextConfig = {
   output: 'standalone',
+  // Emit client-side source maps in the production build so browser errors
+  // map back to original source. Temporary — for debugging a prod-only error.
+  productionBrowserSourceMaps: true,
   // Next 16 opt-in: React Compiler auto-memoizes components.
   reactCompiler: true,
   // cacheComponents: true — enabled in Wave 1 after lib/data/* migrates to
