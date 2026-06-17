@@ -270,7 +270,10 @@ const ProductItemNewApp: FC<ProductItem> = ({ product, channelName }) => {
         (item: any) => item.active == true
       )
       if (activeValue && activeValue.modifiers) {
-        modifier = activeValue.modifiers
+        // Copy: activeValue.modifiers references frozen store state
+        // (Immer/RTK / React Compiler). Mutating it via .push below throws
+        // "object is not extensible".
+        modifier = [...activeValue.modifiers]
         if (activeValue.modifierProduct) {
           let isExistSausage = modifier.find(
             (mod: any) => mod.id == activeValue.modifierProduct.id
@@ -298,7 +301,7 @@ const ProductItemNewApp: FC<ProductItem> = ({ product, channelName }) => {
       }
     } else {
       if (store.modifiers && store.modifiers.length) {
-        modifier = store.modifiers
+        modifier = [...store.modifiers]
       }
     }
 
