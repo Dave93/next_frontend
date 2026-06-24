@@ -182,6 +182,11 @@ const LocationPickerCore: FC<Props> = ({
   const [selectedAddressId, setSelectedAddressId] = useState<number | null>(
     addressId ?? null
   )
+  // Restaurant that will serve the chosen delivery address. Re-resolved from
+  // coords whenever the address changes so it never goes stale (DAV-628).
+  const [nearestTerminal, setNearestTerminal] = useState<any>(
+    locationData?.terminalData || null
+  )
 
   const debounceRef = useRef<NodeJS.Timeout | null>(null)
 
@@ -197,6 +202,7 @@ const LocationPickerCore: FC<Props> = ({
     setCoords(locationData?.location || null)
     setTerminal(locationData?.terminalData || null)
     setSelectedAddressId(addressId ?? null)
+    setNearestTerminal(locationData?.terminalData || null)
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [resyncKey, initialTab])
 
@@ -259,14 +265,18 @@ const LocationPickerCore: FC<Props> = ({
     setAddress(val)
     setCoords(null)
     setSelectedAddressId(null)
+    setNearestTerminal(null)
     fetchSuggestions(val)
   }
 
   const handlePickSuggestion = (s: Suggestion) => {
     setAddress(s.formatted || s.title)
-    setCoords([parseFloat(s.coordinates.lat), parseFloat(s.coordinates.long)])
+    const lat = parseFloat(s.coordinates.lat)
+    const lon = parseFloat(s.coordinates.long)
+    setCoords([lat, lon])
     setSelectedAddressId(null)
     setSuggestions([])
+    resolveNearest(lat, lon)
   }
 
   // Pick a saved address (DAV-628) — fill the form from it instead of
@@ -282,11 +292,33 @@ const LocationPickerCore: FC<Props> = ({
     setSelectedAddressId(a.id)
     setSuggestions([])
     if (a.entrance || a.door_code || a.label) setShowExtras(true)
+    if (a.lat != null && a.lon != null) resolveNearest(a.lat, a.lon)
+    else setNearestTerminal(null)
+  }
+
+  // Resolve the restaurant serving these delivery coords (DAV-628) so the
+  // "Ближайший ресторан" badge updates with the address instead of showing a
+  // stale terminal. null coords → clear it.
+  const resolveNearest = async (lat?: number | null, lon?: number | null) => {
+    if (lat == null || lon == null) {
+      setNearestTerminal(null)
+      return
+    }
+    try {
+      const { data } = await axios.get(
+        `${webAddress}/api/terminals/find_nearest?lat=${lat}&lon=${lon}`
+      )
+      const items = data?.data?.items
+      setNearestTerminal(Array.isArray(items) && items.length ? items[0] : null)
+    } catch {
+      setNearestTerminal(null)
+    }
   }
 
   const handleMapPick = async (lat: number, lon: number) => {
     setCoords([lat, lon])
     setSelectedAddressId(null)
+    resolveNearest(lat, lon)
     try {
       const { data } = await axios.get(`/api/geocode?lat=${lat}&lon=${lon}`)
       const item = Array.isArray(data) ? data[0] : data
@@ -320,11 +352,11 @@ const LocationPickerCore: FC<Props> = ({
         label,
         deliveryType: 'deliver',
         location: coords || undefined,
-        // Switching away from pickup must drop the terminal, otherwise the
-        // header still shows the old branch while the cart shows the address
-        // (DAV-628).
-        terminal_id: null,
-        terminalData: null,
+        // Persist the restaurant resolved for THIS address (DAV-628). Replaces
+        // any stale pickup branch; null when coords/terminal couldn't resolve,
+        // so the cart re-resolves on checkout instead of trusting an old one.
+        terminal_id: nearestTerminal?.id ?? null,
+        terminalData: nearestTerminal ?? null,
       })
       // Keep addressId in sync with the picked saved address (or clear it for
       // a manually-typed address) so the cart highlights the same thing.
@@ -762,7 +794,7 @@ const LocationPickerCore: FC<Props> = ({
               be dispatched from once OrdersApp's auto-search pinned one
               to locationData.terminalData. Trust signal — the user sees
               who's preparing the order before paying. */}
-          {locationData?.terminal_id && locationData?.terminalData && (
+          {nearestTerminal && (
             <div
               className="mt-3 flex items-start gap-2 rounded-2xl"
               style={{
@@ -804,13 +836,13 @@ const LocationPickerCore: FC<Props> = ({
                     lineHeight: 1.25,
                   }}
                 >
-                  {(locale === 'uz' && locationData.terminalData.name_uz) ||
-                    (locale === 'en' && locationData.terminalData.name_en) ||
-                    locationData.terminalData.name}
+                  {(locale === 'uz' && nearestTerminal.name_uz) ||
+                    (locale === 'en' && nearestTerminal.name_en) ||
+                    nearestTerminal.name}
                 </div>
-                {(locationData.terminalData.desc ||
-                  locationData.terminalData.desc_uz ||
-                  locationData.terminalData.desc_en) && (
+                {(nearestTerminal.desc ||
+                  nearestTerminal.desc_uz ||
+                  nearestTerminal.desc_en) && (
                   <div
                     style={{
                       fontSize: 12,
@@ -819,9 +851,9 @@ const LocationPickerCore: FC<Props> = ({
                       marginTop: 2,
                     }}
                   >
-                    {(locale === 'uz' && locationData.terminalData.desc_uz) ||
-                      (locale === 'en' && locationData.terminalData.desc_en) ||
-                      locationData.terminalData.desc}
+                    {(locale === 'uz' && nearestTerminal.desc_uz) ||
+                      (locale === 'en' && nearestTerminal.desc_en) ||
+                      nearestTerminal.desc}
                   </div>
                 )}
               </div>
