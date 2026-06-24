@@ -8,14 +8,17 @@ import Hashids from 'hashids'
 import { DateTime } from 'luxon'
 import currency from 'currency.js'
 import axios from 'axios'
-import Cookies from 'js-cookie'
+import { getOptToken } from '../../lib/auth/optToken'
 import { useInfiniteQuery } from '@tanstack/react-query'
 import { useLocale, useExtracted } from 'next-intl'
 
 let webAddress = process.env.NEXT_PUBLIC_API_URL
 
 const fetchOrders = async ({ pageParam = 1 }) => {
-  const otpToken = Cookies.get('opt_token')
+  // Recover the token from localStorage when the cookie lapsed, otherwise the
+  // request goes out as `Bearer undefined` and my-orders returns empty even
+  // though the user is still logged in (DAV-619). Same fix as order details.
+  const otpToken = getOptToken()
   axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest'
   const { data } = await axios.get(
     `${webAddress}/api/my-orders?page=${pageParam}`,
@@ -217,7 +220,9 @@ const OrdersApp: FC = () => {
             <div className="flex items-start justify-between mb-4">
               <div>
                 <Link
-                  href={`/${activeCity?.slug}/order/${hashids.encode(order.id)}`}
+                  href={`/${activeCity?.slug}/order/${hashids.encode(
+                    order.id
+                  )}`}
                   className="text-blue-600 font-semibold text-lg hover:text-blue-700 hover:underline"
                 >
                   Заказ № {order.id}
