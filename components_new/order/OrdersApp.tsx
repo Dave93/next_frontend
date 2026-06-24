@@ -618,6 +618,10 @@ const OrdersApp: FC<OrdersProps> = ({ channelName, isMobile = false }) => {
         house = address.name
       }
     })
+    // New address → previous apartment details no longer apply (DAV-625).
+    setValue('flat', '')
+    setValue('entrance', '')
+    setValue('door_code', '')
     let terminalData = await searchTerminal(
       {
         location: [selection.coordinates.lat, selection.coordinates.long],
@@ -628,6 +632,9 @@ const OrdersApp: FC<OrdersProps> = ({ channelName, isMobile = false }) => {
       ...locationData,
       deliveryType: tabIndex,
       house: house,
+      flat: '',
+      entrance: '',
+      door_code: '',
       location: [selection.coordinates.lat, selection.coordinates.long],
       terminal_id: terminalData.terminal_id,
       terminalData: terminalData.terminalData,
@@ -683,6 +690,10 @@ const OrdersApp: FC<OrdersProps> = ({ channelName, isMobile = false }) => {
     })
     setValue('house', house)
     setValue('address', data.data.formatted)
+    // New location → previous apartment details no longer apply (DAV-625).
+    setValue('flat', '')
+    setValue('entrance', '')
+    setValue('door_code', '')
     downshiftControl?.current?.reset({
       inputValue: data.data.formatted,
     })
@@ -699,6 +710,9 @@ const OrdersApp: FC<OrdersProps> = ({ channelName, isMobile = false }) => {
       location: coords,
       address: data.data.formatted,
       house,
+      flat: '',
+      entrance: '',
+      door_code: '',
       terminal_id: terminalData.terminal_id,
       terminalData: terminalData.terminalData,
     })

@@ -277,6 +277,10 @@ const LocationPickerCore: FC<Props> = ({
     setSelectedAddressId(null)
     setSuggestions([])
     resolveNearest(lat, lon)
+    // New address → previous apartment details no longer apply (DAV-625).
+    setFlat('')
+    setEntrance('')
+    setDoorCode('')
   }
 
   // Pick a saved address (DAV-628) — fill the form from it instead of
@@ -319,6 +323,10 @@ const LocationPickerCore: FC<Props> = ({
     setCoords([lat, lon])
     setSelectedAddressId(null)
     resolveNearest(lat, lon)
+    // New location → previous apartment details no longer apply (DAV-625).
+    setFlat('')
+    setEntrance('')
+    setDoorCode('')
     try {
       const { data } = await axios.get(`/api/geocode?lat=${lat}&lon=${lon}`)
       const item = Array.isArray(data) ? data[0] : data
