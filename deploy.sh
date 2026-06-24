@@ -57,16 +57,45 @@ log "Step 2/5: Installing dependencies"
 "$BUN" install --frozen-lockfile 2>/dev/null || "$BUN" install
 ok "Dependencies installed"
 
-# ─── Step 3: Build (clean) ──────────────────────────────────────────────────
+# ─── Step 3: Build (stop app, clean build, rollback on failure) ─────────────
 log "Step 3/5: Building Next.js (standalone output)"
-# pm2 keeps file handles open in .next/standalone/, so a hard `rm -rf .next`
-# can fail mid-tree with "Directory not empty". Wipe everything except the
-# live standalone subtree — `next build` regenerates what we keep.
-find .next -mindepth 1 -maxdepth 1 ! -name standalone -exec rm -rf {} + 2>/dev/null || true
-rm -rf .next/standalone/.next/cache 2>/dev/null || true
-"$BUN" run build
+# `next build` regenerates .next/standalone in place. Doing that while pm2
+# holds open handles there fails with ENOTEMPTY ("directory not empty") and
+# leaves the live tree half-deleted — prod then serves the "Критическая
+# ошибка" boundary until a build succeeds (outage seen 2026-06-24). Harden:
+#   1. Back up the current standalone (cheap hardlink copy, outside .next).
+#   2. Stop pm2 so the build can't race with / corrupt the live tree.
+#   3. Build from a clean .next.
+#   4. On build failure, restore the backup and restart — prod returns to the
+#      previous version instead of staying broken.
+# Trade-off: ~1 min downtime per deploy in exchange for no corruption and
+# automatic rollback. (A blue-green / build-to-side swap would remove the
+# downtime — future improvement.)
+BACKUP_DIR="${PROJECT_DIR}/.deploy-standalone-prev"
+rm -rf "$BACKUP_DIR"
+if [ -d .next/standalone ]; then
+  cp -al .next/standalone "$BACKUP_DIR" 2>/dev/null ||
+    cp -r .next/standalone "$BACKUP_DIR"
+fi
 
-[ -d ".next/standalone" ] || { err "standalone build missing — check next.config.ts has output: 'standalone'"; exit 1; }
+if pm2 describe "$PM2_APP" >/dev/null 2>&1; then
+  warn "Stopping ${PM2_APP} for a clean build (brief downtime)"
+  pm2 stop "$PM2_APP" >/dev/null 2>&1 || true
+fi
+rm -rf .next
+
+if "$BUN" run build && [ -d ".next/standalone" ]; then
+  rm -rf "$BACKUP_DIR"
+  ok "Build succeeded"
+else
+  err "build failed — rolling back to the previous standalone"
+  rm -rf .next/standalone
+  mkdir -p .next
+  [ -d "$BACKUP_DIR" ] && mv "$BACKUP_DIR" .next/standalone
+  pm2 restart "$PM2_APP" >/dev/null 2>&1 || true
+  err "  prod restored to the previous version; fix the build and re-run"
+  exit 1
+fi
 
 # ─── Step 4: Backfill files Next.js standalone leaves out ───────────────────
 # These three are NOT copied by `next build` and the server crashes/404s without them.
@@ -87,18 +116,20 @@ find .next/standalone/.next/static -type f \( -name '*.js' -o -name '*.css' -o -
 GZIP_COUNT=$(find .next/standalone/.next/static -name '*.gz' | wc -l)
 ok "Standalone ready (${GZIP_COUNT} files pre-compressed)"
 
-# ─── Step 5: Reload PM2 ─────────────────────────────────────────────────────
-log "Step 5/5: Reloading PM2 app: ${PM2_APP}"
+# ─── Step 5: (Re)start PM2 ──────────────────────────────────────────────────
+# The app was stopped in Step 3 for a clean build, so use restart (not reload)
+# — restart brings a stopped process back up, reload only works on an online one.
+log "Step 5/5: Restarting PM2 app: ${PM2_APP}"
 mkdir -p logs
 if pm2 describe "$PM2_APP" >/dev/null 2>&1; then
-  pm2 reload "$PM2_APP" --update-env
+  pm2 restart "$PM2_APP" --update-env
 else
   err "pm2 app '$PM2_APP' is not registered — start it manually first with the correct script path"
   err "  expected: $PROJECT_DIR/.next/standalone/server.js"
   exit 1
 fi
 pm2 save >/dev/null
-ok "PM2 reloaded"
+ok "PM2 restarted"
 
 # ─── Health checks ──────────────────────────────────────────────────────────
 sleep 3

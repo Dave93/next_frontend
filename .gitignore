@@ -42,3 +42,6 @@ yarn-error.log*
 .sentryclirc
 logs
 .claude/
+
+# deploy.sh rollback backup (server runtime artifact)
+.deploy-standalone-prev
