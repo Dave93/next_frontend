@@ -18,6 +18,7 @@ import { useLocationStore } from '../../lib/stores/location-store'
 import { useUIStore } from '../../lib/stores/ui-store'
 import { pickProductImage } from '@utils/getAssetUrl'
 import { composeHalfPizzaName } from '@lib/utils/composeHalfPizzaName'
+import { pickProductName } from '@lib/utils/pickProductName'
 import { toast } from 'sonner'
 import { useIsWithinWorkHours } from '../../lib/utils/isWorkTime'
 import { storefrontConfig as configData } from '../../lib/data/storefront-config'
@@ -276,24 +277,30 @@ const SmallCartApp: FC<SmallCartProps> = ({ channelName }) => {
                         <div className="font-bold text-xs">
                           {lineItem.child && lineItem.child.length === 1
                             ? composeHalfPizzaName([
-                                lineItem?.variant?.product?.attribute_data
-                                  ?.name[channelName][locale || 'ru'],
+                                pickProductName(
+                                  lineItem?.variant?.product,
+                                  channelName,
+                                  locale
+                                ),
                                 ...lineItem?.child
                                   .filter(
                                     (v: any) =>
                                       lineItem?.variant?.product?.box_id !=
                                       v?.variant?.product?.id
                                   )
-                                  .map(
-                                    (v: any) =>
-                                      v?.variant?.product?.attribute_data?.name[
-                                        channelName
-                                      ][locale || 'ru']
+                                  .map((v: any) =>
+                                    pickProductName(
+                                      v?.variant?.product,
+                                      channelName,
+                                      locale
+                                    )
                                   ),
                               ])
-                            : lineItem?.variant?.product?.attribute_data?.name[
-                                channelName
-                              ][locale || 'ru']}
+                            : pickProductName(
+                                lineItem?.variant?.product,
+                                channelName,
+                                locale
+                              )}
                           {'  '}
                           {lineItem.bonus_id && (
                             <span className="text-yellow">({'Бонус'})</span>

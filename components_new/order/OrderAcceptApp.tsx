@@ -8,6 +8,7 @@ import { Link } from '../../i18n/navigation'
 import { useForm } from 'react-hook-form'
 import currency from 'currency.js'
 import defaultChannel from '@lib/defaultChannel'
+import { pickProductName } from '@lib/utils/pickProductName'
 import { DateTime } from 'luxon'
 import Cookies from 'js-cookie'
 import axios from 'axios'
@@ -170,7 +171,10 @@ const OrderAcceptApp: FC<OrderDetailProps> = ({
 
   useEffect(() => {
     getChannel()
-    if (!initialOrderStatuses || Object.keys(initialOrderStatuses).length === 0) {
+    if (
+      !initialOrderStatuses ||
+      Object.keys(initialOrderStatuses).length === 0
+    ) {
       fetchOrderStatuses()
     }
     if (!order && orderId) {
@@ -264,15 +268,15 @@ const OrderAcceptApp: FC<OrderDetailProps> = ({
             {isUnauthorized
               ? 'Войдите в аккаунт'
               : orderLoadError === 'not_found'
-                ? 'Заказ не найден'
-                : 'Не удалось загрузить заказ'}
+              ? 'Заказ не найден'
+              : 'Не удалось загрузить заказ'}
           </h1>
           <p className="text-gray-500 mb-6">
             {isUnauthorized
               ? 'Чтобы открыть детали заказа, нужно войти в личный кабинет.'
               : orderLoadError === 'not_found'
-                ? 'Проверьте ссылку или вернитесь к списку заказов.'
-                : 'Попробуйте обновить страницу. Если проблема повторится — напишите нам.'}
+              ? 'Проверьте ссылку или вернитесь к списку заказов.'
+              : 'Попробуйте обновить страницу. Если проблема повторится — напишите нам.'}
           </p>
           <div className="flex items-center justify-center gap-3">
             {!isUnauthorized && orderId && (
@@ -405,8 +409,7 @@ const OrderAcceptApp: FC<OrderDetailProps> = ({
       {/* Order items */}
       <div className="md:p-10 p-4 rounded-2xl md:text-xl mt-1 md:mt-5 bg-white">
         <div className="text-base md:text-lg mb-4 md:mb-10 font-bold">
-          {order?.basket?.lines.length} товар{' '}
-          {locale == 'ru' ? 'на' : ''}{' '}
+          {order?.basket?.lines.length} товар {locale == 'ru' ? 'на' : ''}{' '}
           {currency(order?.order_total / 100, {
             pattern: '# !',
             separator: ' ',
@@ -488,26 +491,29 @@ const OrderAcceptApp: FC<OrderDetailProps> = ({
               <div className="ml-3 md:ml-5 flex-1 min-w-0">
                 <div className="text-sm md:text-xl font-bold">
                   {pizza.child && pizza.child.length > 1
-                    ? `${
-                        pizza?.variant?.product?.attribute_data?.name[
-                          channelName
-                        ][locale || 'ru']
-                      } + ${pizza?.child
+                    ? `${pickProductName(
+                        pizza?.variant?.product,
+                        channelName,
+                        locale
+                      )} + ${pizza?.child
                         .filter(
                           (v: any) =>
                             pizza?.variant?.product?.box_id !=
                             v?.variant?.product?.id
                         )
-                        .map(
-                          (v: any) =>
-                            v?.variant?.product?.attribute_data?.name[
-                              channelName
-                            ][locale || 'ru']
+                        .map((v: any) =>
+                          pickProductName(
+                            v?.variant?.product,
+                            channelName,
+                            locale
+                          )
                         )
                         .join(' + ')}`
-                    : pizza?.variant?.product?.attribute_data?.name[
-                        channelName
-                      ][locale || 'ru']}{' '}
+                    : pickProductName(
+                        pizza?.variant?.product,
+                        channelName,
+                        locale
+                      )}{' '}
                   {pizza.bonus_id && (
                     <span className="text-yellow">(Бонус)</span>
                   )}
