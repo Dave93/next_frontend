@@ -405,6 +405,14 @@ const CreateYourPizzaApp: FC<CreatePizzaProps> = ({
       }
     }
 
+    // "Без доп начинки" (price 0) is shown inconsistently across sizes by the
+    // backend (40см has the id-70 modifier, 30/35 don't) — DAV-631. Per product
+    // decision, hide it entirely on every size: "no extra topping" is already
+    // the default state (empty selection), so the tile is redundant.
+    if (leftModifiers) {
+      leftModifiers = leftModifiers.filter((m: any) => +m.price !== 0)
+    }
+
     if (leftModifiers) {
       leftModifiers.sort(function (a: any, b: any) {
         if (+a.price > +b.price) {

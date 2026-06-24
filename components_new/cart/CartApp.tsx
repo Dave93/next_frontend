@@ -7,6 +7,7 @@ import axios from 'axios'
 import defaultChannel from '@lib/defaultChannel'
 import currency from 'currency.js'
 import getAssetUrl from '@utils/getAssetUrl'
+import { composeHalfPizzaName } from '@lib/utils/composeHalfPizzaName'
 import { useCartStore, cartSelectors } from '../../lib/stores/cart-store'
 import {
   useAddToCart,
@@ -412,8 +413,7 @@ export default function CartApp(_props: CartAppProps) {
           return a?.[locale] || a?.['ru'] || ''
         })
         .filter(Boolean)
-        .join(' + ')
-      return extras ? `${main} + ${extras}` : main
+      return composeHalfPizzaName([main, ...extras])
     }
     return main
   }
