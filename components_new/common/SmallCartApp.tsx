@@ -17,6 +17,7 @@ import { useUserStore } from '../../lib/stores/user-store'
 import { useLocationStore } from '../../lib/stores/location-store'
 import { useUIStore } from '../../lib/stores/ui-store'
 import { pickProductImage } from '@utils/getAssetUrl'
+import { composeHalfPizzaName } from '@lib/utils/composeHalfPizzaName'
 import { toast } from 'sonner'
 import { useIsWithinWorkHours } from '../../lib/utils/isWorkTime'
 import { storefrontConfig as configData } from '../../lib/data/storefront-config'
@@ -273,22 +274,23 @@ const SmallCartApp: FC<SmallCartProps> = ({ channelName }) => {
                           </div>
                         )}
                         <div className="font-bold text-xs">
-                          {lineItem.child && lineItem.child.length > 1
-                            ? `${
+                          {lineItem.child && lineItem.child.length === 1
+                            ? composeHalfPizzaName([
                                 lineItem?.variant?.product?.attribute_data
-                                  ?.name[channelName][locale || 'ru']
-                              }  ${lineItem?.child
-                                .filter(
-                                  (v: any) =>
-                                    lineItem?.variant?.product?.box_id !=
-                                    v?.variant?.product?.id
-                                )
-                                .map(
-                                  (v: any) =>
-                                    v?.variant?.product?.attribute_data?.name[
-                                      channelName
-                                    ][locale || 'ru']
-                                )} `
+                                  ?.name[channelName][locale || 'ru'],
+                                ...lineItem?.child
+                                  .filter(
+                                    (v: any) =>
+                                      lineItem?.variant?.product?.box_id !=
+                                      v?.variant?.product?.id
+                                  )
+                                  .map(
+                                    (v: any) =>
+                                      v?.variant?.product?.attribute_data?.name[
+                                        channelName
+                                      ][locale || 'ru']
+                                  ),
+                              ])
                             : lineItem?.variant?.product?.attribute_data?.name[
                                 channelName
                               ][locale || 'ru']}

@@ -321,6 +321,14 @@ const CreateYourPizzaMobileApp: FC<CreatePizzaProps> = ({
       }
     }
 
+    // "Без доп начинки" (price 0) is shown inconsistently across sizes by the
+    // backend (40см has the id-70 modifier, 30/35 don't) — DAV-631. Per product
+    // decision, hide it entirely on every size: "no extra topping" is already
+    // the default state (empty selection), so the tile is redundant.
+    if (leftModifiers) {
+      leftModifiers = leftModifiers.filter((m: any) => +m.price !== 0)
+    }
+
     if (leftModifiers) {
       leftModifiers.sort(function (a: any, b: any) {
         if (+a.price > +b.price) {
@@ -549,35 +557,63 @@ const CreateYourPizzaMobileApp: FC<CreatePizzaProps> = ({
                         </div>
                       </div>
                       <div className="mt-4 text-lg font-semibold text-center">
-                        {leftSelectedProduct?.attribute_data?.name[channelName][locale || 'ru']}
+                        {
+                          leftSelectedProduct?.attribute_data?.name[
+                            channelName
+                          ][locale || 'ru']
+                        }
                         {' + '}
-                        {rightSelectedProduct?.attribute_data?.name[channelName][locale || 'ru']}
+                        {
+                          rightSelectedProduct?.attribute_data?.name[
+                            channelName
+                          ][locale || 'ru']
+                        }
                       </div>
-                      {(leftSelectedProduct?.attribute_data?.description?.[channelName]?.[locale || 'ru'] ||
-                        rightSelectedProduct?.attribute_data?.description?.[channelName]?.[locale || 'ru']) && (
+                      {(leftSelectedProduct?.attribute_data?.description?.[
+                        channelName
+                      ]?.[locale || 'ru'] ||
+                        rightSelectedProduct?.attribute_data?.description?.[
+                          channelName
+                        ]?.[locale || 'ru']) && (
                         <div className="divide-y space-y-2 mt-2">
-                          {leftSelectedProduct?.attribute_data?.description?.[channelName]?.[locale || 'ru'] && (
+                          {leftSelectedProduct?.attribute_data?.description?.[
+                            channelName
+                          ]?.[locale || 'ru'] && (
                             <div className="pt-2">
                               <div className="text-sm font-medium">
-                                {leftSelectedProduct?.attribute_data?.name[channelName][locale || 'ru']}
+                                {
+                                  leftSelectedProduct?.attribute_data?.name[
+                                    channelName
+                                  ][locale || 'ru']
+                                }
                               </div>
                               <div
                                 className="text-xs text-gray-400"
                                 dangerouslySetInnerHTML={{
-                                  __html: leftSelectedProduct.attribute_data.description[channelName][locale || 'ru'],
+                                  __html:
+                                    leftSelectedProduct.attribute_data
+                                      .description[channelName][locale || 'ru'],
                                 }}
                               ></div>
                             </div>
                           )}
-                          {rightSelectedProduct?.attribute_data?.description?.[channelName]?.[locale || 'ru'] && (
+                          {rightSelectedProduct?.attribute_data?.description?.[
+                            channelName
+                          ]?.[locale || 'ru'] && (
                             <div className="pt-2">
                               <div className="text-sm font-medium">
-                                {rightSelectedProduct?.attribute_data?.name[channelName][locale || 'ru']}
+                                {
+                                  rightSelectedProduct?.attribute_data?.name[
+                                    channelName
+                                  ][locale || 'ru']
+                                }
                               </div>
                               <div
                                 className="text-xs text-gray-400"
                                 dangerouslySetInnerHTML={{
-                                  __html: rightSelectedProduct.attribute_data.description[channelName][locale || 'ru'],
+                                  __html:
+                                    rightSelectedProduct.attribute_data
+                                      .description[channelName][locale || 'ru'],
                                 }}
                               ></div>
                             </div>
@@ -590,53 +626,56 @@ const CreateYourPizzaMobileApp: FC<CreatePizzaProps> = ({
                             <span>{'Добавить к пицце'}</span>
                           </div>
                           <div className="grid grid-cols-4 gap-2">
-                            {modifiers.filter((mod: any) => mod.price > 0).map((mod: any) => (
-                              <div
-                                key={mod.id}
-                                className={`border ${
-                                  activeModifiers.includes(mod.id) ||
-                                  (!activeModifiers.length && mod.price == 0)
-                                    ? 'border-yellow'
-                                    : 'border-gray-300'
-                                } flex flex-col justify-between overflow-hidden rounded-[15px] cursor-pointer`}
-                                onClick={() => addModifier(mod.id)}
-                              >
-                                <div className="flex-grow pt-2 px-2 flex justify-center">
-                                  <img
-                                    src={getAssetUrl(mod.assets)}
-                                    width={80}
-                                    height={80}
-                                    alt={mod.name}
-                                  />
-                                </div>
-                                <div className="px-2 text-center text-xs pb-1">
-                                  {locale == 'uz'
-                                    ? mod.name_uz || mod.name
-                                    : locale == 'en'
-                                    ? mod.name_en || mod.name
-                                    : mod.name_ru || mod.name}
-                                </div>
+                            {modifiers
+                              .filter((mod: any) => mod.price > 0)
+                              .map((mod: any) => (
                                 <div
-                                  className={`${
+                                  key={mod.id}
+                                  className={`border ${
                                     activeModifiers.includes(mod.id) ||
                                     (!activeModifiers.length && mod.price == 0)
-                                      ? 'bg-yellow'
-                                      : 'bg-gray-300'
-                                  } font-bold px-4 py-2 text-center text-white text-xs`}
+                                      ? 'border-yellow'
+                                      : 'border-gray-300'
+                                  } flex flex-col justify-between overflow-hidden rounded-[15px] cursor-pointer`}
+                                  onClick={() => addModifier(mod.id)}
                                 >
-                                  {currency(mod.price, {
-                                    pattern: '# !',
-                                    separator: ' ',
-                                    decimal: '.',
-                                    symbol: `${locale == 'uz' ? "so'm" : ''}
+                                  <div className="flex-grow pt-2 px-2 flex justify-center">
+                                    <img
+                                      src={getAssetUrl(mod.assets)}
+                                      width={80}
+                                      height={80}
+                                      alt={mod.name}
+                                    />
+                                  </div>
+                                  <div className="px-2 text-center text-xs pb-1">
+                                    {locale == 'uz'
+                                      ? mod.name_uz || mod.name
+                                      : locale == 'en'
+                                      ? mod.name_en || mod.name
+                                      : mod.name_ru || mod.name}
+                                  </div>
+                                  <div
+                                    className={`${
+                                      activeModifiers.includes(mod.id) ||
+                                      (!activeModifiers.length &&
+                                        mod.price == 0)
+                                        ? 'bg-yellow'
+                                        : 'bg-gray-300'
+                                    } font-bold px-4 py-2 text-center text-white text-xs`}
+                                  >
+                                    {currency(mod.price, {
+                                      pattern: '# !',
+                                      separator: ' ',
+                                      decimal: '.',
+                                      symbol: `${locale == 'uz' ? "so'm" : ''}
                                       ${locale == 'ru' ? 'сум' : ''}
                                       ${locale == 'en' ? 'sum' : ''}
                                       `,
-                                    precision: 0,
-                                  }).format()}
+                                      precision: 0,
+                                    }).format()}
+                                  </div>
                                 </div>
-                              </div>
-                            ))}
+                              ))}
                           </div>
                         </div>
                       )}
@@ -696,7 +735,11 @@ const CreateYourPizzaMobileApp: FC<CreatePizzaProps> = ({
                   <>
                     <div className="flex w-full max-h-32 flex-col">
                       <div className="flex w-full items-center">
-                        <button onClick={closeModal} className="flex p-2 z-10 relative" type="button">
+                        <button
+                          onClick={closeModal}
+                          className="flex p-2 z-10 relative"
+                          type="button"
+                        >
                           <img
                             src="/assets/back.png"
                             width="24"
@@ -730,7 +773,10 @@ const CreateYourPizzaMobileApp: FC<CreatePizzaProps> = ({
                         <div className="flex items-center justify-center">
                           <div className="relative w-32 h-32">
                             {leftSelectedProduct ? (
-                              <div className="absolute inset-0 overflow-hidden" style={{ clipPath: 'inset(0 50% 0 0)' }}>
+                              <div
+                                className="absolute inset-0 overflow-hidden"
+                                style={{ clipPath: 'inset(0 50% 0 0)' }}
+                              >
                                 <img
                                   src={leftSelectedProduct.image}
                                   className="w-32 h-32 object-contain"
@@ -738,14 +784,22 @@ const CreateYourPizzaMobileApp: FC<CreatePizzaProps> = ({
                                 />
                               </div>
                             ) : (
-                              <div className="absolute inset-0 overflow-hidden" style={{ clipPath: 'inset(0 50% 0 0)' }}>
+                              <div
+                                className="absolute inset-0 overflow-hidden"
+                                style={{ clipPath: 'inset(0 50% 0 0)' }}
+                              >
                                 <div className="w-32 h-32 rounded-full bg-gray-100 flex items-center justify-center">
-                                  <span className="text-gray-300 text-3xl">?</span>
+                                  <span className="text-gray-300 text-3xl">
+                                    ?
+                                  </span>
                                 </div>
                               </div>
                             )}
                             {rightSelectedProduct ? (
-                              <div className="absolute inset-0 overflow-hidden" style={{ clipPath: 'inset(0 0 0 50%)' }}>
+                              <div
+                                className="absolute inset-0 overflow-hidden"
+                                style={{ clipPath: 'inset(0 0 0 50%)' }}
+                              >
                                 <img
                                   src={rightSelectedProduct.image}
                                   className="w-32 h-32 object-contain"
@@ -753,9 +807,14 @@ const CreateYourPizzaMobileApp: FC<CreatePizzaProps> = ({
                                 />
                               </div>
                             ) : (
-                              <div className="absolute inset-0 overflow-hidden" style={{ clipPath: 'inset(0 0 0 50%)' }}>
+                              <div
+                                className="absolute inset-0 overflow-hidden"
+                                style={{ clipPath: 'inset(0 0 0 50%)' }}
+                              >
                                 <div className="w-32 h-32 rounded-full bg-gray-100 flex items-center justify-center">
-                                  <span className="text-gray-300 text-3xl">?</span>
+                                  <span className="text-gray-300 text-3xl">
+                                    ?
+                                  </span>
                                 </div>
                               </div>
                             )}
