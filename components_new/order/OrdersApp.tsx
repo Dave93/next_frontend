@@ -159,6 +159,8 @@ const OrdersApp: FC<OrdersProps> = ({ channelName, isMobile = false }) => {
     terminal_is_not_working: 'Ресторан не работает',
     no_address_specified: 'Не указан адрес',
     restaurant_not_found: 'Ресторан не найден',
+    address_out_of_zone:
+      'К сожалению, по этому адресу доставка недоступна. Выберите адрес в пределах города.',
     nearest_terminal_is_closed: 'Ближайший ресторан закрыт',
     location_tabs_incorrect_data: 'Укажите адрес доставки',
     payment_system_not_selected: 'Не выбран способ оплаты',
@@ -872,11 +874,11 @@ const OrdersApp: FC<OrdersProps> = ({ channelName, isMobile = false }) => {
     )
 
     if (terminalsData.data && !terminalsData.data.items.length) {
-      toast.warning(
-        terminalsData.data.message
-          ? terminalsData.data.message
-          : tr('restaurant_not_found')
-      )
+      // Out-of-city / out-of-zone address: the backend returns a cryptic
+      // machine key (e.g. "nearest_terminal_found") in .message, which used to
+      // be shown verbatim. Always surface a clear, localized message instead
+      // (DAV-627).
+      toast.warning(tr('address_out_of_zone'))
 
       // if returnResult is true, return object else return setLocationData
       return returnResult
@@ -1367,48 +1369,48 @@ const OrdersApp: FC<OrdersProps> = ({ channelName, isMobile = false }) => {
           MobileOrdersApp takes over anyway). */}
       <div className="md:flex md:gap-6 md:items-start">
         <div className="md:flex-1 min-w-0 order-form-col">
-      {/* Contacts — always visible. Even logged-in users should be able
+          {/* Contacts — always visible. Even logged-in users should be able
           to verify / edit name, phone, and email before placing the order
           (Baymard's "always show editable contact" rule). */}
-      <div className="w-full bg-white my-5 rounded-2xl">
-        <div className="text-lg mb-5 font-bold">
-          {tr('order_your_contacts')}
-        </div>
-        <form
-          onSubmit={handleSubmit(onSubmit)}
-          className="grid gap-2 md:grid-cols-4"
-        >
-          <div className="col-span-2">
-            <label className="text-sm text-gray-400 mb-2 block">
-              {tr('personal_data_name')}
-            </label>
-            <div className="relative">
-              <input
-                type="text"
-                {...register('name', { required: true })}
-                className="focus:outline-none outline-none px-6 py-3 rounded-full text-sm w-full bg-gray-100 text-gray-400"
-              />
-              {authName && (
-                <button
-                  className="absolute focus:outline-none inset-y-0 outline-none right-4 text-gray-400"
-                  onClick={() => resetField('name')}
-                >
-                  <XIcon className="cursor-pointer h-5 text-gray-400 w-5" />
-                </button>
-              )}
+          <div className="w-full bg-white my-5 rounded-2xl">
+            <div className="text-lg mb-5 font-bold">
+              {tr('order_your_contacts')}
             </div>
-            {errors.name && (
-              <div className="text-sm text-center text-red-600">
-                {tr('required')}
+            <form
+              onSubmit={handleSubmit(onSubmit)}
+              className="grid gap-2 md:grid-cols-4"
+            >
+              <div className="col-span-2">
+                <label className="text-sm text-gray-400 mb-2 block">
+                  {tr('personal_data_name')}
+                </label>
+                <div className="relative">
+                  <input
+                    type="text"
+                    {...register('name', { required: true })}
+                    className="focus:outline-none outline-none px-6 py-3 rounded-full text-sm w-full bg-gray-100 text-gray-400"
+                  />
+                  {authName && (
+                    <button
+                      className="absolute focus:outline-none inset-y-0 outline-none right-4 text-gray-400"
+                      onClick={() => resetField('name')}
+                    >
+                      <XIcon className="cursor-pointer h-5 text-gray-400 w-5" />
+                    </button>
+                  )}
+                </div>
+                {errors.name && (
+                  <div className="text-sm text-center text-red-600">
+                    {tr('required')}
+                  </div>
+                )}
               </div>
-            )}
-          </div>
-          <div className="col-span-2">
-            <label className="text-sm text-gray-400 mb-2 block">
-              {tr('personal_phone')}
-            </label>
-            <div className="relative">
-              {/* <input
+              <div className="col-span-2">
+                <label className="text-sm text-gray-400 mb-2 block">
+                  {tr('personal_phone')}
+                </label>
+                <div className="relative">
+                  {/* <input
                   type="text"
                   {...register('phone', {
                     required: true,
@@ -1416,370 +1418,372 @@ const OrdersApp: FC<OrdersProps> = ({ channelName, isMobile = false }) => {
                   })}
                   className="focus:outline-none outline-none px-6 py-3 rounded-full text-sm w-full bg-gray-100 text-gray-400 "
                 /> */}
-              <Controller
-                render={({ field: { onChange, value } }) => (
+                  <Controller
+                    render={({ field: { onChange, value } }) => (
+                      <Input
+                        defaultCountry="UZ"
+                        country="UZ"
+                        international
+                        withCountryCallingCode
+                        value={value}
+                        className="focus:outline-none outline-none px-6 py-3 rounded-full text-sm w-full bg-gray-100 text-gray-400"
+                        onChange={(e: any) => onChange(e)}
+                      />
+                    )}
+                    rules={{
+                      required: true,
+                    }}
+                    key="phone"
+                    name="phone"
+                    control={control}
+                  />
+
+                  {authPhone && (
+                    <button
+                      className="absolute focus:outline-none inset-y-0 outline-none right-4 text-gray-400"
+                      onClick={() => resetField('phone')}
+                    >
+                      <XIcon className="cursor-pointer h-5 text-gray-400 w-5" />
+                    </button>
+                  )}
+                </div>
+
+                {errors.phone && (
+                  <div className="text-sm text-center text-red-600">
+                    {tr('required')}
+                  </div>
+                )}
+              </div>
+              <div className="col-span-2">
+                <label className="text-sm text-gray-400 mb-2 block">
+                  {tr('personal_email')}
+                </label>
+                <div className="relative">
+                  <input
+                    type="email"
+                    {...register('email')}
+                    className="focus:outline-none outline-none px-6 py-3 rounded-full text-sm w-full bg-gray-100 text-gray-400 "
+                  />
+                  {authEmail && (
+                    <button
+                      className="absolute focus:outline-none inset-y-0 outline-none right-4 text-gray-400"
+                      onClick={() => resetField('email')}
+                    >
+                      <XIcon className="cursor-pointer h-5 text-gray-400 w-5" />
+                    </button>
+                  )}
+                </div>
+              </div>
+              <div className="col-span-2">
+                <div className="text-sm text-gray-400 mb-2 block">
+                  {tr('additional_phone')}
+                </div>
+                <div className="relative">
                   <Input
                     defaultCountry="UZ"
                     country="UZ"
                     international
                     withCountryCallingCode
-                    value={value}
-                    className="focus:outline-none outline-none px-6 py-3 rounded-full text-sm w-full bg-gray-100 text-gray-400"
-                    onChange={(e: any) => onChange(e)}
+                    value={additionalPhone}
+                    className="focus:outline-none outline-none px-6 py-3 rounded-full text-sm w-full bg-gray-100 text-gray-400 "
+                    onChange={(e: any) => {
+                      setValue('additional_phone', e)
+                    }}
                   />
-                )}
-                rules={{
-                  required: true,
-                }}
-                key="phone"
-                name="phone"
-                control={control}
+                  {additionalPhone && (
+                    <button
+                      className="absolute focus:outline-none inset-y-0 outline-none right-4 text-gray-400"
+                      onClick={() => resetField('additional_phone')}
+                    >
+                      <XIcon className="cursor-pointer h-5 text-gray-400 w-5" />
+                    </button>
+                  )}
+                </div>
+              </div>
+            </form>
+          </div>
+          {/* Address Selection */}
+          <div className="my-5 order-delivery-section">
+            {isMobile ? (
+              <AddressSelectionMobile
+                register={register}
+                setValue={setValue}
+                locationData={locationData}
+                setLocationData={setLocationData}
+                cities={cities}
+                activeCity={activeCity}
+                setActiveCity={setActiveCity}
+                addressList={addressList}
+                addressId={addressId}
+                onSelectAddress={selectAddressLocal}
+                onAddNewAddress={addNewAddress}
+                yandexGeoKey={yandexGeoKey}
+                configData={configData}
+                tabIndex={tabIndex}
+                onChangeTab={changeTabIndex}
+                searchTerminal={searchTerminal}
+                downshiftRef={downshiftControl}
+                mapRef={map}
               />
-
-              {authPhone && (
-                <button
-                  className="absolute focus:outline-none inset-y-0 outline-none right-4 text-gray-400"
-                  onClick={() => resetField('phone')}
-                >
-                  <XIcon className="cursor-pointer h-5 text-gray-400 w-5" />
-                </button>
-              )}
+            ) : (
+              <AddressSelection
+                register={register}
+                setValue={setValue}
+                locationData={locationData}
+                setLocationData={setLocationData}
+                cities={cities}
+                activeCity={activeCity}
+                setActiveCity={setActiveCity}
+                addressList={addressList}
+                addressId={addressId}
+                onSelectAddress={selectAddressLocal}
+                onAddNewAddress={addNewAddress}
+                yandexGeoKey={yandexGeoKey}
+                configData={configData}
+                tabIndex={tabIndex}
+                onChangeTab={changeTabIndex}
+                searchTerminal={searchTerminal}
+                downshiftRef={downshiftControl}
+                mapRef={map}
+              />
+            )}
+            {/* Legacy "Найти ближайший ресторан" pickup grid removed — terminal
+            selection now lives inside AddressSelectionApp's LocationPickerCore. */}
+          </div>
+          {/* time of delivery / pickup — applies to both flows */}
+          <div className="w-full bg-white my-5 rounded-2xl order-delivery-time">
+            <div className="text-lg mb-5 font-bold">
+              {tr('order_time_of_delivery')}
             </div>
-
-            {errors.phone && (
-              <div className="text-sm text-center text-red-600">
-                {tr('required')}
+            <div className="flex  md:block space-x-5">
+              <button
+                className={`${
+                  deliveryActive == 'now'
+                    ? 'bg-yellow text-white'
+                    : 'text-gray-400 bg-gray-100'
+                } flex-1 font-bold  rounded-full outline-none focus:outline-none  h-11 md:w-44`}
+                onClick={() => setDeliverySchedule('now')}
+              >
+                {tr('hurry_up')}
+              </button>
+              <button
+                className={`${
+                  deliveryActive == 'later'
+                    ? 'bg-yellow text-white'
+                    : 'text-gray-400 bg-gray-100'
+                } flex-1 font-bold  rounded-full outline-none focus:outline-none  h-11 md:w-44 md:ml-5`}
+                onClick={() => setDeliverySchedule('later')}
+              >
+                {tr('later')}
+              </button>
+            </div>
+            {deliveryActive == 'later' && (
+              <div className="mt-8 flex space-x-4">
+                <Controller
+                  render={({ field: { onChange } }) => (
+                    <Select
+                      items={dateOptions}
+                      placeholder={tr('select_date')}
+                      onChange={(e: any) => {
+                        onChange(e)
+                        const selectedDateTime = DateTime.fromFormat(
+                          e,
+                          'yyyy-MM-dd'
+                        )
+                        setSelectedDate(selectedDateTime)
+                      }}
+                    />
+                  )}
+                  rules={{
+                    required: true,
+                  }}
+                  key="delivery_day"
+                  name="delivery_day"
+                  control={control}
+                />
+                <Controller
+                  render={({ field: { onChange } }) => (
+                    <Select
+                      items={timeOptions}
+                      placeholder={tr('time')}
+                      onChange={(e: any) => onChange(e)}
+                    />
+                  )}
+                  rules={{
+                    required: true,
+                  }}
+                  key="delivery_time"
+                  name="delivery_time"
+                  control={control}
+                />
               </div>
             )}
           </div>
-          <div className="col-span-2">
-            <label className="text-sm text-gray-400 mb-2 block">
-              {tr('personal_email')}
-            </label>
-            <div className="relative">
-              <input
-                type="email"
-                {...register('email')}
-                className="focus:outline-none outline-none px-6 py-3 rounded-full text-sm w-full bg-gray-100 text-gray-400 "
-              />
-              {authEmail && (
-                <button
-                  className="absolute focus:outline-none inset-y-0 outline-none right-4 text-gray-400"
-                  onClick={() => resetField('email')}
-                >
-                  <XIcon className="cursor-pointer h-5 text-gray-400 w-5" />
-                </button>
-              )}
-            </div>
-          </div>
-          <div className="col-span-2">
-            <div className="text-sm text-gray-400 mb-2 block">
-              {tr('additional_phone')}
-            </div>
-            <div className="relative">
-              <Input
-                defaultCountry="UZ"
-                country="UZ"
-                international
-                withCountryCallingCode
-                value={additionalPhone}
-                className="focus:outline-none outline-none px-6 py-3 rounded-full text-sm w-full bg-gray-100 text-gray-400 "
-                onChange={(e: any) => {
-                  setValue('additional_phone', e)
-                }}
-              />
-              {additionalPhone && (
-                <button
-                  className="absolute focus:outline-none inset-y-0 outline-none right-4 text-gray-400"
-                  onClick={() => resetField('additional_phone')}
-                >
-                  <XIcon className="cursor-pointer h-5 text-gray-400 w-5" />
-                </button>
-              )}
-            </div>
-          </div>
-        </form>
-      </div>
-      {/* Address Selection */}
-      <div className="my-5 order-delivery-section">
-        {isMobile ? (
-          <AddressSelectionMobile
-            register={register}
-            setValue={setValue}
-            locationData={locationData}
-            setLocationData={setLocationData}
-            cities={cities}
-            activeCity={activeCity}
-            setActiveCity={setActiveCity}
-            addressList={addressList}
-            addressId={addressId}
-            onSelectAddress={selectAddressLocal}
-            onAddNewAddress={addNewAddress}
-            yandexGeoKey={yandexGeoKey}
-            configData={configData}
-            tabIndex={tabIndex}
-            onChangeTab={changeTabIndex}
-            searchTerminal={searchTerminal}
-            downshiftRef={downshiftControl}
-            mapRef={map}
-          />
-        ) : (
-          <AddressSelection
-            register={register}
-            setValue={setValue}
-            locationData={locationData}
-            setLocationData={setLocationData}
-            cities={cities}
-            activeCity={activeCity}
-            setActiveCity={setActiveCity}
-            addressList={addressList}
-            addressId={addressId}
-            onSelectAddress={selectAddressLocal}
-            onAddNewAddress={addNewAddress}
-            yandexGeoKey={yandexGeoKey}
-            configData={configData}
-            tabIndex={tabIndex}
-            onChangeTab={changeTabIndex}
-            searchTerminal={searchTerminal}
-            downshiftRef={downshiftControl}
-            mapRef={map}
-          />
-        )}
-        {/* Legacy "Найти ближайший ресторан" pickup grid removed — terminal
-            selection now lives inside AddressSelectionApp's LocationPickerCore. */}
-      </div>
-      {/* time of delivery / pickup — applies to both flows */}
-      <div className="w-full bg-white my-5 rounded-2xl order-delivery-time">
-        <div className="text-lg mb-5 font-bold">
-          {tr('order_time_of_delivery')}
-        </div>
-        <div className="flex  md:block space-x-5">
-          <button
-            className={`${
-              deliveryActive == 'now'
-                ? 'bg-yellow text-white'
-                : 'text-gray-400 bg-gray-100'
-            } flex-1 font-bold  rounded-full outline-none focus:outline-none  h-11 md:w-44`}
-            onClick={() => setDeliverySchedule('now')}
-          >
-            {tr('hurry_up')}
-          </button>
-          <button
-            className={`${
-              deliveryActive == 'later'
-                ? 'bg-yellow text-white'
-                : 'text-gray-400 bg-gray-100'
-            } flex-1 font-bold  rounded-full outline-none focus:outline-none  h-11 md:w-44 md:ml-5`}
-            onClick={() => setDeliverySchedule('later')}
-          >
-            {tr('later')}
-          </button>
-        </div>
-        {deliveryActive == 'later' && (
-          <div className="mt-8 flex space-x-4">
-            <Controller
-              render={({ field: { onChange } }) => (
-                <Select
-                  items={dateOptions}
-                  placeholder={tr('select_date')}
-                  onChange={(e: any) => {
-                    onChange(e)
-                    const selectedDateTime = DateTime.fromFormat(
-                      e,
-                      'yyyy-MM-dd'
-                    )
-                    setSelectedDate(selectedDateTime)
-                  }}
-                />
-              )}
-              rules={{
-                required: true,
-              }}
-              key="delivery_day"
-              name="delivery_day"
-              control={control}
-            />
-            <Controller
-              render={({ field: { onChange } }) => (
-                <Select
-                  items={timeOptions}
-                  placeholder={tr('time')}
-                  onChange={(e: any) => onChange(e)}
-                />
-              )}
-              rules={{
-                required: true,
-              }}
-              key="delivery_time"
-              name="delivery_time"
-              control={control}
-            />
-          </div>
-        )}
-      </div>
-      {/* pay */}
-      <div className="w-full bg-white my-5 rounded-2xl relative">
-        {!locationData?.terminal_id && (
-          <div className="absolute h-full bg-opacity-60 bg-gray-100 z-20 items-center flex justify-around left-0 bottom-0 right-0">
-            <div className="text-yellow font-bold text-2xl text-center">
-              {tr('no_address_no_restaurant')}
-            </div>
-          </div>
-        )}
-        <div className="text-lg mb-5 font-bold">{tr('order_pay')}</div>
-        {/* Flat payment grid — every method (cash + each enabled online
+          {/* pay */}
+          <div className="w-full bg-white my-5 rounded-2xl relative">
+            {!locationData?.terminal_id && (
+              <div className="absolute h-full bg-opacity-60 bg-gray-100 z-20 items-center flex justify-around left-0 bottom-0 right-0">
+                <div className="text-yellow font-bold text-2xl text-center">
+                  {tr('no_address_no_restaurant')}
+                </div>
+              </div>
+            )}
+            <div className="text-lg mb-5 font-bold">{tr('order_pay')}</div>
+            {/* Flat payment grid — every method (cash + each enabled online
             provider + deposit) is a single equal-sized card. No tabs,
             no two-step pick. Per Baymard 2025 checkout research, an "all
             methods visible" pattern lifts conversion versus tab-gated
             ones because the user immediately sees the option they want. */}
-        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3">
-          {/* Cash card. Icon: a stylised wallet/banknote (no dollar sign,
+            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3">
+              {/* Cash card. Icon: a stylised wallet/banknote (no dollar sign,
               no currency symbol — keeps it neutral so customers don't
               think they're being charged in USD). */}
-          <button
-            type="button"
-            onClick={() => {
-              setOpenTab(1)
-              if (payType !== 'cash') setPayType('cash')
-            }}
-            className={`flex flex-col items-center justify-center gap-2 aspect-square rounded-2xl border transition ${
-              openTab === 1
-                ? 'border-yellow bg-yellow-50'
-                : 'border-gray-200 hover:border-gray-300 bg-white'
-            }`}
-          >
-            <svg
-              width="44"
-              height="44"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              strokeWidth="1.7"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              className={openTab === 1 ? 'text-yellow' : 'text-gray-500'}
-            >
-              <rect x="2.5" y="6.5" width="19" height="11" rx="2" />
-              <circle cx="12" cy="12" r="2.5" />
-              <path d="M6 9.5h.01M18 14.5h.01" />
-            </svg>
-            <span className="text-sm font-semibold text-gray-700">
-              {tr('in_cash')}
-            </span>
-          </button>
+              <button
+                type="button"
+                onClick={() => {
+                  setOpenTab(1)
+                  if (payType !== 'cash') setPayType('cash')
+                }}
+                className={`flex flex-col items-center justify-center gap-2 aspect-square rounded-2xl border transition ${
+                  openTab === 1
+                    ? 'border-yellow bg-yellow-50'
+                    : 'border-gray-200 hover:border-gray-300 bg-white'
+                }`}
+              >
+                <svg
+                  width="44"
+                  height="44"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="1.7"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  className={openTab === 1 ? 'text-yellow' : 'text-gray-500'}
+                >
+                  <rect x="2.5" y="6.5" width="19" height="11" rx="2" />
+                  <circle cx="12" cy="12" r="2.5" />
+                  <path d="M6 9.5h.01M18 14.5h.01" />
+                </svg>
+                <span className="text-sm font-semibold text-gray-700">
+                  {tr('in_cash')}
+                </span>
+              </button>
 
-          {/* Online providers — only show those enabled for the selected
+              {/* Online providers — only show those enabled for the selected
               terminal, just like the legacy openTab=3 grid. */}
-          {locationData?.terminal_id &&
-            paymentTypes
-              .filter(
-                (payment: string) =>
-                  !!locationData?.terminalData?.[`${payment}_active`]
-              )
-              .map((payment: string) => {
-                const active = openTab === 3 && payType === payment
-                return (
-                  <label
-                    key={payment}
-                    className={`flex items-center justify-center aspect-square rounded-2xl border cursor-pointer transition ${
-                      active
-                        ? 'border-yellow bg-yellow-50'
-                        : 'border-gray-200 hover:border-gray-300 bg-white'
-                    }`}
-                    onClick={() => setOpenTab(3)}
-                  >
-                    <img
-                      src={`/assets/${payment}.svg`}
-                      alt={payment}
-                      width={64}
-                      height={42}
-                    />
-                    <input
-                      type="radio"
-                      {...register('pay_type', { required: openTab === 3 })}
-                      defaultValue={payment}
-                      checked={payType === payment}
-                      onChange={onValueChange}
-                      className="hidden"
-                    />
-                  </label>
-                )
-              })}
+              {locationData?.terminal_id &&
+                paymentTypes
+                  .filter(
+                    (payment: string) =>
+                      !!locationData?.terminalData?.[`${payment}_active`]
+                  )
+                  .map((payment: string) => {
+                    const active = openTab === 3 && payType === payment
+                    return (
+                      <label
+                        key={payment}
+                        className={`flex items-center justify-center aspect-square rounded-2xl border cursor-pointer transition ${
+                          active
+                            ? 'border-yellow bg-yellow-50'
+                            : 'border-gray-200 hover:border-gray-300 bg-white'
+                        }`}
+                        onClick={() => setOpenTab(3)}
+                      >
+                        <img
+                          src={`/assets/${payment}.svg`}
+                          alt={payment}
+                          width={64}
+                          height={42}
+                        />
+                        <input
+                          type="radio"
+                          {...register('pay_type', { required: openTab === 3 })}
+                          defaultValue={payment}
+                          checked={payType === payment}
+                          onChange={onValueChange}
+                          className="hidden"
+                        />
+                      </label>
+                    )
+                  })}
 
-          {/* Deposit card — disabled visually when balance is insufficient. */}
-          {deposit > 0 && (
-            <div
-              className={`relative flex flex-col items-center justify-center gap-1 aspect-square rounded-2xl border transition ${
-                payType === 'deposit'
-                  ? 'border-yellow bg-yellow-50'
-                  : 'border-gray-200 hover:border-gray-300 bg-white'
-              } ${
-                deposit < totalPrice ? 'cursor-not-allowed' : 'cursor-pointer'
-              }`}
-              onClick={(e) => {
-                if (deposit < totalPrice) {
-                  e.preventDefault()
-                  return
-                }
-                setOpenTab(3)
-                setDepositPay()
-              }}
-            >
-              {deposit < totalPrice && (
-                <div className="absolute inset-0 rounded-2xl bg-gray-500/30 flex items-start justify-center pt-1.5 text-[11px] font-bold text-yellow">
-                  {tr('insufficient_funds')}
+              {/* Deposit card — disabled visually when balance is insufficient. */}
+              {deposit > 0 && (
+                <div
+                  className={`relative flex flex-col items-center justify-center gap-1 aspect-square rounded-2xl border transition ${
+                    payType === 'deposit'
+                      ? 'border-yellow bg-yellow-50'
+                      : 'border-gray-200 hover:border-gray-300 bg-white'
+                  } ${
+                    deposit < totalPrice
+                      ? 'cursor-not-allowed'
+                      : 'cursor-pointer'
+                  }`}
+                  onClick={(e) => {
+                    if (deposit < totalPrice) {
+                      e.preventDefault()
+                      return
+                    }
+                    setOpenTab(3)
+                    setDepositPay()
+                  }}
+                >
+                  {deposit < totalPrice && (
+                    <div className="absolute inset-0 rounded-2xl bg-gray-500/30 flex items-start justify-center pt-1.5 text-[11px] font-bold text-yellow">
+                      {tr('insufficient_funds')}
+                    </div>
+                  )}
+                  <input
+                    type="radio"
+                    {...register('pay_type', { required: openTab === 3 })}
+                    defaultValue="deposit"
+                    checked={payType === 'deposit'}
+                    onChange={onValueChange}
+                    className="hidden"
+                  />
+                  <svg
+                    width="36"
+                    height="36"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="1.7"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    className={
+                      payType === 'deposit' ? 'text-yellow' : 'text-gray-500'
+                    }
+                  >
+                    <path d="M21 12a9 9 0 1 1-9-9" />
+                    <path d="M21 4v5h-5" />
+                    <path d="M9 12h6M9 16h4" />
+                  </svg>
+                  <div className="text-xs font-semibold text-gray-700">
+                    {tr('deposit_label')}
+                  </div>
+                  <div className="text-xs text-gray-500">
+                    {Intl.NumberFormat('ru').format(deposit)}
+                  </div>
                 </div>
               )}
-              <input
-                type="radio"
-                {...register('pay_type', { required: openTab === 3 })}
-                defaultValue="deposit"
-                checked={payType === 'deposit'}
-                onChange={onValueChange}
-                className="hidden"
-              />
-              <svg
-                width="36"
-                height="36"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="1.7"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                className={
-                  payType === 'deposit' ? 'text-yellow' : 'text-gray-500'
-                }
-              >
-                <path d="M21 12a9 9 0 1 1-9-9" />
-                <path d="M21 4v5h-5" />
-                <path d="M9 12h6M9 16h4" />
-              </svg>
-              <div className="text-xs font-semibold text-gray-700">
-                {tr('deposit_label')}
-              </div>
-              <div className="text-xs text-gray-500">
-                {Intl.NumberFormat('ru').format(deposit)}
-              </div>
             </div>
-          )}
-        </div>
 
-        {/* Cash-only secondary input: "Change with" appears under the
+            {/* Cash-only secondary input: "Change with" appears under the
             grid when Наличными is selected. */}
-        {openTab === 1 && (
-          <input
-            type="number"
-            {...register('change')}
-            min="10000"
-            step="1000"
-            className="focus:outline-none outline-none px-6 py-3 rounded-full text-sm md:w-80 w-full bg-gray-100 text-gray-400 mt-5"
-            placeholder={tr('change')}
-          />
-        )}
-        {/* <div className={openTab === 2 ? 'block' : 'hidden'} id="link2"> */}
-        {/* <div className="grid grid-cols-2 w-60 pt-8 items-center"> */}
-        {/* <label
+            {openTab === 1 && (
+              <input
+                type="number"
+                {...register('change')}
+                min="10000"
+                step="1000"
+                className="focus:outline-none outline-none px-6 py-3 rounded-full text-sm md:w-80 w-full bg-gray-100 text-gray-400 mt-5"
+                placeholder={tr('change')}
+              />
+            )}
+            {/* <div className={openTab === 2 ? 'block' : 'hidden'} id="link2"> */}
+            {/* <div className="grid grid-cols-2 w-60 pt-8 items-center"> */}
+            {/* <label
               className={`flex justify-around items-center w-24 h-24 p-3 rounded-2xl ${
                 payType == 'uzcard' ? 'border-yellow' : 'border-gray-200'
               } border cursor-pointer`}
@@ -1792,8 +1796,8 @@ const OrdersApp: FC<OrdersProps> = ({ channelName, isMobile = false }) => {
                 onChange={onValueChange}
                 className="hidden"
               /> */}
-        {/* </label> */}
-        {/* <label
+            {/* </label> */}
+            {/* <label
               className={`flex justify-around items-center w-24 h-24 p-3 rounded-2xl ${
                 payType == 'visa' ? 'border-yellow' : 'border-gray-200'
               } border cursor-pointer`}
@@ -1807,7 +1811,7 @@ const OrdersApp: FC<OrdersProps> = ({ channelName, isMobile = false }) => {
                 className="hidden"
               />
             </label> */}
-        {/* <label
+            {/* <label
               className={`flex justify-around items-center w-24 h-24 p-3 rounded-2xl ${
                 payType == 'humo' ? 'border-yellow' : 'border-gray-200'
               } border cursor-pointer`}
@@ -1821,7 +1825,7 @@ const OrdersApp: FC<OrdersProps> = ({ channelName, isMobile = false }) => {
                 className="hidden"
               />
             </label> */}
-        {/* <label
+            {/* <label
               className={`flex justify-around items-center w-24 h-24 p-3 rounded-2xl ${
                 payType == 'mastercard' ? 'border-yellow' : 'border-gray-200'
               } border cursor-pointer`}
@@ -1835,8 +1839,8 @@ const OrdersApp: FC<OrdersProps> = ({ channelName, isMobile = false }) => {
                 className="hidden"
               />
             </label> */}
-        {/* </div> */}
-        {/* <div className="md:w-[460px] pt-10">
+            {/* </div> */}
+            {/* <div className="md:w-[460px] pt-10">
             <div className="flex justify-between">
               <input
                 type="text"
@@ -1866,278 +1870,296 @@ const OrdersApp: FC<OrdersProps> = ({ channelName, isMobile = false }) => {
               />
             </div>
           </div> */}
-        {/* </div> */}
-        {/* Legacy openTab=3 grid removed — every method now lives in the
+            {/* </div> */}
+            {/* Legacy openTab=3 grid removed — every method now lives in the
             single flat grid above. */}
 
-        <Disclosure defaultOpen={true}>
-          {({ open }) => (
-            <>
-              <DisclosureButton className="flex text-yellow outline-none focus:outline-none mt-8">
-                <span>{tr('comment_on_the_order')}</span>
-                {/*
+            <Disclosure defaultOpen={true}>
+              {({ open }) => (
+                <>
+                  <DisclosureButton className="flex text-yellow outline-none focus:outline-none mt-8">
+                    <span>{tr('comment_on_the_order')}</span>
+                    {/*
                           Use the `open` render prop to rotate the icon when the panel is open
                         */}
-                <ChevronRightIcon
-                  className={`w-6 transform ${
-                    open ? 'rotate-90' : '-rotate-90'
-                  }`}
-                />
-              </DisclosureButton>
-              <Transition
-                show={open}
-                enter="transition duration-300 ease-out"
-                enterFrom="transform scale-95 opacity-0"
-                enterTo="transform scale-100 opacity-100"
-                leave="transition duration-300 ease-out"
-                leaveFrom="transform scale-100 opacity-100"
-                leaveTo="transform scale-95 opacity-0"
-              >
-                <DisclosurePanel>
-                  <div className="md:flex mt-3 md:w-96 h-28">
-                    <div className="w-full">
-                      <textarea
-                        {...register('notes')}
-                        className="md:w-96 w-full h-28 bg-gray-100 rounded-2xl p-3 outline-none focus:outline-none resize-none"
-                        placeholder={tr(
-                          'only_the_courier_will_see_your_comment'
-                        )}
-                      ></textarea>
-                    </div>
-                  </div>
-                </DisclosurePanel>
-              </Transition>
-            </>
-          )}
-        </Disclosure>
-      </div>
-      {/* Mobile cutlery */}
-      {isMobile && !isEmpty && (
-        <div className="bg-white px-4 py-3 flex items-center justify-between border-b border-gray-100">
-          <div className="text-sm font-medium">{tr('cutlery_and_napkins')}</div>
-          <div className="flex items-center gap-2">
-            <label htmlFor="mob_N" className="flex items-center gap-1 text-sm">
-              {tr('no')}
-              <input
-                type="radio"
-                value="N"
-                checked={cutlery === 'N'}
-                onChange={cutleryHandler}
-                id="mob_N"
-                className="border-2 border-yellow form-checkbox rounded-md text-yellow"
-              />
-            </label>
-            <label htmlFor="mob_Y" className="flex items-center gap-1 text-sm">
-              {tr('yes')}
-              <input
-                type="radio"
-                value="Y"
-                checked={cutlery === 'Y'}
-                onChange={cutleryHandler}
-                id="mob_Y"
-                className="border-2 border-yellow form-checkbox rounded-md text-yellow"
-              />
-            </label>
+                    <ChevronRightIcon
+                      className={`w-6 transform ${
+                        open ? 'rotate-90' : '-rotate-90'
+                      }`}
+                    />
+                  </DisclosureButton>
+                  <Transition
+                    show={open}
+                    enter="transition duration-300 ease-out"
+                    enterFrom="transform scale-95 opacity-0"
+                    enterTo="transform scale-100 opacity-100"
+                    leave="transition duration-300 ease-out"
+                    leaveFrom="transform scale-100 opacity-100"
+                    leaveTo="transform scale-95 opacity-0"
+                  >
+                    <DisclosurePanel>
+                      <div className="md:flex mt-3 md:w-96 h-28">
+                        <div className="w-full">
+                          <textarea
+                            {...register('notes')}
+                            className="md:w-96 w-full h-28 bg-gray-100 rounded-2xl p-3 outline-none focus:outline-none resize-none"
+                            placeholder={tr(
+                              'only_the_courier_will_see_your_comment'
+                            )}
+                          ></textarea>
+                        </div>
+                      </div>
+                    </DisclosurePanel>
+                  </Transition>
+                </>
+              )}
+            </Disclosure>
           </div>
-        </div>
-      )}
-      <div className={`w-full bg-white my-5 rounded-2xl order-confirm-section`}>
-        <div className={`${isMobile ? 'hidden' : 'md:flex'}`}>
-          {!!user?.user?.sms_sub != true ||
-            (!!user?.user?.email_sub != true && (
-              <div className="mr-8 text-gray-400">{tr('agree_to_send')}</div>
-            ))}
-          {!!user?.user?.sms_sub != true && (
-            <label className="mr-8 cursor-pointer text-gray-400 items-center flex">
-              <input
-                type="checkbox"
-                defaultValue="sms"
-                className={` ${
-                  sms ? 'text-yellow' : 'bg-gray-200'
-                } form-checkbox h-5 w-5  rounded-md  mr-2`}
-                onChange={smsValueChange}
-              />
-              <div>SMS</div>
-            </label>
-          )}
-          {!!user?.user?.email_sub != true && authEmail && (
-            <label className="cursor-pointer text-gray-400 items-center flex">
-              <input
-                type="checkbox"
-                defaultValue="newsletter"
-                className={` ${
-                  newsletter ? 'text-yellow' : 'bg-gray-200'
-                } form-checkbox h-5 w-5  rounded-md mr-2`}
-                onChange={newsletterValueChange}
-              />
-              <div>E-mail {tr('mailing')}</div>
-            </label>
-          )}
-        </div>
-        <div
-          className={`mt-5 text-gray-400 text-sm md:flex border-b pb-8 ${
-            isMobile ? 'hidden' : ''
-          }`}
-        >
-          {tr('processing_of_your_personal_data')}
-          <a
-            href="/privacy"
-            onClick={showPrivacy}
-            className="text-yellow block md:mx-1"
-            target="_blank"
-          >
-            {tr('terms_of_use')}
-          </a>
-        </div>
-        <Transition appear show={isShowPrivacy}>
-          <Dialog
-            as="div"
-            className="fixed inset-0 z-10 overflow-y-auto"
-            onClose={closePrivacy}
-            initialFocus={privacyButtonRef}
-          >
-            <div className="min-h-screen px-4 text-center">
-              <TransitionChild
-                enter="ease-out duration-300"
-                enterFrom="opacity-0"
-                enterTo="opacity-100"
-                leave="ease-in duration-200"
-                leaveFrom="opacity-100"
-                leaveTo="opacity-0"
-              >
-                <DialogBackdrop className="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity" />
-              </TransitionChild>
-
-              {/* This element is to trick the browser into centering the modal contents. */}
-              <span
-                className="inline-block h-screen align-middle"
-                aria-hidden="true"
-              >
-                &#8203;
-              </span>
-              <TransitionChild
-                enter="ease-out duration-300"
-                enterFrom="opacity-0 scale-95"
-                enterTo="opacity-100 scale-100"
-                leave="ease-in duration-200"
-                leaveFrom="opacity-100 scale-100"
-                leaveTo="opacity-0 scale-95"
-              >
-                <div className="align-middle inline-block overflow-hidden w-full">
-                  <div className="inline-flex my-8 items-start">
-                    <div
-                      className="align-middle bg-white inline-block max-w-4xl overflow-hidden p-10 rounded-2xl shadow-xl text-left transform transition-all w-full"
-                      dangerouslySetInnerHTML={{ __html: tr('privacy_text') }}
-                    ></div>
-                    <button
-                      className="text-white outline-none focus:outline-none transform"
-                      onClick={closePrivacy}
-                      ref={privacyButtonRef}
-                    >
-                      <XIcon className="text-white cursor-pointer w-10 h-10" />
-                    </button>
-                  </div>
-                </div>
-              </TransitionChild>
+          {/* Mobile cutlery */}
+          {isMobile && !isEmpty && (
+            <div className="bg-white px-4 py-3 flex items-center justify-between border-b border-gray-100">
+              <div className="text-sm font-medium">
+                {tr('cutlery_and_napkins')}
+              </div>
+              <div className="flex items-center gap-2">
+                <label
+                  htmlFor="mob_N"
+                  className="flex items-center gap-1 text-sm"
+                >
+                  {tr('no')}
+                  <input
+                    type="radio"
+                    value="N"
+                    checked={cutlery === 'N'}
+                    onChange={cutleryHandler}
+                    id="mob_N"
+                    className="border-2 border-yellow form-checkbox rounded-md text-yellow"
+                  />
+                </label>
+                <label
+                  htmlFor="mob_Y"
+                  className="flex items-center gap-1 text-sm"
+                >
+                  {tr('yes')}
+                  <input
+                    type="radio"
+                    value="Y"
+                    checked={cutlery === 'Y'}
+                    onChange={cutleryHandler}
+                    id="mob_Y"
+                    className="border-2 border-yellow form-checkbox rounded-md text-yellow"
+                  />
+                </label>
+              </div>
             </div>
-          </Dialog>
-        </Transition>
-        {/* Desktop: sticky bottom CTA bar so the user never has to scroll
+          )}
+          <div
+            className={`w-full bg-white my-5 rounded-2xl order-confirm-section`}
+          >
+            <div className={`${isMobile ? 'hidden' : 'md:flex'}`}>
+              {!!user?.user?.sms_sub != true ||
+                (!!user?.user?.email_sub != true && (
+                  <div className="mr-8 text-gray-400">
+                    {tr('agree_to_send')}
+                  </div>
+                ))}
+              {!!user?.user?.sms_sub != true && (
+                <label className="mr-8 cursor-pointer text-gray-400 items-center flex">
+                  <input
+                    type="checkbox"
+                    defaultValue="sms"
+                    className={` ${
+                      sms ? 'text-yellow' : 'bg-gray-200'
+                    } form-checkbox h-5 w-5  rounded-md  mr-2`}
+                    onChange={smsValueChange}
+                  />
+                  <div>SMS</div>
+                </label>
+              )}
+              {!!user?.user?.email_sub != true && authEmail && (
+                <label className="cursor-pointer text-gray-400 items-center flex">
+                  <input
+                    type="checkbox"
+                    defaultValue="newsletter"
+                    className={` ${
+                      newsletter ? 'text-yellow' : 'bg-gray-200'
+                    } form-checkbox h-5 w-5  rounded-md mr-2`}
+                    onChange={newsletterValueChange}
+                  />
+                  <div>E-mail {tr('mailing')}</div>
+                </label>
+              )}
+            </div>
+            <div
+              className={`mt-5 text-gray-400 text-sm md:flex border-b pb-8 ${
+                isMobile ? 'hidden' : ''
+              }`}
+            >
+              {tr('processing_of_your_personal_data')}
+              <a
+                href="/privacy"
+                onClick={showPrivacy}
+                className="text-yellow block md:mx-1"
+                target="_blank"
+              >
+                {tr('terms_of_use')}
+              </a>
+            </div>
+            <Transition appear show={isShowPrivacy}>
+              <Dialog
+                as="div"
+                className="fixed inset-0 z-10 overflow-y-auto"
+                onClose={closePrivacy}
+                initialFocus={privacyButtonRef}
+              >
+                <div className="min-h-screen px-4 text-center">
+                  <TransitionChild
+                    enter="ease-out duration-300"
+                    enterFrom="opacity-0"
+                    enterTo="opacity-100"
+                    leave="ease-in duration-200"
+                    leaveFrom="opacity-100"
+                    leaveTo="opacity-0"
+                  >
+                    <DialogBackdrop className="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity" />
+                  </TransitionChild>
+
+                  {/* This element is to trick the browser into centering the modal contents. */}
+                  <span
+                    className="inline-block h-screen align-middle"
+                    aria-hidden="true"
+                  >
+                    &#8203;
+                  </span>
+                  <TransitionChild
+                    enter="ease-out duration-300"
+                    enterFrom="opacity-0 scale-95"
+                    enterTo="opacity-100 scale-100"
+                    leave="ease-in duration-200"
+                    leaveFrom="opacity-100 scale-100"
+                    leaveTo="opacity-0 scale-95"
+                  >
+                    <div className="align-middle inline-block overflow-hidden w-full">
+                      <div className="inline-flex my-8 items-start">
+                        <div
+                          className="align-middle bg-white inline-block max-w-4xl overflow-hidden p-10 rounded-2xl shadow-xl text-left transform transition-all w-full"
+                          dangerouslySetInnerHTML={{
+                            __html: tr('privacy_text'),
+                          }}
+                        ></div>
+                        <button
+                          className="text-white outline-none focus:outline-none transform"
+                          onClick={closePrivacy}
+                          ref={privacyButtonRef}
+                        >
+                          <XIcon className="text-white cursor-pointer w-10 h-10" />
+                        </button>
+                      </div>
+                    </div>
+                  </TransitionChild>
+                </div>
+              </Dialog>
+            </Transition>
+            {/* Desktop: sticky bottom CTA bar so the user never has to scroll
             to the end to find "Оформить заказ" — verified +10–20% AtC
             uplift pattern (FunnelKit, GemPages 2025). On mobile the
             sticky behavior is already handled by mobile-checkout-wrap
             CSS in MobileOrdersApp. */}
-        {isBelowMinOrderDelivery && (
-          <div
-            role="alert"
-            className="mt-6 md:mt-8 rounded-2xl bg-yellow-50 border border-yellow-300 text-yellow-900 px-4 py-3 text-sm"
-          >
-            {locale === 'uz'
-              ? `Yetkazib berish uchun minimal buyurtma summasi ${fmtMinSum(
-                  MIN_ORDER_PRICE
-                )}. Yana ${fmtMinSum(missingForMinOrder)} qo'shing.`
-              : locale === 'en'
-              ? `Minimum order amount for delivery ${fmtMinSum(
-                  MIN_ORDER_PRICE
-                )}. Add ${fmtMinSum(missingForMinOrder)} more.`
-              : `Минимальная сумма заказа для доставки ${fmtMinSum(
-                  MIN_ORDER_PRICE
-                )}. Добавьте ещё на ${fmtMinSum(missingForMinOrder)}.`}
-          </div>
-        )}
-        <div className="md:flex justify-between mt-8 space-y-2 md:space-y-0 md:sticky md:bottom-4 md:z-30 md:bg-white md:rounded-full md:shadow-[0_-4px_24px_rgba(0,0,0,0.08)] md:px-3 md:py-2">
-          <button
-            className="md:text-xl text-gray-400 bg-gray-200 flex h-12 items-center justify-between px-12 rounded-full md:w-80 w-full"
-            onClick={(e) => {
-              e.preventDefault()
-              router.push(`/${activeCity?.slug}/cart/`)
-            }}
-          >
-            {/* Plain <img> instead of next/image — these little chevrons
+            {isBelowMinOrderDelivery && (
+              <div
+                role="alert"
+                className="mt-6 md:mt-8 rounded-2xl bg-yellow-50 border border-yellow-300 text-yellow-900 px-4 py-3 text-sm"
+              >
+                {locale === 'uz'
+                  ? `Yetkazib berish uchun minimal buyurtma summasi ${fmtMinSum(
+                      MIN_ORDER_PRICE
+                    )}. Yana ${fmtMinSum(missingForMinOrder)} qo'shing.`
+                  : locale === 'en'
+                  ? `Minimum order amount for delivery ${fmtMinSum(
+                      MIN_ORDER_PRICE
+                    )}. Add ${fmtMinSum(missingForMinOrder)} more.`
+                  : `Минимальная сумма заказа для доставки ${fmtMinSum(
+                      MIN_ORDER_PRICE
+                    )}. Добавьте ещё на ${fmtMinSum(missingForMinOrder)}.`}
+              </div>
+            )}
+            <div className="md:flex justify-between mt-8 space-y-2 md:space-y-0 md:sticky md:bottom-4 md:z-30 md:bg-white md:rounded-full md:shadow-[0_-4px_24px_rgba(0,0,0,0.08)] md:px-3 md:py-2">
+              <button
+                className="md:text-xl text-gray-400 bg-gray-200 flex h-12 items-center justify-between px-12 rounded-full md:w-80 w-full"
+                onClick={(e) => {
+                  e.preventDefault()
+                  router.push(`/${activeCity?.slug}/cart/`)
+                }}
+              >
+                {/* Plain <img> instead of next/image — these little chevrons
                 were a noisy element type on minified prod and don't
                 benefit from the optimizer (already 20px). */}
-            <img src="/left.png" alt="" width={20} height={20} />{' '}
-            {tr('back_to_basket')}
-          </button>
-          <button
-            className={`md:text-xl text-white bg-yellow flex h-12 items-center justify-evenly rounded-full md:w-80 w-full ${
-              !locationData?.terminal_id || isBelowMinOrderDelivery
-                ? 'opacity-25 cursor-not-allowed'
-                : ''
-            }`}
-            disabled={
-              !locationData?.terminal_id ||
-              isSavingOrder ||
-              isBelowMinOrderDelivery
-            }
-            onClick={handleSubmit(saveOrder)}
-          >
-            {isSavingOrder ? (
-              <svg
-                className="animate-spin h-5 mx-auto text-center text-white w-5"
-                xmlns="http://www.w3.org/2000/svg"
-                fill="none"
-                viewBox="0 0 24 24"
+                <img src="/left.png" alt="" width={20} height={20} />{' '}
+                {tr('back_to_basket')}
+              </button>
+              <button
+                className={`md:text-xl text-white bg-yellow flex h-12 items-center justify-evenly rounded-full md:w-80 w-full ${
+                  !locationData?.terminal_id || isBelowMinOrderDelivery
+                    ? 'opacity-25 cursor-not-allowed'
+                    : ''
+                }`}
+                disabled={
+                  !locationData?.terminal_id ||
+                  isSavingOrder ||
+                  isBelowMinOrderDelivery
+                }
+                onClick={handleSubmit(saveOrder)}
               >
-                <circle
-                  className="opacity-25"
-                  cx="12"
-                  cy="12"
-                  r="10"
-                  stroke="currentColor"
-                  strokeWidth="4"
-                ></circle>
-                <path
-                  className="opacity-75"
-                  fill="currentColor"
-                  d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
-                ></path>
-              </svg>
-            ) : (
-              <>
-                {tr('checkout')}
-                {isMobile && totalPrice > 0 && (
-                  <span className="ml-1">
-                    ·{' '}
-                    {currency(totalPrice, {
-                      pattern: '# !',
-                      separator: ' ',
-                      decimal: '.',
-                      symbol: `${
-                        locale == 'uz' ? "so'm" : locale == 'ru' ? 'сум' : 'sum'
-                      }`,
-                      precision: 0,
-                    }).format()}
-                  </span>
+                {isSavingOrder ? (
+                  <svg
+                    className="animate-spin h-5 mx-auto text-center text-white w-5"
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                  >
+                    <circle
+                      className="opacity-25"
+                      cx="12"
+                      cy="12"
+                      r="10"
+                      stroke="currentColor"
+                      strokeWidth="4"
+                    ></circle>
+                    <path
+                      className="opacity-75"
+                      fill="currentColor"
+                      d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+                    ></path>
+                  </svg>
+                ) : (
+                  <>
+                    {tr('checkout')}
+                    {isMobile && totalPrice > 0 && (
+                      <span className="ml-1">
+                        ·{' '}
+                        {currency(totalPrice, {
+                          pattern: '# !',
+                          separator: ' ',
+                          decimal: '.',
+                          symbol: `${
+                            locale == 'uz'
+                              ? "so'm"
+                              : locale == 'ru'
+                              ? 'сум'
+                              : 'sum'
+                          }`,
+                          precision: 0,
+                        }).format()}
+                      </span>
+                    )}
+                    {!isMobile && (
+                      <img src="/right.png" alt="" width={20} height={20} />
+                    )}
+                  </>
                 )}
-                {!isMobile && (
-                  <img src="/right.png" alt="" width={20} height={20} />
-                )}
-              </>
-            )}
-          </button>
-        </div>
-      </div>
+              </button>
+            </div>
+          </div>
         </div>
         <div className="w-full md:w-80 lg:w-96 md:flex-shrink-0 md:sticky md:top-28 order-summary-col">
           <div className="w-full bg-white my-5 rounded-2xl border border-gray-100 shadow-md p-5 md:p-6 order-summary-section">
@@ -2155,43 +2177,41 @@ const OrdersApp: FC<OrdersProps> = ({ channelName, isMobile = false }) => {
                 >
                   <div className="flex items-start justify-between gap-3">
                     <div className="font-semibold text-base leading-snug min-w-0">
-                      {lineItem.child && lineItem.child.length == 1 ? (
-                        `${
-                          lineItem?.variant?.product?.attribute_data?.name?.[
+                      {lineItem.child && lineItem.child.length == 1
+                        ? `${
+                            lineItem?.variant?.product?.attribute_data?.name?.[
+                              channelName
+                            ]?.[locale || 'ru'] ||
+                            lineItem?.variant?.product?.attribute_data?.name?.[
+                              channelName
+                            ]?.['ru'] ||
+                            ''
+                          } + ${lineItem?.child
+                            .filter(
+                              (v: any) =>
+                                lineItem?.variant?.product?.box_id !=
+                                v?.variant?.product?.id
+                            )
+                            .map(
+                              (v: any) =>
+                                v?.variant?.product?.attribute_data?.name?.[
+                                  channelName
+                                ]?.[locale || 'ru'] ||
+                                v?.variant?.product?.attribute_data?.name?.[
+                                  channelName
+                                ]?.['ru'] ||
+                                ''
+                            )
+                            .join(' + ')}`
+                        : isProductInStop.includes(lineItem.id)
+                        ? tr('stop_product')
+                        : lineItem?.variant?.product?.attribute_data?.name?.[
                             channelName
                           ]?.[locale || 'ru'] ||
                           lineItem?.variant?.product?.attribute_data?.name?.[
                             channelName
                           ]?.['ru'] ||
-                          ''
-                        } + ${lineItem?.child
-                          .filter(
-                            (v: any) =>
-                              lineItem?.variant?.product?.box_id !=
-                              v?.variant?.product?.id
-                          )
-                          .map(
-                            (v: any) =>
-                              v?.variant?.product?.attribute_data?.name?.[
-                                channelName
-                              ]?.[locale || 'ru'] ||
-                              v?.variant?.product?.attribute_data?.name?.[
-                                channelName
-                              ]?.['ru'] ||
-                              ''
-                          )
-                          .join(' + ')}`
-                      ) : isProductInStop.includes(lineItem.id) ? (
-                        tr('stop_product')
-                      ) : (
-                        lineItem?.variant?.product?.attribute_data?.name?.[
-                          channelName
-                        ]?.[locale || 'ru'] ||
-                        lineItem?.variant?.product?.attribute_data?.name?.[
-                          channelName
-                        ]?.['ru'] ||
-                        ''
-                      )}
+                          ''}
                     </div>
                     <div className="flex flex-col items-end flex-shrink-0">
                       {lineItem.total > 0 && lineItem.quantity > 1 && (
