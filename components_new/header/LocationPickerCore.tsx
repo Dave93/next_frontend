@@ -3,6 +3,8 @@
 import { FC, useEffect, useMemo, useRef, useState } from 'react'
 import { XIcon } from '@heroicons/react/outline'
 import { useLocationStore } from '../../lib/stores/location-store'
+import type { Address } from '../../lib/stores/location-store'
+import getAddressList from '@lib/load_addreses'
 import { useExtracted, useLocale } from 'next-intl'
 import axios from 'axios'
 import dynamic from 'next/dynamic'
@@ -63,8 +65,7 @@ const isTerminalOpenNow = (desc?: string | null) => {
   const sched = extractScheduleFromDesc(desc)
   if (!sched) return true
   const now = tashkentMinutesNow()
-  if (sched.close >= sched.open)
-    return now >= sched.open && now < sched.close
+  if (sched.close >= sched.open) return now >= sched.open && now < sched.close
   return now >= sched.open || now < sched.close
 }
 
@@ -126,6 +127,10 @@ const LocationPickerCore: FC<Props> = ({
   const cities = useLocationStore((s) => s.cities) as any
   const setLocationData = useLocationStore((s) => s.setLocationData) as any
   const setActiveCity = useLocationStore((s) => s.setActiveCity)
+  const addressList = useLocationStore((s) => s.addressList) as any
+  const setAddressList = useLocationStore((s) => s.setAddressList) as any
+  const addressId = useLocationStore((s) => s.addressId)
+  const setAddressId = useLocationStore((s) => s.setAddressId)
   const t = useExtracted()
   const locale = useLocale()
   const isMd = useIsMd()
@@ -151,7 +156,9 @@ const LocationPickerCore: FC<Props> = ({
   const [tab, setTab] = useState<Tab>(
     initialTab || locationData?.deliveryType || 'deliver'
   )
-  const [address, setAddress] = useState(locationData?.address || defaultAddress)
+  const [address, setAddress] = useState(
+    locationData?.address || defaultAddress
+  )
   const [house, setHouse] = useState(locationData?.house || '')
   const [flat, setFlat] = useState(locationData?.flat || '')
   const [entrance, setEntrance] = useState(locationData?.entrance || '')
@@ -166,8 +173,20 @@ const LocationPickerCore: FC<Props> = ({
     locationData?.location || null
   )
   const [pickupPoints, setPickupPoints] = useState<any[]>([])
-  const [terminal, setTerminal] = useState<any>(locationData?.terminalData || null)
+  const [terminal, setTerminal] = useState<any>(
+    locationData?.terminalData || null
+  )
   const [showCityDropdown, setShowCityDropdown] = useState(false)
+  // Which saved address is currently picked in delivery mode (DAV-628).
+  // null = manually typed / none. Seeded from the store's addressId.
+  const [selectedAddressId, setSelectedAddressId] = useState<number | null>(
+    addressId ?? null
+  )
+  // Restaurant that will serve the chosen delivery address. Re-resolved from
+  // coords whenever the address changes so it never goes stale (DAV-628).
+  const [nearestTerminal, setNearestTerminal] = useState<any>(
+    locationData?.terminalData || null
+  )
 
   const debounceRef = useRef<NodeJS.Timeout | null>(null)
 
@@ -182,8 +201,29 @@ const LocationPickerCore: FC<Props> = ({
     setLabel(locationData?.label || '')
     setCoords(locationData?.location || null)
     setTerminal(locationData?.terminalData || null)
+    setSelectedAddressId(addressId ?? null)
+    setNearestTerminal(locationData?.terminalData || null)
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [resyncKey, initialTab])
+
+  // Load saved addresses so delivery mode can offer them instead of forcing
+  // manual entry (DAV-628). Requires auth (opt_token) — silently no-ops for
+  // guests or when the list is already populated.
+  useEffect(() => {
+    if (tab !== 'deliver') return
+    if (addressList && addressList.length) return
+    let cancelled = false
+    getAddressList()
+      .then((list) => {
+        if (!cancelled && Array.isArray(list) && list.length)
+          setAddressList(list)
+      })
+      .catch(() => {})
+    return () => {
+      cancelled = true
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [tab])
 
   useEffect(() => {
     if (tab !== 'pickup' || !activeCity?.id) return
@@ -224,17 +264,61 @@ const LocationPickerCore: FC<Props> = ({
   const handleAddressChange = (val: string) => {
     setAddress(val)
     setCoords(null)
+    setSelectedAddressId(null)
+    setNearestTerminal(null)
     fetchSuggestions(val)
   }
 
   const handlePickSuggestion = (s: Suggestion) => {
     setAddress(s.formatted || s.title)
-    setCoords([parseFloat(s.coordinates.lat), parseFloat(s.coordinates.long)])
+    const lat = parseFloat(s.coordinates.lat)
+    const lon = parseFloat(s.coordinates.long)
+    setCoords([lat, lon])
+    setSelectedAddressId(null)
     setSuggestions([])
+    resolveNearest(lat, lon)
+  }
+
+  // Pick a saved address (DAV-628) — fill the form from it instead of
+  // re-typing. Tracks selectedAddressId so submit can persist it.
+  const handleSelectSaved = (a: Address) => {
+    setAddress(a.address || defaultAddress)
+    setHouse(a.house || '')
+    setFlat(a.flat || '')
+    setEntrance(a.entrance || '')
+    setDoorCode(a.door_code || '')
+    setLabel(a.label || '')
+    setCoords(a.lat != null && a.lon != null ? [a.lat, a.lon] : null)
+    setSelectedAddressId(a.id)
+    setSuggestions([])
+    if (a.entrance || a.door_code || a.label) setShowExtras(true)
+    if (a.lat != null && a.lon != null) resolveNearest(a.lat, a.lon)
+    else setNearestTerminal(null)
+  }
+
+  // Resolve the restaurant serving these delivery coords (DAV-628) so the
+  // "Ближайший ресторан" badge updates with the address instead of showing a
+  // stale terminal. null coords → clear it.
+  const resolveNearest = async (lat?: number | null, lon?: number | null) => {
+    if (lat == null || lon == null) {
+      setNearestTerminal(null)
+      return
+    }
+    try {
+      const { data } = await axios.get(
+        `${webAddress}/api/terminals/find_nearest?lat=${lat}&lon=${lon}`
+      )
+      const items = data?.data?.items
+      setNearestTerminal(Array.isArray(items) && items.length ? items[0] : null)
+    } catch {
+      setNearestTerminal(null)
+    }
   }
 
   const handleMapPick = async (lat: number, lon: number) => {
     setCoords([lat, lon])
+    setSelectedAddressId(null)
+    resolveNearest(lat, lon)
     try {
       const { data } = await axios.get(`/api/geocode?lat=${lat}&lon=${lon}`)
       const item = Array.isArray(data) ? data[0] : data
@@ -268,7 +352,15 @@ const LocationPickerCore: FC<Props> = ({
         label,
         deliveryType: 'deliver',
         location: coords || undefined,
+        // Persist the restaurant resolved for THIS address (DAV-628). Replaces
+        // any stale pickup branch; null when coords/terminal couldn't resolve,
+        // so the cart re-resolves on checkout instead of trusting an old one.
+        terminal_id: nearestTerminal?.id ?? null,
+        terminalData: nearestTerminal ?? null,
       })
+      // Keep addressId in sync with the picked saved address (or clear it for
+      // a manually-typed address) so the cart highlights the same thing.
+      setAddressId(selectedAddressId ?? null)
     } else {
       if (!terminal) return
       const termAddress =
@@ -291,6 +383,9 @@ const LocationPickerCore: FC<Props> = ({
         terminalId: terminal.id,
         terminalData: terminal,
       })
+      // Pickup has no saved address — clear addressId so the cart stops
+      // highlighting a previously-selected delivery address (DAV-628).
+      setAddressId(null)
     }
     onSaved?.()
   }
@@ -323,11 +418,7 @@ const LocationPickerCore: FC<Props> = ({
   ])
 
   const cityNameOf = (c: any) =>
-    locale === 'uz'
-      ? c.name_uz
-      : locale === 'en'
-        ? c.name_en || c.name
-        : c.name
+    locale === 'uz' ? c.name_uz : locale === 'en' ? c.name_en || c.name : c.name
 
   return (
     <div className={inline ? '' : 'p-3 md:p-5'}>
@@ -382,6 +473,87 @@ const LocationPickerCore: FC<Props> = ({
               />
             </MapErrorBoundary>
           </div>
+
+          {Array.isArray(addressList) && addressList.length > 0 && (
+            <div className="mb-4">
+              <div className="mb-2" style={{ fontSize: 18, color: GRAY_400 }}>
+                {t('Сохранённые адреса')}
+              </div>
+              <div
+                className="grid gap-2"
+                style={{ gridTemplateColumns: isMd ? '1fr 1fr' : '1fr' }}
+              >
+                {addressList.map((a: Address) => {
+                  const isSel = selectedAddressId === a.id
+                  return (
+                    <button
+                      key={a.id}
+                      type="button"
+                      onClick={() => handleSelectSaved(a)}
+                      className="text-left flex items-start gap-2"
+                      style={{
+                        border: `1px solid ${isSel ? YELLOW : GRAY_400}`,
+                        borderRadius: 15,
+                        padding: 12,
+                        background: isSel
+                          ? 'rgba(250, 175, 4, 0.08)'
+                          : 'transparent',
+                      }}
+                    >
+                      <span
+                        className="mt-0.5 flex-shrink-0"
+                        style={{
+                          width: 16,
+                          height: 16,
+                          borderRadius: '50%',
+                          border: `1px solid ${isSel ? YELLOW : GRAY_400}`,
+                          display: 'inline-flex',
+                          alignItems: 'center',
+                          justifyContent: 'center',
+                        }}
+                      >
+                        {isSel && (
+                          <span
+                            style={{
+                              width: 8,
+                              height: 8,
+                              borderRadius: '50%',
+                              background: YELLOW,
+                              display: 'block',
+                            }}
+                          />
+                        )}
+                      </span>
+                      <div className="flex-1 min-w-0">
+                        {a.label && (
+                          <div
+                            style={{
+                              fontWeight: 700,
+                              fontSize: 14,
+                              marginBottom: 2,
+                            }}
+                          >
+                            {a.label}
+                          </div>
+                        )}
+                        <div
+                          style={{
+                            fontSize: 12,
+                            color: GRAY_500,
+                            lineHeight: 1.3,
+                          }}
+                        >
+                          {a.address}
+                          {a.house ? `, ${t('д.')} ${a.house}` : ''}
+                          {a.flat ? `, ${t('кв.')} ${a.flat}` : ''}
+                        </div>
+                      </div>
+                    </button>
+                  )
+                })}
+              </div>
+            </div>
+          )}
 
           <div className="flex items-center justify-between mb-2">
             <span style={{ fontSize: 18, color: GRAY_400 }}>
@@ -622,7 +794,7 @@ const LocationPickerCore: FC<Props> = ({
               be dispatched from once OrdersApp's auto-search pinned one
               to locationData.terminalData. Trust signal — the user sees
               who's preparing the order before paying. */}
-          {locationData?.terminal_id && locationData?.terminalData && (
+          {nearestTerminal && (
             <div
               className="mt-3 flex items-start gap-2 rounded-2xl"
               style={{
@@ -664,13 +836,13 @@ const LocationPickerCore: FC<Props> = ({
                     lineHeight: 1.25,
                   }}
                 >
-                  {(locale === 'uz' && locationData.terminalData.name_uz) ||
-                    (locale === 'en' && locationData.terminalData.name_en) ||
-                    locationData.terminalData.name}
+                  {(locale === 'uz' && nearestTerminal.name_uz) ||
+                    (locale === 'en' && nearestTerminal.name_en) ||
+                    nearestTerminal.name}
                 </div>
-                {(locationData.terminalData.desc ||
-                  locationData.terminalData.desc_uz ||
-                  locationData.terminalData.desc_en) && (
+                {(nearestTerminal.desc ||
+                  nearestTerminal.desc_uz ||
+                  nearestTerminal.desc_en) && (
                   <div
                     style={{
                       fontSize: 12,
@@ -679,11 +851,9 @@ const LocationPickerCore: FC<Props> = ({
                       marginTop: 2,
                     }}
                   >
-                    {(locale === 'uz' &&
-                      locationData.terminalData.desc_uz) ||
-                      (locale === 'en' &&
-                        locationData.terminalData.desc_en) ||
-                      locationData.terminalData.desc}
+                    {(locale === 'uz' && nearestTerminal.desc_uz) ||
+                      (locale === 'en' && nearestTerminal.desc_en) ||
+                      nearestTerminal.desc}
                   </div>
                 )}
               </div>
@@ -700,9 +870,7 @@ const LocationPickerCore: FC<Props> = ({
           <div
             className="grid gap-2"
             style={{
-              gridTemplateColumns: isMd
-                ? 'repeat(3, minmax(0, 1fr))'
-                : '1fr',
+              gridTemplateColumns: isMd ? 'repeat(3, minmax(0, 1fr))' : '1fr',
             }}
           >
             {pickupPoints.length === 0 && (
