@@ -6,7 +6,7 @@ import { Link, useRouter } from '../../i18n/navigation'
 import axios from 'axios'
 import defaultChannel from '@lib/defaultChannel'
 import currency from 'currency.js'
-import getAssetUrl from '@utils/getAssetUrl'
+import { pickProductImage } from '@utils/getAssetUrl'
 import { composeHalfPizzaName } from '@lib/utils/composeHalfPizzaName'
 import { useCartStore, cartSelectors } from '../../lib/stores/cart-store'
 import {
@@ -434,14 +434,14 @@ export default function CartApp(_props: CartAppProps) {
         return (
           <div className="w-16 h-16 relative rounded-2xl bg-gray-50 overflow-hidden flex-shrink-0">
             <img
-              src={getAssetUrl(line?.variant?.product?.assets)}
+              src={pickProductImage(line?.variant?.product)}
               className="absolute inset-0 m-auto w-10 h-10 object-contain rounded-full"
               alt=""
             />
             {child.map((c: any, i: number) => (
               <img
                 key={i}
-                src={getAssetUrl(c?.variant?.product?.assets)}
+                src={pickProductImage(c?.variant?.product)}
                 className="absolute w-8 h-8 object-contain rounded-full bg-white"
                 style={{
                   right: i * 6,
@@ -457,14 +457,14 @@ export default function CartApp(_props: CartAppProps) {
         <div className="w-16 h-16 flex rounded-2xl bg-gray-50 overflow-hidden flex-shrink-0">
           <div className="w-1/2 relative overflow-hidden">
             <img
-              src={getAssetUrl(line?.variant?.product?.assets)}
+              src={pickProductImage(line?.variant?.product)}
               className="absolute h-full max-w-none left-0"
               alt=""
             />
           </div>
           <div className="w-1/2 relative overflow-hidden">
             <img
-              src={getAssetUrl(child[0]?.variant?.product?.assets)}
+              src={pickProductImage(child[0]?.variant?.product)}
               className="absolute h-full max-w-none right-0"
               alt=""
             />
@@ -475,7 +475,7 @@ export default function CartApp(_props: CartAppProps) {
     return (
       <div className="w-16 h-16 rounded-2xl bg-gray-50 flex items-center justify-center overflow-hidden flex-shrink-0">
         <img
-          src={getAssetUrl(line?.variant?.product?.assets)}
+          src={pickProductImage(line?.variant?.product)}
           className="max-w-full max-h-full object-contain"
           alt=""
         />
