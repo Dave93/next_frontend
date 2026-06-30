@@ -41,9 +41,13 @@ const ProductDetailContent: FC<Props> = ({ product, onAdded }) => {
       product?.attribute_data?.description?.['chopar']?.['ru']
     const raw = attr || product?.description || product?.desc || ''
     return raw
+      .replace(/<br\s*\/?>/gi, '\n')
+      .replace(/<\/(p|div|li)>/gi, '\n')
       .replace(/<[^>]+>/g, ' ')
       .replace(/&nbsp;/g, ' ')
-      .replace(/\s+/g, ' ')
+      .replace(/[ \t\u00a0]+/g, ' ')
+      .replace(/[ \t]*\n[ \t]*/g, '\n')
+      .replace(/\n{3,}/g, '\n\n')
       .trim()
   })()
 
@@ -93,7 +97,7 @@ const ProductDetailContent: FC<Props> = ({ product, onAdded }) => {
           {localizedName}
         </h1>
         {localizedDesc && (
-          <p className="mt-3 text-sm md:text-base text-gray-500 leading-relaxed">
+          <p className="mt-3 text-sm md:text-base text-gray-500 leading-relaxed whitespace-pre-line">
             {localizedDesc}
           </p>
         )}
