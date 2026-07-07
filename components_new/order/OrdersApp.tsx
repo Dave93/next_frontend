@@ -1128,6 +1128,8 @@ const OrdersApp: FC<OrdersProps> = ({ channelName, isMobile = false }) => {
           },
           code: otpCode,
           basket_id: cartId,
+          // Сквозная аналитика: трекинг-трейс посетителя (source из utm) -> backend -> init.php
+          b24_trace: (() => { try { return (window as any).b24Tracker?.guest?.getTrace?.({}) || undefined } catch (e) { return undefined } })(),
         },
         {
           headers: {
@@ -1156,18 +1158,7 @@ const OrdersApp: FC<OrdersProps> = ({ channelName, isMobile = false }) => {
       })
 
       useCartStore.getState().setFromServer(null, [])
-      const orderHashids = new Hashids(
-        'order',
-        15,
-        'abcdefghijklmnopqrstuvwxyz1234567890'
-      )
       router.push(`/${activeCity?.slug}/order/${data.order.id}`)
-      setTimeout(() => {
-        ;(window.b24order = window.b24order || []).push({
-          id: orderHashids.decode(data.order.id)[0],
-          sum: data.order?.order_total / 100,
-        })
-      }, 500)
     } catch (e: any) {
       const errMsg =
         e?.response?.data?.error?.message ||
