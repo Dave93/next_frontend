@@ -5,6 +5,7 @@ import Image from 'next/image'
 import currency from 'currency.js'
 import { useExtracted, useLocale } from 'next-intl'
 import getAssetUrl from '@utils/getAssetUrl'
+import { pickProductDescription } from '@lib/utils/pickProductDescription'
 import { useProductBuilder } from './useProductBuilder'
 
 const YELLOW = '#FAAF04'
@@ -35,21 +36,7 @@ const ProductDetailContent: FC<Props> = ({ product, onAdded }) => {
     return attr || product?.name || ''
   })()
 
-  const localizedDesc = (() => {
-    const attr =
-      product?.attribute_data?.description?.['chopar']?.[locale] ||
-      product?.attribute_data?.description?.['chopar']?.['ru']
-    const raw = attr || product?.description || product?.desc || ''
-    return raw
-      .replace(/<br\s*\/?>/gi, '\n')
-      .replace(/<\/(p|div|li)>/gi, '\n')
-      .replace(/<[^>]+>/g, ' ')
-      .replace(/&nbsp;/g, ' ')
-      .replace(/[ \t\u00a0]+/g, ' ')
-      .replace(/[ \t]*\n[ \t]*/g, '\n')
-      .replace(/\n{3,}/g, '\n\n')
-      .trim()
-  })()
+  const localizedDesc = pickProductDescription(product, 'chopar', locale)
 
   const variantLabel = (v: any) =>
     locale === 'uz'

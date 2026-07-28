@@ -7,6 +7,7 @@ import currency from 'currency.js'
 import { useExtracted, useLocale } from 'next-intl'
 import { useUIStore } from '../../lib/stores/ui-store'
 import getAssetUrl from '@utils/getAssetUrl'
+import { pickProductDescription } from '@lib/utils/pickProductDescription'
 import { useProductBuilder } from './useProductBuilder'
 
 const YELLOW = '#FAAF04'
@@ -39,22 +40,11 @@ const ProductDrawerApp: FC = () => {
     return attr || productDrawerProduct?.name || ''
   })()
 
-  const localizedDesc = (() => {
-    if (!productDrawerProduct) return ''
-    const attr =
-      productDrawerProduct?.attribute_data?.description?.['chopar']?.[locale] ||
-      productDrawerProduct?.attribute_data?.description?.['chopar']?.['ru']
-    const raw =
-      attr ||
-      productDrawerProduct?.description ||
-      productDrawerProduct?.desc ||
-      ''
-    return raw
-      .replace(/<[^>]+>/g, ' ')
-      .replace(/&nbsp;/g, ' ')
-      .replace(/\s+/g, ' ')
-      .trim()
-  })()
+  const localizedDesc = pickProductDescription(
+    productDrawerProduct,
+    'chopar',
+    locale
+  )
 
   const variantLabel = (v: any) =>
     locale === 'uz'
@@ -140,7 +130,7 @@ const ProductDrawerApp: FC = () => {
                 {localizedName}
               </h2>
               {localizedDesc && (
-                <p className="mt-2 text-sm text-gray-500 leading-relaxed">
+                <p className="mt-2 text-sm text-gray-500 leading-relaxed whitespace-pre-line">
                   {localizedDesc}
                 </p>
               )}

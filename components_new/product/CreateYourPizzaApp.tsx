@@ -17,6 +17,7 @@ import { useLocationStore } from '../../lib/stores/location-store'
 import { useUIStore } from '../../lib/stores/ui-store'
 import { DateTime } from 'luxon'
 import getAssetUrl from '@utils/getAssetUrl'
+import { pickProductDescription } from '@lib/utils/pickProductDescription'
 import { storefrontConfig as configData } from '../../lib/data/storefront-config'
 
 type CreatePizzaProps = {
@@ -669,16 +670,13 @@ const CreateYourPizzaApp: FC<CreatePizzaProps> = ({
                                 ][locale || 'ru']
                               }
                             </div>
-                            <div
-                              className="text-xs text-gray-400"
-                              dangerouslySetInnerHTML={{
-                                __html: leftSelectedProduct?.attribute_data
-                                  ?.description
-                                  ? leftSelectedProduct?.attribute_data
-                                      ?.description[channelName][locale || 'ru']
-                                  : '',
-                              }}
-                            ></div>
+                            <div className="text-xs text-gray-400 whitespace-pre-line">
+                              {pickProductDescription(
+                                leftSelectedProduct,
+                                channelName,
+                                locale
+                              )}
+                            </div>
                           </div>
                         )}
 
@@ -708,16 +706,13 @@ const CreateYourPizzaApp: FC<CreatePizzaProps> = ({
                                 ][locale || 'ru']
                               }
                             </div>
-                            <div
-                              className="text-xs text-gray-400"
-                              dangerouslySetInnerHTML={{
-                                __html: rightSelectedProduct?.attribute_data
-                                  ?.description
-                                  ? rightSelectedProduct?.attribute_data
-                                      ?.description[channelName][locale || 'ru']
-                                  : '',
-                              }}
-                            ></div>
+                            <div className="text-xs text-gray-400 whitespace-pre-line">
+                              {pickProductDescription(
+                                rightSelectedProduct,
+                                channelName,
+                                locale
+                              )}
+                            </div>
                           </div>
                         )}
                         {!rightSelectedProduct && (

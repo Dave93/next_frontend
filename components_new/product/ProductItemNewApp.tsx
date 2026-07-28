@@ -22,6 +22,7 @@ import { useExtracted, useLocale } from 'next-intl'
 import { useParams } from 'next/navigation'
 import axios from 'axios'
 import getAssetUrl from '@utils/getAssetUrl'
+import { pickProductDescription } from '@lib/utils/pickProductDescription'
 import { useAddToCart } from '../../lib/hooks/useCartMutations'
 import { XIcon } from '@heroicons/react/solid'
 import styles from './ProductItemNew.module.css'
@@ -60,6 +61,11 @@ const ProductItemNewApp: FC<ProductItem> = ({ product, channelName }) => {
     }
     return p
   })
+  // Описание приходит в двух видах: WYSIWYG-HTML и plain-text с \n.
+  // Нормализуем к тексту с реальными переносами и рендерим текстовым узлом
+  // (white-space: pre-line в .product-desc-clamp) — так карточка, модалка и
+  // drawer ломают строки одинаково.
+  const localizedDesc = pickProductDescription(store, channelName, locale)
   const isLoadingBasket = false
   const locationData = useLocationStore((s) => s.locationData) as any
   const stopProducts = useUIStore((s) => s.stopProducts)
@@ -619,19 +625,13 @@ const ProductItemNewApp: FC<ProductItem> = ({ product, channelName }) => {
                   >
                     {store?.attribute_data?.name[channelName][locale || 'ru']}
                   </div>
-                  {store?.attribute_data?.description?.[channelName]?.[
-                    locale || 'ru'
-                  ] && (
+                  {localizedDesc && (
                     <div
-                      className="mt-1 text-[12px] text-gray-500 line-clamp-2 product-desc-clamp"
-                      dangerouslySetInnerHTML={{
-                        __html:
-                          store.attribute_data.description[channelName][
-                            locale || 'ru'
-                          ],
-                      }}
+                      className="mt-1 text-[12px] text-gray-500 product-desc-clamp"
                       itemProp="description"
-                    />
+                    >
+                      {localizedDesc}
+                    </div>
                   )}
                 </div>
                 <div className="mt-2">
@@ -735,32 +735,19 @@ const ProductItemNewApp: FC<ProductItem> = ({ product, channelName }) => {
               {/* Видимый, всегда обрезанный текст. Hover именно по нему
                   (peer) — а не по всей карточке — чтобы tooltip не
                   всплывал при наведении на размеры/кнопку В корзину. */}
-              <div
-                className="peer product-desc-clamp cursor-help"
-                dangerouslySetInnerHTML={{
-                  __html: store?.attribute_data?.description
-                    ? store?.attribute_data?.description[channelName][
-                        locale || 'ru'
-                      ]
-                    : '',
-                }}
-                itemProp="description"
-              />
+              <div className="peer product-desc-clamp cursor-help" itemProp="description">
+                {localizedDesc}
+              </div>
               {/* Полный текст — tooltip ВВЕРХ от описания (bottom-full),
                   всплывает поверх изображения, а не кнопок снизу.
                   pointer-events-none, чтобы не блокировал клик по карточке.
                   На тачскринах скрыт через @media (hover: none). */}
               <div
-                className="desc-tooltip pointer-events-none opacity-0 peer-hover:opacity-100 transition-opacity duration-150 absolute z-40 left-0 right-0 bottom-full mb-1 max-h-32 overflow-hidden px-3 py-2.5 bg-white rounded-xl shadow-xl ring-1 ring-gray-200 leading-snug text-gray-700"
+                className="desc-tooltip pointer-events-none opacity-0 peer-hover:opacity-100 transition-opacity duration-150 absolute z-40 left-0 right-0 bottom-full mb-1 max-h-32 overflow-hidden px-3 py-2.5 bg-white rounded-xl shadow-xl ring-1 ring-gray-200 leading-snug text-gray-700 whitespace-pre-line"
                 aria-hidden="true"
-                dangerouslySetInnerHTML={{
-                  __html: store?.attribute_data?.description
-                    ? store?.attribute_data?.description[channelName][
-                        locale || 'ru'
-                      ]
-                    : '',
-                }}
-              />
+              >
+                {localizedDesc}
+              </div>
             </div>
             <div className="mt-auto">
               {store.variants && store.variants.length > 0 && (
@@ -986,16 +973,9 @@ const ProductItemNewApp: FC<ProductItem> = ({ product, channelName }) => {
                               ]
                             }
                           </div>
-                          <div
-                            className="mt-1 text-base product-desc-clamp"
-                            dangerouslySetInnerHTML={{
-                              __html: store?.attribute_data?.description
-                                ? store?.attribute_data?.description[
-                                    channelName
-                                  ][locale || 'ru']
-                                : '',
-                            }}
-                          ></div>
+                          <div className="mt-1 text-base whitespace-pre-line">
+                            {localizedDesc}
+                          </div>
                           {store.variants && store.variants.length > 0 && (
                             <div className="flex mt-5 space-x-1">
                               {store.variants.map((v: any) => (

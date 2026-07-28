@@ -1,8 +1,13 @@
+/* Описание товара на карточке. Текст приходит нормализованным
+   (lib/utils/pickProductDescription) — plain text с настоящими \n, поэтому
+   нужен pre-line: без него HTML склеивает состав сета в одну строку.
+   Клэмп в 3 строки, а не 2 — состав сетов обычно 3 позиции. */
 .product-desc-clamp {
   display: -webkit-box;
-  -webkit-line-clamp: 2;
+  -webkit-line-clamp: 3;
   -webkit-box-orient: vertical;
   overflow: hidden;
+  white-space: pre-line;
 }
 
 /* Hover-tooltip с полным описанием — только для устройств с реальным hover
