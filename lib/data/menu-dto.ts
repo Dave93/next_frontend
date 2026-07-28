@@ -1,4 +1,5 @@
 import 'server-only'
+import { normalizeDescription } from '@lib/utils/pickProductDescription'
 
 export type SlimModifier = {
   id: number
@@ -88,13 +89,12 @@ function pickLocalized(map: any, locale: Locale): string {
   return map[locale] || map.ru || map.en || ''
 }
 
+// Описание сюда приходит и WYSIWYG-HTML, и plain-text с \n. Нормализуем ОДИН
+// раз здесь — дальше DTO уходит в карточки/модалки, и своего сырого значения
+// они уже не видят. Раньше тут стоял `\s+ -> ' '`, который съедал переносы:
+// состав сета склеивался в одну строку именно на этом шаге, до компонентов.
 function stripHtml(s: string): string {
-  return s
-    .replace(/<[^>]+>/g, ' ')
-    .replace(/&nbsp;/g, ' ')
-    .replace(/&amp;/g, '&')
-    .replace(/\s+/g, ' ')
-    .trim()
+  return normalizeDescription(s)
 }
 
 function truncate(s: string, max: number): string {
