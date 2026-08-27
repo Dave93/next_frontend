@@ -94,6 +94,16 @@ export const t = {
     uz: 'Chopar Pizza maxfiylik siyosati',
     en: 'Chopar Pizza privacy policy',
   } as Dict,
+  deleteAccount: {
+    ru: 'Удаление аккаунта',
+    uz: 'Akkauntni o\'chirish',
+    en: 'Delete account',
+  } as Dict,
+  deleteAccountDesc: {
+    ru: 'Как удалить аккаунт Chopar Pizza и связанные с ним данные',
+    uz: 'Chopar Pizza akkauntini va u bilan bog\'liq ma\'lumotlarni qanday o\'chirish',
+    en: 'How to delete your Chopar Pizza account and associated data',
+  } as Dict,
   contacts: { ru: 'Наши контакты', uz: 'Bizning kontaktlar', en: 'Our Contacts' } as Dict,
   contactsDesc: {
     ru: 'Контакты и график работы Chopar Pizza',
